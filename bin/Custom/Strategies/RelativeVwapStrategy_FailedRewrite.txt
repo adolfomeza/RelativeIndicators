@@ -1,0 +1,301 @@
+#region Using declarations
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Xml.Serialization;
+using NinjaTrader.Cbi;
+using NinjaTrader.Gui;
+using NinjaTrader.Gui.Chart;
+using NinjaTrader.Gui.SuperDom;
+using NinjaTrader.Gui.Tools;
+using NinjaTrader.Data;
+using NinjaTrader.NinjaScript;
+using NinjaTrader.Core.FloatingPoint;
+using NinjaTrader.NinjaScript.Indicators;
+using NinjaTrader.NinjaScript.DrawingTools; // Fixed Namespace
+#endregion
+
+// ------------------------------------------------------------------------------------------------=
+// RELATIVE VWAP STRATEGY (CLEAN REWRITE)
+// ------------------------------------------------------------------------------------------------=
+
+namespace NinjaTrader.NinjaScript.Strategies
+{
+    public class RelativeVwapStrategy : Strategy
+    {
+        // --- Indicators ---
+        private NinjaTrader.NinjaScript.Indicators.RelativeIndicators.RelativeVwap _vwapIndicator;
+        private NinjaTrader.NinjaScript.Indicators.RelativeIndicators.RelativeNewsFilter _newsFilter;
+
+        // --- State Variables ---
+        private bool _highHasTakenLiquidity = false;
+        private bool _lowHasTakenLiquidity = false;
+        private bool _highDetached = false;
+        private bool _lowDetached = false;
+        
+        // --- Order Variables ---
+        private Order _entryOrder = null;
+        private Order _slOrder = null;
+        private Order _tpOrder = null;
+
+        // --- Constants ---
+        private const string SYSTEM_VERSION = "2.0 (Clean)";
+
+        protected override void OnStateChange()
+        {
+            if (State == State.SetDefaults)
+            {
+                Description = "Relative VWAP Strategy - Fade Liquidity Grabs + VWAP Detachment.";
+                Name = "RelativeVwapStrategy";
+                Calculate = Calculate.OnPriceChange;
+                EntriesPerDirection = 1;
+                EntryHandling = EntryHandling.AllEntries;
+                IsExitOnSessionCloseStrategy = true;
+                ExitOnSessionCloseSeconds = 30;
+                IsFillLimitOnTouch = false;
+                MaximumBarsLookBack = MaximumBarsLookBack.TwoHundredFiftySix;
+                OrderFillResolution = OrderFillResolution.Standard;
+                Slippage = 0;
+                StartBehavior = StartBehavior.WaitUntilFlat;
+                TimeInForce = TimeInForce.Gtc;
+                TraceOrders = false;
+                RealtimeErrorHandling = RealtimeErrorHandling.StopCancelClose;
+                StopTargetHandling = StopTargetHandling.PerEntryExecution;
+                BarsRequiredToTrade = 20;
+
+                // Default Parameters
+                Contracts = 1;
+                StopLossTicks = 20;
+                TakeProfitTicks = 40;
+                EnableNewsFilter = true;
+                
+                // Visuals
+                ShowPanel = true;
+            }
+            else if (State == State.Configure)
+            {
+                // Add Data Series (optional, usually 1 min is main)
+                // AddDataSeries(Data.BarsPeriodType.Minute, 1);
+            }
+            else if (State == State.DataLoaded)
+            {
+                // Initialize Indicators - STANDARD SIGNATURE + Manual Config
+                // TEMPORARILY COMMENTED OUT TO BREAK COMPILATION CYCLE
+                /*
+                _vwapIndicator = RelativeVwap(
+                    input: Close, 
+                    useExchangeTime: true,
+                    showDaysAgo: false,
+                    showLabels: false,
+                    highVWAPText: "High VWAP",
+                    lowVWAPText: "Low VWAP",
+                    extendLinesUntilTouch: false,
+                    maxHistoryDays: 5,
+                    showDebugLabels: false,
+                    enableAlerts: false,
+                    alertSound: "alert.wav",
+                    allowReentries: true,
+                    showTradeSetup: false,
+                    signalTextSize: 11,
+                    longSignalLineLength: 20,
+                    shortSignalLineLength: 20,
+                    longSignalLineWidth: 2,
+                    shortSignalLineWidth: 2,
+                    longSignalLineStyle: DashStyleHelper.Solid,
+                    shortSignalLineStyle: DashStyleHelper.Solid,
+                    signalTextLong: "LONG",
+                    signalTextShort: "SHORT",
+                    tradeLineWidth: 2,
+                    tradeLineStyle: DashStyleHelper.Dot,
+                    connectionLineStyle: DashStyleHelper.Solid,
+                    tradeTextSize: 10,
+                    sLText: "SL",
+                    tP1Text: "TP1",
+                    tP2Text: "TP2",
+                    exportTrades: false,
+                    tradeDirection: NinjaTrader.NinjaScript.Indicators.RelativeIndicators.TradeDirectionMode.Both
+                );
+                
+                // Manual Property Assignment (To avoid Constructor Hell)
+                if (_vwapIndicator != null)
+                {
+                    _vwapIndicator.AsiaStartTime    = SessionAsiaStart;
+                    _vwapIndicator.AsiaEndTime      = SessionAsiaEnd;
+                    _vwapIndicator.ShowAsia         = SessionShowAsia;
+                    _vwapIndicator.ShowAsiaHigh     = SessionShowAsia;
+                    _vwapIndicator.ShowAsiaLow      = SessionShowAsia;
+
+                    _vwapIndicator.EuropeStartTime  = SessionEuropeStart;
+                    _vwapIndicator.EuropeEndTime    = SessionEuropeEnd;
+                    _vwapIndicator.ShowEurope       = SessionShowEurope;
+                    _vwapIndicator.ShowEuropeHigh   = SessionShowEurope;
+                    _vwapIndicator.ShowEuropeLow    = SessionShowEurope;
+
+                    _vwapIndicator.USStartTime      = SessionUSStart;
+                    _vwapIndicator.USEndTime        = SessionUSEnd;
+                    _vwapIndicator.ShowUS           = SessionShowUS;
+                    _vwapIndicator.ShowUSHigh       = SessionShowUS;
+                    _vwapIndicator.ShowUSLow        = SessionShowUS;
+                    
+                    _vwapIndicator.ShowCountdown    = false;
+                    _vwapIndicator.CountDown        = true;
+                    _vwapIndicator.ShowPercent      = false;
+                }
+                */
+                                              
+                // Add News Filter if enabled
+                if (EnableNewsFilter)
+                {
+                    _newsFilter = RelativeNewsFilter(55, 3, true, true, true, true); 
+                }
+            }
+        }
+
+        protected override void OnBarUpdate()
+        {
+            if (BarsInProgress != 0 || CurrentBar < BarsRequiredToTrade) return;
+
+            // 1. News Check
+            if (EnableNewsFilter && _newsFilter != null)
+            {
+                if (_newsFilter.IsNewsImminent) return; 
+            }
+            
+            // 2. Data Sync from Indicator
+            if (_vwapIndicator == null) return;
+            
+            // Sync Touches
+            CheckSessionTouches(_vwapIndicator.AsiaSessions);
+            CheckSessionTouches(_vwapIndicator.EuropeSessions);
+            CheckSessionTouches(_vwapIndicator.USSessions);
+            
+            // 3. Logic: Touch -> Detach -> Enter
+            double highVWAP = _vwapIndicator.Values[0][0];
+            double lowVWAP = _vwapIndicator.Values[1][0];
+            
+            // --- High Side (Short) ---
+            if (_highHasTakenLiquidity)
+            {
+                // Wait for Detachment (High < VWAP)
+                if (High[0] < highVWAP - TickSize)
+                {
+                    _highDetached = true;
+                }
+                
+                if (_highDetached)
+                {
+                    if (Position.MarketPosition == MarketPosition.Flat)
+                    {
+                        EnterShort(); 
+                        _highHasTakenLiquidity = false; // Reset Sequence
+                        _highDetached = false;
+                    }
+                }
+            }
+            
+            // --- Low Side (Long) ---
+            if (_lowHasTakenLiquidity)
+            {
+                // Wait for Detachment (Low > VWAP)
+                if (Low[0] > lowVWAP + TickSize)
+                {
+                    _lowDetached = true;
+                }
+                
+                if (_lowDetached)
+                {
+                    if (Position.MarketPosition == MarketPosition.Flat)
+                    {
+                        EnterLong();
+                        _lowHasTakenLiquidity = false;
+                        _lowDetached = false;
+                    }
+                }
+            }
+        }
+        
+        private void CheckSessionTouches(List<NinjaTrader.NinjaScript.Indicators.RelativeIndicators.RelativeVwap.SessionLevelInfo> sessions)
+        {
+            if (sessions == null) return;
+            
+            foreach (var s in sessions)
+            {
+                // Check High
+                if (High[0] >= s.High)
+                {
+                     _highHasTakenLiquidity = true;
+                     _highDetached = false; 
+                }
+                
+                // Check Low
+                if (Low[0] <= s.Low)
+                {
+                    _lowHasTakenLiquidity = true;
+                    _lowDetached = false;
+                }
+            }
+        }
+
+        private void EnterShort()
+        {
+            int qty = Contracts; 
+            double slPrice = High[0] + (StopLossTicks * TickSize); 
+            
+            EnterShortLimit(qty, Close[0], "EntryShort"); 
+            SetStopLoss("EntryShort", CalculationMode.Price, slPrice, false);
+            SetProfitTarget("EntryShort", CalculationMode.Ticks, TakeProfitTicks);
+        }
+
+        private void EnterLong()
+        {
+            int qty = Contracts;
+            double slPrice = Low[0] - (StopLossTicks * TickSize);
+            
+            EnterLongLimit(qty, Close[0], "EntryLong");
+            SetStopLoss("EntryLong", CalculationMode.Price, slPrice, false);
+            SetProfitTarget("EntryLong", CalculationMode.Ticks, TakeProfitTicks);
+        }
+
+        #region Properties
+        
+        [Display(Name = "Contracts", Description = "Number of contracts to trade", GroupName = "1. Risk", Order = 1)]
+        [Range(1, 100)]
+        public int Contracts { get; set; }
+
+        [Display(Name = "Stop Loss (Ticks)", Description = "Stop Loss in ticks", GroupName = "1. Risk", Order = 2)]
+        [Range(1, 1000)]
+        public int StopLossTicks { get; set; }
+
+        [Display(Name = "Take Profit (Ticks)", Description = "Take Profit in ticks", GroupName = "1. Risk", Order = 3)]
+        [Range(1, 1000)]
+        public int TakeProfitTicks { get; set; }
+
+        [Display(Name = "Enable News Filter", GroupName = "2. Filters", Order = 1)]
+        public bool EnableNewsFilter { get; set; }
+
+        [Display(Name = "Show Panel", GroupName = "3. Visual", Order = 1)]
+        public bool ShowPanel { get; set; }
+
+        // --- Session Parameters (Pass-through to Indicator) ---
+        [Display(Name="Asia Start", GroupName="4. Sessions")] public string SessionAsiaStart { get; set; } = "19:00";
+        [Display(Name="Asia End", GroupName="4. Sessions")] public string SessionAsiaEnd { get; set; } = "03:00";
+        [Display(Name="Show Asia", GroupName="4. Sessions")] public bool SessionShowAsia { get; set; } = true;
+        
+        [Display(Name="Europe Start", GroupName="4. Sessions")] public string SessionEuropeStart { get; set; } = "03:00";
+        [Display(Name="Europe End", GroupName="4. Sessions")] public string SessionEuropeEnd { get; set; } = "11:30";
+        [Display(Name="Show Europe", GroupName="4. Sessions")] public bool SessionShowEurope { get; set; } = true;
+        
+        [Display(Name="US Start", GroupName="4. Sessions")] public string SessionUSStart { get; set; } = "09:30";
+        [Display(Name="US End", GroupName="4. Sessions")] public string SessionUSEnd { get; set; } = "16:15";
+        [Display(Name="Show US", GroupName="4. Sessions")] public bool SessionShowUS { get; set; } = true;
+
+        #endregion
+    }
+}

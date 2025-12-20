@@ -1,0 +1,34 @@
+# NinjaTrader 8 Git Ignore
+/db/
+/log/
+/trace/
+/tmp/
+/cache/
+/workspaces/
+/templates/
+/import/
+/export/
+/incoming/
+/outgoing/
+/strategyanalyzerlogs/
+/MarketData_Exports/
+/LiveTradeLogs/
+/NewsCache/
+/Refugiados_Gemini_Temp/
+/Recovery/
+
+# Files
+*.dll
+*.pdb
+*.suo
+*.user
+*.cache
+*.xml
+!/bin/Custom/**/*.xml
+
+# Bin Folder Logic
+/bin/*
+!/bin/Custom/
+
+# Backup folders
+Backup_Gemini/

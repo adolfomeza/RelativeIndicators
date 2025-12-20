@@ -1,0 +1,5 @@
+0000000000000000000000000000000000000000 57ca0029b1f6ad55da732cba84e307bc69dc0b78 adolfomeza <adolfojmezan@gmail.com> 1766051784 -0400	commit (initial): Baseline: Backup before session start
+57ca0029b1f6ad55da732cba84e307bc69dc0b78 f4ee26b21b4070bce626289bafa5948bc52f9412 adolfomeza <adolfojmezan@gmail.com> 1766099156 -0400	commit: feat: Implement Unique Signal 2 per Anchor (EH3-1, EH3-2 logic)
+f4ee26b21b4070bce626289bafa5948bc52f9412 db7a33b5b8077618958ccbd93fe7cde479bb66ed adolfomeza <adolfojmezan@gmail.com> 1766100881 -0400	commit: feat: Add Signal 3 (Entry Arrow) with Automatic Volatility Spacing
+db7a33b5b8077618958ccbd93fe7cde479bb66ed 96b4406dd51ecc393c840915cdf2442b73c022e7 adolfomeza <adolfojmezan@gmail.com> 1766102364 -0400	commit: feat: Add Signal 3 Cancellation on Opposing VWAP Hit
+96b4406dd51ecc393c840915cdf2442b73c022e7 88e33c1da2a49df6e1c044557d9ba73a786df031 adolfomeza <adolfojmezan@gmail.com> 1766157860 -0400	commit: Simplificación de VWAP: anclaje al inicio de sesión, líneas históricas grises de 2px y correcciones de compilación

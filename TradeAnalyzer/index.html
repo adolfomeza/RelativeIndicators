@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relative Trade Analyzer</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script src="backtest_data.js"></script> <!-- V_AUTO: Auto-generated backtest data -->
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>Relative Trade Analyzer</h1>
+            <div class="header-controls">
+                 <p>Drag & Drop your <code>RelativeVwap_Trades.csv</code> file to analyze performance.</p>
+                 <div class="header-buttons">
+                    <button id="add-files-btn" class="secondary-btn" style="display:none;">+ Add Data</button>
+                    <button id="params-btn" class="secondary-btn" onclick="forceReloadLocal()" title="Force Reload Data">↻ Load Data</button>
+                    <button id="clear-data-btn" class="icon-btn danger" style="display:none;" title="Clear All Data">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                    </button>
+                 </div>
+            </div>
+        </header>
+
+        <div id="drop-zone" class="drop-zone">
+            <div class="drop-content">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="upload-icon"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                <h3>Drop CSV File(s) Here</h3>
+                <p>Add more files anytime to combine results</p>
+                <input type="file" id="file-input" accept=".csv" multiple hidden>
+            </div>
+        </div>
+
+        <main id="dashboard" class="dashboard hidden">
+            <!-- Filters Control Bar -->
+            <div class="filters-container">
+                <div class="filter-group">
+                    <label for="filter-instrument">Instrument</label>
+                    <select id="filter-instrument"><option value="all">All</option></select>
+                </div>
+                <div class="filter-group">
+                    <label for="filter-direction">Direction</label>
+                    <select id="filter-direction">
+                        <option value="all">All</option>
+                        <option value="Long">Long</option>
+                        <option value="Short">Short</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filter-day">Day</label>
+                    <select id="filter-day">
+                        <option value="all">All</option>
+                        <option value="0">Sunday</option>
+                        <option value="1">Monday</option>
+                        <option value="2">Tuesday</option>
+                        <option value="3">Wednesday</option>
+                        <option value="4">Thursday</option>
+                        <option value="5">Friday</option>
+                        <option value="6">Saturday</option>
+                    </select>
+                </div>
+                <!-- Target Filter (TP1 vs TP2) -->
+                <div class="filter-group">
+                    <label for="filter-target">Target</label>
+                    <select id="filter-target">
+                        <option value="all">All</option>
+                        <option value="TP1">TP1 (Scalp)</option>
+                        <option value="TP2">TP2 (Runner)</option>
+                        <option value="SL">Stop Loss</option>
+                    </select>
+                </div>
+                <!-- Component Filter (Scalp vs Runner) -->
+                <div class="filter-group">
+                    <label for="filter-component">Component</label>
+                    <select id="filter-component">
+                        <option value="all">All</option>
+                        <option value="scalp">Scalp Only (.1)</option>
+                        <option value="runner">Runner Only (.2)</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filter-hour">Hour</label>
+                    <select id="filter-hour">
+                        <option value="all">All</option>
+                        <!-- Hours 0-23 will be populated by JS or fixed here, fixed is easier for now -->
+                         <option value="0">00:00</option><option value="1">01:00</option><option value="2">02:00</option>
+                         <option value="3">03:00</option><option value="4">04:00</option><option value="5">05:00</option>
+                         <option value="6">06:00</option><option value="7">07:00</option><option value="8">08:00</option>
+                         <option value="9">09:00</option><option value="10">10:00</option><option value="11">11:00</option>
+                         <option value="12">12:00</option><option value="13">13:00</option><option value="14">14:00</option>
+                         <option value="15">15:00</option><option value="16">16:00</option><option value="17">17:00</option>
+                         <option value="18">18:00</option><option value="19">19:00</option><option value="20">20:00</option>
+                         <option value="21">21:00</option><option value="22">22:00</option><option value="23">23:00</option>
+                    </select>
+                </div>
+                <button id="reset-filters-btn" class="secondary-btn">Reset</button>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
+                <button class="tab-btn" onclick="switchTab('temporal')">Time Analysis</button>
+                <button class="tab-btn" onclick="switchTab('advanced')">Advanced (MAE/MFE)</button>
+                <button class="tab-btn" onclick="switchTab('audit')">Audit & Edge</button>
+            </div>
+
+            <!-- TAB: OVERVIEW -->
+            <div id="tab-overview" class="tab-content active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-label">Net Profit</span>
+                        <span class="stat-value" id="stat-net-profit">$0.00</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Win Rate</span>
+                        <span class="stat-value" id="stat-win-rate">0%</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Profit Factor</span>
+                        <span class="stat-value" id="stat-profit-factor">0.00</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Exp. Value (EV)</span>
+                        <span class="stat-value" id="stat-ev">$0.00</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Avg Win / Loss</span>
+                        <span class="stat-value" id="stat-avg-win-loss">0 / 0</span>
+                    </div>
+                     <div class="stat-card">
+                        <span class="stat-label">Max Drawdown</span>
+                        <span class="stat-value" id="stat-max-dd">$0.00</span>
+                    </div>
+                </div>
+
+                <div class="charts-container">
+                    <div class="chart-card large">
+                        <h3>Equity Curve</h3>
+                        <canvas id="equityChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- NEW: Periodic Performance Chart -->
+                <div class="charts-container">
+                     <div class="chart-card large">
+                        <div class="chart-header-controls" style="display:flex; justify-content:space-between; align-items:center;">
+                            <h3>Performance History</h3>
+                            <div class="period-controls">
+                                <span style="font-size:0.8rem; color:var(--text-secondary); margin-right:5px;">Period:</span>
+                                <button class="secondary-btn active" onclick="setPeriod('D')">D</button>
+                                <button class="secondary-btn" onclick="setPeriod('W')">W</button>
+                                <button class="secondary-btn" onclick="setPeriod('M')">M</button>
+                                <button class="secondary-btn" onclick="setPeriod('Y')">Y</button>
+                                <div style="display:inline-block; width:10px;"></div>
+                                <span style="font-size:0.8rem; color:var(--text-secondary); margin-right:5px;">Type:</span>
+                                <button class="secondary-btn active" onclick="setChartType('bar')">Bar</button>
+                                <button class="secondary-btn" onclick="setChartType('line')">Line</button>
+                            </div>
+                        </div>
+                        <canvas id="periodicChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: TEMPORAL -->
+            <div id="tab-temporal" class="tab-content">
+                <div class="charts-container grid-2">
+                    <div class="chart-card">
+                        <h3>PnL by Hour of Day</h3>
+                        <canvas id="hourChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>PnL by Day of Week</h3>
+                        <canvas id="dayChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: ADVANCED -->
+            <div id="tab-advanced" class="tab-content">
+                <div class="charts-container grid-2">
+                    <div class="chart-card">
+                        <h3>MAE vs PnL (Risk Taken)</h3>
+                        <canvas id="maeChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>MFE vs PnL (Potential vs Realized)</h3>
+                        <canvas id="mfeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Trade List -->
+            <div class="table-container">
+                <h3>Trade Journal</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Entry Time</th>
+                                <th>Exit Time</th>
+                                <th>Type</th>
+                                <th>Instrument</th>
+                                <th>Entry Price</th>
+                                <th>Exit Price</th>
+                                <th>Result</th>
+                                <th>MAE</th>
+                                <th>MFE</th>
+                                <th>PnL</th>
+                            </tr>
+                        </thead>
+                        <tbody id="trade-table-body">
+                            <!-- Rows injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="tab-audit" class="tab-content">
+                <div class="analysis-section">
+                    <h3>Statistical Edge Validation</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                             <span class="stat-label">T-Test Probability (Edge > 0)</span>
+                             <span class="stat-value" id="audit-ttest">--</span>
+                             <span class="stat-sub" id="audit-ttest-desc">Uncertain</span>
+                        </div>
+                        <div class="stat-card">
+                             <span class="stat-label">Monte Carlo (Luck Probability)</span>
+                             <span class="stat-value" id="audit-montecarlo">--</span>
+                             <span class="stat-sub" id="audit-montecarlo-desc">Simulating 1000 scenarios...</span>
+                        </div>
+                        <div class="stat-card">
+                             <span class="stat-label">Sharpe Ratio (Annualized)</span>
+                             <span class="stat-value" id="audit-sharpe">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analysis-section">
+                    <h3>Risk Profile (MAE/MFE)</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                             <span class="stat-label">Avg MFE (Potential)</span>
+                             <span class="stat-value" id="audit-mfe">--</span>
+                        </div>
+                        <div class="stat-card">
+                             <span class="stat-label">Avg MAE (Pain)</span>
+                             <span class="stat-value" id="audit-mae">--</span>
+                        </div>
+                        <div class="stat-card">
+                             <span class="stat-label">Efficiency Ratio</span>
+                             <span class="stat-value" id="audit-efficiency">--</span>
+                             <span class="stat-sub">Net Profit / Total MFE</span>
+                        </div>
+                    </div>
+                    <!-- Future: Scatter Plot MFE vs MAE here -->
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- INLINED SCRIPT TO AVOID CACHE ISSUES -->
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    console.log("Trade Analyzer Script Loaded v1.3 (Inlined)");
+    // alert("Analyzer Script Loaded - If you see this, cache is cleared."); 
+
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const dashboard = document.getElementById('dashboard');
+    
+    // Global Data Store for Incremental Loading
+    let globalAllTrades = [];
+    
+    // Global Chart Settings
+    let currentPeriod = 'D'; // D, W, M, Y
+    let currentChartType = 'bar'; // bar, line
+    
+    // Chart Instances
+    const charts = {};
+
+    // Colors for Multi-Instrument Chart
+    const COLORS = [
+        '#10b981', // Green
+        '#f59e0b', // Amber
+        '#8b5cf6', // Violet
+        '#ec4899', // Pink
+        '#6366f1', // Indigo
+        '#14b8a6', // Teal
+        '#ef4444', // Red
+        '#3b82f6', // Blue
+    ];
+
+    // V_FIX: MathUtils hoisted to top for Auto-Load access
+    const MathUtils = {
+        mean: (arr) => arr.length ? arr.reduce((a,b)=>a+b,0) / arr.length : 0,
+        stdDev: (arr) => {
+            if(arr.length < 2) return 0;
+            const m = MathUtils.mean(arr);
+            const variance = arr.reduce((sq, n) => sq + Math.pow(n - m, 2), 0) / (arr.length - 1);
+            return Math.sqrt(variance);
+        },
+        tTestInfo: (arr) => {
+            // One-sample t-test against mu=0
+            const n = arr.length;
+            if(n < 2) return { t: 0, p: 1, significant: false };
+            const m = MathUtils.mean(arr);
+            const s = MathUtils.stdDev(arr);
+            const se = s / Math.sqrt(n);
+            const t = m / se;
+            const significant = Math.abs(t) > 1.96;
+            return { t: t.toFixed(2), significant: significant };
+        },
+        shuffle: (array) => {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+    };
+
+    // --- Tab Handling ---
+    window.switchTab = (tabId) => {
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+        
+        document.getElementById('tab-' + tabId).classList.add('active');
+        const btns = document.querySelectorAll('.tab-btn');
+        if(btns.length > 0) {
+             if(tabId === 'overview') btns[0].classList.add('active');
+             if(tabId === 'temporal') btns[1].classList.add('active');
+             if(tabId === 'temporal') btns[1].classList.add('active'); // Typo in original but keeping for safety
+             if(tabId === 'advanced') btns[2].classList.add('active');
+             if(tabId === 'audit') btns[3].classList.add('active');
+        }
+        
+        // Resize charts if needed
+        if(tabId === 'overview') {
+            if(charts.equity) charts.equity.resize();
+            if(charts.periodic) charts.periodic.resize();
+        }
+    };
+    
+    // Periodic Chart Controls
+    window.setPeriod = (p) => {
+        currentPeriod = p;
+        // Update Buttons UI
+        document.querySelectorAll('.period-controls button').forEach(b => {
+             if(b.textContent === p) b.classList.add('active');
+             else if(['D','W','M','Y'].includes(b.textContent)) b.classList.remove('active');
+        });
+        applyFilters(); // Re-render logic handles the chart update
+    };
+    
+    window.setChartType = (t) => {
+        currentChartType = t;
+        // Update Buttons UI
+        document.querySelectorAll('.period-controls button').forEach(b => {
+             const txt = b.textContent.toLowerCase();
+             if(txt === t) b.classList.add('active');
+             else if(['bar','line'].includes(txt)) b.classList.remove('active');
+        });
+         applyFilters(); // Re-render
+    };
+
+    const addFilesBtn = document.getElementById('add-files-btn');
+    const clearDataBtn = document.getElementById('clear-data-btn');
+    
+    // Filters DOM Elements
+    const filterInstrument = document.getElementById('filter-instrument');
+    const filterDirection = document.getElementById('filter-direction');
+    const filterDay = document.getElementById('filter-day'); 
+    const filterHour = document.getElementById('filter-hour');
+    const filterTarget = document.getElementById('filter-target');
+    const filterComponent = document.getElementById('filter-component'); // New
+    const resetFiltersBtn = document.getElementById('reset-filters-btn');
+    
+    // --- Persistence Logic ---
+    window.forceReloadLocal = () => {
+        const stored = localStorage.getItem('rta_trades');
+        if(stored) {
+             console.log("Forcing reload from storage...");
+             loadData();
+             alert("Data reloaded from storage!");
+        } else {
+             alert("No saved data found in LocalStorage.");
+        }
+    };
+
+    function saveData() {
+        if(globalAllTrades.length > 0) {
+            localStorage.setItem('rta_trades', JSON.stringify(globalAllTrades));
+        }
+    }
+
+    function loadData() {
+        const stored = localStorage.getItem('rta_trades');
+        if(stored) {
+            try {
+                const trades = JSON.parse(stored);
+                // Fix Date objects
+                trades.forEach(t => {
+                    t.entryTime = new Date(t.entryTime);
+                    if(t.exitTime) t.exitTime = new Date(t.exitTime);
+                });
+                
+                if(trades.length > 0) {
+                    globalAllTrades = trades;
+                    populateFilters(globalAllTrades);
+                    applyFilters();
+                    dashboard.classList.remove('hidden');
+                    dropZone.style.display = 'none';
+                    if(addFilesBtn) addFilesBtn.style.display = 'inline-block';
+                    if(clearDataBtn) clearDataBtn.style.display = 'inline-block';
+                    console.log(`Loaded ${trades.length} trades from storage.`);
+                }
+            } catch(e) {
+                console.error("Failed to load stored data", e);
+            }
+        }
+    }
+
+    function clearData() {
+        if(confirm("Are you sure you want to clear all data?")) {
+            localStorage.removeItem('rta_trades');
+            globalAllTrades = [];
+            location.reload(); // Simplest way to reset all charts/state
+        }
+    }
+
+    if(clearDataBtn) clearDataBtn.addEventListener('click', clearData);
+    
+    // Load on start
+    const storedRaw = localStorage.getItem('rta_trades');
+    if(storedRaw) {
+        // Show clear button if ANY data exists (even if load fails later)
+        if(clearDataBtn) clearDataBtn.style.display = 'inline-block';
+        loadData();
+    }
+    
+    // V_AUTO: Auto-Load Backtest Data from JS injection
+    try {
+        if (window.RTA_DATA && window.RTA_DATA.length > 0) {
+            console.log("Auto-Detected Backtest Data:", window.RTA_DATA.length);
+            
+            // Convert dates
+            const autoTrades = window.RTA_DATA.map(t => {
+                let d = new Date(t.entryTime);
+                // Fix for .NET trailing zeroes if invalid
+                if (isNaN(d.getTime())) {
+                     // Try replace T with space or remove nanoseconds
+                     d = new Date(t.entryTime.split('.')[0]); 
+                }
+                
+                let dExit = new Date(t.exitTime);
+                if (isNaN(dExit.getTime())) {
+                     dExit = new Date(t.exitTime.split('.')[0]);
+                }
+                
+                return {
+                    ...t,
+                    entryTime: d,
+                    exitTime: dExit,
+                    // Ensure numbers
+                    entryPrice: Number(t.entryPrice),
+                    exitPrice: Number(t.exitPrice),
+                    pnl: Number(t.pnl)
+                };
+            });
+            
+            handleAutoFiles(autoTrades);
+        }
+    } catch (err) {
+        alert("Auto-Load Error: " + err.message);
+        console.error(err);
+    }
+    
+    function handleAutoFiles(newTrades) {
+         // Same logic as handleFiles but skipping FileReader
+         let addedCount = 0;
+         let updatedCount = 0;
+         
+         const getTradeKey = (t) => `${t.id}_${t.instrument}_${t.entryTime.getTime()}_${t.entryPrice}_${t.pnl}`;
+         const tradeMap = new Map();
+         globalAllTrades.forEach((t, index) => tradeMap.set(getTradeKey(t), index));
+         
+         newTrades.forEach(t => {
+            const key = getTradeKey(t);
+            if(tradeMap.has(key)) {
+                globalAllTrades[tradeMap.get(key)] = t; 
+                updatedCount++;
+            } else {
+                globalAllTrades.push(t);
+                tradeMap.set(key, globalAllTrades.length - 1);
+                addedCount++;
+            }
+         });
+         
+         if (globalAllTrades.length > 0) {
+             console.log(`Auto Import: ${addedCount} New, ${updatedCount} Updated.`);
+             saveData(); 
+             populateFilters(globalAllTrades); 
+             applyFilters(); 
+             dashboard.classList.remove('hidden');
+             dropZone.style.display = 'none';
+             if(addFilesBtn) addFilesBtn.style.display = 'inline-block';
+             if(clearDataBtn) clearDataBtn.style.display = 'inline-block';
+             
+             // alert("Auto-Loaded Backtest Data!");
+         }
+    }
+    
+    // --- Drag & Drop Handling ---
+    dropZone.addEventListener('click', () => fileInput.click());
+    if(addFilesBtn) addFilesBtn.addEventListener('click', () => fileInput.click());
+
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('dragover');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        if (e.dataTransfer.files.length) {
+            handleFiles(e.dataTransfer.files);
+        }
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length) {
+            handleFiles(e.target.files);
+        }
+    });
+
+    // --- Filter Logic ---
+    function populateFilters(trades) {
+         // Get unique instruments
+         const instruments = [...new Set(trades.map(t => t.instrument))].sort();
+         
+         // Save current selection to restore if possible
+         const currentVal = filterInstrument.value;
+         
+         // Clear (keep "All")
+         filterInstrument.innerHTML = '<option value="all">All</option>';
+         
+         instruments.forEach(inst => {
+             const option = document.createElement('option');
+             option.value = inst;
+             option.textContent = inst;
+             filterInstrument.appendChild(option);
+         });
+         
+         // Restore selection if it still exists
+         if(instruments.includes(currentVal)) {
+             filterInstrument.value = currentVal;
+         }
+    }
+
+    function applyFilters() {
+        const instVal = filterInstrument.value;
+        const dirVal = filterDirection.value;
+        const dayVal = filterDay.value; // 'all' or '0'-'6'
+        const hourVal = filterHour.value; // 'all' or '0'-'23'
+        const targetVal = filterTarget.value; // 'all', 'TP1', 'TP2', 'SL'
+        const compVal = filterComponent.value; // 'all', 'scalp', 'runner'
+
+        const filtered = globalAllTrades.filter(t => {
+            // Instrument
+            if(instVal !== 'all' && t.instrument !== instVal) return false;
+            
+            // Direction (Check exact string match, adjust if case differs)
+            if(dirVal !== 'all') {
+                // Assuming t.type is "Long" or "Short"
+                if(t.type !== dirVal) return false;
+            }
+            
+            // Day
+            if(dayVal !== 'all') {
+                if(t.entryTime.getDay().toString() !== dayVal) return false;
+            }
+            
+            // Hour
+            if(hourVal !== 'all') {
+                 if(t.entryTime.getHours().toString() !== hourVal) return false;
+            }
+
+            // Target Filter (New)
+            if(targetVal !== 'all') {
+                const res = (t.result || "").toUpperCase();
+                
+                if (targetVal === 'SL') {
+                    // Match "SL" OR "LOSS"
+                    if (!res.includes('SL') && !res.includes('LOSS')) return false; 
+                } 
+                else if (targetVal === 'TP1') {
+                    // Match "TP1" OR ("WIN" but NOT "TP2")
+                    // This assumes "Win" implies at least TP1, and if it's not TP2, it's TP1.
+                    const isTP1 = res.includes('TP1');
+                    const isGenericWin = res.includes('WIN') && !res.includes('TP2');
+                    if (!isTP1 && !isGenericWin) return false;
+                }
+                else if (targetVal === 'TP2') {
+                    if (!res.includes('TP2')) return false;
+                }
+            }
+            
+            // Component Filter (New)
+            if(compVal !== 'all') {
+                const idStr = String(t.id);
+                if (compVal === 'scalp') {
+                    if (!idStr.endsWith('.1')) return false;
+                }
+                else if (compVal === 'runner') {
+                    if (!idStr.endsWith('.2')) return false;
+                }
+            }
+            
+            return true;
+        });
+        
+        processData(filtered);
+    }
+
+    // Filter Event Listeners
+    [filterInstrument, filterDirection, filterDay, filterHour, filterTarget, filterComponent].forEach(el => {
+        el.addEventListener('change', applyFilters);
+    });
+
+    if(resetFiltersBtn) {
+        resetFiltersBtn.addEventListener('click', () => {
+             filterInstrument.value = 'all';
+             filterDirection.value = 'all';
+             filterDay.value = 'all';
+             filterHour.value = 'all';
+             filterTarget.value = 'all';
+             filterComponent.value = 'all';
+             applyFilters();
+        });
+    }
+
+
+    function handleFiles(fileList) {
+        const promises = Array.from(fileList).map(file => readFile(file));
+
+        Promise.all(promises).then(results => {
+            let newTrades = [];
+            results.forEach(trades => {
+                newTrades = newTrades.concat(trades);
+            });
+            
+            // Incremental Add with Upsert Logic (Update if exists, Add if new)
+            let addedCount = 0;
+            let updatedCount = 0;
+            
+            // Map existing trades by Key for fast lookup
+            const getTradeKey = (t) => `${t.id}_${t.instrument}_${t.entryTime.getTime()}_${t.entryPrice}_${t.pnl}`;
+            const tradeMap = new Map();
+            globalAllTrades.forEach((t, index) => tradeMap.set(getTradeKey(t), index));
+            
+            newTrades.forEach(t => {
+                const key = getTradeKey(t);
+                if(tradeMap.has(key)) {
+                    // Exists? Update it! (In case user added columns like ExitName to CSV)
+                    const idx = tradeMap.get(key);
+                    globalAllTrades[idx] = t; 
+                    updatedCount++;
+                } else {
+                    // New? Add it!
+                    globalAllTrades.push(t);
+                    tradeMap.set(key, globalAllTrades.length - 1);
+                    addedCount++;
+                }
+            });
+
+            if (globalAllTrades.length > 0) {
+                 console.log(`Processed Import: ${addedCount} New, ${updatedCount} Updated.`);
+                 
+                 // DEBUG: Print unique exit names to help with filtering issues
+                 const exitNames = [...new Set(globalAllTrades.map(t => t.result))];
+                 console.log("DEBUG: Unique Exit Names found in CSV:", exitNames);
+                 // alert("DEBUG: Exit names found: " + exitNames.join(", ")); // Optional: alert user directly
+
+                 saveData(); // Save to localStorage
+                 populateFilters(globalAllTrades); // Update instrument list
+                 applyFilters(); // Apply current filters (or default 'all') to render
+                 dashboard.classList.remove('hidden');
+                 dropZone.style.display = 'none';
+                 if(addFilesBtn) addFilesBtn.style.display = 'inline-block';
+                 if(clearDataBtn) clearDataBtn.style.display = 'inline-block';
+                 
+                 // Feedback if practically nothing changed but user tried to load
+                 if (addedCount === 0 && updatedCount === 0) {
+                     // Still nice to show success or nothing, instead of error.
+                     console.log("Data refreshed. No changes detected.");
+                     alert("Data Refreshed! No new trades found, but existing data was re-scanned.");
+                 } else {
+                     alert(`Success! Added ${addedCount} new trades and updated ${updatedCount}.`);
+                 }
+            } else {
+                alert('No valid trades found in the uploaded CSV files.');
+            }
+        });
+    }
+
+    function readFile(file) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const text = e.target.result;
+                resolve(parseCSV(text));
+            };
+            reader.readAsText(file);
+        });
+    }
+
+    // --- Parsing Logic ---
+    function parseCSV(text) {
+        const lines = text.trim().split('\n');
+        if (lines.length < 2) {
+             console.warn("CSV has less than 2 lines.");
+             return []; 
+        }
+
+        // Detect Delimiter (Line 1 header usually has multiple)
+        const header = lines[0];
+        const delimiter = header.includes(';') ? ';' : ','; // Simple detection
+        console.log("Detected Delimiter:", delimiter);
+
+        const trades = [];
+        let skippedCount = 0;
+        
+        for (let i = 1; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line) continue;
+            
+            const cols = line.split(delimiter);
+            
+            // Relaxed check: Custom exports might have fewer columns. 
+            // We absolutely need: ID, Instrument, EntryTime(2), PnL. 
+            // Result is col 7. PnL is col 8. So if length < 9, critical data might be missing.
+            // But let's try to parse what we can.
+            if (cols.length < 5) { // Absolute minimum
+                console.warn(`Row ${i} skipped: Not enough columns (${cols.length})`, line);
+                skippedCount++;
+                continue; 
+            }
+
+            try {
+                // Formatting Helper
+                const parseNum = (str) => {
+                    if(!str) return 0;
+                    let clean = str.trim();
+                    // Heuristic for Euro format 1.000,00
+                    if(clean.indexOf(',') > -1 && clean.indexOf('.') > -1) {
+                         if(clean.lastIndexOf(',') > clean.lastIndexOf('.')) { // 1.000,00
+                             clean = clean.replace(/\./g, "").replace(',', '.');
+                         } else { // 1,000.00
+                             clean = clean.replace(/,/g, ""); 
+                         }
+                    } else if (clean.indexOf(',') > -1) {
+                         // Only comma: 1,50
+                         clean = clean.replace(',', '.');
+                    }
+                    // Remove currency symbols
+                    clean = clean.replace(/[^0-9.-]/g, "");
+                    return parseFloat(clean);
+                };
+
+                const trade = {
+                    id: cols[0],
+                    instrument: cols[1],
+                    entryTime: new Date(cols[2]), 
+                    type: cols[3],
+                    entryPrice: parseNum(cols[4]),
+                    exitTime: cols[5] ? new Date(cols[5]) : null,
+                    exitPrice: parseNum(cols[6]),
+                    result: cols[7], // Exit Name
+                    pnl: parseNum(cols[8]),
+                    mae: cols[9] ? parseNum(cols[9]) : 0,
+                    mfe: cols[10] ? parseNum(cols[10]) : 0
+                };
+                
+                if (isNaN(trade.pnl)) {
+                    // Try parsing PnL from earlier/later col if offset? No, risky.
+                    console.warn(`Row ${i} skipped: Invalid PnL`, cols[8]);
+                    skippedCount++;
+                    continue;
+                }
+
+                trades.push(trade);
+            } catch (err) {
+                console.warn("Row parsing error", err);
+                skippedCount++;
+            }
+        }
+        
+        if (trades.length === 0) {
+             alert(`Warning: Could not parse any trades.\n\nCheck:\n1. Is the CSV delimiter '${delimiter}' correct?\n2. Are dates/numbers in a valid format?\n3. Does the CSV have headers?\n\n(See Console F12 for details)`);
+        }
+        
+        return trades;
+    }
+
+    // --- Processing & UI ---
+    function processData(trades) {
+        // Sort by Time (Global Execution Order)
+        trades.sort((a, b) => a.entryTime - b.entryTime);
+
+        // Identify Unique Instruments
+        const instruments = [...new Set(trades.map(t => t.instrument))];
+        
+        // --- 1. Calculate General Stats (Total) ---
+        let runningEquity = 0;
+        let totalStats = createStatsObject();
+        
+        // --- 2. Calculate Stats Per Instrument ---
+        let instrumentStats = {};
+        instruments.forEach(inst => {
+            instrumentStats[inst] = {
+                runningEquity: 0,
+                equityCurve: [{ x: 0, y: 0, date: null }], // Start at 0
+                trades: []
+            };
+        });
+
+        // Global Chart Data
+        let globalEquityCurve = [{ x: 0, y: 0, date: null }];
+        
+        // Temporal Data
+        const hourStats = {}; 
+        const dayStats = {};  
+
+        trades.forEach((trade, index) => {
+            if (!isNaN(trade.pnl)) {
+                
+                // --- Global Accumulation ---
+                runningEquity += trade.pnl;
+                updateStats(totalStats, trade, runningEquity);
+
+                globalEquityCurve.push({
+                    x: index + 1,
+                    y: runningEquity,
+                    date: trade.exitTime || trade.entryTime
+                });
+
+                // --- Instrument Accumulation ---
+                if (instrumentStats[trade.instrument]) {
+                    const iStats = instrumentStats[trade.instrument];
+                    iStats.runningEquity += trade.pnl;
+                    iStats.trades.push(trade);
+                    
+                    iStats.equityCurve.push({
+                        x: index + 1, // Use GLOBAL index to align with total equity curve
+                        y: iStats.runningEquity,
+                        date: trade.exitTime || trade.entryTime
+                    });
+                }
+
+                // --- Temporal Stats (Global) ---
+                const hour = trade.entryTime.getHours();
+                const day = trade.entryTime.getDay(); // 0 = Sun
+
+                if (!hourStats[hour]) hourStats[hour] = 0;
+                hourStats[hour] += trade.pnl;
+
+                if (!dayStats[day]) dayStats[day] = 0;
+                dayStats[day] += trade.pnl;
+            }
+        });
+
+        // Calculate Final Derived Stats (WinRate, PF, etc)
+        deriveStats(totalStats, runningEquity);
+
+        // Update DOM
+        updateDOMStats(totalStats);
+
+        // --- Render Charts ---
+        renderMultiEquityChart('equityChart', globalEquityCurve, instrumentStats, instruments);
+        updatePeriodicChart(trades); // <--- Added missing call
+        renderBarChart('hourChart', hourStats, Object.keys(hourStats).sort((a,b)=>a-b), "Hour");
+        renderDayChart('dayChart', dayStats);
+        renderScatterChart('maeChart', trades, 'mae', 'pnl');
+        renderScatterChart('mfeChart', trades, 'mfe', 'pnl');
+
+        // --- Render Table ---
+        renderTable([...trades].reverse());
+
+        // --- Calculate Audit Stats ---
+        calculateAuditStats(trades);
+    }
+
+    // --- Helpers ---
+    function createStatsObject() {
+        return {
+            wins: 0, losses: 0,
+            grossProfit: 0, grossLoss: 0,
+            peakEquity: 0, maxDrawdown: 0,
+            totalWinPnL: 0, totalLossPnL: 0,
+            netProfit: 0, winRate: 0, profitFactor: 0, ev: 0, avgWin: 0, avgLoss: 0
+        };
+    }
+
+    function updateStats(stats, trade, currentEquity) {
+        if (trade.pnl > 0) {
+            stats.wins++;
+            stats.grossProfit += trade.pnl;
+            stats.totalWinPnL += trade.pnl;
+        } else if (trade.pnl < 0) {
+            stats.losses++;
+            stats.grossLoss += Math.abs(trade.pnl);
+            stats.totalLossPnL += trade.pnl;
+        }
+
+        if (currentEquity > stats.peakEquity) stats.peakEquity = currentEquity;
+        const dd = stats.peakEquity - currentEquity;
+        if (dd > stats.maxDrawdown) stats.maxDrawdown = dd;
+    }
+
+    function deriveStats(stats, finalEquity) {
+        const totalTrades = stats.wins + stats.losses;
+        stats.winRate = totalTrades > 0 ? (stats.wins / totalTrades * 100).toFixed(1) : 0;
+        stats.profitFactor = stats.grossLoss > 0 ? (stats.grossProfit / stats.grossLoss).toFixed(2) : "∞";
+        stats.netProfit = finalEquity;
+        stats.avgWin = stats.wins > 0 ? stats.totalWinPnL / stats.wins : 0;
+        stats.avgLoss = stats.losses > 0 ? stats.totalLossPnL / stats.losses : 0;
+        stats.ev = (stats.avgWin * (stats.wins/totalTrades)) + (stats.avgLoss * (stats.losses/totalTrades));
+    }
+
+    function updateDOMStats(stats) {
+        document.getElementById('stat-net-profit').textContent = formatCurrency(stats.netProfit);
+        document.getElementById('stat-net-profit').className = 'stat-value ' + (stats.netProfit >= 0 ? 'pnl-pos' : 'pnl-neg');
+        document.getElementById('stat-win-rate').textContent = stats.winRate + '%';
+        document.getElementById('stat-profit-factor').textContent = stats.profitFactor;
+        document.getElementById('stat-ev').textContent = formatCurrency(stats.ev);
+        document.getElementById('stat-avg-win-loss').textContent = `${formatCurrency(stats.avgWin)} / ${formatCurrency(stats.avgLoss)}`;
+        document.getElementById('stat-max-dd').textContent = formatCurrency(stats.maxDrawdown);
+    }
+
+    function formatCurrency(val) {
+        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val);
+    }
+
+    // --- Charting Logic ---
+
+    function renderMultiEquityChart(id, globalData, instrumentStats, instruments) {
+        const ctx = document.getElementById(id).getContext('2d');
+        if (charts[id]) charts[id].destroy();
+
+        // 1. Total Equity Dataset
+        const datasets = [{
+            label: 'Total Portfolio',
+            data: globalData,
+            borderColor: '#3b82f6', // Blueprint Blue
+            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+            borderWidth: 3,
+            fill: true,
+            tension: 0.2,
+            pointRadius: 0,
+            order: 10 // Draw BEHIND (Higher order = background layer in this context usually, or keep consistent)
+        }];
+        datasets[0].order = 10; // Explicitly set Total to background
+
+        // 2. Instrument Datasets
+        
+        // Get Max X from globalData
+        const maxX = globalData.length > 0 ? globalData[globalData.length - 1].x : 0;
+
+        instruments.forEach((inst, idx) => {
+            const iData = [...instrumentStats[inst].equityCurve]; // Copy
+            
+            // Extend to End Logic
+            // If the instrument stopped trading, extend a flat line to mark its final contribution relative to total time
+            if (iData.length > 0 && maxX > 0) {
+                const lastPt = iData[iData.length - 1];
+                if (lastPt.x < maxX) {
+                     // Add a point at the very end
+                    iData.push({
+                        x: maxX,
+                        y: lastPt.y,
+                        date: globalData[globalData.length - 1].date
+                    });
+                }
+            }
+            
+            datasets.push({
+                label: inst,
+                data: iData,
+                borderColor: COLORS[idx % COLORS.length],
+                borderWidth: 2,
+                borderDash: [5, 5],
+                fill: false,
+                tension: 0, // 0 for straight connect lines
+                pointRadius: 0,
+                order: 0 // Draw ON TOP (Lower order)
+            });
+        });
+
+        charts[id] = new Chart(ctx, {
+            type: 'line',
+            data: { datasets: datasets },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                scales: {
+                    x: { type: 'linear', title: { display: true, text: 'Trade #' }, grid: { color: '#334155' } },
+                    y: { grid: { color: '#334155' } }
+                },
+                plugins: { 
+                    legend: { 
+                        display: true,
+                        labels: { color: '#94a3b8', font: {family: 'Inter'} }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function renderBarChart(id, dataObj, labels, xLabel) {
+        const ctx = document.getElementById(id).getContext('2d');
+        if (charts[id]) charts[id].destroy();
+
+        const dataValues = labels.map(l => dataObj[l] || 0);
+        const bgColors = dataValues.map(v => v >= 0 ? '#10b981' : '#ef4444');
+
+        charts[id] = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'PnL',
+                    data: dataValues,
+                    backgroundColor: bgColors,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#94a3b8' } },
+                    y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+    }
+
+    function renderDayChart(id, dataObj) {
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const labels = [0, 1, 2, 3, 4, 5, 6];
+        const ctx = document.getElementById(id).getContext('2d');
+        if (charts[id]) charts[id].destroy();
+        
+        const dataValues = labels.map(l => dataObj[l] || 0);
+        const bgColors = dataValues.map(v => v >= 0 ? '#10b981' : '#ef4444');
+
+        charts[id] = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: days,
+                datasets: [{
+                    label: 'PnL',
+                    data: dataValues,
+                    backgroundColor: bgColors,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: '#94a3b8' } },
+                    y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } }
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
+    }
+
+    function renderScatterChart(id, trades, xProp, yProp) {
+        const ctx = document.getElementById(id).getContext('2d');
+        if (charts[id]) charts[id].destroy();
+
+        const dataPoints = trades.map(t => ({
+            x: t[xProp],
+            y: t[yProp]
+        })).filter(p => p.x !== 0);
+
+        charts[id] = new Chart(ctx, {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'Trades',
+                    data: dataPoints,
+                    backgroundColor: dataPoints.map(p => p.y >= 0 ? 'rgba(16, 185, 129, 0.7)' : 'rgba(239, 68, 68, 0.7)')
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { 
+                        type: 'linear', 
+                        position: 'bottom', 
+                        title: { display: true, text: xProp.toUpperCase(), color: '#94a3b8' },
+                        grid: { color: '#334155' }
+                    },
+                    y: { 
+                        title: { display: true, text: 'PnL', color: '#94a3b8' },
+                        grid: { color: '#334155' }
+                    }
+                },
+                 plugins: { legend: { display: false } }
+            }
+        });
+    }
+
+    function updatePeriodicChart(trades) {
+        const ctx = document.getElementById('periodicChart').getContext('2d');
+        if (charts.periodic) charts.periodic.destroy();
+
+        // 1. Aggregate Data
+        const aggregated = {}; // Key -> { pnl, count, win }
+        
+        trades.forEach(t => {
+            let key;
+            const d = t.entryTime;
+            
+            if (currentPeriod === 'D') {
+                key = d.toISOString().split('T')[0]; // YYYY-MM-DD
+            } else if (currentPeriod === 'M') {
+                 key = `${d.getFullYear()}-${(d.getMonth()+1).toString().padStart(2,'0')}`; // YYYY-MM
+            } else if (currentPeriod === 'Y') {
+                 key = `${d.getFullYear()}`; // YYYY
+            } else if (currentPeriod === 'W') {
+                 // Get Monday of the week
+                 const day = d.getDay(),
+                 diff = d.getDate() - day + (day == 0 ? -6 : 1); // adjust when day is sunday
+                 const monday = new Date(d);
+                 monday.setDate(diff);
+                 key = monday.toISOString().split('T')[0];
+            }
+            
+            if (!aggregated[key]) aggregated[key] = { pnl: 0, count: 0 };
+            aggregated[key].pnl += t.pnl;
+            aggregated[key].count++;
+        });
+        
+        // Sort keys
+        const labels = Object.keys(aggregated).sort();
+        const data = labels.map(k => aggregated[k].pnl);
+        
+        // Colors
+        const bgColors = data.map(v => v >= 0 ? 'rgba(16, 185, 129, 0.6)' : 'rgba(239, 68, 68, 0.6)');
+        const borderColors = data.map(v => v >= 0 ? '#10b981' : '#ef4444');
+
+        // Config
+        const dataset = {
+            label: 'Net PnL',
+            data: data,
+            backgroundColor: bgColors,
+            borderColor: borderColors,
+            borderWidth: 1,
+        };
+        
+        if(currentChartType === 'line') {
+             dataset.type = 'line';
+             dataset.fill = false;
+             dataset.tension = 0.3;
+             dataset.borderColor = '#6366f1'; // Unified color for line
+             dataset.pointBackgroundColor = bgColors;
+        }
+
+        charts.periodic = new Chart(ctx, {
+            type: currentChartType === 'line' ? 'line' : 'bar',
+            data: {
+                labels: labels,
+                datasets: [dataset]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                         callbacks: {
+                              label: function(context) {
+                                   return formatCurrency(context.raw);
+                              }
+                         }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        ticks: { color: '#94a3b8' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#94a3b8' }
+                    }
+                }
+            }
+        });
+    }
+
+    function renderTable(trades) {
+        const tbody = document.getElementById('trade-table-body');
+        tbody.innerHTML = '';
+        trades.forEach(t => {
+            const tr = document.createElement('tr');
+            const pnlClass = t.pnl > 0 ? 'pnl-pos' : (t.pnl < 0 ? 'pnl-neg' : '');
+            
+            tr.innerHTML = `
+                <td>${t.id}</td>
+                <td>${t.entryTime.toLocaleString()}</td>
+                <td>${t.exitTime ? t.exitTime.toLocaleString() : '-'}</td>
+                <td>${t.type}</td>
+                <td>${t.instrument || 'N/A'}</td>
+                <td>${t.entryPrice.toFixed(2)}</td>
+                <td>${t.exitTime ? t.exitPrice.toFixed(2) : '-'}</td>
+                <td>${t.result}</td>
+                <td>${t.mae !== undefined ? formatCurrency(t.mae) : '-'}</td>
+                <td>${t.mfe !== undefined ? formatCurrency(t.mfe) : '-'}</td>
+                <td class="${pnlClass}">${formatCurrency(t.pnl)}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // --- AUDIT & MATH LOGIC ---
+    
+    // --- AUDIT & MATH LOGIC ---
+    // (MathUtils moved to top)
+
+    function calculateAuditStats(trades) {
+        if(!trades || trades.length === 0) return;
+
+        // 1. Prepare Data
+        const pnls = trades.map(t => t.pnl);
+        const maes = trades.map(t => t.mae || 0);
+        const mfes = trades.map(t => t.mfe || 0);
+
+        // 2. Risk Metrics
+        const avgMAE = MathUtils.mean(maes.filter(m => m > 0)); 
+        const avgMFE = MathUtils.mean(mfes.filter(m => m > 0));
+        
+        let totalMFE = mfes.reduce((a,b)=>a+b,0);
+        const netProfit = pnls.reduce((a,b)=>a+b,0);
+        const efficiency = totalMFE > 0 ? (netProfit / totalMFE) * 100 : 0;
+
+        // 3. T-Test
+        const tResult = MathUtils.tTestInfo(pnls);
+        
+        // 4. Update UI Immediate
+        document.getElementById('audit-mae').textContent = avgMAE ? "$" + avgMAE.toFixed(2) : "--";
+        document.getElementById('audit-mfe').textContent = avgMFE ? "$" + avgMFE.toFixed(2) : "--";
+        document.getElementById('audit-efficiency').textContent = efficiency.toFixed(1) + "%";
+        
+        const tEl = document.getElementById('audit-ttest');
+        const tDesc = document.getElementById('audit-ttest-desc');
+        tEl.textContent = `T-Score: ${tResult.t}`;
+        if(tResult.significant) {
+            tEl.classList.add('positive-val');
+            tDesc.textContent = "Statistically Significant (95%)";
+        } else {
+            tDesc.textContent = "Not Significant (Could be random)";
+        }
+
+        // 5. Monte Carlo (Async)
+        document.getElementById('audit-montecarlo-desc').textContent = "Running 1000 simulations...";
+        setTimeout(() => runMonteCarlo(pnls, netProfit), 100);
+    }
+
+    function runMonteCarlo(pnls, actualProfit) {
+        const ITERATIONS = 1000;
+        let worseCount = 0;
+        let baseArr = [...pnls];
+
+        for(let i=0; i<ITERATIONS; i++) {
+            MathUtils.shuffle(baseArr);
+            let randomProfit = 0;
+            // Bootstrap resampling logic could be better, but simple shuffle test for now
+            // Actually, let's do simple resampling (Bootstrapping) logic:
+            for(let j=0; j<baseArr.length; j++) {
+                 randomProfit += baseArr[Math.floor(Math.random() * baseArr.length)];
+            }
+            if(randomProfit < actualProfit) worseCount++;
+        }
+        
+        const percentile = (worseCount / ITERATIONS) * 100;
+        const div = document.getElementById('audit-montecarlo');
+        div.textContent = `Better than ${percentile.toFixed(1)}% of random scenarios`;
+        
+        const desc = document.getElementById('audit-montecarlo-desc');
+        if(percentile > 95) desc.textContent = "High Confidence of Edge";
+        else if(percentile > 50) desc.textContent = "Average Edge";
+        else desc.textContent = "Result likely random or lucky";
+    }
+
+}); // End of DOMContentLoaded
+    </script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+# Binaries and Objects
+*.dll
+*.pdb
+*.cache
+obj/
+bin/
+
+# Temporary files
+*.tmp
+*.log
+*.user
+*.suo
+
+# NinjaTrader generated resources
+Resource.Designer.cs
+*.resx
+
+# Ignore Backup folders created by user or system
+Backup_Gemini/

@@ -1,0 +1,1242 @@
+#region Using declarations
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Xml.Serialization;
+using NinjaTrader.Cbi;
+using NinjaTrader.Gui;
+using NinjaTrader.Gui.Chart;
+using NinjaTrader.Gui.SuperDom;
+using NinjaTrader.Gui.Tools;
+using NinjaTrader.Data;
+using NinjaTrader.NinjaScript;
+using NinjaTrader.Core.FloatingPoint;
+using NinjaTrader.NinjaScript.DrawingTools;
+using System.Globalization;
+#endregion
+
+namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
+{
+    public class RelativeLevels : Indicator
+    {
+        private List<SessionInfo> asiaSessions;
+        private List<SessionInfo> europeSessions;
+        private List<SessionInfo> usSessions;
+        private List<SessionInfo> weeklySessions;
+        private List<SessionInfo> monthlySessions;
+
+        private SharpDX.DirectWrite.TextFormat textFormat;
+        private SharpDX.DirectWrite.Factory dwFactory;
+
+        // Universal Queue for ALL labels to resolve overlaps
+        private List<LabelData> labelQueue;
+
+        // Private fields for parsed times
+        private DateTime asiaStart, asiaEnd;
+        private DateTime europeStart, europeEnd;
+        private DateTime usStart, usEnd;
+
+        protected override void OnStateChange()
+        {
+            if (State == State.SetDefaults)
+            {
+                ZOrder = -5; // Aggressively behind price
+                Description = @"Relative Levels with Text Labels";
+                Name = "Relative Levels";
+                Calculate = Calculate.OnBarClose;
+                IsOverlay = true;
+                DisplayInDataBox = true;
+                DrawOnPricePanel = true;
+                DrawHorizontalGridLines = true;
+                DrawVerticalGridLines = true;
+                PaintPriceMarkers = true;
+                ScaleJustification = NinjaTrader.Gui.Chart.ScaleJustification.Right;
+                IsSuspendedWhileInactive = true;
+
+
+                // Asia Defaults
+                AsiaStartTime = "18:00";
+                AsiaEndTime = "02:00";
+                ShowAsia = true;
+                AsiaAreaColor = Brushes.Gray;
+                AsiaAreaOpacity = 10;
+                AsiaLineColor = Brushes.DarkGray;
+                AsiaLabelColor = Brushes.Silver;
+                ShowAsiaHigh = true;
+                ShowAsiaLow = true;
+                ShowAsiaOpen = true;
+                ShowAsiaClose = true;
+
+                // Europe Defaults
+                EuropeStartTime = "03:00";
+                EuropeEndTime = "11:00";
+                ShowEurope = true;
+                EuropeAreaColor = Brushes.Yellow;
+                EuropeAreaOpacity = 10;
+                EuropeLineColor = Brushes.Gold;
+                EuropeLabelColor = Brushes.Silver;
+                ShowEuropeHigh = true;
+                ShowEuropeLow = true;
+                ShowEuropeOpen = true;
+                ShowEuropeClose = true;
+                
+                ShowEuropeOR = false;
+                EuropeORDuration = 60;
+                EuropeORAreaColor = Brushes.Orange;
+                EuropeORAreaOpacity = 20; // Default
+                EuropeORLineColor = Brushes.Orange;
+                EuropeORLineColor = Brushes.Orange;
+                ShowEuropeORLines = true;
+                ShowEuropeORLabels = true;
+
+                // US Defaults
+                USStartTime = "09:30";
+                USEndTime = "16:00";
+                ShowUS = true;
+                USAreaColor = Brushes.DodgerBlue;
+                USAreaOpacity = 10;
+                USLineColor = Brushes.Blue;
+                USLabelColor = Brushes.White;
+                ShowUSHigh = true;
+                ShowUSLow = true;
+                ShowUSOpen = true;
+                ShowUSClose = true;
+                
+                ShowUSOR = false;
+                USORDuration = 60;
+                USORAreaColor = Brushes.Cyan;
+                USORAreaOpacity = 20; // Default
+                USORLineColor = Brushes.Cyan;
+                USORLineColor = Brushes.Cyan;
+                ShowUSORLines = true;
+                ShowUSORLabels = true;
+
+                // Weekly Defaults
+                ShowWeekly = true;
+                WeeklyLineColor = Brushes.Purple;
+                WeeklyLabelColor = Brushes.Plum;
+                ShowWeeklyHigh = true;
+                ShowWeeklyLow = true;
+                ShowWeeklyOpen = false;
+                ShowWeeklyClose = false;
+
+                // Monthly Defaults
+                ShowMonthly = true;
+                MonthlyLineColor = Brushes.Teal;
+                MonthlyLabelColor = Brushes.Cyan;
+                ShowMonthlyHigh = true;
+                ShowMonthlyLow = true;
+                ShowMonthlyOpen = false;
+                ShowMonthlyClose = false;
+
+                // Labels
+                ShowLabels = true;
+                ShowHistoricalLabels = true;
+                LabelFontSize = 12;
+                ExtendLinesUntilTouch = false;
+                ShowDateOnLabels = true;
+                
+                ShowDateOnLabels = true;
+            }
+            else if (State == State.DataLoaded)
+            {
+                asiaSessions = new List<SessionInfo>();
+                europeSessions = new List<SessionInfo>();
+                usSessions = new List<SessionInfo>();
+                weeklySessions = new List<SessionInfo>();
+                monthlySessions = new List<SessionInfo>();
+                labelQueue = new List<LabelData>();
+                
+                // Parse Times
+                asiaStart = DateTime.Parse(AsiaStartTime);
+                asiaEnd = DateTime.Parse(AsiaEndTime);
+                europeStart = DateTime.Parse(EuropeStartTime);
+                europeEnd = DateTime.Parse(EuropeEndTime);
+                usStart = DateTime.Parse(USStartTime);
+                usEnd = DateTime.Parse(USEndTime);
+
+                // Initialize DirectWrite Factory and TextFormat
+                dwFactory = new SharpDX.DirectWrite.Factory();
+                textFormat = new SharpDX.DirectWrite.TextFormat(dwFactory, "Arial", SharpDX.DirectWrite.FontWeight.Normal, SharpDX.DirectWrite.FontStyle.Normal, LabelFontSize);
+                textFormat.TextAlignment = SharpDX.DirectWrite.TextAlignment.Leading; 
+                textFormat.ParagraphAlignment = SharpDX.DirectWrite.ParagraphAlignment.Center;
+            }
+            else if (State == State.Terminated)
+            {
+                if (textFormat != null)
+                {
+                    textFormat.Dispose();
+                    textFormat = null;
+                }
+                if (dwFactory != null)
+                {
+                    dwFactory.Dispose();
+                    dwFactory = null;
+                }
+            }
+        }
+
+        protected override void OnBarUpdate()
+        {
+            if (CurrentBar < 1) return;
+
+            DateTime time = Time[0];
+            
+            // Update Sessions
+            UpdateSessionList(asiaSessions, "Asia", time, asiaStart, asiaEnd, false, 0); 
+            UpdateSessionList(europeSessions, "Europe", time, europeStart, europeEnd, ShowEuropeOR, EuropeORDuration);
+            UpdateSessionList(usSessions, "USA", time, usStart, usEnd, ShowUSOR, USORDuration);
+            UpdateWeeklySession(time);
+            UpdateMonthlySession(time);
+            
+            // Check for touches if enabled
+            if (ExtendLinesUntilTouch)
+            {
+                CheckTouches(asiaSessions);
+                CheckTouches(europeSessions);
+                CheckTouches(usSessions);
+                CheckTouches(weeklySessions);
+                CheckTouches(monthlySessions);
+            }
+        }
+        
+        private void UpdateWeeklySession(DateTime currentTime)
+        {
+            // Simple Week Change Detection
+            int currentWeekNum = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(currentTime, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Sunday);
+            
+            SessionInfo currentSession = null;
+            if (weeklySessions.Count > 0)
+                currentSession = weeklySessions[weeklySessions.Count - 1];
+
+            // If no session or week changed
+            bool isNewWeek = false;
+            
+            if (currentSession == null)
+            {
+                isNewWeek = true;
+            }
+            else
+            {
+                int sessionWeekNum = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(currentSession.SessionDate, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Sunday);
+                int sessionYear = currentSession.SessionDate.Year;
+                int currentYear = currentTime.Year;
+                
+                if (currentWeekNum != sessionWeekNum || currentYear != sessionYear)
+                {
+                    isNewWeek = true;
+                    // Close previous
+                    currentSession.IsActive = false;
+                    currentSession.LastOpen = currentSession.CurrentOpen;
+                    currentSession.LastHigh = currentSession.CurrentHigh;
+                    currentSession.LastLow = currentSession.CurrentLow;
+                    currentSession.LastClose = currentSession.CurrentClose;
+                }
+            }
+            
+            if (isNewWeek)
+            {
+                 // Start new Weekly Session
+                 currentSession = new SessionInfo("Weekly", currentTime.Date);
+                 currentSession.IsActive = true;
+                 currentSession.CurrentOpen = Open[0];
+                 currentSession.CurrentHigh = High[0];
+                 currentSession.CurrentLow = Low[0];
+                 currentSession.CurrentClose = Close[0];
+                 currentSession.StartBarIdx = CurrentBar;
+                 currentSession.HighBarIdx = CurrentBar;
+                 currentSession.LowBarIdx = CurrentBar;
+                 currentSession.SessionStartDateTime = currentTime.Date; 
+                 
+                 weeklySessions.Add(currentSession);
+            }
+            else
+            {
+                 // Update active weekly session
+                 if (High[0] >= currentSession.CurrentHigh)
+                 {
+                     currentSession.CurrentHigh = High[0];
+                     currentSession.HighBarIdx = CurrentBar;
+                 }
+                 if (Low[0] <= currentSession.CurrentLow)
+                 {
+                     currentSession.CurrentLow = Low[0];
+                     currentSession.LowBarIdx = CurrentBar;
+                 }
+                 currentSession.CurrentClose = Close[0];
+            }
+            currentSession.EndBarIdx = CurrentBar;
+        }
+
+        private void UpdateMonthlySession(DateTime currentTime)
+        {
+            SessionInfo currentSession = null;
+            if (monthlySessions.Count > 0)
+                currentSession = monthlySessions[monthlySessions.Count - 1];
+
+            bool isNewMonth = false;
+            
+            if (currentSession == null)
+            {
+                isNewMonth = true;
+            }
+            else
+            {
+                if (currentTime.Month != currentSession.SessionDate.Month || currentTime.Year != currentSession.SessionDate.Year)
+                {
+                    isNewMonth = true;
+                    // Close previous
+                    currentSession.IsActive = false;
+                    currentSession.LastOpen = currentSession.CurrentOpen;
+                    currentSession.LastHigh = currentSession.CurrentHigh;
+                    currentSession.LastLow = currentSession.CurrentLow;
+                    currentSession.LastClose = currentSession.CurrentClose;
+                }
+            }
+            
+            if (isNewMonth)
+            {
+                 // Start new Monthly Session
+                 currentSession = new SessionInfo("Monthly", currentTime.Date);
+                 currentSession.IsActive = true;
+                 currentSession.CurrentOpen = Open[0];
+                 currentSession.CurrentHigh = High[0];
+                 currentSession.CurrentLow = Low[0];
+                 currentSession.CurrentClose = Close[0];
+                 currentSession.StartBarIdx = CurrentBar;
+                 currentSession.HighBarIdx = CurrentBar;
+                 currentSession.LowBarIdx = CurrentBar;
+                 currentSession.SessionStartDateTime = currentTime.Date; 
+                 
+                 monthlySessions.Add(currentSession);
+            }
+            else
+            {
+                 // Update active monthly session
+                 if (High[0] >= currentSession.CurrentHigh)
+                 {
+                     currentSession.CurrentHigh = High[0];
+                     currentSession.HighBarIdx = CurrentBar;
+                 }
+                 if (Low[0] <= currentSession.CurrentLow)
+                 {
+                     currentSession.CurrentLow = Low[0];
+                     currentSession.LowBarIdx = CurrentBar;
+                 }
+                 currentSession.CurrentClose = Close[0];
+            }
+            currentSession.EndBarIdx = CurrentBar;
+        }
+
+        private void CheckTouches(List<SessionInfo> sessions)
+        {
+            if (sessions == null) return;
+            
+            double high = High[0];
+            double low = Low[0];
+            
+            foreach (var session in sessions)
+            {
+                // STANDARD LEVELS: Check only after active session
+                if (!session.IsActive)
+                {
+                    if (session.HighBrokenBarIdx == -1 && high >= session.LastHigh && low <= session.LastHigh)
+                        session.HighBrokenBarIdx = CurrentBar;
+                        
+                    if (session.LowBrokenBarIdx == -1 && high >= session.LastLow && low <= session.LastLow)
+                        session.LowBrokenBarIdx = CurrentBar;
+                        
+                    if (session.OpenBrokenBarIdx == -1 && high >= session.LastOpen && low <= session.LastOpen)
+                        session.OpenBrokenBarIdx = CurrentBar;
+                        
+                    if (session.CloseBrokenBarIdx == -1 && high >= session.LastClose && low <= session.LastClose)
+                        session.CloseBrokenBarIdx = CurrentBar;
+                }
+                
+                // OR LEVELS
+                if (session.OREndBarIdx > 0 && CurrentBar > session.OREndBarIdx && session.ORHigh > 0)
+                {
+                     if (session.ORHighBrokenBarIdx == -1)
+                     {
+                         if (high >= session.ORHigh && low <= session.ORHigh)
+                             session.ORHighBrokenBarIdx = CurrentBar;
+                     }
+                     
+                     if (session.ORLowBrokenBarIdx == -1)
+                     {
+                         if (low <= session.ORLow && high >= session.ORLow)
+                             session.ORLowBrokenBarIdx = CurrentBar;
+                     }
+                }
+            }
+        }
+
+        private void UpdateSessionList(List<SessionInfo> sessions, string name, DateTime currentTime, DateTime start, DateTime end, bool trackOR, int orDuration)
+        {
+            bool isInside = IsTimeInSession(currentTime.TimeOfDay, start.TimeOfDay, end.TimeOfDay);
+            
+            SessionInfo currentSession = null;
+            if (sessions.Count > 0)
+                currentSession = sessions[sessions.Count - 1];
+
+            if (isInside)
+            {
+                if (currentSession == null || !currentSession.IsActive)
+                {
+                    // Start new session
+                    currentSession = new SessionInfo(name, currentTime.Date);
+                    currentSession.IsActive = true;
+                    currentSession.CurrentOpen = Open[0];
+                    currentSession.CurrentHigh = High[0];
+                    currentSession.CurrentLow = Low[0];
+                    currentSession.CurrentClose = Close[0];
+                    currentSession.StartBarIdx = CurrentBar;
+                    currentSession.HighBarIdx = CurrentBar;
+                    currentSession.LowBarIdx = CurrentBar;
+                    
+                    DateTime sessionStartDateTime = currentTime.Date.Add(start.TimeOfDay);
+                    if (start.TimeOfDay > end.TimeOfDay && currentTime.TimeOfDay < end.TimeOfDay)
+                         sessionStartDateTime = currentTime.Date.AddDays(-1).Add(start.TimeOfDay);
+                    else if (start.TimeOfDay > end.TimeOfDay && currentTime.TimeOfDay >= start.TimeOfDay)
+                         sessionStartDateTime = currentTime.Date.Add(start.TimeOfDay);
+                    
+                    currentSession.SessionStartDateTime = sessionStartDateTime;
+
+                    if (trackOR)
+                    {
+                        currentSession.ORHigh = High[0];
+                        currentSession.ORLow = Low[0];
+                        currentSession.OREndDateTime = sessionStartDateTime.AddMinutes(orDuration);
+                    }
+                    else
+                    {
+                        currentSession.ORHigh = 0;
+                        currentSession.ORLow = 0;
+                    }
+                    
+                    sessions.Add(currentSession);
+                }
+                else
+                {
+                    if (High[0] >= currentSession.CurrentHigh)
+                    {
+                        currentSession.CurrentHigh = High[0];
+                        currentSession.HighBarIdx = CurrentBar;
+                    }
+                    if (Low[0] <= currentSession.CurrentLow)
+                    {
+                        currentSession.CurrentLow = Low[0];
+                        currentSession.LowBarIdx = CurrentBar;
+                    }
+                    currentSession.CurrentClose = Close[0];
+                    
+                    if (trackOR && currentTime <= currentSession.OREndDateTime)
+                    {
+                        currentSession.ORHigh = Math.Max(currentSession.ORHigh, High[0]);
+                        currentSession.ORLow = Math.Min(currentSession.ORLow, Low[0]);
+                        currentSession.OREndBarIdx = CurrentBar;
+                    }
+                }
+                currentSession.EndBarIdx = CurrentBar;
+            }
+            else
+            {
+                if (currentSession != null && currentSession.IsActive)
+                {
+                    currentSession.IsActive = false;
+                    currentSession.LastOpen = currentSession.CurrentOpen;
+                    currentSession.LastHigh = currentSession.CurrentHigh;
+                    currentSession.LastLow = currentSession.CurrentLow;
+                    currentSession.LastClose = currentSession.CurrentClose;
+                }
+            }
+        }
+
+        private bool IsTimeInSession(TimeSpan current, TimeSpan start, TimeSpan end)
+        {
+            if (start <= end)
+                return current >= start && current < end;
+            else
+                return current >= start || current < end; 
+        }
+
+        protected override void OnRender(ChartControl chartControl, ChartScale chartScale)
+        {
+            base.OnRender(chartControl, chartScale);
+
+            if (Bars == null || chartControl == null) return;
+
+            // Clear label queue
+            if (labelQueue != null) labelQueue.Clear();
+
+            if (ShowAsia) RenderSessionList(asiaSessions, AsiaAreaColor, AsiaAreaOpacity, AsiaLineColor, AsiaLabelColor, ShowAsiaHigh, ShowAsiaLow, ShowAsiaOpen, ShowAsiaClose, false, 0, null, 0, null, false, false, false, chartControl, chartScale);
+            
+            if (ShowEurope) RenderSessionList(europeSessions, EuropeAreaColor, EuropeAreaOpacity, EuropeLineColor, EuropeLabelColor, ShowEuropeHigh, ShowEuropeLow, ShowEuropeOpen, ShowEuropeClose, ShowEuropeOR, EuropeORDuration, EuropeORAreaColor, EuropeORAreaOpacity, EuropeORLineColor, ShowEuropeORLines, ShowEuropeORLabels, false, chartControl, chartScale);
+            
+            if (ShowUS) RenderSessionList(usSessions, USAreaColor, USAreaOpacity, USLineColor, USLabelColor, ShowUSHigh, ShowUSLow, ShowUSOpen, ShowUSClose, ShowUSOR, USORDuration, USORAreaColor, USORAreaOpacity, USORLineColor, ShowUSORLines, ShowUSORLabels, true, chartControl, chartScale);
+
+            if (ShowWeekly) RenderSessionList(weeklySessions, Brushes.Transparent, 0, WeeklyLineColor, WeeklyLabelColor, ShowWeeklyHigh, ShowWeeklyLow, ShowWeeklyOpen, ShowWeeklyClose, false, 0, null, 0, null, false, false, true, chartControl, chartScale);
+            
+            if (ShowMonthly) RenderSessionList(monthlySessions, Brushes.Transparent, 0, MonthlyLineColor, MonthlyLabelColor, ShowMonthlyHigh, ShowMonthlyLow, ShowMonthlyOpen, ShowMonthlyClose, false, 0, null, 0, null, false, false, true, chartControl, chartScale);
+        
+            RenderQueuedLabels(chartControl);
+        }
+
+        private void RenderSessionList(List<SessionInfo> sessions, Brush areaBrush, int opacity, Brush lineBrush, Brush labelBrush, bool showHigh, bool showLow, bool showOpen, bool showClose, bool showOR, int orDuration, Brush orAreaBrush, int orOpacity, Brush orLineBrush, bool showORLines, bool showORLabels, bool extendToNextDay, ChartControl chartControl, ChartScale chartScale)
+
+        {
+            if (sessions == null || sessions.Count == 0) return;
+            
+            DateTime tmpUsEnd;
+            if (!DateTime.TryParse(USEndTime, out tmpUsEnd)) tmpUsEnd = DateTime.Parse("16:00");
+            TimeSpan usEndTimeSpan = tmpUsEnd.TimeOfDay;
+
+            DateTime currentChartDate = (Bars != null && Bars.Count > 0) ? Bars.GetTime(Bars.Count - 1).Date : DateTime.MinValue;
+
+            for (int i = 0; i < sessions.Count; i++)
+            {
+                var session = sessions[i];
+                int startIdx = session.StartBarIdx;
+                int endIdx = session.IsActive ? Bars.Count - 1 : session.EndBarIdx;
+
+                if (startIdx > ChartBars.ToIndex) continue;
+                if (!ExtendLinesUntilTouch && endIdx < ChartBars.FromIndex) continue;
+
+                DateTime sessionStart = session.SessionStartDateTime;
+                if (sessionStart == DateTime.MinValue) sessionStart = session.SessionDate.Date;
+
+                int limitIdx;
+
+                if (ExtendLinesUntilTouch)
+                {
+                    limitIdx = Bars.Count - 1;
+                }
+                else
+                {
+                    DateTime targetUsEnd = sessionStart.Date + usEndTimeSpan;
+                    if (targetUsEnd <= sessionStart) targetUsEnd = targetUsEnd.AddDays(1);
+                    if (extendToNextDay) targetUsEnd = targetUsEnd.AddDays(1);
+                    
+                    if (session.Name == "Weekly") targetUsEnd = sessionStart.AddDays(7); 
+                    if (session.Name == "Monthly") targetUsEnd = sessionStart.AddDays(31); 
+
+                    limitIdx = Bars.GetBar(targetUsEnd);
+                    if (targetUsEnd > Bars.LastBarTime) limitIdx = Bars.Count - 1;
+                    else if (limitIdx < 0) 
+                    {
+                         if (targetUsEnd < Bars.GetTime(0)) limitIdx = 0;
+                         else limitIdx = Bars.Count - 1; 
+                    }
+                }
+                
+                if (limitIdx < endIdx) limitIdx = endIdx;
+
+                bool showDateForSession = ShowDateOnLabels && (session.SessionDate.Date != currentChartDate);
+                bool isCurrentDay = (session.SessionDate.Date == currentChartDate);
+                bool showMainLabels = ShowLabels && (ShowHistoricalLabels || isCurrentDay);
+                bool showORLabelsForSession = showORLabels && (ShowHistoricalLabels || isCurrentDay);
+
+                RenderSession(session, startIdx, endIdx, areaBrush, opacity, lineBrush, labelBrush, showHigh, showLow, showOpen, showClose, showOR, orAreaBrush, orOpacity, orLineBrush, showORLines, showORLabelsForSession, chartControl, chartScale, limitIdx, showDateForSession, showMainLabels);
+            }
+        }
+
+        private void RenderSession(SessionInfo session, int startIdx, int endIdx, Brush areaBrush, int opacity, Brush lineBrush, Brush labelBrush, bool showHigh, bool showLow, bool showOpen, bool showClose, bool showOR, Brush orAreaBrush, int orOpacity, Brush orLineBrush, bool showORLines, bool showORLabels, ChartControl chartControl, ChartScale chartScale, int limitIdx, bool showDateForSession, bool showMainLabels)
+        {
+            float x1 = chartControl.GetXByBarIndex(ChartBars, startIdx);
+            float x2Box = chartControl.GetXByBarIndex(ChartBars, endIdx); 
+            
+            double high = session.IsActive ? session.CurrentHigh : session.LastHigh;
+            double low = session.IsActive ? session.CurrentLow : session.LastLow;
+            double open = session.IsActive ? session.CurrentOpen : session.LastOpen;
+            double close = session.IsActive ? session.CurrentClose : session.LastClose;
+
+            if (high == 0 || low == 0) return;
+
+            float yHigh = (float)chartScale.GetYByValue(high);
+            float yLow = (float)chartScale.GetYByValue(low);
+            float yOpen = (float)chartScale.GetYByValue(open);
+            float yClose = (float)chartScale.GetYByValue(close);
+
+            // Box
+            if (opacity > 0)
+            {
+                var dxBrush = areaBrush.ToDxBrush(RenderTarget);
+                var solidColor = ((SolidColorBrush)areaBrush).Color;
+                var colorWithAlpha = new SharpDX.Color((int)solidColor.R, (int)solidColor.G, (int)solidColor.B, (int)(255 * opacity / 100));
+                using (var fillBrush = new SharpDX.Direct2D1.SolidColorBrush(RenderTarget, colorWithAlpha))
+                {
+                    var rect = new SharpDX.RectangleF(x1, yHigh, x2Box - x1, yLow - yHigh);
+                    RenderTarget.FillRectangle(rect, fillBrush);
+                }
+                dxBrush.Dispose();
+            }
+            
+            string mainDateSuffix = showDateForSession ? " " + session.SessionDate.ToString("dd/MM/yy") : "";
+            DateTime tmpUsEnd;
+            if (!DateTime.TryParse(USEndTime, out tmpUsEnd)) tmpUsEnd = DateTime.Parse("16:00");
+            TimeSpan usEndTimeSpan = tmpUsEnd.TimeOfDay;
+
+            Action<string, double, float, int, bool, bool, int> drawSpecificLine = (name, price, yVals, breakIdx, isNaturalDash, isOR, customStartIdx) => {
+                 int currentLimit = limitIdx;
+                 if (session.IsActive) currentLimit = endIdx; 
+
+                 int seg1End = currentLimit;
+                 
+                 bool isBroken = false;
+                 if (isOR)
+                 {
+                      if (ExtendLinesUntilTouch && breakIdx != -1 && breakIdx < currentLimit)
+                           isBroken = true;
+                 }
+                 else
+                 {
+                      if (ExtendLinesUntilTouch && !session.IsActive && breakIdx != -1 && breakIdx < currentLimit)
+                           isBroken = true;
+                 }
+
+                 if (isBroken) seg1End = breakIdx;
+
+                 float xEnd1 = chartControl.GetXByBarIndex(ChartBars, seg1End);
+                 float xStart = (customStartIdx > 0) ? chartControl.GetXByBarIndex(ChartBars, customStartIdx) : x1;
+                 
+                 Brush activeLineBrush = isOR ? orLineBrush : lineBrush;
+                 
+                 var dxMainBrush = activeLineBrush.ToDxBrush(RenderTarget);
+                 SharpDX.Direct2D1.StrokeStyle mainStyle = isNaturalDash ? GetDashStyle(DashStyleHelper.Dash) : null; 
+                 
+                 RenderTarget.DrawLine(new SharpDX.Vector2(xStart, yVals), new SharpDX.Vector2(xEnd1, yVals), dxMainBrush, 1, mainStyle);
+                 dxMainBrush.Dispose();
+
+                 Brush finalLabelBrush = isOR && isBroken ? Brushes.Gray : labelBrush; 
+                 if (isBroken) finalLabelBrush = Brushes.Gray;
+                 
+                 if (isOR && !isBroken) finalLabelBrush = orLineBrush; 
+
+                 float finalLabelX = xEnd1;
+                 bool isAlignedRight = false;
+                 
+                 if (mainStyle != null) mainStyle.Dispose();
+                 
+                 // Ghost Segment
+                 if (isBroken)
+                 {
+                     DateTime touchDate = Bars.GetTime(breakIdx).Date;
+                     DateTime ghostEndDt = touchDate + usEndTimeSpan;
+                     
+                     if (Bars.GetTime(breakIdx).TimeOfDay > usEndTimeSpan) ghostEndDt = ghostEndDt.AddDays(1);
+
+                     int ghostEndIdx = Bars.GetBar(ghostEndDt);
+                     if (ghostEndDt > Bars.LastBarTime) ghostEndIdx = Bars.Count - 1;
+                     else if (ghostEndIdx < 0) 
+                     {
+                         if (ghostEndDt < Bars.GetTime(0)) ghostEndIdx = 0;
+                         else ghostEndIdx = Bars.Count - 1;
+                     } 
+                     
+                     if (ghostEndIdx < breakIdx) ghostEndIdx = breakIdx;
+
+                     float xEnd2 = chartControl.GetXByBarIndex(ChartBars, ghostEndIdx);
+                     
+                     using (var ghostBrush = Brushes.Gray.ToDxBrush(RenderTarget))
+                     {
+                          using (var dashStyle = GetDashStyle(DashStyleHelper.Dash))
+                          {
+                            RenderTarget.DrawLine(new SharpDX.Vector2(xEnd1, yVals), new SharpDX.Vector2(xEnd2, yVals), ghostBrush, 1, dashStyle);
+                          }
+                     }
+                     // Ghost Label position
+                     finalLabelBrush = Brushes.Gray;
+                     finalLabelX = xEnd2;
+                 }
+                 else if (ExtendLinesUntilTouch && (!session.IsActive || (isOR && session.OREndBarIdx > 0)) && ChartPanel != null)
+                 {
+                     // NAKED LEVEL 
+                     finalLabelX = ChartPanel.X + ChartPanel.W;
+                     isAlignedRight = true;
+                 }
+                 
+                 if (showMainLabels) DrawLabel(session.Name + " " + name + mainDateSuffix, finalLabelX, yVals, finalLabelBrush, chartControl, session.SessionDate, isAlignedRight);
+            };
+            
+            // OR
+            if (showOR && session.ORHigh > 0)
+            {
+                int orEndIdx = session.OREndBarIdx;
+                if (orEndIdx == 0) orEndIdx = endIdx; 
+                // Draw Box
+                float x2OR = chartControl.GetXByBarIndex(ChartBars, orEndIdx);
+                float yORHigh = (float)chartScale.GetYByValue(session.ORHigh);
+                float yORLow = (float)chartScale.GetYByValue(session.ORLow);
+                
+                var dxORBrush = orAreaBrush.ToDxBrush(RenderTarget);
+                var solidORColor = ((SolidColorBrush)orAreaBrush).Color;
+                var orColorWithAlpha = new SharpDX.Color((int)solidORColor.R, (int)solidORColor.G, (int)solidORColor.B, (int)(255 * orOpacity / 100)); 
+                using (var fillBrush = new SharpDX.Direct2D1.SolidColorBrush(RenderTarget, orColorWithAlpha))
+                {
+                    var rect = new SharpDX.RectangleF(x1, yORHigh, x2OR - x1, yORLow - yORHigh);
+                    RenderTarget.FillRectangle(rect, fillBrush);
+                }
+                dxORBrush.Dispose();
+                
+                if (showORLines)
+                {
+                     drawSpecificLine("OR High", session.ORHigh, yORHigh, session.ORHighBrokenBarIdx, false, true, 0);
+                     drawSpecificLine("OR Low", session.ORLow, yORLow, session.ORLowBrokenBarIdx, false, true, 0);
+                }
+            }
+
+            if (showHigh) drawSpecificLine("High", high, yHigh, session.HighBrokenBarIdx, false, false, session.HighBarIdx);
+            if (showLow) drawSpecificLine("Low", low, yLow, session.LowBrokenBarIdx, false, false, session.LowBarIdx);
+            if (showOpen) drawSpecificLine("Open", open, yOpen, session.OpenBrokenBarIdx, false, false, 0); 
+            
+            if (showClose && !session.IsActive && close != 0)
+            {
+                 int currentLimit = limitIdx;
+                 int breakIdx = session.CloseBrokenBarIdx;
+                 int seg1End = currentLimit;
+                 bool isBroken = (ExtendLinesUntilTouch && !session.IsActive && breakIdx != -1 && breakIdx < currentLimit);
+                 if (isBroken) seg1End = breakIdx;
+
+                 float xEnd1 = chartControl.GetXByBarIndex(ChartBars, seg1End);
+                 var dxMainBrush = lineBrush.ToDxBrush(RenderTarget);
+                 using (var dotStyle = GetDashStyle(DashStyleHelper.Dot))
+                 {
+                    RenderTarget.DrawLine(new SharpDX.Vector2(x1, yClose), new SharpDX.Vector2(xEnd1, yClose), dxMainBrush, 1, dotStyle);
+                 }
+                 dxMainBrush.Dispose();
+
+                 Brush finalLabelBrush = labelBrush;
+                 float finalLabelX = xEnd1;
+                 bool isAlignedRight = false;
+                 
+                 if (isBroken)
+                 {
+                     DateTime touchDate = Bars.GetTime(breakIdx).Date;
+                     DateTime ghostEndDt = touchDate + usEndTimeSpan;
+                     
+                     if (Bars.GetTime(breakIdx).TimeOfDay > usEndTimeSpan) ghostEndDt = ghostEndDt.AddDays(1);
+
+                     int ghostEndIdx = Bars.GetBar(ghostEndDt);
+                     if (ghostEndDt > Bars.LastBarTime) ghostEndIdx = Bars.Count - 1;
+                     else if (ghostEndIdx < 0) 
+                     {
+                         if (ghostEndDt < Bars.GetTime(0)) ghostEndIdx = 0;
+                         else ghostEndIdx = Bars.Count - 1;
+                     }
+                     
+                     if (ghostEndIdx < breakIdx) ghostEndIdx = breakIdx;
+
+                     float xEnd2 = chartControl.GetXByBarIndex(ChartBars, ghostEndIdx);
+
+                     using (var ghostBrush = Brushes.Gray.ToDxBrush(RenderTarget))
+                     {
+                          using (var dashStyle = GetDashStyle(DashStyleHelper.Dash))
+                          {
+                               RenderTarget.DrawLine(new SharpDX.Vector2(xEnd1, yClose), new SharpDX.Vector2(xEnd2, yClose), ghostBrush, 1, dashStyle);
+                          }
+                     }
+                     finalLabelBrush = Brushes.Gray;
+                     finalLabelX = xEnd2;
+                 }
+                 else if (ExtendLinesUntilTouch && !session.IsActive && ChartPanel != null)
+                 {
+                     finalLabelX = ChartPanel.X + ChartPanel.W;
+                     isAlignedRight = true;
+                 }
+                 
+                 if (showMainLabels) DrawLabel(session.Name + " Close" + mainDateSuffix, finalLabelX, yClose, finalLabelBrush, chartControl, session.SessionDate, isAlignedRight);
+            }
+        }
+
+        private void DrawLabel(string text, float x, float y, Brush color, ChartControl chartControl, DateTime timestamp, bool alignRight = false)
+        {
+            if (dwFactory == null || textFormat == null) return;
+
+            // Measure Text
+            float textWidth = 0;
+            using (var layout = new SharpDX.DirectWrite.TextLayout(dwFactory, text, textFormat, 2000, 20))
+            {
+                textWidth = layout.Metrics.Width;
+            }
+
+            // Calculate 'True' Top-Left X position
+            float drawX = alignRight ? (x - textWidth - 5) : (x + 5);
+
+            // Queue EVERY label
+            if (labelQueue != null)
+            {
+                labelQueue.Add(new LabelData {
+                    Text = text,
+                    DrawX = drawX,
+                    Y = y,
+                    Width = textWidth,
+                    Brush = color,
+                    Time = timestamp
+                });
+            }
+        }
+        
+        private void RenderQueuedLabels(ChartControl chartControl)
+        {
+            if (labelQueue == null || labelQueue.Count == 0 || RenderTarget == null) return;
+            
+            // De-duplicate
+            var distinctQueue = labelQueue
+                .GroupBy(l => l.Text)
+                .Select(g => g.OrderByDescending(l => l.Time).First())
+                .ToList();
+
+            // Sort by Time DESC
+            var sortedQueue = distinctQueue.OrderByDescending(l => l.Time).ToList();
+            
+            List<SharpDX.RectangleF> placedRects = new List<SharpDX.RectangleF>();
+            
+            foreach (var label in sortedQueue)
+            {
+                var solidColor = ((SolidColorBrush)label.Brush).Color;
+                var dxColor = new SharpDX.Color((int)solidColor.R, (int)solidColor.G, (int)solidColor.B, 255);
+                using (var brush = new SharpDX.Direct2D1.SolidColorBrush(RenderTarget, dxColor))
+                {
+                    // Re-create layout for drawing
+                    using (var layout = new SharpDX.DirectWrite.TextLayout(dwFactory, label.Text, textFormat, 2000, 20))
+                    {
+                        float desiredX = label.DrawX;
+                        float desiredY = label.Y - 10;
+                        
+                        // Candidate Box
+                        SharpDX.RectangleF candidate = new SharpDX.RectangleF(desiredX, desiredY, label.Width, 20);
+                        
+                        // Resolve Collision (Universal Shift Left)
+                        int safety = 0;
+                        while (safety < 100)
+                        {
+                            bool hit = false;
+                            foreach (var rect in placedRects)
+                            {
+                                if (candidate.Intersects(rect))
+                                {
+                                    // Shift Left
+                                    float newRight = rect.Left - 10;
+                                    candidate.X = newRight - candidate.Width;
+                                    hit = true;
+                                    break;
+                                }
+                            }
+                            if (!hit) break;
+                            safety++;
+                        }
+                        
+                        // Draw Background
+                        using (var backBrush = new SharpDX.Direct2D1.SolidColorBrush(RenderTarget, SharpDX.Color.Black))
+                        {
+                            RenderTarget.FillRectangle(candidate, backBrush);
+                        }
+
+                        RenderTarget.DrawTextLayout(new SharpDX.Vector2(candidate.X, candidate.Y), layout, brush);
+                        placedRects.Add(candidate);
+                    }
+                }
+            }
+        }
+
+
+
+        private SharpDX.Direct2D1.StrokeStyle GetDashStyle(DashStyleHelper style)
+        {
+            if (RenderTarget == null) return null;
+            switch (style)
+            {
+                case DashStyleHelper.Dash:
+                    return new SharpDX.Direct2D1.StrokeStyle(RenderTarget.Factory, new SharpDX.Direct2D1.StrokeStyleProperties { DashStyle = SharpDX.Direct2D1.DashStyle.Dash });
+                case DashStyleHelper.Dot:
+                    return new SharpDX.Direct2D1.StrokeStyle(RenderTarget.Factory, new SharpDX.Direct2D1.StrokeStyleProperties { DashStyle = SharpDX.Direct2D1.DashStyle.Dot });
+                default:
+                    return null;
+            }
+        }
+
+        public override void OnRenderTargetChanged()
+        {
+            base.OnRenderTargetChanged();
+        }
+
+        #region Properties
+        // Asia
+        [NinjaScriptProperty]
+        [Display(Name = "Asia Start Time", GroupName = "Asia Session", Order = 1)]
+        public string AsiaStartTime { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "Asia End Time", GroupName = "Asia Session", Order = 2)]
+        public string AsiaEndTime { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "Show Asia", GroupName = "Asia Session", Order = 3)]
+        public bool ShowAsia { get; set; }
+        
+        [XmlIgnore]
+        [Display(Name = "Asia Area Color", GroupName = "Asia Session", Order = 4)]
+        public Brush AsiaAreaColor { get; set; }
+        
+        [Range(0, 100)]
+        [Display(Name = "Asia Area Opacity", GroupName = "Asia Session", Order = 5)]
+        public int AsiaAreaOpacity { get; set; }
+        
+        [XmlIgnore]
+        [Display(Name = "Asia Line Color", GroupName = "Asia Session", Order = 6)]
+        public Brush AsiaLineColor { get; set; }
+        
+        [XmlIgnore]
+        [Display(Name = "Asia Label Color", GroupName = "Asia Session", Order = 7)]
+        public Brush AsiaLabelColor { get; set; }
+        
+        [NinjaScriptProperty]
+        [Display(Name = "Show Asia High", GroupName = "Asia Session", Order = 8)]
+        public bool ShowAsiaHigh { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "Show Asia Low", GroupName = "Asia Session", Order = 9)]
+        public bool ShowAsiaLow { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "Show Asia Open", GroupName = "Asia Session", Order = 10)]
+        public bool ShowAsiaOpen { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "Show Asia Close", GroupName = "Asia Session", Order = 11)]
+        public bool ShowAsiaClose { get; set; }
+
+        // Europe
+        [NinjaScriptProperty]
+        [Display(Name = "Europe Start Time", GroupName = "Europe Session", Order = 1)]
+        public string EuropeStartTime { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "Europe End Time", GroupName = "Europe Session", Order = 2)]
+        public string EuropeEndTime { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "Show Europe", GroupName = "Europe Session", Order = 3)]
+        public bool ShowEurope { get; set; }
+        
+        [XmlIgnore]
+        [Display(Name = "Europe Area Color", GroupName = "Europe Session", Order = 4)]
+        public Brush EuropeAreaColor { get; set; }
+        
+        [Range(0, 100)]
+        [Display(Name = "Europe Area Opacity", GroupName = "Europe Session", Order = 5)]
+        public int EuropeAreaOpacity { get; set; }
+        
+        [XmlIgnore]
+        [Display(Name = "Europe Line Color", GroupName = "Europe Session", Order = 6)]
+        public Brush EuropeLineColor { get; set; }
+        
+        [XmlIgnore]
+        [Display(Name = "Europe Label Color", GroupName = "Europe Session", Order = 7)]
+        public Brush EuropeLabelColor { get; set; }
+        
+        [NinjaScriptProperty]
+        [Display(Name = "Show Europe High", GroupName = "Europe Session", Order = 8)]
+        public bool ShowEuropeHigh { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "Show Europe Low", GroupName = "Europe Session", Order = 9)]
+        public bool ShowEuropeLow { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "Show Europe Open", GroupName = "Europe Session", Order = 10)]
+        public bool ShowEuropeOpen { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "Show Europe Close", GroupName = "Europe Session", Order = 11)]
+        public bool ShowEuropeClose { get; set; }
+        
+        [NinjaScriptProperty]
+        [Display(Name = "Show Europe OR", GroupName = "Europe Session", Order = 12)]
+        public bool ShowEuropeOR { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "Europe OR Duration (min)", GroupName = "Europe Session", Order = 13)]
+        public int EuropeORDuration { get; set; }
+        
+        [XmlIgnore]
+        [Display(Name = "Europe OR Area Color", GroupName = "Europe Session", Order = 14)]
+        public Brush EuropeORAreaColor { get; set; }
+        
+        [XmlIgnore]
+        [Display(Name = "Europe OR Line Color", GroupName = "Europe Session", Order = 15)]
+        public Brush EuropeORLineColor { get; set; }
+        
+        [NinjaScriptProperty]
+        [Display(Name = "Show Europe OR Lines", GroupName = "Europe Session", Order = 16)]
+        public bool ShowEuropeORLines { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "Show Europe OR Labels", GroupName = "Europe Session", Order = 17)]
+        public bool ShowEuropeORLabels { get; set; }
+
+        // US
+        [NinjaScriptProperty]
+        [Display(Name = "US Start Time", GroupName = "US Session", Order = 1)]
+        public string USStartTime { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "US End Time", GroupName = "US Session", Order = 2)]
+        public string USEndTime { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "Show US", GroupName = "US Session", Order = 3)]
+        public bool ShowUS { get; set; }
+        
+        [XmlIgnore]
+        [Display(Name = "US Area Color", GroupName = "US Session", Order = 4)]
+        public Brush USAreaColor { get; set; }
+        
+        [Range(0, 100)]
+        [Display(Name = "US Area Opacity", GroupName = "US Session", Order = 5)]
+        public int USAreaOpacity { get; set; }
+        
+        [XmlIgnore]
+        [Display(Name = "US Line Color", GroupName = "US Session", Order = 6)]
+        public Brush USLineColor { get; set; }
+        
+        [XmlIgnore]
+        [Display(Name = "US Label Color", GroupName = "US Session", Order = 7)]
+        public Brush USLabelColor { get; set; }
+        
+        [NinjaScriptProperty]
+        [Display(Name = "Show US High", GroupName = "US Session", Order = 8)]
+        public bool ShowUSHigh { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "Show US Low", GroupName = "US Session", Order = 9)]
+        public bool ShowUSLow { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "Show US Open", GroupName = "US Session", Order = 10)]
+        public bool ShowUSOpen { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "Show US Close", GroupName = "US Session", Order = 11)]
+        public bool ShowUSClose { get; set; }
+        
+        [NinjaScriptProperty]
+        [Display(Name = "Show US OR", GroupName = "US Session", Order = 12)]
+        public bool ShowUSOR { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "US OR Duration (min)", GroupName = "US Session", Order = 13)]
+        public int USORDuration { get; set; }
+        
+        [XmlIgnore]
+        [Display(Name = "US OR Area Color", GroupName = "US Session", Order = 14)]
+        public Brush USORAreaColor { get; set; }
+        
+        [XmlIgnore]
+        [Display(Name = "US OR Line Color", GroupName = "US Session", Order = 15)]
+        public Brush USORLineColor { get; set; }
+        
+        [NinjaScriptProperty]
+        [Display(Name = "Show US OR Lines", GroupName = "US Session", Order = 16)]
+        public bool ShowUSORLines { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "Show US OR Labels", GroupName = "US Session", Order = 17)]
+        public bool ShowUSORLabels { get; set; }
+
+        // Weekly
+        [NinjaScriptProperty]
+        [Display(Name = "Show Weekly", GroupName = "Weekly Session", Order = 1)]
+        public bool ShowWeekly { get; set; }
+        
+        [XmlIgnore]
+        [Display(Name = "Weekly Line Color", GroupName = "Weekly Session", Order = 2)]
+        public Brush WeeklyLineColor { get; set; }
+        
+        [XmlIgnore]
+        [Display(Name = "Weekly Label Color", GroupName = "Weekly Session", Order = 3)]
+        public Brush WeeklyLabelColor { get; set; }
+        
+        [NinjaScriptProperty]
+        [Display(Name = "Show Weekly High", GroupName = "Weekly Session", Order = 4)]
+        public bool ShowWeeklyHigh { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "Show Weekly Low", GroupName = "Weekly Session", Order = 5)]
+        public bool ShowWeeklyLow { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "Show Weekly Open", GroupName = "Weekly Session", Order = 6)]
+        public bool ShowWeeklyOpen { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "Show Weekly Close", GroupName = "Weekly Session", Order = 7)]
+        public bool ShowWeeklyClose { get; set; }
+
+        // Monthly
+        [NinjaScriptProperty]
+        [Display(Name = "Show Monthly", GroupName = "Monthly Session", Order = 1)]
+        public bool ShowMonthly { get; set; }
+        
+        [XmlIgnore]
+        [Display(Name = "Monthly Line Color", GroupName = "Monthly Session", Order = 2)]
+        public Brush MonthlyLineColor { get; set; }
+        
+        [XmlIgnore]
+        [Display(Name = "Monthly Label Color", GroupName = "Monthly Session", Order = 3)]
+        public Brush MonthlyLabelColor { get; set; }
+        
+        [NinjaScriptProperty]
+        [Display(Name = "Show Monthly High", GroupName = "Monthly Session", Order = 4)]
+        public bool ShowMonthlyHigh { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "Show Monthly Low", GroupName = "Monthly Session", Order = 5)]
+        public bool ShowMonthlyLow { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "Show Monthly Open", GroupName = "Monthly Session", Order = 6)]
+        public bool ShowMonthlyOpen { get; set; }
+        [NinjaScriptProperty]
+        [Display(Name = "Show Monthly Close", GroupName = "Monthly Session", Order = 7)]
+        public bool ShowMonthlyClose { get; set; }
+
+        // Labels
+        [NinjaScriptProperty]
+        [Display(Name = "Show Labels", GroupName = "Labels", Order = 1)]
+        public bool ShowLabels { get; set; }
+        
+        [NinjaScriptProperty]
+        [Display(Name = "Show Historical Labels", GroupName = "Labels", Order = 2)]
+        public bool ShowHistoricalLabels { get; set; }
+        [NinjaScriptProperty]
+        [Range(1, 100)]
+        [Display(Name = "Label Font Size", GroupName = "Labels", Order = 3)]
+        public int LabelFontSize { get; set; }
+        
+        [NinjaScriptProperty]
+        [Display(Name = "Extend Lines Until Touch", GroupName = "Options", Order = 1)]
+        public bool ExtendLinesUntilTouch { get; set; }
+        
+        [NinjaScriptProperty]
+        [Display(Name = "Show Date On Labels", GroupName = "Options", Order = 2)]
+        public bool ShowDateOnLabels { get; set; }
+        
+        [NinjaScriptProperty]
+        [Display(Name = "Drawing Z-Order", GroupName = "Visual", Order = 100, Description = "Set to negative value (e.g. -5) to draw BEHIND price.")]
+        public int PlotZOrder
+        {
+            get { return ZOrder; }
+            set { ZOrder = value; }
+        }
+
+        [Range(0, 100)]
+        [NinjaScriptProperty]
+        [Display(Name="Europe OR Opacity", Description="Opacity for Europe OR Box (0-100)", Order=6, GroupName="2. Europe Session")]
+        public int EuropeORAreaOpacity
+        { get; set; }
+
+        [Range(0, 100)]
+        [NinjaScriptProperty]
+        [Display(Name="US OR Opacity", Description="Opacity for US OR Box (0-100)", Order=6, GroupName="3. US Session")]
+        public int USORAreaOpacity
+        { get; set; }
+
+
+        #endregion
+
+        private class SessionInfo
+        {
+            public string Name;
+            public DateTime SessionDate;
+            public bool IsActive;
+            public double CurrentHigh;
+            public double CurrentLow;
+            public double CurrentOpen;
+            public double CurrentClose;
+            public double LastHigh;
+            public double LastLow;
+            public double LastOpen;
+            public double LastClose;
+            public int StartBarIdx;
+            public int EndBarIdx;
+            
+            // Peak/Valley locations
+            public int HighBarIdx;
+            public int LowBarIdx;
+            
+            // OR Info
+            public double ORHigh;
+            public double ORLow;
+            public DateTime SessionStartDateTime;
+            public DateTime OREndDateTime;
+            public int OREndBarIdx;
+            
+            // Touch detection
+            public int HighBrokenBarIdx = -1;
+            public int LowBrokenBarIdx = -1;
+            public int OpenBrokenBarIdx = -1;
+            public int CloseBrokenBarIdx = -1;
+            
+            // OR Touch detection
+            public int ORHighBrokenBarIdx = -1;
+            public int ORLowBrokenBarIdx = -1;
+
+            public SessionInfo(string name, DateTime date)
+            {
+                Name = name;
+                SessionDate = date;
+            }
+        }
+        
+        private class LabelData
+        {
+            public string Text;
+            public float DrawX; // Top-Left X
+            public float Y;
+            public float Width;
+            public Brush Brush;
+            public DateTime Time;
+        }
+    }
+}
+
+#region NinjaScript generated code. Neither change nor remove.
+
+namespace NinjaTrader.NinjaScript.Indicators
+{
+	public partial class Indicator : NinjaTrader.Gui.NinjaScript.IndicatorRenderBase
+	{
+		private RelativeIndicators.RelativeLevels[] cacheRelativeLevels;
+		public RelativeIndicators.RelativeLevels RelativeLevels(string asiaStartTime, string asiaEndTime, bool showAsia, bool showAsiaHigh, bool showAsiaLow, bool showAsiaOpen, bool showAsiaClose, string europeStartTime, string europeEndTime, bool showEurope, bool showEuropeHigh, bool showEuropeLow, bool showEuropeOpen, bool showEuropeClose, bool showEuropeOR, int europeORDuration, bool showEuropeORLines, bool showEuropeORLabels, string uSStartTime, string uSEndTime, bool showUS, bool showUSHigh, bool showUSLow, bool showUSOpen, bool showUSClose, bool showUSOR, int uSORDuration, bool showUSORLines, bool showUSORLabels, bool showWeekly, bool showWeeklyHigh, bool showWeeklyLow, bool showWeeklyOpen, bool showWeeklyClose, bool showMonthly, bool showMonthlyHigh, bool showMonthlyLow, bool showMonthlyOpen, bool showMonthlyClose, bool showLabels, bool showHistoricalLabels, int labelFontSize, bool extendLinesUntilTouch, bool showDateOnLabels, int plotZOrder, int europeORAreaOpacity, int uSORAreaOpacity)
+		{
+			return RelativeLevels(Input, asiaStartTime, asiaEndTime, showAsia, showAsiaHigh, showAsiaLow, showAsiaOpen, showAsiaClose, europeStartTime, europeEndTime, showEurope, showEuropeHigh, showEuropeLow, showEuropeOpen, showEuropeClose, showEuropeOR, europeORDuration, showEuropeORLines, showEuropeORLabels, uSStartTime, uSEndTime, showUS, showUSHigh, showUSLow, showUSOpen, showUSClose, showUSOR, uSORDuration, showUSORLines, showUSORLabels, showWeekly, showWeeklyHigh, showWeeklyLow, showWeeklyOpen, showWeeklyClose, showMonthly, showMonthlyHigh, showMonthlyLow, showMonthlyOpen, showMonthlyClose, showLabels, showHistoricalLabels, labelFontSize, extendLinesUntilTouch, showDateOnLabels, plotZOrder, europeORAreaOpacity, uSORAreaOpacity);
+		}
+
+		public RelativeIndicators.RelativeLevels RelativeLevels(ISeries<double> input, string asiaStartTime, string asiaEndTime, bool showAsia, bool showAsiaHigh, bool showAsiaLow, bool showAsiaOpen, bool showAsiaClose, string europeStartTime, string europeEndTime, bool showEurope, bool showEuropeHigh, bool showEuropeLow, bool showEuropeOpen, bool showEuropeClose, bool showEuropeOR, int europeORDuration, bool showEuropeORLines, bool showEuropeORLabels, string uSStartTime, string uSEndTime, bool showUS, bool showUSHigh, bool showUSLow, bool showUSOpen, bool showUSClose, bool showUSOR, int uSORDuration, bool showUSORLines, bool showUSORLabels, bool showWeekly, bool showWeeklyHigh, bool showWeeklyLow, bool showWeeklyOpen, bool showWeeklyClose, bool showMonthly, bool showMonthlyHigh, bool showMonthlyLow, bool showMonthlyOpen, bool showMonthlyClose, bool showLabels, bool showHistoricalLabels, int labelFontSize, bool extendLinesUntilTouch, bool showDateOnLabels, int plotZOrder, int europeORAreaOpacity, int uSORAreaOpacity)
+		{
+			if (cacheRelativeLevels != null)
+				for (int idx = 0; idx < cacheRelativeLevels.Length; idx++)
+					if (cacheRelativeLevels[idx] != null && cacheRelativeLevels[idx].AsiaStartTime == asiaStartTime && cacheRelativeLevels[idx].AsiaEndTime == asiaEndTime && cacheRelativeLevels[idx].ShowAsia == showAsia && cacheRelativeLevels[idx].ShowAsiaHigh == showAsiaHigh && cacheRelativeLevels[idx].ShowAsiaLow == showAsiaLow && cacheRelativeLevels[idx].ShowAsiaOpen == showAsiaOpen && cacheRelativeLevels[idx].ShowAsiaClose == showAsiaClose && cacheRelativeLevels[idx].EuropeStartTime == europeStartTime && cacheRelativeLevels[idx].EuropeEndTime == europeEndTime && cacheRelativeLevels[idx].ShowEurope == showEurope && cacheRelativeLevels[idx].ShowEuropeHigh == showEuropeHigh && cacheRelativeLevels[idx].ShowEuropeLow == showEuropeLow && cacheRelativeLevels[idx].ShowEuropeOpen == showEuropeOpen && cacheRelativeLevels[idx].ShowEuropeClose == showEuropeClose && cacheRelativeLevels[idx].ShowEuropeOR == showEuropeOR && cacheRelativeLevels[idx].EuropeORDuration == europeORDuration && cacheRelativeLevels[idx].ShowEuropeORLines == showEuropeORLines && cacheRelativeLevels[idx].ShowEuropeORLabels == showEuropeORLabels && cacheRelativeLevels[idx].USStartTime == uSStartTime && cacheRelativeLevels[idx].USEndTime == uSEndTime && cacheRelativeLevels[idx].ShowUS == showUS && cacheRelativeLevels[idx].ShowUSHigh == showUSHigh && cacheRelativeLevels[idx].ShowUSLow == showUSLow && cacheRelativeLevels[idx].ShowUSOpen == showUSOpen && cacheRelativeLevels[idx].ShowUSClose == showUSClose && cacheRelativeLevels[idx].ShowUSOR == showUSOR && cacheRelativeLevels[idx].USORDuration == uSORDuration && cacheRelativeLevels[idx].ShowUSORLines == showUSORLines && cacheRelativeLevels[idx].ShowUSORLabels == showUSORLabels && cacheRelativeLevels[idx].ShowWeekly == showWeekly && cacheRelativeLevels[idx].ShowWeeklyHigh == showWeeklyHigh && cacheRelativeLevels[idx].ShowWeeklyLow == showWeeklyLow && cacheRelativeLevels[idx].ShowWeeklyOpen == showWeeklyOpen && cacheRelativeLevels[idx].ShowWeeklyClose == showWeeklyClose && cacheRelativeLevels[idx].ShowMonthly == showMonthly && cacheRelativeLevels[idx].ShowMonthlyHigh == showMonthlyHigh && cacheRelativeLevels[idx].ShowMonthlyLow == showMonthlyLow && cacheRelativeLevels[idx].ShowMonthlyOpen == showMonthlyOpen && cacheRelativeLevels[idx].ShowMonthlyClose == showMonthlyClose && cacheRelativeLevels[idx].ShowLabels == showLabels && cacheRelativeLevels[idx].ShowHistoricalLabels == showHistoricalLabels && cacheRelativeLevels[idx].LabelFontSize == labelFontSize && cacheRelativeLevels[idx].ExtendLinesUntilTouch == extendLinesUntilTouch && cacheRelativeLevels[idx].ShowDateOnLabels == showDateOnLabels && cacheRelativeLevels[idx].PlotZOrder == plotZOrder && cacheRelativeLevels[idx].EuropeORAreaOpacity == europeORAreaOpacity && cacheRelativeLevels[idx].USORAreaOpacity == uSORAreaOpacity && cacheRelativeLevels[idx].EqualsInput(input))
+						return cacheRelativeLevels[idx];
+			return CacheIndicator<RelativeIndicators.RelativeLevels>(new RelativeIndicators.RelativeLevels(){ AsiaStartTime = asiaStartTime, AsiaEndTime = asiaEndTime, ShowAsia = showAsia, ShowAsiaHigh = showAsiaHigh, ShowAsiaLow = showAsiaLow, ShowAsiaOpen = showAsiaOpen, ShowAsiaClose = showAsiaClose, EuropeStartTime = europeStartTime, EuropeEndTime = europeEndTime, ShowEurope = showEurope, ShowEuropeHigh = showEuropeHigh, ShowEuropeLow = showEuropeLow, ShowEuropeOpen = showEuropeOpen, ShowEuropeClose = showEuropeClose, ShowEuropeOR = showEuropeOR, EuropeORDuration = europeORDuration, ShowEuropeORLines = showEuropeORLines, ShowEuropeORLabels = showEuropeORLabels, USStartTime = uSStartTime, USEndTime = uSEndTime, ShowUS = showUS, ShowUSHigh = showUSHigh, ShowUSLow = showUSLow, ShowUSOpen = showUSOpen, ShowUSClose = showUSClose, ShowUSOR = showUSOR, USORDuration = uSORDuration, ShowUSORLines = showUSORLines, ShowUSORLabels = showUSORLabels, ShowWeekly = showWeekly, ShowWeeklyHigh = showWeeklyHigh, ShowWeeklyLow = showWeeklyLow, ShowWeeklyOpen = showWeeklyOpen, ShowWeeklyClose = showWeeklyClose, ShowMonthly = showMonthly, ShowMonthlyHigh = showMonthlyHigh, ShowMonthlyLow = showMonthlyLow, ShowMonthlyOpen = showMonthlyOpen, ShowMonthlyClose = showMonthlyClose, ShowLabels = showLabels, ShowHistoricalLabels = showHistoricalLabels, LabelFontSize = labelFontSize, ExtendLinesUntilTouch = extendLinesUntilTouch, ShowDateOnLabels = showDateOnLabels, PlotZOrder = plotZOrder, EuropeORAreaOpacity = europeORAreaOpacity, USORAreaOpacity = uSORAreaOpacity }, input, ref cacheRelativeLevels);
+		}
+	}
+}
+
+namespace NinjaTrader.NinjaScript.MarketAnalyzerColumns
+{
+	public partial class MarketAnalyzerColumn : MarketAnalyzerColumnBase
+	{
+		public Indicators.RelativeIndicators.RelativeLevels RelativeLevels(string asiaStartTime, string asiaEndTime, bool showAsia, bool showAsiaHigh, bool showAsiaLow, bool showAsiaOpen, bool showAsiaClose, string europeStartTime, string europeEndTime, bool showEurope, bool showEuropeHigh, bool showEuropeLow, bool showEuropeOpen, bool showEuropeClose, bool showEuropeOR, int europeORDuration, bool showEuropeORLines, bool showEuropeORLabels, string uSStartTime, string uSEndTime, bool showUS, bool showUSHigh, bool showUSLow, bool showUSOpen, bool showUSClose, bool showUSOR, int uSORDuration, bool showUSORLines, bool showUSORLabels, bool showWeekly, bool showWeeklyHigh, bool showWeeklyLow, bool showWeeklyOpen, bool showWeeklyClose, bool showMonthly, bool showMonthlyHigh, bool showMonthlyLow, bool showMonthlyOpen, bool showMonthlyClose, bool showLabels, bool showHistoricalLabels, int labelFontSize, bool extendLinesUntilTouch, bool showDateOnLabels, int plotZOrder, int europeORAreaOpacity, int uSORAreaOpacity)
+		{
+			return indicator.RelativeLevels(Input, asiaStartTime, asiaEndTime, showAsia, showAsiaHigh, showAsiaLow, showAsiaOpen, showAsiaClose, europeStartTime, europeEndTime, showEurope, showEuropeHigh, showEuropeLow, showEuropeOpen, showEuropeClose, showEuropeOR, europeORDuration, showEuropeORLines, showEuropeORLabels, uSStartTime, uSEndTime, showUS, showUSHigh, showUSLow, showUSOpen, showUSClose, showUSOR, uSORDuration, showUSORLines, showUSORLabels, showWeekly, showWeeklyHigh, showWeeklyLow, showWeeklyOpen, showWeeklyClose, showMonthly, showMonthlyHigh, showMonthlyLow, showMonthlyOpen, showMonthlyClose, showLabels, showHistoricalLabels, labelFontSize, extendLinesUntilTouch, showDateOnLabels, plotZOrder, europeORAreaOpacity, uSORAreaOpacity);
+		}
+
+		public Indicators.RelativeIndicators.RelativeLevels RelativeLevels(ISeries<double> input , string asiaStartTime, string asiaEndTime, bool showAsia, bool showAsiaHigh, bool showAsiaLow, bool showAsiaOpen, bool showAsiaClose, string europeStartTime, string europeEndTime, bool showEurope, bool showEuropeHigh, bool showEuropeLow, bool showEuropeOpen, bool showEuropeClose, bool showEuropeOR, int europeORDuration, bool showEuropeORLines, bool showEuropeORLabels, string uSStartTime, string uSEndTime, bool showUS, bool showUSHigh, bool showUSLow, bool showUSOpen, bool showUSClose, bool showUSOR, int uSORDuration, bool showUSORLines, bool showUSORLabels, bool showWeekly, bool showWeeklyHigh, bool showWeeklyLow, bool showWeeklyOpen, bool showWeeklyClose, bool showMonthly, bool showMonthlyHigh, bool showMonthlyLow, bool showMonthlyOpen, bool showMonthlyClose, bool showLabels, bool showHistoricalLabels, int labelFontSize, bool extendLinesUntilTouch, bool showDateOnLabels, int plotZOrder, int europeORAreaOpacity, int uSORAreaOpacity)
+		{
+			return indicator.RelativeLevels(input, asiaStartTime, asiaEndTime, showAsia, showAsiaHigh, showAsiaLow, showAsiaOpen, showAsiaClose, europeStartTime, europeEndTime, showEurope, showEuropeHigh, showEuropeLow, showEuropeOpen, showEuropeClose, showEuropeOR, europeORDuration, showEuropeORLines, showEuropeORLabels, uSStartTime, uSEndTime, showUS, showUSHigh, showUSLow, showUSOpen, showUSClose, showUSOR, uSORDuration, showUSORLines, showUSORLabels, showWeekly, showWeeklyHigh, showWeeklyLow, showWeeklyOpen, showWeeklyClose, showMonthly, showMonthlyHigh, showMonthlyLow, showMonthlyOpen, showMonthlyClose, showLabels, showHistoricalLabels, labelFontSize, extendLinesUntilTouch, showDateOnLabels, plotZOrder, europeORAreaOpacity, uSORAreaOpacity);
+		}
+	}
+}
+
+namespace NinjaTrader.NinjaScript.Strategies
+{
+	public partial class Strategy : NinjaTrader.Gui.NinjaScript.StrategyRenderBase
+	{
+		public Indicators.RelativeIndicators.RelativeLevels RelativeLevels(string asiaStartTime, string asiaEndTime, bool showAsia, bool showAsiaHigh, bool showAsiaLow, bool showAsiaOpen, bool showAsiaClose, string europeStartTime, string europeEndTime, bool showEurope, bool showEuropeHigh, bool showEuropeLow, bool showEuropeOpen, bool showEuropeClose, bool showEuropeOR, int europeORDuration, bool showEuropeORLines, bool showEuropeORLabels, string uSStartTime, string uSEndTime, bool showUS, bool showUSHigh, bool showUSLow, bool showUSOpen, bool showUSClose, bool showUSOR, int uSORDuration, bool showUSORLines, bool showUSORLabels, bool showWeekly, bool showWeeklyHigh, bool showWeeklyLow, bool showWeeklyOpen, bool showWeeklyClose, bool showMonthly, bool showMonthlyHigh, bool showMonthlyLow, bool showMonthlyOpen, bool showMonthlyClose, bool showLabels, bool showHistoricalLabels, int labelFontSize, bool extendLinesUntilTouch, bool showDateOnLabels, int plotZOrder, int europeORAreaOpacity, int uSORAreaOpacity)
+		{
+			return indicator.RelativeLevels(Input, asiaStartTime, asiaEndTime, showAsia, showAsiaHigh, showAsiaLow, showAsiaOpen, showAsiaClose, europeStartTime, europeEndTime, showEurope, showEuropeHigh, showEuropeLow, showEuropeOpen, showEuropeClose, showEuropeOR, europeORDuration, showEuropeORLines, showEuropeORLabels, uSStartTime, uSEndTime, showUS, showUSHigh, showUSLow, showUSOpen, showUSClose, showUSOR, uSORDuration, showUSORLines, showUSORLabels, showWeekly, showWeeklyHigh, showWeeklyLow, showWeeklyOpen, showWeeklyClose, showMonthly, showMonthlyHigh, showMonthlyLow, showMonthlyOpen, showMonthlyClose, showLabels, showHistoricalLabels, labelFontSize, extendLinesUntilTouch, showDateOnLabels, plotZOrder, europeORAreaOpacity, uSORAreaOpacity);
+		}
+
+		public Indicators.RelativeIndicators.RelativeLevels RelativeLevels(ISeries<double> input , string asiaStartTime, string asiaEndTime, bool showAsia, bool showAsiaHigh, bool showAsiaLow, bool showAsiaOpen, bool showAsiaClose, string europeStartTime, string europeEndTime, bool showEurope, bool showEuropeHigh, bool showEuropeLow, bool showEuropeOpen, bool showEuropeClose, bool showEuropeOR, int europeORDuration, bool showEuropeORLines, bool showEuropeORLabels, string uSStartTime, string uSEndTime, bool showUS, bool showUSHigh, bool showUSLow, bool showUSOpen, bool showUSClose, bool showUSOR, int uSORDuration, bool showUSORLines, bool showUSORLabels, bool showWeekly, bool showWeeklyHigh, bool showWeeklyLow, bool showWeeklyOpen, bool showWeeklyClose, bool showMonthly, bool showMonthlyHigh, bool showMonthlyLow, bool showMonthlyOpen, bool showMonthlyClose, bool showLabels, bool showHistoricalLabels, int labelFontSize, bool extendLinesUntilTouch, bool showDateOnLabels, int plotZOrder, int europeORAreaOpacity, int uSORAreaOpacity)
+		{
+			return indicator.RelativeLevels(input, asiaStartTime, asiaEndTime, showAsia, showAsiaHigh, showAsiaLow, showAsiaOpen, showAsiaClose, europeStartTime, europeEndTime, showEurope, showEuropeHigh, showEuropeLow, showEuropeOpen, showEuropeClose, showEuropeOR, europeORDuration, showEuropeORLines, showEuropeORLabels, uSStartTime, uSEndTime, showUS, showUSHigh, showUSLow, showUSOpen, showUSClose, showUSOR, uSORDuration, showUSORLines, showUSORLabels, showWeekly, showWeeklyHigh, showWeeklyLow, showWeeklyOpen, showWeeklyClose, showMonthly, showMonthlyHigh, showMonthlyLow, showMonthlyOpen, showMonthlyClose, showLabels, showHistoricalLabels, labelFontSize, extendLinesUntilTouch, showDateOnLabels, plotZOrder, europeORAreaOpacity, uSORAreaOpacity);
+		}
+	}
+}
+
+#endregion

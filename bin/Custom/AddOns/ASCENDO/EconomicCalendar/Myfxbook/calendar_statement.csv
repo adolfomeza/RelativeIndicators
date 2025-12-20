@@ -1,0 +1,195 @@
+Date,Event,Impact,Currency
+"2022, November 20, 13:00","(Slovakia) Unemployment Rate",Low,EUR
+"2022, November 20, 19:30","(Euro Area) ECB President Lagarde Speech",Medium,EUR
+"2022, November 20, 23:01","(Ireland) Consumer Confidence",Low,EUR
+"2022, November 21, 02:00","(New Zealand) Credit Card Spending YoY",Low,NZD
+"2022, November 21, 05:30","(Netherlands) Consumer Confidence",Medium,EUR
+"2022, November 21, 06:00","(Estonia) PPI YoY",Low,EUR
+"2022, November 21, 06:00","(Estonia) PPI MoM",Low,EUR
+"2022, November 21, 07:00","(Germany) PPI MoM",Medium,EUR
+"2022, November 21, 07:00","(Germany) PPI YoY",Low,EUR
+"2022, November 21, 08:00","(Euro Area) ECB Fernandez-Bollo Speech",Low,EUR
+"2022, November 21, 09:00","(Greece) Current Account",Low,EUR
+"2022, November 21, 09:05","(United Kingdom) BoE Cunliffe Speech",Low,GBP
+"2022, November 21, 09:30","(Slovenia) PPI YoY",Low,EUR
+"2022, November 21, 10:30","(Germany) 12-Month Bubill Auction",Low,EUR
+"2022, November 21, 11:00","(Luxembourg) Unemployment Rate",Low,EUR
+"2022, November 21, 12:00","(Montenegro) Current Account",Low,EUR
+"2022, November 21, 12:00","(Slovenia) Unemployment Rate",Low,EUR
+"2022, November 21, 13:30","(United States) Chicago Fed National Activity Index",Medium,USD
+"2022, November 21, 14:00","(France) 12-Month BTF Auction",Low,EUR
+"2022, November 21, 14:00","(France) 6-Month BTF Auction",Low,EUR
+"2022, November 21, 14:00","(France) 3-Month BTF Auction",Low,EUR
+"2022, November 21, 16:30","(United States) 6-Month Bill Auction",Low,USD
+"2022, November 21, 16:30","(United States) 2-Year Note Auction",Low,USD
+"2022, November 21, 18:00","(United States) 3-Month Bill Auction",Low,USD
+"2022, November 21, 18:00","(United States) 5-Year Note Auction",Low,USD
+"2022, November 21, 21:30","(El Salvador) Balance of Trade",Low,USD
+"2022, November 21, 21:45","(New Zealand) Exports",Low,NZD
+"2022, November 21, 21:45","(New Zealand) Imports",Low,NZD
+"2022, November 21, 21:45","(New Zealand) Balance of Trade",Medium,NZD
+"2022, November 22, 06:00","(Finland) Unemployment Rate",Low,EUR
+"2022, November 22, 07:00","(United Kingdom) Public Sector Net Borrowing",Low,GBP
+"2022, November 22, 07:00","(United Kingdom) Public Sector Net Borrowing Ex Banks",Low,GBP
+"2022, November 22, 07:00","(Australia) RBA Gov Lowe Speech",High,AUD
+"2022, November 22, 08:10","(Slovakia) Current Account",Low,EUR
+"2022, November 22, 09:00","(Euro Area) Current Account s.a",Low,EUR
+"2022, November 22, 09:00","(Euro Area) Current Account",Low,EUR
+"2022, November 22, 09:30","(Slovenia) Consumer Confidence",Low,EUR
+"2022, November 22, 10:00","(Belgium) Consumer Confidence",Low,EUR
+"2022, November 22, 10:00","(Italy) Current Account",Low,EUR
+"2022, November 22, 10:00","(France) OECD Economic Outlook",Medium,EUR
+"2022, November 22, 10:30","(Germany) 5-Year Bobl Auction",Low,EUR
+"2022, November 22, 11:00","(Ireland) Balance of Trade",Low,EUR
+"2022, November 22, 11:00","(Ireland) Wholesale Prices MoM",Low,EUR
+"2022, November 22, 11:00","(Ireland) Wholesale Prices YoY",Low,EUR
+"2022, November 22, 11:00","(Latvia) PPI MoM",Low,EUR
+"2022, November 22, 11:00","(Latvia) PPI YoY",Low,EUR
+"2022, November 22, 13:00","(Kosovo) Balance of Trade",Low,EUR
+"2022, November 22, 13:30","(Canada) Retail Sales YoY",High,CAD
+"2022, November 22, 13:30","(Canada) Retail Sales Ex Autos MoM",High,CAD
+"2022, November 22, 13:30","(Canada) Retail Sales MoM",High,CAD
+"2022, November 22, 13:30","(Canada) New Housing Price Index YoY",Low,CAD
+"2022, November 22, 13:30","(Canada) New Housing Price Index MoM",Low,CAD
+"2022, November 22, 13:30","(Canada) Wholesale Sales MoM",Low,CAD
+"2022, November 22, 13:30","(Canada) Manufacturing Sales MoM",Low,CAD
+"2022, November 22, 13:55","(United States) Redbook YoY",Low,USD
+"2022, November 22, 15:00","(Euro Area) Consumer Confidence",Medium,EUR
+"2022, November 22, 15:00","(United States) Richmond Fed Services Index",Low,USD
+"2022, November 22, 15:00","(United States) Richmond Fed Manufacturing Index",Low,USD
+"2022, November 22, 15:00","(United States) Richmond Fed Manufacturing Shipments Index",Low,USD
+"2022, November 22, 16:00","(United States) Fed Mester Speech",Medium,USD
+"2022, November 22, 16:30","(United States) 2-Year FRN Auction",Low,USD
+"2022, November 22, 17:00","(Canada) BoC Gov Rogers Speech",Medium,CAD
+"2022, November 22, 18:00","(United States) 7-Year Note Auction",Low,USD
+"2022, November 22, 19:15","(United States) Fed George Speech",Medium,USD
+"2022, November 22, 19:45","(United States) Fed Bullard Speech",Medium,USD
+"2022, November 22, 21:30","(United States) API Crude Oil Stock Change",Medium,USD
+"2022, November 22, 22:00","(Australia) S&P Global Composite PMI",Low,AUD
+"2022, November 22, 22:00","(Australia) S&P Global Manufacturing PMI",High,AUD
+"2022, November 22, 22:00","(Australia) S&P Global Services PMI",High,AUD
+"2022, November 23, 00:00","(Japan) Labor Thanksgiving Day",None,JPY
+"2022, November 23, 01:00","(New Zealand) RBNZ Interest Rate Decision",Medium,NZD
+"2022, November 23, 02:00","(New Zealand) RBNZ Press Conference",Medium,NZD
+"2022, November 23, 07:00","(Lithuania) Industrial Production MoM",Low,EUR
+"2022, November 23, 07:00","(Lithuania) Industrial Production YoY",Low,EUR
+"2022, November 23, 07:00","(Euro Area) ECB Research Bulletin",Low,EUR
+"2022, November 23, 08:15","(France) S&P Global Composite PMI",Low,EUR
+"2022, November 23, 08:15","(France) S&P Global Services PMI",Medium,EUR
+"2022, November 23, 08:15","(France) S&P Global Manufacturing PMI",Medium,EUR
+"2022, November 23, 08:30","(Germany) S&P Global Composite PMI",Low,EUR
+"2022, November 23, 08:30","(Germany) S&P Global Services PMI",High,EUR
+"2022, November 23, 08:30","(Germany) S&P Global Manufacturing PMI",High,EUR
+"2022, November 23, 08:30","(Euro Area) ECB Guindos Speech",High,EUR
+"2022, November 23, 09:00","(Euro Area) S&P Global Composite PMI",Low,EUR
+"2022, November 23, 09:00","(Euro Area) S&P Global Services PMI",High,EUR
+"2022, November 23, 09:00","(Euro Area) S&P Global Manufacturing PMI",High,EUR
+"2022, November 23, 09:00","(Euro Area) ECB Fernandez-Bollo Speech",Low,EUR
+"2022, November 23, 09:30","(United Kingdom) S&P Global/CIPS Manufacturing PMI",High,GBP
+"2022, November 23, 09:30","(United Kingdom) S&P Global/CIPS UK Services PMI",High,GBP
+"2022, November 23, 09:30","(United Kingdom) S&P Global/CIPS Composite PMI",Low,GBP
+"2022, November 23, 10:30","(Germany) 30-Year Bund Auction",Low,EUR
+"2022, November 23, 11:10","(European Union) 3-Month Bill Auction",Low,EUR
+"2022, November 23, 11:10","(European Union) 6-Month Bill Auction",Low,EUR
+"2022, November 23, 11:45","(United Kingdom) 3-Year Treasury Gilt Auction",Low,GBP
+"2022, November 23, 12:00","(United States) MBA 30-Year Mortgage Rate",Low,USD
+"2022, November 23, 12:00","(United States) MBA Mortgage Market Index",Low,USD
+"2022, November 23, 12:00","(United States) MBA Mortgage Refinance Index",Low,USD
+"2022, November 23, 12:00","(United States) MBA Purchase Index",Low,USD
+"2022, November 23, 12:00","(United States) MBA Mortgage Applications",Low,USD
+"2022, November 23, 13:25","(United States) Building Permits",Medium,USD
+"2022, November 23, 13:25","(United States) Building Permits MoM",Low,USD
+"2022, November 23, 13:30","(United States) Non Defense Goods Orders Ex Air",Low,USD
+"2022, November 23, 13:30","(United States) Durable Goods Orders ex Defense MoM",High,USD
+"2022, November 23, 13:30","(United States) Durable Goods Orders Ex Transp MoM",High,USD
+"2022, November 23, 13:30","(United States) Durable Goods Orders MoM",High,USD
+"2022, November 23, 13:30","(United States) Initial Jobless Claims",High,USD
+"2022, November 23, 13:30","(United States) Continuing Jobless Claims",High,USD
+"2022, November 23, 13:30","(United States) Jobless Claims 4-week Average",High,USD
+"2022, November 23, 14:45","(United States) S&P Global Manufacturing PMI",High,USD
+"2022, November 23, 14:45","(United States) S&P Global Services PMI",High,USD
+"2022, November 23, 14:45","(United States) S&P Global Composite PMI",Medium,USD
+"2022, November 23, 15:00","(United States) New Home Sales MoM",High,USD
+"2022, November 23, 15:00","(United States) New Home Sales",High,USD
+"2022, November 23, 15:00","(United States) Michigan Consumer Sentiment",High,USD
+"2022, November 23, 15:00","(United States) Michigan Consumer Expectations",Low,USD
+"2022, November 23, 15:00","(United States) Michigan Current Conditions",Low,USD
+"2022, November 23, 15:00","(United States) Michigan Inflation Expectations",Low,USD
+"2022, November 23, 15:00","(United States) Michigan 5 Year Inflation Expectations",Low,USD
+"2022, November 23, 15:30","(United States) EIA Gasoline Stocks Change",Medium,USD
+"2022, November 23, 15:30","(United States) EIA Refinery Crude Runs Change",Low,USD
+"2022, November 23, 15:30","(United States) EIA Heating Oil Stocks Change",Low,USD
+"2022, November 23, 15:30","(United States) EIA Gasoline Production Change",Low,USD
+"2022, November 23, 15:30","(United States) EIA Distillate Stocks Change",Low,USD
+"2022, November 23, 15:30","(United States) EIA Distillate Fuel Production Change",Low,USD
+"2022, November 23, 15:30","(United States) EIA Cushing Crude Oil Stocks Change",Low,USD
+"2022, November 23, 15:30","(United States) EIA Crude Oil Stocks Change",Medium,USD
+"2022, November 23, 15:30","(United States) EIA Crude Oil Imports Change",Low,USD
+"2022, November 23, 16:30","(United States) 8-Week Bill Auction",Low,USD
+"2022, November 23, 16:30","(United States) 4-Week Bill Auction",Low,USD
+"2022, November 23, 16:30","(United States) 17-Week Bill Auction",Low,USD
+"2022, November 23, 17:00","(Canada) 30-Year Bond Auction",Low,CAD
+"2022, November 23, 17:00","(United States) EIA Natural Gas Stocks Change",Low,USD
+"2022, November 23, 18:00","(United States) Baker Hughes Total Rig Count",Low,USD
+"2022, November 23, 18:00","(United States) Baker Hughes Oil Rig Count",Low,USD
+"2022, November 23, 19:00","(United States) FOMC Minutes",High,USD
+"2022, November 23, 19:00","(United Kingdom) BoE Pill Speech",Medium,GBP
+"2022, November 24, 00:00","(United States) Thanksgiving Day",None,USD
+"2022, November 24, 00:00","(Australia) RBA Payments System Board Meeting",Low,AUD
+"2022, November 24, 00:30","(Japan) Jibun Bank Manufacturing PMI",Medium,JPY
+"2022, November 24, 00:30","(Japan) Jibun Bank Composite PMI",Low,JPY
+"2022, November 24, 00:30","(Japan) Jibun Bank Services PMI",Medium,JPY
+"2022, November 24, 05:00","(Japan) Coincident Index",Low,JPY
+"2022, November 24, 05:00","(Japan) Leading Economic Index",Low,JPY
+"2022, November 24, 06:00","(Finland) Import Prices YoY",Low,EUR
+"2022, November 24, 06:00","(Finland) Export Prices YoY",Low,EUR
+"2022, November 24, 06:00","(Finland) PPI YoY",Low,EUR
+"2022, November 24, 07:45","(France) Business Climate Indicator",Low,EUR
+"2022, November 24, 07:45","(France) Business Confidence",Medium,EUR
+"2022, November 24, 09:00","(Germany) Ifo Current Conditions",Low,EUR
+"2022, November 24, 09:00","(Germany) Ifo Expectations",Low,EUR
+"2022, November 24, 09:00","(Germany) Ifo Business Climate",High,EUR
+"2022, November 24, 09:30","(Slovenia) Business Confidence",Low,EUR
+"2022, November 24, 09:45","(United Kingdom) BoE Ramsden Speech",Low,GBP
+"2022, November 24, 10:10","(Italy) BTP Short Term",Low,EUR
+"2022, November 24, 10:10","(Italy) 7-Year BTP Auction",Low,EUR
+"2022, November 24, 10:30","(United Kingdom) BoE Pill Speech",Low,GBP
+"2022, November 24, 11:00","(United Kingdom) CBI Industrial Trends Orders",Medium,GBP
+"2022, November 24, 11:15","(Euro Area) ECB Guindos Speech",High,EUR
+"2022, November 24, 12:30","(Euro Area) ECB Monetary Policy Meeting Accounts",Medium,EUR
+"2022, November 24, 13:00","(Euro Area) ECB Schnabel Speech",Low,EUR
+"2022, November 24, 13:15","(Euro Area) ECB Enria Speech",Low,EUR
+"2022, November 24, 13:30","(Canada) Average Weekly Earnings YoY",Low,CAD
+"2022, November 24, 13:45","(United Kingdom) BoE L Mann Speech",Medium,GBP
+"2022, November 24, 14:00","(Belgium) Business Confidence",Low,EUR
+"2022, November 24, 21:00","(New Zealand) ANZ Roy Morgan Consumer Confidence",Low,NZD
+"2022, November 24, 21:45","(New Zealand) Retail Sales YoY",High,NZD
+"2022, November 24, 21:45","(New Zealand) Retail Sales QoQ",High,NZD
+"2022, November 24, 23:30","(Japan) Tokyo CPI YoY",Low,JPY
+"2022, November 24, 23:30","(Japan) Tokyo Core CPI YoY",Low,JPY
+"2022, November 24, 23:30","(Japan) Tokyo CPI Ex Food and Energy YoY",Low,JPY
+"2022, November 24, 23:50","(Japan) Foreign Bond Investment",Low,JPY
+"2022, November 24, 23:50","(Japan) Stock Investment by Foreigners",Low,JPY
+"2022, November 25, 00:01","(United Kingdom) Car Production YoY",Low,GBP
+"2022, November 25, 03:35","(Japan) 3-Month Bill Auction",Low,JPY
+"2022, November 25, 03:35","(Japan) 40-Year JGB Auction",Low,JPY
+"2022, November 25, 07:00","(Germany) GDP Growth Rate QoQ",Medium,EUR
+"2022, November 25, 07:00","(Germany) GDP Growth Rate YoY",Medium,EUR
+"2022, November 25, 07:00","(Germany) GfK Consumer Confidence",High,EUR
+"2022, November 25, 07:30","(Switzerland) Non Farm Payrolls",Low,CHF
+"2022, November 25, 07:45","(France) Consumer Confidence",Medium,EUR
+"2022, November 25, 08:00","(East Timor) Inflation Rate MoM",Low,USD
+"2022, November 25, 08:00","(East Timor) Inflation Rate YoY",Low,USD
+"2022, November 25, 08:00","(Spain) PPI YoY",Low,EUR
+"2022, November 25, 08:50","(Euro Area) ECB af Jochnick Speech",Low,EUR
+"2022, November 25, 09:00","(Italy) Consumer Confidence",Medium,EUR
+"2022, November 25, 09:00","(Italy) Business Confidence",Medium,EUR
+"2022, November 25, 09:30","(Slovenia) Tourist Arrivals YoY",Low,EUR
+"2022, November 25, 10:00","(Luxembourg) Balance of Trade",Low,EUR
+"2022, November 25, 10:10","(Italy) 6-Month BOT Auction",Low,EUR
+"2022, November 25, 11:00","(Canada) CFIB Business Barometer",Low,CAD
+"2022, November 25, 11:00","(France) Jobseekers Total",Low,EUR
+"2022, November 25, 11:00","(France) Unemployment Benefit Claims",Medium,EUR
+"2022, November 25, 16:00","(Canada) Budget Balance",Low,CAD
+"2022, November 25, 17:00","(Euro Area) ECB Guindos Speech",High,EUR
+
