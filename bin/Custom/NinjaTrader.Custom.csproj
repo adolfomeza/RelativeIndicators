@@ -394,13 +394,6 @@
     <Compile Include="Indicators\RelativeIndicators\RelativeNewsFilter.cs" />
     <Compile Include="DrawingTools\LabeledLines.cs" />
     <Compile Include="Strategies\AxionValueProtocol.cs" />
-    <Compile Include="Strategies\ESTRATEGIA\RelativeVwapStrategy.cs" />
-    <Compile Include="Strategies\ESTRATEGIA\RelativeVwap_20251210_PreFix.cs" />
-    <Compile Include="Strategies\ESTRATEGIA\RelativeVwap_20251210_PreRotateLabels.cs" />
-    <Compile Include="Strategies\ESTRATEGIA\RelativeVwap_20251210_PreSignalStyles.cs" />
-    <Compile Include="Strategies\ESTRATEGIA\RelativeVwap_BeforeTimezoneFix.cs" />
-    <Compile Include="Strategies\ESTRATEGIA\RelativeVwapStrategy_BeforeTimezoneFix.cs" />
-    <Compile Include="Strategies\ESTRATEGIA\RelativeVwapStrategy (2).cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Resource.resx">
