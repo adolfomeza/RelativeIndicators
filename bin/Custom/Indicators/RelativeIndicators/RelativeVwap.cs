@@ -926,48 +926,42 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                   // V_SIGNAL_2: SECONDARY CONFIRMATION (Yellow Dot) - UNIQUE PER ANCHOR
                   // Condition: Active VWAP (Taken), Candle High BELOW VWAP by threshold
                   // CHECK: Have we signaled for THIS specific anchor yet?
-                  // FIX: Confirmed on Close (IsFirstTickOfBar check for Previous Bar [1])
-                  if (IsFirstTickOfBar && highHasTakenRelevant)
+                  if (highHasTakenRelevant && High[0] <= (hVwap - Signal2ThresholdTicks * TickSize))
                   {
-                      // Use Previous Bar's VWAP (Values[0][1]) and Previous Bar's Low (High[1])
-                      double prevHVwap = Values[0][1];
-                      if (High[1] <= (prevHVwap - Signal2ThresholdTicks * TickSize))
+                      if (sessionHighBarIdx != lastSignaledHighAnchorBar)
                       {
-                          if (sessionHighBarIdx != lastSignaledHighAnchorBar)
+                          highAnchorSequence++; 
+                          
+                          // Determine Brush
+                          Brush sigBrush = HighVWAPColor; // Default
+                          if (lastUnlockedHighSession != null)
                           {
-                              highAnchorSequence++;
-                              
-                              // Determine Brush
-                              Brush sigBrush = HighVWAPColor; // Default
-                              if (lastUnlockedHighSession != null)
-                              {
-                                   if (lastUnlockedHighSession.Name.StartsWith("Asia")) sigBrush = AsiaLineColor;
-                                   else if (lastUnlockedHighSession.Name.StartsWith("Europe")) sigBrush = EuropeLineColor;
-                                   else if (lastUnlockedHighSession.Name.StartsWith("USA")) sigBrush = USLineColor;
-                              }
-    
-                              double proposedDotY = High[1] + (SignalIconOffsetTicks * verticalUnit);
-                              double dotY = GetStackedHighY(proposedDotY, 5 * verticalUnit);
-                              Draw.Dot(this, "Sig2H_" + (CurrentBar - 1), true, 1, dotY, sigBrush); // Draw on T-1
-                              
-                              // Label: e.g. "UH1.1", "UH1.2"
-                              if (lastUnlockedHighSession != null)
-                              {
-                                  string code = "2";
-                                  if (!UseSimpleLabels)
-                                  {
-                                      code = GetSignalCode(lastUnlockedHighSession, "H");
-                                      if (lastUnlockedHighSession.IsInternalHigh) code = "i" + code;
-                                      code += "." + highAnchorSequence;
-                                  }
-                                  // Calculate Label Y for Sig2 (Dot)
-                                  double label2Y = GetStackedHighY(High[1] + (SignalTextOffsetTicks * verticalUnit), 15 * verticalUnit);
-                                  AddSignal(CurrentBar - 1, label2Y, code, true, sigBrush, "Sig2");
-                              }
-                              
-                              lastSignaledHighAnchorBar = sessionHighBarIdx; // Mark this anchor as USED
-                              highSignal2Fired = true;
+                               if (lastUnlockedHighSession.Name.StartsWith("Asia")) sigBrush = AsiaLineColor;
+                               else if (lastUnlockedHighSession.Name.StartsWith("Europe")) sigBrush = EuropeLineColor;
+                               else if (lastUnlockedHighSession.Name.StartsWith("USA")) sigBrush = USLineColor;
                           }
+
+                          double proposedDotY = High[0] + (SignalIconOffsetTicks * verticalUnit);
+                          double dotY = GetStackedHighY(proposedDotY, 5 * verticalUnit);
+                          Draw.Dot(this, "Sig2H_" + CurrentBar, true, 0, dotY, sigBrush);
+                          
+                          // Label: e.g. "UH1.1", "UH1.2"
+                          if (lastUnlockedHighSession != null)
+                          {
+                                  string code = "2";
+                              if (!UseSimpleLabels)
+                              {
+                                  code = GetSignalCode(lastUnlockedHighSession, "H");
+                                  if (lastUnlockedHighSession.IsInternalHigh) code = "i" + code;
+                                  code += "." + highAnchorSequence;
+                              }
+                              // Calculate Label Y for Sig2 (Dot)
+                              double label2Y = GetStackedHighY(High[0] + (SignalTextOffsetTicks * verticalUnit), 15 * verticalUnit);
+                              AddSignal(CurrentBar, label2Y, code, true, sigBrush, "Sig2");
+                          }
+                          
+                          lastSignaledHighAnchorBar = sessionHighBarIdx; // Mark this anchor as USED
+                          highSignal2Fired = true;
                       }
                   }
               }
@@ -1169,48 +1163,42 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                   // V_SIGNAL_2: SECONDARY CONFIRMATION (Yellow Dot) - UNIQUE PER ANCHOR
                   // Condition: Active VWAP (Taken), Candle Low ABOVE VWAP by threshold
                   // CHECK: Have we signaled for THIS specific anchor yet?
-                  // FIX: Confirmed on Close (IsFirstTickOfBar check for Previous Bar [1])
-                  if (IsFirstTickOfBar && lowHasTakenRelevant)
+                  if (lowHasTakenRelevant && Low[0] >= (lVwap + Signal2ThresholdTicks * TickSize))
                   {
-                       // Use Previous Bar's VWAP (Values[1][1]) and Previous Bar's Low (Low[1])
-                       double prevLVwap = Values[1][1];
-                       if (Low[1] >= (prevLVwap + Signal2ThresholdTicks * TickSize))
-                       {
-                           if (sessionLowBarIdx != lastSignaledLowAnchorBar)
-                           {
-                               lowAnchorSequence++;
-                               
-                               // Determine Brush
-                               Brush sigBrush = LowVWAPColor; // Default
-                               if (lastUnlockedLowSession != null)
+                      if (sessionLowBarIdx != lastSignaledLowAnchorBar)
+                      {
+                          lowAnchorSequence++;
+                          
+                          // Determine Brush
+                          Brush sigBrush = LowVWAPColor; // Default
+                          if (lastUnlockedLowSession != null)
+                          {
+                               if (lastUnlockedLowSession.Name.StartsWith("Asia")) sigBrush = AsiaLineColor;
+                               else if (lastUnlockedLowSession.Name.StartsWith("Europe")) sigBrush = EuropeLineColor;
+                               else if (lastUnlockedLowSession.Name.StartsWith("USA")) sigBrush = USLineColor;
+                          }
+
+                          double proposedDotY = Low[0] - (SignalIconOffsetTicks * verticalUnit);
+                          double dotY = GetStackedLowY(proposedDotY, 5 * verticalUnit);
+                          Draw.Dot(this, "Sig2L_" + CurrentBar, true, 0, dotY, sigBrush);
+                          
+                          // Label: e.g. "UL1.1", "UL1.2"
+                          if (lastUnlockedLowSession != null)
+                          {
+                               string code = "2";
+                               if (!UseSimpleLabels)
                                {
-                                    if (lastUnlockedLowSession.Name.StartsWith("Asia")) sigBrush = AsiaLineColor;
-                                    else if (lastUnlockedLowSession.Name.StartsWith("Europe")) sigBrush = EuropeLineColor;
-                                    else if (lastUnlockedLowSession.Name.StartsWith("USA")) sigBrush = USLineColor;
+                                   code = GetSignalCode(lastUnlockedLowSession, "L");
+                                   if (lastUnlockedLowSession.IsInternalLow) code = "i" + code;
+                                   code += "." + lowAnchorSequence;
                                }
-    
-                               double proposedDotY = Low[1] - (SignalIconOffsetTicks * verticalUnit);
-                               double dotY = GetStackedLowY(proposedDotY, 5 * verticalUnit);
-                               Draw.Dot(this, "Sig2L_" + (CurrentBar - 1), true, 1, dotY, sigBrush); // Draw on T-1
-                               
-                               // Label: e.g. "UL1.1", "UL1.2"
-                               if (lastUnlockedLowSession != null)
-                               {
-                                    string code = "2";
-                                    if (!UseSimpleLabels)
-                                    {
-                                        code = GetSignalCode(lastUnlockedLowSession, "L");
-                                        if (lastUnlockedLowSession.IsInternalLow) code = "i" + code;
-                                        code += "." + lowAnchorSequence;
-                                    }
-                                    double label2Y = GetStackedLowY(Low[1] - (SignalTextOffsetTicks * verticalUnit), 15 * verticalUnit);
-                                    AddSignal(CurrentBar - 1, label2Y, code, false, sigBrush, "Sig2");
-                               }
-                               
-                               lastSignaledLowAnchorBar = sessionLowBarIdx; // Mark this anchor as USED
-                               lowSignal2Fired = true;
-                           }
-                       }
+                               double label2Y = GetStackedLowY(Low[0] - (SignalTextOffsetTicks * verticalUnit), 15 * verticalUnit);
+                               AddSignal(CurrentBar, label2Y, code, false, sigBrush, "Sig2");
+                          }
+                          
+                          lastSignaledLowAnchorBar = sessionLowBarIdx; // Mark this anchor as USED
+                          lowSignal2Fired = true;
+                      }
                   }
               }
 
