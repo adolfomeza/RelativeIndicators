@@ -64,6 +64,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 				EuropeEndTime = "09:30";
 				USAStartTime = "09:30";
 				USAEndTime = "18:00";
+				
+				// High Performance Plots for VWAPs
+				AddPlot(new Stroke(Brushes.White, 2), PlotStyle.Line, "EthHighVWAP");
+				AddPlot(new Stroke(Brushes.White, 2), PlotStyle.Line, "EthLowVWAP");
 			}
 			else if (State == State.Configure)
 			{
@@ -74,7 +78,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private TimeZoneInfo nyTimeZone;
 		private TimeZoneInfo chartTimeZone;
 		private bool timeZonesLoaded = false;
-		
+		private double lastVol = 0;
+
 		// Level Persistence
 		private class SessionLevel
 		{
@@ -87,6 +92,11 @@ namespace NinjaTrader.NinjaScript.Strategies
 			public bool IsMitigated;
 			public Brush Color;
 			public string Tag; // For Drawing
+			
+			// VWAP Data
+			public double VolSum;
+			public double PvSum;
+			public bool JustReset;
 		}
 		
 		private List<SessionLevel> activeLevels = new List<SessionLevel>();
@@ -118,16 +128,24 @@ namespace NinjaTrader.NinjaScript.Strategies
 				}
 			}
 
+			// 0. Calculate Volume Delta for VWAP
+			if (IsFirstTickOfBar) lastVol = 0;
+			double deltaVol = Volume[0] - lastVol;
+			lastVol = Volume[0];
+
 			// 1. Session Logic: Identify/Create Levels
-			CheckSession("Asia", AsiaStartTime, AsiaEndTime, Brushes.White);
-			CheckSession("Europe", EuropeStartTime, EuropeEndTime, Brushes.Yellow);
-			CheckSession("USA", USAStartTime, USAEndTime, Brushes.RoyalBlue);
+			CheckSession("Asia", AsiaStartTime, AsiaEndTime, Brushes.White, deltaVol);
+			CheckSession("Europe", EuropeStartTime, EuropeEndTime, Brushes.Yellow, deltaVol);
+			CheckSession("USA", USAStartTime, USAEndTime, Brushes.RoyalBlue, deltaVol);
 			
 			// 2. Manage Extension & Touching
-			ManageLevels();
+			ManageLevels(deltaVol);
+			
+			// 3. Global ETH VWAPs
+			ManageGlobalVWAPs(deltaVol);
 		}
 		
-		private void CheckSession(string sessionName, string startStr, string endStr, Brush color)
+		private void CheckSession(string sessionName, string startStr, string endStr, Brush color, double deltaVol)
 		{
 			if (nyTimeZone == null || chartTimeZone == null) return;
 
@@ -162,27 +180,50 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 				if (highLvl == null)
 				{
-					// New High Level
-					highLvl = new SessionLevel { Name = sessionName + " High", Price = double.MinValue, StartTime = chartStartTime, EndTime = Time[0], IsResistance = true, IsMitigated = false, Color = color, Tag = tagH };
+					// New High Level (Init VWAP with current Bar Full Volume as it creates the anchor)
+					highLvl = new SessionLevel 
+					{ 
+						Name = sessionName + " High", Price = double.MinValue, StartTime = chartStartTime, EndTime = Time[0], 
+						IsResistance = true, IsMitigated = false, Color = color, Tag = tagH,
+						VolSum = Volume[0], PvSum = Volume[0] * Close[0], JustReset = true
+					};
 					activeLevels.Add(highLvl);
 				}
+				else highLvl.JustReset = false; // Reset flag default
 				
 				if (lowLvl == null)
 				{
 					// New Low Level
-					lowLvl = new SessionLevel { Name = sessionName + " Low", Price = double.MaxValue, StartTime = chartStartTime, EndTime = Time[0], IsResistance = false, IsMitigated = false, Color = color, Tag = tagL };
+					lowLvl = new SessionLevel 
+					{ 
+						Name = sessionName + " Low", Price = double.MaxValue, StartTime = chartStartTime, EndTime = Time[0], 
+						IsResistance = false, IsMitigated = false, Color = color, Tag = tagL,
+						VolSum = Volume[0], PvSum = Volume[0] * Close[0], JustReset = true
+					};
 					activeLevels.Add(lowLvl);
 				}
+				else lowLvl.JustReset = false;
 				
-				// Update Prices ONLY if not mitigated (though usually can't be mitigated while forming inside session?)
 				// Logic: While in session, we push the High/Low out. 
-				// If price breaks High, the High moves up. It doesn't "break" structurally until tested later?
-				// Usually: Track absolute High/Low during session. 
-				// "Mitigation" usually happens AFTER the High/Low is set.
-				// But what if we break High during session? It just becomes new High.
+				// If New High -> Reset VWAP to Anchor HERE.
 				
-				if (High[0] > highLvl.Price) highLvl.Price = High[0];
-				if (Low[0] < lowLvl.Price) lowLvl.Price = Low[0];
+				if (High[0] > highLvl.Price) 
+				{
+					highLvl.Price = High[0];
+					// RE-ANCHOR VWAP
+					highLvl.VolSum = Volume[0];
+					highLvl.PvSum = Volume[0] * Close[0];
+					highLvl.JustReset = true;
+				}
+				
+				if (Low[0] < lowLvl.Price) 
+				{
+					lowLvl.Price = Low[0];
+					// RE-ANCHOR VWAP
+					lowLvl.VolSum = Volume[0];
+					lowLvl.PvSum = Volume[0] * Close[0];
+					lowLvl.JustReset = true;
+				}
 				
 				// While in session, update EndTime to current to keep line growing
 				if (!highLvl.IsMitigated) highLvl.EndTime = Time[0];
@@ -190,12 +231,25 @@ namespace NinjaTrader.NinjaScript.Strategies
 			}
 		}
 
-		private void ManageLevels()
+		private void ManageLevels(double deltaVol)
 		{
 			// Check for touches on existing active levels
 			
 			foreach (var lvl in activeLevels)
 			{
+				// VWAP ACCUMULATION
+				if (!lvl.JustReset)
+				{
+					lvl.VolSum += deltaVol;
+					lvl.PvSum += deltaVol * Close[0];
+				}
+				// If JustReset was true, we already set VolSum/PvSum in CheckSession. 
+				// JustReset is ephemeral for this tick.
+				
+				// Calculate VWAP
+				double vwap = 0;
+				if (lvl.VolSum > 0) vwap = lvl.PvSum / lvl.VolSum;
+
 				// LINE EXTENSION LOGIC
 				// Alive: Always extend.
 				// Mitigated: Extend ONLY if we are still in the same calendar day as the mitigation Event.
@@ -355,6 +409,147 @@ namespace NinjaTrader.NinjaScript.Strategies
 					// User requested: Gray, Dash, 1px.
 					Draw.Line(this, tagB, false, lvl.MitigationTime, lvl.Price, lvl.EndTime, lvl.Price, Brushes.Gray, DashStyleHelper.Dash, 1);
 				}
+			}
+		}
+
+
+		// -------------------------------------------------------------------------
+		// GLOBAL ETH SESSION VWAP LOGIC
+		// -------------------------------------------------------------------------
+		private class SessionVWAP
+		{
+			public double VolSum;
+			public double PvSum;
+			public double CurrentValue => VolSum == 0 ? 0 : PvSum / VolSum;
+			
+			public void Reset(double vol, double price)
+			{
+				VolSum = vol;
+				PvSum = vol * price;
+			}
+			
+			public void Accumulate(double vol, double price)
+			{
+				VolSum += vol;
+				PvSum += vol * price;
+			}
+		}
+		
+		private SessionVWAP ethHighVWAP = new SessionVWAP();
+		private SessionVWAP ethLowVWAP = new SessionVWAP();
+		private double ethHighPrice = double.MinValue;
+		private double ethLowPrice = double.MaxValue;
+		private DateTime lastEthResetDate = DateTime.MinValue; // Tracks the "Trading Day"
+		
+		private int highAnchorBar = 0;
+		private int lowAnchorBar = 0;
+
+		private void ManageGlobalVWAPs(double deltaVol)
+		{
+			if (nyTimeZone == null || chartTimeZone == null) return;
+			
+			// 1. Determine Current Trading Day (based on 18:00 NY start)
+			DateTime currentNy = TimeZoneInfo.ConvertTime(Time[0], chartTimeZone, nyTimeZone);
+			TimeSpan cutoff = TimeSpan.FromHours(18);
+			DateTime tradingDay = currentNy.TimeOfDay >= cutoff ? currentNy.Date.AddDays(1) : currentNy.Date;
+			
+			// 2. HARD RESET at Start of Day
+			bool hardReset = false;
+			if (tradingDay != lastEthResetDate)
+			{
+				ethHighPrice = double.MinValue;
+				ethLowPrice = double.MaxValue;
+				ethHighVWAP = new SessionVWAP();
+				ethLowVWAP = new SessionVWAP();
+				lastEthResetDate = tradingDay;
+				hardReset = true;
+				
+				// Reset Anchor Trackers
+				highAnchorBar = CurrentBar;
+				lowAnchorBar = CurrentBar;
+			}
+			
+			// 3. Update High/Low and Anchor Logic
+			bool highReset = false;
+			bool lowReset = false;
+			
+			// Check High
+			if (High[0] > ethHighPrice)
+			{
+				// New High found! The PREVIOUS segment (from highAnchorBar to CurrentBar-1) is now "Old/Cut".
+				// We must paint it GRAY.
+				if (!hardReset && CurrentBar > highAnchorBar)
+				{
+					int barsBack = CurrentBar - highAnchorBar;
+					for (int i = 1; i <= barsBack; i++)
+					{
+						PlotBrushes[0][i] = Brushes.Gray;
+					}
+				}
+				
+				ethHighPrice = High[0];
+				highReset = true;
+				ethHighVWAP.Reset(Volume[0], Close[0]);
+				highAnchorBar = CurrentBar; // Update anchor to here
+			}
+			else
+			{
+				ethHighVWAP.Accumulate(deltaVol, Close[0]);
+			}
+			
+			// Check Low
+			if (Low[0] < ethLowPrice)
+			{
+				// New Low found! Paint previous segment Gray.
+				if (!hardReset && CurrentBar > lowAnchorBar)
+				{
+					int barsBack = CurrentBar - lowAnchorBar;
+					for (int i = 1; i <= barsBack; i++)
+					{
+						PlotBrushes[1][i] = Brushes.Gray;
+					}
+				}
+				
+				ethLowPrice = Low[0];
+				lowReset = true;
+				ethLowVWAP.Reset(Volume[0], Close[0]);
+				lowAnchorBar = CurrentBar;
+			}
+			else
+			{
+				ethLowVWAP.Accumulate(deltaVol, Close[0]);
+			}
+			
+			// 4. Assign to Plots (Values[0] = High, Values[1] = Low)
+			// Default color is White (defined in AddPlot). We only override active history to Gray when it dies.
+			// The "Current" active segment stays White until it dies.
+			
+			if (ethHighVWAP.VolSum > 0)
+			{
+				Values[0][0] = ethHighVWAP.CurrentValue;
+				
+				if (hardReset || highReset)
+				{
+					PlotBrushes[0][0] = Brushes.Transparent;
+				}
+			}
+			else
+			{
+				Values[0][0] = double.NaN; 
+			}
+
+			if (ethLowVWAP.VolSum > 0)
+			{
+				Values[1][0] = ethLowVWAP.CurrentValue;
+				
+				if (hardReset || lowReset)
+				{
+					PlotBrushes[1][0] = Brushes.Transparent;
+				}
+			}
+			else
+			{
+				Values[1][0] = double.NaN;
 			}
 		}
 
