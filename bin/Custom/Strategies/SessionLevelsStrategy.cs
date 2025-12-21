@@ -20,6 +20,9 @@ using NinjaTrader.NinjaScript;
 using NinjaTrader.Core.FloatingPoint;
 using NinjaTrader.NinjaScript.Indicators;
 using NinjaTrader.NinjaScript.DrawingTools;
+using System.Net;
+using System.Net.Mail;
+using System.IO;
 #endregion
 
 //This namespace holds Strategies in this folder and is required. Do not change it. 
@@ -458,6 +461,35 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private SessionVWAP ethLowVWAP = new SessionVWAP();
 		
 		#region Properties
+		// Email & Screenshot Properties
+		[NinjaScriptProperty]
+		[Display(Name = "Send Email with Photo", Description = "Send screenshot via email (Requires SMTP settings)", GroupName = "8. Email Alerts", Order = 1)]
+		public bool EnableEmailAlerts { get; set; } = false;
+
+		[NinjaScriptProperty]
+		[Display(Name = "To Address", Description = "Recipient address", GroupName = "8. Email Alerts", Order = 2)]
+		public string EmailTo { get; set; } = "user@example.com";
+
+		[NinjaScriptProperty]
+		[Display(Name = "From Address", Description = "Sender address (usually same as username)", GroupName = "8. Email Alerts", Order = 3)]
+		public string EmailFrom { get; set; } = "user@gmail.com";
+
+		[NinjaScriptProperty]
+		[Display(Name = "SMTP Host", Description = "e.g. smtp.gmail.com", GroupName = "8. Email Alerts", Order = 4)]
+		public string EmailHost { get; set; } = "smtp.gmail.com";
+
+		[NinjaScriptProperty]
+		[Display(Name = "SMTP Port", Description = "e.g. 587", GroupName = "8. Email Alerts", Order = 5)]
+		public int EmailPort { get; set; } = 587;
+
+		[NinjaScriptProperty]
+		[Display(Name = "SMTP Username", Description = "Full email address", GroupName = "8. Email Alerts", Order = 6)]
+		public string EmailUsername { get; set; } = "user@gmail.com";
+
+		[NinjaScriptProperty]
+		[Display(Name = "SMTP Password", Description = "App Password (not your login password)", GroupName = "8. Email Alerts", Order = 7)]
+		public string EmailPassword { get; set; } = "password";
+
 		private double ethHighPrice = double.MinValue;
 		private double ethLowPrice = double.MaxValue;
 		private DateTime lastEthResetDate = DateTime.MinValue; 
@@ -854,7 +886,123 @@ namespace NinjaTrader.NinjaScript.Strategies
 		{
 			return val > 0 && !double.IsNaN(val);
 		}
-		
+
+		private int screenshotSequence = 0; // For unique filenames
+
+		private void TriggerScreenshot(string eventName, DateTime time, string execId)
+		{
+			// Only take screenshots in LIVE/REALTIME mode or if forcing it (users choice)
+			// Generally we prefer Realtime to avoid spam during reload.
+			if (State != State.Realtime) return;
+
+			if (EnableEmailAlerts && ChartControl != null)
+			{
+				try 
+				{
+					// Must run on UI Thread
+					ChartControl.Dispatcher.InvokeAsync((Action)(() => 
+					{
+						try 
+						{
+							// 1. Get Screen Coordinates of the ChartControl
+							System.Windows.Point p = ChartControl.PointToScreen(new System.Windows.Point(0, 0));
+							
+							// 2. Get Dimensions
+							int w = (int)ChartControl.ActualWidth;
+							int h = (int)ChartControl.ActualHeight;
+							
+							if (w > 0 && h > 0)
+							{
+								// 3. Creates System.Drawing.Bitmap (WinForms/GDI+)
+								// Fully qualified to avoid namespace ambiguity
+								using (System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(w, h))
+								{
+									using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(bitmap))
+									{
+										// 4. Capture Screen
+										g.CopyFromScreen((int)p.X, (int)p.Y, 0, 0, new System.Drawing.Size(w, h));
+									}
+									
+									// 5. Build Path
+									string docPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
+									string shotFolder = System.IO.Path.Combine(docPath, "NinjaTrader 8", "Strategy_Screenshots");
+									if (!System.IO.Directory.Exists(shotFolder)) System.IO.Directory.CreateDirectory(shotFolder);
+									
+									// Increment Sequence
+									screenshotSequence++;
+
+									string cleanName = Instrument.FullName.Replace(" ", "_");
+									string fileName = string.Format("{0:D4}_{1}_{2}_{3}_{4}.png", 
+										screenshotSequence,
+										eventName,
+										cleanName,
+										time.ToString("yyyyMMdd_HHmmss"),
+										execId.GetHashCode()); 
+										
+									string fullPath = System.IO.Path.Combine(shotFolder, fileName);
+									
+									// 6. Save
+									bitmap.Save(fullPath, System.Drawing.Imaging.ImageFormat.Png);
+									Print(Time[0] + " Snapshot Saved: " + fullPath);
+									
+									// 7. Send Email (Async-ish)
+									if (EnableEmailAlerts)
+									{
+										SendEmailWithAttachment(eventName, fullPath);
+									}
+								}
+							}
+						}
+						catch (Exception innerEx) { Print(Time[0] + " Screen Capture Failed: " + innerEx.Message); }
+					}));
+				}
+				catch (Exception ex) { Print(Time[0] + " Snapshot Dispatch Failed: " + ex.Message); }
+			}
+		}
+
+		private void SendEmailWithAttachment(string subject, string attachmentPath)
+		{
+			try 
+			{
+				// Basic Validation
+				if (string.IsNullOrEmpty(EmailHost) || string.IsNullOrEmpty(EmailUsername) || string.IsNullOrEmpty(EmailPassword))
+					return;
+
+				Task.Run(() => 
+				{
+					try 
+					{
+						using (MailMessage mail = new MailMessage())
+						{
+							mail.From = new MailAddress(EmailFrom);
+							mail.To.Add(EmailTo);
+							mail.Subject = "NinjaTrader Alert: " + subject + " - " + Instrument.FullName;
+							mail.Body = string.Format("Trade alert for {0} at {1}.\nEvent: {2}", Instrument.FullName, DateTime.Now, subject);
+							
+							if (File.Exists(attachmentPath))
+							{
+								Attachment data = new Attachment(attachmentPath, "image/png");
+								mail.Attachments.Add(data);
+							}
+							
+							using (SmtpClient smtp = new SmtpClient(EmailHost, EmailPort))
+							{
+								smtp.Credentials = new NetworkCredential(EmailUsername, EmailPassword);
+								smtp.EnableSsl = true;
+								smtp.Send(mail);
+							}
+							Print("Email Sent to " + EmailTo);
+						}
+					}
+					catch (Exception ex)
+					{
+						Print("Email Failed: " + ex.Message);
+					}
+				});
+			}
+			catch (Exception ex) { Print("Email Setup Failed: " + ex.Message); }
+		}
+
 		private double GetCurrentHighVWAP() { return ethHighVWAP.CurrentValue; }
 		private double GetCurrentLowVWAP() { return ethLowVWAP.CurrentValue; }
 
@@ -920,11 +1068,13 @@ namespace NinjaTrader.NinjaScript.Strategies
 					{
 						Print(Time + " Filled Short (Exec). Placing SL/TP.");
 						EnsureProtection("Short");
+						TriggerScreenshot("Entry_Short", DateTime.Now, executionId);
 					}
 					else if (Position.MarketPosition == MarketPosition.Long)
 					{
 						Print(Time + " Filled Long (Exec). Placing SL/TP.");
 						EnsureProtection("Long");
+						TriggerScreenshot("Entry_Long", DateTime.Now, executionId);
 					}
 				}
 			}
