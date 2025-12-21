@@ -430,6 +430,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private Order targetOrder = null; // We use Order objects for dynamic management
 		
 		private double setupAnchorPrice = 0; // For SL
+		private string setupLevelName = "";
 		
 		// Visual Tracking
 		private string triggerTag = "";
@@ -640,6 +641,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 			{
 				Print(Time[0] + " SYNC: State is InPosition but MarketPosition is Flat. Resetting to Idle.");
 				currentEntryState = EntryState.Idle;
+				setupLevelName = "";
 				entryOrder = null;
 				targetOrder = null;
 			}
@@ -663,13 +665,11 @@ namespace NinjaTrader.NinjaScript.Strategies
 		// -------------------------------------------------------------------------
 		private void ManageEntryA_Plus()
 		{
-			// 1. TRIGGER DETECTION (Transition from Idle -> Waiting)
-			// Check if any "Virgin" level was JUST mitigated this tick/bar.
-			// Since we run OnEachTick, we can check if MitigationTime is very recent (Time[0]).
-			// Warning: OnEachTick means this might fire multiple times per bar if logic repeats.
-			// We guard with currentEntryState == Idle.
+			// 1. TRIGGER DETECTION (Transition from Idle -> Waiting OR Switch Setup)
+			// Allow scanning for triggers if Idle OR Waiting (to switch setups).
+			bool canScan = (currentEntryState == EntryState.Idle || currentEntryState == EntryState.WaitingForConfirmation);
 			
-			if (currentEntryState == EntryState.Idle)
+			if (canScan)
 			{
 				foreach (var lvl in activeLevels)
 				{
@@ -677,8 +677,12 @@ namespace NinjaTrader.NinjaScript.Strategies
 					// Note: ManageLevels sets MitigationTime = Time[0].
 					if (lvl.IsMitigated && lvl.MitigationTime == Time[0])
 					{
-						// Valid Trigger?
-						// "Entrada A+ cuando el precio toque un nivel virgen"
+						// If we are already waiting, check if this is a DIFFERENT level.
+						// If it's the same level, we ignore re-triggering to preserve the 'setupAnchorPrice' (Extreme).
+						if (currentEntryState == EntryState.WaitingForConfirmation && lvl.Name == setupLevelName)
+							continue;
+							
+						// Valid Trigger (New or Switch)
 						
 						if (lvl.IsResistance)
 						{
@@ -691,7 +695,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 							
 							currentEntryState = EntryState.WaitingForConfirmation;
 							isShortSetup = true;
-							setupAnchorPrice = ethHighPrice; 
+							setupAnchorPrice = ethHighPrice;
+							setupLevelName = lvl.Name;
 						}
 						else
 						{
@@ -705,6 +710,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 							currentEntryState = EntryState.WaitingForConfirmation;
 							isShortSetup = false; // Long
 							setupAnchorPrice = ethLowPrice;
+							setupLevelName = lvl.Name;
 						}
 						
 						break; // Only take one trigger at a time
@@ -1041,6 +1047,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 					if (currentEntryState == EntryState.workingOrder) 
 					{
 						currentEntryState = EntryState.Idle;
+						setupLevelName = "";
 						entryOrder = null;
 					}
 				}
@@ -1092,6 +1099,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				{
 					Print(Time + " Entry Order Cancelled/Rejected. Resetting to Idle.");
 					currentEntryState = EntryState.Idle;
+					setupLevelName = "";
 					entryOrder = null;
 					targetOrder = null;
 				}
@@ -1102,6 +1110,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				Print(Time + " Position Closed (TP/SL). Resetting to Idle.");
 				TriggerScreenshot("Exit_" + execution.Order.Name, DateTime.Now, executionId);
 				currentEntryState = EntryState.Idle;
+				setupLevelName = "";
 				entryOrder = null;
 				targetOrder = null;
 			}
