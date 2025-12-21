@@ -1100,6 +1100,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 			if (execution.Order.OrderState == OrderState.Filled && (execution.Order.Name.Contains("SL_") || execution.Order.Name.Contains("TP_")))
 			{
 				Print(Time + " Position Closed (TP/SL). Resetting to Idle.");
+				TriggerScreenshot("Exit_" + execution.Order.Name, DateTime.Now, executionId);
 				currentEntryState = EntryState.Idle;
 				entryOrder = null;
 				targetOrder = null;
