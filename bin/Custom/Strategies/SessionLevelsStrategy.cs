@@ -143,6 +143,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 			
 			// 3. Global ETH VWAPs
 			ManageGlobalVWAPs(deltaVol);
+			
+			// 4. Entry Logic
+			ManageEntryA_Plus();
 		}
 		
 		private void CheckSession(string sessionName, string startStr, string endStr, Brush color, double deltaVol)
@@ -414,6 +417,22 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 
 		// -------------------------------------------------------------------------
+		// ENTRY LOGIC VARIABLES
+		// -------------------------------------------------------------------------
+		private enum EntryState { Idle, WaitingForConfirmation, workingOrder, InPosition }
+		private EntryState currentEntryState = EntryState.Idle;
+		private bool isShortSetup = false; // true = Short, false = Long
+		private Order entryOrder = null;
+		private Order stopOrder = null;
+		private Order targetOrder = null; // We use Order objects for dynamic management
+		
+		private double setupAnchorPrice = 0; // For SL
+		
+		// Visual Tracking
+		private string triggerTag = "";
+		private int triggerBar = 0;
+		
+		// -------------------------------------------------------------------------
 		// GLOBAL ETH SESSION VWAP LOGIC
 		// -------------------------------------------------------------------------
 		private class SessionVWAP
@@ -437,9 +456,11 @@ namespace NinjaTrader.NinjaScript.Strategies
 		
 		private SessionVWAP ethHighVWAP = new SessionVWAP();
 		private SessionVWAP ethLowVWAP = new SessionVWAP();
+		
+		#region Properties
 		private double ethHighPrice = double.MinValue;
 		private double ethLowPrice = double.MaxValue;
-		private DateTime lastEthResetDate = DateTime.MinValue; // Tracks the "Trading Day"
+		private DateTime lastEthResetDate = DateTime.MinValue; 
 		
 		private int highAnchorBar = 0;
 		private int lowAnchorBar = 0;
@@ -481,7 +502,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 				if (!hardReset && CurrentBar > highAnchorBar)
 				{
 					int barsBack = CurrentBar - highAnchorBar;
-					for (int i = 1; i <= barsBack; i++)
+					// IMPORTANT: Use i < barsBack to avoid overwriting the Transparency of the Anchor Bar itself.
+					for (int i = 1; i < barsBack; i++)
 					{
 						PlotBrushes[0][i] = Brushes.Gray;
 					}
@@ -504,7 +526,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				if (!hardReset && CurrentBar > lowAnchorBar)
 				{
 					int barsBack = CurrentBar - lowAnchorBar;
-					for (int i = 1; i <= barsBack; i++)
+					for (int i = 1; i < barsBack; i++)
 					{
 						PlotBrushes[1][i] = Brushes.Gray;
 					}
@@ -551,9 +573,389 @@ namespace NinjaTrader.NinjaScript.Strategies
 			{
 				Values[1][0] = double.NaN;
 			}
+			
+			// Debug Panel
+			DrawStatePanel();
+			
+			// SAFETY NET: Check for Zombie Positions (In Market, but State logic missed it)
+			CheckSafetyNet();
+		}
+		
+		private void CheckSafetyNet()
+		{
+			// 1. Zombie Position: We have a position, but State thinks we are Idle/Working.
+			if (Position.MarketPosition != MarketPosition.Flat && currentEntryState != EntryState.InPosition)
+			{
+				Print(Time[0] + " CRITICAL: Safety Net Triggered! Position exists but State was " + currentEntryState);
+				currentEntryState = EntryState.InPosition;
+				
+				// Force Place Stops if missing
+				if (Position.MarketPosition == MarketPosition.Short)
+				{
+					EnsureProtection("Short");
+				}
+				else if (Position.MarketPosition == MarketPosition.Long)
+				{
+					EnsureProtection("Long");
+				}
+			}
+			
+			// 2. Ghost State: State thinks we are InPosition, but we are Flat.
+			// This happens if we missed the Exit Execution or closed manually.
+			// We only reset if we are confident the entry order isn't just "about to fill" (Working State handles that).
+			// If State is InPosition, it implies we ALREADY filled. So if we are Flat now, we must have closed.
+			if (Position.MarketPosition == MarketPosition.Flat && currentEntryState == EntryState.InPosition)
+			{
+				Print(Time[0] + " SYNC: State is InPosition but MarketPosition is Flat. Resetting to Idle.");
+				currentEntryState = EntryState.Idle;
+				entryOrder = null;
+				targetOrder = null;
+			}
+		}
+		
+		private void DrawStatePanel()
+		{
+			string text = string.Format("State: {0}\nPosition: {1}\nPnL: {2}\nActive Levels: {3}\nHigh VWAP: {4:F2}\nLow VWAP: {5:F2}",
+				currentEntryState,
+				Position.MarketPosition,
+				SystemPerformance.AllTrades.TradesPerformance.Currency.CumProfit.ToString("C"),
+				activeLevels.Count,
+				ethHighVWAP.CurrentValue,
+				ethLowVWAP.CurrentValue);
+				
+			Draw.TextFixed(this, "InfoPanel", text, TextPosition.TopRight, Brushes.White, new SimpleFont("Arial", 12), Brushes.Black, Brushes.Transparent, 100);
+		}
+		
+		// -------------------------------------------------------------------------
+		// ENTRY A+ MANAGEMENT
+		// -------------------------------------------------------------------------
+		private void ManageEntryA_Plus()
+		{
+			// 1. TRIGGER DETECTION (Transition from Idle -> Waiting)
+			// Check if any "Virgin" level was JUST mitigated this tick/bar.
+			// Since we run OnEachTick, we can check if MitigationTime is very recent (Time[0]).
+			// Warning: OnEachTick means this might fire multiple times per bar if logic repeats.
+			// We guard with currentEntryState == Idle.
+			
+			if (currentEntryState == EntryState.Idle)
+			{
+				foreach (var lvl in activeLevels)
+				{
+					// If level is mitigated exactly NOW
+					// Note: ManageLevels sets MitigationTime = Time[0].
+					if (lvl.IsMitigated && lvl.MitigationTime == Time[0])
+					{
+						// Valid Trigger?
+						// "Entrada A+ cuando el precio toque un nivel virgen"
+						
+						if (lvl.IsResistance)
+						{
+							Print(Time[0] + " Trigger Short on " + lvl.Name); // DEBUG
+							// Short Setup
+							triggerTag = "TriggerShort_" + Time[0].Ticks; // Store Tag
+							triggerBar = CurrentBar;
+							Draw.ArrowDown(this, triggerTag, true, 0, High[0] + TickSize * 15, Brushes.Cyan);
+							Draw.Text(this, triggerTag + "_Txt", "Short", 0, High[0] + TickSize * 25, Brushes.Cyan);
+							
+							currentEntryState = EntryState.WaitingForConfirmation;
+							isShortSetup = true;
+							setupAnchorPrice = ethHighPrice; 
+						}
+						else
+						{
+							Print(Time[0] + " Trigger Long on " + lvl.Name); // DEBUG
+							// Long Setup
+							triggerTag = "TriggerLong_" + Time[0].Ticks;
+							triggerBar = CurrentBar;
+							Draw.ArrowUp(this, triggerTag, true, 0, Low[0] - TickSize * 15, Brushes.Lime);
+							Draw.Text(this, triggerTag + "_Txt", "Long", 0, Low[0] - TickSize * 25, Brushes.Lime);
+							
+							currentEntryState = EntryState.WaitingForConfirmation;
+							isShortSetup = false; // Long
+							setupAnchorPrice = ethLowPrice;
+						}
+						
+						break; // Only take one trigger at a time
+					}
+				}
+			}
+			
+			// Update Visuals if bar is expanding (Avoid burying the arrow)
+			if (currentEntryState == EntryState.WaitingForConfirmation && CurrentBar == triggerBar)
+			{
+				if (isShortSetup)
+				{
+					Draw.ArrowDown(this, triggerTag, true, 0, High[0] + TickSize * 15, Brushes.Cyan);
+					Draw.Text(this, triggerTag + "_Txt", "Short", 0, High[0] + TickSize * 25, Brushes.Cyan);
+				}
+				else
+				{
+					Draw.ArrowUp(this, triggerTag, true, 0, Low[0] - TickSize * 15, Brushes.Lime);
+					Draw.Text(this, triggerTag + "_Txt", "Long", 0, Low[0] - TickSize * 25, Brushes.Lime);
+				}
+			}
+			
+			// 2. CONFIRMATION LOGIC (Waiting -> Working)
+			// "Wait for a candle... close... max below vwap 1 tick"
+			// Must check on Bar Close (IsFirstTickOfBar of NEXT bar, or calculate OnBarClose).
+			// If we are OnEachTick, checking IsFirstTickOfBar handles "Just Closed".
+			
+			if (currentEntryState == EntryState.WaitingForConfirmation && IsFirstTickOfBar)
+			{
+				// Check Previous Bar [1]
+				
+				if (isShortSetup)
+				{
+					// Short: High[1] < Bearish VWAP (ethHighVWAP) - 1 Tick
+					// We need the VWAP value at that time. 
+					// Values[0][1] holds the HighVWAP of the previous bar.
+					double vwapVal = Values[0][1]; 
+					
+					if (isValidVWAP(vwapVal) && High[1] < (vwapVal - TickSize))
+					{
+						// CONFIRMED. Place Limit Order.
+						// Order Price = Current VWAP (Values[0][0] or re-calculated).
+						// Wait, Limit Order "en el vwap".
+						// We submit at current VWAP.
+						
+						entryOrder = EnterShortLimit(0, true, 1, GetCurrentHighVWAP(), "EntryA_Short");
+						currentEntryState = EntryState.workingOrder;
+						Print(Time[0] + " Order Submitted (Short). OID: " + (entryOrder != null ? entryOrder.OrderId : "null"));
+					}
+					else
+					{
+						// Confirmation Logic Update:
+						// Do NOT reset to Idle immediately. Wait for subsequent bars.
+						// "Esperar a una vela..." implies patience.
+						
+						// Check invalidation? If price goes ABOVE the Anchor (SL), setup is dead.
+						// FIX: Don't invalidate on Sweep. UPDATE Anchor (Trail it).
+						if (High[0] > setupAnchorPrice)
+						{
+							Print(Time[0] + " Anchor Broken. Updating Anchor to " + High[0]);
+							setupAnchorPrice = High[0];
+							// Do not reset state. Keep Waiting.
+						}
+					}
+				}
+				else
+				{
+					// Long: Low[1] > Bullish VWAP (ethLowVWAP) + 1 Tick
+					double vwapVal = Values[1][1];
+					
+					if (isValidVWAP(vwapVal) && Low[1] > (vwapVal + TickSize))
+					{
+						entryOrder = EnterLongLimit(0, true, 1, GetCurrentLowVWAP(), "EntryA_Long");
+						currentEntryState = EntryState.workingOrder;
+						Print(Time[0] + " Order Submitted (Long). OID: " + (entryOrder != null ? entryOrder.OrderId : "null"));
+					}
+					else
+					{
+						// Check invalidation
+						if (Low[0] < setupAnchorPrice)
+						{
+							Print(Time[0] + " Anchor Broken. Updating Anchor to " + Low[0]);
+							setupAnchorPrice = Low[0];
+							// Do not reset state. Keep Waiting.
+						}
+					}
+				}
+			}
+			
+			// Mid-bar check for Anchor Update
+			if (currentEntryState == EntryState.WaitingForConfirmation && !IsFirstTickOfBar)
+			{
+				if (isShortSetup && High[0] > setupAnchorPrice) 
+				{
+					Print(Time[0] + " Anchor Broken (Mid-Bar). Updating Anchor to " + High[0]);
+					setupAnchorPrice = High[0];
+				}
+				if (!isShortSetup && Low[0] < setupAnchorPrice) 
+				{
+					Print(Time[0] + " Anchor Broken (Mid-Bar). Updating Anchor to " + Low[0]);
+					setupAnchorPrice = Low[0];
+				}
+			}
+			
+			// Visuals Update (Track the expanding candle)
+			if (currentEntryState == EntryState.WaitingForConfirmation && CurrentBar == triggerBar)
+			{
+				if (isShortSetup)
+				{
+					Draw.ArrowDown(this, triggerTag, true, 0, High[0] + TickSize * 15, Brushes.Cyan);
+					Draw.Text(this, triggerTag + "_Txt", "Short", 0, High[0] + TickSize * 25, Brushes.Cyan);
+				}
+				else
+				{
+					Draw.ArrowUp(this, triggerTag, true, 0, Low[0] - TickSize * 15, Brushes.Lime);
+					Draw.Text(this, triggerTag + "_Txt", "Long", 0, Low[0] - TickSize * 25, Brushes.Lime);
+				}
+			}
+
+			// 3. ORDER MANAGEMENT & SYNC (Working -> InPosition)
+			if (currentEntryState == EntryState.workingOrder && entryOrder != null)
+			{
+				// Check for FILL (Full or Partial)
+				if (entryOrder.OrderState == OrderState.Filled || entryOrder.OrderState == OrderState.PartFilled)
+				{
+					Print(Time[0] + " SYNC: Order Filled but State was Working. Forcing InPosition.");
+					currentEntryState = EntryState.InPosition;
+					EnsureProtection(isShortSetup ? "Short" : "Long");
+				}
+				// Tracking the VWAP (Only if still working)
+				else if (entryOrder.OrderState == OrderState.Working || entryOrder.OrderState == OrderState.Accepted)
+				{
+					double currentVWAP = isShortSetup ? GetCurrentHighVWAP() : GetCurrentLowVWAP();
+					
+					// Compare with current Order Limit Price
+					if (Math.Abs(entryOrder.LimitPrice - currentVWAP) >= TickSize)
+					{
+						ChangeOrder(entryOrder, 1, currentVWAP, 0);
+					}
+				}
+			}
+			
+			// 4. IN POSITION MANAGEMENT
+			ManagePositionExit();
+		} // End ManageEntryA_Plus
+
+		private void EnsureProtection(string direction)
+		{
+			// Debug
+			Print(Time[0] + " EnsureProtection Called for " + direction + ". Anchor=" + setupAnchorPrice);
+
+			// Places SL and TP if they don't exist.
+			if (direction == "Short")
+			{
+				// FALLBACK VALIDATION
+				if (setupAnchorPrice <= 0 || setupAnchorPrice == double.MaxValue || setupAnchorPrice == double.MinValue) 
+				{
+					setupAnchorPrice = High[0] + 20 * TickSize; // Emergency Stop
+					Print(Time[0] + " WARNING: Invalid Anchor. Used Emergency Stop: " + setupAnchorPrice);
+				}
+
+				ExitShortStopMarket(0, true, 1, setupAnchorPrice, "SL_Short", "EntryA_Short");
+				ExitShortLimit(0, true, 1, GetCurrentLowVWAP(), "TP_Short", "EntryA_Short");
+			}
+			else
+			{
+				if (setupAnchorPrice <= 0 || setupAnchorPrice == double.MaxValue || setupAnchorPrice == double.MinValue) 
+				{
+					setupAnchorPrice = Low[0] - 20 * TickSize; // Emergency Stop
+					Print(Time[0] + " WARNING: Invalid Anchor. Used Emergency Stop: " + setupAnchorPrice);
+				}
+
+				ExitLongStopMarket(0, true, 1, setupAnchorPrice, "SL_Long", "EntryA_Long");
+				ExitLongLimit(0, true, 1, GetCurrentHighVWAP(), "TP_Long", "EntryA_Long");
+			}
+		}
+		
+		private bool isValidVWAP(double val)
+		{
+			return val > 0 && !double.IsNaN(val);
+		}
+		
+		private double GetCurrentHighVWAP() { return ethHighVWAP.CurrentValue; }
+		private double GetCurrentLowVWAP() { return ethLowVWAP.CurrentValue; }
+
+		private void ManagePositionExit()
+		{
+			if (Position.MarketPosition == MarketPosition.Flat) return;
+			
+			if (targetOrder != null && (targetOrder.OrderState == OrderState.Working || targetOrder.OrderState == OrderState.Accepted))
+			{
+				double targetPrice = 0;
+				if (Position.MarketPosition == MarketPosition.Long)
+				{
+					targetPrice = GetCurrentHighVWAP();
+				}
+				else
+				{
+					targetPrice = GetCurrentLowVWAP();
+				}
+				
+				if (isValidVWAP(targetPrice) && Math.Abs(targetOrder.LimitPrice - targetPrice) >= TickSize)
+				{
+					ChangeOrder(targetOrder, 1, targetPrice, 0);
+				}
+			}
 		}
 
-		#region Properties
+		protected override void OnOrderUpdate(Order order, double limitPrice, double stopPrice, int quantity, int filled, double averageFillPrice, OrderState orderState, DateTime time, ErrorCode error, string nativeError)
+		{
+			if (order.Name == "EntryA_Short" || order.Name == "EntryA_Long")
+			{
+				entryOrder = order;
+				
+				// Handle Terminal States
+				if (orderState == OrderState.Cancelled || orderState == OrderState.Rejected || (orderState == OrderState.Filled && filled == 0)) 
+				{
+					if (currentEntryState == EntryState.workingOrder) 
+					{
+						currentEntryState = EntryState.Idle;
+						entryOrder = null;
+					}
+				}
+			}
+			
+			if (order.Name.Contains("TP_"))
+			{
+				targetOrder = order;
+			}
+		}
+
+		protected override void OnExecutionUpdate(Execution execution, string executionId, double price, int quantity, MarketPosition marketPosition, string orderId, DateTime time)
+		{
+			if (execution.Order == null) return;
+
+			if (execution.Order.Name == "EntryA_Short" || execution.Order.Name == "EntryA_Long")
+			{
+				entryOrder = execution.Order;
+				
+				if (execution.Order.OrderState == OrderState.Filled || execution.Order.OrderState == OrderState.PartFilled)
+				{
+					currentEntryState = EntryState.InPosition;
+					
+					if (Position.MarketPosition == MarketPosition.Short)
+					{
+						Print(Time + " Filled Short (Exec). Placing SL/TP.");
+						EnsureProtection("Short");
+					}
+					else if (Position.MarketPosition == MarketPosition.Long)
+					{
+						Print(Time + " Filled Long (Exec). Placing SL/TP.");
+						EnsureProtection("Long");
+					}
+				}
+			}
+			
+			if (execution.Order.Name.Contains("TP_"))
+			{
+				targetOrder = execution.Order;
+			}
+			
+			// Reset if Closed (Filled) OR Cancelled/Rejected
+			if (entryOrder != null && execution.Order == entryOrder)
+			{
+				if (execution.Order.OrderState == OrderState.Cancelled || 
+					execution.Order.OrderState == OrderState.Rejected)
+				{
+					Print(Time + " Entry Order Cancelled/Rejected. Resetting to Idle.");
+					currentEntryState = EntryState.Idle;
+					entryOrder = null;
+					targetOrder = null;
+				}
+			}
+			
+			if (execution.Order.OrderState == OrderState.Filled && (execution.Order.Name.Contains("SL_") || execution.Order.Name.Contains("TP_")))
+			{
+				Print(Time + " Position Closed (TP/SL). Resetting to Idle.");
+				currentEntryState = EntryState.Idle;
+				entryOrder = null;
+				targetOrder = null;
+			}
+		}
+
 		[NinjaScriptProperty]
 		[Display(Name="Asia Start Time", Order=1, GroupName="1. Sessions")]
 		public string AsiaStartTime { get; set; }
