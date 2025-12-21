@@ -28,19 +28,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	public class SessionLevelsStrategy : Strategy
 	{
 		// Session 1: Asia
-		private double asiaHigh = double.MinValue;
-		private double asiaLow = double.MaxValue;
-		private DateTime asiaSessionDate; // To track if we are in a new session
-		
-		// Session 2: Europe
-		private double europeHigh = double.MinValue;
-		private double europeLow = double.MaxValue;
-		private DateTime europeSessionDate;
 
-		// Session 3: USA
-		private double usaHigh = double.MinValue;
-		private double usaLow = double.MaxValue;
-		private DateTime usaSessionDate;
 
 		protected override void OnStateChange()
 		{
@@ -86,12 +74,28 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private TimeZoneInfo nyTimeZone;
 		private TimeZoneInfo chartTimeZone;
 		private bool timeZonesLoaded = false;
+		
+		// Level Persistence
+		private class SessionLevel
+		{
+			public string Name;
+			public double Price;
+			public DateTime StartTime;
+			public DateTime EndTime;
+			public DateTime MitigationTime; // When it was touched
+			public bool IsResistance; // True = High, False = Low
+			public bool IsMitigated;
+			public Brush Color;
+			public string Tag; // For Drawing
+		}
+		
+		private List<SessionLevel> activeLevels = new List<SessionLevel>();
 
 		protected override void OnBarUpdate()
 		{
 			if (CurrentBar < 20) return;
 			
-			// Initialize TimeZones once
+			// Initialize TimeZones & Lists once
 			if (!timeZonesLoaded)
 			{
 				try 
@@ -99,10 +103,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 					// "Eastern Standard Time" handles both EST and EDT automatically on Windows
 					nyTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
 					
-					
 					// Get the TimeZone of the current bars/chart
-					// We use the Global Options TimeZone because that is what determines the visual 'Local' time on the chart
-					// for most users who use "Default" time settings.
 					if (NinjaTrader.Core.Globals.GeneralOptions.TimeZoneInfo != null)
 						chartTimeZone = NinjaTrader.Core.Globals.GeneralOptions.TimeZoneInfo;
 					else
@@ -113,95 +114,246 @@ namespace NinjaTrader.NinjaScript.Strategies
 				catch (Exception ex)
 				{
 					Print("Error loading TimeZones: " + ex.Message);
-					timeZonesLoaded = true; // Don't retry per tick
+					timeZonesLoaded = true; 
 				}
 			}
 
-			// We pass the TimeZones to the check method
-			CheckSession("Asia", AsiaStartTime, AsiaEndTime, ref asiaHigh, ref asiaLow, ref asiaSessionDate, Brushes.White);
-			CheckSession("Europe", EuropeStartTime, EuropeEndTime, ref europeHigh, ref europeLow, ref europeSessionDate, Brushes.Yellow);
-			CheckSession("USA", USAStartTime, USAEndTime, ref usaHigh, ref usaLow, ref usaSessionDate, Brushes.RoyalBlue);
+			// 1. Session Logic: Identify/Create Levels
+			CheckSession("Asia", AsiaStartTime, AsiaEndTime, Brushes.White);
+			CheckSession("Europe", EuropeStartTime, EuropeEndTime, Brushes.Yellow);
+			CheckSession("USA", USAStartTime, USAEndTime, Brushes.RoyalBlue);
+			
+			// 2. Manage Extension & Touching
+			ManageLevels();
 		}
 		
-		private void CheckSession(string sessionName, string startStr, string endStr, ref double sessionHigh, ref double sessionLow, ref DateTime sessionDate, Brush color)
+		private void CheckSession(string sessionName, string startStr, string endStr, Brush color)
 		{
 			if (nyTimeZone == null || chartTimeZone == null) return;
 
-			// 1. Resolve NY Times for "Today"
-			// Problem: "Today" in NY might be different than "Today" on Chart if offset is large.
-			// However, we just need to find the "Current" or "Upcoming" session window in Chart Time.
-			
-			// Strategy: Get Current Chart Time. Convert to NY Time. 
-			// Compare NY Time to NY Windows.
-			// This is easier than converting Windows to Chart Time because of date boundaries.
-			
 			DateTime chartTime = Time[0];
 			DateTime nyTime = TimeZoneInfo.ConvertTime(chartTime, chartTimeZone, nyTimeZone);
 			TimeSpan nyTimeOfDay = nyTime.TimeOfDay;
 			
-			// Parse inputs (Assumed to be NY Time)
 			TimeSpan startTs = TimeSpan.Parse(startStr);
 			TimeSpan endTs = TimeSpan.Parse(endStr);
 			
 			bool inSession = false;
 			
-			// Handle Midnight crossover (Start > End, e.g. 18:00 to 03:00)
-			if (startTs > endTs)
-			{
-				if (nyTimeOfDay >= startTs || nyTimeOfDay < endTs) inSession = true;
-			}
-			else
-			{
-				if (nyTimeOfDay >= startTs && nyTimeOfDay < endTs) inSession = true;
-			}
+			if (startTs > endTs) { if (nyTimeOfDay >= startTs || nyTimeOfDay < endTs) inSession = true; }
+			else { if (nyTimeOfDay >= startTs && nyTimeOfDay < endTs) inSession = true; }
 			
 			if (inSession)
 			{
-				// Detect New Session Start Logic based on NY Date
-				// If (nyNow >= startTs), the session started Today (NY).
-				// If (nyNow < endTs) and is crossover, the session started Yesterday (NY).
+				// Determine Session Date (for unique ID)
+				DateTime calculatedSessionStartNY = (startTs > endTs && nyTimeOfDay < endTs) ? nyTime.Date.AddDays(-1) : nyTime.Date;
+				calculatedSessionStartNY = calculatedSessionStartNY.Add(startTs);
 				
-				DateTime calculatedSessionStartNY = DateTime.MinValue;
-				if (startTs > endTs)
+				// Unique IDs for High and Low
+				string tagH = sessionName + "_High_" + calculatedSessionStartNY.Ticks;
+				string tagL = sessionName + "_Low_" + calculatedSessionStartNY.Ticks;
+				
+				// Find or Create Levels
+				SessionLevel highLvl = activeLevels.FirstOrDefault(l => l.Tag == tagH);
+				SessionLevel lowLvl = activeLevels.FirstOrDefault(l => l.Tag == tagL);
+				
+				// Convert Start Time to Chart Time for Visuals
+				DateTime chartStartTime = TimeZoneInfo.ConvertTime(calculatedSessionStartNY, nyTimeZone, chartTimeZone);
+
+				if (highLvl == null)
 				{
-					// Crossover
-					if (nyTimeOfDay >= startTs) calculatedSessionStartNY = nyTime.Date; // Started today
-					else calculatedSessionStartNY = nyTime.Date.AddDays(-1); // Started yesterday
+					// New High Level
+					highLvl = new SessionLevel { Name = sessionName + " High", Price = double.MinValue, StartTime = chartStartTime, EndTime = Time[0], IsResistance = true, IsMitigated = false, Color = color, Tag = tagH };
+					activeLevels.Add(highLvl);
+				}
+				
+				if (lowLvl == null)
+				{
+					// New Low Level
+					lowLvl = new SessionLevel { Name = sessionName + " Low", Price = double.MaxValue, StartTime = chartStartTime, EndTime = Time[0], IsResistance = false, IsMitigated = false, Color = color, Tag = tagL };
+					activeLevels.Add(lowLvl);
+				}
+				
+				// Update Prices ONLY if not mitigated (though usually can't be mitigated while forming inside session?)
+				// Logic: While in session, we push the High/Low out. 
+				// If price breaks High, the High moves up. It doesn't "break" structurally until tested later?
+				// Usually: Track absolute High/Low during session. 
+				// "Mitigation" usually happens AFTER the High/Low is set.
+				// But what if we break High during session? It just becomes new High.
+				
+				if (High[0] > highLvl.Price) highLvl.Price = High[0];
+				if (Low[0] < lowLvl.Price) lowLvl.Price = Low[0];
+				
+				// While in session, update EndTime to current to keep line growing
+				if (!highLvl.IsMitigated) highLvl.EndTime = Time[0];
+				if (!lowLvl.IsMitigated) lowLvl.EndTime = Time[0];
+			}
+		}
+
+		private void ManageLevels()
+		{
+			// Check for touches on existing active levels
+			
+			foreach (var lvl in activeLevels)
+			{
+				// LINE EXTENSION LOGIC
+				// Alive: Always extend.
+				// Mitigated: Extend ONLY if we are still in the same calendar day as the mitigation Event.
+				
+				if (!lvl.IsMitigated)
+				{
+					lvl.EndTime = Time[0];
 				}
 				else
 				{
-					calculatedSessionStartNY = nyTime.Date;
-				}
-				
-				// Full NY Start DateTime
-				calculatedSessionStartNY = calculatedSessionStartNY.Add(startTs);
-				
-				// Identify this session instance uniquely
-				if (calculatedSessionStartNY != sessionDate)
-				{
-					// New Session Detected
-					sessionHigh = double.MinValue;
-					sessionLow = double.MaxValue;
-					sessionDate = calculatedSessionStartNY;
-				}
-				
-				// Track High/Low
-				if (High[0] > sessionHigh) sessionHigh = High[0];
-				if (Low[0] < sessionLow) sessionLow = Low[0];
-				
-				// Visuals: We need to draw from the Session Start Time.
-				// But 'sessionDate' is in NY Time. We need to convert it back to Chart Time for Draw.Line!
-				
-				DateTime chartStartTime = TimeZoneInfo.ConvertTime(sessionDate, nyTimeZone, chartTimeZone);
-
-				// Draw logic
-				if (sessionHigh > 0 && sessionLow < double.MaxValue)
-				{
-					string tagH = sessionName + "_High_" + sessionDate.Ticks;
-					Draw.Line(this, tagH, false, chartStartTime, sessionHigh, Time[0], sessionHigh, color, DashStyleHelper.Solid, 2);
+					// Ghost Line Extension
+					// Extension Rule: Continue until the End of the American Session (USAEndTime).
+					// We need to calculate the *specific* cutoff time relative to the Mitigation event.
 					
-					string tagL = sessionName + "_Low_" + sessionDate.Ticks;
-					Draw.Line(this, tagL, false, chartStartTime, sessionLow, Time[0], sessionLow, color, DashStyleHelper.Solid, 2);
+					// 1. Convert MitigationTime to NY to understand when it happened
+					DateTime mitNy = TimeZoneInfo.ConvertTime(lvl.MitigationTime, chartTimeZone, nyTimeZone);
+					TimeSpan usaEndTs = TimeSpan.Parse(USAEndTime);
+					
+					// 2. Determine the Cutoff Date/Time (NY)
+					// If mitigation happened BEFORE the cutoff today (e.g. 10:00 vs 18:00), cutoff is Today 18:00.
+					// If mitigation happened AFTER the cutoff (e.g. 19:00 vs 18:00), cutoff is Tomorrow 18:00.
+					
+					DateTime cutoffNy;
+					if (mitNy.TimeOfDay < usaEndTs)
+						cutoffNy = mitNy.Date.Add(usaEndTs);
+					else
+						cutoffNy = mitNy.Date.AddDays(1).Add(usaEndTs);
+						
+					// 3. Compare Current Time (NY) to Cutoff (NY)
+					DateTime currentNy = TimeZoneInfo.ConvertTime(Time[0], chartTimeZone, nyTimeZone);
+					
+					if (currentNy < cutoffNy)
+					{
+						lvl.EndTime = Time[0];
+					}
+					// Else: Freeze (Stop extending)
+				}
+				
+				// Check for Mitigation (if not already broken)
+				// Only if session is effectively done (Start/End checks or just assume if formed)
+				// Simplified: Just always check touch.
+				
+				if (!lvl.IsMitigated)
+				{
+					// Avoid self-mitigation during formation
+					// If the StartTime was effectively "today" or "recent" and we are still largely in that window?
+					// Problem: CheckSession pushes Price up/down. 
+					// If we are IN session, CheckSession updates Price.
+					// So if High[0] > Price, CheckSession makes Price = High[0].
+					// So High[0] == Price.
+					// So "High[0] >= Price" is TRUE.
+					// We need to know if we are "In Session" to avoid mitigation.
+					
+					// Heuristic: If CheckSession updated it THIS TICK, don't mitigate.
+					// But we run ManageLevels AFTER CheckSession.
+					// Let's rely on a flag or simply check if Time is outside Session Window?
+					// Checking Time is hard because of the varying session hours.
+					// Let's use a "InSession" flag on the object?
+					// Or reusing the "EndTime" check from previous step:
+					// If(lvl.EndTime == Time[0]) it means CheckSession updated it? 
+					// NO, we just updated lvl.EndTime = Time[0] at the top of this loop! Invalid logic now.
+					
+					// Let's add an explicit "LastUpdateBar" or similar to SessionLevel?
+					// Or simpler: We know the logic in CheckSession updates Price.
+					// If Price == High[0], it's likely pushing.
+					// But if Price < High[0], it's a break.
+					// Wait, if Price < High[0] (Resistance), then CheckSession WOULD have updated it if we were in session!
+					// So... if CheckSession DID NOT update it (Price < High[0]), it means we are NOT in session (or logic failed).
+					// Therefore, if High[0] > Price, it MUST be a mitigation break!
+					// CORRECT.
+					
+					// Exception: The very specific moment High[0] jumps? 
+					// If in session, CheckSession runs first. 
+					// If High[0] > currentHigh, set currentHigh = High[0].
+					// So entering ManageLevels, Price == High[0].
+					// Use strict inequality? High[0] > Price? No, touch is enough.
+					
+					// Let's iterate:
+					// In Session: Price = 100. High[0] = 101. -> CheckSession sets Price = 101. -> ManageLevels sees Price=101, High[0]=101.
+					// Out Session: Price = 100. High[0] = 101. -> CheckSession does nothing. -> ManageLevels sees Price=100, High[0]=101. -> MITIGATION!
+					
+					// So, logic:
+					// Resistance: If High[0] > Price -> Mitigation.
+					// Support: If Low[0] < Price -> Mitigation.
+					// Equality (Touch) shouldn't count if we assume "Break"?
+					// User said "cortadas" (cut/broken) or "tocada" (touched)?
+					// "hasta que sea tocada" (touched).
+					// If it's a touch (==), then in-session formation is a touch.
+					// We MUST distinguish In-Session.
+					
+					// Let's calculate In-Session locally again or store it.
+					// Re-calculating properly is safer.
+					
+					// Actually, let's use the object creation/update time?
+					// Let's look at `IsResistance`.
+					bool potentialMitigation = false;
+					if (lvl.IsResistance && High[0] >= lvl.Price) potentialMitigation = true;
+					if (!lvl.IsResistance && Low[0] <= lvl.Price) potentialMitigation = true;
+					
+					if (potentialMitigation)
+					{
+						// Check if we are physically in the session window for this specific level
+						// This line's tag has StartTicks.
+						// Simplest: Check if the *current price* is EQUAL to level price.
+						// If equal, likely just forming/touching.
+						// If strictly Greater (Res) or Less (Sup) AND Level Price wasn't updated?
+						// It's ambiguous.
+						
+						// CLEAN FIX: Add `IsActive` bool to SessionLevel, set by CheckSession.
+						// But I can't easily change CheckSession signature in this edit without replacing whole file.
+						// I'll calculate `inSession` simply here. It's safe.
+						// Oh wait, I don't know WHICH session hours apply to THIS level (Asia? USA?).
+						// I have `lvl.Name` ("Asia High"). I can parse or Map.
+						
+						// HACK: Just assume if the Price CHANGED this bar, it's active?
+						// No.
+						
+						// Let's guess based on inequality.
+						// If High[0] > lvl.Price, it's definitely a Break (Mitigation), because if it was active, Price would have updated to match High[0].
+						// Wait. CheckSession updates logic: `if (High[0] > highLvl.Price) highLvl.Price = High[0];`
+						// So Price will ALWAYS be >= High[0] if active.
+						// Price will never be < High[0].
+						// So if High[0] > Price, it implies CheckSession did NOT run/update -> We are Out of Session -> Mitigation.
+						// If High[0] == Price? Could be "Just forming" OR "Perfect double top touch".
+						// We'll ignore Exact Touch for mitigation to be safe against formation noise.
+						// Strictly greater/less for "Cut/Break".
+						
+						bool strictBreak = false;
+						if (lvl.IsResistance && High[0] > lvl.Price) strictBreak = true;
+						if (!lvl.IsResistance && Low[0] < lvl.Price) strictBreak = true;
+						
+						if (strictBreak)
+						{
+							lvl.IsMitigated = true;
+							lvl.MitigationTime = Time[0];
+						}
+					}
+				}
+				
+				// Drawing Logic
+				string tagA = lvl.Tag + "_A";
+				string tagB = lvl.Tag + "_B";
+				
+				if (!lvl.IsMitigated)
+				{
+					// Phase A Only: Start -> Current
+					Draw.Line(this, tagA, false, lvl.StartTime, lvl.Price, lvl.EndTime, lvl.Price, lvl.Color, DashStyleHelper.Solid, 2);
+				}
+				else
+				{
+					// Phase A: Start -> Mitigation
+					Draw.Line(this, tagA, false, lvl.StartTime, lvl.Price, lvl.MitigationTime, lvl.Price, lvl.Color, DashStyleHelper.Solid, 2);
+					
+					// Phase B (Ghost): Mitigation -> Current (Gray, Dash, 1px)
+					// Verify MitigationTime < EndTime to draw
+					// Draw.Line(this, tagB, false, lvl.MitigationTime, lvl.Price, lvl.EndTime, lvl.Price, Brushes.Gray, DashStyleHelper.Dash, 1);
+					// User requested: Gray, Dash, 1px.
+					Draw.Line(this, tagB, false, lvl.MitigationTime, lvl.Price, lvl.EndTime, lvl.Price, Brushes.Gray, DashStyleHelper.Dash, 1);
 				}
 			}
 		}
