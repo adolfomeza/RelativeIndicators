@@ -860,7 +860,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 					{
 						// --- RISK / REWARD CHECK ---
 						double projectedEntry = setupVWAP;
-						double projectedStop = setupAnchorPrice;
+						// Padding: Stop is placed 1 tick ABOVE the wicks for breathing room.
+						double projectedStop = setupAnchorPrice + TickSize; 
 						double projectedTarget = GetCurrentLowVWAP(); // Opposing Global VWAP? Or Local? 
 						// Opposing Usually Global Extreme is the Target (Standard). Or Opposing Local?
 						// Let's assume Target is Global Opposing VWAP (Classic Reversion).
@@ -898,7 +899,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 					{
 						// --- RISK / REWARD CHECK ---
 						double projectedEntry = setupVWAP;
-						double projectedStop = setupAnchorPrice;
+						// Padding: Stop is placed 1 tick BELOW the wicks.
+						double projectedStop = setupAnchorPrice - TickSize;
 						double projectedTarget = GetCurrentHighVWAP(); // Opposing Global
 						
 						double risk = Math.Abs(projectedEntry - projectedStop);
@@ -978,7 +980,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 					// --- DYNAMIC RISK / REWARD CHECK ---
 					// As VWAP moves, our entry price moves. We must re-validate R/R.
 					double projectedEntry = currentVWAP;
-					double projectedStop = setupAnchorPrice;
+					// Update R/R check to include padding too
+					double projectedStop = isShortSetup ? (setupAnchorPrice + TickSize) : (setupAnchorPrice - TickSize);
 					double projectedTarget = isShortSetup ? GetCurrentLowVWAP() : GetCurrentHighVWAP(); // Global Opposing
 					
 					double risk = Math.Abs(projectedEntry - projectedStop);
@@ -1021,7 +1024,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 					Print(Time[0] + " WARNING: Invalid Anchor. Used Emergency Stop: " + setupAnchorPrice);
 				}
 
-				ExitShortStopMarket(0, true, 1, setupAnchorPrice, "SL_Short", "EntryA_Short");
+				// SL at Anchor + 1 Tick
+				ExitShortStopMarket(0, true, 1, setupAnchorPrice + TickSize, "SL_Short", "EntryA_Short");
 				ExitShortLimit(0, true, 1, GetCurrentLowVWAP(), "TP_Short", "EntryA_Short");
 			}
 			else
@@ -1032,7 +1036,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 					Print(Time[0] + " WARNING: Invalid Anchor. Used Emergency Stop: " + setupAnchorPrice);
 				}
 
-				ExitLongStopMarket(0, true, 1, setupAnchorPrice, "SL_Long", "EntryA_Long");
+				// SL at Anchor - 1 Tick
+				ExitLongStopMarket(0, true, 1, setupAnchorPrice - TickSize, "SL_Long", "EntryA_Long");
 				ExitLongLimit(0, true, 1, GetCurrentHighVWAP(), "TP_Long", "EntryA_Long");
 			}
 		}
