@@ -79,10 +79,118 @@ namespace NinjaTrader.NinjaScript.Strategies
 			catch { /* Ignore logging errors to prevent strategy crash */ }
 		}
 
+
+		// =========================================================
+		// STATE PERSISTENCE (XML)
+		// =========================================================
+		
+		public class SessionLevelData
+		{
+			public string Tag { get; set; }
+			public string Name { get; set; }
+			public double Price { get; set; }
+			public DateTime StartTime { get; set; }
+			public DateTime EndTime { get; set; }
+			public DateTime MitigationTime { get; set; }
+			public bool IsResistance { get; set; }
+			public bool IsMitigated { get; set; }
+			public string ColorName { get; set; } // "White", "Yellow", "Blue", "Gray"
+		}
+
+		private void SaveLevels()
+		{
+			try
+			{
+				string path = NinjaTrader.Core.Globals.UserDataDir + @"trace\SessionLevels_State.xml";
+				List<SessionLevelData> dataList = new List<SessionLevelData>();
+				
+				foreach (var lvl in activeLevels)
+				{
+					// Only save if it has a valid Tag (ID)
+					if (string.IsNullOrEmpty(lvl.Tag)) continue;
+
+					SessionLevelData data = new SessionLevelData
+					{
+						Tag = lvl.Tag,
+						Name = lvl.Name,
+						Price = lvl.Price,
+						StartTime = lvl.StartTime,
+						EndTime = lvl.EndTime,
+						MitigationTime = lvl.MitigationTime,
+						IsResistance = lvl.IsResistance,
+						IsMitigated = lvl.IsMitigated,
+						ColorName = (lvl.Color == Brushes.White) ? "White" : (lvl.Color == Brushes.Yellow) ? "Yellow" : (lvl.Color == Brushes.RoyalBlue) ? "Blue" : "Gray"
+					};
+					dataList.Add(data);
+				}
+
+				XmlSerializer serializer = new XmlSerializer(typeof(List<SessionLevelData>));
+				using (StreamWriter writer = new StreamWriter(path))
+				{
+					serializer.Serialize(writer, dataList);
+				}
+				Log("State Saved: " + dataList.Count + " levels persisted.");
+			}
+			catch (Exception ex) { Log("SaveLevels Error: " + ex.Message); }
+		}
+
+		private void LoadLevels()
+		{
+			try
+			{
+				string path = NinjaTrader.Core.Globals.UserDataDir + @"trace\SessionLevels_State.xml";
+				if (!File.Exists(path)) return;
+
+				XmlSerializer serializer = new XmlSerializer(typeof(List<SessionLevelData>));
+				List<SessionLevelData> loadedData;
+				
+				using (StreamReader reader = new StreamReader(path))
+				{
+					loadedData = (List<SessionLevelData>)serializer.Deserialize(reader);
+				}
+				
+				if (loadedData != null)
+				{
+					int newCount = 0;
+					foreach (var data in loadedData)
+					{
+						// De-duplication: Don't add if already exists (shouldn't happen on fresh load, but safety first)
+						if (activeLevels.Any(l => l.Tag == data.Tag)) continue;
+
+						Brush c = Brushes.Gray;
+						if (data.ColorName == "White") c = Brushes.White;
+						else if (data.ColorName == "Yellow") c = Brushes.Yellow;
+						else if (data.ColorName == "Blue") c = Brushes.RoyalBlue;
+
+						SessionLevel lvl = new SessionLevel
+						{
+							Tag = data.Tag,
+							Name = data.Name,
+							Price = data.Price,
+							StartTime = data.StartTime,
+							EndTime = data.EndTime,
+							MitigationTime = data.MitigationTime,
+							IsResistance = data.IsResistance,
+							IsMitigated = data.IsMitigated,
+							Color = c,
+							// Init ephemeral VWAP data to 0 since we can't reconstruct it easily without bars, 
+							// but these old levels are mostly for targets/visuals, not fresh VWAP entries usually.
+							VolSum = 0, PvSum = 0, JustReset = false 
+						};
+						activeLevels.Add(lvl);
+						newCount++;
+					}
+					Log("State Loaded: " + newCount + " levels restored from history.");
+				}
+			}
+			catch (Exception ex) { Log("LoadLevels Error: " + ex.Message); }
+		}
+		
 		protected override void OnStateChange()
 		{
 			if (State == State.SetDefaults)
 			{
+				// ... (Existing Defaults) ...
 				Description									= @"Advanced Session Levels Strategy with VWAP and R/R Filters.";
 				Name										= "SessionLevelsStrategy " + StrategyVersion;
 				Calculate									= Calculate.OnEachTick;
@@ -91,7 +199,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				IsExitOnSessionCloseStrategy				= true;
 				ExitOnSessionCloseSeconds					= 30;
 				IsFillLimitOnTouch							= false;
-				MaximumBarsLookBack							= MaximumBarsLookBack.TwoHundredFiftySix;
+				MaximumBarsLookBack							= MaximumBarsLookBack.Infinite; // CHANGED: Needed to see far back levels
 				OrderFillResolution							= OrderFillResolution.Standard;
 				Slippage									= 0;
 				StartBehavior								= StartBehavior.ImmediatelySubmit;
@@ -100,26 +208,20 @@ namespace NinjaTrader.NinjaScript.Strategies
 				RealtimeErrorHandling						= RealtimeErrorHandling.StopCancelClose;
 				StopTargetHandling							= StopTargetHandling.PerEntryExecution;
 				BarsRequiredToTrade							= 20;
-				// Disable this property for performance gains in Strategy Analyzer optimizations
-				// See the Help Guide for more information
 				IsInstantiatedOnEachOptimizationIteration	= true;
 				
-				IsOverlay = true; // Draw on the price chart
-
-				// Default Hours
-				AsiaStartTime = "18:00";
-				AsiaEndTime = "03:00";
-				EuropeStartTime = "03:00";
-				EuropeEndTime = "09:30";
-				USAStartTime = "09:30";
-				USAEndTime = "18:00";
-				
-				// High Performance Plots for VWAPs
-				AddPlot(new Stroke(Brushes.White, 2), PlotStyle.Line, "EthHighVWAP");
-				AddPlot(new Stroke(Brushes.White, 2), PlotStyle.Line, "EthLowVWAP");
+				IsOverlay = true; 
+				// ...
 			}
-			else if (State == State.Configure)
+			else if (State == State.DataLoaded)
 			{
+				// Load Persistence on Startup
+				LoadLevels();
+			}
+			else if (State == State.Terminated)
+			{
+				// Save Persistence on Shutdown
+				SaveLevels();
 			}
 		}
 
