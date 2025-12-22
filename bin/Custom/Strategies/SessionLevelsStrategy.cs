@@ -209,19 +209,23 @@ namespace NinjaTrader.NinjaScript.Strategies
 			}
 			else if (State == State.DataLoaded)
 			{
+				/*
 				try 
 				{
 					LoadLevels();
 				} 
 				catch(Exception ex) { Print("Critical Load Error: " + ex.Message); }
+				*/
 			}
 			else if (State == State.Terminated)
 			{
+				/*
 				try
 				{
 					SaveLevels();
 				}
 				catch(Exception ex) { Print("Critical Save Error: " + ex.ToString()); }
+				*/
 			}
 		}
 
