@@ -711,10 +711,16 @@ namespace NinjaTrader.NinjaScript.Strategies
 		
 		private void DrawStatePanel()
 		{
-			string text = string.Format("State: {0}\nPosition: {1}\nPnL: {2}\nActive Levels: {3}\nHigh VWAP: {4:F2}\nLow VWAP: {5:F2}",
+			double accountPnL = 0;
+			try {
+				if (Account != null)
+					accountPnL = Account.Get(AccountItem.RealizedProfitLoss, Currency.UsDollar);
+			} catch {}
+
+			string text = string.Format("State: {0}\nPosition: {1}\nAcc Daily PnL: {2}\nActive Levels: {3}\nHigh VWAP: {4:F2}\nLow VWAP: {5:F2}",
 				currentEntryState,
 				Position.MarketPosition,
-				SystemPerformance.AllTrades.TradesPerformance.Currency.CumProfit.ToString("C"),
+				accountPnL.ToString("C"),
 				activeLevels.Count,
 				ethHighVWAP.CurrentValue,
 				ethLowVWAP.CurrentValue);
