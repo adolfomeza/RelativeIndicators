@@ -1146,6 +1146,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 			Log(Time[0] + " EnsureProtection Called for " + direction + ". Anchor=" + setupAnchorPrice);
 
 			// Places SL and TP if they don't exist.
+			double slPrice = 0;
+			double tpPrice = 0;
+
 			if (direction == "Short")
 			{
 				// FALLBACK VALIDATION
@@ -1155,9 +1158,20 @@ namespace NinjaTrader.NinjaScript.Strategies
 					Log(Time[0] + " WARNING: Invalid Anchor. Used Emergency Stop: " + setupAnchorPrice);
 				}
 
-				// SL at Anchor + 1 Tick
-				ExitShortStopMarket(0, true, 1, setupAnchorPrice + TickSize, "SL_Short", "EntryA_Short");
-				ExitShortLimit(0, true, 1, GetCurrentLowVWAP(), "TP_Short", "EntryA_Short");
+				slPrice = setupAnchorPrice + TickSize;
+				tpPrice = GetCurrentLowVWAP();
+				
+				// Sanity Check TP for Short (Must be < Close)
+				// If VWAP is 0 or above current price, use fallback
+				if (!isValidVWAP(tpPrice) || tpPrice >= Close[0]) 
+				{
+					Log(Time[0] + " WARNING: Short TP (LowVWAP=" + tpPrice + ") is invalid or >= Price (" + Close[0] + "). Using Entry - 40 ticks fallback.");
+					tpPrice = Close[0] - 40 * TickSize;
+				}
+
+				Log("   -> Placing Short Protection: SL=" + slPrice + " | TP=" + tpPrice);
+				ExitShortStopMarket(0, true, 1, slPrice, "SL_Short", "EntryA_Short");
+				ExitShortLimit(0, true, 1, tpPrice, "TP_Short", "EntryA_Short");
 			}
 			else
 			{
@@ -1167,9 +1181,20 @@ namespace NinjaTrader.NinjaScript.Strategies
 					Log(Time[0] + " WARNING: Invalid Anchor. Used Emergency Stop: " + setupAnchorPrice);
 				}
 
-				// SL at Anchor - 1 Tick
-				ExitLongStopMarket(0, true, 1, setupAnchorPrice - TickSize, "SL_Long", "EntryA_Long");
-				ExitLongLimit(0, true, 1, GetCurrentHighVWAP(), "TP_Long", "EntryA_Long");
+				slPrice = setupAnchorPrice - TickSize;
+				tpPrice = GetCurrentHighVWAP();
+
+				// Sanity Check TP for Long (Must be > Close)
+				// If VWAP is 0 or below current price, use fallback
+				if (!isValidVWAP(tpPrice) || tpPrice <= Close[0]) 
+				{
+					Log(Time[0] + " WARNING: Long TP (HighVWAP=" + tpPrice + ") is invalid or <= Price (" + Close[0] + "). Using Entry + 40 ticks fallback.");
+					tpPrice = Close[0] + 40 * TickSize;
+				}
+
+				Log("   -> Placing Long Protection: SL=" + slPrice + " | TP=" + tpPrice);
+				ExitLongStopMarket(0, true, 1, slPrice, "SL_Long", "EntryA_Long");
+				ExitLongLimit(0, true, 1, tpPrice, "TP_Long", "EntryA_Long");
 			}
 		}
 		
