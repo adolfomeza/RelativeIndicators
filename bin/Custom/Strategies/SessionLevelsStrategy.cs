@@ -84,18 +84,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		// STATE PERSISTENCE (XML)
 		// =========================================================
 		
-		public class SessionLevelData
-		{
-			public string Tag { get; set; }
-			public string Name { get; set; }
-			public double Price { get; set; }
-			public DateTime StartTime { get; set; }
-			public DateTime EndTime { get; set; }
-			public DateTime MitigationTime { get; set; }
-			public bool IsResistance { get; set; }
-			public bool IsMitigated { get; set; }
-			public string ColorName { get; set; } // "White", "Yellow", "Blue", "Gray"
-		}
+
 
 		private void SaveLevels()
 		{
@@ -1701,5 +1690,25 @@ namespace NinjaTrader.NinjaScript.Strategies
 				Log(DateTime.Now + " INFO: Connection Restored. Please verify active orders manually.");
 			}
 		}
+	} // End of SessionLevelsStrategy class
+
+	// =========================================================
+	// XML DTO (Namespace Level)
+	// =========================================================
+	[XmlRoot("SessionLevelData")]
+	public class SessionLevelData
+	{
+		public string Tag { get; set; }
+		public string Name { get; set; }
+		public double Price { get; set; }
+		public DateTime StartTime { get; set; }
+		public DateTime EndTime { get; set; }
+		public DateTime MitigationTime { get; set; }
+		public bool IsResistance { get; set; }
+		public bool IsMitigated { get; set; }
+		public string ColorName { get; set; } 
+		
+		public SessionLevelData() {} // Parameterless constructor required for XML
 	}
-}
+
+} // End of Namespace
