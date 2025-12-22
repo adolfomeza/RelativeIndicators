@@ -137,7 +137,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 			lastVol = Volume[0];
 
 			// CSV LOGGING INIT (Once per session)
-			if (CurrentBar == barsRequiredToTrade) // Use a safe bar index to init
+			if (CurrentBar == BarsRequiredToTrade) // Use a safe bar index to init
 			{
 				InitCSV();
 			}
@@ -1152,8 +1152,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 					DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
 					Instrument.FullName,
 					action,
-					trade.Entry.AveragePrice,
-					trade.Exit.AveragePrice,
+					trade.Entry.Price,
+					trade.Exit.Price,
 					trade.ProfitCurrency,
 					trade.Quantity);
 					
