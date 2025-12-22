@@ -745,25 +745,35 @@ namespace NinjaTrader.NinjaScript.Strategies
 							else if (!orphanHandled)
 							{
 								// Safe Orphan & Not Handled -> ADOPT MANUAL (Unmanaged)
+								// Visual Confirmation
+								Draw.Text(this, "OrphanTxt_" + CurrentBar, "ORPHAN DETECTED\nAttempting Protection", 0, avgPrice, Brushes.Orange);
+								
 								Log(Time[0] + " ORPHAN ADOPTION: Safe Manual Position Detected @ " + avgPrice + ". Placing Unmanaged Protection.");
 								
+								Order slOrder = null;
+								Order tpOrder = null;
+
 								if (accPos.MarketPosition == MarketPosition.Long)
 								{
 									// Place SL at Entry - 20 ticks
-									SubmitOrderUnmanaged(0, OrderAction.Sell, OrderType.StopMarket, accPos.Quantity, 0, avgPrice - safetyMargin, "Orphan_SL", "Orphan_Long");
+									slOrder = SubmitOrderUnmanaged(0, OrderAction.Sell, OrderType.StopMarket, accPos.Quantity, 0, avgPrice - safetyMargin, "Orphan_SL", "Orphan_Long");
 									// Place TP at High VWAP (or min 20 ticks)
 									double tpPrice = Math.Max(GetCurrentHighVWAP(), avgPrice + 20 * TickSize);
-									SubmitOrderUnmanaged(0, OrderAction.Sell, OrderType.Limit, accPos.Quantity, tpPrice, 0, "Orphan_TP", "Orphan_Long");
+									tpOrder = SubmitOrderUnmanaged(0, OrderAction.Sell, OrderType.Limit, accPos.Quantity, tpPrice, 0, "Orphan_TP", "Orphan_Long");
 								}
 								else if (accPos.MarketPosition == MarketPosition.Short)
 								{
 									// Place SL at Entry + 20 ticks
-									SubmitOrderUnmanaged(0, OrderAction.BuyToCover, OrderType.StopMarket, accPos.Quantity, 0, avgPrice + safetyMargin, "Orphan_SL", "Orphan_Short");
+									slOrder = SubmitOrderUnmanaged(0, OrderAction.BuyToCover, OrderType.StopMarket, accPos.Quantity, 0, avgPrice + safetyMargin, "Orphan_SL", "Orphan_Short");
 									// Place TP at Low VWAP (or min 20 ticks)
 									double tpPrice = Math.Min(GetCurrentLowVWAP(), avgPrice - 20 * TickSize);
-									SubmitOrderUnmanaged(0, OrderAction.BuyToCover, OrderType.Limit, accPos.Quantity, tpPrice, 0, "Orphan_TP", "Orphan_Short");
+									tpOrder = SubmitOrderUnmanaged(0, OrderAction.BuyToCover, OrderType.Limit, accPos.Quantity, tpPrice, 0, "Orphan_TP", "Orphan_Short");
 								}
 								
+								// Log Result
+								Log("   -> Unmanaged SL Order Submitted. Result: " + (slOrder != null ? "OK (OID: " + slOrder.OrderId + ")" : "FAILED (Null)"));
+								Log("   -> Unmanaged TP Order Submitted. Result: " + (tpOrder != null ? "OK (OID: " + tpOrder.OrderId + ")" : "FAILED (Null)"));
+
 								orphanHandled = true;
 							}
 						}
