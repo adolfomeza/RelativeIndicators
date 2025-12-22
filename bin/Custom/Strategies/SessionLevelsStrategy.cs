@@ -33,12 +33,15 @@ namespace NinjaTrader.NinjaScript.Strategies
 		// Session 1: Asia
 
 
+		// Version Control
+		private const string StrategyVersion = "v1.1";
+
 		protected override void OnStateChange()
 		{
 			if (State == State.SetDefaults)
 			{
-				Description									= @"Strategy to track Session Highs and Lows strictly during session hours.";
-				Name										= "SessionLevelsStrategy";
+				Description									= @"Advanced Session Levels Strategy with VWAP and R/R Filters.";
+				Name										= "SessionLevelsStrategy " + StrategyVersion;
 				Calculate									= Calculate.OnEachTick;
 				EntriesPerDirection							= 1;
 				EntryHandling								= EntryHandling.AllEntries;
@@ -733,7 +736,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 					sessionPnL = SystemPerformance.RealTimeTrades.TradesPerformance.Currency.CumProfit;
 			} catch {}
 
-			string text = string.Format("State: {0}\nPosition: {1}\nAcc Daily PnL: {2}\nInstrument Daily PnL: {3}\nActive Levels: {4}\nHigh VWAP: {5:F2}\nLow VWAP: {6:F2}",
+			string text = string.Format("Ver: {0}\nState: {1}\nPosition: {2}\nAcc Daily PnL: {3}\nInstrument Daily PnL: {4}\nActive Levels: {5}\nHigh VWAP: {6:F2}\nLow VWAP: {7:F2}",
+				StrategyVersion,
 				currentEntryState,
 				Position.MarketPosition,
 				accountPnL.ToString("C"),
