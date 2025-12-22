@@ -43,6 +43,16 @@ namespace NinjaTrader.NinjaScript.Strategies
 			get { return enableDebugLogs; }
 			set { enableDebugLogs = value; }
 		}
+
+		private bool showVisuals = true;
+		
+		[NinjaScriptProperty]
+		[Display(Name="Show Visuals", Description="Draw lines on chart. Disable to save resources.", Order=61, GroupName="General")]
+		public bool ShowVisuals
+		{
+			get { return showVisuals; }
+			set { showVisuals = value; }
+		}
 		
 		// Forensic Logging
 		private void Log(string message)
@@ -437,25 +447,26 @@ namespace NinjaTrader.NinjaScript.Strategies
 					}
 				}
 				
-				// Drawing Logic
-				string tagA = lvl.Tag + "_A";
-				string tagB = lvl.Tag + "_B";
-				
-				if (!lvl.IsMitigated)
+				// Drawing Logic in Low Performance Mode (Optional)
+				if (ShowVisuals)
 				{
-					// Phase A Only: Start -> Current
-					Draw.Line(this, tagA, false, lvl.StartTime, lvl.Price, lvl.EndTime, lvl.Price, lvl.Color, DashStyleHelper.Solid, 2);
-				}
-				else
-				{
-					// Phase A: Start -> Mitigation
-					Draw.Line(this, tagA, false, lvl.StartTime, lvl.Price, lvl.MitigationTime, lvl.Price, lvl.Color, DashStyleHelper.Solid, 2);
+					string tagA = lvl.Tag + "_A";
+					string tagB = lvl.Tag + "_B";
 					
-					// Phase B (Ghost): Mitigation -> Current (Gray, Dash, 1px)
-					// Verify MitigationTime < EndTime to draw
-					// Draw.Line(this, tagB, false, lvl.MitigationTime, lvl.Price, lvl.EndTime, lvl.Price, Brushes.Gray, DashStyleHelper.Dash, 1);
-					// User requested: Gray, Dash, 1px.
-					Draw.Line(this, tagB, false, lvl.MitigationTime, lvl.Price, lvl.EndTime, lvl.Price, Brushes.Gray, DashStyleHelper.Dash, 1);
+					if (!lvl.IsMitigated)
+					{
+						// Phase A Only: Start -> Current
+						Draw.Line(this, tagA, false, lvl.StartTime, lvl.Price, lvl.EndTime, lvl.Price, lvl.Color, DashStyleHelper.Solid, 2);
+					}
+					else
+					{
+						// Phase A: Start -> Mitigation
+						Draw.Line(this, tagA, false, lvl.StartTime, lvl.Price, lvl.MitigationTime, lvl.Price, lvl.Color, DashStyleHelper.Solid, 2);
+						
+						// Phase B (Ghost): Mitigation -> Current (Gray, Dash, 1px)
+						// Verify MitigationTime < EndTime to draw
+						Draw.Line(this, tagB, false, lvl.MitigationTime, lvl.Price, lvl.EndTime, lvl.Price, Brushes.Gray, DashStyleHelper.Dash, 1);
+					}
 				}
 			}
 		}
