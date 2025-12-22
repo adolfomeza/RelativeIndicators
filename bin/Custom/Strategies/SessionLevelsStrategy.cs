@@ -86,99 +86,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		
 
 
-	        private string GetXmlPath()
-	        {
-		        return NinjaTrader.Core.Globals.UserDataDir + @"trace\SessionLevels_State_v2.xml";
-	        }
 
-		private void SaveLevels()
-		{
-			try
-			{
-				string path = GetXmlPath();
-				List<SessionLevelData> dataList = new List<SessionLevelData>();
-				
-				foreach (var lvl in activeLevels)
-				{
-					// Only save if it has a valid Tag (ID)
-					if (string.IsNullOrEmpty(lvl.Tag)) continue;
-
-					SessionLevelData data = new SessionLevelData
-					{
-						Tag = lvl.Tag,
-						Name = lvl.Name,
-						Price = lvl.Price,
-						StartTime = lvl.StartTime,
-						EndTime = lvl.EndTime,
-						MitigationTime = lvl.MitigationTime,
-						IsResistance = lvl.IsResistance,
-						IsMitigated = lvl.IsMitigated,
-						ColorName = (lvl.Color == Brushes.White) ? "White" : (lvl.Color == Brushes.Yellow) ? "Yellow" : (lvl.Color == Brushes.RoyalBlue) ? "Blue" : "Gray"
-					};
-					dataList.Add(data);
-				}
-
-				XmlSerializer serializer = new XmlSerializer(typeof(List<SessionLevelData>));
-				using (StreamWriter writer = new StreamWriter(path))
-				{
-					serializer.Serialize(writer, dataList);
-				}
-				Log("State Saved: " + dataList.Count + " levels persisted.");
-			}
-			catch (Exception ex) { Log("SaveLevels Error: " + ex.Message); }
-		}
-
-		private void LoadLevels()
-		{
-			try
-			{
-				string path = GetXmlPath();
-				if (!File.Exists(path)) return;
-
-				XmlSerializer serializer = new XmlSerializer(typeof(List<SessionLevelData>));
-				List<SessionLevelData> loadedData;
-				
-				using (StreamReader reader = new StreamReader(path))
-				{
-					loadedData = (List<SessionLevelData>)serializer.Deserialize(reader);
-				}
-				
-				if (loadedData != null)
-				{
-					int newCount = 0;
-					foreach (var data in loadedData)
-					{
-						// De-duplication: Don't add if already exists (shouldn't happen on fresh load, but safety first)
-						if (activeLevels.Any(l => l.Tag == data.Tag)) continue;
-
-						Brush c = Brushes.Gray;
-						if (data.ColorName == "White") c = Brushes.White;
-						else if (data.ColorName == "Yellow") c = Brushes.Yellow;
-						else if (data.ColorName == "Blue") c = Brushes.RoyalBlue;
-
-						SessionLevel lvl = new SessionLevel
-						{
-							Tag = data.Tag,
-							Name = data.Name,
-							Price = data.Price,
-							StartTime = data.StartTime,
-							EndTime = data.EndTime,
-							MitigationTime = data.MitigationTime,
-							IsResistance = data.IsResistance,
-							IsMitigated = data.IsMitigated,
-							Color = c,
-							// Init ephemeral VWAP data to 0 since we can't reconstruct it easily without bars, 
-							// but these old levels are mostly for targets/visuals, not fresh VWAP entries usually.
-							VolSum = 0, PvSum = 0, JustReset = false 
-						};
-						activeLevels.Add(lvl);
-						newCount++;
-					}
-					Log("State Loaded: " + newCount + " levels restored from history.");
-				}
-			}
-			catch (Exception ex) { Log("LoadLevels Error: " + ex.Message); }
-		}
 		
 		protected override void OnStateChange()
 		{
@@ -1709,24 +1617,4 @@ namespace NinjaTrader.NinjaScript.Strategies
 		}
 		*/
 	} // End of SessionLevelsStrategy class
-
-	// =========================================================
-	// XML DTO (Namespace Level)
-	// =========================================================
-	[XmlRoot("SessionLevelData")]
-	public class SessionLevelData
-	{
-		public string Tag { get; set; }
-		public string Name { get; set; }
-		public double Price { get; set; }
-		public DateTime StartTime { get; set; }
-		public DateTime EndTime { get; set; }
-		public DateTime MitigationTime { get; set; }
-		public bool IsResistance { get; set; }
-		public bool IsMitigated { get; set; }
-		public string ColorName { get; set; } 
-		
-		public SessionLevelData() {} // Parameterless constructor required for XML
-	}
-
 } // End of Namespace
