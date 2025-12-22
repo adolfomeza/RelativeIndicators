@@ -1587,14 +1587,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 		[Display(Name="USA End Time", Order=6, GroupName="1. Sessions")]
 		public string USAEndTime { get; set; }
 		#endregion
-		protected override void OnConnectionStatusUpdate(ConnectionStatusEnvironment connectionStatusEnvironment, ConnectionStatus oldStatus, ConnectionStatus newStatus)
+		protected override void OnConnectionStatusUpdate(ConnectionStatus newStatus, ConnectionStatus oldStatus)
 		{
-			if (newStatus == ConnectionStatus.Lost)
+			if (newStatus == ConnectionStatus.ConnectionLost)
 			{
 				Log(DateTime.Now + " CRITICAL: Connection to Broker/Feed LOST. Strategy may be blind.");
 				PlaySound(NinjaTrader.Core.Globals.InstallDir + @"\sounds\Alert1.wav"); 
 			}
-			else if (newStatus == ConnectionStatus.Connected && oldStatus == ConnectionStatus.Lost)
+			else if (newStatus == ConnectionStatus.Connected && oldStatus == ConnectionStatus.ConnectionLost)
 			{
 				Log(DateTime.Now + " INFO: Connection Restored. Please verify active orders manually.");
 			}
