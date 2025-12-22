@@ -57,26 +57,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 		// Forensic Logging
 		private void Log(string message)
 		{
-			// 1. Output Window (Immediate Feedback)
+			// Simple Print only to debug activation crash
 			if (EnableDebugLogs) Print(message);
-			
-			// 2. File Persistence (Forensic Audit)
-			try 
-			{
-				string path = NinjaTrader.Core.Globals.UserDataDir + @"trace\Strategy_Forensic_" + DateTime.Now.ToString("yyyyMMdd") + ".txt";
-				string dir = Path.GetDirectoryName(path);
-				if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
-				
-				// Format: [Time] [Instrument] Message
-				string line = string.Format("[{0:HH:mm:ss.fff}] [{1}] {2}", DateTime.Now, Instrument != null ? Instrument.FullName : "System", message);
-				
-				// Append to file (Thread safe-ish for simple usage, NT might lock but typically fine for append)
-				using (StreamWriter sw = File.AppendText(path))
-				{
-					sw.WriteLine(line);
-				}
-			}
-			catch { /* Ignore logging errors to prevent strategy crash */ }
 		}
 
 
