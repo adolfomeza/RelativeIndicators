@@ -136,6 +136,12 @@ namespace NinjaTrader.NinjaScript.Strategies
 			double deltaVol = Volume[0] - lastVol;
 			lastVol = Volume[0];
 
+			// CSV LOGGING INIT (Once per session)
+			if (CurrentBar == barsRequiredToTrade) // Use a safe bar index to init
+			{
+				InitCSV();
+			}
+
 			// 1. Session Logic: Identify/Create Levels
 			CheckSession("Asia", AsiaStartTime, AsiaEndTime, Brushes.White, deltaVol);
 			CheckSession("Europe", EuropeStartTime, EuropeEndTime, Brushes.Yellow, deltaVol);
@@ -722,11 +728,11 @@ namespace NinjaTrader.NinjaScript.Strategies
 					sessionPnL = SystemPerformance.RealTimeTrades.TradesPerformance.Currency.CumProfit;
 			} catch {}
 
-			string text = string.Format("State: {0}\nPosition: {1}\nAcc Daily PnL: {2}\nSession PnL: {3}\nActive Levels: {4}\nHigh VWAP: {5:F2}\nLow VWAP: {6:F2}",
+			string text = string.Format("State: {0}\nPosition: {1}\nAcc Daily PnL: {2}\nInstrument Daily PnL: {3}\nActive Levels: {4}\nHigh VWAP: {5:F2}\nLow VWAP: {6:F2}",
 				currentEntryState,
 				Position.MarketPosition,
 				accountPnL.ToString("C"),
-				sessionPnL.ToString("C"),
+				(storedDailyPnL + sessionPnL).ToString("C"),
 				activeLevels.Count,
 				ethHighVWAP.CurrentValue,
 				ethLowVWAP.CurrentValue);
@@ -1082,6 +1088,96 @@ namespace NinjaTrader.NinjaScript.Strategies
 					}));
 				}
 				catch (Exception ex) { Print(Time[0] + " Snapshot Dispatch Failed: " + ex.Message); }
+			}
+		}
+
+
+		// -------------------------------------------------------------------------
+		// CSV PnL PERSISTENCE
+		// -------------------------------------------------------------------------
+		private string csvPath = "";
+		private double storedDailyPnL = 0;
+		private bool csvInitialized = false;
+
+		private void InitCSV()
+		{
+			if (csvInitialized) return;
+			try
+			{
+				string docsDir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
+				string logDir = System.IO.Path.Combine(docsDir, "NinjaTrader 8", "TradeLogs");
+				if (!Directory.Exists(logDir)) Directory.CreateDirectory(logDir);
+				
+				string fileName = "SessionLevels_" + DateTime.Now.ToString("yyyyMMdd") + ".csv";
+				csvPath = System.IO.Path.Combine(logDir, fileName);
+				
+				storedDailyPnL = 0;
+				
+				if (File.Exists(csvPath))
+				{
+					string[] lines = File.ReadAllLines(csvPath);
+					foreach (string line in lines)
+					{
+						string[] parts = line.Split(',');
+						if (parts.Length >= 6)
+						{
+							// Format: Time,Instrument,Action,Entry,Exit,Profit,Qty
+							string fileInst = parts[1];
+							if (fileInst == Instrument.FullName)
+							{
+								double profit = 0;
+								if (double.TryParse(parts[5], out profit))
+								{
+									storedDailyPnL += profit;
+								}
+							}
+						}
+					}
+					Print("CSV Init: Loaded PnL for " + Instrument.FullName + ": " + storedDailyPnL.ToString("C"));
+				}
+				
+				csvInitialized = true;
+			}
+			catch (Exception ex) { Print("CSV Init Failed: " + ex.Message); }
+		}
+
+		private void LogTrade(Trade trade)
+		{
+			if (!csvInitialized) InitCSV();
+			try
+			{
+				// Time,Instrument,Action,Entry,Exit,Profit,Qty
+				string action = (trade.Entry.MarketPosition == MarketPosition.Long) ? "Long" : "Short";
+				string line = string.Format("{0},{1},{2},{3},{4},{5},{6}",
+					DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+					Instrument.FullName,
+					action,
+					trade.Entry.AveragePrice,
+					trade.Exit.AveragePrice,
+					trade.ProfitCurrency,
+					trade.Quantity);
+					
+				using (StreamWriter sw = File.AppendText(csvPath))
+				{
+					sw.WriteLine(line);
+				}
+			}
+			catch (Exception ex) { Print("CSV Log Failed: " + ex.Message); }
+		}
+
+		protected override void OnPositionUpdate(Position position, double averagePrice, int quantity, MarketPosition marketPosition)
+		{
+			// Detect Trade Close (Transition to Flat)
+			if (marketPosition == MarketPosition.Flat && position.Instrument == Instrument)
+			{
+				// We just closed a position. Log the last trade.
+				if (SystemPerformance != null && SystemPerformance.RealTimeTrades != null && SystemPerformance.RealTimeTrades.Count > 0)
+				{
+					Trade lastTrade = SystemPerformance.RealTimeTrades[SystemPerformance.RealTimeTrades.Count - 1];
+					// Verify it just happened (within last few seconds? Or just assume sequentially correct)
+					// "RealTimeTrades" only updates on close. So the last one IS the one we just closed.
+					LogTrade(lastTrade);
+				}
 			}
 		}
 
