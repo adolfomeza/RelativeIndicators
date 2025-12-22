@@ -30,11 +30,21 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		// Session 1: Asia
+		// ... existing properties ...
+		private bool enableDebugLogs = true; // Default to true during dev
 
-
-		// Version Control
-		private const string StrategyVersion = "v1.1";
+		[NinjaScriptProperty]
+		[Display(Name="Enable Debug Logs", Description="Print detailed execution steps to Output. Disable for faster backtests.", Order=60, GroupName="General")]
+		public bool EnableDebugLogs
+		{
+			get { return enableDebugLogs; }
+			set { enableDebugLogs = value; }
+		}
+		
+		private void Log(string message)
+		{
+			if (EnableDebugLogs) Print(message);
+		}
 
 		protected override void OnStateChange()
 		{
@@ -675,7 +685,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				// If Price is ABOVE Anchor + Buffer
 				if (High[0] >= (setupAnchorPrice + checkBuffer))
 				{
-					Print(Time[0] + " FAILSAFE: Price (" + High[0] + ") violated Anchor (" + (setupAnchorPrice + checkBuffer) + "). Forcing ExitShort.");
+					Log(Time[0] + " FAILSAFE: Price (" + High[0] + ") violated Anchor (" + (setupAnchorPrice + checkBuffer) + "). Forcing ExitShort.");
 					ExitShort();
 				}
 			}
@@ -684,7 +694,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				// If Price is BELOW Anchor - Buffer
 				if (Low[0] <= (setupAnchorPrice - checkBuffer))
 				{
-					Print(Time[0] + " FAILSAFE: Price (" + Low[0] + ") violated Anchor (" + (setupAnchorPrice - checkBuffer) + "). Forcing ExitLong.");
+					Log(Time[0] + " FAILSAFE: Price (" + Low[0] + ") violated Anchor (" + (setupAnchorPrice - checkBuffer) + "). Forcing ExitLong.");
 					ExitLong();
 				}
 			}
@@ -695,7 +705,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 			// 1. Zombie Position: We have a position, but State thinks we are Idle/Working.
 			if (Position.MarketPosition != MarketPosition.Flat && currentEntryState != EntryState.InPosition)
 			{
-				Print(Time[0] + " CRITICAL: Safety Net Triggered! Position exists but State was " + currentEntryState);
+				Log(Time[0] + " CRITICAL: Safety Net Triggered! Position exists but State was " + currentEntryState);
 				currentEntryState = EntryState.InPosition;
 				
 				// Force Place Stops if missing
@@ -715,7 +725,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 			// If State is InPosition, it implies we ALREADY filled. So if we are Flat now, we must have closed.
 			if (Position.MarketPosition == MarketPosition.Flat && currentEntryState == EntryState.InPosition)
 			{
-				Print(Time[0] + " SYNC: State is InPosition but MarketPosition is Flat. Resetting to Idle.");
+				Log(Time[0] + " SYNC: State is InPosition but MarketPosition is Flat. Resetting to Idle.");
 				currentEntryState = EntryState.Idle;
 				setupLevelName = "";
 				entryOrder = null;
@@ -882,11 +892,11 @@ namespace NinjaTrader.NinjaScript.Strategies
 						{
 							entryOrder = EnterShortLimit(0, true, 1, setupVWAP, "EntryA_Short");
 							currentEntryState = EntryState.workingOrder;
-							Print(Time[0] + " Order Submitted (Short). OID: " + (entryOrder != null ? entryOrder.OrderId : "null"));
+							Log(Time[0] + " Order Submitted (Short). OID: " + (entryOrder != null ? entryOrder.OrderId : "null"));
 						}
 						else
 						{
-							Print(Time[0] + " Trade Skipped (Short). Risk: " + risk + " Reward: " + reward + " Ratio: " + (risk > 0 ? (reward/risk).ToString("F2") : "N/A"));
+							Log(Time[0] + " Trade Skipped (Short). Risk: " + risk + " Reward: " + reward + " Ratio: " + (risk > 0 ? (reward/risk).ToString("F2") : "N/A"));
 						}
 					}
 					else
@@ -894,7 +904,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 						// Check invalidation
 						if (High[0] > setupAnchorPrice)
 						{
-							Print(Time[0] + " Anchor Broken (Short). Setup Invalidated. Resetting to Idle.");
+							Log(Time[0] + " Anchor Broken (Short). Setup Invalidated. Resetting to Idle.");
 							currentEntryState = EntryState.Idle; // RESET
 							setupLevelName = "";
 						}
@@ -919,11 +929,11 @@ namespace NinjaTrader.NinjaScript.Strategies
 						{
 							entryOrder = EnterLongLimit(0, true, 1, setupVWAP, "EntryA_Long");
 							currentEntryState = EntryState.workingOrder;
-							Print(Time[0] + " Order Submitted (Long). OID: " + (entryOrder != null ? entryOrder.OrderId : "null"));
+							Log(Time[0] + " Order Submitted (Long). OID: " + (entryOrder != null ? entryOrder.OrderId : "null"));
 						}
 						else
 						{
-							Print(Time[0] + " Trade Skipped (Long). Risk: " + risk + " Reward: " + reward + " Ratio: " + (risk > 0 ? (reward/risk).ToString("F2") : "N/A"));
+							Log(Time[0] + " Trade Skipped (Long). Risk: " + risk + " Reward: " + reward + " Ratio: " + (risk > 0 ? (reward/risk).ToString("F2") : "N/A"));
 						}
 					}
 					else
@@ -931,7 +941,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 						// Check invalidation
 						if (Low[0] < setupAnchorPrice)
 						{
-							Print(Time[0] + " Anchor Broken (Long). Setup Invalidated. Resetting to Idle.");
+							Log(Time[0] + " Anchor Broken (Long). Setup Invalidated. Resetting to Idle.");
 							currentEntryState = EntryState.Idle; // RESET
 							setupLevelName = "";
 						}
@@ -945,13 +955,13 @@ namespace NinjaTrader.NinjaScript.Strategies
 			{
 				if (isShortSetup && High[0] > setupAnchorPrice) 
 				{
-					Print(Time[0] + " Anchor Broken (Mid-Bar Short). Setup Invalidated. Resetting to Idle.");
+					Log(Time[0] + " Anchor Broken (Mid-Bar Short). Setup Invalidated. Resetting to Idle.");
 					currentEntryState = EntryState.Idle;
 					setupLevelName = "";
 				}
 				if (!isShortSetup && Low[0] < setupAnchorPrice) 
 				{
-					Print(Time[0] + " Anchor Broken (Mid-Bar Long). Setup Invalidated. Resetting to Idle.");
+					Log(Time[0] + " Anchor Broken (Mid-Bar Long). Setup Invalidated. Resetting to Idle.");
 					currentEntryState = EntryState.Idle;
 					setupLevelName = "";
 				}
@@ -963,7 +973,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				// Check for FILL (Full or Partial)
 				if (entryOrder.OrderState == OrderState.Filled || entryOrder.OrderState == OrderState.PartFilled)
 				{
-					Print(Time[0] + " SYNC: Order Filled but State was Working. Forcing InPosition.");
+					Log(Time[0] + " SYNC: Order Filled but State was Working. Forcing InPosition.");
 					currentEntryState = EntryState.InPosition;
 					EnsureProtection(isShortSetup ? "Short" : "Long");
 				}
@@ -978,7 +988,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 					
 					if (anchorViolated)
 					{
-						Print(Time[0] + " SECURITY: Anchor Violated while Working Order. Cancelling.");
+						Log(Time[0] + " SECURITY: Anchor Violated while Working Order. Cancelling.");
 						CancelOrder(entryOrder);
 						return; 
 					}
@@ -1000,7 +1010,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 					// If degraded:
 					if (risk > 0 && (reward / risk) < MinRiskRewardRatio)
 					{
-						Print(Time[0] + " R/R Degraded to " + (reward/risk).ToString("F2") + " (Min: " + MinRiskRewardRatio + "). Cancelling Order.");
+						Log(Time[0] + " R/R Degraded to " + (reward/risk).ToString("F2") + " (Min: " + MinRiskRewardRatio + "). Cancelling Order.");
 						CancelOrder(entryOrder);
 						// State reset happens in OnExecutionUpdate/OnOrderUpdate when cancel is confirmed.
 						return;
@@ -1021,7 +1031,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private void EnsureProtection(string direction)
 		{
 			// Debug
-			Print(Time[0] + " EnsureProtection Called for " + direction + ". Anchor=" + setupAnchorPrice);
+			Log(Time[0] + " EnsureProtection Called for " + direction + ". Anchor=" + setupAnchorPrice);
 
 			// Places SL and TP if they don't exist.
 			if (direction == "Short")
@@ -1030,7 +1040,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				if (setupAnchorPrice <= 0 || setupAnchorPrice == double.MaxValue || setupAnchorPrice == double.MinValue) 
 				{
 					setupAnchorPrice = High[0] + 20 * TickSize; // Emergency Stop
-					Print(Time[0] + " WARNING: Invalid Anchor. Used Emergency Stop: " + setupAnchorPrice);
+					Log(Time[0] + " WARNING: Invalid Anchor. Used Emergency Stop: " + setupAnchorPrice);
 				}
 
 				// SL at Anchor + 1 Tick
@@ -1042,7 +1052,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				if (setupAnchorPrice <= 0 || setupAnchorPrice == double.MaxValue || setupAnchorPrice == double.MinValue) 
 				{
 					setupAnchorPrice = Low[0] - 20 * TickSize; // Emergency Stop
-					Print(Time[0] + " WARNING: Invalid Anchor. Used Emergency Stop: " + setupAnchorPrice);
+					Log(Time[0] + " WARNING: Invalid Anchor. Used Emergency Stop: " + setupAnchorPrice);
 				}
 
 				// SL at Anchor - 1 Tick
