@@ -18,6 +18,7 @@ using NinjaTrader.Gui.Tools;
 using NinjaTrader.Data;
 using NinjaTrader.NinjaScript;
 using NinjaTrader.Core.FloatingPoint;
+using NinjaTrader.Core; // Added explicit Core usage
 using NinjaTrader.NinjaScript.Indicators;
 using NinjaTrader.NinjaScript.DrawingTools;
 using System.Net;
@@ -1583,20 +1584,5 @@ namespace NinjaTrader.NinjaScript.Strategies
 		[Display(Name="USA End Time", Order=6, GroupName="1. Sessions")]
 		public string USAEndTime { get; set; }
 		#endregion
-		// Commented out for Activation Debugging
-		/*
-		protected override void OnConnectionStatusUpdate(ConnectionStatusEventArgs connectionStatusUpdate)
-		{
-			if (connectionStatusUpdate.Status == ConnectionStatus.ConnectionLost)
-			{
-				Log(DateTime.Now + " CRITICAL: Connection to Broker/Feed LOST. Strategy may be blind.");
-				PlaySound(NinjaTrader.Core.Globals.InstallDir + @"\sounds\Alert1.wav"); 
-			}
-			else if (connectionStatusUpdate.Status == ConnectionStatus.Connected && connectionStatusUpdate.PreviousStatus == ConnectionStatus.ConnectionLost)
-			{
-				Log(DateTime.Now + " INFO: Connection Restored. Please verify active orders manually.");
-			}
-		}
-		*/
 	} // End of SessionLevelsStrategy class
 } // End of Namespace
