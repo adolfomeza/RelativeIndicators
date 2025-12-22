@@ -929,13 +929,15 @@ namespace NinjaTrader.NinjaScript.Strategies
 			{
 				if (isShortSetup && High[0] > setupAnchorPrice) 
 				{
-					Print(Time[0] + " Anchor Broken (Mid-Bar). Updating Anchor to " + High[0]);
-					setupAnchorPrice = High[0];
+					Print(Time[0] + " Anchor Broken (Mid-Bar Short). Setup Invalidated. Resetting to Idle.");
+					currentEntryState = EntryState.Idle;
+					setupLevelName = "";
 				}
 				if (!isShortSetup && Low[0] < setupAnchorPrice) 
 				{
-					Print(Time[0] + " Anchor Broken (Mid-Bar). Updating Anchor to " + Low[0]);
-					setupAnchorPrice = Low[0];
+					Print(Time[0] + " Anchor Broken (Mid-Bar Long). Setup Invalidated. Resetting to Idle.");
+					currentEntryState = EntryState.Idle;
+					setupLevelName = "";
 				}
 			}
 
@@ -952,6 +954,19 @@ namespace NinjaTrader.NinjaScript.Strategies
 				// Tracking the VWAP (Only if still working)
 				else if (entryOrder.OrderState == OrderState.Working || entryOrder.OrderState == OrderState.Accepted)
 				{
+					// --- SAFETY VALIDATION: ANCHOR BREAK ---
+					// If price moves against us and breaks the Anchor while we are trying to enter, CANCEL.
+					bool anchorViolated = false;
+					if (isShortSetup && High[0] > setupAnchorPrice) anchorViolated = true;
+					if (!isShortSetup && Low[0] < setupAnchorPrice) anchorViolated = true;
+					
+					if (anchorViolated)
+					{
+						Print(Time[0] + " SECURITY: Anchor Violated while Working Order. Cancelling.");
+						CancelOrder(entryOrder);
+						return; 
+					}
+				
 					// Track the SETUP VWAP (Local), not just Global
 					double currentVWAP = GetSetupVWAP(isShortSetup);
 					
