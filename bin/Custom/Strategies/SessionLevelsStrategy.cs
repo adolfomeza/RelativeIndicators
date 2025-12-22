@@ -705,14 +705,55 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 		private void CheckSafetyNet()
 		{
+			// 0. ACCOUNT SYNC CHECK (Realtime Only)
+			// Detect if the Account has a position but the Strategy thinks it's Flat.
+			if (State == State.Realtime && Account != null && Position.MarketPosition == MarketPosition.Flat)
+			{
+				try 
+				{
+					foreach (Position accPos in Account.Positions)
+					{
+						// Filter for this Instrument
+						if (accPos.Instrument == Instrument && accPos.MarketPosition != MarketPosition.Flat)
+						{
+							// ORPHAN DETECTED
+							double avgPrice = accPos.AveragePrice;
+							double safetyMargin = 20 * TickSize;
+							bool unsafeOrphan = false;
+
+							if (accPos.MarketPosition == MarketPosition.Long)
+							{
+								if (Low[0] <= avgPrice - safetyMargin) unsafeOrphan = true;
+							}
+							else if (accPos.MarketPosition == MarketPosition.Short)
+							{
+								if (High[0] >= avgPrice + safetyMargin) unsafeOrphan = true;
+							}
+
+							if (unsafeOrphan)
+							{
+								Log(Time[0] + " CRITICAL: Orphan Position Detected (Unsafe). Flattening Account for " + Instrument.FullName);
+								Account.Flatten(new [] { Instrument });
+							}
+							else
+							{
+								// Safe Orphan - Warn User
+								// We cannot easily 'Adopt' unmanaged positions into Managed state without risk.
+								Log(Time[0] + " WARNING: Orphan Position Detected (Safe). Strategy is Flat. Please Manage Manually.");
+							}
+						}
+					}
+				}
+				catch (Exception ex) { Log("Account Sync Check Failed: " + ex.Message); }
+			}
+
 			// 1. Zombie Position: We have a position, but State thinks we are Idle/Working.
 			if (Position.MarketPosition != MarketPosition.Flat && currentEntryState != EntryState.InPosition)
 			{
 				Log(Time[0] + " CRITICAL: Safety Net Triggered! Position exists but State was " + currentEntryState);
 				
-				// --- SMART ADOPTION LOGIC ---
-				// If we have lost our memory (Repaint/Reload), we don't know the original Anchor (Wick High/Low).
-				// We must decide: Is it safe to hold this? Or should we kill it?
+				// --- SMART ADOPTION LOGIC (Strategy Position) ---
+				// ... (Existing Logic) ...
 				
 				if (setupAnchorPrice == 0 || setupAnchorPrice == double.MaxValue || setupAnchorPrice == double.MinValue)
 				{
