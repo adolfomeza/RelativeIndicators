@@ -703,12 +703,16 @@ namespace NinjaTrader.NinjaScript.Strategies
 			}
 		}
 
+		// Orphan State Tracking
+		private bool orphanHandled = false;
+
 		private void CheckSafetyNet()
 		{
 			// 0. ACCOUNT SYNC CHECK (Realtime Only)
-			// Detect if the Account has a position but the Strategy thinks it's Flat.
 			if (State == State.Realtime && Account != null && Position.MarketPosition == MarketPosition.Flat)
 			{
+				bool foundOrphan = false; 
+				
 				try 
 				{
 					foreach (Position accPos in Account.Positions)
@@ -716,11 +720,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 						// Filter for this Instrument (String compare safer)
 						if (accPos.Instrument.FullName == Instrument.FullName && accPos.MarketPosition != MarketPosition.Flat)
 						{
+							foundOrphan = true;
+							
 							// ORPHAN DETECTED
 							double avgPrice = accPos.AveragePrice;
 							double safetyMargin = 20 * TickSize;
+							
+							// Safety Check
 							bool unsafeOrphan = false;
-
 							if (accPos.MarketPosition == MarketPosition.Long)
 							{
 								if (Low[0] <= avgPrice - safetyMargin) unsafeOrphan = true;
@@ -735,15 +742,41 @@ namespace NinjaTrader.NinjaScript.Strategies
 								Log(Time[0] + " CRITICAL: Orphan Position Detected (Unsafe). Flattening Account for " + Instrument.FullName + " @ " + avgPrice);
 								Account.Flatten(new [] { Instrument });
 							}
-							else
+							else if (!orphanHandled)
 							{
-								// Safe Orphan
-								Log(Time[0] + " WARNING: Orphan Position Detected (Safe). Strategy is Flat. Position @ " + avgPrice);
+								// Safe Orphan & Not Handled -> ADOPT MANUAL (Unmanaged)
+								Log(Time[0] + " ORPHAN ADOPTION: Safe Manual Position Detected @ " + avgPrice + ". Placing Unmanaged Protection.");
+								
+								if (accPos.MarketPosition == MarketPosition.Long)
+								{
+									// Place SL at Entry - 20 ticks
+									SubmitOrderUnmanaged(0, OrderAction.Sell, OrderType.StopMarket, accPos.Quantity, 0, avgPrice - safetyMargin, "Orphan_SL", "Orphan_Long");
+									// Place TP at High VWAP (or min 20 ticks)
+									double tpPrice = Math.Max(GetCurrentHighVWAP(), avgPrice + 20 * TickSize);
+									SubmitOrderUnmanaged(0, OrderAction.Sell, OrderType.Limit, accPos.Quantity, tpPrice, 0, "Orphan_TP", "Orphan_Long");
+								}
+								else if (accPos.MarketPosition == MarketPosition.Short)
+								{
+									// Place SL at Entry + 20 ticks
+									SubmitOrderUnmanaged(0, OrderAction.BuyToCover, OrderType.StopMarket, accPos.Quantity, 0, avgPrice + safetyMargin, "Orphan_SL", "Orphan_Short");
+									// Place TP at Low VWAP (or min 20 ticks)
+									double tpPrice = Math.Min(GetCurrentLowVWAP(), avgPrice - 20 * TickSize);
+									SubmitOrderUnmanaged(0, OrderAction.BuyToCover, OrderType.Limit, accPos.Quantity, tpPrice, 0, "Orphan_TP", "Orphan_Short");
+								}
+								
+								orphanHandled = true;
 							}
 						}
 					}
 				}
 				catch (Exception ex) { Log("Account Sync Check Failed: " + ex.Message); }
+				
+				// Reset Handled flag if no orphan found (position closed)
+				if (!foundOrphan) orphanHandled = false;
+			}
+			else
+			{
+				orphanHandled = false; // Reset if Strategy has position (managed)
 			}
 
 			// 1. Zombie Position: We have a position, but State thinks we are Idle/Working.
