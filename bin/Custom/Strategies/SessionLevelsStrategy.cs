@@ -662,21 +662,26 @@ namespace NinjaTrader.NinjaScript.Strategies
 			// Validate Anchor
 			if (setupAnchorPrice <= 0 || setupAnchorPrice == double.MaxValue || setupAnchorPrice == double.MinValue) return;
 
+			// BUFFER: Only force exit if price breaches Anchor SIGNIFICANTLY (e.g., 4 ticks).
+			// This gives the native Stop Order priority to execute at the correct price.
+			// Failsafe is only for when the Stop Order fails.
+			double checkBuffer = 4 * TickSize;
+
 			if (Position.MarketPosition == MarketPosition.Short)
 			{
-				// If Price is ABOVE Anchor, we should be OUT.
-				if (High[0] >= setupAnchorPrice)
+				// If Price is ABOVE Anchor + Buffer
+				if (High[0] >= (setupAnchorPrice + checkBuffer))
 				{
-					Print(Time[0] + " FAILSAFE: Price (" + High[0] + ") violated Anchor (" + setupAnchorPrice + "). Forcing ExitShort.");
+					Print(Time[0] + " FAILSAFE: Price (" + High[0] + ") violated Anchor (" + (setupAnchorPrice + checkBuffer) + "). Forcing ExitShort.");
 					ExitShort();
 				}
 			}
 			else if (Position.MarketPosition == MarketPosition.Long)
 			{
-				// If Price is BELOW Anchor, we should be OUT.
-				if (Low[0] <= setupAnchorPrice)
+				// If Price is BELOW Anchor - Buffer
+				if (Low[0] <= (setupAnchorPrice - checkBuffer))
 				{
-					Print(Time[0] + " FAILSAFE: Price (" + Low[0] + ") violated Anchor (" + setupAnchorPrice + "). Forcing ExitLong.");
+					Print(Time[0] + " FAILSAFE: Price (" + Low[0] + ") violated Anchor (" + (setupAnchorPrice - checkBuffer) + "). Forcing ExitLong.");
 					ExitLong();
 				}
 			}
