@@ -86,11 +86,16 @@ namespace NinjaTrader.NinjaScript.Strategies
 		
 
 
+	        private string GetXmlPath()
+	        {
+		        return NinjaTrader.Core.Globals.UserDataDir + @"trace\SessionLevels_State_v2.xml";
+	        }
+
 		private void SaveLevels()
 		{
 			try
 			{
-				string path = NinjaTrader.Core.Globals.UserDataDir + @"trace\SessionLevels_State.xml";
+				string path = GetXmlPath();
 				List<SessionLevelData> dataList = new List<SessionLevelData>();
 				
 				foreach (var lvl in activeLevels)
@@ -127,7 +132,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		{
 			try
 			{
-				string path = NinjaTrader.Core.Globals.UserDataDir + @"trace\SessionLevels_State.xml";
+				string path = GetXmlPath();
 				if (!File.Exists(path)) return;
 
 				XmlSerializer serializer = new XmlSerializer(typeof(List<SessionLevelData>));
@@ -179,7 +184,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		{
 			if (State == State.SetDefaults)
 			{
-				// ... (Existing Defaults) ...
+				// ...
 				Description									= @"Advanced Session Levels Strategy with VWAP and R/R Filters.";
 				Name										= "SessionLevelsStrategy " + StrategyVersion;
 				Calculate									= Calculate.OnEachTick;
@@ -188,7 +193,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				IsExitOnSessionCloseStrategy				= true;
 				ExitOnSessionCloseSeconds					= 30;
 				IsFillLimitOnTouch							= false;
-				MaximumBarsLookBack							= MaximumBarsLookBack.Infinite; // CHANGED: Needed to see far back levels
+				MaximumBarsLookBack							= MaximumBarsLookBack.Infinite; 
 				OrderFillResolution							= OrderFillResolution.Standard;
 				Slippage									= 0;
 				StartBehavior								= StartBehavior.ImmediatelySubmit;
@@ -204,13 +209,19 @@ namespace NinjaTrader.NinjaScript.Strategies
 			}
 			else if (State == State.DataLoaded)
 			{
-				// Load Persistence on Startup
-				LoadLevels();
+				try 
+				{
+					LoadLevels();
+				} 
+				catch(Exception ex) { Print("Critical Load Error: " + ex.Message); }
 			}
 			else if (State == State.Terminated)
 			{
-				// Save Persistence on Shutdown
-				SaveLevels();
+				try
+				{
+					SaveLevels();
+				}
+				catch(Exception ex) { Print("Critical Save Error: " + ex.ToString()); }
 			}
 		}
 
