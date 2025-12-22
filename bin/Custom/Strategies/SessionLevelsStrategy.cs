@@ -644,8 +644,38 @@ namespace NinjaTrader.NinjaScript.Strategies
 			
 			// SAFETY NET: Check for Zombie Positions (In Market, but State logic missed it)
 			CheckSafetyNet();
+			
+			// FAILSAFE: Hard Stop Check (In case Managed Order fails)
+			CheckHardStop();
 		}
 		
+		private void CheckHardStop()
+		{
+			if (Position.MarketPosition == MarketPosition.Flat) return;
+			
+			// Validate Anchor
+			if (setupAnchorPrice <= 0 || setupAnchorPrice == double.MaxValue || setupAnchorPrice == double.MinValue) return;
+
+			if (Position.MarketPosition == MarketPosition.Short)
+			{
+				// If Price is ABOVE Anchor, we should be OUT.
+				if (High[0] >= setupAnchorPrice)
+				{
+					Print(Time[0] + " FAILSAFE: Price (" + High[0] + ") violated Anchor (" + setupAnchorPrice + "). Forcing ExitShort.");
+					ExitShort();
+				}
+			}
+			else if (Position.MarketPosition == MarketPosition.Long)
+			{
+				// If Price is BELOW Anchor, we should be OUT.
+				if (Low[0] <= setupAnchorPrice)
+				{
+					Print(Time[0] + " FAILSAFE: Price (" + Low[0] + ") violated Anchor (" + setupAnchorPrice + "). Forcing ExitLong.");
+					ExitLong();
+				}
+			}
+		}
+
 		private void CheckSafetyNet()
 		{
 			// 1. Zombie Position: We have a position, but State thinks we are Idle/Working.
