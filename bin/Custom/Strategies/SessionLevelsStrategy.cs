@@ -749,7 +749,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 								Draw.Text(this, "OrphanTxt_" + CurrentBar, "SAFE ORPHAN DETECTED\nMANAGE MANUALLY", 0, avgPrice, Brushes.LimeGreen);
 								
 								// Alert
-								PlaySound(SoundFile.Alert1);
+								PlaySound(NinjaTrader.Core.Globals.InstallDir + @"\sounds\Alert1.wav");
 								Log(Time[0] + " WARNING: Safe Orphan Position Detected @ " + avgPrice + ". Unable to auto-manage in Managed Mode. PLEASE SET SL/TP MANUALLY.");
 								
 								orphanHandled = true;
