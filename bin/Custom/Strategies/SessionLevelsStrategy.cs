@@ -193,7 +193,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				IsExitOnSessionCloseStrategy				= true;
 				ExitOnSessionCloseSeconds					= 30;
 				IsFillLimitOnTouch							= false;
-				MaximumBarsLookBack							= MaximumBarsLookBack.Infinite; 
+				MaximumBarsLookBack							= MaximumBarsLookBack.TwoHundredFiftySix; // REVERTED FROM INFINITE 
 				OrderFillResolution							= OrderFillResolution.Standard;
 				Slippage									= 0;
 				StartBehavior								= StartBehavior.ImmediatelySubmit;
@@ -1693,6 +1693,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 		[Display(Name="USA End Time", Order=6, GroupName="1. Sessions")]
 		public string USAEndTime { get; set; }
 		#endregion
+		// Commented out for Activation Debugging
+		/*
 		protected override void OnConnectionStatusUpdate(ConnectionStatusEventArgs connectionStatusUpdate)
 		{
 			if (connectionStatusUpdate.Status == ConnectionStatus.ConnectionLost)
@@ -1705,6 +1707,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				Log(DateTime.Now + " INFO: Connection Restored. Please verify active orders manually.");
 			}
 		}
+		*/
 	} // End of SessionLevelsStrategy class
 
 	// =========================================================
