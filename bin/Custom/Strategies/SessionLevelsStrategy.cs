@@ -1120,6 +1120,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 		private void InitCSV()
 		{
+			// SAFETY: Only run CSV logic in Realtime to prevent Backtest corruption.
+			if (State != State.Realtime) return;
+
 			if (csvInitialized) return;
 			try
 			{
