@@ -498,6 +498,34 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private double ethHighPrice = double.MinValue;
 		private double ethLowPrice = double.MaxValue;
 		private DateTime lastEthResetDate = DateTime.MinValue; 
+
+		// AD-HOC VWAP Variables (Fresh Start)
+		private double adhocVolSum = 0;
+		private double adhocPvSum = 0;
+		private double adhocLastVol = 0; // To track delta volume inside a bar
+		private int adhocLastBar = -1;
+
+		private void UpdateAdhocVWAP()
+		{
+			// Reset tracker on new bar for proper delta calculation
+			if (CurrentBar != adhocLastBar)
+			{
+				adhocLastVol = 0;
+				adhocLastBar = CurrentBar;
+			}
+
+			// Calculate Delta Volume (Current Bar Volume so far - what we already processed)
+			// NinjaTrader Volume[0] is cumulative for the bar
+			double currentBarVol = Volume[0];
+			double deltaVol = currentBarVol - adhocLastVol;
+			
+			if (deltaVol > 0)
+			{
+				adhocVolSum += deltaVol;
+				adhocPvSum += deltaVol * Input[0]; // Price * Vol
+				adhocLastVol = currentBarVol; // Update processed volume
+			}
+		} 
 		
 		private int highAnchorBar = 0;
 		private int lowAnchorBar = 0;
@@ -673,6 +701,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 			// Allow scanning for triggers if Idle OR Waiting (to switch setups).
 			bool canScan = (currentEntryState == EntryState.Idle || currentEntryState == EntryState.WaitingForConfirmation);
 			
+			// Always Update ADHOC VWAP if we are in a setup based on it
+			// Wait... we need to accumulate ONLY after trigger? Or always?
+			// User wants "Ends when touched". So we accumulate FROM Trigger.
+			if (currentEntryState == EntryState.WaitingForConfirmation || currentEntryState == EntryState.workingOrder)
+			{
+				UpdateAdhocVWAP();
+			}
+			
 			if (canScan)
 			{
 				foreach (var lvl in activeLevels)
@@ -701,6 +737,12 @@ namespace NinjaTrader.NinjaScript.Strategies
 							isShortSetup = true;
 							setupAnchorPrice = lvl.Price; // Use Level Price as Anchor (Local Stop)
 							setupLevelName = lvl.Name;
+							
+							// RESET ADHOC VWAP (Start Fresh from this touch)
+							adhocVolSum = 0;
+							adhocPvSum = 0;
+							adhocLastBar = CurrentBar;
+							adhocLastVol = Volume[0]; // Ignore previous volume of this bar, start from NOW
 						}
 						else
 						{
@@ -715,6 +757,12 @@ namespace NinjaTrader.NinjaScript.Strategies
 							isShortSetup = false; // Long
 							setupAnchorPrice = lvl.Price; // Use Level Price as Anchor (Local Stop)
 							setupLevelName = lvl.Name;
+							
+							// RESET ADHOC VWAP
+							adhocVolSum = 0;
+							adhocPvSum = 0;
+							adhocLastBar = CurrentBar;
+							adhocLastVol = Volume[0];
 						}
 						
 						break; // Only take one trigger at a time
@@ -722,7 +770,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				}
 			}
 			
-			// Update Visuals if bar is expanding (Avoid burying the arrow)
+			// ... (Visuals Update Skipped for brevity, unchanged) ...
 			if (currentEntryState == EntryState.WaitingForConfirmation && CurrentBar == triggerBar)
 			{
 				if (isShortSetup)
@@ -1043,14 +1091,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 		
 		private double GetSetupVWAP(bool isShort)
 		{
-			// 1. Try to find the specific Local Level
-			var lvl = activeLevels.FirstOrDefault(l => l.Name == setupLevelName);
-			if (lvl != null && lvl.VolSum > 0)
+			// 1. If we have ADHOC VOLUME tracked, use it.
+			// This represents the "VWAP since touch".
+			if (!string.IsNullOrEmpty(setupLevelName) && adhocVolSum > 0)
 			{
-				return lvl.PvSum / lvl.VolSum;
+				return adhocPvSum / adhocVolSum;
 			}
 			
-			// 2. Fallback to Global
+			// 2. Fallback to Global (e.g. if logic fails or we are tracking a Global Extremum trade where we didn't reset adhoc)
 			return isShort ? GetCurrentHighVWAP() : GetCurrentLowVWAP();
 		}
 
