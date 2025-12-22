@@ -774,7 +774,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 						
 						if (lvl.IsResistance)
 						{
-							Print(Time[0] + " Trigger Short on " + lvl.Name); // DEBUG
+							Print(Time[0] + " DEBUG: Trigger Short Detected on " + lvl.Name + " Price: " + lvl.Price); // DEBUG
 							// Short Setup
 							triggerTag = "TriggerShort_" + Time[0].Ticks; // Store Tag
 							triggerBar = CurrentBar;
@@ -794,7 +794,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 						}
 						else
 						{
-							Print(Time[0] + " Trigger Long on " + lvl.Name); // DEBUG
+							Print(Time[0] + " DEBUG: Trigger Long Detected on " + lvl.Name + " Price: " + lvl.Price); // DEBUG
 							// Long Setup
 							triggerTag = "TriggerLong_" + Time[0].Ticks;
 							triggerBar = CurrentBar;
@@ -870,9 +870,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 						}
 						else
 						{
-							Print(Time[0] + " Trade Skipped. R/R Ratio " + (reward/risk).ToString("F2") + " < " + MinRiskRewardRatio);
-							// Optional: Reset to Idle here too if R/R is bad? 
-							// For now, let's just wait to see if it improves or invalidates.
+							Print(Time[0] + " Trade Skipped (Short). Risk: " + risk + " Reward: " + reward + " Ratio: " + (risk > 0 ? (reward/risk).ToString("F2") : "N/A"));
 						}
 					}
 					else
@@ -908,7 +906,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 						}
 						else
 						{
-							Print(Time[0] + " Trade Skipped. R/R Ratio " + (reward/risk).ToString("F2") + " < " + MinRiskRewardRatio);
+							Print(Time[0] + " Trade Skipped (Long). Risk: " + risk + " Reward: " + reward + " Ratio: " + (risk > 0 ? (reward/risk).ToString("F2") : "N/A"));
 						}
 					}
 					else
