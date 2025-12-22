@@ -871,6 +871,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 						else
 						{
 							Print(Time[0] + " Trade Skipped. R/R Ratio " + (reward/risk).ToString("F2") + " < " + MinRiskRewardRatio);
+							// Optional: Reset to Idle here too if R/R is bad? 
+							// For now, let's just wait to see if it improves or invalidates.
 						}
 					}
 					else
@@ -878,8 +880,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 						// Check invalidation
 						if (High[0] > setupAnchorPrice)
 						{
-							Print(Time[0] + " Anchor Broken. Updating Anchor to " + High[0]);
-							setupAnchorPrice = High[0];
+							Print(Time[0] + " Anchor Broken (Short). Setup Invalidated. Resetting to Idle.");
+							currentEntryState = EntryState.Idle; // RESET
+							setupLevelName = "";
 						}
 					}
 				}
@@ -913,8 +916,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 						// Check invalidation
 						if (Low[0] < setupAnchorPrice)
 						{
-							Print(Time[0] + " Anchor Broken. Updating Anchor to " + Low[0]);
-							setupAnchorPrice = Low[0];
+							Print(Time[0] + " Anchor Broken (Long). Setup Invalidated. Resetting to Idle.");
+							currentEntryState = EntryState.Idle; // RESET
+							setupLevelName = "";
 						}
 					}
 				}
