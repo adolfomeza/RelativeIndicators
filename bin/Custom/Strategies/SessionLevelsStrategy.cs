@@ -711,10 +711,13 @@ namespace NinjaTrader.NinjaScript.Strategies
 			{
 				try 
 				{
+					// Debug Trace
+					// Log("DEBUG: Checking Account Sync. Strategy Flat. Account has " + Account.Positions.Count + " positions.");
+
 					foreach (Position accPos in Account.Positions)
 					{
-						// Filter for this Instrument
-						if (accPos.Instrument == Instrument && accPos.MarketPosition != MarketPosition.Flat)
+						// Filter for this Instrument (String compare safer)
+						if (accPos.Instrument.FullName == Instrument.FullName && accPos.MarketPosition != MarketPosition.Flat)
 						{
 							// ORPHAN DETECTED
 							double avgPrice = accPos.AveragePrice;
@@ -732,14 +735,13 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 							if (unsafeOrphan)
 							{
-								Log(Time[0] + " CRITICAL: Orphan Position Detected (Unsafe). Flattening Account for " + Instrument.FullName);
+								Log(Time[0] + " CRITICAL: Orphan Position Detected (Unsafe). Flattening Account for " + Instrument.FullName + " @ " + avgPrice);
 								Account.Flatten(new [] { Instrument });
 							}
 							else
 							{
-								// Safe Orphan - Warn User
-								// We cannot easily 'Adopt' unmanaged positions into Managed state without risk.
-								Log(Time[0] + " WARNING: Orphan Position Detected (Safe). Strategy is Flat. Please Manage Manually.");
+								// Safe Orphan
+								Log(Time[0] + " WARNING: Orphan Position Detected (Safe). Strategy is Flat. Position @ " + avgPrice);
 							}
 						}
 					}
