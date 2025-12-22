@@ -709,6 +709,54 @@ namespace NinjaTrader.NinjaScript.Strategies
 			if (Position.MarketPosition != MarketPosition.Flat && currentEntryState != EntryState.InPosition)
 			{
 				Log(Time[0] + " CRITICAL: Safety Net Triggered! Position exists but State was " + currentEntryState);
+				
+				// --- SMART ADOPTION LOGIC ---
+				// If we have lost our memory (Repaint/Reload), we don't know the original Anchor (Wick High/Low).
+				// We must decide: Is it safe to hold this? Or should we kill it?
+				
+				if (setupAnchorPrice == 0 || setupAnchorPrice == double.MaxValue || setupAnchorPrice == double.MinValue)
+				{
+					// We have AMNESIA. Let's infer a safety anchor.
+					double avgPrice = Position.AveragePrice;
+					double safetyMargin = 20 * TickSize; // Emergency allow 20 ticks from entry
+					
+					if (Position.MarketPosition == MarketPosition.Short)
+					{
+						// Short: Anchor should be ABOVE entry.
+						double inferredAnchor = avgPrice + safetyMargin;
+						
+						// Validation: Are we ALREADY dead?
+						if (High[0] >= inferredAnchor)
+						{
+							Log(Time[0] + " ZOMBIE CHECK: Price (" + High[0] + ") is above Inferred Anchor (" + inferredAnchor + "). Closing Unsafe Position.");
+							ExitShort();
+							return; // Don't adopt. Kill.
+						}
+						
+						// If safe, adopt.
+						setupAnchorPrice = inferredAnchor;
+						Log(Time[0] + " ZOMBIE ADOPTED (Short). Inferred Anchor: " + setupAnchorPrice);
+					}
+					else if (Position.MarketPosition == MarketPosition.Long)
+					{
+						// Long: Anchor should be BELOW entry.
+						double inferredAnchor = avgPrice - safetyMargin;
+						
+						// Validation: Are we ALREADY dead?
+						if (Low[0] <= inferredAnchor)
+						{
+							Log(Time[0] + " ZOMBIE CHECK: Price (" + Low[0] + ") is below Inferred Anchor (" + inferredAnchor + "). Closing Unsafe Position.");
+							ExitLong();
+							return; // Don't adopt. Kill.
+						}
+						
+						// If safe, adopt.
+						setupAnchorPrice = inferredAnchor;
+						Log(Time[0] + " ZOMBIE ADOPTED (Long). Inferred Anchor: " + setupAnchorPrice);
+					}
+				}
+
+				// If we reached here, we are adopting (or already had an anchor).
 				currentEntryState = EntryState.InPosition;
 				
 				// Force Place Stops if missing
