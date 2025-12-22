@@ -855,6 +855,25 @@ namespace NinjaTrader.NinjaScript.Strategies
 					// Track the SETUP VWAP (Local), not just Global
 					double currentVWAP = GetSetupVWAP(isShortSetup);
 					
+					// --- DYNAMIC RISK / REWARD CHECK ---
+					// As VWAP moves, our entry price moves. We must re-validate R/R.
+					double projectedEntry = currentVWAP;
+					double projectedStop = setupAnchorPrice;
+					double projectedTarget = isShortSetup ? GetCurrentLowVWAP() : GetCurrentHighVWAP(); // Global Opposing
+					
+					double risk = Math.Abs(projectedEntry - projectedStop);
+					double reward = Math.Abs(projectedTarget - projectedEntry);
+					
+					// If Risk is 0 (Anchor == Entry), ratio is infinite (Good). 
+					// If degraded:
+					if (risk > 0 && (reward / risk) < MinRiskRewardRatio)
+					{
+						Print(Time[0] + " R/R Degraded to " + (reward/risk).ToString("F2") + " (Min: " + MinRiskRewardRatio + "). Cancelling Order.");
+						CancelOrder(entryOrder);
+						// State reset happens in OnExecutionUpdate/OnOrderUpdate when cancel is confirmed.
+						return;
+					}
+
 					// Compare with current Order Limit Price
 					if (Math.Abs(entryOrder.LimitPrice - currentVWAP) >= TickSize)
 					{
