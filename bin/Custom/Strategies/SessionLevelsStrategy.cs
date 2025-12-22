@@ -711,11 +711,18 @@ namespace NinjaTrader.NinjaScript.Strategies
 			{
 				try 
 				{
-					// Debug Trace
-					// Log("DEBUG: Checking Account Sync. Strategy Flat. Account has " + Account.Positions.Count + " positions.");
+					// DEBUG: Print status every 10 seconds or every bar to confirm logic runs
+					// Using explicit Print to bypass Log() in case it's disabled
+					Print(string.Format("{0} | DEBUG SYNC: Account='{1}' | Positions={2} | StrategyInst='{3}'", 
+						Time[0], Account.Name, Account.Positions.Count, Instrument.FullName));
 
 					foreach (Position accPos in Account.Positions)
 					{
+						Print(string.Format("   -> CheckPos: Inst='{0}' (Match? {1}) | MktPos={2}", 
+							accPos.Instrument.FullName, 
+							(accPos.Instrument.FullName == Instrument.FullName),
+							accPos.MarketPosition));
+
 						// Filter for this Instrument (String compare safer)
 						if (accPos.Instrument.FullName == Instrument.FullName && accPos.MarketPosition != MarketPosition.Flat)
 						{
