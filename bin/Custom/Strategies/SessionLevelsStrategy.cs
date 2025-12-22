@@ -783,7 +783,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 							
 							currentEntryState = EntryState.WaitingForConfirmation;
 							isShortSetup = true;
-							setupAnchorPrice = lvl.Price; // Use Level Price as Anchor (Local Stop)
+							setupAnchorPrice = High[0]; // ANCHOR START: Current Wick High
 							setupLevelName = lvl.Name;
 							
 							// RESET ADHOC VWAP (Start Fresh from this touch)
@@ -803,7 +803,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 							
 							currentEntryState = EntryState.WaitingForConfirmation;
 							isShortSetup = false; // Long
-							setupAnchorPrice = lvl.Price; // Use Level Price as Anchor (Local Stop)
+							setupAnchorPrice = Low[0]; // ANCHOR START: Current Wick Low
 							setupLevelName = lvl.Name;
 							
 							// RESET ADHOC VWAP
@@ -821,6 +821,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 			// ... (Visuals Update Skipped for brevity, unchanged) ...
 			if (currentEntryState == EntryState.WaitingForConfirmation && CurrentBar == triggerBar)
 			{
+				// VISUALS
 				if (isShortSetup)
 				{
 					Draw.ArrowDown(this, triggerTag, true, 0, High[0] + TickSize * 15, Brushes.Cyan);
@@ -831,12 +832,17 @@ namespace NinjaTrader.NinjaScript.Strategies
 					Draw.ArrowUp(this, triggerTag, true, 0, Low[0] - TickSize * 15, Brushes.Lime);
 					Draw.Text(this, triggerTag + "_Txt", "Long", 0, Low[0] - TickSize * 25, Brushes.Lime);
 				}
+
+				// WICK GROWTH (Mid-Bar during Trigger)
+				// We allow the anchor to expand while we form the trigger candle.
+				if (isShortSetup && High[0] > setupAnchorPrice) setupAnchorPrice = High[0];
+				if (!isShortSetup && Low[0] < setupAnchorPrice) setupAnchorPrice = Low[0];
 			}
 			
 			// 2. CONFIRMATION LOGIC (Waiting -> Working)
 			// "Wait for a candle... close... max below vwap 1 tick"
 			
-			if (currentEntryState == EntryState.WaitingForConfirmation && IsFirstTickOfBar)
+			if (currentEntryState == EntryState.WaitingForConfirmation && IsFirstTickOfBar && CurrentBar > triggerBar)
 			{
 				// Determine Local VWAP to use
 				double setupVWAP = GetSetupVWAP(isShortSetup);
@@ -922,8 +928,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 				}
 			}
 			
-			// Mid-bar check for Anchor Update
-			if (currentEntryState == EntryState.WaitingForConfirmation && !IsFirstTickOfBar)
+			// Mid-bar check for Anchor Update / Invalidation
+			// ONLY if we are PAST the trigger bar (because logic above handles Trigger Bar growth)
+			if (currentEntryState == EntryState.WaitingForConfirmation && !IsFirstTickOfBar && CurrentBar > triggerBar)
 			{
 				if (isShortSetup && High[0] > setupAnchorPrice) 
 				{
