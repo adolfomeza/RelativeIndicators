@@ -30,6 +30,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
+		// Version Control
+		private const string StrategyVersion = "v1.1";
+
 		// ... existing properties ...
 		private bool enableDebugLogs = true; // Default to true during dev
 
