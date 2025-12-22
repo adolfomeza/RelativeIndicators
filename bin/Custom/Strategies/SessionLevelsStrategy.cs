@@ -490,6 +490,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 		[NinjaScriptProperty]
 		[Display(Name = "SMTP Password", Description = "App Password (not your login password)", GroupName = "8. Email Alerts", Order = 7)]
 		public string EmailPassword { get; set; } = "password";
+		
+		[NinjaScriptProperty]
+		[Display(Name = "Min Risk/Reward Ratio", Description = "Minimum Reward/Risk ratio to take a trade (TargetDist/StopDist)", GroupName = "6. Risk Management", Order = 1)]
+		public double MinRiskRewardRatio { get; set; } = 1.0;
 
 		private double ethHighPrice = double.MinValue;
 		private double ethLowPrice = double.MaxValue;
@@ -695,7 +699,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 							
 							currentEntryState = EntryState.WaitingForConfirmation;
 							isShortSetup = true;
-							setupAnchorPrice = ethHighPrice;
+							setupAnchorPrice = lvl.Price; // Use Level Price as Anchor (Local Stop)
 							setupLevelName = lvl.Name;
 						}
 						else
@@ -709,7 +713,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 							
 							currentEntryState = EntryState.WaitingForConfirmation;
 							isShortSetup = false; // Long
-							setupAnchorPrice = ethLowPrice;
+							setupAnchorPrice = lvl.Price; // Use Level Price as Anchor (Local Stop)
 							setupLevelName = lvl.Name;
 						}
 						
@@ -735,57 +739,78 @@ namespace NinjaTrader.NinjaScript.Strategies
 			
 			// 2. CONFIRMATION LOGIC (Waiting -> Working)
 			// "Wait for a candle... close... max below vwap 1 tick"
-			// Must check on Bar Close (IsFirstTickOfBar of NEXT bar, or calculate OnBarClose).
-			// If we are OnEachTick, checking IsFirstTickOfBar handles "Just Closed".
 			
 			if (currentEntryState == EntryState.WaitingForConfirmation && IsFirstTickOfBar)
 			{
-				// Check Previous Bar [1]
+				// Determine Local VWAP to use
+				double setupVWAP = GetSetupVWAP(isShortSetup);
 				
 				if (isShortSetup)
 				{
-					// Short: High[1] < Bearish VWAP (ethHighVWAP) - 1 Tick
-					// We need the VWAP value at that time. 
-					// Values[0][1] holds the HighVWAP of the previous bar.
-					double vwapVal = Values[0][1]; 
+					// Short: High[1] < Bearish VWAP (setupVWAP) - 1 Tick
+					// Note: setupVWAP is current tick value. 
+					// Ideally we want Previous Bar VWAP. 
+					// Approximation: Using current is acceptable if volatility low, but "Values[0][1]" was global.
+					// We must re-calculate previous bar Local VWAP? 
+					// Simplifying: Use current setupVWAP.
 					
-					if (isValidVWAP(vwapVal) && High[1] < (vwapVal - TickSize))
+					if (isValidVWAP(setupVWAP) && High[1] < (setupVWAP - TickSize))
 					{
-						// CONFIRMED. Place Limit Order.
-						// Order Price = Current VWAP (Values[0][0] or re-calculated).
-						// Wait, Limit Order "en el vwap".
-						// We submit at current VWAP.
+						// --- RISK / REWARD CHECK ---
+						double projectedEntry = setupVWAP;
+						double projectedStop = setupAnchorPrice;
+						double projectedTarget = GetCurrentLowVWAP(); // Opposing Global VWAP? Or Local? 
+						// Opposing Usually Global Extreme is the Target (Standard). Or Opposing Local?
+						// Let's assume Target is Global Opposing VWAP (Classic Reversion).
 						
-						entryOrder = EnterShortLimit(0, true, 1, GetCurrentHighVWAP(), "EntryA_Short");
-						currentEntryState = EntryState.workingOrder;
-						Print(Time[0] + " Order Submitted (Short). OID: " + (entryOrder != null ? entryOrder.OrderId : "null"));
+						double risk = Math.Abs(projectedEntry - projectedStop);
+						double reward = Math.Abs(projectedTarget - projectedEntry);
+						
+						if (risk > 0 && (reward / risk) >= MinRiskRewardRatio)
+						{
+							entryOrder = EnterShortLimit(0, true, 1, setupVWAP, "EntryA_Short");
+							currentEntryState = EntryState.workingOrder;
+							Print(Time[0] + " Order Submitted (Short). OID: " + (entryOrder != null ? entryOrder.OrderId : "null"));
+						}
+						else
+						{
+							Print(Time[0] + " Trade Skipped. R/R Ratio " + (reward/risk).ToString("F2") + " < " + MinRiskRewardRatio);
+						}
 					}
 					else
 					{
-						// Confirmation Logic Update:
-						// Do NOT reset to Idle immediately. Wait for subsequent bars.
-						// "Esperar a una vela..." implies patience.
-						
-						// Check invalidation? If price goes ABOVE the Anchor (SL), setup is dead.
-						// FIX: Don't invalidate on Sweep. UPDATE Anchor (Trail it).
+						// Check invalidation
 						if (High[0] > setupAnchorPrice)
 						{
 							Print(Time[0] + " Anchor Broken. Updating Anchor to " + High[0]);
 							setupAnchorPrice = High[0];
-							// Do not reset state. Keep Waiting.
 						}
 					}
 				}
 				else
 				{
-					// Long: Low[1] > Bullish VWAP (ethLowVWAP) + 1 Tick
-					double vwapVal = Values[1][1];
+					// Long: Low[1] > Bullish VWAP (setupVWAP) + 1 Tick
 					
-					if (isValidVWAP(vwapVal) && Low[1] > (vwapVal + TickSize))
+					if (isValidVWAP(setupVWAP) && Low[1] > (setupVWAP + TickSize))
 					{
-						entryOrder = EnterLongLimit(0, true, 1, GetCurrentLowVWAP(), "EntryA_Long");
-						currentEntryState = EntryState.workingOrder;
-						Print(Time[0] + " Order Submitted (Long). OID: " + (entryOrder != null ? entryOrder.OrderId : "null"));
+						// --- RISK / REWARD CHECK ---
+						double projectedEntry = setupVWAP;
+						double projectedStop = setupAnchorPrice;
+						double projectedTarget = GetCurrentHighVWAP(); // Opposing Global
+						
+						double risk = Math.Abs(projectedEntry - projectedStop);
+						double reward = Math.Abs(projectedTarget - projectedEntry);
+						
+						if (risk > 0 && (reward / risk) >= MinRiskRewardRatio)
+						{
+							entryOrder = EnterLongLimit(0, true, 1, setupVWAP, "EntryA_Long");
+							currentEntryState = EntryState.workingOrder;
+							Print(Time[0] + " Order Submitted (Long). OID: " + (entryOrder != null ? entryOrder.OrderId : "null"));
+						}
+						else
+						{
+							Print(Time[0] + " Trade Skipped. R/R Ratio " + (reward/risk).ToString("F2") + " < " + MinRiskRewardRatio);
+						}
 					}
 					else
 					{
@@ -794,7 +819,6 @@ namespace NinjaTrader.NinjaScript.Strategies
 						{
 							Print(Time[0] + " Anchor Broken. Updating Anchor to " + Low[0]);
 							setupAnchorPrice = Low[0];
-							// Do not reset state. Keep Waiting.
 						}
 					}
 				}
@@ -814,21 +838,6 @@ namespace NinjaTrader.NinjaScript.Strategies
 					setupAnchorPrice = Low[0];
 				}
 			}
-			
-			// Visuals Update (Track the expanding candle)
-			if (currentEntryState == EntryState.WaitingForConfirmation && CurrentBar == triggerBar)
-			{
-				if (isShortSetup)
-				{
-					Draw.ArrowDown(this, triggerTag, true, 0, High[0] + TickSize * 15, Brushes.Cyan);
-					Draw.Text(this, triggerTag + "_Txt", "Short", 0, High[0] + TickSize * 25, Brushes.Cyan);
-				}
-				else
-				{
-					Draw.ArrowUp(this, triggerTag, true, 0, Low[0] - TickSize * 15, Brushes.Lime);
-					Draw.Text(this, triggerTag + "_Txt", "Long", 0, Low[0] - TickSize * 25, Brushes.Lime);
-				}
-			}
 
 			// 3. ORDER MANAGEMENT & SYNC (Working -> InPosition)
 			if (currentEntryState == EntryState.workingOrder && entryOrder != null)
@@ -843,7 +852,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 				// Tracking the VWAP (Only if still working)
 				else if (entryOrder.OrderState == OrderState.Working || entryOrder.OrderState == OrderState.Accepted)
 				{
-					double currentVWAP = isShortSetup ? GetCurrentHighVWAP() : GetCurrentLowVWAP();
+					// Track the SETUP VWAP (Local), not just Global
+					double currentVWAP = GetSetupVWAP(isShortSetup);
 					
 					// Compare with current Order Limit Price
 					if (Math.Abs(entryOrder.LimitPrice - currentVWAP) >= TickSize)
@@ -1011,6 +1021,19 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 		private double GetCurrentHighVWAP() { return ethHighVWAP.CurrentValue; }
 		private double GetCurrentLowVWAP() { return ethLowVWAP.CurrentValue; }
+		
+		private double GetSetupVWAP(bool isShort)
+		{
+			// 1. Try to find the specific Local Level
+			var lvl = activeLevels.FirstOrDefault(l => l.Name == setupLevelName);
+			if (lvl != null && lvl.VolSum > 0)
+			{
+				return lvl.PvSum / lvl.VolSum;
+			}
+			
+			// 2. Fallback to Global
+			return isShort ? GetCurrentHighVWAP() : GetCurrentLowVWAP();
+		}
 
 		private void ManagePositionExit()
 		{
