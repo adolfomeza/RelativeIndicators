@@ -32,7 +32,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	public class SessionLevelsStrategy : Strategy
 	{
 		// Version Control
-		private const string StrategyVersion = "v1.2";
+		private const string StrategyVersion = "v1.4_StrictAlign";
 
 		public enum VwapCalculationMode
 		{
@@ -94,10 +94,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 
 		
+
 		protected override void OnStateChange()
 		{
 			if (State == State.SetDefaults)
 			{
+				// CRITICAL: Unmanaged Mode (Moved to end)
+				// IsUnmanaged = true; // Moved down
+				
 				// ...
 				Description									= @"Advanced Session Levels Strategy with VWAP and R/R Filters.";
 				Name										= "SessionLevelsStrategy " + StrategyVersion;
@@ -110,23 +114,24 @@ namespace NinjaTrader.NinjaScript.Strategies
 				MaximumBarsLookBack							= MaximumBarsLookBack.TwoHundredFiftySix; // REVERTED FROM INFINITE 
 				OrderFillResolution							= OrderFillResolution.Standard;
 				Slippage									= 0;
-				StartBehavior								= StartBehavior.ImmediatelySubmit;
-				TimeInForce									= TimeInForce.Day; // Changed to Day for potential runners
+				StartBehavior								= StartBehavior.WaitUntilFlat; // Aligned with RLS
+				TimeInForce									= TimeInForce.Gtc; // Aligned with RLS
 				TraceOrders									= false;
 				RealtimeErrorHandling						= RealtimeErrorHandling.StopCancelClose;
-				StopTargetHandling							= StopTargetHandling.PerEntryExecution;
-				BarsRequiredToTrade							= 20;
-				IsInstantiatedOnEachOptimizationIteration	= true;
-				
 				IsOverlay = true;
+				
+				// IsUnmanaged moved to top
 				
 				// Add Plots for VWAP
 				AddPlot(Brushes.White, "HighVWAP"); // Values[0]
 				AddPlot(Brushes.White, "LowVWAP");  // Values[1]
-				// ...
+				
+				// FINAL FORCE: Unmanaged Mode
+				IsUnmanaged = false; // Reverted to false
 			}
 			else if (State == State.DataLoaded)
 			{
+				Print("DEBUG: OnStateChange(DataLoaded) IsUnmanaged = " + IsUnmanaged);
 				try 
 				{
 					LoadLevels();
@@ -683,7 +688,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		// -------------------------------------------------------------------------
 		// ENTRY LOGIC VARIABLES
 		// -------------------------------------------------------------------------
-		private enum EntryState { Idle, WaitingForConfirmation, workingOrder, InPosition }
+		private enum EntryState { Idle, WaitingForConfirmation, workingOrder, PositionActive }
 		private EntryState currentEntryState = EntryState.Idle;
 		private bool isShortSetup = false; // true = Short, false = Long
 		private Order entryOrder = null;
@@ -1011,7 +1016,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 			}
 
 			// 1. Zombie Position: We have a position, but State thinks we are Idle/Working.
-			if (Position.MarketPosition != MarketPosition.Flat && currentEntryState != EntryState.InPosition)
+			if (Position.MarketPosition != MarketPosition.Flat && currentEntryState != EntryState.PositionActive)
 			{
 				Log(Time[0] + " CRITICAL: Safety Net Triggered! Position exists but State was " + currentEntryState);
 				
@@ -1061,7 +1066,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				}
 
 				// If we reached here, we are adopting (or already had an anchor).
-				currentEntryState = EntryState.InPosition;
+				currentEntryState = EntryState.PositionActive;
 				
 				// Force Place Stops if missing
 				if (Position.MarketPosition == MarketPosition.Short)
@@ -1078,13 +1083,18 @@ namespace NinjaTrader.NinjaScript.Strategies
 			// This happens if we missed the Exit Execution or closed manually.
 			// We only reset if we are confident the entry order isn't just "about to fill" (Working State handles that).
 			// If State is InPosition, it implies we ALREADY filled. So if we are Flat now, we must have closed.
-			if (Position.MarketPosition == MarketPosition.Flat && currentEntryState == EntryState.InPosition)
+			if (Position.MarketPosition == MarketPosition.Flat && currentEntryState == EntryState.PositionActive)
 			{
 				Log(Time[0] + " SYNC: State is InPosition but MarketPosition is Flat. Resetting to Idle.");
 				currentEntryState = EntryState.Idle;
 				setupLevelName = "";
+				
+				// CRITICAL FIX: Ensure ALL order references are cleared to prevent "Exits already exist" blocking future trades.
 				entryOrder = null;
-				targetOrder = null;
+				targetOrder = null; // Legacy
+				stopOrder = null; 
+				tp1Order = null;
+				tp2Order = null;
 			}
 		}
 		
@@ -1424,7 +1434,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				if (entryOrder.OrderState == OrderState.Filled || entryOrder.OrderState == OrderState.PartFilled)
 				{
 					Log(Time[0] + " SYNC: Order Filled but State was Working. Forcing InPosition.");
-					currentEntryState = EntryState.InPosition;
+					currentEntryState = EntryState.PositionActive;
 					EnsureProtection(isShortSetup ? "Short" : "Long");
 				}
 				// Tracking the VWAP (Only if still working)
@@ -1480,12 +1490,12 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 		private void EnsureProtection(string direction)
 		{
-			// Debug
-			Log(Time[0] + " EnsureProtection Called for " + direction + ". Anchor=" + setupAnchorPrice);
-
 			// Places SL and TP if they don't exist.
 			// PROTECTION & TARGETS (Multi-Contract Smart Split)
-			if (entryOrder == null || entryOrder.OrderState != OrderState.Filled) return;
+			if (entryOrder == null) return;
+			
+			// Relaxed Check: Allow PartFilled to start protecting
+			if (entryOrder.OrderState != OrderState.Filled && entryOrder.OrderState != OrderState.PartFilled) return;
 			
 			// Check if we already have exits
 			if (targetOrder != null || stopOrder != null) return; 
@@ -1501,30 +1511,22 @@ namespace NinjaTrader.NinjaScript.Strategies
 			if (isShortSetup)
 			{
 				slPrice = setupAnchorPrice + (StopLossTicks * TickSize); // SL Above High
-				targetGlobalVWAP = GetCurrentLowVWAP(); // Short -> Target Low VWAP? No, REVERSION target is usually Moving Average (Middle) or Opposite Side? 
-				// User said: "target 1 estaria en el vwap high del dia el global" (for Long?).
-				// Waits. If Short from High, Target is Low VWAP? Or High VWAP? 
-				// Usually Short Target is Lower.
-				// User Example: "precio cae hasta tocar el asia low... entramos... target 1 estaria en el vwap high del dia"
-				// Wait. "Asia Low" -> Long. Target -> VWAP High.
-				// So if Long (from Low), Target is High VWAP.
-				// So if Short (from High), Target is Low VWAP.
 				targetGlobalVWAP = GetCurrentLowVWAP(); 
-				
-				// Zone Opposite Check
-				targetZoneOpposite = GetOppositeLevelPrice(setupLevelName);
-				// Valid?
+				targetZoneOpposite = GetOppositeLevelPrice(setupLevelName, Time[0]);
 				if (targetZoneOpposite == 0) targetZoneOpposite = targetGlobalVWAP; // Fallback
 			}
 			else
 			{
 				slPrice = setupAnchorPrice - (StopLossTicks * TickSize); // SL Below Low
 				targetGlobalVWAP = GetCurrentHighVWAP(); // Long -> Target High VWAP
-				
-				targetZoneOpposite = GetOppositeLevelPrice(setupLevelName);
+				targetZoneOpposite = GetOppositeLevelPrice(setupLevelName, Time[0]);
 				if (targetZoneOpposite == 0) targetZoneOpposite = targetGlobalVWAP;
 			}
 			
+			// SANITY CHECK PRICES (Prevent 0.0 price error)
+			if (targetGlobalVWAP <= 0) targetGlobalVWAP = avgEntry; 
+			if (targetZoneOpposite <= 0) targetZoneOpposite = avgEntry;
+
 			// 3. Sort Targets (Closer = TP1, Farther = TP2)
 			double distV = Math.Abs(avgEntry - targetGlobalVWAP);
 			double distZ = Math.Abs(avgEntry - targetZoneOpposite);
@@ -1532,35 +1534,80 @@ namespace NinjaTrader.NinjaScript.Strategies
 			double tp1Price = (distV < distZ) ? targetGlobalVWAP : targetZoneOpposite;
 			double tp2Price = (distV < distZ) ? targetZoneOpposite : targetGlobalVWAP;
 			
+			// Rounding to TickSize is CRITICAL for Limit Orders
+			tp1Price = Instrument.MasterInstrument.RoundToTickSize(tp1Price);
+			tp2Price = Instrument.MasterInstrument.RoundToTickSize(tp2Price);
+			slPrice = Instrument.MasterInstrument.RoundToTickSize(slPrice);
+			
 			// Store for dynamic updates
 			activeTp1Price = tp1Price;
 			activeTp2Price = tp2Price;
 
 			// 4. Split Quantity
 			int qty1 = Quantity / 2;
-			int qty2 = Quantity - qty1; // Remainder (in case of odd quantity like 1 or 3)
+			int qty2 = Quantity - qty1; // Remainder (in case of odd quantity)
 			
-			// If Quantity is 1, qty1=0, qty2=1. Logic handles logic below. (Wait, 1/2 = 0).
-			// If Qty=1: qty1=0. qty2=1. We want TP1 (Closer) to take the single contract?
-			// User logic implies 2 contracts. If 1 contract, probably take the SAFER (Closer) one.
 			if (Quantity == 1) { qty1 = 1; qty2 = 0; tp1Price = (distV < distZ ? targetGlobalVWAP : targetZoneOpposite); } 
 
 			Log("   -> Smart Protection Split: Qty=" + Quantity + " | TP1(Qty"+qty1+")=" + tp1Price + " | TP2(Qty"+qty2+")=" + tp2Price);
 
-			// 5. Submit Orders
-			if (isShortSetup)
+			// 5. Submit Orders (MANAGED)
+			try
 			{
-				ExitShortStopMarket(0, true, Quantity, slPrice, "SL_Short", "EntryA_Short");
+				if (isShortSetup)
 				{
-					Log(Time[0] + " WARNING: Long TP (HighVWAP=" + tpPrice + ") is invalid or <= Price (" + Close[0] + "). Using Entry + 40 ticks fallback.");
-					tpPrice = Close[0] + 40 * TickSize;
+					// Stop Loss (All Qty)
+					ExitShortStopMarket(0, true, Quantity, slPrice, "SL_Short", "EntryA_Short");
+					
+					// TP1
+					if (qty1 > 0) tp1Order = ExitShortLimit(0, true, qty1, tp1Price, "TP1_Short", "EntryA_Short");
+					
+					// TP2
+					if (qty2 > 0) tp2Order = ExitShortLimit(0, true, qty2, tp2Price, "TP2_Short", "EntryA_Short");
 				}
-
-				Log("   -> Placing Long Protection: SL=" + slPrice + " | TP=" + tpPrice);
-				ExitLongStopMarket(0, true, Quantity, slPrice, "SL_Long", "EntryA_Long");
-				ExitLongLimit(0, true, Quantity, tpPrice, "TP_Long", "EntryA_Long");
+				else
+				{
+					// Stop Loss (All Qty)
+					ExitLongStopMarket(0, true, Quantity, slPrice, "SL_Long", "EntryA_Long");
+					
+					// TP1
+					if (qty1 > 0) tp1Order = ExitLongLimit(0, true, qty1, tp1Price, "TP1_Long", "EntryA_Long");
+					
+					// TP2
+					if (qty2 > 0) tp2Order = ExitLongLimit(0, true, qty2, tp2Price, "TP2_Long", "EntryA_Long");
+				}
+			}
+			catch (Exception ex)
+			{
+				Log("CRITICAL ERROR Submitting Exits: " + ex.Message);
 			}
 		}
+		
+		private double GetOppositeLevelPrice(string name, DateTime refTime)
+		{
+			// Try to find the opposite.
+			// Format: "Asia Low", "Asia High".
+			if (string.IsNullOrEmpty(name)) return 0;
+			
+			string oppName = "";
+			if (name.Contains(" Low")) oppName = name.Replace(" Low", " High");
+			else if (name.Contains(" High")) oppName = name.Replace(" High", " Low");
+			else return 0; // Can't guess
+			
+			// Search in valid levels for the SAME DAY (Session)
+			foreach(var l in activeLevels)
+			{
+				if (l.Name == oppName) 
+				{
+					// Date Check: Ensure it's from the same session date as the reference.
+					// Or within a reasonable window (e.g. < 24 hours difference).
+					if (Math.Abs((l.StartTime - refTime).TotalHours) < 24)
+						return l.Price;
+				}
+			}
+			return 0; // Not found
+		}
+
 		
 		private bool isValidVWAP(double val)
 		{
@@ -1595,7 +1642,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 							{
 								// 3. Creates System.Drawing.Bitmap (WinForms/GDI+)
 								// Fully qualified to avoid namespace ambiguity
-								using (System.Drawing.Bitmap bitmap = System.Drawing.Bitmap(w, h))
+								using (System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(w, h))
 								{
 									using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(bitmap))
 									{
@@ -1729,32 +1776,19 @@ namespace NinjaTrader.NinjaScript.Strategies
 		{
 			if (Position.MarketPosition == MarketPosition.Flat) return;
 			
-			if (targetOrder != null && (targetOrder.OrderState == OrderState.Working || targetOrder.OrderState == OrderState.Accepted))
-			{
-				double targetPrice = 0;
-				if (Position.MarketPosition == MarketPosition.Long)
-				{
-					targetPrice = GetCurrentHighVWAP();
-				}
-				else
-				{
-					targetPrice = GetCurrentLowVWAP();
-				}
-				
-				if (isValidVWAP(targetPrice) && Math.Abs(targetOrder.LimitPrice - targetPrice) >= TickSize)
-				{
-					ChangeOrder(targetOrder, Quantity, targetPrice, 0);
-				}
-			}
+			// Updates for Limit Orders (Chasing/Dynamic) can go here if needed.
+			// Currently TP1/TP2 are static or handled elsewhere?
+			// Use internal state if we want to move them.
 		}
 
 		protected override void OnOrderUpdate(Order order, double limitPrice, double stopPrice, int quantity, int filled, double averageFillPrice, OrderState orderState, DateTime time, ErrorCode error, string nativeError)
 		{
+			// 1. Entry Order Tracking
 			if (order.Name == "EntryA_Short" || order.Name == "EntryA_Long")
 			{
 				entryOrder = order;
 				
-				// Handle Terminal States
+				// Handle Terminal States for Entry
 				if (orderState == OrderState.Cancelled || orderState == OrderState.Rejected || (orderState == OrderState.Filled && filled == 0)) 
 				{
 					if (currentEntryState == EntryState.workingOrder) 
@@ -1766,42 +1800,88 @@ namespace NinjaTrader.NinjaScript.Strategies
 				}
 			}
 			
-			if (order.Name.Contains("TP_"))
-			{
-				targetOrder = order;
-			}
+			// 2. Generic Reference Updates (for persistence/recovery)
+			if (order.Name.Contains("SL_")) stopOrder = order;
+			if (order.Name.Contains("Entry")) entryOrder = order;
+			// TP Orders are now tracked via return value of SubmitOrderUnmanaged
 		}
 
 		protected override void OnExecutionUpdate(Execution execution, string executionId, double price, int quantity, MarketPosition marketPosition, string orderId, DateTime time)
 		{
-			if (execution.Order == null) return;
+			// DEBUG: Global Spy
+			if (EnableDebugLogs) Print(Time + " EXEC SPY: Name='" + execution.Order.Name + "' State=" + execution.Order.OrderState + " Qty=" + quantity + " OID=" + orderId);
 
-			if (execution.Order.Name == "EntryA_Short" || execution.Order.Name == "EntryA_Long")
+			if (execution.Order.OrderState == OrderState.Filled || execution.Order.OrderState == OrderState.PartFilled)
 			{
-				entryOrder = execution.Order;
-				
-				if (execution.Order.OrderState == OrderState.Filled || execution.Order.OrderState == OrderState.PartFilled)
+				if (execution.Order.Name == "EntryA_Short" || execution.Order.Name == "EntryA_Long")
 				{
-					currentEntryState = EntryState.InPosition;
+					if (currentEntryState == EntryState.workingOrder)
+					{
+						currentEntryState = EntryState.PositionActive;
+						Log(Time + " Entry Filled ("+execution.Order.Name+"). State -> PositionActive.");
+					}
 					
+					// Ensure Protection Runs (Retry if needed)
 					if (Position.MarketPosition == MarketPosition.Short)
 					{
-						Print(Time + " Filled Short (Exec). Placing SL/TP.");
 						EnsureProtection("Short");
 						TriggerScreenshot("Entry_Short", DateTime.Now, executionId);
 					}
 					else if (Position.MarketPosition == MarketPosition.Long)
 					{
-						Print(Time + " Filled Long (Exec). Placing SL/TP.");
 						EnsureProtection("Long");
 						TriggerScreenshot("Entry_Long", DateTime.Now, executionId);
 					}
 				}
 			}
 			
-			if (execution.Order.Name.Contains("TP_"))
+			// Remove reliance on targetOrder singular variable? 
+			// if (execution.Order.Name.Contains("TP_")) targetOrder = execution.Order;
+			
+			// BREAKEVEN & QUANTITY MANAGEMENT (TP1 Filled)
+			if (execution.Order.OrderState == OrderState.Filled)
 			{
-				targetOrder = execution.Order;
+				// Robust Check: Name Contains "TP1_"
+				string n = execution.Order.Name;
+				bool isTP1 = n.Contains("TP1_");
+
+				if (isTP1)
+				{
+					Print(Time + " DETECTED TP1 FILL: " + n);
+
+					if (stopOrder != null && entryOrder != null)
+					{
+						// 1. Calculate Remaining Quantity
+						// Safe math: (Order Qty - Filled Portion). 
+						// Or just Position.Quantity? 
+						// Careful: Position.Quantity updates slightly differently in Managed.
+						// Better: Original Stop Qty - Executed Qty.
+						int filledQty = execution.Order.Quantity;
+						int currentStopQty = stopOrder.Quantity;
+						int newSlQty = currentStopQty - filledQty;
+						
+						if (newSlQty < 1) newSlQty = 1; // Safety floor
+						
+						// 2. Determine New Price
+						double newSlPrice = stopOrder.StopPrice; 
+						bool priceChanged = false;
+						
+						if (EnableBreakeven)
+						{
+							newSlPrice = entryOrder.AverageFillPrice;
+							priceChanged = true;
+						}
+
+						Print(Time + " -> Adjusting SL (" + stopOrder.Name + "): Qty " + currentStopQty + "->" + newSlQty + " | Price " + stopOrder.StopPrice + "->" + newSlPrice);
+						
+						// 3. Update Stop Order
+						ChangeOrder(stopOrder, newSlQty, 0, newSlPrice);
+					}
+					else
+					{
+						Print(Time + " -> TP1 Filled but StopOrder/EntryOrder is NULL. Cannot Adjust.");
+					}
+				}
 			}
 			
 			// Reset if Closed (Filled) OR Cancelled/Rejected
@@ -1815,17 +1895,31 @@ namespace NinjaTrader.NinjaScript.Strategies
 					setupLevelName = "";
 					entryOrder = null;
 					targetOrder = null;
+					tp1Order = null;
+					tp2Order = null; 
+					stopOrder = null;
 				}
 			}
 			
+			// CRITICAL FIX: Only reset if we are truly FLAT. 
 			if (execution.Order.OrderState == OrderState.Filled && (execution.Order.Name.Contains("SL_") || execution.Order.Name.Contains("TP_")))
 			{
-				Print(Time + " Position Closed (TP/SL). Resetting to Idle.");
-				TriggerScreenshot("Exit_" + execution.Order.Name, DateTime.Now, executionId);
-				currentEntryState = EntryState.Idle;
-				setupLevelName = "";
-				entryOrder = null;
-				targetOrder = null;
+				if (Position.MarketPosition == MarketPosition.Flat)
+				{
+					Print(Time + " Position Closed (" + execution.Order.Name + "). Resetting to Idle.");
+					TriggerScreenshot("Exit_" + execution.Order.Name, DateTime.Now, executionId);
+					currentEntryState = EntryState.Idle;
+					setupLevelName = "";
+					entryOrder = null;
+					targetOrder = null;
+					stopOrder = null; 
+					tp1Order = null;
+					tp2Order = null;
+				}
+				else
+				{
+					Print(Time + " Partial Execution (" + execution.Order.Name + "). Position Active. Qty=" + Position.Quantity);
+				}
 			}
 		}
 
@@ -1846,7 +1940,12 @@ namespace NinjaTrader.NinjaScript.Strategies
 		[Display(Name="Quantity", Order=1, GroupName="Order Management")]
 		public int Quantity
 		{ get; set; }
-		
+
+		[NinjaScriptProperty]
+		[Display(Name="Move to Breakeven", Order=1, GroupName="Order Management")]
+		public bool EnableBreakeven
+		{ get; set; } = true;
+
 		[NinjaScriptProperty]
 		[Range(1, int.MaxValue)]
 		[Display(Name="Stop Loss (Ticks)", Order=2, GroupName="Order Management")]
@@ -1862,6 +1961,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 		// Internal Targets State
 		private double activeTp1Price = 0;
 		private double activeTp2Price = 0;
+		
+		// Explicit Order Tracking
+		private Order tp1Order = null;
+		private Order tp2Order = null;
 
 		
 		[NinjaScriptProperty]
@@ -1876,13 +1979,12 @@ namespace NinjaTrader.NinjaScript.Strategies
 		[Display(Name="USA End Time", Order=6, GroupName="1. Sessions")]
 		public string USAEndTime { get; set; }
 		
+
+
 		// Fix: Missing InitCSV stub.
 		private void InitCSV()
 		{
-			// Placeholder for CSV initialization logic if it was lost.
-			// Ideally this should setup the StreamWriter for logging.
-			// Since we don't have the original code, we stub it to allow compilation.
-			Print("InitCSV Called");
+			// Safe stub to ensure compilation
 		}
 
 	} // End of SessionLevelsStrategy class
