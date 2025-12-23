@@ -32,7 +32,15 @@ namespace NinjaTrader.NinjaScript.Strategies
 	public class SessionLevelsStrategy : Strategy
 	{
 		// Version Control
-		private const string StrategyVersion = "v1.1";
+		private const string StrategyVersion = "v1.2";
+
+		public enum VwapCalculationMode
+		{
+			Typical, // (H+L+C)/3
+			Close,   // Close
+			OHLC4    // (O+H+L+C)/4
+		}
+
 
 		// ... existing properties ...
 		private bool enableDebugLogs = true; // Default to true during dev
@@ -55,6 +63,21 @@ namespace NinjaTrader.NinjaScript.Strategies
 			set { showVisuals = value; }
 		}
 		
+		private VwapCalculationMode vwapMethod = VwapCalculationMode.Typical;
+		[NinjaScriptProperty]
+		[Display(Name="VWAP Calculation Method", Description="Select formula for VWAP.", Order=62, GroupName="General")]
+		public VwapCalculationMode VwapMethod
+		{
+			get { return vwapMethod; }
+			set { vwapMethod = value; }
+		}
+		
+
+		// Visual State for Adhoc VWAP Line
+		private double visualAdhocPrevBarVal = 0;
+		private double visualAdhocLastVal = 0;
+		private int visualAdhocLastBar = -1;
+
 		// Forensic Logging
 		private void Log(string message)
 		{
@@ -88,7 +111,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				OrderFillResolution							= OrderFillResolution.Standard;
 				Slippage									= 0;
 				StartBehavior								= StartBehavior.ImmediatelySubmit;
-				TimeInForce									= TimeInForce.Gtc;
+				TimeInForce									= TimeInForce.Day; // Changed to Day for potential runners
 				TraceOrders									= false;
 				RealtimeErrorHandling						= RealtimeErrorHandling.StopCancelClose;
 				StopTargetHandling							= StopTargetHandling.PerEntryExecution;
@@ -477,11 +500,15 @@ namespace NinjaTrader.NinjaScript.Strategies
 				if (lvl.StartTime > Time[0]) continue;
 
 				// VWAP ACCUMULATION
-				if (!lvl.JustReset)
-				{
-					lvl.VolSum += deltaVol;
-					lvl.PvSum += deltaVol * Close[0];
-				}
+			if (!lvl.JustReset)
+			{
+				lvl.VolSum += deltaVol;
+				double price = Close[0];
+				if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
+				else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
+				
+				lvl.PvSum += deltaVol * price;
+			}
 				// If JustReset was true, we already set VolSum/PvSum in CheckSession. 
 				// JustReset is ephemeral for this tick.
 				
@@ -537,7 +564,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 					// If the StartTime was effectively "today" or "recent" and we are still largely in that window?
 					// Problem: CheckSession pushes Price up/down. 
 					// If we are IN session, CheckSession updates Price.
-					// So if High[0] > Price, CheckSession makes Price = High[0].
+					// So if High[0] == Price, CheckSession makes Price = High[0].
 					// So High[0] == Price.
 					// So "High[0] >= Price" is TRUE.
 					// We need to know if we are "In Session" to avoid mitigation.
@@ -556,7 +583,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 					// If Price == High[0], it's likely pushing.
 					// But if Price < High[0], it's a break.
 					// Wait, if Price < High[0] (Resistance), then CheckSession WOULD have updated it if we were in session!
-					// So... if CheckSession DID NOT update it (Price < High[0]), it means we are NOT in session (or logic failed).
+					// So if CheckSession DID NOT update it (Price < High[0]), it means we are NOT in session (or logic failed).
 					// Therefore, if High[0] > Price, it MUST be a mitigation break!
 					// CORRECT.
 					
@@ -725,10 +752,6 @@ namespace NinjaTrader.NinjaScript.Strategies
 		[Display(Name = "SMTP Password", Description = "App Password (not your login password)", GroupName = "8. Email Alerts", Order = 7)]
 		public string EmailPassword { get; set; } = "password";
 		
-		[NinjaScriptProperty]
-		[Display(Name = "Min Risk/Reward Ratio", Description = "Minimum Reward/Risk ratio to take a trade (TargetDist/StopDist)", GroupName = "6. Risk Management", Order = 1)]
-		public double MinRiskRewardRatio { get; set; } = 1.0;
-
 		private double ethHighPrice = double.MinValue;
 		private double ethLowPrice = double.MaxValue;
 		private DateTime lastEthResetDate = DateTime.MinValue; 
@@ -754,11 +777,15 @@ namespace NinjaTrader.NinjaScript.Strategies
 			double deltaVol = currentBarVol - adhocLastVol;
 			
 			if (deltaVol > 0)
-			{
-				adhocVolSum += deltaVol;
-				adhocPvSum += deltaVol * Input[0]; // Price * Vol
-				adhocLastVol = currentBarVol; // Update processed volume
-			}
+	{
+		adhocVolSum += deltaVol;
+		double price = Close[0];
+		if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
+		else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
+		
+		adhocPvSum += deltaVol * price; 
+		adhocLastVol = currentBarVol; // Update processed volume
+	}
 		} 
 		
 		private int highAnchorBar = 0;
@@ -790,56 +817,60 @@ namespace NinjaTrader.NinjaScript.Strategies
 			}
 			
 			// 3. Update High/Low and Anchor Logic
-			bool highReset = false;
-			bool lowReset = false;
-			
-			// Check High
-			if (High[0] > ethHighPrice)
+	bool highReset = false;
+	bool lowReset = false;
+	
+	double price = Close[0];
+	if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
+	else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
+	
+	// Check High
+	if (High[0] > ethHighPrice)
+	{
+		// New High found! The PREVIOUS segment (from highAnchorBar to CurrentBar-1) is now "Old/Cut".
+		// We must paint it GRAY.
+		if (!hardReset && CurrentBar > highAnchorBar)
+		{
+			int barsBack = CurrentBar - highAnchorBar;
+			// IMPORTANT: Use i < barsBack to avoid overwriting the Transparency of the Anchor Bar itself.
+			for (int i = 1; i < barsBack; i++)
 			{
-				// New High found! The PREVIOUS segment (from highAnchorBar to CurrentBar-1) is now "Old/Cut".
-				// We must paint it GRAY.
-				if (!hardReset && CurrentBar > highAnchorBar)
-				{
-					int barsBack = CurrentBar - highAnchorBar;
-					// IMPORTANT: Use i < barsBack to avoid overwriting the Transparency of the Anchor Bar itself.
-					for (int i = 1; i < barsBack; i++)
-					{
-						PlotBrushes[0][i] = Brushes.Gray;
-					}
-				}
-				
-				ethHighPrice = High[0];
-				highReset = true;
-				ethHighVWAP.Reset(Volume[0], Close[0]);
-				highAnchorBar = CurrentBar; // Update anchor to here
+				PlotBrushes[0][i] = Brushes.Gray;
 			}
-			else
+		}
+		
+		ethHighPrice = High[0];
+		highReset = true;
+		ethHighVWAP.Reset(Volume[0], price);
+		highAnchorBar = CurrentBar; // Update anchor to here
+	}
+	else
+	{
+		ethHighVWAP.Accumulate(deltaVol, price);
+	}
+	
+	// Check Low
+	if (Low[0] < ethLowPrice)
+	{
+		// New Low found! Paint previous segment Gray.
+		if (!hardReset && CurrentBar > lowAnchorBar)
+		{
+			int barsBack = CurrentBar - lowAnchorBar;
+			for (int i = 1; i < barsBack; i++)
 			{
-				ethHighVWAP.Accumulate(deltaVol, Close[0]);
+				PlotBrushes[1][i] = Brushes.Gray;
 			}
-			
-			// Check Low
-			if (Low[0] < ethLowPrice)
-			{
-				// New Low found! Paint previous segment Gray.
-				if (!hardReset && CurrentBar > lowAnchorBar)
-				{
-					int barsBack = CurrentBar - lowAnchorBar;
-					for (int i = 1; i < barsBack; i++)
-					{
-						PlotBrushes[1][i] = Brushes.Gray;
-					}
-				}
-				
-				ethLowPrice = Low[0];
-				lowReset = true;
-				ethLowVWAP.Reset(Volume[0], Close[0]);
-				lowAnchorBar = CurrentBar;
-			}
-			else
-			{
-				ethLowVWAP.Accumulate(deltaVol, Close[0]);
-			}
+		}
+		
+		ethLowPrice = Low[0];
+		lowReset = true;
+		ethLowVWAP.Reset(Volume[0], price);
+		lowAnchorBar = CurrentBar;
+	}
+	else
+	{
+		ethLowVWAP.Accumulate(deltaVol, price);
+	}
 			
 			// 4. Assign to Plots (Values[0] = High, Values[1] = Low)
 			// Default color is White (defined in AddPlot). We only override active history to Gray when it dies.
@@ -1102,6 +1133,42 @@ namespace NinjaTrader.NinjaScript.Strategies
 			if (currentEntryState == EntryState.WaitingForConfirmation || currentEntryState == EntryState.workingOrder)
 			{
 				UpdateAdhocVWAP();
+				
+				// VISUAL DEBUG: Draw 1px White Line
+				bool isShort = (isShortSetup); 
+				double v = GetSetupVWAP(isShort);
+				
+				// Redundancy Check: Is this Anchor the Global High or Low?
+				// If so, the Global Plot (Values[0] or [1]) is already drawing this. We don't need a double line.
+				bool isGlobal = false;
+				if (isShort && Math.Abs(setupAnchorPrice - ethHighPrice) < TickSize) isGlobal = true;
+				if (!isShort && Math.Abs(setupAnchorPrice - ethLowPrice) < TickSize) isGlobal = true;
+				
+				if (v > 0 && !isGlobal)
+				{
+					// Update Visual State logic
+					if (visualAdhocLastBar != CurrentBar && visualAdhocLastBar != -1)
+					{
+						// New Bar Detected. Store the FINAL value of previous bar as start point.
+						visualAdhocPrevBarVal = visualAdhocLastVal;
+					}
+					
+					// Draw Line from PrevBarVal (Start of this bar logic) to CurrentVal (v)
+					// Only draw if we have a valid previous point (not just started)
+					if (visualAdhocLastBar != -1 && visualAdhocPrevBarVal > 0)
+					{
+						string lineTag = "AdhocLine_" + CurrentBar;
+						Draw.Line(this, lineTag, false, 1, visualAdhocPrevBarVal, 0, v, Brushes.White, DashStyleHelper.Solid, 1);
+					}
+					
+					// REMOVED TEXT LABEL AS REQUESTED
+					// string label = "  " + setupLevelName; 
+					// Draw.Text(this, "AdhocCurrentLabel", label, 0, v, Brushes.White);
+
+					// Update Tracking
+					visualAdhocLastVal = v;
+					visualAdhocLastBar = CurrentBar;
+				}
 			}
 			
 			if (canScan)
@@ -1117,8 +1184,17 @@ namespace NinjaTrader.NinjaScript.Strategies
 					{
 						// If we are already waiting, check if this is a DIFFERENT level.
 						// If it's the same level, we ignore re-triggering to preserve the 'setupAnchorPrice' (Extreme).
-						if (currentEntryState == EntryState.WaitingForConfirmation && lvl.Name == setupLevelName)
-							continue;
+						if (currentEntryState == EntryState.WaitingForConfirmation)
+						{
+							if (lvl.Name == setupLevelName)
+								continue;
+							else
+							{
+								// SWITCHING SETUP!
+								Log(Time[0] + " SWITCH: New Trigger on " + lvl.Name + " overrides " + setupLevelName);
+								// Fall through to process new trigger...
+							}
+						}
 							
 						// Valid Trigger (New or Switch)
 						
@@ -1137,10 +1213,20 @@ namespace NinjaTrader.NinjaScript.Strategies
 							setupLevelName = lvl.Name;
 							
 							// RESET ADHOC VWAP (Start Fresh from this touch)
-							adhocVolSum = 0;
-							adhocPvSum = 0;
+							// ALIGNMENT: To match Global VWAP behavior, we must Include the Trigger Bar's volume completely.
+							double price = Close[0];
+							if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
+							else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
+
+							adhocVolSum = Volume[0]; 
+							adhocPvSum = Volume[0] * price;
 							adhocLastBar = CurrentBar;
-							adhocLastVol = Volume[0]; // Ignore previous volume of this bar, start from NOW
+							adhocLastVol = Volume[0]; // So Delta next tick in same bar is 0, but we already have base volume.
+							
+							// Reset Visual State
+							visualAdhocPrevBarVal = 0;
+							visualAdhocLastVal = 0;
+							visualAdhocLastBar = -1;
 						}
 						else
 						{
@@ -1157,10 +1243,19 @@ namespace NinjaTrader.NinjaScript.Strategies
 							setupLevelName = lvl.Name;
 							
 							// RESET ADHOC VWAP
-							adhocVolSum = 0;
-							adhocPvSum = 0;
+							double price = Close[0];
+							if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
+							else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
+
+							adhocVolSum = Volume[0]; 
+							adhocPvSum = Volume[0] * price;
 							adhocLastBar = CurrentBar;
 							adhocLastVol = Volume[0];
+
+							// Reset Visual State
+							visualAdhocPrevBarVal = 0;
+							visualAdhocLastVal = 0;
+							visualAdhocLastBar = -1;
 						}
 						
 						break; // Only take one trigger at a time
@@ -1215,7 +1310,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 						
 						if (risk > 0 && (reward / risk) >= MinRiskRewardRatio)
 						{
-							entryOrder = EnterShortLimit(0, true, 1, setupVWAP, "EntryA_Short");
+							entryOrder = EnterShortLimit(0, true, Quantity, setupVWAP, "EntryA_Short");
 							currentEntryState = EntryState.workingOrder;
 							Log(Time[0] + " Order Submitted (Short). OID: " + (entryOrder != null ? entryOrder.OrderId : "null"));
 						}
@@ -1233,6 +1328,15 @@ namespace NinjaTrader.NinjaScript.Strategies
 							// DYNAMIC UPDATE: Don't kill the setup, just update the reference High.
 							setupAnchorPrice = High[0];
 							Log(Time[0] + " Anchor Updated (Short End-Bar) to New High: " + setupAnchorPrice);
+							
+							// RESET VWAP Calculation (Start fresh from new high)
+							double price = Close[0];
+							if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
+							else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
+
+							adhocVolSum = Volume[0]; 
+							adhocPvSum = Volume[0] * price;
+							// Keep visual continuity: visualAdhocLastBar = -1; // Removed to allow drop visualization
 						}
 					}
 				}
@@ -1253,7 +1357,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 						
 						if (risk > 0 && (reward / risk) >= MinRiskRewardRatio)
 						{
-							entryOrder = EnterLongLimit(0, true, 1, setupVWAP, "EntryA_Long");
+							entryOrder = EnterLongLimit(0, true, Quantity, setupVWAP, "EntryA_Long");
 							currentEntryState = EntryState.workingOrder;
 							Log(Time[0] + " Order Submitted (Long). OID: " + (entryOrder != null ? entryOrder.OrderId : "null"));
 						}
@@ -1271,6 +1375,15 @@ namespace NinjaTrader.NinjaScript.Strategies
 							// DYNAMIC UPDATE: Don't kill the setup, just update the reference Low.
 							setupAnchorPrice = Low[0];
 							Log(Time[0] + " Anchor Updated (Long End-Bar) to New Low: " + setupAnchorPrice);
+							
+							// RESET VWAP Calculation (Start fresh from new low)
+							double price = Close[0];
+							if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
+							else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
+
+							adhocVolSum = Volume[0]; 
+							adhocPvSum = Volume[0] * price;
+							// Keep visual continuity: visualAdhocLastBar = -1; // Removed to allow drop visualization
 						}
 					}
 				}
@@ -1284,13 +1397,23 @@ namespace NinjaTrader.NinjaScript.Strategies
 				{
 					// DYNAMIC UPDATE: Don't kill the setup, just update the reference High.
 					setupAnchorPrice = High[0];
-					Log(Time[0] + " Anchor Updated (Short) to New High: " + setupAnchorPrice);
+					// PERFORMANCE OPTIMIZATION: Reduce spam.
+					// Log(Time[0] + " Anchor Updated (Short) to New High: " + setupAnchorPrice);
+					
+					// RESET VWAP Calculation
+					adhocVolSum = 0; adhocPvSum = 0;
+					// visualAdhocLastBar = -1; 
 				}
 				if (!isShortSetup && Low[0] < setupAnchorPrice) 
 				{
 					// DYNAMIC UPDATE: Don't kill the setup, just update the reference Low.
 					setupAnchorPrice = Low[0];
-					Log(Time[0] + " Anchor Updated (Long) to New Low: " + setupAnchorPrice);
+					// PERFORMANCE OPTIMIZATION: Reduce spam.
+					// Log(Time[0] + " Anchor Updated (Long) to New Low: " + setupAnchorPrice);
+					
+					// RESET VWAP Calculation
+					adhocVolSum = 0; adhocPvSum = 0;
+					// visualAdhocLastBar = -1;
 				}
 			}
 
@@ -1346,7 +1469,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 					// Compare with current Order Limit Price
 					if (Math.Abs(entryOrder.LimitPrice - currentVWAP) >= TickSize)
 					{
-						ChangeOrder(entryOrder, 1, currentVWAP, 0);
+						ChangeOrder(entryOrder, Quantity, currentVWAP, 0);
 					}
 				}
 			}
@@ -1361,55 +1484,81 @@ namespace NinjaTrader.NinjaScript.Strategies
 			Log(Time[0] + " EnsureProtection Called for " + direction + ". Anchor=" + setupAnchorPrice);
 
 			// Places SL and TP if they don't exist.
+			// PROTECTION & TARGETS (Multi-Contract Smart Split)
+			if (entryOrder == null || entryOrder.OrderState != OrderState.Filled) return;
+			
+			// Check if we already have exits
+			if (targetOrder != null || stopOrder != null) return; 
+
+			// 1. Calculate Basis Prices
+			double avgEntry = entryOrder.AverageFillPrice;
 			double slPrice = 0;
-			double tpPrice = 0;
-
-			if (direction == "Short")
+			
+			// 2. Determine Smart Targets (TP1 Closer, TP2 Farther)
+			double targetGlobalVWAP = 0;
+			double targetZoneOpposite = 0;
+			
+			if (isShortSetup)
 			{
-				// FALLBACK VALIDATION
-				if (setupAnchorPrice <= 0 || setupAnchorPrice == double.MaxValue || setupAnchorPrice == double.MinValue) 
-				{
-					setupAnchorPrice = High[0] + 20 * TickSize; // Emergency Stop
-					Log(Time[0] + " WARNING: Invalid Anchor. Used Emergency Stop: " + setupAnchorPrice);
-				}
-
-				slPrice = setupAnchorPrice + TickSize;
-				tpPrice = GetCurrentLowVWAP();
+				slPrice = setupAnchorPrice + (StopLossTicks * TickSize); // SL Above High
+				targetGlobalVWAP = GetCurrentLowVWAP(); // Short -> Target Low VWAP? No, REVERSION target is usually Moving Average (Middle) or Opposite Side? 
+				// User said: "target 1 estaria en el vwap high del dia el global" (for Long?).
+				// Waits. If Short from High, Target is Low VWAP? Or High VWAP? 
+				// Usually Short Target is Lower.
+				// User Example: "precio cae hasta tocar el asia low... entramos... target 1 estaria en el vwap high del dia"
+				// Wait. "Asia Low" -> Long. Target -> VWAP High.
+				// So if Long (from Low), Target is High VWAP.
+				// So if Short (from High), Target is Low VWAP.
+				targetGlobalVWAP = GetCurrentLowVWAP(); 
 				
-				// Sanity Check TP for Short (Must be < Close)
-				// If VWAP is 0 or above current price, use fallback
-				if (!isValidVWAP(tpPrice) || tpPrice >= Close[0]) 
-				{
-					Log(Time[0] + " WARNING: Short TP (LowVWAP=" + tpPrice + ") is invalid or >= Price (" + Close[0] + "). Using Entry - 40 ticks fallback.");
-					tpPrice = Close[0] - 40 * TickSize;
-				}
-
-				Log("   -> Placing Short Protection: SL=" + slPrice + " | TP=" + tpPrice);
-				ExitShortStopMarket(0, true, 1, slPrice, "SL_Short", "EntryA_Short");
-				ExitShortLimit(0, true, 1, tpPrice, "TP_Short", "EntryA_Short");
+				// Zone Opposite Check
+				targetZoneOpposite = GetOppositeLevelPrice(setupLevelName);
+				// Valid?
+				if (targetZoneOpposite == 0) targetZoneOpposite = targetGlobalVWAP; // Fallback
 			}
 			else
 			{
-				if (setupAnchorPrice <= 0 || setupAnchorPrice == double.MaxValue || setupAnchorPrice == double.MinValue) 
-				{
-					setupAnchorPrice = Low[0] - 20 * TickSize; // Emergency Stop
-					Log(Time[0] + " WARNING: Invalid Anchor. Used Emergency Stop: " + setupAnchorPrice);
-				}
+				slPrice = setupAnchorPrice - (StopLossTicks * TickSize); // SL Below Low
+				targetGlobalVWAP = GetCurrentHighVWAP(); // Long -> Target High VWAP
+				
+				targetZoneOpposite = GetOppositeLevelPrice(setupLevelName);
+				if (targetZoneOpposite == 0) targetZoneOpposite = targetGlobalVWAP;
+			}
+			
+			// 3. Sort Targets (Closer = TP1, Farther = TP2)
+			double distV = Math.Abs(avgEntry - targetGlobalVWAP);
+			double distZ = Math.Abs(avgEntry - targetZoneOpposite);
+			
+			double tp1Price = (distV < distZ) ? targetGlobalVWAP : targetZoneOpposite;
+			double tp2Price = (distV < distZ) ? targetZoneOpposite : targetGlobalVWAP;
+			
+			// Store for dynamic updates
+			activeTp1Price = tp1Price;
+			activeTp2Price = tp2Price;
 
-				slPrice = setupAnchorPrice - TickSize;
-				tpPrice = GetCurrentHighVWAP();
+			// 4. Split Quantity
+			int qty1 = Quantity / 2;
+			int qty2 = Quantity - qty1; // Remainder (in case of odd quantity like 1 or 3)
+			
+			// If Quantity is 1, qty1=0, qty2=1. Logic handles logic below. (Wait, 1/2 = 0).
+			// If Qty=1: qty1=0. qty2=1. We want TP1 (Closer) to take the single contract?
+			// User logic implies 2 contracts. If 1 contract, probably take the SAFER (Closer) one.
+			if (Quantity == 1) { qty1 = 1; qty2 = 0; tp1Price = (distV < distZ ? targetGlobalVWAP : targetZoneOpposite); } 
 
-				// Sanity Check TP for Long (Must be > Close)
-				// If VWAP is 0 or below current price, use fallback
-				if (!isValidVWAP(tpPrice) || tpPrice <= Close[0]) 
+			Log("   -> Smart Protection Split: Qty=" + Quantity + " | TP1(Qty"+qty1+")=" + tp1Price + " | TP2(Qty"+qty2+")=" + tp2Price);
+
+			// 5. Submit Orders
+			if (isShortSetup)
+			{
+				ExitShortStopMarket(0, true, Quantity, slPrice, "SL_Short", "EntryA_Short");
 				{
 					Log(Time[0] + " WARNING: Long TP (HighVWAP=" + tpPrice + ") is invalid or <= Price (" + Close[0] + "). Using Entry + 40 ticks fallback.");
 					tpPrice = Close[0] + 40 * TickSize;
 				}
 
 				Log("   -> Placing Long Protection: SL=" + slPrice + " | TP=" + tpPrice);
-				ExitLongStopMarket(0, true, 1, slPrice, "SL_Long", "EntryA_Long");
-				ExitLongLimit(0, true, 1, tpPrice, "TP_Long", "EntryA_Long");
+				ExitLongStopMarket(0, true, Quantity, slPrice, "SL_Long", "EntryA_Long");
+				ExitLongLimit(0, true, Quantity, tpPrice, "TP_Long", "EntryA_Long");
 			}
 		}
 		
@@ -1446,7 +1595,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 							{
 								// 3. Creates System.Drawing.Bitmap (WinForms/GDI+)
 								// Fully qualified to avoid namespace ambiguity
-								using (System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(w, h))
+								using (System.Drawing.Bitmap bitmap = System.Drawing.Bitmap(w, h))
 								{
 									using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(bitmap))
 									{
@@ -1594,7 +1743,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				
 				if (isValidVWAP(targetPrice) && Math.Abs(targetOrder.LimitPrice - targetPrice) >= TickSize)
 				{
-					ChangeOrder(targetOrder, 1, targetPrice, 0);
+					ChangeOrder(targetOrder, Quantity, targetPrice, 0);
 				}
 			}
 		}
@@ -1691,6 +1840,29 @@ namespace NinjaTrader.NinjaScript.Strategies
 		[NinjaScriptProperty]
 		[Display(Name="Europe Start Time", Order=3, GroupName="1. Sessions")]
 		public string EuropeStartTime { get; set; }
+		
+		[NinjaScriptProperty]
+		[Range(1, int.MaxValue)]
+		[Display(Name="Quantity", Order=1, GroupName="Order Management")]
+		public int Quantity
+		{ get; set; }
+		
+		[NinjaScriptProperty]
+		[Range(1, int.MaxValue)]
+		[Display(Name="Stop Loss (Ticks)", Order=2, GroupName="Order Management")]
+		public int StopLossTicks
+		{ get; set; }
+		
+		[NinjaScriptProperty]
+		[Range(0, double.MaxValue)]
+		[Display(Name="Min Risk/Reward Ratio", Order=3, GroupName="Order Management")]
+		public double MinRiskRewardRatio
+		{ get; set; }
+		
+		// Internal Targets State
+		private double activeTp1Price = 0;
+		private double activeTp2Price = 0;
+
 		
 		[NinjaScriptProperty]
 		[Display(Name="Europe End Time", Order=4, GroupName="1. Sessions")]
