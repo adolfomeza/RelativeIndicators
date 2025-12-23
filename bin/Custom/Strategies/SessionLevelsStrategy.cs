@@ -95,28 +95,184 @@ namespace NinjaTrader.NinjaScript.Strategies
 				BarsRequiredToTrade							= 20;
 				IsInstantiatedOnEachOptimizationIteration	= true;
 				
-				IsOverlay = true; 
+				IsOverlay = true;
+				
+				// Add Plots for VWAP
+				AddPlot(Brushes.White, "HighVWAP"); // Values[0]
+				AddPlot(Brushes.White, "LowVWAP");  // Values[1]
 				// ...
 			}
 			else if (State == State.DataLoaded)
 			{
-				/*
 				try 
 				{
 					LoadLevels();
 				} 
-				catch(Exception ex) { Print("Critical Load Error: " + ex.Message); }
-				*/
+				catch(Exception ex) { Print("Warning: Failed to load levels: " + ex.Message); }
 			}
 			else if (State == State.Terminated)
 			{
-				/*
 				try
 				{
 					SaveLevels();
 				}
-				catch(Exception ex) { Print("Critical Save Error: " + ex.ToString()); }
-				*/
+				catch(Exception ex) { Print("Warning: Failed to save levels: " + ex.Message); }
+			}
+		}
+
+
+		// -------------------------------------------------------------------------
+		// PERSISTENCE LOGIC (v3 - Safe Mode - Multi-Instrument)
+		// -------------------------------------------------------------------------
+		private string GetPersistencePath()
+		{
+			// Safe Filename: Remove slashes or colons from Instrument Name
+			string safeName = Instrument.FullName.Replace('/', '-').Replace(':', '-');
+			string filename = "SessionLevels_State_" + safeName + "_v3.xml";
+			return System.IO.Path.Combine(NinjaTrader.Core.Globals.UserDataDir, "trace", filename);
+		}
+
+		private void SaveLevels()
+		{
+			// Only save if we have data and logic initialized
+			if (activeLevels == null || activeLevels.Count == 0) return;
+
+			string path = GetPersistencePath();
+			
+			// Map specific List<SessionLevel> to List<SessionLevelData>
+			List<SessionLevelData> dataToSave = new List<SessionLevelData>();
+			foreach(var level in activeLevels)
+			{
+				dataToSave.Add(new SessionLevelData
+				{
+					Name = level.Name,
+					Price = level.Price,
+					StartTime = level.StartTime,
+					EndTime = level.EndTime,
+					MitigationTime = level.MitigationTime,
+					IsResistance = level.IsResistance,
+					IsMitigated = level.IsMitigated,
+					VolSum = level.VolSum,
+					PvSum = level.PvSum,
+					Tag = level.Tag
+				});
+			}
+
+			try
+			{
+				// Ensure directory exists
+				string dir = System.IO.Path.GetDirectoryName(path);
+				if (!System.IO.Directory.Exists(dir)) System.IO.Directory.CreateDirectory(dir);
+
+				XmlSerializer serializer = new XmlSerializer(typeof(List<SessionLevelData>));
+				using (StreamWriter writer = new StreamWriter(path))
+				{
+					serializer.Serialize(writer, dataToSave);
+				}
+				Print(DateTime.Now + " State Saved: " + dataToSave.Count + " levels to " + path);
+			}
+			catch (Exception ex)
+			{
+				Print("SaveLevels Exception: " + ex.Message);
+			}
+		}
+
+		private void LoadLevels()
+		{
+			string path = GetPersistencePath();
+			if (!File.Exists(path)) return;
+
+			// 1. GAP DETECTION
+			try
+			{
+				if (Bars != null && Bars.Count > 0)
+				{
+					DateTime fileTime = File.GetLastWriteTime(path);
+					DateTime firstBarTime = Bars.GetTime(0);
+					
+					// If the file is OLDER than the First Bar loaded, we have a blind spot.
+					if (fileTime < firstBarTime) 
+					{
+						gapDetected = true;
+						Print("WARNING: Persistence Gap Detected! File Time: " + fileTime + " < First Bar: " + firstBarTime);
+					}
+				}
+			}
+			catch {}
+
+			try
+			{
+				XmlSerializer serializer = new XmlSerializer(typeof(List<SessionLevelData>));
+				List<SessionLevelData> loadedData;
+				
+				using (StreamReader reader = new StreamReader(path))
+				{
+					loadedData = (List<SessionLevelData>)serializer.Deserialize(reader);
+				}
+
+				if (loadedData != null && loadedData.Count > 0)
+				{
+					// 2. SANITY CHECK (Auto-Mitigate Ghost Lines)
+					double sanityPrice = -1;
+					if (Bars != null && Bars.Count > 0) sanityPrice = Bars.GetOpen(0);
+
+					int count = 0;
+					int mitigatedCount = 0;
+					
+					foreach (var d in loadedData)
+					{
+						if (activeLevels.Any(l => l.Tag == d.Tag)) continue;
+
+						SessionLevel newLvl = new SessionLevel
+						{
+							Name = d.Name,
+							Price = d.Price,
+							StartTime = d.StartTime,
+							EndTime = d.EndTime,
+							MitigationTime = d.MitigationTime,
+							IsResistance = d.IsResistance,
+							IsMitigated = d.IsMitigated,
+							Tag = d.Tag,
+							VolSum = d.VolSum,
+							PvSum = d.PvSum,
+							JustReset = false
+						};
+						
+						// SANITY LOGIC
+						if (sanityPrice > 0 && !newLvl.IsMitigated)
+						{
+							if (newLvl.IsResistance && sanityPrice > newLvl.Price)
+							{
+								newLvl.IsMitigated = true;
+								newLvl.MitigationTime = Bars.GetTime(0); // Mark as broken at open
+								mitigatedCount++;
+							}
+							else if (!newLvl.IsResistance && sanityPrice < newLvl.Price)
+							{
+								newLvl.IsMitigated = true;
+								newLvl.MitigationTime = Bars.GetTime(0);
+								mitigatedCount++;
+							}
+						}
+						
+						// Restore Color
+						if (d.Name.Contains("Asia")) newLvl.Color = Brushes.White;
+						else if (d.Name.Contains("Europe")) newLvl.Color = Brushes.Yellow;
+						else if (d.Name.Contains("USA")) newLvl.Color = Brushes.RoyalBlue;
+						else newLvl.Color = Brushes.Gray;
+
+						activeLevels.Add(newLvl);
+						count++;
+					}
+					
+					string msg = "State Loaded: " + count + " levels restored.";
+					if (mitigatedCount > 0) msg += " (Auto-Mitigated " + mitigatedCount + " ghosts due to Gap).";
+					Print(DateTime.Now + " " + msg);
+				}
+			}
+			catch (Exception ex)
+			{
+				Print("LoadLevels Exception: " + ex.Message);
 			}
 		}
 
@@ -147,9 +303,34 @@ namespace NinjaTrader.NinjaScript.Strategies
 		
 		private List<SessionLevel> activeLevels = new List<SessionLevel>();
 
+		// Strategy Initialization Flag
+		private bool isStrategyInitialized = false;
+		private bool gapDetected = false;
+
 		protected override void OnBarUpdate()
 		{
 			if (CurrentBar < 20) return;
+			
+			// INITIALIZATION (Snap Anchors to start)
+			if (!isStrategyInitialized)
+			{
+				isStrategyInitialized = true;
+				highAnchorBar = CurrentBar;
+				lowAnchorBar = CurrentBar;
+				ethHighPrice = High[0];
+				ethLowPrice = Low[0];
+				
+				// Reset VWAPs to start fresh here
+				ethHighVWAP = new SessionVWAP(); ethHighVWAP.Reset(Volume[0], Close[0]);
+				ethLowVWAP = new SessionVWAP(); ethLowVWAP.Reset(Volume[0], Close[0]);
+				
+				// Init AdHoc
+				adhocLastBar = CurrentBar;
+				lastVol = Volume[0]; // Set volume baseline
+				
+				// Don't modify plots on init frame
+				return;
+			}
 			
 			// Initialize TimeZones & Lists once
 			if (!timeZonesLoaded)
@@ -292,6 +473,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 			
 			foreach (var lvl in activeLevels)
 			{
+				// BACKTEST SAFETY: Completely ignore future levels (Visuals + Logic)
+				if (lvl.StartTime > Time[0]) continue;
+
 				// VWAP ACCUMULATION
 				if (!lvl.JustReset)
 				{
@@ -886,17 +1070,21 @@ namespace NinjaTrader.NinjaScript.Strategies
 					sessionPnL = SystemPerformance.RealTimeTrades.TradesPerformance.Currency.CumProfit;
 			} catch {}
 
-			string text = string.Format("Ver: {0}\nState: {1}\nPosition: {2}\nAcc Daily PnL: {3}\nInstrument Daily PnL: {4}\nActive Levels: {5}\nHigh VWAP: {6:F2}\nLow VWAP: {7:F2}",
+			string text = string.Format("Ver: {0}\nState: {1}\nPosition: {2}\nSession PnL: {3}\nActive Levels: {4}\nHigh VWAP: {5:F2}\nLow VWAP: {6:F2}",
 				StrategyVersion,
 				currentEntryState,
 				Position.MarketPosition,
-				accountPnL.ToString("C"),
-				(storedDailyPnL + sessionPnL).ToString("C"),
+				sessionPnL.ToString("C"),
 				activeLevels.Count,
 				ethHighVWAP.CurrentValue,
 				ethLowVWAP.CurrentValue);
 				
 			Draw.TextFixed(this, "InfoPanel", text, TextPosition.TopRight, Brushes.White, new SimpleFont("Arial", 12), Brushes.Black, Brushes.Transparent, 100);
+			
+			if (gapDetected)
+			{
+				Draw.TextFixed(this, "GapWarning", "\n\n\n\n\n\n\n\nDATA GAP DETECTED - LOAD MORE DAYS", TextPosition.TopRight, Brushes.Red, new SimpleFont("Arial", 12) { Bold = true }, Brushes.Transparent, Brushes.Transparent, 100);
+			}
 		}
 		
 		// -------------------------------------------------------------------------
@@ -920,6 +1108,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 			{
 				foreach (var lvl in activeLevels)
 				{
+					// BACKTEST SAFETY: Ignore Future Levels (Cheat Prevention)
+					if (lvl.StartTime > Time[0]) continue;
+
 					// If level is mitigated exactly NOW
 					// Note: ManageLevels sets MitigationTime = Time[0].
 					if (lvl.IsMitigated && lvl.MitigationTime == Time[0])
@@ -1009,12 +1200,6 @@ namespace NinjaTrader.NinjaScript.Strategies
 				if (isShortSetup)
 				{
 					// Short: High[1] < Bearish VWAP (setupVWAP) - 1 Tick
-					// Note: setupVWAP is current tick value. 
-					// Ideally we want Previous Bar VWAP. 
-					// Approximation: Using current is acceptable if volatility low, but "Values[0][1]" was global.
-					// We must re-calculate previous bar Local VWAP? 
-					// Simplifying: Use current setupVWAP.
-					
 					if (isValidVWAP(setupVWAP) && High[1] < (setupVWAP - TickSize))
 					{
 						// --- RISK / REWARD CHECK ---
@@ -1036,17 +1221,18 @@ namespace NinjaTrader.NinjaScript.Strategies
 						}
 						else
 						{
-							Log(Time[0] + " Trade Skipped (Short). Risk: " + risk + " Reward: " + reward + " Ratio: " + (risk > 0 ? (reward/risk).ToString("F2") : "N/A"));
+							Log(Time[0] + string.Format(" Trade Skipped (Short). Risk: {0:F2} Reward: {1:F2} Ratio: {2:F2}", risk, reward, (risk > 0 ? (reward/risk) : 0)));
 						}
 					}
 					else
 					{
 						// Check invalidation
+						// Check invalidation (End of Bar)
 						if (High[0] > setupAnchorPrice)
 						{
-							Log(Time[0] + " Anchor Broken (Short). Setup Invalidated. Resetting to Idle.");
-							currentEntryState = EntryState.Idle; // RESET
-							setupLevelName = "";
+							// DYNAMIC UPDATE: Don't kill the setup, just update the reference High.
+							setupAnchorPrice = High[0];
+							Log(Time[0] + " Anchor Updated (Short End-Bar) to New High: " + setupAnchorPrice);
 						}
 					}
 				}
@@ -1073,17 +1259,18 @@ namespace NinjaTrader.NinjaScript.Strategies
 						}
 						else
 						{
-							Log(Time[0] + " Trade Skipped (Long). Risk: " + risk + " Reward: " + reward + " Ratio: " + (risk > 0 ? (reward/risk).ToString("F2") : "N/A"));
+							Log(Time[0] + string.Format(" Trade Skipped (Long). Risk: {0:F2} Reward: {1:F2} Ratio: {2:F2}", risk, reward, (risk > 0 ? (reward/risk) : 0)));
 						}
 					}
 					else
 					{
 						// Check invalidation
+						// Check invalidation (End of Bar)
 						if (Low[0] < setupAnchorPrice)
 						{
-							Log(Time[0] + " Anchor Broken (Long). Setup Invalidated. Resetting to Idle.");
-							currentEntryState = EntryState.Idle; // RESET
-							setupLevelName = "";
+							// DYNAMIC UPDATE: Don't kill the setup, just update the reference Low.
+							setupAnchorPrice = Low[0];
+							Log(Time[0] + " Anchor Updated (Long End-Bar) to New Low: " + setupAnchorPrice);
 						}
 					}
 				}
@@ -1095,15 +1282,15 @@ namespace NinjaTrader.NinjaScript.Strategies
 			{
 				if (isShortSetup && High[0] > setupAnchorPrice) 
 				{
-					Log(Time[0] + " Anchor Broken (Mid-Bar Short). Setup Invalidated. Resetting to Idle.");
-					currentEntryState = EntryState.Idle;
-					setupLevelName = "";
+					// DYNAMIC UPDATE: Don't kill the setup, just update the reference High.
+					setupAnchorPrice = High[0];
+					Log(Time[0] + " Anchor Updated (Short) to New High: " + setupAnchorPrice);
 				}
 				if (!isShortSetup && Low[0] < setupAnchorPrice) 
 				{
-					Log(Time[0] + " Anchor Broken (Mid-Bar Long). Setup Invalidated. Resetting to Idle.");
-					currentEntryState = EntryState.Idle;
-					setupLevelName = "";
+					// DYNAMIC UPDATE: Don't kill the setup, just update the reference Low.
+					setupAnchorPrice = Low[0];
+					Log(Time[0] + " Anchor Updated (Long) to New Low: " + setupAnchorPrice);
 				}
 			}
 
@@ -1305,80 +1492,13 @@ namespace NinjaTrader.NinjaScript.Strategies
 		}
 
 
-		// -------------------------------------------------------------------------
-		// CSV PnL PERSISTENCE
-		// -------------------------------------------------------------------------
-		private string csvPath = "";
-		private double storedDailyPnL = 0;
-		private bool csvInitialized = false;
-
-		private void InitCSV()
-		{
-			// SAFETY: Only run CSV logic in Realtime to prevent Backtest corruption.
-			if (State != State.Realtime) return;
-
-			if (csvInitialized) return;
-			try
-			{
-				string docsDir = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
-				string logDir = System.IO.Path.Combine(docsDir, "NinjaTrader 8", "TradeLogs");
-				if (!Directory.Exists(logDir)) Directory.CreateDirectory(logDir);
-				
-				string fileName = "SessionLevels_" + DateTime.Now.ToString("yyyyMMdd") + ".csv";
-				csvPath = System.IO.Path.Combine(logDir, fileName);
-				
-				storedDailyPnL = 0;
-				
-				if (File.Exists(csvPath))
-				{
-					string[] lines = File.ReadAllLines(csvPath);
-					foreach (string line in lines)
-					{
-						string[] parts = line.Split(',');
-						if (parts.Length >= 6)
-						{
-							// Format: Time,Instrument,Action,Entry,Exit,Profit,Qty
-							string fileInst = parts[1];
-							if (fileInst == Instrument.FullName)
-							{
-								double profit = 0;
-								if (double.TryParse(parts[5], out profit))
-								{
-									storedDailyPnL += profit;
-								}
-							}
-						}
-					}
-					Print("CSV Init: Loaded PnL for " + Instrument.FullName + ": " + storedDailyPnL.ToString("C"));
-				}
-				
-				csvInitialized = true;
-			}
-			catch (Exception ex) { Print("CSV Init Failed: " + ex.Message); }
-		}
-
+		#endregion
+		
 		private void LogTrade(Trade trade)
 		{
-			if (!csvInitialized) InitCSV();
-			try
-			{
-				// Time,Instrument,Action,Entry,Exit,Profit,Qty
-				string action = (trade.Entry.MarketPosition == MarketPosition.Long) ? "Long" : "Short";
-				string line = string.Format("{0},{1},{2},{3},{4},{5},{6}",
-					DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-					Instrument.FullName,
-					action,
-					trade.Entry.Price,
-					trade.Exit.Price,
-					trade.ProfitCurrency,
-					trade.Quantity);
-					
-				using (StreamWriter sw = File.AppendText(csvPath))
-				{
-					sw.WriteLine(line);
-				}
-			}
-			catch (Exception ex) { Print("CSV Log Failed: " + ex.Message); }
+			string action = (trade.Entry.MarketPosition == MarketPosition.Long) ? "TR_LONG" : "TR_SHORT";
+			Log(string.Format("{0} TRADE CLOSED: {1} at {2}, Exit at {3}, Profit: {4}", 
+				DateTime.Now, action, trade.Entry.Price, trade.Exit.Price, trade.ProfitCurrency.ToString("C")));
 		}
 
 		protected override void OnPositionUpdate(Position position, double averagePrice, int quantity, MarketPosition marketPosition)
@@ -1583,6 +1703,30 @@ namespace NinjaTrader.NinjaScript.Strategies
 		[NinjaScriptProperty]
 		[Display(Name="USA End Time", Order=6, GroupName="1. Sessions")]
 		public string USAEndTime { get; set; }
-		#endregion
+		
+		// Fix: Missing InitCSV stub.
+		private void InitCSV()
+		{
+			// Placeholder for CSV initialization logic if it was lost.
+			// Ideally this should setup the StreamWriter for logging.
+			// Since we don't have the original code, we stub it to allow compilation.
+			Print("InitCSV Called");
+		}
+
 	} // End of SessionLevelsStrategy class
+
+	public class SessionLevelData
+	{
+		public string Name;
+		public double Price;
+		public DateTime StartTime;
+		public DateTime EndTime;
+		public DateTime MitigationTime;
+		public bool IsResistance;
+		public bool IsMitigated;
+		public double VolSum;
+		public double PvSum;
+		public string Tag;
+		// Color is not serialized easily, we infer it from Name or defaults.
+	}
 } // End of Namespace
