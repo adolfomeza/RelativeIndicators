@@ -33,7 +33,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	{
 		// Version Control
 		// Version Control
-		private const string StrategyVersion = "v1.5.1"; // Decoupled Screenshots
+		private const string StrategyVersion = "v1.5.2"; // Fix Quantity Default
 
 		public enum VwapCalculationMode
 		{
@@ -2003,7 +2003,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		[Range(1, int.MaxValue)]
 		[Display(Name="Quantity", Order=1, GroupName="Order Management")]
 		public int Quantity
-		{ get; set; }
+		{ get; set; } = 1;
 
 		[NinjaScriptProperty]
 		[Display(Name="Move to Breakeven", Order=1, GroupName="Order Management")]

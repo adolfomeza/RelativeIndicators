@@ -5,6 +5,10 @@ All notable changes to the `SessionLevelsStrategy` project will be documented in
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.2] - 2025-12-23
+### Fixed
+- **Validation Error:** Fixed "Quantity is 0" error by setting default `Quantity = 1`.
+
 ## [1.5.1] - 2025-12-23
 ### Added
 - **Local Screenshots:** Added `EnableLocalScreenshots` to allow saving chart images without enabling email alerts.

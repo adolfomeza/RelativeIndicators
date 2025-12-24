@@ -5,6 +5,10 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.2] - 2025-12-23
+### Corregido
+- **Error de Validación:** Se arregló el error "Quantity is 0" asignando un valor por defecto de `1`.
+
 ## [1.5.1] - 2025-12-23
 ### Agregado
 - **Cauduras Locales:** Se agregó `EnableLocalScreenshots` para permitir guardar imágenes del gráfico en el disco sin necesidad de activar alertas por correo.
