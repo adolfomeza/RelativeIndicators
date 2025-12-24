@@ -5,6 +5,20 @@ All notable changes to the `SessionLevelsStrategy` project will be documented in
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.5] - 2025-12-23
+### Changed
+- **Persistence Disabled:** Disabled `LoadLevels` and `SaveLevels`. The strategy now relies entirely on loaded chart history to generate levels, ensuring perfect synchronization and resolving visual artifacts in playback.
+
+## [1.5.4] - 2025-12-23
+### Fixed
+- **Duplicate Levels:** Implemented fuzzy matching to merge restored levels with newly calculated ones, preventing "double lines" when timestamps differ slightly.
+
+## [1.5.3] - 2025-12-23
+### Changed
+- **Gap Handling:** Stale levels (older than 12h relative to chart start) are now filtered out preventing "weird lines".
+### Added
+- **Missing History Warning:** Red alert on chart when levels are hidden due to missing history, prompting user to load more days.
+
 ## [1.5.2] - 2025-12-23
 ### Fixed
 - **Validation Error:** Fixed "Quantity is 0" error by setting default `Quantity = 1`.

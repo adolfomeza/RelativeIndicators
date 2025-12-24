@@ -5,6 +5,20 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.5] - 2025-12-23
+### Cambiado
+- **Persistencia Deshabilitada:** Se desactivaron `LoadLevels` y `SaveLevels`. La estrategia ahora depende totalmente del historial cargado en el gráfico, garantizando una sincronización perfecta y eliminando artefactos visuales en playback.
+
+## [1.5.4] - 2025-12-23
+### Corregido
+- **Niveles Duplicados:** Se implementó una "búsqueda difusa" (fuzzy matching) para fusionar niveles restaurados con los nuevos, evitando que aparezcan líneas dobles cuando los tiempos difieren por milisegundos.
+
+## [1.5.3] - 2025-12-23
+### Cambiado
+- **Manejo de Gaps:** Niveles antiguos (más de 12h del inicio del gráfico) son filtrados para evitar líneas erróneas.
+### Agregado
+- **Alerta de Historial:** Aviso rojo en el gráfico cuando hay niveles ocultos, indicando al usuario que cargue más días.
+
 ## [1.5.2] - 2025-12-23
 ### Corregido
 - **Error de Validación:** Se arregló el error "Quantity is 0" asignando un valor por defecto de `1`.

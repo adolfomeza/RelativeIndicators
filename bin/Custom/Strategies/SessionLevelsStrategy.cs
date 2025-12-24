@@ -33,7 +33,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	{
 		// Version Control
 		// Version Control
-		private const string StrategyVersion = "v1.5.2"; // Fix Quantity Default
+		private const string StrategyVersion = "v1.5.5"; // Persistence Disabled
 
 		public enum VwapCalculationMode
 		{
@@ -133,19 +133,25 @@ namespace NinjaTrader.NinjaScript.Strategies
 			else if (State == State.DataLoaded)
 			{
 				Print("DEBUG: OnStateChange(DataLoaded) IsUnmanaged = " + IsUnmanaged);
+				// PERSISTENCE DISABLED (v1.5.5) - Relying on Chart History
+				/*
 				try 
 				{
 					LoadLevels();
 				} 
 				catch(Exception ex) { Print("Warning: Failed to load levels: " + ex.Message); }
+				*/
 			}
 			else if (State == State.Terminated)
 			{
+				// PERSISTENCE DISABLED (v1.5.5)
+				/*
 				try
 				{
 					SaveLevels();
 				}
 				catch(Exception ex) { Print("Warning: Failed to save levels: " + ex.Message); }
+				*/
 			}
 		}
 
@@ -210,6 +216,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 		{
 			string path = GetPersistencePath();
 			if (!File.Exists(path)) return;
+			
+			// Define variable at method scope
+			DateTime firstBarTime = (Bars != null && Bars.Count > 0) ? Bars.GetTime(0) : DateTime.MinValue;
 
 			// 1. GAP DETECTION
 			try
@@ -217,7 +226,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				if (Bars != null && Bars.Count > 0)
 				{
 					DateTime fileTime = File.GetLastWriteTime(path);
-					DateTime firstBarTime = Bars.GetTime(0);
+					// Removed local declaration to prevent shadowing/scope issues
 					
 					// If the file is OLDER than the First Bar loaded, we have a blind spot.
 					if (fileTime < firstBarTime) 
@@ -267,6 +276,16 @@ namespace NinjaTrader.NinjaScript.Strategies
 							JustReset = false
 						};
 						
+						// Check Staleness Gap (STRICT)
+						// If the level START time is older than our First Bar, we are blind to its history.
+						// We MUST skip it to prevent "Time Warp" lines.
+						if (d.StartTime < firstBarTime)
+						{
+							gapDetected = true; 
+							gapCount++;
+							continue;
+						}
+
 						// SANITY LOGIC
 						if (sanityPrice > 0 && !newLvl.IsMitigated)
 						{
@@ -296,6 +315,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 					
 					string msg = "State Loaded: " + count + " levels restored.";
 					if (mitigatedCount > 0) msg += " (Auto-Mitigated " + mitigatedCount + " ghosts due to Gap).";
+					if (gapCount > 0) msg += " (Skipped " + gapCount + " stale levels. Load more days).";
 					Print(DateTime.Now + " " + msg);
 				}
 			}
@@ -335,6 +355,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		// Strategy Initialization Flag
 		private bool isStrategyInitialized = false;
 		private bool gapDetected = false;
+		private int gapCount = 0;
 
 		protected override void OnBarUpdate()
 		{
@@ -436,12 +457,25 @@ namespace NinjaTrader.NinjaScript.Strategies
 				string tagH = sessionName + "_High_" + calculatedSessionStartNY.Ticks;
 				string tagL = sessionName + "_Low_" + calculatedSessionStartNY.Ticks;
 				
-				// Find or Create Levels
+				// Find or Create Levels (Legacy ID Lookup first)
 				SessionLevel highLvl = activeLevels.FirstOrDefault(l => l.Tag == tagH);
 				SessionLevel lowLvl = activeLevels.FirstOrDefault(l => l.Tag == tagL);
 				
 				// Convert Start Time to Chart Time for Visuals
 				DateTime chartStartTime = TimeZoneInfo.ConvertTime(calculatedSessionStartNY, nyTimeZone, chartTimeZone);
+
+				// FUZZY MATCHING (v1.5.4):
+				// Instead of relying purely on the Exact Ticks ID (which is fragile to precision errors),
+				// We check if a level with the SAME NAME and APPROXIMATE TIME (within 4 hours) already exists.
+				
+				if (highLvl == null)
+				{
+					highLvl = activeLevels.FirstOrDefault(l => l.Tag == tagH || (l.Name == sessionName + " High" && Math.Abs((l.StartTime - chartStartTime).TotalHours) < 4));
+				}
+				if (lowLvl == null)
+				{
+					lowLvl = activeLevels.FirstOrDefault(l => l.Tag == tagL || (l.Name == sessionName + " Low" && Math.Abs((l.StartTime - chartStartTime).TotalHours) < 4));
+				}
 
 				if (highLvl == null)
 				{
@@ -1127,9 +1161,13 @@ namespace NinjaTrader.NinjaScript.Strategies
 				
 			Draw.TextFixed(this, "InfoPanel", text, TextPosition.TopRight, Brushes.White, new SimpleFont("Arial", 12), Brushes.Black, Brushes.Transparent, 100);
 			
-			if (gapDetected)
+			if (gapDetected || gapCount > 0)
 			{
-				Draw.TextFixed(this, "GapWarning", "\n\n\n\n\n\n\n\nDATA GAP DETECTED - LOAD MORE DAYS", TextPosition.TopRight, Brushes.Red, new SimpleFont("Arial", 12) { Bold = true }, Brushes.Transparent, Brushes.Transparent, 100);
+				string msg = "GAP DETECTED";
+				if (gapCount > 0) msg = "ALERTA: FALTAN DIAS\n" + gapCount + " NIVELES OCULTOS\nCARGA MAS HISTORIAL";
+				
+				// Increased padding to roughly 12 lines to clear the InfoPanel
+				Draw.TextFixed(this, "GapWarning", "\n\n\n\n\n\n\n\n\n\n\n\n" + msg, TextPosition.TopRight, Brushes.Red, new SimpleFont("Arial", 12) { Bold = true }, Brushes.Transparent, Brushes.Transparent, 100);
 			}
 		}
 		
