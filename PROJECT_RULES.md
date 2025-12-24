@@ -9,3 +9,4 @@ Este documento sirve como punto central de verdad para enlaces importantes, regl
 ## Reglas de Desarrollo
 1.  **Versionado:** Seguir SemVer (Major.Minor.Patch) y registrar cambios en `CHANGELOG.md` y `CHANGELOG_ES.md`.
 2.  **Backups:** Antes de cambios críticos, asegurar que el código funcional esté commiteado en Git.
+3.  **Verificación antes de Push:** NO subir cambios a GitHub (`git push`) hasta que el usuario haya confirmado que el cambio funciona correctamente en simulación.
