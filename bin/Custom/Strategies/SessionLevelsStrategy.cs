@@ -32,7 +32,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 	public class SessionLevelsStrategy : Strategy
 	{
 		// Version Control
-		private const string StrategyVersion = "v1.5.0"; // Dynamic TP & Changelog
+		// Version Control
+		private const string StrategyVersion = "v1.5.1"; // Decoupled Screenshots
 
 		public enum VwapCalculationMode
 		{
@@ -730,7 +731,11 @@ namespace NinjaTrader.NinjaScript.Strategies
 		#region Properties
 		// Email & Screenshot Properties
 		[NinjaScriptProperty]
-		[Display(Name = "Send Email with Photo", Description = "Send screenshot via email (Requires SMTP settings)", GroupName = "8. Email Alerts", Order = 1)]
+		[Display(Name = "Enable Local Screenshots", Description = "Save screenshots to disk without sending email", GroupName = "8. Email Alerts", Order = 0)]
+		public bool EnableLocalScreenshots { get; set; } = true;
+
+		[NinjaScriptProperty]
+		[Display(Name = "Enable Email Alerts", Description = "Send screenshot via email (Requires SMTP settings)", GroupName = "8. Email Alerts", Order = 1)]
 		public bool EnableEmailAlerts { get; set; } = false;
 
 		[NinjaScriptProperty]
@@ -1622,7 +1627,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 			// Generally we prefer Realtime to avoid spam during reload.
 			if (State != State.Realtime) return;
 
-			if (EnableEmailAlerts && ChartControl != null)
+			// Check if EITHER Local OR Email is enabled
+			if ((EnableLocalScreenshots || EnableEmailAlerts) && ChartControl != null)
 			{
 				try 
 				{

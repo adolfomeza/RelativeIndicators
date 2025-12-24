@@ -394,6 +394,10 @@
     <Compile Include="Indicators\RelativeIndicators\RelativeNewsFilter.cs" />
     <Compile Include="DrawingTools\LabeledLines.cs" />
     <Compile Include="Strategies\AxionValueProtocol.cs" />
+    <Compile Include="Strategies\RelativeLevelsData.cs" />
+    <Compile Include="Strategies\RelativeLevelsStrategy.cs" />
+    <Compile Include="Strategies\SessionLevelsStrategy.cs" />
+    <Compile Include="Strategies\Backup_Gemini\SessionLevelsStrategy_20251223_v1.2_Verified.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Resource.resx">

@@ -5,6 +5,12 @@ All notable changes to the `SessionLevelsStrategy` project will be documented in
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.1] - 2025-12-23
+### Added
+- **Local Screenshots:** Added `EnableLocalScreenshots` to allow saving chart images without enabling email alerts.
+### Changed
+- **Strategy Version:** Updated to v1.5.1.
+
 ## [1.5.0] - 2025-12-23
 ### Added
 - **Dynamic TP Updates:** Target orders (TP1/TP2) now automatically adjust their price to follow the Global VWAP and Opposite Session Levels if they move while the order is working.

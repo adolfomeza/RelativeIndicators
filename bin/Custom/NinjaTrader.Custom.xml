@@ -5802,6 +5802,26 @@
             </summary>
             
         </member>
+        <member name="T:NinjaTrader.NinjaScript.Strategies.VirginLevelType">
+            <summary>
+            Define los tipos de niveles soportados.
+            </summary>
+        </member>
+        <member name="T:NinjaTrader.NinjaScript.Strategies.VirginLevel">
+            <summary>
+            Representa un nivel de liquidez "Virgen".
+            </summary>
+        </member>
+        <member name="T:NinjaTrader.NinjaScript.Strategies.VirginLevelsManager">
+            <summary>
+            Gestiona la carga, guardado y limpieza de niveles virgenes.
+            </summary>
+        </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.VirginLevelsManager.AuditLevels(System.Collections.Generic.List{NinjaTrader.NinjaScript.Strategies.VirginLevel},System.DateTime)">
+            <summary>
+            Elimina niveles más antiguos que 'cutoffDate' y niveles duplicados cercanos.
+            </summary>
+        </member>
         <member name="M:NinjaTrader.NinjaScript.Optimizers.DefaultOptimizer.Iterate(System.Int32)">
             <summary>
             This methods iterates the parameters recursively. The actual back test is performed as the last parameter is iterated.

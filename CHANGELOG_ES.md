@@ -5,6 +5,12 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.1] - 2025-12-23
+### Agregado
+- **Cauduras Locales:** Se agregó `EnableLocalScreenshots` para permitir guardar imágenes del gráfico en el disco sin necesidad de activar alertas por correo.
+### Cambiado
+- **Versión de Estrategia:** Actualizada a v1.5.1.
+
 ## [1.5.0] - 2025-12-23
 ### Agregado
 - **Actualizaciones Dinámicas de TP:** Las órdenes objetivo (TP1/TP2) ahora ajustan su precio automáticamente para seguir al VWAP Global y a los Niveles de Sesión Opuestos si estos se mueven mientras la orden está trabajando.
