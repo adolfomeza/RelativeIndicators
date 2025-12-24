@@ -32,7 +32,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	public class SessionLevelsStrategy : Strategy
 	{
 		// Version Control
-		private const string StrategyVersion = "v1.4_StrictAlign";
+		private const string StrategyVersion = "v1.5.0"; // Dynamic TP & Changelog
 
 		public enum VwapCalculationMode
 		{
@@ -1776,9 +1776,67 @@ namespace NinjaTrader.NinjaScript.Strategies
 		{
 			if (Position.MarketPosition == MarketPosition.Flat) return;
 			
-			// Updates for Limit Orders (Chasing/Dynamic) can go here if needed.
-			// Currently TP1/TP2 are static or handled elsewhere?
-			// Use internal state if we want to move them.
+			// Dynamic TP Management
+			// We only update if we have active TP orders that are working
+			bool updateTp1 = (tp1Order != null && (tp1Order.OrderState == OrderState.Working || tp1Order.OrderState == OrderState.Accepted));
+			bool updateTp2 = (tp2Order != null && (tp2Order.OrderState == OrderState.Working || tp2Order.OrderState == OrderState.Accepted));
+			
+			if (!updateTp1 && !updateTp2) return;
+
+			// Recalculate Targets
+			double targetGlobalVWAP = 0;
+			double targetZoneOpposite = 0;
+			double avgEntry = Position.AveragePrice; // Use Position Avg Price or Entry Order
+
+			// Use entryOrder for more precision if available, else Position
+			if (entryOrder != null) avgEntry = entryOrder.AverageFillPrice;
+			
+			if (isShortSetup)
+			{
+				targetGlobalVWAP = GetCurrentLowVWAP(); 
+				targetZoneOpposite = GetOppositeLevelPrice(setupLevelName, Time[0]);
+				if (targetZoneOpposite <= 0) targetZoneOpposite = targetGlobalVWAP; // Fallback
+			}
+			else
+			{
+				targetGlobalVWAP = GetCurrentHighVWAP(); 
+				targetZoneOpposite = GetOppositeLevelPrice(setupLevelName, Time[0]);
+				if (targetZoneOpposite <= 0) targetZoneOpposite = targetGlobalVWAP;
+			}
+			
+			// Sanity
+			if (targetGlobalVWAP <= 0) targetGlobalVWAP = avgEntry; 
+			if (targetZoneOpposite <= 0) targetZoneOpposite = avgEntry;
+
+			// Sort Targets (Closer = TP1)
+			double distV = Math.Abs(avgEntry - targetGlobalVWAP);
+			double distZ = Math.Abs(avgEntry - targetZoneOpposite);
+			
+			double newTp1Price = (distV < distZ) ? targetGlobalVWAP : targetZoneOpposite;
+			double newTp2Price = (distV < distZ) ? targetZoneOpposite : targetGlobalVWAP;
+			
+			// Rounding
+			newTp1Price = Instrument.MasterInstrument.RoundToTickSize(newTp1Price);
+			newTp2Price = Instrument.MasterInstrument.RoundToTickSize(newTp2Price);
+
+			// Update TP1
+			if (updateTp1)
+			{
+				if (Math.Abs(tp1Order.LimitPrice - newTp1Price) >= TickSize)
+				{
+					// Keep same Quantity, update Price
+					ChangeOrder(tp1Order, tp1Order.Quantity, newTp1Price, 0);
+				}
+			}
+
+			// Update TP2
+			if (updateTp2)
+			{
+				if (Math.Abs(tp2Order.LimitPrice - newTp2Price) >= TickSize)
+				{
+					ChangeOrder(tp2Order, tp2Order.Quantity, newTp2Price, 0);
+				}
+			}
 		}
 
 		protected override void OnOrderUpdate(Order order, double limitPrice, double stopPrice, int quantity, int filled, double averageFillPrice, OrderState orderState, DateTime time, ErrorCode error, string nativeError)
