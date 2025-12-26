@@ -4,6 +4,21 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.30] - 2025-12-26
+### Feature (Strategy Analyzer Support)
+- **Soporte para Strategy Analyzer**:
+    - **Problema**: Strategy no podía ejecutarse en Strategy Analyzer (State.Historical bloqueado)
+    - **Solución**: Modificado check de `State == State.Realtime` a `State == State.Realtime || State == State.Historical`
+    - **Impacto**: Ahora funciona en Playback (Realtime) Y en Strategy Analyzer (Historical)
+    - **Código modificado**: Líneas 1622-1625 (SHORT), líneas 1706-1708 (LONG)
+- **Debug VWAP Ad-Hoc**:
+    - Agregados logs debug en `GetSetupVWAP()` para diagnosticar fallback a VWAP global
+    - Log: "VWAP_DEBUG: Using ADHOC VWAP=..." o "VWAP_DEBUG: FALLBACK to GLOBAL VWAP=..."
+
+## [1.7.29-debug] - 2025-12-26 (No publicada)
+### Debug
+- Logs temporales para investigar problema de VWAP ad-hoc.
+
 ## [1.7.28] - 2025-12-26
 ### Feature Crítica (Validación Continua R/R)
 - **Validación Continua de Risk/Reward**:

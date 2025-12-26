@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.7.28"; // Continuous R/R validation (partial)
+		private const string StrategyVersion = "v1.7.30"; // Enable Strategy Analyzer support
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -1619,10 +1619,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 							}
 
 							// ACCOUNTS FOR 1 Entry -> 1 OCO Group limitation
-							// FIX (v1.7.10): PREVENT HISTORICAL CATCHUP
-							// Only submit if we are strictly in Realtime. This prevents "ImmediatelySubmit" from 
-							// firing the last historical entry again on reload.
-							if (State == State.Realtime)
+						// UPDATED (v1.7.30): Allow Historical for Strategy Analyzer
+						if (State == State.Realtime || State == State.Historical)
 							{
 								if (entryOrder != null) 
 								{
@@ -1704,8 +1702,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 								try { Print(string.Format("{0} | EXEC_DEBUG: Submitting Long Limit @ {1} (Raw: {2}). Bid={3} Ask={4}", Time[0], limitPrice, setupVWAP, GetCurrentBid(), GetCurrentAsk())); } catch {}
 							}
 							
-							// FIX (v1.7.10): PREVENT HISTORICAL CATCHUP
-							if (State == State.Realtime)
+							// UPDATED (v1.7.30): Allow Historical for Strategy Analyzer
+						if (State == State.Realtime || State == State.Historical)
 							{
 								// CONSOLIDATED ENTRY (v1.7.17)
 								if (entryOrder != null) 
@@ -2284,17 +2282,21 @@ setupLevelName = "";
 	}
 		
 		private double GetSetupVWAP(bool isShort)
+	{
+		// 1. If we have ADHOC VOLUME tracked, use it.
+		// This represents the "VWAP since touch".
+		if (!string.IsNullOrEmpty(setupLevelName) && adhocVolSum > 0)
 		{
-			// 1. If we have ADHOC VOLUME tracked, use it.
-			// This represents the "VWAP since touch".
-			if (!string.IsNullOrEmpty(setupLevelName) && adhocVolSum > 0)
-			{
-				return adhocPvSum / adhocVolSum;
-			}
-			
-			// 2. Fallback to Global (e.g. if logic fails or we are tracking a Global Extremum trade where we didn't reset adhoc)
-			return isShort ? GetCurrentHighVWAP() : GetCurrentLowVWAP();
+			double adhocValue = adhocPvSum / adhocVolSum;
+			if (EnableDebugLogs) Print(string.Format("{0} | VWAP_DEBUG: Using ADHOC VWAP={1:F2} (VolSum={2:F2})", Time[0], adhocValue, adhocVolSum));
+			return adhocValue;
 		}
+		
+		// 2. Fallback to Global (e.g. if logic fails or we are tracking a Global Extremum trade where we didn't reset adhoc)
+		double globalValue = isShort ? GetCurrentHighVWAP() : GetCurrentLowVWAP();
+		if (EnableDebugLogs) Print(string.Format("{0} | VWAP_DEBUG: FALLBACK to GLOBAL VWAP={1:F2} (VolSum={2:F2}, Setup={3})", Time[0], globalValue, adhocVolSum, setupLevelName));
+		return globalValue;
+	}
 
 		private void ManagePositionExit()
 		{
