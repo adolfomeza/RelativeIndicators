@@ -4,6 +4,44 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.28] - 2025-12-26
+### Feature Crítica (Validación Continua R/R)
+- **Validación Continua de Risk/Reward**:
+    - **Problema**: Validación R/R se hacía solo en confirmación inicial, pero el VWAP seguía moviéndose después. Ejemplo: valida @ 9:34 AM con entry 2564 (R/R válido), pero orden se llena @ 9:37 AM con entry 2552 (R/R inválido 0.26).
+    - **Solución**: 
+        - Creada función reutilizable `ValidateRiskReward()` (línea 2251)
+        - Confirmaciones SHORT/LONG ahora usan esta función
+        - **Validación continua**: Cada bar mientras orden está en `workingOrder`, re-calcula R/R con precios actuales
+        - Si R/R cae debajo de 1:1, **cancela automáticamente** la orden limit
+        - Log: "R/R Invalidated While Working. Risk: X Reward: Y Ratio: Z - Cancelling Order"
+    - **Código modificado**: Líneas 1595-1610 (SHORT), 1677-1692 (LONG), 1784-1806 (monitoreo continuo).
+
+## [1.7.27] - 2025-12-25
+### Corrección Crítica (Validación R/R)
+- **Validar R/R contra Target Más Cercano**:
+    - **Problema**: La validación R/R usaba solo TP2 (nivel opuesto, más lejano) para calcular el reward. Esto permitía trades con R/R inválido en TP1, donde el primer target no recuperaba el riesgo (ejemplo: Entry 2552, TP1 2548.1, TP2 2535.8, SL 2567 → R/R para TP1 = 0.26 ❌, pero para TP2 = 1.08 ✅).
+    - **Impacto**: Strategy aceptaba trades que solo eran rentables si llegaban a TP2, sin garantizar recuperación de riesgo en TP1 (50% de la posición).
+    - **Solución**: 
+        - SHORT: Calcula ambos targets (TP1 VWAP, TP2 Nivel), usa `Math.Max()` para obtener el más cercano (precio más alto = más cerca)
+        - LONG: Calcula ambos targets (TP1 VWAP, TP2 Nivel), usa `Math.Min()` para obtener el más cercano (precio más bajo = más cerca)
+        - Valida R/R contra el target más cercano (TP1), asegurando que el primer 50% recupere el riesgo
+    - **Código modificado**: Líneas 1601-1617 (SHORT), líneas 1696-1710 (LONG).
+
+## [1.7.26] - 2025-12-25
+### Corrección Crítica (Reset de Contadores en SYNC)
+- **Reset de `protectedTp1Qty` y `protectedTp2Qty` en Ruta SYNC**:
+    - **Problema**: v1.7.24 agregó reset de contadores en cierre por ejecución (líneas 2510-2511), pero NO en la ruta SYNC (línea 1350). Cuando una posición se cierra por sincronización (ej: OrderState diferente al esperado), los contadores no se limpiaban, causando que el siguiente trade asignara TODOS los contratos a TP2 en lugar de dividir.
+    - **Ejemplo del bug**: Trade 1 termina con SYNC reset → `protectedTp1Qty = 1`. Trade 2 calcula `neededTp1 = 1 - 1 = 0` → `ForTP1=0, ForTP2=2`.
+    - **Solución**: Agregado reset de contadores en ruta SYNC (líneas 1353-1356).
+    - **Resultado**: Todos los cierres ahora resetean correctamente los contadores.
+
+## [1.7.25] - 2025-12-25
+### Cambio Menor (Logs de Auditoría)
+- **Protección de Logs de Trigger Detection**:
+    - Los logs "DEBUG: Trigger Short/Long Detected" ahora están protegidos con `if (EnableDebugLogs)` (líneas 1486, 1519).
+    - Con `EnableDebugLogs = false`, solo se muestran logs de auditoría esenciales (orden submissions, fills, cierres).
+    - Con `EnableDebugLogs = true`, se muestran todos los logs de debugging (búsquedas, targets, triggers).
+
 ## [1.7.24] - 2025-12-25
 ### Corrección Crítica (Contadores de Protección)
 - **Reset de Contadores `protectedTp1Qty` y `protectedTp2Qty`**:

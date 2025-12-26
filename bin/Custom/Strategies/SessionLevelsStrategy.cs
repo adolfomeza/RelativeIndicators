@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.7.24"; // Fix: Reset protected counters
+		private const string StrategyVersion = "v1.7.28"; // Continuous R/R validation (partial)
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -1350,6 +1350,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 				Log(Time[0] + " SYNC: State is InPosition but MarketPosition is Flat. Resetting to Idle.");
 				currentEntryState = EntryState.Idle;
 				setupLevelName = "";
+			
+			// RESET PROTECTION COUNTERS (v1.7.26) - Fix bucket allocation in SYNC path
+			protectedTp1Qty = 0;
+			protectedTp2Qty = 0;
 				
 				// CRITICAL FIX: Ensure ALL order references are cleared to prevent "Exits already exist" blocking future trades.
 				// CRITICAL FIX: Ensure ALL order references are cleared to prevent "Exits already exist" blocking future trades.
@@ -1483,7 +1487,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 						
 						if (lvl.IsResistance)
 						{
-							Print(Time[0] + " DEBUG: Trigger Short Detected on " + lvl.Name + " Price: " + lvl.Price); // DEBUG
+					if (EnableDebugLogs) Print(Time[0] + " DEBUG: Trigger Short Detected on " + lvl.Name + " Price: " + lvl.Price);
 							// Short Setup
 							triggerTag = "TriggerShort_" + Time[0].Ticks; // Store Tag
 							triggerBar = CurrentBar;
@@ -1516,7 +1520,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 						}
 						else
 						{
-							Print(Time[0] + " DEBUG: Trigger Long Detected on " + lvl.Name + " Price: " + lvl.Price); // DEBUG
+					if (EnableDebugLogs) Print(Time[0] + " DEBUG: Trigger Long Detected on " + lvl.Name + " Price: " + lvl.Price);
 							// Long Setup
 							triggerTag = "TriggerLong_" + Time[0].Ticks;
 							triggerBar = CurrentBar;
@@ -1594,23 +1598,17 @@ namespace NinjaTrader.NinjaScript.Strategies
 						// Padding: Stop is placed 1 tick ABOVE the wicks for breathing room.
 						double projectedStop = setupAnchorPrice + TickSize; 
 						
-						// Pass Context to GetOpposite: We are Shorting a High, so we look for a Low < Anchor.
-						double projectedTarget = GetOppositeLevelPrice(setupLevelName, setupLevelTime, setupAnchorPrice, true); // true = expectLower
 						
-						if (projectedTarget == 0) projectedTarget = GetCurrentLowVWAP(); // Fallback to Global if specific level not found 
-						// Opposing Usually Global Extreme is the Target (Standard). Or Opposing Local?
-						// Let's assume Target is Global Opposing VWAP (Classic Reversion).
+						// VALIDATE R/R (v1.7.28) - Continuous validation
+						double risk, reward, ratio;
+						bool isValidRR = ValidateRiskReward(true, projectedEntry, projectedStop, out risk, out reward, out ratio);
 						
-						double risk = Math.Abs(projectedEntry - projectedStop);
-						
-						// STRICT DIRECTION CHECK (Short): Target must be BELOW Entry
-						bool validDirection = (projectedTarget < projectedEntry);
-						double reward = validDirection ? (projectedEntry - projectedTarget) : 0;
-						
-						if (validDirection && risk > 0 && (reward / risk) >= MinRiskRewardRatio)
+						if (isValidRR)
 						{
 							// CAPTURE TARGET (v1.7.16)
-							validatedTargetPrice = projectedTarget;
+							double tp2Target = GetOppositeLevelPrice(setupLevelName, setupLevelTime, setupAnchorPrice, true);
+							if (tp2Target == 0) tp2Target = GetCurrentLowVWAP();
+							validatedTargetPrice = tp2Target;
 
 							// EXE DEBUG & ROUNDING (v1.7.1 Fix MGC Exec)
 							double limitPrice = Instrument.MasterInstrument.RoundToTickSize(setupVWAP);
@@ -1687,21 +1685,17 @@ namespace NinjaTrader.NinjaScript.Strategies
 						// Padding: Stop is placed 1 tick BELOW the wicks.
 						double projectedStop = setupAnchorPrice - TickSize;
 						
-						// Pass Context: Longing a Low, so we look for a High > Anchor.
-						double projectedTarget = GetOppositeLevelPrice(setupLevelName, setupLevelTime, setupAnchorPrice, false); // false = expectHigher (not lower)
 						
-						if (projectedTarget == 0) projectedTarget = GetCurrentHighVWAP(); // Fallback to Global
+						// VALIDATE R/R (v1.7.28) - Continuous validation
+						double risk, reward, ratio;
+						bool isValidRR = ValidateRiskReward(false, projectedEntry, projectedStop, out risk, out reward, out ratio);
 						
-						double risk = Math.Abs(projectedEntry - projectedStop);
-						
-						// STRICT DIRECTION CHECK (Long): Target must be ABOVE Entry
-						bool validDirection = (projectedTarget > projectedEntry);
-						double reward = validDirection ? (projectedTarget - projectedEntry) : 0;
-						
-						if (validDirection && risk > 0 && (reward / risk) >= MinRiskRewardRatio)
+						if (isValidRR)
 						{
 							// CAPTURE TARGET (v1.7.16)
-							validatedTargetPrice = projectedTarget;
+							double tp2Target = GetOppositeLevelPrice(setupLevelName, setupLevelTime, setupAnchorPrice, false);
+							if (tp2Target == 0) tp2Target = GetCurrentHighVWAP();
+							validatedTargetPrice = tp2Target;
 
 							// EXE DEBUG & ROUNDING (v1.7.1 Fix MGC Exec)
 							double limitPrice = Instrument.MasterInstrument.RoundToTickSize(setupVWAP);
@@ -1787,6 +1781,29 @@ namespace NinjaTrader.NinjaScript.Strategies
 			// 3. ORDER MANAGEMENT & SYNC (Working -> InPosition)
 			// 3. ORDER MANAGEMENT & SYNC (Working -> InPosition)
 			// Handle BOTH orders (1 and 2)
+
+// CONTINUOUS R/R VALIDATION (v1.7.28) - Monitor while order is working
+if (currentEntryState == EntryState.workingOrder && entryOrder != null && entryOrder.OrderState == OrderState.Working)
+{
+double currentEntry = (entryOrder.LimitPrice > 0) ? entryOrder.LimitPrice : Close[0];
+double currentStop = isShortSetup ? (setupAnchorPrice + TickSize) : (setupAnchorPrice - TickSize);
+
+double risk, reward, ratio;
+bool isStillValid = ValidateRiskReward(isShortSetup, currentEntry, currentStop, out risk, out reward, out ratio);
+
+if (!isStillValid)
+{
+Log(string.Format("{0} R/R Invalidated While Working. Risk: {1:F2} Reward: {2:F2} Ratio: {3:F2} - Cancelling Order", 
+Time[0], risk, reward, ratio));
+
+if (entryOrder != null && entryOrder.OrderState == OrderState.Working)
+CancelOrder(entryOrder);
+
+currentEntryState = EntryState.Idle;
+setupLevelName = "";
+}
+}
+
 			if (currentEntryState == EntryState.workingOrder)
 			{
 				bool anyFilled = false;
@@ -2236,6 +2253,35 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 		private double GetCurrentHighVWAP() { return ethHighVWAP.CurrentValue; }
 		private double GetCurrentLowVWAP() { return ethLowVWAP.CurrentValue; }
+	
+	// CONTINUOUS R/R VALIDATION (v1.7.28)
+	private bool ValidateRiskReward(bool isShort, double entryPrice, double stopPrice, out double risk, out double reward, out double ratio)
+	{
+		// Calculate both targets
+		double tp1Target = isShort ? GetCurrentLowVWAP() : GetCurrentHighVWAP();
+		double tp2Target = GetOppositeLevelPrice(setupLevelName, setupLevelTime, setupAnchorPrice, isShort); // isShort = expectLower
+		
+		if (tp2Target == 0) tp2Target = tp1Target; // Fallback
+		
+		// Find closest target
+		double closestTarget = isShort 
+			? Math.Max(tp1Target, tp2Target)  // Short: higher price = closer
+			: Math.Min(tp1Target, tp2Target); // Long: lower price = closer
+		
+		// Calculate risk/reward
+		risk = Math.Abs(entryPrice - stopPrice);
+		
+		// Direction check
+		bool validDirection = isShort ? (closestTarget < entryPrice) : (closestTarget > entryPrice);
+		reward = validDirection 
+			? (isShort ? (entryPrice - closestTarget) : (closestTarget - entryPrice))
+			: 0;
+		
+		ratio = (risk > 0) ? (reward / risk) : 0;
+		
+		// Return true if valid
+		return validDirection && risk > 0 && ratio >= MinRiskRewardRatio;
+	}
 		
 		private double GetSetupVWAP(bool isShort)
 		{
