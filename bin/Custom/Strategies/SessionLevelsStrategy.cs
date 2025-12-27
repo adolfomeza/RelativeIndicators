@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.7.30"; // Enable Strategy Analyzer support
+		private const string StrategyVersion = "v1.10.11"; // Fix: Ad-hoc VWAP retroactive anchor update
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -112,6 +112,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 		
 		// OPTIMIZATION (v1.7.3): Cache Opposite Level to avoid loops
 		private SessionLevel cachedOppositeLevel = null;
+		
+		// v1.10.0: Internal Levels Management
+		private bool isInternalLevel = false;
+		private double externalLevelAbove = 0;  // For SHORT setups (external High above)
+		private double externalLevelBelow = 0;  // For LONG setups (external Low below)
+		private string externalLevelAboveName = "";
+		private string externalLevelBelowName = "";
+	private int lastInvalidationBar = -1;  // v1.10.1: Anti-loop for invalidation
 
 		private bool enableDebugLogs = false; // Default false for performance
 
@@ -962,6 +970,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private double adhocPvSum = 0;
 		private double adhocLastVol = 0; // To track delta volume inside a bar
 		private int adhocLastBar = -1;
+		private int adhocAnchorBar = -1; // v1.10.11: Track anchor bar for retroactive update
 
 		private void UpdateAdhocVWAP()
 		{
@@ -970,6 +979,22 @@ namespace NinjaTrader.NinjaScript.Strategies
 			{
 				adhocLastVol = 0;
 				adhocLastBar = CurrentBar;
+				
+				// v1.10.11: Retroactive update - if previous bar was anchor, recalculate with final Close
+				if (CurrentBar > 0 && adhocAnchorBar == CurrentBar - 1 && adhocVolSum > 0)
+				{
+					double finalPrice = Close[1];
+					if (VwapMethod == VwapCalculationMode.Typical) finalPrice = (High[1] + Low[1] + Close[1]) / 3.0;
+					else if (VwapMethod == VwapCalculationMode.OHLC4) finalPrice = (Open[1] + High[1] + Low[1] + Close[1]) / 4.0;
+					
+					// Recalculate VWAP with final values
+					adhocVolSum = Volume[1];
+					adhocPvSum = Volume[1] * finalPrice;
+					
+					// Update visual start point retroactively
+					visualAdhocPrevBarVal = finalPrice;
+					visualAdhocLastVal = finalPrice;
+				}
 			}
 
 			// Calculate Delta Volume (Current Bar Volume so far - what we already processed)
@@ -1024,6 +1049,37 @@ namespace NinjaTrader.NinjaScript.Strategies
 	double price = Close[0];
 	if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
 	else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
+	
+	// v1.10.10: Retroactive anchor update - On first tick of new bar, if previous bar was anchor,
+	// recalculate VWAP with the FINAL Close[1] and update Values[x][1] to correct the visual
+	if (IsFirstTickOfBar && CurrentBar > 0)
+	{
+		// Check if previous bar was the high anchor
+		if (highAnchorBar == CurrentBar - 1 && ethHighVWAP.VolSum > 0)
+		{
+			double finalPrice = Close[1];
+			if (VwapMethod == VwapCalculationMode.Typical) finalPrice = (High[1] + Low[1] + Close[1]) / 3.0;
+			else if (VwapMethod == VwapCalculationMode.OHLC4) finalPrice = (Open[1] + High[1] + Low[1] + Close[1]) / 4.0;
+			
+			// Recalculate VWAP with final values
+			ethHighVWAP.Reset(Volume[1], finalPrice);
+			// Update the previous bar's visual value retroactively
+			Values[0][1] = finalPrice;
+		}
+		
+		// Check if previous bar was the low anchor
+		if (lowAnchorBar == CurrentBar - 1 && ethLowVWAP.VolSum > 0)
+		{
+			double finalPrice = Close[1];
+			if (VwapMethod == VwapCalculationMode.Typical) finalPrice = (High[1] + Low[1] + Close[1]) / 3.0;
+			else if (VwapMethod == VwapCalculationMode.OHLC4) finalPrice = (Open[1] + High[1] + Low[1] + Close[1]) / 4.0;
+			
+			// Recalculate VWAP with final values
+			ethLowVWAP.Reset(Volume[1], finalPrice);
+			// Update the previous bar's visual value retroactively
+			Values[1][1] = finalPrice;
+		}
+	}
 	
 	// Check High
 	if (High[0] > ethHighPrice)
@@ -1403,6 +1459,50 @@ namespace NinjaTrader.NinjaScript.Strategies
 		}
 		
 		// -------------------------------------------------------------------------
+		// DYNAMIC POSITION SIZING (v1.8.0)
+		// -------------------------------------------------------------------------
+		private int CalculateDynamicQuantity(double entryPrice, double stopPrice)
+		{
+			// Si dynamic sizing está OFF, usar Quantity fijo
+			if (!UseDynamicSizing) return Quantity;
+			
+			// Calcular ticks de riesgo
+			double riskInPrice = Math.Abs(entryPrice - stopPrice);
+			double riskInTicks = riskInPrice / TickSize;
+			
+			// Valor de 1 tick en USD
+			double tickValue = Instrument.MasterInstrument.PointValue * TickSize;
+			
+			// Validación: evitar división por cero
+			if (riskInTicks <= 0 || tickValue <= 0)
+			{
+				if (EnableDebugLogs)
+					Print(string.Format("{0} DYNAMIC SIZING ERROR: Invalid risk calculation. RiskTicks={1:F2} TickValue=${2:F4} - Using MinQuantity", 
+						Time[0], riskInTicks, tickValue));
+				return MinQuantity;
+			}
+			
+			// Fórmula: Quantity = RiskUSD / (Ticks × Value)
+			double calculatedQty = RiskPerTradeUSD / (riskInTicks * tickValue);
+			
+			// Redondear a entero
+			int quantity = (int)Math.Round(calculatedQty);
+			
+			// Aplicar límites
+			if (quantity < MinQuantity) quantity = MinQuantity;
+			if (quantity > MaxQuantity) quantity = MaxQuantity;
+			
+			// Log para debugging
+			if (EnableDebugLogs)
+			{
+				Print(string.Format("{0} DYNAMIC SIZING: Risk=${1} Ticks={2:F1} Value=${3:F2} → Qty={4}",
+					Time[0], RiskPerTradeUSD, riskInTicks, tickValue, quantity));
+			}
+			
+			return quantity;
+		}
+
+		// -------------------------------------------------------------------------
 		// ENTRY A+ MANAGEMENT
 		// -------------------------------------------------------------------------
 		private void ManageEntryA_Plus()
@@ -1417,6 +1517,179 @@ namespace NinjaTrader.NinjaScript.Strategies
 			if (currentEntryState == EntryState.WaitingForConfirmation || currentEntryState == EntryState.workingOrder)
 			{
 				UpdateAdhocVWAP();
+			
+			//v1.10.0: PHASE 3 - RE-ANCHORING (Internal levels behave like external)
+			// Both internal AND external levels should re-anchor when price breaks the anchor
+			// SHORT: Re-anchor if price makes new high
+			if (isShortSetup && High[0] >= setupAnchorPrice + TickSize)
+			{
+				setupAnchorPrice = High[0];
+				
+				// Reset VWAP from new anchor
+				double price = Close[0];
+				if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
+				else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
+				
+				adhocVolSum = Volume[0];
+				adhocPvSum = Volume[0] * price;
+				adhocLastBar = CurrentBar;
+				adhocLastVol = Volume[0];
+				adhocAnchorBar = CurrentBar; // v1.10.11: Track for retroactive update
+				
+				// Reset Visual				
+				visualAdhocPrevBarVal = price;
+				visualAdhocLastVal = price;
+				visualAdhocLastBar = -1;
+				
+				Log(string.Format("RE-ANCHOR: New High @ {0} (Setup: {1})", setupAnchorPrice, setupLevelName));
+			}
+			
+			// LONG: Re-anchor if price makes new low
+			if (!isShortSetup && Low[0] <= setupAnchorPrice - TickSize)
+			{
+				setupAnchorPrice = Low[0];
+				
+				// Reset VWAP from new anchor
+				double price = Close[0];
+				if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
+				else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
+				
+				adhocVolSum = Volume[0];
+				adhocPvSum = Volume[0] * price;
+				adhocLastBar = CurrentBar;
+				adhocLastVol = Volume[0];
+				adhocAnchorBar = CurrentBar; // v1.10.11: Track for retroactive update
+				
+				// Reset Visual
+				visualAdhocPrevBarVal = price;
+				visualAdhocLastVal = price;
+				visualAdhocLastBar = -1;
+				
+				Log(string.Format("RE-ANCHOR: New Low @ {0} (Setup: {1})", setupAnchorPrice, setupLevelName));
+			}
+			
+			// v1.10.0: PHASE 4 - INVALIDATION (If internal level touches external)
+			if (isInternalLevel && currentEntryState == EntryState.WaitingForConfirmation)
+			{
+				bool touchedExternal = false;
+				
+				// SHORT internal: Check if touched external High above
+				if (isShortSetup && externalLevelAbove > 0)
+				{
+					if (High[0] >= externalLevelAbove)
+					{
+						touchedExternal = true;
+						Log(string.Format("INVALIDATED: Touched external {0} @ {1}", externalLevelAboveName, externalLevelAbove));
+					}
+				}
+				
+				// LONG internal: Check if touched external Low below
+				if (!isShortSetup && externalLevelBelow > 0)
+				{
+					if (Low[0] <= externalLevelBelow)
+					{
+						touchedExternal = true;
+						Log(string.Format("INVALIDATED: Touched external {0} @ {1}", externalLevelBelowName, externalLevelBelow));
+					}
+				}
+				
+				if (touchedExternal)
+				{
+					// v1.10.1: Mark bar to prevent re-triggering (infinite loop fix)
+					lastInvalidationBar = CurrentBar;
+					
+					// Cancel entry order if exists
+					if (entryOrder != null && (entryOrder.OrderState == OrderState.Working || entryOrder.OrderState == OrderState.Accepted))
+					{
+						CancelOrder(entryOrder);
+					}
+					
+					// Reset to Idle
+					currentEntryState = EntryState.Idle;
+					isInternalLevel = false;
+					
+					// v1.10.2: AUTO-TRIGGER on external level after invalidation
+					// The external level was touched, so it should become the new setup
+					string externalName = isShortSetup ? externalLevelAboveName : externalLevelBelowName;
+					double externalPrice = isShortSetup ? externalLevelAbove : externalLevelBelow;
+					
+					if (externalPrice > 0 && !string.IsNullOrEmpty(externalName))
+					{
+						Log(string.Format("AUTO-TRIGGER: Switching to external level {0} @ {1}", externalName, externalPrice));
+						
+						// Setup new trigger on external level
+						if (isShortSetup)
+						{
+							// SHORT on external High
+							triggerTag = "TriggerShort_" + Time[0].Ticks;
+							triggerBar = CurrentBar;
+							Draw.ArrowDown(this, triggerTag, true, 0, High[0] + TickSize * 15, Brushes.Cyan);
+							Draw.Text(this, triggerTag + "_Txt", "Short", 0, High[0] + TickSize * 25, Brushes.Cyan);
+							
+							currentEntryState = EntryState.WaitingForConfirmation;
+							isShortSetup = true;
+							setupAnchorPrice = High[0]; // Current extreme
+							setupLevelName = externalName;
+							setupLevelTime = Time[0]; // Use current time as reference
+							validatedTargetPrice = 0;
+							cachedOppositeLevel = null;
+							
+							// NO call DetectInternalLevel again (external is not internal)
+							isInternalLevel = false;
+							
+							// Reset VWAP
+							double price = Close[0];
+							if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
+							else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
+							
+							adhocVolSum = Volume[0];
+							adhocPvSum = Volume[0] * price;
+							adhocLastBar = CurrentBar;
+							adhocLastVol = Volume[0];
+							adhocAnchorBar = CurrentBar; // v1.10.11: Track for retroactive update
+							
+							visualAdhocPrevBarVal = price;
+							visualAdhocLastVal = price;
+							visualAdhocLastBar = -1;
+						}
+						else
+						{
+							// LONG on external Low
+							triggerTag = "TriggerLong_" + Time[0].Ticks;
+							triggerBar = CurrentBar;
+							Draw.ArrowUp(this, triggerTag, true, 0, Low[0] - TickSize * 15, Brushes.Lime);
+							Draw.Text(this, triggerTag + "_Txt", "Long", 0, Low[0] - TickSize * 25, Brushes.Lime);
+							
+							currentEntryState = EntryState.WaitingForConfirmation;
+							isShortSetup = false;
+							setupAnchorPrice = Low[0];
+							setupLevelName = externalName;
+							setupLevelTime = Time[0];
+							validatedTargetPrice = 0;
+							cachedOppositeLevel = null;
+							
+							isInternalLevel = false;
+							
+							// Reset VWAP
+							double price = Close[0];
+							if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
+							else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
+							
+							adhocVolSum = Volume[0];
+							adhocPvSum = Volume[0] * price;
+							adhocLastBar = CurrentBar;
+							adhocLastVol = Volume[0];
+							adhocAnchorBar = CurrentBar; // v1.10.11: Track for retroactive update
+							
+							visualAdhocPrevBarVal = price;
+							visualAdhocLastVal = price;
+							visualAdhocLastBar = -1;
+						}
+					}
+					
+					// Note: Could optionally trigger new A+ setup on external level here
+				}
+			}
 				
 				// VISUAL DEBUG: Draw 1px White Line
 				bool isShort = (isShortSetup); 
@@ -1457,8 +1730,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 			
 			if (canScan)
 			{
-				// LOOP PROTECTION: If we were rejected this bar, DO NOT scan again.
-				if (CurrentBar == lastRejectionBar) return;
+				// LOOP PROTECTION: If rejected OR invalidated this bar, DO NOT scan again.
+				if (CurrentBar == lastRejectionBar || CurrentBar == lastInvalidationBar) return;
 
 				foreach (var lvl in activeLevels)
 				{
@@ -1502,6 +1775,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 							validatedTargetPrice = 0; // RESET for new setup
 			cachedOppositeLevel = null; // CLEAR CACHE (v1.7.22)
 							
+							// v1.10.0: Detect if this is an internal level
+							DetectInternalLevel(lvl, activeLevels);
+							
 							// RESET ADHOC VWAP (Start Fresh from this touch)
 							// ALIGNMENT: To match Global VWAP behavior, we must Include the Trigger Bar's volume completely.
 							double price = Close[0];
@@ -1512,10 +1788,11 @@ namespace NinjaTrader.NinjaScript.Strategies
 							adhocPvSum = Volume[0] * price;
 							adhocLastBar = CurrentBar;
 							adhocLastVol = Volume[0]; // So Delta next tick in same bar is 0, but we already have base volume.
+							adhocAnchorBar = CurrentBar; // v1.10.11: Track for retroactive update
 							
 							// Reset Visual State
-							visualAdhocPrevBarVal = 0;
-							visualAdhocLastVal = 0;
+							visualAdhocPrevBarVal = price;
+							visualAdhocLastVal = price;
 							visualAdhocLastBar = -1;
 						}
 						else
@@ -1535,6 +1812,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 							validatedTargetPrice = 0; // RESET for new setup
 			cachedOppositeLevel = null; // CLEAR CACHE (v1.7.22)
 							
+							// v1.10.0: Detect if this is an internal level
+							DetectInternalLevel(lvl, activeLevels);
+							
 							// RESET ADHOC VWAP
 							double price = Close[0];
 							if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
@@ -1544,10 +1824,11 @@ namespace NinjaTrader.NinjaScript.Strategies
 							adhocPvSum = Volume[0] * price;
 							adhocLastBar = CurrentBar;
 							adhocLastVol = Volume[0];
+							adhocAnchorBar = CurrentBar; // v1.10.11: Track for retroactive update
 
 							// Reset Visual State
-							visualAdhocPrevBarVal = 0;
-							visualAdhocLastVal = 0;
+							visualAdhocPrevBarVal = price;
+							visualAdhocLastVal = price;
 							visualAdhocLastBar = -1;
 						}
 						
@@ -1627,10 +1908,13 @@ namespace NinjaTrader.NinjaScript.Strategies
 									Log("WARNING: Entry Order already exists? Overwriting.");
 								}
 								
+								// DYNAMIC SIZING (v1.8.0): Calcular cantidad según riesgo
+								int dynamicQuantity = CalculateDynamicQuantity(limitPrice, projectedStop);
+								
 								// CONSOLIDATED ENTRY (v1.7.17)
-								entryOrder = SubmitOrderUnmanaged(0, OrderAction.SellShort, OrderType.Limit, Quantity, limitPrice, 0, "", "EntryA_Short");
+								entryOrder = SubmitOrderUnmanaged(0, OrderAction.SellShort, OrderType.Limit, dynamicQuantity, limitPrice, 0, "", "EntryA_Short");
 								currentEntryState = EntryState.workingOrder;
-								Log(Time[0] + " Order Submitted (Short Consolidated). Qty=" + Quantity);
+								Log(Time[0] + " Order Submitted (Short Consolidated). Qty=" + dynamicQuantity);
 							}
 							else
 							{
@@ -1711,9 +1995,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 									Log("WARNING: Entry Order already exists? Overwriting.");
 								}
 								
-								entryOrder = SubmitOrderUnmanaged(0, OrderAction.Buy, OrderType.Limit, Quantity, limitPrice, 0, "", "EntryA_Long");
+								int dynamicQuantity = CalculateDynamicQuantity(limitPrice, projectedStop); // v1.8.0
+				entryOrder = SubmitOrderUnmanaged(0, OrderAction.Buy, OrderType.Limit, dynamicQuantity, limitPrice, 0, "", "EntryA_Long");
 								currentEntryState = EntryState.workingOrder;
-								Log(Time[0] + " Order Submitted (Long Consolidated). Qty=" + Quantity);
+								Log(Time[0] + " Order Submitted (Long Consolidated). Qty=" + dynamicQuantity);
 							}
 							else
 							{
@@ -1891,8 +2176,10 @@ setupLevelName = "";
 		// DYNAMIC BUCKET ALLOCATION (v1.7.17)
 		// We decide now how many of this 'filledQty' go to TP1 vs TP2.
 		
-		int totalTp1Target = (Quantity + 1) / 2;
-		// int totalTp2Target = Quantity - totalTp1Target;
+		// v1.8.1 FIX: Use TOTAL position quantity, not partial fill quantity
+		// This ensures correct 50/50 distribution even with partial fills
+		int totalPositionQty = Math.Abs(Position.Quantity);
+		int totalTp1Target = (totalPositionQty + 1) / 2;
 		
 		// How many does TP1 still need?
 		int neededTp1 = totalTp1Target - protectedTp1Qty;
@@ -1916,9 +2203,47 @@ setupLevelName = "";
 		protectedTp1Qty += forTp1;
 		protectedTp2Qty += forTp2;
 	}
-
+	
+	// v1.10.0: Get daily high extreme (for LONG TP2)
+	private double GetDailyHigh()
+	{
+		// Find today's midnight
+		DateTime today = Time[0].Date;
+		
+		// Search backwards from current bar to find highest high since midnight
+		double highestPrice = High[0];
+		for (int i = 0; i < CurrentBar && i < 500; i++) // Limit to 500 bars for safety
+		{
+			if (Time[i].Date < today) break; // Stop when we reach yesterday
+			if (High[i] > highestPrice) highestPrice = High[i];
+		}
+		
+		return highestPrice;
+	}
+	
+	// v1.10.0: Get daily low extreme (for SHORT TP2)
+	private double GetDailyLow()
+	{
+		// Find today's midnight
+		DateTime today = Time[0].Date;
+		
+		// Search backwards from current bar to find lowest low since midnight
+		double lowestPrice = Low[0];
+		for (int i = 0; i < CurrentBar && i < 500; i++) // Limit to 500 bars for safety
+		{
+			if (Time[i].Date < today) break; // Stop when we reach yesterday
+			if (Low[i] < lowestPrice) lowestPrice = Low[i];
+		}
+		
+		return lowestPrice;
+	}
+	
 	private void SubmitProtectionOrders(string direction, bool isTp1, int qty)
 	{
+		// v1.9.0: SINGLE-SL ARCHITECTURE
+		// Instead of creating SL1 and SL2, we create ONE SL for the entire position
+		// TP1 and TP2 remain independent
+		
 		// 2. Determine Targets (TP1 vs TP2)
 		double avgEntry = Position.AveragePrice; 
 		
@@ -1980,9 +2305,15 @@ setupLevelName = "";
 		if (targetZoneOpposite <= 0) targetZoneOpposite = avgEntry;
 
 		// FIXED ASSIGNMENT (v1.7.21): TP1=VWAP (dinámico), TP2=Nivel (fijo)
-	// No sorting por distancia - permite que TP2 se llene primero en niveles internos
+	// v1.10.0: TP2 changed to DAILY EXTREME instead of opposite level
 	double tp1Price = targetGlobalVWAP; // TP1 siempre VWAP opuesto
-	double tp2Price = targetZoneOpposite; // TP2 siempre Nivel opuesto
+	double tp2Price = isShortSetup ? GetDailyLow() : GetDailyHigh(); // TP2 = Daily extreme
+	
+	// v1.10.0: Validate TP2 is valid target
+	if (isShortSetup && tp2Price >= avgEntry)
+		tp2Price = avgEntry - fallbackTargetDist;
+	if (!isShortSetup && tp2Price <= avgEntry)
+		tp2Price = avgEntry + fallbackTargetDist;
 		
 		double myTpPrice = isTp1 ? tp1Price : tp2Price;
 		string myTpTag = isTp1 ? "TP1" : "TP2";
@@ -1997,38 +2328,70 @@ setupLevelName = "";
 		Log(string.Format("TP CALC ({0}): Entry={1} | GlobalVWAP={2} | ZoneOpp={3} (Val={4}) | TP1={5} TP2={6} | Selected={7}",
 			direction, avgEntry, targetGlobalVWAP, targetZoneOpposite, validatedTargetPrice, tp1Price, tp2Price, myTpPrice));
 
-		// 4. Submit Unmanaged OCO Orders
+		// v1.9.0: SINGLE-SL CREATION/UPDATE
 		try
 		{
-			// Unique OCO String per Group
-			// Uses Ticks to ensure uniqueness on partial fills
-			string ocoId = string.Format("OCO_{0}_{1}_{2}", direction, (isTp1 ? "1" : "2"), DateTime.Now.Ticks);
+			int totalPositionQty = Math.Abs(Position.Quantity);
 			
-			if (direction == "Short")
+			// Check if SL already exists
+			Order existingSL = stopOrder;
+			Order existingTP = isTp1 ? tp1Order : tp2Order;
+			
+			// Determine if we need to cancel-consolidate the SL
+			bool shouldUpdateSL = (existingSL != null && (existingSL.OrderState == OrderState.Working || existingSL.OrderState == OrderState.Accepted));
+			bool shouldUpdateTP = (existingTP != null && (existingTP.OrderState == OrderState.Working || existingTP.OrderState == OrderState.Accepted));
+			
+			// STEP 1: Handle STOP LOSS (single for entire position)
+			if (shouldUpdateSL)
 			{
-				OrderAction slAction = OrderAction.BuyToCover;
-				OrderAction tpAction = OrderAction.BuyToCover;
-				
-				if (isTp1) {
-					stopOrder1 = SubmitOrderUnmanaged(0, slAction, OrderType.StopMarket, qty, 0, slPrice, ocoId, "SL_Short_1");
-					tp1Order = SubmitOrderUnmanaged(0, tpAction, OrderType.Limit, qty, myTpPrice, 0, ocoId, "TP1_Short");
-				} else {
-					stopOrder2 = SubmitOrderUnmanaged(0, slAction, OrderType.StopMarket, qty, 0, slPrice, ocoId, "SL_Short_2");
-					tp2Order = SubmitOrderUnmanaged(0, tpAction, OrderType.Limit, qty, myTpPrice, 0, ocoId, "TP2_Short");
+				// SL exists - cancel and recreate with updated quantity
+				if (existingSL.Quantity != totalPositionQty)
+				{
+					Log(string.Format("SL UPDATE: Cancelling old SL (Qty={0}), creating new (Qty={1})", 
+						existingSL.Quantity, totalPositionQty));
+					try {
+						CancelOrder(existingSL);
+					} catch (Exception ex) {
+						Log("Warning: Could not cancel old SL: " + ex.Message);
+					}
+					shouldUpdateSL = false; // Force creation below
 				}
 			}
-			else
+			
+			// Create SL if it doesn't exist or we just cancelled it
+			if (!shouldUpdateSL)
 			{
-				OrderAction slAction = OrderAction.Sell;
-				OrderAction tpAction = OrderAction.Sell;
+				string slTag = direction == "Short" ? "SL_Short" : "SL_Long";
+				OrderAction slAction = direction == "Short" ? OrderAction.BuyToCover : OrderAction.Sell;
 				
-				if (isTp1) {
-					stopOrder1 = SubmitOrderUnmanaged(0, slAction, OrderType.StopMarket, qty, 0, slPrice, ocoId, "SL_Long_1");
-					tp1Order = SubmitOrderUnmanaged(0, tpAction, OrderType.Limit, qty, myTpPrice, 0, ocoId, "TP1_Long");
-				} else {
-					stopOrder2 = SubmitOrderUnmanaged(0, slAction, OrderType.StopMarket, qty, 0, slPrice, ocoId, "SL_Long_2");
-					tp2Order = SubmitOrderUnmanaged(0, tpAction, OrderType.Limit, qty, myTpPrice, 0, ocoId, "TP2_Long");
+				stopOrder = SubmitOrderUnmanaged(0, slAction, OrderType.StopMarket, totalPositionQty, 0, slPrice, "", slTag);
+			}
+			
+			// STEP 2: Handle TAKE PROFIT (TP1 or TP2)
+			int tpQty = isTp1 ? (protectedTp1Qty + qty) : (protectedTp2Qty + qty);
+			
+			if (shouldUpdateTP)
+			{
+				// TP exists - cancel and recreate with updated quantity
+				Log(string.Format("CANCEL-CONSOLIDATE {0}: Cancelling old (Qty={1}), creating new (Qty={2})", 
+					myTpTag, existingTP.Quantity, tpQty));
+				try {
+					CancelOrder(existingTP);
+				} catch (Exception ex) {
+					Log("Warning: Could not cancel old TP: " + ex.Message);
 				}
+			}
+			
+			// Create TP (always, either first time or after cancel)
+			string tpTag = direction == "Short" ? 
+				(isTp1 ? "TP1_Short" : "TP2_Short") : 
+				(isTp1 ? "TP1_Long" : "TP2_Long");
+			OrderAction tpAction = direction == "Short" ? OrderAction.BuyToCover : OrderAction.Sell;
+			
+			if (isTp1) {
+				tp1Order = SubmitOrderUnmanaged(0, tpAction, OrderType.Limit, tpQty, myTpPrice, 0, "", tpTag);
+			} else {
+				tp2Order = SubmitOrderUnmanaged(0, tpAction, OrderType.Limit, tpQty, myTpPrice, 0, "", tpTag);
 			}
 		}
 		catch (Exception ex)
@@ -2037,7 +2400,126 @@ setupLevelName = "";
 		}
 	}
 		
-		// CORRECTED (v1.7.22): Search for opposite level from SAME DAY (not same hour)
+	// v1.10.0: Detect if setup level is INTERNAL (contained within external levels)
+	private void DetectInternalLevel(SessionLevel setupLevel, List<SessionLevel> allLevels)
+	{
+		// Reset state
+		isInternalLevel = false;
+		externalLevelAbove = 0;
+		externalLevelBelow = 0;
+		externalLevelAboveName = "";
+		externalLevelBelowName = "";
+		
+		if (setupLevel == null || allLevels == null) return;
+		
+		// For SHORT setups (High resistance): find external High above
+		if (setupLevel.IsResistance)
+		{
+			externalLevelAbove = FindExternalLevelAbove(setupLevel, allLevels);
+			if (externalLevelAbove >0)
+			{
+				isInternalLevel = true;
+				Log(string.Format("INTERNAL LEVEL: {0} @ {1} (External above: {2} @ {3})",
+					setupLevel.Name, setupLevel.Price, externalLevelAboveName, externalLevelAbove));
+			}
+			
+			// Also find external Low below (for TP2 context)
+			externalLevelBelow = FindExternalLevelBelow(setupLevel, allLevels);
+		}
+		// For LONG setups (Low support): find external Low below
+		else
+		{
+			externalLevelBelow = FindExternalLevelBelow(setupLevel, allLevels);
+			if (externalLevelBelow > 0)
+			{
+				isInternalLevel = true;
+				Log(string.Format("INTERNAL LEVEL: {0} @ {1} (External below: {2} @ {3})",
+					setupLevel.Name, setupLevel.Price, externalLevelBelowName, externalLevelBelow));
+			}
+			
+			// Also find external High above (for TP2 context)
+			externalLevelAbove = FindExternalLevelAbove(setupLevel, allLevels);
+		}
+	}
+	
+	// v1.10.3 CORRECTED: Find HIGHEST High of the day (daily extreme) from different session
+	// For SHORT: Level is internal if there's a higher High from another session
+	private double FindExternalLevelAbove(SessionLevel currentLevel, List<SessionLevel> allLevels)
+	{
+		double highestExternal = 0;
+		string highestName = "";
+		
+		foreach (var level in allLevels)
+		{
+			// Only consider High levels (resistances) above current
+			if (!level.IsResistance) continue;
+			if (level.Price <= currentLevel.Price) continue;
+			
+			// Skip if same session (we want EXTERNAL, not same session)
+			string currentSession = GetSessionName(currentLevel.Name);
+			string candidateSession = GetSessionName(level.Name);
+			if (currentSession == candidateSession) continue;
+			
+			// Find HIGHEST High (daily extreme), not closest
+			if (level.Price > highestExternal)
+			{
+				highestExternal = level.Price;
+				highestName = level.Name;
+			}
+		}
+		
+		if (highestExternal > 0)
+		{
+			externalLevelAboveName = highestName;
+		}
+		
+		return highestExternal;
+	}
+	
+	// v1.10.3 CORRECTED: Find LOWEST Low of the day (daily extreme) from different session
+	// For LONG: Level is internal if there's a lower Low from another session
+	private double FindExternalLevelBelow(SessionLevel currentLevel, List<SessionLevel> allLevels)
+	{
+		double lowestExternal = 0;
+		string lowestName = "";
+		
+		foreach (var level in allLevels)
+		{
+			// Only consider Low levels (supports) below current
+			if (level.IsResistance) continue;
+			if (level.Price >= currentLevel.Price) continue;
+			
+			// Skip if same session
+			string currentSession = GetSessionName(currentLevel.Name);
+			string candidateSession = GetSessionName(level.Name);
+			if (currentSession == candidateSession) continue;
+			
+			// Find LOWEST Low (daily extreme), not closest
+			if (lowestExternal == 0 || level.Price < lowestExternal)
+			{
+				lowestExternal = level.Price;
+				lowestName = level.Name;
+			}
+		}
+		
+		if (lowestExternal > 0)
+		{
+			externalLevelBelowName = lowestName;
+		}
+		
+		return lowestExternal;
+	}
+	
+	// v1.10.0: Extract session name from level name (e.g., "Asia High" -> "Asia")
+	private string GetSessionName(string levelName)
+	{
+		if (levelName.Contains("Asia")) return "Asia";
+		if (levelName.Contains("Europe")) return "Europe";
+		if (levelName.Contains("USA")) return "USA";
+		return "";
+	}
+		
+	// CORRECTED (v1.7.22): Search for opposite level from SAME DAY (not same hour)
 	private double GetOppositeLevelPrice(string name, DateTime refTime, double refPrice = 0, bool expectLower = false)
 	{
 		// OPTIMIZATION (v1.7.3): Return Cached Price if available
@@ -2288,13 +2770,11 @@ setupLevelName = "";
 		if (!string.IsNullOrEmpty(setupLevelName) && adhocVolSum > 0)
 		{
 			double adhocValue = adhocPvSum / adhocVolSum;
-			if (EnableDebugLogs) Print(string.Format("{0} | VWAP_DEBUG: Using ADHOC VWAP={1:F2} (VolSum={2:F2})", Time[0], adhocValue, adhocVolSum));
 			return adhocValue;
 		}
 		
 		// 2. Fallback to Global (e.g. if logic fails or we are tracking a Global Extremum trade where we didn't reset adhoc)
 		double globalValue = isShort ? GetCurrentHighVWAP() : GetCurrentLowVWAP();
-		if (EnableDebugLogs) Print(string.Format("{0} | VWAP_DEBUG: FALLBACK to GLOBAL VWAP={1:F2} (VolSum={2:F2}, Setup={3})", Time[0], globalValue, adhocVolSum, setupLevelName));
 		return globalValue;
 	}
 
@@ -2611,6 +3091,31 @@ setupLevelName = "";
 		[Display(Name="Min Risk/Reward Ratio", Order=3, GroupName="Order Management")]
 		public double MinRiskRewardRatio
 		{ get; set; }
+		
+		// ===== DYNAMIC POSITION SIZING (v1.8.0) =====
+		
+		[NinjaScriptProperty]
+		[Range(1, double.MaxValue)]
+		[Display(Name="Risk Per Trade (USD)", Order=4, GroupName="Order Management")]
+		public double RiskPerTradeUSD
+		{ get; set; } = 50.0;
+		
+		[NinjaScriptProperty]
+		[Range(1, int.MaxValue)]
+		[Display(Name="Min Quantity", Order=5, GroupName="Order Management")]
+		public int MinQuantity
+		{ get; set; } = 1;
+		
+		[NinjaScriptProperty]
+		[Range(1, int.MaxValue)]
+		[Display(Name="Max Quantity", Order=6, GroupName="Order Management")]
+		public int MaxQuantity
+		{ get; set; } = 10;
+		
+		[NinjaScriptProperty]
+		[Display(Name="Use Dynamic Sizing", Order=7, GroupName="Order Management")]
+		public bool UseDynamicSizing
+		{ get; set; } = true;
 		
 		// Internal Targets State
 		private double activeTp1Price = 0;

@@ -4,6 +4,353 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.11] - 2025-12-27 ✅ VERSIÓN ACTUAL
+### Fix: VWAP Ad-Hoc También Usa Close Definitivo
+- **Problema**: v1.10.10 solo arreglaba VWAP Global, ad-hoc seguía usando Close momentáneo
+    - Re-anchors (nuevos highs/lows durante setup) usaban Close[0] momentáneo
+    - Triggers iniciales y external triggers igualmente afectados
+- **Solución**:
+    - Nueva variable: `adhocAnchorBar` para rastrear barra de anchor
+    - En `UpdateAdhocVWAP()`: Si barra anterior fue anchor → recalcula con Close[1]
+    - Actualiza 6 ubicaciones: re-anchor SHORT/LONG, trigger SHORT/LONG, external SHORT/LONG
+- **Resultado**: Ambos VWAPs (Global y Ad-Hoc) comienzan en Close definitivo
+
+## [1.10.10] - 2025-12-27
+### Fix: VWAP Comienza en Close Definitivo (Actualización Retroactiva)
+- **Problema**: En tiempo real, Close[0] es el último precio, no el cierre final
+    - Causaba que el VWAP comenzara en punto intermedio durante formación de vela
+- **Solución** (Actualización Retroactiva):
+    - Reset inmediato del VWAP usando Close[0] momentáneo (para tener valor visible)
+    - En IsFirstTickOfBar, si barra anterior fue anchor → recalcula con Close[1] definitivo
+    - Actualiza `Values[x][1]` retroactivamente para corregir el valor visual
+- **Resultado**: VWAP se muestra durante formación de vela, pero al cerrar queda en Close exacto
+- **Beneficio**: Evita señales falsas de entrada al usar Close más conservador (más cerca del precio)
+
+## [1.10.9] - 2025-12-27
+### Reversión: VWAP Global con Reset Inmediato
+- **Problema**: v1.10.7/v1.10.8 intentaron diferir el reset para usar Close definitivo
+    - Causó línea de conexión no deseada con VWAP histórico
+    - El VWAP comenzaba en barra siguiente o con problemas visuales
+- **Solución**: Revertido al comportamiento original (reset inmediato)
+    - El VWAP se resetea inmediatamente cuando se detecta nuevo High/Low
+    - En tiempo real, usará Close momentáneo (se actualiza tick-a-tick)
+    - Al cerrar la barra, el valor se fija al Close definitivo
+- **Nota**: En barras históricas siempre funciona correctamente. En tiempo real el primer punto puede moverse durante formación de la vela.
+
+## [1.10.8] - 2025-12-27
+### Fix: VWAP Visual Comienza en Barra de Anchor Correcta
+- **Problema**: v1.10.7 colocaba el inicio del VWAP en la barra siguiente al nuevo High
+    - Causa: Solo asignaba `Values[0][0]` (barra actual), no `Values[0][1]` (barra anterior)
+- **Solución**: Al aplicar reset diferido, asigna el valor inicial a `Values[x][1]`
+    - Línea VWAP ahora comienza visualmente en la barra que hizo el nuevo High/Low
+    - Usa `Close[1]` definitivo para el precio de anclaje
+- **Resultado**: VWAP comienza en la vela correcta CON el Close definitivo
+
+## [1.10.7] - 2025-12-27
+### Fix: VWAP Global Ahora Usa Close Definitivo de la Vela
+- **Problema**: VWAP Global comenzaba en el "medio de la mecha" cuando se formaba nuevo High/Low
+    - Causa: Al detectar nuevo High intra-bar, `Close[0]` era el último precio, no el cierre final
+    - Resultado: La línea VWAP comenzaba en punto aleatorio dentro de la vela
+- **Solución** (Sistema de Reset Diferido):
+    - Variables nuevas: `pendingHighReset`, `pendingLowReset` para marcar reset pendiente
+    - Cuando se detecta nuevo High/Low → marca como pendiente, NO resetea inmediatamente
+    - En primera tick de siguiente barra → aplica reset con `Close[1]` (cierre definitivo)
+    - Calcula precio según VwapMethod configurado (Close/Typical/OHLC4)
+- **Resultado**: VWAP Global ahora siempre comienza exactamente en el Close de la vela anchor
+- **Testing**: Verificar en Playback que nuevos Highs del día generen VWAP desde Close, no desde precio intermedio
+
+## [1.10.6] - 2025-12-27
+### Fix Visual Completo: VWAP Ad-Hoc LONG Setups
+- **Problema**: v1.10.5 solo corrigió SHORT setups, LONG seguían anclando desde Low
+    - Re-anchor LONG: Faltaba `visualAdhocLastVal = price` y usaba `= 0`
+    - Trigger LONG: Usaba `visualAdhocPrevBarVal = 0` y `visualAdhocLastVal = 0`
+    - External level triggers (SHORT y LONG): Ambos usaban `= 0`
+- **Solución** (4 ubicaciones corregidas):
+    - Línea 1513-1517: Re-anchor LONG → `= price` + agregada línea faltante
+    - Línea 1597-1599: External SHORT trigger → `= price`
+    - Línea 1629-1631: External LONG trigger → `= price`
+    - Línea 1773-1775: Trigger LONG regular → `= price`
+- **Resultado**: Ahora TODOS los VWAPs ad-hoc (SHORT y LONG) comienzan en el precio correcto
+- **Testing**: Verificar que líneas VWAP de LONG setups inicien en Close/Typical, no en Low
+
+## [1.10.5] - 2025-12-26
+### Fix Visual: VWAP Ahora Comienza en Precio Calculado
+- **Problema**: VWAP visual comenzaba en Low/High en vez del Close/Typical configurado
+    - Usuario reportó: "Todas las líneas VWAP históricas comienzan desde el low de la vela"
+    - Causa: `visualAdhocPrevBarVal = 0` y `visualAdhocLastVal = 0` en inicialización
+- **Solución** (parcial - solo SHORT):
+    - Cambio: `visualAdhocLastVal = 0` → `visualAdhocLastVal = price`
+    - Donde `price` = Close/Typical/OHLC4 según configuración VwapMethod
+- **Nota**: Este fix fue incompleto, corregido en v1.10.6
+
+## [1.10.4] - 2025-12-26
+### Fix Crítico: Re-Anclaje de VWAP Corregido
+- **Problema**: VWAP no se re-anclaba cuando precio se movía exactamente 1 tick
+    - Condición usaba `<` y `>` (comparación estricta) en vez de `<=` y `>=`
+    - Ejemplo: Anchor @ 6901, price baja a 6900.75 (1 tick)
+    - Evaluación: `6900.75 < (6901 - 0.25)` → `6900.75 < 6900.75` → FALSE ❌
+- **Solución** (líneas 1476, 1499):
+    - **SHORT**: `High[0] > setupAnchorPrice + TickSize` → `High[0] >= setupAnchorPrice + TickSize`
+    - **LONG**: `Low[0] < setupAnchorPrice - TickSize` → `Low[0] <= setupAnchorPrice - TickSize`
+    - Ahora re-ancla cuando precio se mueve 1 tick O MÁS
+- **Impacto**: VWAP ahora se resetea correctamente en nuevos extremos
+- **Testing**: Verificar logs `RE-ANCHOR: New Low/High` aparecen con cada nuevo extremo
+
+## [1.10.3] - 2025-12-26
+### Fix Crítico: Corrección de Lógica de Detección de Niveles Internos
+- **Problema**: Lógica INVERTIDA para detectar niveles internos
+    - Buscaba nivel más CERCANO de otra sesión
+    - **INCORRECTO**: Europe High @ 90 con Asia High @ 100 arriba no se detectaba como interno
+- **Definición CORRECTA de nivel interno**:
+    - **SHORT**: Nivel es interno si existe un High del DÍA de otra sesión POR ENCIMA (máximo del día)
+        - Ejemplo: Europe High @ 90 es INTERNO porque Asia High @ 100 es el máximo del día
+    - **LONG**: Nivel es interno si existe un Low del DÍA de otra sesión POR DEBAJO (mínimo del día)
+        - Ejemplo: Europe Low @ 60 es INTERNO porque Asia Low @ 50 es el mínimo del día
+- **Solución** (líneas 2391-2455):
+    - `FindExternalLevelAbove()`: Ahora busca el **HIGHEST High** del día (no el closest)
+        - `if (level.Price > highestExternal)` en vez de `if (level.Price < closestExternal)`
+    - `FindExternalLevelBelow()`: Ahora busca el **LOWEST Low** del día (no el closest)
+        - `if (level.Price < lowestExternal)` en vez de `if (level.Price > closestExternal)`
+- **Testing**: Con Asia High @ 100, Europe High @ 90 debe detectarse como interno ✅
+
+## [1.10.2] - 2025-12-26
+### Fix: Auto-Trigger en Nivel Externo Tras Invalidación
+- **Problema**: Después de invalidar nivel interno, NO hacía trigger en nivel externo
+    - Invalidaba Asia High @ 6911.75 (toca Europe High @ 6912)
+    - En barra 4:53 precio se despegaba de VWAP de Europe High
+    - NO colocaba orden limit porque Europe High ya tenía `IsMitigated = true` de barra anterior
+- **Solución** (líneas 1561-1640):
+    - Al invalidar nivel interno, automáticamente hace **AUTO-TRIGGER** en nivel externo
+    - Crea nuevo setup completo: anchor, VWAP, visual, estado
+    - Log: `AUTO-TRIGGER: Switching to external level Europe High @ 6912`
+    - `isInternalLevel = false` (externo no es interno)
+- **Flujo ahora**:
+    1. Detecta Asia High interno
+    2. Invalida (toca Europe High externo)
+    3. AUTO-TRIGGER en Europe High
+    4. En 4:53 se despega → Crea orden limit ✅
+- **Testing**: Verificar log AUTO-TRIGGER y que coloca orden en 4:53
+
+## [1.10.1] - 2025-12-26
+### Hotfix Crítico: Infinite Loop en Invalidación
+- **Bug Corregido**: Loop infinito cuando nivel interno se invalida inmediatamente
+    - **Problema**: Al invalidar (tocar externo), estrategia reseteaba a `Idle` pero continuaba foreach en misma barra
+        - Resultado: Re-detectaba trigger → Invalidaba → Re-detectaba infinitamente
+        - Log spam: 80+ líneas idénticas en mismo timestamp
+    - **Root Cause**: No había protección anti-loop para invalidación (solo para rejection)
+- **Solución** (líneas 121, 1546, 1598):
+    - Nueva variable: `lastInvalidationBar` (línea 121)
+    - Al invalidar: `lastInvalidationBar = CurrentBar` (línea 1546)
+    - Check loop protection: `if (CurrentBar == lastRejectionBar || CurrentBar == lastInvalidationBar) return` (línea 1598)
+- **Beneficio**: Invalidación solo ocurre una vez por barra
+- **Testing**: Verificar con Asia High interno que se invalida al tocar Europe High
+
+## [1.10.0] - 2025-12-26
+### Feature Mayor: Internal Levels Management
+- **Objetivo**: Mejorar comportamiento y win rate de trades en niveles internos
+    - **Niveles internos**: Niveles de sesión contenidos dentro del rango de otra sesión (ej: Europe Low dentro de rango Asia)
+    - **Problema previo**: Niveles internos no se comportaban correctamente (VWAP no se re-anclaba, no se invalidaban al tocar externos, TP2 lejano)
+
+#### Fase 1-2: Detección de Niveles Internos
+- **Nuevas variables** (líneas 115-120):
+  - `isInternalLevel`: Flag que indica si setup actual es interno
+  - `externalLevelAbove/Below`: Precio de niveles externos que contienen al interno
+  - `externalLevelAboveName/BelowName`: Nombres para logs
+- **Nuevas funciones** (líneas 2133-2248):
+  - `DetectInternalLevel()`: Detecta si nivel es interno y encuentra externos
+  - `FindExternalLevelAbove()`: Busca High externo superior (SHORT setups)
+  - `FindExternalLevelBelow()`: Busca Low externo inferior (LONG setups)
+  - `GetSessionName()`: Extrae nombre de sesión del nivel
+- **Log nuevo**: `INTERNAL LEVEL: Europe Low @ 6884 (External below: Asia Low @ 6850)`
+
+#### Fase 3: Re-Anclaje de VWAP para Internos (líneas 1473-1519)
+- **Cambio**: Niveles internos ahora re-anclan VWAP igual que externos
+  - ANTES: Solo niveles externos re-anclaban cuando precio rompía anchor
+  - AHORA: **TODOS** los niveles re-anclan (internos y externos)
+- **Implementación**:
+  - SHORT: Si `High[0] > setupAnchorPrice + TickSize` → Re-anclar a nuevo High
+  - LONG: Si `Low[0] < setupAnchorPrice - TickSize` → Re-anclar a nuevo Low
+  - Reset completo de VWAP desde nuevo anchor
+- **Log nuevo**: `RE-ANCHOR: New High @ 6920 (Setup: Europe High)`
+- **Beneficio**: VWAP siempre refleja precio desde extremo REAL, independiente de tipo de nivel
+
+#### Fase 4: Invalidación al Tocar Nivel Externo (líneas 1521-1558)
+- **Cambio**: Trade se cancela si precio toca nivel externo
+  - SHORT interno: Si toca High externo superior → Invalidar
+  - LONG interno: Si toca Low externo inferior → Invalidar
+- **Acción al invalidar**:
+  1. Cancel entry order si existe
+  2. Reset a EntryState.Idle
+  3. Log: `INVALIDATED: Touched external Asia Low @ 6850`
+- **Beneficio**: No entra en contexto inválido (nivel externo tiene prioridad)
+
+#### Fase 5: TP2 = Extremos Diarios (líneas 2067-2090, 2158-2167)
+- **Cambio**: TP2 usa High/Low del día en vez de nivel opuesto
+  - ANTES: TP2 = Nivel opuesto de sesión (ej: Europe High para Europe Low LONG)
+    - Problema: Muy lejano o ilógico en internos
+  - AHORA: TP2 = `GetDailyHigh()` (LONG) o `GetDailyLow()` (SHORT)
+- **Nuevas funciones**:
+  - `GetDailyHigh()`: Retorna High más alto desde medianoche
+  - `GetDailyLow()`: Retorna Low más bajo desde medianoche
+  - Usa `BarsSinceNewTradingDay` + `HighestBar`/`LowestBar`
+- **Validación**: Si TP2 inválido (>= entry para SHORT), usa fallback
+- **Beneficio**: TP2 más realista, basado en extremos reales del día
+
+#### Fase 6: Integración (líneas 1645-1647, 1679-1681)
+- **Call point**: `DetectInternalLevel(lvl, activeLevels)` llamado cuando trigger detectado
+  - Para SHORT triggers (línea 1645)
+  - Para LONG triggers (línea 1679)
+- **Flujo completo**:
+  1. Trigger detectado → `DetectInternalLevel()` ejecuta
+  2. Si interno: `isInternalLevel = true`, encuentra externos
+  3. Durante confirmación: Re-anclaje automático si precio rompe
+  4. Durante confirmación: Invalidación si toca externo
+  5. Al crear órdenes: TP2 usa daily extreme
+
+### Logs Esperados (Ejemplo: Europe Low Interno)
+```
+INTERNAL LEVEL: Europe Low @ 6884 (External below: Asia Low @ 6850)
+RE-ANCHOR: New Low @ 6880 (Setup: Europe Low)
+RE-ANCHOR: New Low @ 6875 (Setup: Europe Low)
+TP CALC (Long): ... | TP2=6950 | Selected=6950  ← Daily High, no Europe High
+```
+
+### Código Agregado
+- **Total**: ~250 líneas nuevas
+  - Variables: 5 líneas
+  - Funciones detección: 120 líneas
+  - Re-anclaje: 50 líneas
+  - Invalidación: 40 líneas
+  - Daily extremes: 30 líneas
+  - Integ ración: 5 líneas
+
+### Testing Sugerido
+1. **Playback con nivel interno** (Europe dentro de Asia)
+2. **Verificar logs**: INTERNAL LEVEL, RE-ANCHOR, INVALIDATED
+3. **Verificar TP2**: Debe ser daily extreme, no nivel opuesto
+4. **Verificar invalidación**: Si toca Asia Low, debe cancelar Europe Low trade
+
+## [1.9.0] - 2025-12-26
+### Cambio Arquitectónico Mayor (Single-SL Architecture)
+- **Rediseño Completo**: Arquitectura de órdenes de protección  reorganizada
+    - **Problema v1.8.6 y anteriores**: Dual-SL (SL1↔TP1, SL2↔TP2) causaba ejecución simultánea de ambos SL
+        - OCO solo funciona DENTRO de cada grupo, no ENTRE grupos
+        - Cuando precio tocaba SL → SL1 y SL2 se ejecutaban juntos
+        - Resultado: Cierre doble (20 contratos en vez de 10)
+    - **Solución v1.9.0**: SINGLE-SL Architecture
+        - **UN SOLO SL** para toda la posición (`stopOrder`)
+        - TP1 y TP2 independientes (sin OCO)
+        - SL siempre refleja `Position.Quantity` total
+    - **Cambios en código** (`SubmitProtectionOrders`, líneas 1970-2124):
+        - Eliminada lógica dual-SL (`stopOrder1`/`stopOrder2`)
+        - Implementado SL único que se cancela/recrea con partial fills
+        - `stopOrder.Quantity` siempre = `Math.Abs(Position.Quantity)`
+    - **Logs nuevos**:
+        - `SL UPDATE: Cancelling old SL (Qty=10), creating new (Qty=20)`
+        - `CANCEL-CONSOLIDATE TP1: Cancelling old (Qty=2), creating new (Qty=3)`
+    - **Impacto**: Solo UN SL puede ejecutarse. Protección correcta garantizada.
+
+## [1.8.6] - 2025-12-26
+### Corrección Crítica (Cancel-Before-Consolidate for Safe OCO)
+- **Bug Corregido**: Dual SL execution - ambos SL se ejecutaban simultáneamente (arquitectura OCO incorrecta)
+    - **Problema ROOT CAUSE**: Consolidación con `ChangeOrder` dejaba **múltiples grupos OCO activos** simultáneamente
+        - Cada partial fill creaba nuevo grupo OCO (SL1↔TP1, SL2↔TP2)
+        - OCO solo funciona **dentro** de cada grupo, no **entre** grupos
+        - Resultado: Cuando precio tocaba SL, **ambos SL1 y SL2** se ejecutaban (20 contratos en vez de 10)
+    - **Solución**: Arquitectura Cancel-Before-Consolidate (líneas 2060-2083):
+        1. **Cancelar** órdenes antiguas del OCO group
+        2. **Crear** nuevas órdenes consolidadas con cantidad total
+        3. Garantiza solo **UN** grupo OCO activo a la vez
+   - **Log nuevo**: `CANCEL-CONSOLIDATE TP1: Cancelling old orders (Qty=2), creating new (Qty=3)`
+    - **Impacto**: Solo un SL activo por bucket. OCO funciona correctamente. Cierre seguro.
+
+## [1.8.5] - 2025-12-26
+### Corrección Crítica (Dual SL Execution Fix)
+- **Bug Corregido**: Ambos SL se ejecutaban simultáneamente al mismo precio
+    - **Problema**: Durante consolidación, `ChangeOrder` actualizaba el precio del SL con `slPrice` recalculado
+        - SL1 y SL2 terminaban ambos al mismo precio (ej: 6916.75)
+        - Cuando precio tocaba ese nivel, **ambos** SL se ejecutaban antes de que OCO cancelara uno
+        - Resultado: Posición cerrada doble (20 contratos en vez de 10)
+    - **Solución**: Preservar precio original del SL durante consolidación (línea 2070):
+        ```csharp
+        // ANTES (v1.8.4) - Recalcula precio ❌
+        ChangeOrder(existingSL, targetQty, 0, slPrice);
+        
+        // AHORA (v1.8.5) - Preserva precio original ✅
+        ChangeOrder(existingSL, targetQty, 0, existingSL.StopPrice);
+        ```
+    - **Impacto**: Solo actualiza cantidad del SL, **no el precio**. Cada OCO group mantiene su SL independiente.
+
+## [1.8.4] - 2025-12-26
+### Corrección Crítica (Over-Consolidation Fix)
+- **Bug Corregido**: Sobre-consolidación causaba doble protección
+    - **Problema**: La lógica de consolidación v1.8.3 sumaba cantidades **incrementalmente** en vez de establecer la cantidad **absoluta**
+        - Con 6 partial fills, acumulaba: 1+2+3+5+4+5 = 20 → TP1=10, TP2=10 (total 20 en vez de 10)
+        - Resultado: Ambos SL se llenaron cerrando 20 contratos cuando la posición solo tenía 10
+    - **Solución**: Cambiar cálculo de consolidación (líneas 2062-2065):
+        ```csharp
+        // ANTES (v1.8.3) - Suma incremental ❌
+        int newQty = existingTP.Quantity + qty;
+        
+        // AHORA (v1.8.4) - Cantidad absoluta ✅
+        int targetQty = isTp1 ? (protectedTp1Qty + qty) : (protectedTp2Qty + qty);
+        ```
+    - **Log actualizado**: `CONSOLIDATE TP1: Current=2 → Target=3 (was adding 1)`
+    - **Impacto**: Ahora la cantidad de protección es correcta. Con 20 contratos llenados → TP1=10, TP2=10 (total 20) ✅
+
+## [1.8.3] - 2025-12-26
+### Corrección Crítica (Partial Fills Consolidation)
+- **Bug Corregido**: Órdenes de protección duplicadas con partial fills múltiples
+    - **Problema**: Con partial fills fragmentados (ej: orden de 20 llenada en 6 fills), `SubmitProtectionOrders` creaba nuevas órdenes TP1/TP2 en cada fill en vez de consolidar, causando:
+        - Múltiples órdenes TP/SL activas simultáneas
+        - Solo la última orden se actualizaba con VWAP dinámico
+        - Órdenes "huérfanas" permanecían en precios obsoletos
+        - Ejemplo: 10 contratos en TP1, pero solo 2 se movían con VWAP
+    - **Solución**: Implementada lógica de consolidación en `SubmitProtectionOrders()` (líneas 2050-2103):
+        - Verifica si ya existe orden activa (`Working` o `Accepted`)
+        - Si existe: usa `ChangeOrder` para **aumentar cantidad** de orden existente
+        - Si no existe: crea nueva orden (comportamiento original)
+        - Mantiene integridad de OCO groups
+    - **Log nuevo**: `CONSOLIDATE TP1: Existing=2 + New=3 = Total=5`
+    - **Impacto**: Ahora todos los contratos se mueven juntos con actualizaciones de VWAP. Una sola orden TP1, una sola orden TP2.
+
+## [1.8.2] - 2025-12-26
+### Optimización (Output Log Cleanup)
+- **Logs VWAP Removidos**: Eliminados logs verbosos de debug del VWAP
+    - **Problema**: `GetSetupVWAP()` imprimía mensajes duplicados en cada bar, saturando el Output Window
+    - **Ejemplo**: `VWAP_DEBUG: Using ADHOC VWAP=6875.58 (VolSum=44655.00)` aparecía 2-3 veces por minuto
+    - **Solución**: Removidos ambos logs de `GetSetupVWAP()` (líneas 2341, 2347)
+    - **Impacto**: Output más limpio. Los logs importantes de targets (TP CALC) y búsqueda (SEARCH_OPPOSITE) permanecen intactos
+    - **Beneficio**: Más fácil identificar problemas reales en playback/live testing
+
+## [1.8.1] - 2025-12-26
+### Corrección (Partial Fills Distribution)
+- **Bug Corregido**: Distribución incorrecta de TP1/TP2 con partial fills
+    - **Problema**: Con partial fills, `EnsureProtection` usaba `filledQty` (cantidad del fill parcial) en vez de la posición total, resultando en distribución desigual (ej: 4 en TP1, 16 en TP2 en vez de 10/10 con 20 contratos)
+    - **Solución**: Cambiar fórmula para usar `Position.Quantity` (total acumulado) en vez de `filledQty` (parcial)
+    - **Código modificado**:
+        - `EnsureProtection()`: Usa `Math.Abs(Position.Quantity)` para calcular `totalTp1Target`
+    - **Impacto**: Ahora la distribución 50/50 se mantiene correcta incluso con fills parciales en instrumentos de bajo volumen
+
+## [1.8.0] - 2025-12-26
+### Feature Mayor (Dynamic Position Sizing)
+- **Normalización de Riesgo por Instrumento**:
+    - **Problema**: Quantity fijo resultaba en riesgo desigual en USD entre instrumentos (ej: MES $100 vs MYM $10 para mismo setup)
+    - **Solución**: Sistema de cálculo dinámico basado en riesgo objetivo en USD
+    - **Nuevas Propiedades** (Order Management):
+        - `RiskPerTradeUSD`: Riesgo deseado por trade en USD (default: $50)
+        - `MinQuantity`: Cantidad mínima de contratos (default: 1)
+        - `MaxQuantity`: Cantidad máxima de contratos (default: 10)
+        - `UseDynamicSizing`: Toggle para activar/desactivar sizing dinámico (default: true)
+    - **Fórmula**: `Quantity = RiskUSD / (TicksDeRiesgo × ValorPorTick)`
+    - **Ejemplo**: Con Risk=$50 y SL=10 ticks → MES (1 contrato), MNQ (3 contratos), MYM (10 contratos) → Riesgo normalizado ~$50
+    - **Código modificado**:
+        - Nuevo método `CalculateDynamicQuantity()` (línea 1405)
+        - Confirmación SHORT (línea 1674): Ahora calcula quantity dinámicamente
+        - Confirmación LONG (línea 1761): Ahora calcula quantity dinámicamente
+        - `EnsureProtection` (línea 1942): Usa `filledQty` real en vez de `Quantity` configurado
+    - **Beneficio**: Riesgo consistente entre todos los instrumentos. Compatible con toggle OFF para usar Quantity fijo tradicional.
+
 ## [1.7.30] - 2025-12-26
 ### Feature (Strategy Analyzer Support)
 - **Soporte para Strategy Analyzer**:
