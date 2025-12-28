@@ -48,4 +48,5 @@ Estamos trabajando en `SessionLevelsStrategy.cs`, una estrategia avanzada que:
 3. Sigue versionado SemVer y sincroniza `StrategyVersion` con el changelog
 4. Commits automáticos a GitHub tras cada cambio funcional
 5. Todos los documentos deben estar en ESPAÑOL
-```
+**Limpieza de Artifacts**: Al completar exitosamente una implementación, mover todos los documentos temporales de planificación/implementación (de `.gemini/antigravity/brain/`) a una subcarpeta `completed/` para mantener el workspace limpio. Solo mantener abiertos documentos relevantes para trabajo actual.
+```**Sincronización de Versión**: Asegurar que la constante de versión en el código (`StrategyVersion`) coincida *exactamente* con la última entrada en `CHANGELOG_ES.md` y se muestre en el panel de estado.

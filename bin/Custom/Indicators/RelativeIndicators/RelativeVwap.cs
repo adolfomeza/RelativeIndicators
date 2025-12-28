@@ -30,6 +30,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public enum TradeDirectionMode { Both, LongOnly, ShortOnly }
     public class RelativeVwap : Indicator
     {
+        // ========== VERSION ==========
+        private const string VERSION = "1.0.0";
+        // ==============================
+        
         private SessionIterator sessionIterator;
         
         // Tracking for High Anchored VWAP
@@ -267,7 +271,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         {
             if (State == State.SetDefaults)
             {
-                Description = "RelativeVwap (Unified V2): Enhanced Strategy with robust logging and account filtering.";
+                Description = $"RelativeVwap v{VERSION}: VWAP anclado a extremos de sesión con señales de trading y niveles relativos.";
                 Name = "RelativeVwap";
                 Calculate = Calculate.OnEachTick;
                 IsOverlay = true;
