@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.10.39"; // TP/SL label colors
+		private const string StrategyVersion = "v1.10.40"; // TP/SL label colors
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -1447,16 +1447,37 @@ namespace NinjaTrader.NinjaScript.Strategies
 			// Lunes-Jueves: permitir overnight
 			bool isFriday = nyTime.DayOfWeek == DayOfWeek.Friday;
 			
+			// v1.10.40: Debug log for Friday close
+			if (isFriday && IsFirstTickOfBar && EnableDebugLogs)
+			{
+				Print(Time[0] + " FRIDAY DEBUG: nyTimeOfDay=" + nyTimeOfDay + " cutoffTime=" + cutoffTime + " tsUsaEnd=" + tsUsaEnd + " Position=" + Position.MarketPosition);
+			}
+			
 			if (isFriday && nyTimeOfDay >= cutoffTime && nyTimeOfDay <= tsUsaEnd.Add(gapBuffer))
 			{
 				// 3. Execution Logic - ONLY ON FRIDAYS
 				
-				// A) Close Positions
-				if (Position.MarketPosition != MarketPosition.Flat)
+				// v1.10.40: Check BOTH Strategy position AND Account position
+				bool hasStrategyPosition = Position.MarketPosition != MarketPosition.Flat;
+				bool hasAccountPosition = false;
+				if (Account != null)
+				{
+					foreach(Position p in Account.Positions)
+					{
+						if (p.Instrument.FullName == Instrument.FullName && p.MarketPosition != MarketPosition.Flat)
+						{
+							hasAccountPosition = true;
+							break;
+						}
+					}
+				}
+				
+				// A) Close Positions - if either Strategy OR Account has position
+				if (hasStrategyPosition || hasAccountPosition)
 				{
 					// Only log once per bar to avoid spam
 					if (IsFirstTickOfBar)
-						Log(Time[0] + " FRIDAY CLOSE: Market closing for weekend. Forcing Exit.");
+						Log(Time[0] + " FRIDAY CLOSE: Market closing for weekend. Forcing Exit. StratPos=" + hasStrategyPosition + " AcctPos=" + hasAccountPosition);
 						
 					ClosePositionUnmanaged("Exit on Friday Close");
 				}

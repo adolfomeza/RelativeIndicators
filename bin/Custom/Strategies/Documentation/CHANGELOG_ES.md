@@ -4,7 +4,14 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.39] - 2025-12-28 ✅ VERSIÓN ACTUAL
+## [1.10.40] - 2025-12-28 ✅ VERSIÓN ACTUAL
+### Fix: Cierre Viernes Verifica Account Position
+- **Problema**: CheckSessionExit solo verificaba `Position.MarketPosition` (puede estar desincronizado)
+- **Solución**: Ahora verifica **AMBOS**: Strategy position Y Account position
+- **Debug**: Agregado log "FRIDAY DEBUG" cuando EnableDebugLogs está activo para diagnosticar
+- **Resultado**: Cierra si cualquiera de las dos tiene posición
+
+## [1.10.39] - 2025-12-28
 ### Fix: Cierre Viernes 2 Minutos Antes
 - **Problema**: 1 minuto antes (v1.10.36) aún no era suficiente para capturar el cierre viernes en playback
 - **Solución**: Cambiar exitBuffer de 60s a **120s** (2 minutos antes)
