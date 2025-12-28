@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.10.32"; // TP/SL label colors
+		private const string StrategyVersion = "v1.10.33"; // TP/SL label colors
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -2728,23 +2728,6 @@ setupLevelName = "";
 				OrderAction slAction = direction == "Short" ? OrderAction.BuyToCover : OrderAction.Sell;
 				
 				stopOrder = SubmitOrderUnmanaged(0, slAction, OrderType.StopMarket, totalPositionQty, 0, slPrice, "", slTag);
-				
-				// v1.10.27: Draw custom SL label with risk amount
-				if (ShowVisuals)
-				{
-					double risk = Math.Abs(avgEntry - slPrice);
-					double ticksToSL = risk / TickSize;
-					double tickValue = Instrument.MasterInstrument.PointValue * TickSize;
-					double riskUSD = ticksToSL * tickValue * totalPositionQty;
-					
-					string slLabelText = string.Format("SL -${0:F0}", riskUSD);
-					string slLabelTag = "SLLabel_" + CurrentBar;
-					
-					double slLabelY = isShortSetup ? slPrice + (5 * TickSize) : slPrice - (5 * TickSize);
-					// Draw background rectangle then text
-					Draw.Rectangle(this, slLabelTag + "_bg", false, 3, slLabelY + (3 * TickSize), -6, slLabelY - (3 * TickSize), Brushes.Red, Brushes.Red, 100);
-					Draw.Text(this, slLabelTag, slLabelText, 2, slLabelY, Brushes.White);
-				}
 			}
 			
 			// STEP 2: Handle TAKE PROFIT (TP1 or TP2)
@@ -2773,28 +2756,6 @@ setupLevelName = "";
 				tp1Order = SubmitOrderUnmanaged(0, tpAction, OrderType.Limit, tpQty, myTpPrice, 0, "", tpTag);
 			} else {
 				tp2Order = SubmitOrderUnmanaged(0, tpAction, OrderType.Limit, tpQty, myTpPrice, 0, "", tpTag);
-			}
-			
-			// v1.10.26: Draw custom TP label with R and profit
-			if (ShowVisuals)
-			{
-				double risk = Math.Abs(avgEntry - slPrice);
-				double reward = Math.Abs(myTpPrice - avgEntry);
-				double rMultiple = risk > 0 ? reward / risk : 0;
-				
-				// Calculate profit in USD
-				double ticksToTarget = Math.Abs(myTpPrice - avgEntry) / TickSize;
-				double tickValue = Instrument.MasterInstrument.PointValue * TickSize;
-				double profitUSD = ticksToTarget * tickValue * tpQty;
-				
-				string labelText = string.Format("R={0:F1} +${1:F0}", rMultiple, profitUSD);
-				string labelTag = "TPLabel_" + myTpTag + "_" + CurrentBar;
-				
-				// Position label slightly offset from TP price
-				double labelY = isShortSetup ? myTpPrice - (5 * TickSize) : myTpPrice + (5 * TickSize);
-				// Draw background rectangle then text
-				Draw.Rectangle(this, labelTag + "_bg", false, 3, labelY + (3 * TickSize), -6, labelY - (3 * TickSize), Brushes.Lime, Brushes.Lime, 100);
-				Draw.Text(this, labelTag, labelText, 2, labelY, Brushes.Black);
 			}
 		}
 		catch (Exception ex)

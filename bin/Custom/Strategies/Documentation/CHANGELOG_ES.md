@@ -4,7 +4,14 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.32] - 2025-12-28 ✅ VERSIÓN ACTUAL
+## [1.10.33] - 2025-12-28 ✅ VERSIÓN ACTUAL
+### Removed: Etiquetas TP/SL con R y Monto
+- **Eliminado**: Etiquetas de SL que mostraban `-$XX` con fondo rojo
+- **Eliminado**: Etiquetas de TP1/TP2 que mostraban `R=X.X +$XX` con fondo lime
+- **Motivo**: Usuario prefiere chart limpio sin etiquetas adicionales
+- **Impacto**: Las órdenes TP/SL siguen funcionando, solo se quitó la visualización extra
+
+## [1.10.32] - 2025-12-28
 ### Fix: Error "Modify Historical Order" en Playback Multi-Instrumento
 - **Problema**: Al hacer playback con 6 instrumentos, error "attempted to modify a historical order"
 - **Causa**: `ManagePositionExit()` intentaba usar `ChangeOrder()` en órdenes creadas en modo Historical
