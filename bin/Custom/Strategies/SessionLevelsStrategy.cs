@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.10.46"; // TP/SL label colors
+		private const string StrategyVersion = "v1.10.47"; // TP/SL label colors
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -1625,17 +1625,35 @@ namespace NinjaTrader.NinjaScript.Strategies
 					// DON'T try to close position - will fail without market data
 					// Just reset the strategy state and null out order references
 					
-					// Full state reset - strategy can take new trades
+					// v1.10.47: COMPLETE STATE RESET - reset ALL trading state variables
+					// This ensures no "ghost" state from Friday affects Sunday trading
+					
+					// 1. Entry state
 					currentEntryState = EntryState.Idle;
+					
+					// 2. Setup variables
 					setupLevelName = "";
 					setupAnchorPrice = 0;
+					isShortSetup = false;
+					validatedTargetPrice = 0;
+					cachedOppositeLevel = null;
+					
+					// 3. Order references
 					stopOrder = null;
 					tp1Order = null;
 					tp2Order = null;
 					entryOrder = null;
+					
+					// 4. VWAP tracking
 					tradeVwapActive = false;
 					
-					Log(Time[0] + " SUNDAY RESET: State = Idle. Strategy ready for new trades.");
+					// 5. Skipped levels (reset to allow fresh detection)
+					skippedLevelsAtStartup.Clear();
+					
+					// 6. Safety net flags
+					orphanHandled = false;
+					
+					Log(Time[0] + " SUNDAY RESET (v1.10.47): COMPLETE state reset. Strategy ready for fresh trades.");
 					return; // Exit CheckSafetyNet
 				}
 			}

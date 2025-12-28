@@ -4,7 +4,19 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.46] - 2025-12-28 ✅ VERSIÓN ACTUAL
+## [1.10.47] - 2025-12-28 ✅ VERSIÓN ACTUAL
+### Fix CRÍTICO: Reset Completo de Variables Domingo
+- **Problema**: Reset parcial causaba entradas espurias (órdenes por todos lados)
+- **Causa**: Solo se reseteaba `currentEntryState` pero no otras variables críticas
+- **Solución**: Reset COMPLETO de todas las variables de trading:
+    - `isShortSetup = false`
+    - `validatedTargetPrice = 0`
+    - `cachedOppositeLevel = null`
+    - `skippedLevelsAtStartup.Clear()`
+    - `orphanHandled = false`
+- **Resultado**: Estado completamente limpio para nuevos trades
+
+## [1.10.46] - 2025-12-28
 ### Fix: Evitar Error "Modify Historical Order"
 - **Problema**: Intentar cancelar órdenes históricas en playback causaba error fatal
 - **Causa**: Órdenes del viernes son "históricas" y no pueden modificarse/cancelarse
