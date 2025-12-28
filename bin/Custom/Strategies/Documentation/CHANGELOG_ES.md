@@ -4,7 +4,14 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.37] - 2025-12-28 ✅ VERSIÓN ACTUAL
+## [1.10.38] - 2025-12-28 ✅ VERSIÓN ACTUAL
+### Fix: Error "No Market Data" en Cierre Domingo
+- **Problema**: El error persistía porque las órdenes adoptadas del viernes (StopMarket) seguían trabajando
+- **Causa**: ClosePositionUnmanaged cerraba posición pero órdenes adoptadas seguían activas
+- **Solución**: Cancelar stopOrder, tp1Order, tp2Order **ANTES** de cerrar posición
+- **Resultado**: Cierre domingo limpio sin errores de simulación
+
+## [1.10.37] - 2025-12-28
 ### Feature: Cierre Automático Posiciones Weekend al Activar Domingo
 - **Problema**: Posiciones del viernes quedaban abiertas si la estrategia se activaba domingo
 - **Solución**: Detectar si es domingo y cerrar posiciones heredadas automáticamente

@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.10.37"; // TP/SL label colors
+		private const string StrategyVersion = "v1.10.38"; // TP/SL label colors
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -1525,6 +1525,15 @@ namespace NinjaTrader.NinjaScript.Strategies
 							if (isSundayOrphan && Bars.Count >= 2 && CurrentBar >= 1)
 							{
 								Log(Time[0] + " SUNDAY CLEANUP: Closing weekend orphan position @ " + avgPrice);
+								
+								// v1.10.38: Cancel adopted orders FIRST to prevent "no market data" error
+								if (stopOrder != null && (stopOrder.OrderState == OrderState.Working || stopOrder.OrderState == OrderState.Accepted))
+									try { CancelOrder(stopOrder); } catch { }
+								if (tp1Order != null && (tp1Order.OrderState == OrderState.Working || tp1Order.OrderState == OrderState.Accepted))
+									try { CancelOrder(tp1Order); } catch { }
+								if (tp2Order != null && (tp2Order.OrderState == OrderState.Working || tp2Order.OrderState == OrderState.Accepted))
+									try { CancelOrder(tp2Order); } catch { }
+								
 								ClosePositionUnmanaged("Sunday Weekend Cleanup");
 								orphanHandled = true;
 								continue; // Move to next position if any
