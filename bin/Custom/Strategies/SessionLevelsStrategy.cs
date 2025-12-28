@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.10.33"; // TP/SL label colors
+		private const string StrategyVersion = "v1.10.34"; // TP/SL label colors
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -598,22 +598,60 @@ namespace NinjaTrader.NinjaScript.Strategies
 					}
 				}
 
-				// 2. Stuck Order Cleanup
+				// 2. Stuck Order Cleanup / Adoption (v1.10.34)
+				// If we have a position, ADOPT orders instead of cancelling
 				if (Account != null)
 				{
+					// First check if there's an existing position
+					bool hasExistingPosition = false;
+					foreach(Position p in Account.Positions)
+					{
+						if (p.Instrument.FullName == Instrument.FullName && p.MarketPosition != MarketPosition.Flat)
+						{
+							hasExistingPosition = true;
+							break;
+						}
+					}
+					
 					foreach(Order o in Account.Orders)
 					{
-						if (o.Instrument.FullName == Instrument.FullName && (o.OrderState == OrderState.Working || o.OrderState == OrderState.Accepted || o.OrderState == OrderState.CancelPending))
+						if (o.Instrument.FullName == Instrument.FullName && (o.OrderState == OrderState.Working || o.OrderState == OrderState.Accepted))
 						{
-							if (EnableDebugLogs) Print(Time[0] + " STARTUP FAILSAFE: Cancelling Stuck Order: " + o.Name);
-							try 
-							{ 
-								CancelOrder(o); 
-							} 
-							catch (Exception ex) 
-							{ 
-								// Refined Log (v1.7.10): Don't spam "Warning" for expected foreign order failures
-								// Print(Time[0] + " FAILSAFE WARNING: Could not cancel old order (Not Owner?): " + ex.Message); 
+							if (hasExistingPosition)
+							{
+								// v1.10.34: ADOPT orders instead of cancelling
+								if (o.Name.StartsWith("SL_"))
+								{
+									stopOrder = o;
+									if (EnableDebugLogs) Print(Time[0] + " STARTUP: Adopted SL order: " + o.Name);
+								}
+								else if (o.Name.StartsWith("TP1_"))
+								{
+									tp1Order = o;
+									protectedTp1Qty = o.Quantity;
+									// v1.10.34: Fix tradeVWAP from existing TP1 price
+									tradeVWAP.Reset(1, o.LimitPrice);
+									tradeVwapActive = true;
+									if (EnableDebugLogs) Print(Time[0] + " STARTUP: Adopted TP1 order: " + o.Name + " @ " + o.LimitPrice);
+								}
+								else if (o.Name.StartsWith("TP2_"))
+								{
+									tp2Order = o;
+									protectedTp2Qty = o.Quantity;
+									if (EnableDebugLogs) Print(Time[0] + " STARTUP: Adopted TP2 order: " + o.Name + " @ " + o.LimitPrice);
+								}
+								else
+								{
+									// Unknown order - log but don't cancel (might be manual)
+									if (EnableDebugLogs) Print(Time[0] + " STARTUP: Unknown order found: " + o.Name + " - NOT cancelling.");
+								}
+							}
+							else
+							{
+								// No position - cancel stuck orders
+								if (EnableDebugLogs) Print(Time[0] + " STARTUP FAILSAFE: Cancelling Stuck Order: " + o.Name);
+								try { CancelOrder(o); } 
+								catch (Exception) { }
 							}
 						}
 					}

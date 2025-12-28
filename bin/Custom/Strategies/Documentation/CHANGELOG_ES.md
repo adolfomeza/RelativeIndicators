@@ -4,7 +4,17 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.33] - 2025-12-28 ✅ VERSIÓN ACTUAL
+## [1.10.34] - 2025-12-28 ✅ VERSIÓN ACTUAL
+### Fix Crítico: Adopción de Órdenes Overnight (Startup Failsafe)
+- **Problema**: Al activar domingo 7pm con posición del viernes, se cancelaban SL/TP
+- **Solución**: Startup Failsafe ahora ADOPTA órdenes en vez de cancelarlas
+    - Detecta si hay posición existente antes de procesar órdenes
+    - Si hay posición: Adopta órdenes SL_, TP1_, TP2_ a las variables correspondientes
+    - Si no hay posición: Comportamiento anterior (cancela stuck orders)
+- **Bonus**: Al adoptar TP1, fija `tradeVWAP` al precio del TP1 existente
+- **Resultado**: Posiciones overnight mantienen sus SL/TP originales
+
+## [1.10.33] - 2025-12-28
 ### Removed: Etiquetas TP/SL con R y Monto
 - **Eliminado**: Etiquetas de SL que mostraban `-$XX` con fondo rojo
 - **Eliminado**: Etiquetas de TP1/TP2 que mostraban `R=X.X +$XX` con fondo lime
