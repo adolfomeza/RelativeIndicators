@@ -6,6 +6,21 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 
 ---
 
+## [2.5.2] - 2025-12-28
+### 🎨 Cambio de Colores Predeterminados
+Nueva paleta de colores más consistente.
+
+### Cambiado
+- **Bandas DVA**: Todas las bandas ahora usan `RoyalBlue` por defecto
+- **VWAP Line**: Cambiado de `Blue/Red` a `RoyalBlue` (up/down)
+- **Zonas de sesión**: Color cambiado de `Gray` a `RoyalBlue`
+- **Líneas de zona**: Ancho cambiado de 1px a 2px
+- **VWAP width**: Cambiado de 3px a 2px
+- **Bandas width**: Cambiado de 1px a 2px
+- **VWAP style**: Cambiado de `DashDot` a `Solid`
+
+---
+
 ## [2.5.1] - 2025-12-28
 ### 🧹 Limpieza de Código
 Refactorización menor sin cambios funcionales.

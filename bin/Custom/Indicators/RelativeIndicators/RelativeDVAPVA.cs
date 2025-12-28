@@ -100,11 +100,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		private BandTypeVWAPD				bandType					= BandTypeVWAPD.Standard_Deviation;
 		private readonly List<int>				newSessionBarIdxArr			= new List<int>();
 		private SessionIterator					sessionIterator				= null;
-		private System.Windows.Media.Brush		upBrush						= Brushes.Blue;
-		private System.Windows.Media.Brush  	downBrush					= Brushes.Red;
+		private System.Windows.Media.Brush		upBrush						= Brushes.RoyalBlue;
+		private System.Windows.Media.Brush  	downBrush					= Brushes.RoyalBlue;
 		private System.Windows.Media.Brush		innerBandBrush				= Brushes.RoyalBlue;
-		private System.Windows.Media.Brush  	middleBandBrush				= Brushes.MediumBlue;
-		private System.Windows.Media.Brush		outerBandBrush				= Brushes.Navy;
+		private System.Windows.Media.Brush  	middleBandBrush				= Brushes.RoyalBlue;
+		private System.Windows.Media.Brush		outerBandBrush				= Brushes.RoyalBlue;
 		private System.Windows.Media.Brush		band05Brush					= Brushes.Transparent; // Configurable
 		private System.Windows.Media.Brush		band15Brush					= Brushes.Transparent; // Configurable
 		private System.Windows.Media.Brush		innerAreaBrush 				= null;
@@ -125,15 +125,15 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		private int								innerAreaOpacity			= 60;
 		private int								middleAreaOpacity			= 0;
 		private int								outerAreaOpacity			= 60;
-		private int								plot0Width					= 3;
-		private int								plot1Width					= 1;
+		private int								plot0Width					= 2;
+		private int								plot1Width					= 2;
 		private PlotStyle						plot0Style					= PlotStyle.Line;
-		private DashStyleHelper					dash0Style					= DashStyleHelper.DashDot;
+		private DashStyleHelper					dash0Style					= DashStyleHelper.Solid;
 		private PlotStyle						plot1Style					= PlotStyle.Line;
 		private DashStyleHelper					dash1Style					= DashStyleHelper.Solid;
 		private TimeZoneInfo					globalTimeZone				= Core.Globals.GeneralOptions.TimeZoneInfo;
 		private TimeZoneInfo					customTimeZone;
-		private string							versionString				= "v2.5.1 - 2025-12-28";
+		private string							versionString				= "v2.5.2 - 2025-12-28";
 		private Series<DateTime>				tradingDate;
 		private Series<DateTime>				sessionBegin;
 		private Series<DateTime>				anchorTime;
@@ -218,10 +218,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		private object zonesLock = new object();
 		private bool showSessionZones = true;
 		private int zoneCutoffPercentage = 50;
-		private System.Windows.Media.Brush sessionZoneBrush = Brushes.Gray;
+		private System.Windows.Media.Brush sessionZoneBrush = Brushes.RoyalBlue;
 		private int sessionZoneOpacity = 40;
-		private System.Windows.Media.Brush zoneLineBrush = Brushes.Gray;
-		private int zoneLineWidth = 1;
+		private System.Windows.Media.Brush zoneLineBrush = Brushes.RoyalBlue;
+		private int zoneLineWidth = 2;
 		private System.Windows.Media.Brush zoneTextBrush = Brushes.White;
 		private int zoneTextSize = 12;
 		private string zoneLabelUpper = "pDVAH";
