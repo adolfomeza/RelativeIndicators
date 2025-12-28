@@ -4,7 +4,21 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.35] - 2025-12-28 ✅ VERSIÓN ACTUAL
+## [1.10.36] - 2025-12-28 ✅ VERSIÓN ACTUAL
+### Fix Crítico: Bloquear Órdenes Históricas en Cuenta Live/Demo
+- **Problema**: Al activar estrategia en cuenta demo con mercado cerrado, enviaba órdenes durante procesamiento histórico
+- **Causa**: Condición `State == State.Historical` permitía órdenes siempre (agregada en v1.7.30 para Strategy Analyzer)
+- **Solución**: Verificar si es conexión Playback antes de permitir órdenes en Historical
+  - `bool isPlayback = (Connection.PlaybackConnection != null);`
+  - Solo permite Historical orders si `isPlayback == true`
+- **Comportamiento nuevo**:
+  - **Cuenta live/demo**: Solo órdenes en Realtime (mercado abierto)
+  - **Playback**: Órdenes en Historical y Realtime (como antes)
+  - **Strategy Analyzer**: Órdenes en Historical (conexión Playback)
+
+---
+
+## [1.10.35] - 2025-12-28
 ### Feature: Información SL/TP en Panel de Estado
 - **Nuevo**: Al tener orden limit activa o posición abierta, el panel muestra:
   - `SL: -$XX (Yt)` - Pérdida potencial en USD y ticks
