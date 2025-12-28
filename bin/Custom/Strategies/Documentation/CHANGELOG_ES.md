@@ -4,7 +4,14 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.35] - 2025-12-28 ✅ VERSIÓN ACTUAL
+## [1.10.36] - 2025-12-28 ✅ VERSIÓN ACTUAL
+### Fix: Cierre Viernes No Funcionaba en Playback 1-Minuto
+- **Problema**: En barras de 1 minuto, el cierre del viernes (30s antes) era saltado
+- **Causa**: Playback salta de 17:59:00 a 18:00:00, perdiendo 17:59:30
+- **Solución**: Cambiar exitBuffer de **30 segundos** a **60 segundos**
+- **Efecto**: Ahora cierra a las 17:59:00 NY (1 minuto antes)
+
+## [1.10.35] - 2025-12-28
 ### Fix: Error "No Market Data Available" al Activar Domingo 7PM
 - **Problema**: Error "There is no market data available to drive the simulation engine"
 - **Causa**: CheckSafetyNet intentaba colocar órdenes de protección antes de tener tick data
