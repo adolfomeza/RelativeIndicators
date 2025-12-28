@@ -11,7 +11,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Controls;
 using System.Xml.Serialization;
@@ -134,7 +133,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		private DashStyleHelper					dash1Style					= DashStyleHelper.Solid;
 		private TimeZoneInfo					globalTimeZone				= Core.Globals.GeneralOptions.TimeZoneInfo;
 		private TimeZoneInfo					customTimeZone;
-		private string							versionString				= "v2.5.0 - 2025-12-28";
+		private string							versionString				= "v2.5.1 - 2025-12-28";
 		private Series<DateTime>				tradingDate;
 		private Series<DateTime>				sessionBegin;
 		private Series<DateTime>				anchorTime;
@@ -520,7 +519,6 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				Plots[6].Width = plot1Width;
 				Plots[6].PlotStyle = plot1Style;
 				Plots[6].DashStyleHelper = dash1Style;
-				Plots[6].DashStyleHelper = dash1Style;
 				// Config for new plots
 				Plots[7].Width = plot1Width; 
 				Plots[7].Brush = band05Brush.Clone(); 
@@ -578,17 +576,6 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 					ChartControl.Dispatcher.InvokeAsync(() =>
 					{
 						InsertWpfControls();
-						
-						// DIAGNOSTIC: List all indicators on the chart
-						NinjaTrader.Code.Output.Process("=== DIAGNOSTIC: LIST OF INDICATORS ON CHART ===", PrintTo.OutputTab1);
-						if (ChartControl != null && ChartControl.Indicators != null)
-						{
-							foreach (var ind in ChartControl.Indicators)
-							{
-								NinjaTrader.Code.Output.Process(string.Format("FOUND INDICATOR: Name='{0}' Type='{1}'", ind.Name, ind.GetType().FullName), PrintTo.OutputTab1);
-							}
-						}
-						NinjaTrader.Code.Output.Process("===============================================", PrintTo.OutputTab1);
 					});
 				}
 			}

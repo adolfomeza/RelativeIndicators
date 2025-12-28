@@ -6,6 +6,17 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 
 ---
 
+## [2.5.1] - 2025-12-28
+### 🧹 Limpieza de Código
+Refactorización menor sin cambios funcionales.
+
+### Eliminado
+- Import duplicado `using System.Windows.Input;`
+- Asignación duplicada `Plots[6].DashStyleHelper = dash1Style;`
+- Código de diagnóstico (`DIAGNOSTIC: LIST OF INDICATORS`) que imprimía en Output
+
+---
+
 ## [2.5.0] - 2025-12-28
 ### 🎉 Versión Inicial Documentada
 Primera versión oficialmente documentada del indicador RelativeDVAPVA.
