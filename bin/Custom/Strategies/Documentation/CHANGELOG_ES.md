@@ -4,7 +4,17 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.40] - 2025-12-28 ✅ VERSIÓN ACTUAL
+## [1.10.41] - 2025-12-28 ✅ VERSIÓN ACTUAL
+### Fix: Cierre Domingo en Zombie Position Block
+- **Problema**: El cierre de domingo en orphan block no se ejecutaba cuando Strategy Position ya estaba sincronizada
+- **Causa**: La condición `Position.MarketPosition == Flat` excluía posiciones sincronizadas
+- **Solución**: Agregar cierre de domingo también en el zombie position block
+    - Detecta si es domingo y hay posición zombie (Strategy != Flat pero State != PositionActive)
+    - Cancela órdenes adoptadas (stopOrder, tp1Order, tp2Order)
+    - Cierra posición con `ClosePositionUnmanaged("Sunday Zombie Cleanup")`
+- **Resultado**: Ahora cierra posiciones domingo tanto en orphan como en zombie scenarios
+
+## [1.10.40] - 2025-12-28
 ### Fix: Cierre Viernes Verifica Account Position
 - **Problema**: CheckSessionExit solo verificaba `Position.MarketPosition` (puede estar desincronizado)
 - **Solución**: Ahora verifica **AMBOS**: Strategy position Y Account position

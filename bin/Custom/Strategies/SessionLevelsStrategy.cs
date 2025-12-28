@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.10.40"; // TP/SL label colors
+		private const string StrategyVersion = "v1.10.41"; // TP/SL label colors
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -1600,6 +1600,27 @@ namespace NinjaTrader.NinjaScript.Strategies
 			if (Position.MarketPosition != MarketPosition.Flat && currentEntryState != EntryState.PositionActive)
 			{
 				Log(Time[0] + " CRITICAL: Safety Net Triggered! Position exists but State was " + currentEntryState);
+				
+				// v1.10.41: If Sunday and we have a zombie position, close it immediately
+				DateTime nyTimeZombie = nyTimeZone != null && chartTimeZone != null 
+					? TimeZoneInfo.ConvertTime(Time[0], chartTimeZone, nyTimeZone) 
+					: Time[0];
+				bool isSundayZombie = nyTimeZombie.DayOfWeek == DayOfWeek.Sunday;
+				
+				if (isSundayZombie && Bars.Count >= 2 && CurrentBar >= 1)
+				{
+					Log(Time[0] + " SUNDAY ZOMBIE: Found weekend position. CLOSING instead of adopting.");
+					// Cancel any adopted orders
+					if (stopOrder != null && (stopOrder.OrderState == OrderState.Working || stopOrder.OrderState == OrderState.Accepted))
+						try { CancelOrder(stopOrder); } catch { }
+					if (tp1Order != null && (tp1Order.OrderState == OrderState.Working || tp1Order.OrderState == OrderState.Accepted))
+						try { CancelOrder(tp1Order); } catch { }
+					if (tp2Order != null && (tp2Order.OrderState == OrderState.Working || tp2Order.OrderState == OrderState.Accepted))
+						try { CancelOrder(tp2Order); } catch { }
+					
+					ClosePositionUnmanaged("Sunday Zombie Cleanup");
+					return; // Don't adopt
+				}
 				
 				// --- SMART ADOPTION LOGIC (Strategy Position) ---
 				// ... (Existing Logic) ...
