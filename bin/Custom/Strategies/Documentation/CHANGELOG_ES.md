@@ -4,7 +4,19 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.42] - 2025-12-28 ✅ VERSIÓN ACTUAL
+## [1.10.43] - 2025-12-28 ✅ VERSIÓN ACTUAL
+### Fix: Reset Estado a Idle Después de Cierre Domingo
+- **Problema**: Después del cierre domingo, `currentEntryState` permanecía en `PositionActive`
+- **Efecto**: La estrategia no tomaba nuevos trades porque creía tener posición
+- **Solución**: Reset completo del estado después de ClosePositionUnmanaged:
+    - `currentEntryState = Idle`
+    - `setupLevelName = ""`
+    - `setupAnchorPrice = 0`
+    - `stopOrder, tp1Order, tp2Order = null`
+    - `tradeVwapActive = false`
+- **Resultado**: Estrategia lista para nuevos trades después del cierre
+
+## [1.10.42] - 2025-12-28
 ### Fix: Startup Failsafe Cancela Órdenes Domingo
 - **Problema**: Órdenes adoptadas en Startup causaban error "no market data" antes de CheckSafetyNet
 - **Causa**: Startup adoptaba órdenes del viernes, que intentaban ejecutarse sin datos

@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.10.42"; // TP/SL label colors
+		private const string StrategyVersion = "v1.10.43"; // TP/SL label colors
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -1633,6 +1633,16 @@ namespace NinjaTrader.NinjaScript.Strategies
 						try { CancelOrder(tp2Order); } catch { }
 					
 					ClosePositionUnmanaged("Sunday Zombie Cleanup");
+					
+					// v1.10.43: Force reset state to Idle so strategy can take new trades
+					currentEntryState = EntryState.Idle;
+					setupLevelName = "";
+					setupAnchorPrice = 0;
+					stopOrder = null;
+					tp1Order = null;
+					tp2Order = null;
+					tradeVwapActive = false;
+					Log(Time[0] + " SUNDAY ZOMBIE: State reset to Idle. Ready for new trades.");
 					return; // Don't adopt
 				}
 				
