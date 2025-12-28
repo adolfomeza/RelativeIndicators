@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.10.38"; // TP/SL label colors
+		private const string StrategyVersion = "v1.10.39"; // TP/SL label colors
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -1435,8 +1435,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 			DateTime nyTime = TimeZoneInfo.ConvertTime(chartTime, chartTimeZone, nyTimeZone);
 			TimeSpan nyTimeOfDay = nyTime.TimeOfDay;
 			
-			// Safety Margin (60 seconds before close - v1.10.36: was 30s, increased for 1-min bars)
-			TimeSpan exitBuffer = TimeSpan.FromSeconds(60);
+			// Safety Margin (120 seconds before close - v1.10.39: increased to 2 mins for reliable playback close)
+			TimeSpan exitBuffer = TimeSpan.FromSeconds(120);
 			TimeSpan cutoffTime = tsUsaEnd.Subtract(exitBuffer);
 			
 			// 2. Trigger Window: Are we in the LAST 30 seconds of the session OR in the cooldown/gap period (5 mins after)?

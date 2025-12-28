@@ -4,7 +4,13 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.38] - 2025-12-28 ✅ VERSIÓN ACTUAL
+## [1.10.39] - 2025-12-28 ✅ VERSIÓN ACTUAL
+### Fix: Cierre Viernes 2 Minutos Antes
+- **Problema**: 1 minuto antes (v1.10.36) aún no era suficiente para capturar el cierre viernes en playback
+- **Solución**: Cambiar exitBuffer de 60s a **120s** (2 minutos antes)
+- **Efecto**: Ahora cierra a las **17:58:00 NY** los viernes
+
+## [1.10.38] - 2025-12-28
 ### Fix: Error "No Market Data" en Cierre Domingo
 - **Problema**: El error persistía porque las órdenes adoptadas del viernes (StopMarket) seguían trabajando
 - **Causa**: ClosePositionUnmanaged cerraba posición pero órdenes adoptadas seguían activas
