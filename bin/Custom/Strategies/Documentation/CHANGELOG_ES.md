@@ -4,17 +4,24 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.47] - 2025-12-28 ✅ VERSIÓN ACTUAL
+## [1.10.33] - 2025-12-28 ✅ VERSIÓN ACTUAL (REVERT)
+### REVERTIDO: Cambios de Manejo Domingo Removidos
+- **Acción**: Revertido de v1.10.47 a v1.10.33
+- **Razón**: Los fixes de manejo de activación domingo (v1.10.34-v1.10.47) causaban entradas espurias y comportamiento errático
+- **Estado**: Código estable pre-domingo restaurado
+- **Recomendación**: Para playback con posiciones overnight, empezar desde el viernes (antes de 17:58 NY)
+
+---
+
+## VERSIONES REVERTIDAS (v1.10.34 - v1.10.47)
+> ⚠️ Las siguientes versiones fueron revertidas por causar inestabilidad:
+
+## [1.10.47] - 2025-12-28 ❌ REVERTIDO
 ### Fix CRÍTICO: Reset Completo de Variables Domingo
 - **Problema**: Reset parcial causaba entradas espurias (órdenes por todos lados)
 - **Causa**: Solo se reseteaba `currentEntryState` pero no otras variables críticas
-- **Solución**: Reset COMPLETO de todas las variables de trading:
-    - `isShortSetup = false`
-    - `validatedTargetPrice = 0`
-    - `cachedOppositeLevel = null`
-    - `skippedLevelsAtStartup.Clear()`
-    - `orphanHandled = false`
-- **Resultado**: Estado completamente limpio para nuevos trades
+- **Solución**: Reset COMPLETO de todas las variables de trading
+- **NOTA**: REVERTIDO por causar comportamiento errático
 
 ## [1.10.46] - 2025-12-28
 ### Fix: Evitar Error "Modify Historical Order"
