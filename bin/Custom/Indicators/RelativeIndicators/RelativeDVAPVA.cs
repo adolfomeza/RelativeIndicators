@@ -126,14 +126,14 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		private int								middleAreaOpacity			= 0;
 		private int								outerAreaOpacity			= 60;
 		private int								plot0Width					= 2;
-		private int								plot1Width					= 2;
+		private int								plot1Width					= 1;
 		private PlotStyle						plot0Style					= PlotStyle.Line;
 		private DashStyleHelper					dash0Style					= DashStyleHelper.Solid;
 		private PlotStyle						plot1Style					= PlotStyle.Line;
 		private DashStyleHelper					dash1Style					= DashStyleHelper.Solid;
 		private TimeZoneInfo					globalTimeZone				= Core.Globals.GeneralOptions.TimeZoneInfo;
 		private TimeZoneInfo					customTimeZone;
-		private string							versionString				= "v2.5.2 - 2025-12-28";
+		private string							versionString				= "v2.5.3 - 2025-12-28";
 		private Series<DateTime>				tradingDate;
 		private Series<DateTime>				sessionBegin;
 		private Series<DateTime>				anchorTime;
@@ -218,9 +218,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		private object zonesLock = new object();
 		private bool showSessionZones = true;
 		private int zoneCutoffPercentage = 50;
-		private System.Windows.Media.Brush sessionZoneBrush = Brushes.RoyalBlue;
+		private System.Windows.Media.Brush sessionZoneBrush = Brushes.Gray;
 		private int sessionZoneOpacity = 40;
-		private System.Windows.Media.Brush zoneLineBrush = Brushes.RoyalBlue;
+		private System.Windows.Media.Brush zoneLineBrush = Brushes.Gray;
 		private int zoneLineWidth = 2;
 		private System.Windows.Media.Brush zoneTextBrush = Brushes.White;
 		private int zoneTextSize = 12;
