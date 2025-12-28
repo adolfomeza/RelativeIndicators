@@ -4,7 +4,14 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.31] - 2025-12-28 ✅ VERSIÓN ACTUAL
+## [1.10.32] - 2025-12-28 ✅ VERSIÓN ACTUAL
+### Fix: Error "Modify Historical Order" en Playback Multi-Instrumento
+- **Problema**: Al hacer playback con 6 instrumentos, error "attempted to modify a historical order"
+- **Causa**: `ManagePositionExit()` intentaba usar `ChangeOrder()` en órdenes creadas en modo Historical
+- **Solución**: Agregar check `if (State == State.Historical) return;` al inicio
+- **Resultado**: Playback funciona sin deshabilitar la estrategia
+
+## [1.10.31] - 2025-12-28
 ### Feature: VWAP Dual (Trade vs Global)
 - **Problema v1.10.30**: VWAP fijo no seguía moviéndose, solo guardaba un precio estático
 - **Nuevo sistema**: Dos VWAPs paralelos

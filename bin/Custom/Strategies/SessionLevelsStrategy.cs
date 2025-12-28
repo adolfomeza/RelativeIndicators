@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.10.31"; // TP/SL label colors
+		private const string StrategyVersion = "v1.10.32"; // TP/SL label colors
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -3186,6 +3186,10 @@ setupLevelName = "";
 			// FAILSAFE: If we are actually Flat, do not attempt to manage exits.
 			// This prevents "Ghost" order modifications after "Exit on session close"
 			if (Position.MarketPosition == MarketPosition.Flat) return;
+			
+			// v1.10.32: Do not modify orders during Historical mode or transition
+			// This prevents "attempted to modify a historical order" error during playback
+			if (State == State.Historical) return;
 			
 			// Dynamic TP Management
 			// We only update if we have active TP orders that are working
