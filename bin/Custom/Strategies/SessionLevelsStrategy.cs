@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.10.44"; // TP/SL label colors
+		private const string StrategyVersion = "v1.10.46"; // TP/SL label colors
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -639,9 +639,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 							
 							if (isSundayStartup)
 							{
-								// Sunday - Cancel weekend orders, don't adopt
-								if (EnableDebugLogs) Print(Time[0] + " STARTUP SUNDAY: Cancelling order (not adopting): " + o.Name);
-								try { CancelOrder(o); } catch { }
+								// v1.10.46: DON'T cancel - just ignore (causes error with historical orders)
+								if (EnableDebugLogs) Print(Time[0] + " STARTUP SUNDAY: Ignoring order (historical): " + o.Name);
 								continue;
 							}
 							
@@ -1620,22 +1619,13 @@ namespace NinjaTrader.NinjaScript.Strategies
 				
 				if (nyTimeSunday.DayOfWeek == DayOfWeek.Sunday)
 				{
-					Log(Time[0] + " SUNDAY CLEANUP (v1.10.44): Found weekend position. CLOSING. Current State=" + currentEntryState);
+					Log(Time[0] + " SUNDAY RESET (v1.10.46): Found weekend position. Resetting state only.");
 					
-					// Cancel ALL working orders
-					if (stopOrder != null && (stopOrder.OrderState == OrderState.Working || stopOrder.OrderState == OrderState.Accepted))
-						try { CancelOrder(stopOrder); } catch { }
-					if (tp1Order != null && (tp1Order.OrderState == OrderState.Working || tp1Order.OrderState == OrderState.Accepted))
-						try { CancelOrder(tp1Order); } catch { }
-					if (tp2Order != null && (tp2Order.OrderState == OrderState.Working || tp2Order.OrderState == OrderState.Accepted))
-						try { CancelOrder(tp2Order); } catch { }
-					if (entryOrder != null && (entryOrder.OrderState == OrderState.Working || entryOrder.OrderState == OrderState.Accepted))
-						try { CancelOrder(entryOrder); } catch { }
+					// v1.10.46: DON'T try to cancel orders - they are "historical" and can't be modified
+					// DON'T try to close position - will fail without market data
+					// Just reset the strategy state and null out order references
 					
-					// Close the position
-					ClosePositionUnmanaged("Sunday Cleanup v1.10.44");
-					
-					// Full state reset
+					// Full state reset - strategy can take new trades
 					currentEntryState = EntryState.Idle;
 					setupLevelName = "";
 					setupAnchorPrice = 0;
@@ -1645,7 +1635,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 					entryOrder = null;
 					tradeVwapActive = false;
 					
-					Log(Time[0] + " SUNDAY CLEANUP: State reset to Idle. Ready for new trades.");
+					Log(Time[0] + " SUNDAY RESET: State = Idle. Strategy ready for new trades.");
 					return; // Exit CheckSafetyNet
 				}
 			}

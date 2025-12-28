@@ -4,7 +4,16 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.44] - 2025-12-28 ✅ VERSIÓN ACTUAL
+## [1.10.46] - 2025-12-28 ✅ VERSIÓN ACTUAL
+### Fix: Evitar Error "Modify Historical Order"
+- **Problema**: Intentar cancelar órdenes históricas en playback causaba error fatal
+- **Causa**: Órdenes del viernes son "históricas" y no pueden modificarse/cancelarse
+- **Solución**: Remover TODOS los `CancelOrder` para domingo
+    - Startup Failsafe: Solo ignora órdenes, no intenta cancelar
+    - CheckSafetyNet: Solo resetea estado, no intenta cancelar ni cerrar
+- **Resultado**: La estrategia ignora órdenes/posiciones fantasma y está lista para trades
+
+## [1.10.44] - 2025-12-28
 ### Fix: Cierre Domingo Independiente del Estado
 - **Problema**: El cierre dentro del zombie block solo corría si `State != PositionActive`, pero State ya era PositionActive
 - **Solución**: Nuevo bloque de cierre domingo **ANTES** del zombie check
