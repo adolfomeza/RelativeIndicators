@@ -4,7 +4,17 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.43] - 2025-12-28 ✅ VERSIÓN ACTUAL
+## [1.10.44] - 2025-12-28 ✅ VERSIÓN ACTUAL
+### Fix: Cierre Domingo Independiente del Estado
+- **Problema**: El cierre dentro del zombie block solo corría si `State != PositionActive`, pero State ya era PositionActive
+- **Solución**: Nuevo bloque de cierre domingo **ANTES** del zombie check
+    - Se ejecuta si `Position != Flat` y es domingo (sin importar Estado)
+    - Cancela TODAS las órdenes (stop, tp1, tp2, entry)
+    - Cierra posición
+    - Reset completo del estado a Idle
+- **Resultado**: Cierra posición domingo sin importar el estado actual
+
+## [1.10.43] - 2025-12-28
 ### Fix: Reset Estado a Idle Después de Cierre Domingo
 - **Problema**: Después del cierre domingo, `currentEntryState` permanecía en `PositionActive`
 - **Efecto**: La estrategia no tomaba nuevos trades porque creía tener posición

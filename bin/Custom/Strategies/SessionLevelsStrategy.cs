@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.10.43"; // TP/SL label colors
+		private const string StrategyVersion = "v1.10.44"; // TP/SL label colors
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -1608,6 +1608,46 @@ namespace NinjaTrader.NinjaScript.Strategies
 			else
 			{
 				orphanHandled = false; // Reset if Strategy has position (managed)
+			}
+
+			// v1.10.44: SUNDAY CLEANUP - Independent of currentEntryState
+			// This runs BEFORE the zombie check to ensure we close weekend positions
+			if (Position.MarketPosition != MarketPosition.Flat && Bars.Count >= 2 && CurrentBar >= 1)
+			{
+				DateTime nyTimeSunday = nyTimeZone != null && chartTimeZone != null 
+					? TimeZoneInfo.ConvertTime(Time[0], chartTimeZone, nyTimeZone) 
+					: Time[0];
+				
+				if (nyTimeSunday.DayOfWeek == DayOfWeek.Sunday)
+				{
+					Log(Time[0] + " SUNDAY CLEANUP (v1.10.44): Found weekend position. CLOSING. Current State=" + currentEntryState);
+					
+					// Cancel ALL working orders
+					if (stopOrder != null && (stopOrder.OrderState == OrderState.Working || stopOrder.OrderState == OrderState.Accepted))
+						try { CancelOrder(stopOrder); } catch { }
+					if (tp1Order != null && (tp1Order.OrderState == OrderState.Working || tp1Order.OrderState == OrderState.Accepted))
+						try { CancelOrder(tp1Order); } catch { }
+					if (tp2Order != null && (tp2Order.OrderState == OrderState.Working || tp2Order.OrderState == OrderState.Accepted))
+						try { CancelOrder(tp2Order); } catch { }
+					if (entryOrder != null && (entryOrder.OrderState == OrderState.Working || entryOrder.OrderState == OrderState.Accepted))
+						try { CancelOrder(entryOrder); } catch { }
+					
+					// Close the position
+					ClosePositionUnmanaged("Sunday Cleanup v1.10.44");
+					
+					// Full state reset
+					currentEntryState = EntryState.Idle;
+					setupLevelName = "";
+					setupAnchorPrice = 0;
+					stopOrder = null;
+					tp1Order = null;
+					tp2Order = null;
+					entryOrder = null;
+					tradeVwapActive = false;
+					
+					Log(Time[0] + " SUNDAY CLEANUP: State reset to Idle. Ready for new trades.");
+					return; // Exit CheckSafetyNet
+				}
 			}
 
 			// 1. Zombie Position: We have a position, but State thinks we are Idle/Working.
