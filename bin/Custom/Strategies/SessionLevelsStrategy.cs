@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.10.34"; // TP/SL label colors
+		private const string StrategyVersion = "v1.10.35"; // TP/SL label colors
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -1590,6 +1590,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 				// If we reached here, we are adopting (or already had an anchor).
 				currentEntryState = EntryState.PositionActive;
+				
+				// v1.10.35: Only place protection orders if we have market data
+				// On Sunday 7pm there's no tick data yet, orders will fail
+				if (Bars.Count < 2 || CurrentBar < 1)
+				{
+					Log(Time[0] + " ZOMBIE: Waiting for market data before placing protection orders.");
+					return; // Will try again on next OnBarUpdate
+				}
 				
 				// Force Place Stops if missing
 				// Use "Emergency" signal tag for safety net adoption

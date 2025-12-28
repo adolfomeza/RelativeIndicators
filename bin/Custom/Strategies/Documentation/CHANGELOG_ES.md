@@ -4,7 +4,16 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.34] - 2025-12-28 ✅ VERSIÓN ACTUAL
+## [1.10.35] - 2025-12-28 ✅ VERSIÓN ACTUAL
+### Fix: Error "No Market Data Available" al Activar Domingo 7PM
+- **Problema**: Error "There is no market data available to drive the simulation engine"
+- **Causa**: CheckSafetyNet intentaba colocar órdenes de protección antes de tener tick data
+- **Solución**: Verificar `Bars.Count < 2 || CurrentBar < 1` antes de EnsureProtection
+    - Si no hay datos: Log y esperar al siguiente OnBarUpdate
+    - Si hay datos: Proceder normalmente
+- **Resultado**: Estrategia espera datos de mercado antes de enviar órdenes
+
+## [1.10.34] - 2025-12-28
 ### Fix Crítico: Adopción de Órdenes Overnight (Startup Failsafe)
 - **Problema**: Al activar domingo 7pm con posición del viernes, se cancelaban SL/TP
 - **Solución**: Startup Failsafe ahora ADOPTA órdenes en vez de cancelarlas
