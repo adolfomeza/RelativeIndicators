@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.10.47"; // TP/SL label colors
+		private const string StrategyVersion = "v1.10.33"; // TP/SL label colors
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -591,94 +591,29 @@ namespace NinjaTrader.NinjaScript.Strategies
 					{
 						if (p.Instrument == Instrument && p.MarketPosition != MarketPosition.Flat)
 						{
-							// v1.10.37: If activating on Sunday, close inherited weekend positions
-							DateTime nyTime = nyTimeZone != null && chartTimeZone != null 
-								? TimeZoneInfo.ConvertTime(Time[0], chartTimeZone, nyTimeZone) 
-								: Time[0];
-							bool isSunday = nyTime.DayOfWeek == DayOfWeek.Sunday;
-							
-							if (isSunday)
-							{
-								Log(Time[0] + " STARTUP SUNDAY: Found weekend position. Qty=" + p.Quantity + " - CLOSING (should have closed Friday).");
-								// Mark for closing - will be handled by ClosePositionUnmanaged after data is available
-								// We can't close immediately as we may not have market data yet
-							}
-							else
-							{
-								// v1.10.28: Weekday overnight - adopt the position
-								if (EnableDebugLogs) Print(Time[0] + " STARTUP: Found existing position. Qty=" + p.Quantity + " - Adopting (overnight allowed).");
-							}
+							// v1.10.28: Skip zombie cleanup - this is an intentional overnight position
+							if (EnableDebugLogs) Print(Time[0] + " STARTUP: Found existing position. Qty=" + p.Quantity + " - Adopting (overnight allowed).");
+							// Don't close - just log and let strategy adopt it
 						}
 					}
 				}
 
-				// 2. Stuck Order Cleanup / Adoption (v1.10.34)
-				// If we have a position, ADOPT orders instead of cancelling
+				// 2. Stuck Order Cleanup
 				if (Account != null)
 				{
-					// First check if there's an existing position
-					bool hasExistingPosition = false;
-					foreach(Position p in Account.Positions)
-					{
-						if (p.Instrument.FullName == Instrument.FullName && p.MarketPosition != MarketPosition.Flat)
-						{
-							hasExistingPosition = true;
-							break;
-						}
-					}
-					
 					foreach(Order o in Account.Orders)
 					{
-						if (o.Instrument.FullName == Instrument.FullName && (o.OrderState == OrderState.Working || o.OrderState == OrderState.Accepted))
+						if (o.Instrument.FullName == Instrument.FullName && (o.OrderState == OrderState.Working || o.OrderState == OrderState.Accepted || o.OrderState == OrderState.CancelPending))
 						{
-							// v1.10.42: Check if Sunday - if so, CANCEL instead of adopting
-							DateTime nyTimeStartup = nyTimeZone != null && chartTimeZone != null 
-								? TimeZoneInfo.ConvertTime(Time[0], chartTimeZone, nyTimeZone) 
-								: Time[0];
-							bool isSundayStartup = nyTimeStartup.DayOfWeek == DayOfWeek.Sunday;
-							
-							if (isSundayStartup)
-							{
-								// v1.10.46: DON'T cancel - just ignore (causes error with historical orders)
-								if (EnableDebugLogs) Print(Time[0] + " STARTUP SUNDAY: Ignoring order (historical): " + o.Name);
-								continue;
-							}
-							
-							if (hasExistingPosition)
-							{
-								// v1.10.34: ADOPT orders instead of cancelling
-								if (o.Name.StartsWith("SL_"))
-								{
-									stopOrder = o;
-									if (EnableDebugLogs) Print(Time[0] + " STARTUP: Adopted SL order: " + o.Name);
-								}
-								else if (o.Name.StartsWith("TP1_"))
-								{
-									tp1Order = o;
-									protectedTp1Qty = o.Quantity;
-									// v1.10.34: Fix tradeVWAP from existing TP1 price
-									tradeVWAP.Reset(1, o.LimitPrice);
-									tradeVwapActive = true;
-									if (EnableDebugLogs) Print(Time[0] + " STARTUP: Adopted TP1 order: " + o.Name + " @ " + o.LimitPrice);
-								}
-								else if (o.Name.StartsWith("TP2_"))
-								{
-									tp2Order = o;
-									protectedTp2Qty = o.Quantity;
-									if (EnableDebugLogs) Print(Time[0] + " STARTUP: Adopted TP2 order: " + o.Name + " @ " + o.LimitPrice);
-								}
-								else
-								{
-									// Unknown order - log but don't cancel (might be manual)
-									if (EnableDebugLogs) Print(Time[0] + " STARTUP: Unknown order found: " + o.Name + " - NOT cancelling.");
-								}
-							}
-							else
-							{
-								// No position - cancel stuck orders
-								if (EnableDebugLogs) Print(Time[0] + " STARTUP FAILSAFE: Cancelling Stuck Order: " + o.Name);
-								try { CancelOrder(o); } 
-								catch (Exception) { }
+							if (EnableDebugLogs) Print(Time[0] + " STARTUP FAILSAFE: Cancelling Stuck Order: " + o.Name);
+							try 
+							{ 
+								CancelOrder(o); 
+							} 
+							catch (Exception ex) 
+							{ 
+								// Refined Log (v1.7.10): Don't spam "Warning" for expected foreign order failures
+								// Print(Time[0] + " FAILSAFE WARNING: Could not cancel old order (Not Owner?): " + ex.Message); 
 							}
 						}
 					}
@@ -1448,8 +1383,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 			DateTime nyTime = TimeZoneInfo.ConvertTime(chartTime, chartTimeZone, nyTimeZone);
 			TimeSpan nyTimeOfDay = nyTime.TimeOfDay;
 			
-			// Safety Margin (120 seconds before close - v1.10.39: increased to 2 mins for reliable playback close)
-			TimeSpan exitBuffer = TimeSpan.FromSeconds(120);
+			// Safety Margin (30 seconds before close)
+			TimeSpan exitBuffer = TimeSpan.FromSeconds(30);
 			TimeSpan cutoffTime = tsUsaEnd.Subtract(exitBuffer);
 			
 			// 2. Trigger Window: Are we in the LAST 30 seconds of the session OR in the cooldown/gap period (5 mins after)?
@@ -1460,37 +1395,16 @@ namespace NinjaTrader.NinjaScript.Strategies
 			// Lunes-Jueves: permitir overnight
 			bool isFriday = nyTime.DayOfWeek == DayOfWeek.Friday;
 			
-			// v1.10.40: Debug log for Friday close
-			if (isFriday && IsFirstTickOfBar && EnableDebugLogs)
-			{
-				Print(Time[0] + " FRIDAY DEBUG: nyTimeOfDay=" + nyTimeOfDay + " cutoffTime=" + cutoffTime + " tsUsaEnd=" + tsUsaEnd + " Position=" + Position.MarketPosition);
-			}
-			
 			if (isFriday && nyTimeOfDay >= cutoffTime && nyTimeOfDay <= tsUsaEnd.Add(gapBuffer))
 			{
 				// 3. Execution Logic - ONLY ON FRIDAYS
 				
-				// v1.10.40: Check BOTH Strategy position AND Account position
-				bool hasStrategyPosition = Position.MarketPosition != MarketPosition.Flat;
-				bool hasAccountPosition = false;
-				if (Account != null)
-				{
-					foreach(Position p in Account.Positions)
-					{
-						if (p.Instrument.FullName == Instrument.FullName && p.MarketPosition != MarketPosition.Flat)
-						{
-							hasAccountPosition = true;
-							break;
-						}
-					}
-				}
-				
-				// A) Close Positions - if either Strategy OR Account has position
-				if (hasStrategyPosition || hasAccountPosition)
+				// A) Close Positions
+				if (Position.MarketPosition != MarketPosition.Flat)
 				{
 					// Only log once per bar to avoid spam
 					if (IsFirstTickOfBar)
-						Log(Time[0] + " FRIDAY CLOSE: Market closing for weekend. Forcing Exit. StratPos=" + hasStrategyPosition + " AcctPos=" + hasAccountPosition);
+						Log(Time[0] + " FRIDAY CLOSE: Market closing for weekend. Forcing Exit.");
 						
 					ClosePositionUnmanaged("Exit on Friday Close");
 				}
@@ -1550,30 +1464,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 								if (High[0] >= avgPrice + safetyMargin) unsafeOrphan = true;
 							}
 
-							// v1.10.37: If Sunday, close weekend orphan positions immediately
-							DateTime nyTimeCheck = nyTimeZone != null && chartTimeZone != null 
-								? TimeZoneInfo.ConvertTime(Time[0], chartTimeZone, nyTimeZone) 
-								: Time[0];
-							bool isSundayOrphan = nyTimeCheck.DayOfWeek == DayOfWeek.Sunday;
-							
-							if (isSundayOrphan && Bars.Count >= 2 && CurrentBar >= 1)
-							{
-								Log(Time[0] + " SUNDAY CLEANUP: Closing weekend orphan position @ " + avgPrice);
-								
-								// v1.10.38: Cancel adopted orders FIRST to prevent "no market data" error
-								if (stopOrder != null && (stopOrder.OrderState == OrderState.Working || stopOrder.OrderState == OrderState.Accepted))
-									try { CancelOrder(stopOrder); } catch { }
-								if (tp1Order != null && (tp1Order.OrderState == OrderState.Working || tp1Order.OrderState == OrderState.Accepted))
-									try { CancelOrder(tp1Order); } catch { }
-								if (tp2Order != null && (tp2Order.OrderState == OrderState.Working || tp2Order.OrderState == OrderState.Accepted))
-									try { CancelOrder(tp2Order); } catch { }
-								
-								ClosePositionUnmanaged("Sunday Weekend Cleanup");
-								orphanHandled = true;
-								continue; // Move to next position if any
-							}
-							
-							// v1.10.28: Don't flatten overnight positions L-T - user wants them open
+							// v1.10.28: Don't flatten overnight positions - user wants them open
 							// Only alert, don't close
 							if (unsafeOrphan)
 							{
@@ -1609,90 +1500,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 				orphanHandled = false; // Reset if Strategy has position (managed)
 			}
 
-			// v1.10.44: SUNDAY CLEANUP - Independent of currentEntryState
-			// This runs BEFORE the zombie check to ensure we close weekend positions
-			if (Position.MarketPosition != MarketPosition.Flat && Bars.Count >= 2 && CurrentBar >= 1)
-			{
-				DateTime nyTimeSunday = nyTimeZone != null && chartTimeZone != null 
-					? TimeZoneInfo.ConvertTime(Time[0], chartTimeZone, nyTimeZone) 
-					: Time[0];
-				
-				if (nyTimeSunday.DayOfWeek == DayOfWeek.Sunday)
-				{
-					Log(Time[0] + " SUNDAY RESET (v1.10.46): Found weekend position. Resetting state only.");
-					
-					// v1.10.46: DON'T try to cancel orders - they are "historical" and can't be modified
-					// DON'T try to close position - will fail without market data
-					// Just reset the strategy state and null out order references
-					
-					// v1.10.47: COMPLETE STATE RESET - reset ALL trading state variables
-					// This ensures no "ghost" state from Friday affects Sunday trading
-					
-					// 1. Entry state
-					currentEntryState = EntryState.Idle;
-					
-					// 2. Setup variables
-					setupLevelName = "";
-					setupAnchorPrice = 0;
-					isShortSetup = false;
-					validatedTargetPrice = 0;
-					cachedOppositeLevel = null;
-					
-					// 3. Order references
-					stopOrder = null;
-					tp1Order = null;
-					tp2Order = null;
-					entryOrder = null;
-					
-					// 4. VWAP tracking
-					tradeVwapActive = false;
-					
-					// 5. Skipped levels (reset to allow fresh detection)
-					skippedLevelsAtStartup.Clear();
-					
-					// 6. Safety net flags
-					orphanHandled = false;
-					
-					Log(Time[0] + " SUNDAY RESET (v1.10.47): COMPLETE state reset. Strategy ready for fresh trades.");
-					return; // Exit CheckSafetyNet
-				}
-			}
-
 			// 1. Zombie Position: We have a position, but State thinks we are Idle/Working.
 			if (Position.MarketPosition != MarketPosition.Flat && currentEntryState != EntryState.PositionActive)
 			{
 				Log(Time[0] + " CRITICAL: Safety Net Triggered! Position exists but State was " + currentEntryState);
-				
-				// v1.10.41: If Sunday and we have a zombie position, close it immediately
-				DateTime nyTimeZombie = nyTimeZone != null && chartTimeZone != null 
-					? TimeZoneInfo.ConvertTime(Time[0], chartTimeZone, nyTimeZone) 
-					: Time[0];
-				bool isSundayZombie = nyTimeZombie.DayOfWeek == DayOfWeek.Sunday;
-				
-				if (isSundayZombie && Bars.Count >= 2 && CurrentBar >= 1)
-				{
-					Log(Time[0] + " SUNDAY ZOMBIE: Found weekend position. CLOSING instead of adopting.");
-					// Cancel any adopted orders
-					if (stopOrder != null && (stopOrder.OrderState == OrderState.Working || stopOrder.OrderState == OrderState.Accepted))
-						try { CancelOrder(stopOrder); } catch { }
-					if (tp1Order != null && (tp1Order.OrderState == OrderState.Working || tp1Order.OrderState == OrderState.Accepted))
-						try { CancelOrder(tp1Order); } catch { }
-					if (tp2Order != null && (tp2Order.OrderState == OrderState.Working || tp2Order.OrderState == OrderState.Accepted))
-						try { CancelOrder(tp2Order); } catch { }
-					
-					ClosePositionUnmanaged("Sunday Zombie Cleanup");
-					
-					// v1.10.43: Force reset state to Idle so strategy can take new trades
-					currentEntryState = EntryState.Idle;
-					setupLevelName = "";
-					setupAnchorPrice = 0;
-					stopOrder = null;
-					tp1Order = null;
-					tp2Order = null;
-					tradeVwapActive = false;
-					Log(Time[0] + " SUNDAY ZOMBIE: State reset to Idle. Ready for new trades.");
-					return; // Don't adopt
-				}
 				
 				// --- SMART ADOPTION LOGIC (Strategy Position) ---
 				// ... (Existing Logic) ...
@@ -1741,14 +1552,6 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 				// If we reached here, we are adopting (or already had an anchor).
 				currentEntryState = EntryState.PositionActive;
-				
-				// v1.10.35: Only place protection orders if we have market data
-				// On Sunday 7pm there's no tick data yet, orders will fail
-				if (Bars.Count < 2 || CurrentBar < 1)
-				{
-					Log(Time[0] + " ZOMBIE: Waiting for market data before placing protection orders.");
-					return; // Will try again on next OnBarUpdate
-				}
 				
 				// Force Place Stops if missing
 				// Use "Emergency" signal tag for safety net adoption
