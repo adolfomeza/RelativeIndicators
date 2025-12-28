@@ -396,6 +396,7 @@
     <Compile Include="Strategies\AxionValueProtocol.cs" />
     <Compile Include="Strategies\RelativeLevelsData.cs" />
     <Compile Include="Strategies\RelativeLevelsStrategy.cs" />
+    <Compile Include="Strategies\SessionLevelsStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Resource.resx">
