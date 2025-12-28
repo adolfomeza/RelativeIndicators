@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.10.36"; // TP/SL label colors
+		private const string StrategyVersion = "v1.10.37"; // TP/SL label colors
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -591,9 +591,23 @@ namespace NinjaTrader.NinjaScript.Strategies
 					{
 						if (p.Instrument == Instrument && p.MarketPosition != MarketPosition.Flat)
 						{
-							// v1.10.28: Skip zombie cleanup - this is an intentional overnight position
-							if (EnableDebugLogs) Print(Time[0] + " STARTUP: Found existing position. Qty=" + p.Quantity + " - Adopting (overnight allowed).");
-							// Don't close - just log and let strategy adopt it
+							// v1.10.37: If activating on Sunday, close inherited weekend positions
+							DateTime nyTime = nyTimeZone != null && chartTimeZone != null 
+								? TimeZoneInfo.ConvertTime(Time[0], chartTimeZone, nyTimeZone) 
+								: Time[0];
+							bool isSunday = nyTime.DayOfWeek == DayOfWeek.Sunday;
+							
+							if (isSunday)
+							{
+								Log(Time[0] + " STARTUP SUNDAY: Found weekend position. Qty=" + p.Quantity + " - CLOSING (should have closed Friday).");
+								// Mark for closing - will be handled by ClosePositionUnmanaged after data is available
+								// We can't close immediately as we may not have market data yet
+							}
+							else
+							{
+								// v1.10.28: Weekday overnight - adopt the position
+								if (EnableDebugLogs) Print(Time[0] + " STARTUP: Found existing position. Qty=" + p.Quantity + " - Adopting (overnight allowed).");
+							}
 						}
 					}
 				}
@@ -1502,7 +1516,21 @@ namespace NinjaTrader.NinjaScript.Strategies
 								if (High[0] >= avgPrice + safetyMargin) unsafeOrphan = true;
 							}
 
-							// v1.10.28: Don't flatten overnight positions - user wants them open
+							// v1.10.37: If Sunday, close weekend orphan positions immediately
+							DateTime nyTimeCheck = nyTimeZone != null && chartTimeZone != null 
+								? TimeZoneInfo.ConvertTime(Time[0], chartTimeZone, nyTimeZone) 
+								: Time[0];
+							bool isSundayOrphan = nyTimeCheck.DayOfWeek == DayOfWeek.Sunday;
+							
+							if (isSundayOrphan && Bars.Count >= 2 && CurrentBar >= 1)
+							{
+								Log(Time[0] + " SUNDAY CLEANUP: Closing weekend orphan position @ " + avgPrice);
+								ClosePositionUnmanaged("Sunday Weekend Cleanup");
+								orphanHandled = true;
+								continue; // Move to next position if any
+							}
+							
+							// v1.10.28: Don't flatten overnight positions L-T - user wants them open
 							// Only alert, don't close
 							if (unsafeOrphan)
 							{

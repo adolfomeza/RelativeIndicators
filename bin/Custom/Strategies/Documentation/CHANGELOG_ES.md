@@ -4,7 +4,16 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.36] - 2025-12-28 ✅ VERSIÓN ACTUAL
+## [1.10.37] - 2025-12-28 ✅ VERSIÓN ACTUAL
+### Feature: Cierre Automático Posiciones Weekend al Activar Domingo
+- **Problema**: Posiciones del viernes quedaban abiertas si la estrategia se activaba domingo
+- **Solución**: Detectar si es domingo y cerrar posiciones heredadas automáticamente
+    - Startup Failsafe: Logea posición weekend encontrada
+    - CheckSafetyNet: Cierra posición orphan cuando hay datos de mercado disponibles
+- **Condición**: Solo aplica si `DayOfWeek == Sunday`
+- **Lunes-Jueves**: Comportamiento anterior (adopta posiciones overnight)
+
+## [1.10.36] - 2025-12-28
 ### Fix: Cierre Viernes No Funcionaba en Playback 1-Minuto
 - **Problema**: En barras de 1 minuto, el cierre del viernes (30s antes) era saltado
 - **Causa**: Playback salta de 17:59:00 a 18:00:00, perdiendo 17:59:30
