@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.10.36"; // Fix: Block historical orders on live/demo
+		private const string StrategyVersion = "v1.10.37"; // Fix: Reset state at week end
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -571,6 +571,73 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private HashSet<string> skippedLevelsAtStartup = new HashSet<string>(); // v1.10.29: Levels already touched at startup
 		private bool gapDetected = false;
 		private int gapCount = 0;
+		private DateTime lastWeeklyReset = DateTime.MinValue; // v1.10.37: Track weekly reset
+
+		// -------------------------------------------------------------------------
+		// WEEKLY RESET LOGIC (v1.10.37)
+		// -------------------------------------------------------------------------
+		private void CheckWeekEndReset()
+		{
+			if (nyTimeZone == null || chartTimeZone == null) return;
+			
+			DateTime nyTime = TimeZoneInfo.ConvertTime(Time[0], chartTimeZone, nyTimeZone);
+			
+			// Calculate this week's Friday 6pm
+			int daysToFriday = ((int)DayOfWeek.Friday - (int)nyTime.DayOfWeek + 7) % 7;
+			if (daysToFriday == 0 && nyTime.TimeOfDay >= TimeSpan.Parse("18:00"))
+				daysToFriday = 0; // Already past this Friday 6pm
+			else if (daysToFriday == 0)
+				daysToFriday = 7; // Before Friday 6pm, use last Friday
+			
+			DateTime lastFriday6pm = nyTime.Date.AddDays(-((7 - daysToFriday) % 7)).Date.Add(TimeSpan.Parse("18:00"));
+			
+			// Adjust: If we're on Friday after 6pm, lastFriday6pm is TODAY
+			if (nyTime.DayOfWeek == DayOfWeek.Friday && nyTime.TimeOfDay >= TimeSpan.Parse("18:00"))
+				lastFriday6pm = nyTime.Date.Add(TimeSpan.Parse("18:00"));
+			// If Saturday/Sunday, last Friday was recent
+			else if (nyTime.DayOfWeek == DayOfWeek.Saturday)
+				lastFriday6pm = nyTime.Date.AddDays(-1).Add(TimeSpan.Parse("18:00"));
+			else if (nyTime.DayOfWeek == DayOfWeek.Sunday)
+				lastFriday6pm = nyTime.Date.AddDays(-2).Add(TimeSpan.Parse("18:00"));
+			else
+				lastFriday6pm = nyTime.Date.AddDays(-((int)nyTime.DayOfWeek + 2)).Add(TimeSpan.Parse("18:00"));
+			
+			// Convert to chart timezone for comparison
+			DateTime lastFriday6pmChart = TimeZoneInfo.ConvertTime(lastFriday6pm, nyTimeZone, chartTimeZone);
+			
+			// Check if we need to reset
+			if (lastFriday6pmChart > lastWeeklyReset && currentEntryState != EntryState.PositionActive)
+			{
+				lastWeeklyReset = lastFriday6pmChart;
+				
+				Print(Time[0] + " v1.10.37 WEEK RESET - State cleared for new trading week (Last Friday 6pm: " + lastFriday6pm + " NY)");
+				
+				// Cancel pending entry if any
+				if (entryOrder != null && (entryOrder.OrderState == OrderState.Working || entryOrder.OrderState == OrderState.Accepted))
+				{
+					try { CancelOrder(entryOrder); } catch {}
+				}
+				
+				// Reset ALL setup state
+				currentEntryState = EntryState.Idle;
+				setupLevelName = "";
+				setupLevelTime = DateTime.MinValue;
+				setupAnchorPrice = 0;
+				validatedTargetPrice = 0;
+				cachedOppositeLevel = null;
+				isInternalLevel = false;
+				waitingForVwapMitigation = false;
+				currentVwapNumber = 1;
+				
+				// Reset Adhoc VWAP
+				adhocVolSum = 0;
+				adhocPvSum = 0;
+				adhocLastBar = -1;
+				
+				// Clear skipped levels from last week
+				skippedLevelsAtStartup.Clear();
+			}
+		}
 
 		protected override void OnBarUpdate()
 		{
@@ -643,6 +710,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 			}
 
 			if (CurrentBar < 20) return;
+			
+			// v1.10.37: Reset state at week end (Friday 6pm NY) or new week start
+			CheckWeekEndReset();
 			
 			// V_STACK: Reset Stack per bar update cycle (re-draws everything)
             verticalUnit = (atr != null && atr[0] > 0) ? atr[0] * 0.1 : TickSize;

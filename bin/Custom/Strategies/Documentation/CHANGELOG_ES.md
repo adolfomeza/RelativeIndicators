@@ -4,7 +4,27 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.36] - 2025-12-28 ✅ VERSIÓN ACTUAL
+## [1.10.37] - 2025-12-28 ✅ VERSIÓN ACTUAL
+### Feature: Reset Estado al Cierre de Semana
+- **Problema**: Al activar la estrategia el domingo, usaba señales/VWAP del viernes anterior
+  - El estado (`currentEntryState`, `setupLevelName`, VWAP adhoc) persistía entre semanas
+  - Colocaba órdenes basadas en triggers obsoletos de la semana pasada
+- **Solución**: Nuevo método `CheckWeekEndReset()` ejecutado cada bar
+  - Calcula el último viernes 6pm NY (cierre de mercados de futuros)
+  - Si ha pasado ese viernes desde el último reset → resetea TODO
+- **Estado reseteado**:
+  - `currentEntryState = Idle`
+  - `setupLevelName = ""`
+  - `setupAnchorPrice = 0`
+  - VWAP adhoc (`adhocVolSum`, `adhocPvSum`, `adhocLastBar`)
+  - Cancela órdenes pendientes si existen
+  - Limpia `skippedLevelsAtStartup`
+- **Log**: `"v1.10.37 WEEK RESET - State cleared for new trading week"`
+- **Resultado**: Estrategia empieza "limpia" cada domingo, sin señales heredadas
+
+---
+
+## [1.10.36] - 2025-12-28
 ### Fix Crítico: Bloquear Órdenes Históricas en Cuenta Live/Demo
 - **Problema**: Al activar estrategia en cuenta demo con mercado cerrado, enviaba órdenes durante procesamiento histórico
 - **Causa**: Condición `State == State.Historical` permitía órdenes siempre (agregada en v1.7.30 para Strategy Analyzer)
