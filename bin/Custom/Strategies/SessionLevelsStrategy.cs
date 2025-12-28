@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.10.41"; // TP/SL label colors
+		private const string StrategyVersion = "v1.10.42"; // TP/SL label colors
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -631,6 +631,20 @@ namespace NinjaTrader.NinjaScript.Strategies
 					{
 						if (o.Instrument.FullName == Instrument.FullName && (o.OrderState == OrderState.Working || o.OrderState == OrderState.Accepted))
 						{
+							// v1.10.42: Check if Sunday - if so, CANCEL instead of adopting
+							DateTime nyTimeStartup = nyTimeZone != null && chartTimeZone != null 
+								? TimeZoneInfo.ConvertTime(Time[0], chartTimeZone, nyTimeZone) 
+								: Time[0];
+							bool isSundayStartup = nyTimeStartup.DayOfWeek == DayOfWeek.Sunday;
+							
+							if (isSundayStartup)
+							{
+								// Sunday - Cancel weekend orders, don't adopt
+								if (EnableDebugLogs) Print(Time[0] + " STARTUP SUNDAY: Cancelling order (not adopting): " + o.Name);
+								try { CancelOrder(o); } catch { }
+								continue;
+							}
+							
 							if (hasExistingPosition)
 							{
 								// v1.10.34: ADOPT orders instead of cancelling

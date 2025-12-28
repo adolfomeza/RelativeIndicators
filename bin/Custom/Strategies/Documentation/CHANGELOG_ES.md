@@ -4,7 +4,14 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.41] - 2025-12-28 ✅ VERSIÓN ACTUAL
+## [1.10.42] - 2025-12-28 ✅ VERSIÓN ACTUAL
+### Fix: Startup Failsafe Cancela Órdenes Domingo
+- **Problema**: Órdenes adoptadas en Startup causaban error "no market data" antes de CheckSafetyNet
+- **Causa**: Startup adoptaba órdenes del viernes, que intentaban ejecutarse sin datos
+- **Solución**: Check de domingo en Startup Failsafe - si es domingo, **CANCELAR** en vez de adoptar
+- **Resultado**: Las órdenes del viernes se cancelan inmediatamente, evitando el error
+
+## [1.10.41] - 2025-12-28
 ### Fix: Cierre Domingo en Zombie Position Block
 - **Problema**: El cierre de domingo en orphan block no se ejecutaba cuando Strategy Position ya estaba sincronizada
 - **Causa**: La condición `Position.MarketPosition == Flat` excluía posiciones sincronizadas
