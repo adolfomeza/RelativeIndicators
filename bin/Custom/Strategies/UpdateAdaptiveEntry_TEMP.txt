@@ -1,0 +1,56 @@
+	// -------------------------------------------------------------------------
+	// ADAPTIVE ENTRY ORDERS (v1.9.0)
+	// -------------------------------------------------------------------------
+	private void UpdateAdaptiveEntry(string direction)
+	{
+		// Only update if we're in workingOrder state
+		if (currentEntryState != EntryState.workingOrder) return;
+		if (entryOrder == null || entryOrder.OrderState != OrderState.Working) return;
+		
+		// STOP adaptativo si hay partial fill
+		if (entryOrder.OrderState == OrderState.PartFilled)
+		{
+			if (EnableDebugLogs)
+				Print($"{Time[0]} ADAPTIVE STOP: Partial fill detected, freezing order updates");
+			return;
+		}
+		
+		// Calculate current VWAP entry price
+		double currentVwap = CalculateAdHocVWAP();
+		double limitPrice = Math.Round(currentVwap / TickSize) * TickSize;
+		
+		// Recalculate dynamic quantity based on NEW risk
+		double projectedEntry = limitPrice;
+		double projectedStop = direction == "Short" ? 
+			setupAnchorPrice + TickSize : 
+			setupAnchorPrice - TickSize;
+		
+		int newQuantity = CalculateDynamicQuantity(projectedEntry, projectedStop);
+		
+		// Calculate price change tolerance (1 tick minimum)
+		priceUpdateTolerance = TickSize;
+		
+		// Check if update is needed
+		bool priceChanged = Math.Abs(limitPrice - lastUpdateVwap) >= priceUpdateTolerance;
+		bool quantityChanged = newQuantity != lastUpdateQuantity;
+		
+		if (priceChanged || quantityChanged)
+		{
+			if (EnableDebugLogs)
+				Print($"{Time[0]} ADAPTIVE UPDATE: VWAP {lastUpdateVwap:F2} → {limitPrice:F2} | Qty {lastUpdateQuantity} → {newQuantity}");
+			
+			try
+			{
+				// Update order
+				ChangeOrder(entryOrder, newQuantity, 0, limitPrice);
+				
+				// Update tracking
+				lastUpdateVwap = limitPrice;
+				lastUpdateQuantity = newQuantity;
+			}
+			catch (Exception ex)
+			{
+				Print($"{Time[0]} ADAPTIVE ERROR: Failed to update order - {ex.Message}");
+			}
+		}
+	}

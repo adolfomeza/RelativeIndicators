@@ -1,74 +1,75 @@
 # Session Status - 27 Diciembre 2025
 
-## ✅ COMPLETADO HOY (27 Dic)
+## ✅ VERSIÓN ACTUAL: v1.10.18
 
-### VWAP Visual Fixes (v1.10.6 - v1.10.10)
-
-**Problema Original**: 
-- VWAPs comenzaban en Low/High en vez del Close configurado
-- En tiempo real, Close[0] es el último precio, no el cierre final
-
-**Secuencia de Fixes**:
+### Fixes y Features Implementados Hoy
 
 | Versión | Cambio | Status |
 |---------|--------|--------|
-| v1.10.6 | Fix VWAP Ad-Hoc LONG (faltaba `= price`) | ✅ |
-| v1.10.7 | Reset diferido (causó línea conexión) | ❌ Revert |
-| v1.10.8 | Intento Values[x][1] (seguía mal) | ❌ Revert |
-| v1.10.9 | Reversión a reset inmediato | ⚪ Intermedio |
-| **v1.10.10** | **Actualización retroactiva** | ✅ **FUNCIONAL** |
-
-**Solución Final (v1.10.10)**:
-- Reset inmediato con Close[0] momentáneo (VWAP visible durante formación)
-- En `IsFirstTickOfBar`: si barra anterior fue anchor → recalcula con `Close[1]` definitivo
-- Actualiza `Values[x][1]` retroactivamente para corregir el visual
-
-**Beneficio**: VWAP comienza en Close exacto, evitando señales falsas de entrada
+| v1.10.10 | VWAP Global con Close definitivo | ✅ |
+| v1.10.11 | VWAP Ad-Hoc con Close definitivo | ✅ |
+| v1.10.12 | Safety Net cancela órdenes huérfanas | ✅ |
+| v1.10.13 | Breakeven usa arquitectura Single-SL | ✅ |
+| v1.10.14 | Cantidad del SL al mover a BE | ✅ |
+| v1.10.15 | Ajuste dinámico de cantidad | ✅ |
+| v1.10.16 | Eliminado spam logs CalculateDynamicQuantity | ✅ |
+| v1.10.17 | Cancel stopOrder en exit | ⚠️ Parcial |
+| **v1.10.18** | **Cancelación robusta SL huérfano (Working/Accepted)** | ✅ |
 
 ---
 
-## 📦 BACKUP CREADO
+## 🔧 Fix Crítico v1.10.18 - SL Huérfano
 
-**Archivo**: `SessionLevelsStrategy_v1.10.10_2025-12-27.cs`
-**Ubicación**: `Backup_Gemini/`
-**Status**: Versión funcional confirmada por usuario
+**Problema diagnosticado:**
+- Después de TP2, el SL en BE quedaba huérfano
+- El estado del stopOrder era `Accepted`, no `Working`
+- v1.10.17 solo verificaba `Working`
 
----
+**Solución:**
+```csharp
+if (stopOrder.OrderState == OrderState.Working || stopOrder.OrderState == OrderState.Accepted)
+{
+    Log("CANCELLING ORPHAN SL: " + stopOrder.Name);
+    CancelOrder(stopOrder);
+}
+```
 
-## 📊 VERSIÓN ACTUAL
-
-- **Estrategia**: v1.10.10
-- **Último fix**: Actualización retroactiva de anchor VWAP
-- **Features activos**:
-  - Internal Levels Management (v1.10.0)
-  - Dynamic Position Sizing (v1.8.0)
-  - Single-SL Architecture (v1.9.0)
-  - Continuous R/R Validation (v1.7.28)
-
----
-
-## 📋 FEATURES PENDIENTES
-
-### TradeAnalyzer / Quant Advisor
-- **Archivo**: `tradeanalyzer_quant_plan.md`
-- **Status**: Plan completo, implementación pendiente
-- **Prioridad**: Media
-
-### Entry Type B
-- **Archivo**: `feature_entry_type_b.md`
-- **Status**: Diseñado, no implementado
-- **Prioridad**: Baja
+**Log de confirmación:**
+```
+DEBUG ORPHAN: stopOrder exists. State=Accepted Name=SL_Short
+CANCELLING ORPHAN SL: SL_Short
+```
 
 ---
 
-## 🎯 PRÓXIMOS PASOS
+## 📦 BACKUPS CREADOS
 
-1. ⏳ Continuar playback con v1.10.10 para verificar estabilidad
-2. ⏳ Implementar TradeAnalyzer si se desea análisis cuantitativo
-3. ⏳ Considerar Entry Type B para más oportunidades
+| Archivo | Versión |
+|---------|---------|
+| `SessionLevelsStrategy_v1.10.11_2025-12-27.bak` | v1.10.11 |
+| `SessionLevelsStrategy_v1.10.15_2025-12-27.bak` | v1.10.15 |
+| `SessionLevelsStrategy_v1.10.18_2025-12-27.bak` | v1.10.18 ✅ |
 
 ---
 
-*Última actualización: 27/12/2025 08:59 AM*
-*Versión activa: v1.10.10*
-*Backup: SessionLevelsStrategy_v1.10.10_2025-12-27.cs*
+## 📊 Features Activos
+
+- Internal Levels Management (v1.10.0)
+- Dynamic Position Sizing (v1.8.0)
+- Single-SL Architecture (v1.9.0)
+- Continuous R/R Validation (v1.7.28)
+- Dynamic Quantity Adjustment (v1.10.15)
+- **Robust Orphan SL Cancellation (v1.10.18)** 🆕
+
+---
+
+## 🎯 EN PROGRESO
+
+- Playback 1 semana, 6 instrumentos (excluyendo MYM)
+- Verificación de estabilidad v1.10.18
+
+---
+
+*Última actualización: 27/12/2025 1:41 PM*
+*Versión activa: v1.10.18*
+*Backup: SessionLevelsStrategy_v1.10.18_2025-12-27.bak*

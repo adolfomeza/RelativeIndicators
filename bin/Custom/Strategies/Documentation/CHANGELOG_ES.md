@@ -4,7 +4,162 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.11] - 2025-12-27 ✅ VERSIÓN ACTUAL
+## [1.10.27] - 2025-12-27 ✅ VERSIÓN ACTUAL
+### Features Session
+- **TP Labels con R y Profit**: Fondo Lime, texto negro - `R=1.5 +$45`
+- **SL Label**: Fondo rojo, texto blanco - `SL -$25`
+- **TP2 Fix**: Reverted to ZoneOpposite (era Daily Extreme en v1.10.0)
+- **Panel**: Contador X/Y de intentos
+- **Nombres de Órdenes**: `EntryA+_Short_01`, `TP1_Long_02`, etc.
+- **Pending**: Ajustar posición de etiquetas (texto y rectángulo juntos)
+
+## [1.10.26] - 2025-12-27
+### Feature: VWAP Mitigation Retry Logic
+- **Nuevo Estado**: `WaitingForVwapMitigation` - espera después de SL
+- **Flujo**: SL Hit → esperar nuevo low/high → crear VWAP# → retry
+- **Variables**: `vwapCandleExtreme`, `currentVwapNumber`, `waitingForVwapMitigation`
+- **Panel**: Muestra contador `2/10` (intento actual / max configurado)
+- **Nombres de Órdenes con Número de Intento**:
+    - `EntryA+_Long_01`, `EntryA+_Short_02`
+    - `SL_Long_01`, `TP1_Short_02`, `TP2_Long_03`
+- **Etiquetas TP con R y Profit**:
+    - Muestra `R=1.5 +$45` junto a cada TP
+    - TP1 = Verde (Lime), TP2 = Cyan
+- **Logs**: `VWAP RETRY: Waiting for price to break...` y `VWAP#2 CREATED`
+- **Reset**: Al tocar nuevo nivel, reintentos se cancelan
+
+## [1.10.25] - 2025-12-27
+### Feature: Máximos Intentos por Nivel
+- **Nueva propiedad**: `Max Retries Per Level` (default: 1)
+    - Valor 1 = comportamiento actual (1 intento por nivel)
+    - Valor 2+ = permite re-intentar si primer trade pierde
+- **Nuevo campo**: `EntryAttempts` en cada nivel para tracking
+- **Log**: `ENTRY ATTEMPT #1/2 on Europe Low`
+- **Uso**: Si pierdes por SL, el nivel puede intentarse de nuevo
+
+## [1.10.24] - 2025-12-27
+### FIX: Excluir Niveles del Mismo Día de Trading
+- **Problema**: Estrategia tomaba triggers en niveles de "Today" aún en formación
+    - USA Low Today no debería ser válido porque aún no cerró
+- **Solución**: Filtro en escaneo de triggers:
+    ```csharp
+    if (lvl.StartTime.Date == Time[0].Date) continue; // Skip same-day
+    ```
+- **Regla**: Solo niveles de días ANTERIORES y activos son válidos
+- **Debug Log**: `SKIP SAME-DAY: USA Low (still forming)`
+
+## [1.10.23] - 2025-12-27
+### Feature: Mostrar Nivel Actual con Edad
+- **Panel**: Ahora muestra el nivel en uso: `Level: USA Low (3 Days)`
+- **Formatos**: "Today", "1 Day", "X Days"
+- **Removed**: Log spam `GLOBAL RISK SYNC` que llenaba el output
+- **Beneficio**: Identificar fácilmente si estás operando niveles históricos
+
+## [1.10.22] - 2025-12-27
+### Performance: Optimización de Sincronización de Riesgo
+- **Problema**: Lectura de archivo en cada tick causaba carga lenta
+- **Solución**: Caché de lectura - solo lee archivo cada 5 segundos
+- **Resultado**: Carga significativamente más rápida
+
+## [1.10.21] - 2025-12-27
+### Feature: Sincronización de Riesgo Entre Instrumentos
+- **Problema**: Cada instrumento calculaba su riesgo ATR independientemente
+    - MNQ mostraba $70, MCL mostraba $5 - no estaban normalizados
+    - Usuario quería que TODOS usen el mismo riesgo (el máximo)
+- **Solución**: Sistema de archivo compartido para sincronizar riesgo
+    - Cada instrumento escribe su ATR Risk al archivo `SharedRisk.txt`
+    - Todos leen el MÁXIMO de todos los instrumentos activos
+    - Entradas expiran después de 60 segundos (limpieza automática)
+- **Nuevos Métodos**:
+    - `WriteSharedRisk()`: Escribe riesgo local al archivo compartido
+    - `ReadMaxSharedRisk()`: Lee el máximo de todos los instrumentos
+- **Panel**: Ahora muestra "Global Risk" (el máximo compartido)
+- **Beneficio**: Si MNQ tiene $70 y MCL tiene $5 → AMBOS usan $70
+
+## [1.10.20] - 2025-12-27
+### Feature: Riesgo Dinámico Basado en Volatilidad (ATR)
+- **Problema**: En mercados poco volátiles (ej: 2 AM), $100 de riesgo requería muchos contratos
+    - MNQ calculaba 20+ contratos, NinjaTrader rechazaba por límites
+    - No era proporcional a la volatilidad del momento
+- **Solución**: Escalar el riesgo objetivo según ATR
+    - Nueva propiedad: `ATRRiskScaleFactor` (default: 2.0)
+    - Fórmula: `RiesgoEfectivo = MIN(RiskPerTradeUSD, ATR × ScaleFactor)`
+    - Riesgo mínimo: $5 (nunca menos)
+- **Comportamiento**:
+    - 9:30 AM (ATR alto): Usa hasta $100 de riesgo → más contratos
+    - 2:00 AM (ATR bajo): Riesgo reducido ~$20 → menos contratos
+- **SL se mantiene en anchor + 1 tick** (protege estructura)
+- **Log nuevo**: `ATR RISK SCALING: ATR=X ATR$=Y ScaledRisk=$Z EffectiveRisk=$W`
+
+## [1.10.19] - 2025-12-27
+### Feature: Stop Loss Basado en ATR (REVERTIDO en v1.10.20)
+- **Problema**: v1.10.17 no cancelaba el SL - verificación `OrderState.Working` no era suficiente
+- **Diagnóstico**: Añadido log `DEBUG ORPHAN: stopOrder exists. State=X`
+- **Solución**:
+    - Verificar `OrderState.Working` **O** `OrderState.Accepted`
+    - Log explícito cuando se intenta cancelar
+- **Resultado**: Mejor diagnóstico y cancelación más robusta
+
+## [1.10.17] - 2025-12-27
+### Fix: SL Huérfano Después de TP2
+- **Problema**: Después de trade exitoso (TP1 → BE → TP2), el SL en BE quedaba activo
+    - El código cancelaba `stopOrder1`/`stopOrder2` (arquitectura antigua)
+    - Pero NO cancelaba `stopOrder` (arquitectura Single-SL v1.9.0+)
+- **Solución**: En `OnExecutionUpdate()`, cuando posición queda Flat:
+    - Agregar: `if (stopOrder != null && stopOrder.OrderState == OrderState.Working) CancelOrder(stopOrder);`
+- **Resultado**: SL se cancela automáticamente al cerrar posición por TP2
+
+## [1.10.16] - 2025-12-27
+### Fix: Spam de Logs en CalculateDynamicQuantity
+- **Problema**: La función `CalculateDynamicQuantity()` tenía un `Print()` interno
+    - Se llamaba en cada tick mientras la orden estaba working
+    - Generaba miles de líneas de log por minuto
+- **Solución**: Eliminar el log interno de la función de cálculo
+    - El log solo ocurre cuando realmente hay un cambio de cantidad (`DYNAMIC QTY ADJUST`)
+- **Resultado**: Logs limpios, solo mensajes relevantes
+
+## [1.10.15] - 2025-12-27
+### Feature: Ajuste Dinámico de Cantidad Durante Working Order
+- **Problema**: Si el precio se movía y el SL quedaba más amplio, la cantidad de contratos permanecía igual
+    - Esto causaba que el riesgo real excediera el `RiskPerTradeUSD` configurado
+    - Ejemplo: Entrar con 10 contratos, SL se amplía → riesgo mayor al deseado
+- **Solución**: En el estado `workingOrder`, recalcular cantidad cada vez que cambia:
+    - El precio del anchor (nuevo high/low)
+    - El precio del VWAP (entry adaptativo)
+    - Fórmula: `CalculateDynamicQuantity(currentVWAP, projectedStop)`
+    - Modificar orden solo si precio O cantidad cambian (evita spam)
+- **Resultado**: Riesgo se mantiene constante aunque el SL se amplíe
+
+## [1.10.14] - 2025-12-27
+### Fix: Cantidad del SL al Mover a Breakeven
+- **Problema**: SL mantenía 8 contratos después de TP1 cuando solo quedaban 4
+    - Causa: `ChangeOrder(stopOrder, stopOrder.Quantity, ...)` usaba cantidad original
+    - Debería usar contratos restantes después de TP1
+- **Solución**: Usar `Math.Abs(Position.Quantity)` para obtener contratos vivos
+- **Resultado**: SL se ajusta a la cantidad correcta al moverse a BE
+
+## [1.10.13] - 2025-12-27
+### Fix: Lógica Breakeven para Arquitectura Single-SL
+- **Problema**: TP1 llenaba pero SL no se movía a BE
+    - Log mostraba "BE LOGIC: TP1 Filled. Move SL2." pero sin acción
+    - Causa: Código buscaba `stopOrder2` (arquitectura antigua v1.7.x)
+    - Pero v1.9.0+ usa `stopOrder` único para toda la posición
+- **Solución**:
+    - TP1 Fill → Mueve `stopOrder` a BE (no `stopOrder2`)
+    - TP2 Fill → Solo log (SL ya debería estar en BE)
+- **Resultado**: SL se mueve a BE automáticamente cuando TP1 se llena
+
+## [1.10.12] - 2025-12-27
+### Fix: Cancelación de Órdenes Huérfanas en Safety Net
+- **Problema**: Al mover SL manualmente a BE y ejecutarse, el TP quedaba abierto
+    - Safety Net detectaba Flat pero solo nullificaba referencias
+    - No cancelaba las órdenes working (TP, SL)
+- **Solución**: En Safety Net (`CheckSafetyNet()`), antes de nullificar:
+    - Cancela `stopOrder1`, `stopOrder2`, `tp1Order`, `tp2Order`, `entryOrder` si están Working
+    - También agrega `stopOrder1 = null` y `stopOrder2 = null` que faltaban
+- **Resultado**: Cuando SL se ejecuta manualmente, los TPs se cancelan automáticamente
+
+## [1.10.11] - 2025-12-27
 ### Fix: VWAP Ad-Hoc También Usa Close Definitivo
 - **Problema**: v1.10.10 solo arreglaba VWAP Global, ad-hoc seguía usando Close momentáneo
     - Re-anchors (nuevos highs/lows durante setup) usaban Close[0] momentáneo
