@@ -4,7 +4,16 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.33] - 2025-12-28 ✅ VERSIÓN ACTUAL (REVERT)
+## [1.10.34] - 2025-12-28 ✅ VERSIÓN ACTUAL
+### Removed: Etiquetas TP/SL Eliminadas
+- **Eliminado**: Etiquetas SL con fondo rojo y texto `-$XX`
+- **Eliminado**: Etiquetas TP1/TP2 con fondo lime y texto `R=X.X +$XX`
+- **Motivo**: Chart más limpio sin overlays adicionales
+- **Impacto**: Las órdenes TP/SL funcionan normalmente, solo se quitó la visualización
+
+---
+
+## [1.10.33] - 2025-12-28 (REVERT)
 ### REVERTIDO: Cambios de Manejo Domingo Removidos
 - **Acción**: Revertido de v1.10.47 a v1.10.33
 - **Razón**: Los fixes de manejo de activación domingo (v1.10.34-v1.10.47) causaban entradas espurias y comportamiento errático

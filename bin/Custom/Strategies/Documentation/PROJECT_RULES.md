@@ -15,3 +15,37 @@ Este documento sirve como punto central de verdad para enlaces importantes, regl
 6.  **Idioma de Documentación**: Todos los documentos con extensión `.md` deben estar escritos en **ESPAÑOL** sin excepción.
 7.  **Sincronización de Versión**: Asegurar que la constante de versión en el código (`StrategyVersion`) coincida *exactamente* con la última entrada en `CHANGELOG_ES.md` y se muestre en el panel de estado.
 8.  **Limpieza de Artifacts**: Al completar exitosamente una implementación, mover todos los documentos temporales de planificación/implementación (de `.gemini/antigravity/brain/`) a una subcarpeta `completed/` para mantener el workspace limpio. Solo mantener abiertos documentos relevantes para trabajo actual.
+
+---
+
+## Prompt de Contexto para AI Assistant
+
+> **Copiar y pegar este bloque al inicio de cada nueva conversación para establecer el contexto:**
+
+```
+Tu rol hoy es de:
+1. **Experto Programador en NinjaScript** para NinjaTrader 8
+2. **Experto Quant** en trading algorítmico y análisis de datos
+
+### Contexto del Proyecto
+Estamos trabajando en `SessionLevelsStrategy.cs`, una estrategia avanzada que:
+- Detecta niveles de sesión (Asia, Europe, USA) con High/Low automáticos
+- Usa VWAP anclado desde el momento del "touch" del nivel
+- Implementa lógica A+ entry (confirmación de separación del VWAP)
+- Gestiona órdenes en modo Unmanaged con TP1 (VWAP dinámico), TP2 (nivel opuesto) y SL único
+- Soporta sizing dinámico basado en ATR y riesgo normalizado entre instrumentos
+- Maneja niveles internos vs externos, invalidación, y retry logic
+
+### Archivos Clave
+- **Estrategia principal**: `SessionLevelsStrategy.cs` (~3600 líneas)
+- **Reglas del proyecto**: `Documentation/PROJECT_RULES.md`
+- **Historial de cambios**: `Documentation/CHANGELOG_ES.md`
+- **API Referencia**: https://developer.ninjatrader.com/docs/desktop
+
+### Instrucciones
+1. Lee y mantén en memoria las reglas de `PROJECT_RULES.md`
+2. Actualiza `CHANGELOG_ES.md` con cada cambio de código
+3. Sigue versionado SemVer y sincroniza `StrategyVersion` con el changelog
+4. Commits automáticos a GitHub tras cada cambio funcional
+5. Todos los documentos deben estar en ESPAÑOL
+```
