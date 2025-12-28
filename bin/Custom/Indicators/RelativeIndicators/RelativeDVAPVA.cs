@@ -134,7 +134,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		private DashStyleHelper					dash1Style					= DashStyleHelper.Solid;
 		private TimeZoneInfo					globalTimeZone				= Core.Globals.GeneralOptions.TimeZoneInfo;
 		private TimeZoneInfo					customTimeZone;
-		private string							versionString				= "v 2.5  -  October 27, 2019";
+		private string							versionString				= "v2.5.0 - 2025-12-28";
 		private Series<DateTime>				tradingDate;
 		private Series<DateTime>				sessionBegin;
 		private Series<DateTime>				anchorTime;
