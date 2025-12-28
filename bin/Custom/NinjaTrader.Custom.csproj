@@ -397,6 +397,7 @@
     <Compile Include="Strategies\RelativeLevelsData.cs" />
     <Compile Include="Strategies\RelativeLevelsStrategy.cs" />
     <Compile Include="Strategies\SessionLevelsStrategy.cs" />
+    <Compile Include="Strategies\Backup_Gemini\SessionLevelsStrategy_v1.10.31_20251228_105436.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Resource.resx">

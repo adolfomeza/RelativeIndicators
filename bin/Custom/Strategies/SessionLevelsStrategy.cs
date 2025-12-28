@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.10.27"; // TP/SL label colors
+		private const string StrategyVersion = "v1.10.31"; // TP/SL label colors
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -209,6 +209,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				// Add Plots for VWAP
 				AddPlot(Brushes.White, "HighVWAP"); // Values[0]
 				AddPlot(Brushes.White, "LowVWAP");  // Values[1]
+				// Trade VWAP is calculated internally but NOT plotted (v1.10.31)
 				
 				// FINAL FORCE: Unmanaged Mode
 				// FINAL FORCE: Unmanaged Mode
@@ -566,6 +567,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 		// Strategy Initialization Flag
 		private bool isStrategyInitialized = false;
 		private bool isRealtimeInitialized = false; // v1.7.7 Cleanup Flag
+		private int realtimeStartBar = -1; // v1.10.28: Bar when strategy entered Realtime (for fresh signals only)
+		private HashSet<string> skippedLevelsAtStartup = new HashSet<string>(); // v1.10.29: Levels already touched at startup
 		private bool gapDetected = false;
 		private int gapCount = 0;
 
@@ -573,9 +576,11 @@ namespace NinjaTrader.NinjaScript.Strategies
 		{
 			// v1.7.7: STARTUP CLEANUP FAILSAFE
 			// Must run inside OnBarUpdate when State is Realtime to allow Order Submission
+			// v1.10.28: Skip if overnight positions are allowed (user wants to keep positions)
 			if (State == State.Realtime && !isRealtimeInitialized)
 			{
 				isRealtimeInitialized = true;
+				realtimeStartBar = CurrentBar; // v1.10.28: Track when we went live
 				
 				// 1. Zombie Position Cleanup (ACCOUNT LEVEL - v1.7.8)
 				// Strategy 'Position' starts flat on reload, checking that is useless for Zombies.
@@ -586,9 +591,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 					{
 						if (p.Instrument == Instrument && p.MarketPosition != MarketPosition.Flat)
 						{
-							Print(Time[0] + " STARTUP FAILSAFE (v1.7.8): Closing Account 'Zombie' Position: " + p.MarketPosition + " Qty=" + p.Quantity);
-							if (p.MarketPosition == MarketPosition.Long) SubmitOrderUnmanaged(0, OrderAction.Sell, OrderType.Market, p.Quantity, 0, 0, "", "Zombie_Startup_Exit");
-							else SubmitOrderUnmanaged(0, OrderAction.BuyToCover, OrderType.Market, p.Quantity, 0, 0, "", "Zombie_Startup_Exit");
+							// v1.10.28: Skip zombie cleanup - this is an intentional overnight position
+							if (EnableDebugLogs) Print(Time[0] + " STARTUP: Found existing position. Qty=" + p.Quantity + " - Adopting (overnight allowed).");
+							// Don't close - just log and let strategy adopt it
 						}
 					}
 				}
@@ -600,7 +605,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 					{
 						if (o.Instrument.FullName == Instrument.FullName && (o.OrderState == OrderState.Working || o.OrderState == OrderState.Accepted || o.OrderState == OrderState.CancelPending))
 						{
-							Print(Time[0] + " STARTUP FAILSAFE: Cancelling Stuck Order: " + o.Name);
+							if (EnableDebugLogs) Print(Time[0] + " STARTUP FAILSAFE: Cancelling Stuck Order: " + o.Name);
 							try 
 							{ 
 								CancelOrder(o); 
@@ -611,6 +616,28 @@ namespace NinjaTrader.NinjaScript.Strategies
 								// Print(Time[0] + " FAILSAFE WARNING: Could not cancel old order (Not Owner?): " + ex.Message); 
 							}
 						}
+					}
+				}
+				
+				// v1.10.29: DETECT LEVELS ALREADY BEING TOUCHED AT STARTUP
+				// These levels are "spent" - we should NOT trigger on them
+				foreach (var lvl in activeLevels)
+				{
+					if (lvl.IsMitigated) continue; // Already mitigated = already spent
+					
+					// Check if price is currently AT this level (within 5 ticks)
+					double tolerance = 5 * TickSize;
+					bool isBeingTouched = false;
+					
+					if (lvl.IsResistance && High[0] >= lvl.Price - tolerance && High[0] <= lvl.Price + tolerance)
+						isBeingTouched = true;
+					if (!lvl.IsResistance && Low[0] >= lvl.Price - tolerance && Low[0] <= lvl.Price + tolerance)
+						isBeingTouched = true;
+					
+					if (isBeingTouched)
+					{
+						skippedLevelsAtStartup.Add(lvl.Name);
+						if (EnableDebugLogs) Print(Time[0] + " STARTUP: Level '" + lvl.Name + "' is already being touched - will be skipped.");
 					}
 				}
 			}
@@ -661,7 +688,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				}
 				catch (Exception ex)
 				{
-					Print("Error loading TimeZones: " + ex.Message);
+					if (EnableDebugLogs) Print("Error loading TimeZones: " + ex.Message);
 					timeZonesLoaded = true; 
 				}
 			}
@@ -999,6 +1026,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 		// Protection State (v1.7.17)
 		private int protectedTp1Qty = 0;
 		private int protectedTp2Qty = 0;
+		// v1.10.31: Trade VWAP - continues accumulating even when day changes
+		// Separate from global VWAP to keep TP1 moving with original day's VWAP
+		private SessionVWAP tradeVWAP = new SessionVWAP();
+		private bool tradeVwapActive = false;
 
 		// REFACTOR v1.7.3: Consolidated SL/TP tracking
 		private Order stopOrder = null; // Legacy fallback, kept to avoid compile errors if referenced elsewhere (e.g. Draw)
@@ -1238,6 +1269,12 @@ namespace NinjaTrader.NinjaScript.Strategies
 	{
 		ethLowVWAP.Accumulate(deltaVol, price);
 	}
+	
+	// v1.10.31: Also accumulate in Trade VWAP if active (keeps TP1 moving during overnight)
+	if (tradeVwapActive && deltaVol > 0)
+	{
+		tradeVWAP.Accumulate(deltaVol, price);
+	}
 			
 			// 4. Assign to Plots (Values[0] = High, Values[1] = Low)
 			// Default color is White (defined in AddPlot). We only override active history to Gray when it dies.
@@ -1269,6 +1306,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 			else
 			{
 				Values[1][0] = double.NaN;
+			}
+			
+			// v1.10.31: Draw Trade VWAP line manually (no vertical connections)
+			if (tradeVwapActive && tradeVWAP.VolSum > 0 && CurrentBar > 0)
+			{
+				double tradeVwapValue = tradeVWAP.CurrentValue;
+				string lineTag = "TradeVWAP_" + CurrentBar;
+				Draw.Line(this, lineTag, false, 1, tradeVwapValue, 0, tradeVwapValue, Brushes.Cyan, DashStyleHelper.Solid, 2);
 			}
 			
 			// Debug Panel
@@ -1346,18 +1391,22 @@ namespace NinjaTrader.NinjaScript.Strategies
 			// Broadened window to catch exact 16:00:00 bars and any immediate post-close processing.
 			TimeSpan gapBuffer = TimeSpan.FromMinutes(5);
 			
-			if (nyTimeOfDay >= cutoffTime && nyTimeOfDay <= tsUsaEnd.Add(gapBuffer))
+			// v1.10.28: Solo cerrar posiciones los VIERNES (antes del weekend)
+			// Lunes-Jueves: permitir overnight
+			bool isFriday = nyTime.DayOfWeek == DayOfWeek.Friday;
+			
+			if (isFriday && nyTimeOfDay >= cutoffTime && nyTimeOfDay <= tsUsaEnd.Add(gapBuffer))
 			{
-				// 3. Execution Logic
+				// 3. Execution Logic - ONLY ON FRIDAYS
 				
 				// A) Close Positions
 				if (Position.MarketPosition != MarketPosition.Flat)
 				{
 					// Only log once per bar to avoid spam
 					if (IsFirstTickOfBar)
-						Log(Time[0] + " SESSION CLOSE PROTECT: Market closing/closed. Forcing Exit.");
+						Log(Time[0] + " FRIDAY CLOSE: Market closing for weekend. Forcing Exit.");
 						
-					ClosePositionUnmanaged("Exit on Session Close");
+					ClosePositionUnmanaged("Exit on Friday Close");
 				}
 				
 				// B) Cancel Working Orders & Reset State
@@ -1415,10 +1464,16 @@ namespace NinjaTrader.NinjaScript.Strategies
 								if (High[0] >= avgPrice + safetyMargin) unsafeOrphan = true;
 							}
 
+							// v1.10.28: Don't flatten overnight positions - user wants them open
+							// Only alert, don't close
 							if (unsafeOrphan)
 							{
-								Log(Time[0] + " CRITICAL: Orphan Position Detected (Unsafe). Flattening Account for " + Instrument.FullName + " @ " + avgPrice);
-								Account.Flatten(new [] { Instrument });
+								// Log warning but DON'T close - this is intentional overnight
+								if (!orphanHandled)
+								{
+									Log(Time[0] + " WARNING: Orphan Position (gap detected) @ " + avgPrice + ". Overnight mode - NOT closing.");
+									orphanHandled = true;
+								}
 							}
 							else if (!orphanHandled)
 							{
@@ -1520,6 +1575,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 			// RESET PROTECTION COUNTERS (v1.7.26) - Fix bucket allocation in SYNC path
 			protectedTp1Qty = 0;
 			protectedTp2Qty = 0;
+			tradeVwapActive = false; // v1.10.31: Reset Trade VWAP
 				
 				// v1.10.12: Cancel orphan orders before nullifying references
 				// This handles cases where SL was manually moved and executed
@@ -1725,7 +1781,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 					currentEntryState = EntryState.WaitingForConfirmation;
 					waitingForVwapMitigation = false;
 					
-					Print(string.Format("{0} VWAP#{1} CREATED @ {2:F2} - Ready for entry",
+					if (EnableDebugLogs) Print(string.Format("{0} VWAP#{1} CREATED @ {2:F2} - Ready for entry",
 						Time[0], currentVwapNumber, newAnchor));
 				}
 				
@@ -1957,6 +2013,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 			{
 				// LOOP PROTECTION: If rejected OR invalidated this bar, DO NOT scan again.
 				if (CurrentBar == lastRejectionBar || CurrentBar == lastInvalidationBar) return;
+				
+				// v1.10.28: FRESH SIGNAL ONLY - Don't trigger on historical setups
+				// Wait for a new trigger AFTER strategy is active in Realtime
+				if (State == State.Realtime && realtimeStartBar > 0 && CurrentBar <= realtimeStartBar)
+				{
+					// We are on the same bar where we started - don't trigger on inherited setup
+					return;
+				}
 
 				foreach (var lvl in activeLevels)
 				{
@@ -1970,6 +2034,11 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 					// v1.10.25: Check if max retries exceeded for this level
 					if (lvl.EntryAttempts >= MaxRetriesPerLevel)
+						continue;
+					
+					// v1.10.29: Skip levels that were already being touched at startup
+					// These are "spent" and we need a fresh level
+					if (skippedLevelsAtStartup.Contains(lvl.Name))
 						continue;
 
 					// If level is mitigated exactly NOW
@@ -2441,6 +2510,24 @@ setupLevelName = "";
 			// REFACTORED EnsureProtection (v1.7.17) - Consolidated Split Handling
 	private void EnsureProtection(string direction, string entrySignalName, int filledQty)
 	{
+		// v1.10.31: Initialize Trade VWAP on first fill
+		// Copy accumulators from global VWAP so it continues accumulating
+		if (!tradeVwapActive)
+		{
+			if (isShortSetup)
+			{
+				tradeVWAP.VolSum = ethLowVWAP.VolSum;
+				tradeVWAP.PvSum = ethLowVWAP.PvSum;
+			}
+			else
+			{
+				tradeVWAP.VolSum = ethHighVWAP.VolSum;
+				tradeVWAP.PvSum = ethHighVWAP.PvSum;
+			}
+			tradeVwapActive = true;
+			Log(Time[0] + " TRADE VWAP: Initialized @ " + tradeVWAP.CurrentValue);
+		}
+		
 		// DYNAMIC BUCKET ALLOCATION (v1.7.17)
 		// We decide now how many of this 'filledQty' go to TP1 vs TP2.
 		
@@ -2528,7 +2615,11 @@ setupLevelName = "";
 			slPrice = setupAnchorPrice + TickSize;
 			if (slPrice <= lastPrice) slPrice = lastPrice + (5 * TickSize); 
 
-			targetGlobalVWAP = GetCurrentLowVWAP(); 
+			// v1.10.31: Use Trade VWAP if active (continues accumulating even on day change)
+			if (tradeVwapActive)
+				targetGlobalVWAP = tradeVWAP.CurrentValue;
+			else
+				targetGlobalVWAP = GetCurrentLowVWAP(); 
 			
 			if (cachedOppositeLevel != null) targetZoneOpposite = cachedOppositeLevel.Price;
 			else targetZoneOpposite = GetOppositeLevelPrice(setupLevelName, setupLevelTime);
@@ -2551,7 +2642,11 @@ setupLevelName = "";
 			slPrice = setupAnchorPrice - TickSize;
 			if (slPrice >= lastPrice) slPrice = lastPrice - (5 * TickSize); 
 
-			targetGlobalVWAP = GetCurrentHighVWAP(); 
+			// v1.10.31: Use Trade VWAP if active (continues accumulating even on day change)
+			if (tradeVwapActive)
+				targetGlobalVWAP = tradeVWAP.CurrentValue;
+			else
+				targetGlobalVWAP = GetCurrentHighVWAP(); 
 
 			if (cachedOppositeLevel != null) targetZoneOpposite = cachedOppositeLevel.Price;
 			else targetZoneOpposite = GetOppositeLevelPrice(setupLevelName, setupLevelTime);
@@ -3114,14 +3209,22 @@ setupLevelName = "";
 			
 			if (isShortSetup)
 			{
-				targetGlobalVWAP = GetCurrentLowVWAP(); 
+				// v1.10.31: Use Trade VWAP if active (continues from day of entry)
+				if (tradeVwapActive)
+					targetGlobalVWAP = tradeVWAP.CurrentValue;
+				else
+					targetGlobalVWAP = GetCurrentLowVWAP(); 
 				// FIX (v1.6.2): Use setupLevelTime to ensure stable target throughout the trade
 				targetZoneOpposite = GetOppositeLevelPrice(setupLevelName, setupLevelTime);
 				if (targetZoneOpposite <= 0) targetZoneOpposite = targetGlobalVWAP; // Fallback
 			}
 			else
 			{
-				targetGlobalVWAP = GetCurrentHighVWAP(); 
+				// v1.10.31: Use Trade VWAP if active (continues from day of entry)
+				if (tradeVwapActive)
+					targetGlobalVWAP = tradeVWAP.CurrentValue;
+				else
+					targetGlobalVWAP = GetCurrentHighVWAP(); 
 				// FIX (v1.6.2): Use setupLevelTime here too
 				targetZoneOpposite = GetOppositeLevelPrice(setupLevelName, setupLevelTime);
 				if (targetZoneOpposite <= 0) targetZoneOpposite = targetGlobalVWAP;
@@ -3323,7 +3426,7 @@ setupLevelName = "";
 				if (Position.MarketPosition == MarketPosition.Flat)
 				{
 					bool isSLClose = execution.Order.Name.Contains("SL_");
-					Print(Time + " Position Closed (" + execution.Order.Name + "). Resetting to Idle.");
+					if (EnableDebugLogs) Print(Time + " Position Closed (" + execution.Order.Name + "). Resetting to Idle.");
 					TriggerScreenshot("Exit_" + execution.Order.Name, DateTime.Now, executionId);
 					
 					// v1.10.26: Check if we can retry
@@ -3348,7 +3451,7 @@ setupLevelName = "";
 						vwapCandleExtreme = isShortSetup ? setupAnchorPrice : setupAnchorPrice;
 						currentVwapNumber++;
 						
-						Print(string.Format("{0} VWAP RETRY: Waiting for price to break {1:F2} for VWAP#{2}",
+						if (EnableDebugLogs) Print(string.Format("{0} VWAP RETRY: Waiting for price to break {1:F2} for VWAP#{2}",
 							Time, vwapCandleExtreme, currentVwapNumber));
 					}
 					else
@@ -3373,6 +3476,7 @@ setupLevelName = "";
 				// RESET PROTECTION COUNTERS (v1.7.24) - Fix bucket allocation
 				protectedTp1Qty = 0;
 				protectedTp2Qty = 0;
+				tradeVwapActive = false; // v1.10.31: Reset Trade VWAP
 
 					// CLEARED
 					entryOrder = null;

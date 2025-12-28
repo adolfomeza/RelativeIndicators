@@ -4,7 +4,69 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.27] - 2025-12-27 ✅ VERSIÓN ACTUAL
+## [1.10.31] - 2025-12-28 ✅ VERSIÓN ACTUAL
+### Feature: VWAP Dual (Trade vs Global)
+- **Problema v1.10.30**: VWAP fijo no seguía moviéndose, solo guardaba un precio estático
+- **Nuevo sistema**: Dos VWAPs paralelos
+    - **Trade VWAP**: Copia del global al entrar, **sigue acumulando** durante overnight
+    - **Global VWAP**: Se reinicia cada nuevo día para futuros trades
+- **Implementación**:
+    - `tradeVWAP` (SessionVWAP) + `tradeVwapActive` (bool)
+    - `EnsureProtection`: Al primer fill, copia acumuladores del VWAP global
+    - `ManageGlobalVWAPs`: Acumula en Trade VWAP si está activo
+    - `SubmitProtectionOrders`: Usa `tradeVWAP.CurrentValue` para TP1
+    - **`ManagePositionExit`** (FIX): Actualiza TP1 usando `tradeVWAP` en vez del global
+    - Resets al cerrar trade en `CheckSafetyNet` y `OnExecutionUpdate`
+- **Visual**: Línea **cyan** (`Draw.Line`) muestra el VWAP del trade activo (sin conexiones verticales)
+- **Resultado**: TP1 sigue moviéndose con el VWAP del día de entrada, incluso overnight
+
+## [1.10.30] - 2025-12-28
+
+## [1.10.29] - 2025-12-28
+### Fix: Solo Señales Frescas (Corrección de Lógica)
+- **Problema v1.10.28**: Permitía re-trigger del mismo nivel después de separarse
+- **Corrección**: Niveles tocados al activar quedan **gastados permanentemente**
+    - Al activar: Detecta qué niveles están siendo tocados (±5 ticks)
+    - Los agrega a `skippedLevelsAtStartup`
+    - El trigger loop los ignora siempre
+- **Comportamiento correcto**: Espera nivel DIFERENTE, no re-toque del mismo
+
+## [1.10.28] - 2025-12-28
+### Feature: Overnight Permitido Lunes-Jueves
+- **Cambio en `CheckSessionExit()`**: Ahora solo cierra posiciones los **viernes a las 17:59:30 NY**
+    - Lunes-Jueves: Trades pueden permanecer abiertos overnight
+    - Viernes: Cierre obligatorio antes del fin de semana
+- **Lógica**: `if (isFriday && nyTimeOfDay >= cutoffTime)` en vez de siempre
+
+### Feature: Adopción de Posiciones Overnight (No Más Cierres Automáticos)
+- **Startup Failsafe modificado**: Ya NO cierra posiciones "zombie" al activar estrategia
+    - Antes: Cerraba cualquier posición encontrada
+    - Ahora: Adopta la posición y deja que la estrategia la maneje
+- **CheckSafetyNet modificado**: Ya NO hace `Flatten` en posiciones "inseguras"
+    - Antes: Cerraba si gap > 20 ticks
+    - Ahora: Solo alerta con log, no cierra
+- **Resultado**: Posiciones overnight se mantienen abiertas, incluyendo al recargar estrategia
+
+### Feature: Solo Señales Frescas (No Heredadas del Historial)
+- **Problema**: Al activar la estrategia en medio de un setup, entraba inmediatamente
+- **Solución**: Nueva variable `realtimeStartBar` trackea cuándo la estrategia entró en Realtime
+- **Lógica**: Ignora triggers que ocurren en el mismo bar donde se activó
+    - Si activas mientras el precio toca un nivel → **NO entra**
+    - Espera a que el precio se separe y vuelva a tocar → **SÍ entra**
+- **Beneficio**: Evita entradas "heredadas" del historial, solo reacciona a señales nuevas
+
+### Fix: Logs Sin Protección
+- **Problema**: Algunos `Print()` aparecían aunque `EnableDebugLogs = false`
+- **Ubicaciones corregidas** (6 total):
+    - Línea 589: Startup Failsafe (Zombie Position)
+    - Línea 603: Startup Failsafe (Stuck Order)
+    - Línea 664: Error TimeZones
+    - Línea 1728: VWAP Retry Created
+    - Línea 3330: Position Closed (OnExecutionUpdate)
+    - Línea 3355: VWAP RETRY Waiting (OnExecutionUpdate)
+- **Resultado**: Todos los logs ahora respetan `EnableDebugLogs`
+
+## [1.10.27] - 2025-12-27
 ### Features Session
 - **TP Labels con R y Profit**: Fondo Lime, texto negro - `R=1.5 +$45`
 - **SL Label**: Fondo rojo, texto blanco - `SL -$25`

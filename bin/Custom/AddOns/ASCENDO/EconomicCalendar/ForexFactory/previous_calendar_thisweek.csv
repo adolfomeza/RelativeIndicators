@@ -1,53 +1,47 @@
-2025-12-21 11:00:00,USD,Low,FOMC Member Hammack Speaks,,
-2025-12-22 01:00:00,CNY,Low,1-y Loan Prime Rate,3.00%,3.00%
-2025-12-22 01:00:00,CNY,Low,5-y Loan Prime Rate,3.50%,3.50%
-2025-12-22 07:00:00,GBP,Low,Current Account,-19.1B,-28.9B
-2025-12-22 07:00:00,GBP,Low,Final GDP q/q,0.1%,0.1%
-2025-12-22 07:00:00,GBP,Low,Revised Business Investment q/q,-0.3%,-0.3%
-2025-12-22 13:30:00,CAD,Low,IPPI m/m,0.3%,1.5%
-2025-12-22 13:30:00,CAD,Low,RMPI m/m,0.6%,1.6%
-2025-12-22 14:00:00,CNY,Low,CB Leading Index m/m,,-0.8%
-2025-12-23 00:30:00,AUD,Low,Monetary Policy Meeting Minutes,,
-2025-12-23 05:00:00,JPY,Low,BOJ Core CPI y/y,2.2%,2.2%
-2025-12-23 07:00:00,EUR,Low,German Import Prices m/m,0.2%,0.2%
-2025-12-23 09:00:00,CHF,Low,UBS Economic Expectations,,12.2
-2025-12-23 13:15:00,USD,Medium,ADP Weekly Employment Change,,16.3K
-2025-12-23 13:30:00,CAD,High,GDP m/m,-0.3%,0.2%
-2025-12-23 13:30:00,USD,High,Prelim GDP q/q,3.3%,3.8%
-2025-12-23 13:30:00,USD,Medium,Core Durable Goods Orders m/m,0.3%,0.6%
-2025-12-23 13:30:00,USD,Medium,Durable Goods Orders m/m,-1.5%,0.5%
-2025-12-23 13:30:00,USD,Medium,Prelim GDP Price Index q/q,2.7%,2.1%
-2025-12-23 14:14:00,USD,Low,Capacity Utilization Rate,,75.9%
-2025-12-23 14:14:00,USD,Low,Industrial Production m/m,,0.1%
-2025-12-23 14:15:00,USD,Low,Capacity Utilization Rate,75.9%,75.9%
-2025-12-23 14:15:00,USD,Low,Industrial Production m/m,0.1%,-0.1%
-2025-12-23 15:00:00,USD,Medium,CB Consumer Confidence,91.7,88.7
-2025-12-23 15:00:00,USD,Medium,Richmond Manufacturing Index,-8,-15
-2025-12-23 18:30:00,CAD,Low,BOC Summary of Deliberations,,
-2025-12-23 21:30:00,USD,Low,API Weekly Statistical Bulletin,,
-2025-12-23 23:50:00,JPY,Low,Monetary Policy Meeting Minutes,,
-2025-12-23 23:50:00,JPY,Low,SPPI y/y,2.7%,2.7%
-2025-12-24 07:02:00,EUR,Holiday,German Bank Holiday,,
-2025-12-24 13:30:00,USD,High,Unemployment Claims,224K,224K
-2025-12-24 20:00:00,NZD,Holiday,Bank Holiday,,
-2025-12-24 21:00:00,AUD,Holiday,Bank Holiday,,
-2025-12-25 04:22:00,JPY,Medium,BOJ Gov Ueda Speaks,,
-2025-12-25 05:00:00,JPY,Low,Housing Starts y/y,0.2%,3.2%
-2025-12-25 06:00:00,CHF,Holiday,Bank Holiday,,
-2025-12-25 07:01:00,EUR,Holiday,French Bank Holiday,,
-2025-12-25 07:02:00,EUR,Holiday,German Bank Holiday,,
-2025-12-25 07:03:00,EUR,Holiday,Italian Bank Holiday,,
-2025-12-25 08:00:00,GBP,Holiday,Bank Holiday,,
-2025-12-25 13:00:00,CAD,Holiday,Bank Holiday,,
-2025-12-25 13:00:00,USD,Holiday,Bank Holiday,,
-2025-12-25 20:00:00,NZD,Holiday,Bank Holiday,,
-2025-12-25 21:00:00,AUD,Holiday,Bank Holiday,,
-2025-12-25 23:30:00,JPY,Low,Tokyo Core CPI y/y,2.5%,2.8%
-2025-12-25 23:30:00,JPY,Low,Unemployment Rate,2.6%,2.6%
-2025-12-25 23:50:00,JPY,Low,Prelim Industrial Production m/m,-1.9%,1.4%
-2025-12-25 23:50:00,JPY,Low,Retail Sales y/y,0.9%,1.7%
-2025-12-26 06:00:00,CHF,Holiday,Bank Holiday,,
-2025-12-26 07:02:00,EUR,Holiday,German Bank Holiday,,
-2025-12-26 07:03:00,EUR,Holiday,Italian Bank Holiday,,
-2025-12-26 08:00:00,GBP,Holiday,Bank Holiday,,
-2025-12-26 13:00:00,CAD,Holiday,Bank Holiday,,
+2025-12-28 23:50:00,JPY,Low,BOJ Summary of Opinions,,
+2025-12-29 15:00:00,USD,Medium,Pending Home Sales m/m,0.9%,1.9%
+2025-12-29 15:30:00,USD,Low,Crude Oil Inventories,-2.0M,-1.3M
+2025-12-29 17:00:00,USD,Low,Natural Gas Storage,-169B,-167B
+2025-12-30 08:00:00,CHF,Low,KOF Economic Barometer,101.5,101.7
+2025-12-30 08:00:00,EUR,Low,Spanish Flash CPI y/y,2.9%,3.0%
+2025-12-30 14:00:00,USD,Low,HPI m/m,0.1%,0.0%
+2025-12-30 14:00:00,USD,Low,S&P/CS Composite-20 HPI y/y,1.1%,1.4%
+2025-12-30 14:45:00,USD,Low,Chicago PMI,39.6,36.3
+2025-12-30 19:00:00,USD,High,FOMC Meeting Minutes,,
+2025-12-30 21:30:00,USD,Low,API Weekly Statistical Bulletin,,
+2025-12-31 00:00:00,JPY,Holiday,Bank Holiday,,
+2025-12-31 01:30:00,CNY,Low,Non-Manufacturing PMI,49.8,49.5
+2025-12-31 01:30:00,CNY,Medium,Manufacturing PMI,49.4,49.2
+2025-12-31 01:45:00,CNY,Low,RatingDog Manufacturing PMI,49.7,49.9
+2025-12-31 07:02:00,EUR,Holiday,German Bank Holiday,,
+2025-12-31 13:30:00,USD,High,Unemployment Claims,215K,214K
+2025-12-31 15:30:00,USD,Low,Crude Oil Inventories,,
+2025-12-31 17:00:00,USD,Low,Natural Gas Storage,,
+2025-12-31 20:00:00,NZD,Holiday,Bank Holiday,,
+2025-12-31 21:00:00,AUD,Holiday,Bank Holiday,,
+2026-01-01 00:00:00,JPY,Holiday,Bank Holiday,,
+2026-01-01 00:01:00,CNY,Holiday,Bank Holiday,,
+2026-01-01 06:00:00,CHF,Holiday,Bank Holiday,,
+2026-01-01 07:01:00,EUR,Holiday,French Bank Holiday,,
+2026-01-01 07:02:00,EUR,Holiday,German Bank Holiday,,
+2026-01-01 07:03:00,EUR,Holiday,Italian Bank Holiday,,
+2026-01-01 08:00:00,GBP,Holiday,Bank Holiday,,
+2026-01-01 13:00:00,CAD,Holiday,Bank Holiday,,
+2026-01-01 13:00:00,USD,Holiday,Bank Holiday,,
+2026-01-01 20:00:00,NZD,Holiday,Bank Holiday,,
+2026-01-02 00:00:00,JPY,Holiday,Bank Holiday,,
+2026-01-02 00:01:00,CNY,Holiday,Bank Holiday,,
+2026-01-02 06:00:00,CHF,Holiday,Bank Holiday,,
+2026-01-02 07:00:00,GBP,Low,Nationwide HPI m/m,0.1%,0.3%
+2026-01-02 08:15:00,EUR,Low,Spanish Manufacturing PMI,51.2,51.5
+2026-01-02 08:45:00,EUR,Low,Italian Manufacturing PMI,50.1,50.6
+2026-01-02 08:50:00,EUR,Low,French Final Manufacturing PMI,50.6,50.6
+2026-01-02 08:55:00,EUR,Low,German Final Manufacturing PMI,47.7,47.7
+2026-01-02 09:00:00,EUR,Low,Final Manufacturing PMI,49.2,49.2
+2026-01-02 09:00:00,EUR,Low,M3 Money Supply y/y,2.7%,2.8%
+2026-01-02 09:00:00,EUR,Low,Private Loans y/y,2.8%,2.8%
+2026-01-02 09:30:00,GBP,Low,Final Manufacturing PMI,51.2,51.2
+2026-01-02 14:30:00,CAD,Low,Manufacturing PMI,,48.4
+2026-01-02 14:45:00,USD,Low,Final Manufacturing PMI,51.8,51.8
+2026-01-03 15:15:00,USD,Low,FOMC Member Paulson Speaks,,
+2026-01-03 19:30:00,USD,Low,FOMC Member Paulson Speaks,,
