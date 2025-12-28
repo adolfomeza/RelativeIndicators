@@ -4,7 +4,18 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.34] - 2025-12-28 ✅ VERSIÓN ACTUAL
+## [1.10.35] - 2025-12-28 ✅ VERSIÓN ACTUAL
+### Feature: Información SL/TP en Panel de Estado
+- **Nuevo**: Al tener orden limit activa o posición abierta, el panel muestra:
+  - `SL: -$XX (Yt)` - Pérdida potencial en USD y ticks
+  - `TP1: +$XX R=X.X` - Ganancia potencial TP1 y ratio R/R
+  - `TP2: +$XX R=X.X` - Ganancia potencial TP2 y ratio R/R
+- **Cálculo**: Usa precios reales de órdenes y cantidad de contratos
+- **Separador visual**: Línea `─────────────────` para distinguir info de órdenes
+
+---
+
+## [1.10.34] - 2025-12-28
 ### Removed: Etiquetas TP/SL Eliminadas
 - **Eliminado**: Etiquetas SL con fondo rojo y texto `-$XX`
 - **Eliminado**: Etiquetas TP1/TP2 con fondo lime y texto `R=X.X +$XX`

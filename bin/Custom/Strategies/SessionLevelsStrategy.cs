@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.10.34"; // Removed TP/SL labels
+		private const string StrategyVersion = "v1.10.35"; // SL/TP info in panel
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -1654,13 +1654,80 @@ namespace NinjaTrader.NinjaScript.Strategies
 					levelInfo += " " + currentVwapNumber + "/" + MaxRetriesPerLevel;
 			}
 
-			string text = string.Format("Ver: {0}\nState: {1}\nLevel: {2}\nPosition: {3}\nPnL: {4} | Risk: {5:C0}",
+			// v1.10.35: Build order info string when orders are active
+			string orderInfo = "";
+			bool hasActiveOrders = (currentEntryState == EntryState.workingOrder || currentEntryState == EntryState.PositionActive);
+			
+			if (hasActiveOrders)
+			{
+				double tickValue = Instrument.MasterInstrument.PointValue * TickSize;
+				double avgEntry = 0;
+				double slPrice = 0;
+				double tp1Price = activeTp1Price;
+				double tp2Price = activeTp2Price;
+				int totalQty = 0;
+				
+				// Get entry price
+				if (entryOrder != null && entryOrder.AverageFillPrice > 0)
+					avgEntry = entryOrder.AverageFillPrice;
+				else if (entryOrder != null && entryOrder.LimitPrice > 0)
+					avgEntry = entryOrder.LimitPrice;
+				else if (Position.MarketPosition != MarketPosition.Flat)
+					avgEntry = Position.AveragePrice;
+				
+				// Get quantity
+				if (Position.MarketPosition != MarketPosition.Flat)
+					totalQty = Math.Abs(Position.Quantity);
+				else if (entryOrder != null)
+					totalQty = entryOrder.Quantity;
+				
+				// Calculate SL price
+				slPrice = isShortSetup ? (setupAnchorPrice + TickSize) : (setupAnchorPrice - TickSize);
+				
+				if (avgEntry > 0 && slPrice > 0 && totalQty > 0)
+				{
+					// Calculate risk
+					double riskTicks = Math.Abs(avgEntry - slPrice) / TickSize;
+					double riskUSD = riskTicks * tickValue * totalQty;
+					
+					// Calculate TP1 reward
+					double tp1RewardTicks = 0;
+					double tp1RewardUSD = 0;
+					double tp1RR = 0;
+					if (tp1Price > 0)
+					{
+						tp1RewardTicks = Math.Abs(tp1Price - avgEntry) / TickSize;
+						tp1RewardUSD = tp1RewardTicks * tickValue * ((totalQty + 1) / 2); // TP1 gets ~50%
+						tp1RR = riskTicks > 0 ? tp1RewardTicks / riskTicks : 0;
+					}
+					
+					// Calculate TP2 reward
+					double tp2RewardTicks = 0;
+					double tp2RewardUSD = 0;
+					double tp2RR = 0;
+					if (tp2Price > 0)
+					{
+						tp2RewardTicks = Math.Abs(tp2Price - avgEntry) / TickSize;
+						tp2RewardUSD = tp2RewardTicks * tickValue * (totalQty / 2); // TP2 gets ~50%
+						tp2RR = riskTicks > 0 ? tp2RewardTicks / riskTicks : 0;
+					}
+					
+					// Build order info lines
+					orderInfo = string.Format("\n─────────────────\nSL: -${0:F0} ({1:F0}t)\nTP1: +${2:F0} R={3:F1}\nTP2: +${4:F0} R={5:F1}",
+						riskUSD, riskTicks,
+						tp1RewardUSD, tp1RR,
+						tp2RewardUSD, tp2RR);
+				}
+			}
+
+			string text = string.Format("Ver: {0}\nState: {1}\nLevel: {2}\nPosition: {3}\nPnL: {4} | Risk: {5:C0}{6}",
 				StrategyVersion,
 				currentEntryState,
 				levelInfo,
 				Position.MarketPosition,
 				sessionPnL.ToString("C"),
-				globalRiskDisplay);
+				globalRiskDisplay,
+				orderInfo);
 				
 			Draw.TextFixed(this, "InfoPanel", text, TextPosition.TopRight, Brushes.White, new SimpleFont("Arial", 12), Brushes.Black, Brushes.Transparent, 100);
 			
