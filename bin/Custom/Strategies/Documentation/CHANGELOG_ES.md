@@ -4,15 +4,32 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.3] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.6] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### FIX CRÍTICO: Evitar SL Duplicados
+- **Problema**: Al entrar con 2 contratos, SL tenía 4 contratos
+  - `SubmitProtectionOrders()` se llamaba 2 veces (para TP1 y TP2)
+  - Cada llamada creaba un nuevo SL si `shouldUpdateSL = false`
+- **Solución**: Solo crear SL si `stopOrder == null`
+  - Verificación explícita antes de crear
+  - Si ya existe `stopOrder`, no crear duplicado
+- **Log nuevo**: `SL CREATED: SL_Long_01 @ 25000 Qty=2`
+
+---
+
+## [1.11.5] - 2025-12-29
+### Feature: Propiedades Configurables para Trigger Labels
+- **Nuevo grupo de propiedades**: "Trigger Labels" en panel de configuración
+- **Propiedades agregadas**:
+  - `Label Distance (ATR)`: Distancia como multiplicador del ATR (default: 0.3)
+  - `Label Font Size`: Tamaño de fuente 8-20 (default: 12)
+  - `Show Text`: Mostrar/ocultar texto "Short"/"Long"
+  - `Show Arrow`: Mostrar/ocultar flecha
+- **Método**: `DrawTriggerLabel()` usa ATR para distancia consistente entre instrumentos
+
+---
+
+## [1.11.3] - 2025-12-29
 ### Feature: Etiquetas de Trigger Estilo NinjaTrader
-- **Nuevo método**: `DrawTriggerLabel()` crea etiquetas que imitan las ejecuciones de NT
-- **Características**:
-  - Fondo con color: Crimson (Short), ForestGreen (Long)
-  - Texto blanco con fuente Arial Bold
-  - Offset en pixels (no ticks) - se mantiene legible al hacer zoom
-  - Iconos unicode: ▼ Short, ▲ Long
-- **Resultado**: Etiquetas profesionales que se escalan correctamente
 
 ---
 
