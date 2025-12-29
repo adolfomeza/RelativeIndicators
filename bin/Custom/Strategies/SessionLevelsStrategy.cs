@@ -2576,9 +2576,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 							// ACCOUNTS FOR 1 Entry -> 1 OCO Group limitation
 						// UPDATED (v1.7.30): Allow Historical for Strategy Analyzer
-						// FIX (v1.10.36): Block Historical orders on live/demo accounts (only allow in Playback)
-						bool isPlayback = (Connection.PlaybackConnection != null);
-						bool canSubmitOrder = (State == State.Realtime) || (State == State.Historical && isPlayback);
+						// FIX (v1.11.1): Allow Historical for visualization. EvaluateRestartNoPosition() handles Realtime cleanup.
+						bool canSubmitOrder = (State == State.Realtime) || (State == State.Historical);
 						if (canSubmitOrder)
 							{
 								if (entryOrder != null) 
@@ -2666,9 +2665,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 							}
 							
 							// UPDATED (v1.7.30): Allow Historical for Strategy Analyzer
-						// FIX (v1.10.36): Block Historical orders on live/demo accounts
-						bool isPlaybackLong = (Connection.PlaybackConnection != null);
-						bool canSubmitOrderLong = (State == State.Realtime) || (State == State.Historical && isPlaybackLong);
+						// FIX (v1.11.1): Allow Historical for visualization. EvaluateRestartNoPosition() handles Realtime cleanup.
+						bool canSubmitOrderLong = (State == State.Realtime) || (State == State.Historical);
 						if (canSubmitOrderLong)
 							{
 								// CONSOLIDATED ENTRY (v1.7.17)

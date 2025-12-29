@@ -4,7 +4,18 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.0] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.1] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### Fix: Restaurar Ejecuciones Históricas para Visualización
+- **Problema**: v1.10.36 bloqueaba órdenes históricas en cuentas live/demo
+  - No se veían los trades simulados históricos en el chart
+- **Solución**: Permitir órdenes históricas para visualización
+  - `EvaluateRestartNoPosition()` (v1.11.0) maneja la limpieza al entrar en Realtime
+  - Las órdenes históricas son simulación, no se envían al broker
+- **Resultado**: Ahora ves los trades históricos en el chart como antes
+
+---
+
+## [1.11.0] - 2025-12-29
 ### Feature: Lógica Inteligente de Reinicio
 - **Nuevo método**: `EvaluateRestartNoPosition()` evalúa qué hacer al reiniciar
 - **CASO B (orden pendiente)**:
