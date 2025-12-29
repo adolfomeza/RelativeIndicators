@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.10.40"; // Fix: Log cleanup + instrument prefix
+		private const string StrategyVersion = "v1.10.41"; // Fix: Emergency protection for adopted positions
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -704,6 +704,81 @@ namespace NinjaTrader.NinjaScript.Strategies
 						
 						Log(Time[0] + " STARTUP ADOPT COMPLETE: SL=" + (stopOrder != null) + 
 							" TP1=" + (tp1Order != null) + " TP2=" + (tp2Order != null));
+						
+						// v1.10.41: EMERGENCY PROTECTION - If no SL found, create protection or close
+						if (stopOrder == null)
+						{
+							Log(Time[0] + " EMERGENCY: Adopted position has NO protection! Attempting to create...");
+							
+							// Get position details
+							double avgPrice = 0;
+							int posQty = 0;
+							foreach(Position p in Account.Positions)
+							{
+								if (p.Instrument == Instrument && p.MarketPosition != MarketPosition.Flat)
+								{
+									avgPrice = p.AveragePrice;
+									posQty = Math.Abs(p.Quantity);
+									break;
+								}
+							}
+							
+							if (avgPrice > 0 && posQty > 0)
+							{
+								// Calculate emergency SL using StopLossTicks parameter
+								double slDistance = StopLossTicks * TickSize;
+								double emergencySlPrice = isShortSetup ? avgPrice + slDistance : avgPrice - slDistance;
+								
+								// Validate SL is on correct side
+								bool slValid = isShortSetup ? (emergencySlPrice > Close[0]) : (emergencySlPrice < Close[0]);
+								
+								if (slValid)
+								{
+									// Create emergency SL
+									string slTag = "SL_Emergency_" + (isShortSetup ? "Short" : "Long");
+									OrderAction slAction = isShortSetup ? OrderAction.BuyToCover : OrderAction.Sell;
+									
+									try
+									{
+										stopOrder = SubmitOrderUnmanaged(0, slAction, OrderType.StopMarket, posQty, 0, emergencySlPrice, "", slTag);
+										Log(Time[0] + " EMERGENCY SL CREATED: " + slTag + " @ " + emergencySlPrice + " Qty=" + posQty);
+										
+										// Try to create TP at 2:1 minimum
+										double tpDistance = slDistance * 2;
+										double emergencyTpPrice = isShortSetup ? avgPrice - tpDistance : avgPrice + tpDistance;
+										
+										string tpTag = "TP1_Emergency_" + (isShortSetup ? "Short" : "Long");
+										
+										tp1Order = SubmitOrderUnmanaged(0, slAction, OrderType.Limit, posQty, emergencyTpPrice, 0, "", tpTag);
+										Log(Time[0] + " EMERGENCY TP CREATED: " + tpTag + " @ " + emergencyTpPrice + " Qty=" + posQty);
+									}
+									catch (Exception ex)
+									{
+										Log(Time[0] + " EMERGENCY ORDER FAILED: " + ex.Message);
+									}
+								}
+								else
+								{
+									// SL would be on wrong side - position already in loss beyond SL
+									Log(Time[0] + " EMERGENCY: SL invalid (price already beyond). CLOSING POSITION.");
+									
+									try
+									{
+										if (isShortSetup)
+											SubmitOrderUnmanaged(0, OrderAction.BuyToCover, OrderType.Market, posQty, 0, 0, "", "EmergencyClose_Short");
+										else
+											SubmitOrderUnmanaged(0, OrderAction.Sell, OrderType.Market, posQty, 0, 0, "", "EmergencyClose_Long");
+										
+										Log(Time[0] + " EMERGENCY CLOSE SUBMITTED for Qty=" + posQty);
+										currentEntryState = EntryState.Idle;
+									}
+									catch (Exception ex)
+									{
+										Log(Time[0] + " EMERGENCY CLOSE FAILED: " + ex.Message);
+									}
+								}
+							}
+						}
 					}
 					else
 					{

@@ -4,7 +4,24 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.40] - 2025-12-28 ✅ VERSIÓN ACTUAL
+## [1.10.41] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### Fix Crítico: Protección de Emergencia para Posiciones Adoptadas
+- **Problema**: Al reconectar, posiciones adoptadas quedaban sin SL/TP
+  - Las órdenes fueron canceladas por el broker durante desconexión
+  - Estrategia adoptaba posición pero NO creaba nuevas protecciones
+- **Solución**: Verificación post-adopción y creación automática
+  - Si `stopOrder == null` después de adoptar → CREAR PROTECCIÓN
+  - Calcula SL usando `StopLossTicks` desde precio promedio
+  - Crea TP1 automático a 2:1 del SL
+  - **Si precio ya pasó el SL** → CIERRA POSICIÓN INMEDIATAMENTE
+- **Logs nuevos**:
+  - `EMERGENCY: Adopted position has NO protection! Attempting to create...`
+  - `EMERGENCY SL CREATED: SL_Emergency_Long @ 25000 Qty=2`
+  - `EMERGENCY: SL invalid (price already beyond). CLOSING POSITION.`
+
+---
+
+## [1.10.40] - 2025-12-28
 ### Feature: Limpieza de Logs + Prefijo de Instrumento
 - **Problema**: Logs mezclados de 6 instrumentos, imposible diagnosticar
 - **Solución 1**: Método `Log()` ahora agrega prefijo `[INSTRUMENTO]` a cada mensaje
