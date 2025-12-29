@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.6"; // FIX CRITICAL: Prevent duplicate SL orders
+		private const string StrategyVersion = "v1.11.7"; // Fix: Separate arrow and text with pixel offset
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -242,7 +242,11 @@ namespace NinjaTrader.NinjaScript.Strategies
 			{
 				string label = isShort ? "Short" : "Long";
 				SimpleFont font = new SimpleFont("Arial", LabelFontSize);
-				Draw.Text(this, tag + "_Txt", true, label, barsAgo, textPrice, 0, color, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
+				// v1.11.7: yPixelOffset para separar texto de la flecha
+				// Short: texto arriba de la flecha (negativo = hacia arriba)
+				// Long: texto abajo de la flecha (positivo = hacia abajo)
+				int textPixelOffset = isShort ? -12 : 12;
+				Draw.Text(this, tag + "_Txt", true, label, barsAgo, arrowPrice, textPixelOffset, color, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
 			}
 		}
 

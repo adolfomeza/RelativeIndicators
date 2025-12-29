@@ -4,7 +4,17 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.6] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.7] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### Fix: Separar Flecha y Texto en Trigger Labels
+- **Problema**: Texto y flecha estaban superpuestos
+- **Solución**: Usar `yPixelOffset` de 12 pixels para separar
+  - Short: Texto 12px arriba de la flecha
+  - Long: Texto 12px abajo de la flecha
+- **Cambio**: Texto ahora usa `arrowPrice` como ancla + offset en pixels
+
+---
+
+## [1.11.6] - 2025-12-29
 ### FIX CRÍTICO: Evitar SL Duplicados
 - **Problema**: Al entrar con 2 contratos, SL tenía 4 contratos
   - `SubmitProtectionOrders()` se llamaba 2 veces (para TP1 y TP2)
