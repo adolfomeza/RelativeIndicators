@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.16"; // Fix: Append to log instead of overwrite
+		private const string StrategyVersion = "v1.11.17"; // Feature: Lag Filter - Block orders on chart delay
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -136,6 +136,12 @@ namespace NinjaTrader.NinjaScript.Strategies
 			get { return enableDebugLogs; }
 			set { enableDebugLogs = value; }
 		}
+		
+		// v1.11.17: Lag Filter - Maximum allowed chart lag before blocking orders
+		[NinjaScriptProperty]
+		[Range(0.1, 10)]
+		[Display(Name="Max Chart Lag (Seconds)", Description="Block orders when chart data is older than this threshold. Set higher if experiencing false positives.", Order=62, GroupName="General")]
+		public double MaxChartLagSeconds { get; set; } = 0.75;
 
 		private bool showVisuals = true;
 		
@@ -243,6 +249,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private string logFilePath = null;
 		private DateTime lastLogFlush = DateTime.MinValue;
 		
+		// v1.11.17: Lag Filter - Chart data freshness detection
+		private double currentChartLag = 0;
+		private bool isLagAlertActive = false;
+		
 		private void Log(string message)
 		{
 			if (!EnableDebugLogs) return;
@@ -307,6 +317,37 @@ namespace NinjaTrader.NinjaScript.Strategies
 				}
 			}
 			catch { }
+		}
+
+
+		// =========================================================
+		// v1.11.17: LAG FILTER - Check chart data freshness
+		// =========================================================
+		private bool CheckChartLag()
+		{
+			// Only check in Realtime (not Playback/Historical)
+			if (State != State.Realtime) return true;
+			
+			// Calculate lag: System time vs last bar time
+			TimeSpan chartLag = Core.Globals.Now - Time[0];
+			currentChartLag = chartLag.TotalSeconds;
+			
+			// For 1-minute bars, we expect up to 60 seconds "lag" normally
+			// So we only flag if it exceeds the bar period + threshold
+			double expectedLag = BarsPeriod.Value * 60; // Bar period in seconds
+			double actualExcessLag = currentChartLag - expectedLag;
+			
+			// Check if exceeds threshold
+			if (actualExcessLag > MaxChartLagSeconds)
+			{
+				isLagAlertActive = true;
+				Log(string.Format("{0} LAG ALERT: Chart excess lag {1:F2}s > {2}s threshold - ORDERS BLOCKED", 
+					Time[0], actualExcessLag, MaxChartLagSeconds));
+				return false; // Not safe to trade
+			}
+			
+			isLagAlertActive = false;
+			return true; // Safe to trade
 		}
 
 
@@ -2209,6 +2250,17 @@ namespace NinjaTrader.NinjaScript.Strategies
 				// Increased padding to roughly 12 lines to clear the InfoPanel
 				Draw.TextFixed(this, "GapWarning", "\n\n\n\n\n\n\n\n\n\n\n\n" + msg, TextPosition.TopRight, Brushes.Red, new SimpleFont("Arial", 12) { Bold = true }, Brushes.Transparent, Brushes.Transparent, 100);
 			}
+			
+			// v1.11.17: Lag Alert - Yellow text warning when chart has excessive lag
+			if (isLagAlertActive)
+			{
+				string lagMsg = string.Format("⚠️ LAG: {0:F1}s - ORDERS BLOCKED", currentChartLag);
+				Draw.TextFixed(this, "LagAlert", "\n\n\n\n\n\n\n" + lagMsg, TextPosition.TopRight, Brushes.Yellow, new SimpleFont("Arial", 14) { Bold = true }, Brushes.Transparent, Brushes.Transparent, 100);
+			}
+			else
+			{
+				RemoveDrawObject("LagAlert"); // Clear when no lag
+			}
 		}
 		
 		// -------------------------------------------------------------------------
@@ -2780,6 +2832,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 								
 								// CONSOLIDATED ENTRY (v1.7.17)
 								string entryTag = string.Format("EntryA+_Short_{0:D2}", currentVwapNumber);
+								
+								// v1.11.17: Lag Filter - Block order if chart has lag
+								if (!CheckChartLag())
+								{
+									Log(Time[0] + " Short order BLOCKED due to chart lag");
+									return;
+								}
+								
 								entryOrder = SubmitOrderUnmanaged(0, OrderAction.SellShort, OrderType.Limit, dynamicQuantity, limitPrice, 0, "", entryTag);
 								currentEntryState = EntryState.workingOrder;
 								Log(Time[0] + " Order Submitted (Short Consolidated). Qty=" + dynamicQuantity);
@@ -2876,6 +2936,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 								
 								int dynamicQuantity = CalculateDynamicQuantity(limitPrice, projectedStop); // v1.8.0
 				string entryTag = string.Format("EntryA+_Long_{0:D2}", currentVwapNumber);
+				
+				// v1.11.17: Lag Filter - Block order if chart has lag
+				if (!CheckChartLag())
+				{
+					Log(Time[0] + " Long order BLOCKED due to chart lag");
+					return;
+				}
+				
 				entryOrder = SubmitOrderUnmanaged(0, OrderAction.Buy, OrderType.Limit, dynamicQuantity, limitPrice, 0, "", entryTag);
 								currentEntryState = EntryState.workingOrder;
 								Log(Time[0] + " Order Submitted (Long Consolidated). Qty=" + dynamicQuantity);

@@ -4,7 +4,21 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.16] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.17] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### Feature: Filtro de Lag de Chart
+- **Nueva propiedad**: `Max Chart Lag (Seconds)` - Default: 0.75s
+- **Método**: `CheckChartLag()` verifica frescura de datos del chart
+  - Calcula: `Core.Globals.Now - Time[0]` vs período de barra + umbral
+  - Retorna `false` si hay lag excesivo → bloquea órdenes
+- **Integración**: Verificación antes de `SubmitOrderUnmanaged` en:
+  - Confirmación Short (línea ~2824)
+  - Confirmación Long (línea ~2936)
+- **Alerta visual**: Texto amarillo `⚠️ LAG: X.Xs - ORDERS BLOCKED` en panel de estado
+- **Logs**: `LAG ALERT: Chart excess lag X.XXs > 0.75s threshold - ORDERS BLOCKED`
+
+---
+
+## [1.11.16] - 2025-12-29
 ### Fix: Logs Append en Lugar de Sobrescribir
 - **Problema**: Al cargar MES se borraban los logs de MGC
 - **Causa**: `ClearLogFile()` usaba `WriteAllText` (sobrescribir)
