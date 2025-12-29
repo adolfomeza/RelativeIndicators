@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.10.41"; // Fix: Emergency protection for adopted positions
+		private const string StrategyVersion = "v1.11.0"; // Feature: Intelligent restart evaluation
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -172,6 +172,120 @@ namespace NinjaTrader.NinjaScript.Strategies
 			}
 		}
 
+
+		// =========================================================
+		// v1.11.0: INTELLIGENT RESTART EVALUATION (No Position)
+		// =========================================================
+		private void EvaluateRestartNoPosition()
+		{
+			Log(Time[0] + " v1.11 RESTART EVAL: Checking for pending orders or valid setup to continue...");
+			
+			// STEP 1: Check for pending entry order in Account
+			Order pendingEntry = null;
+			foreach(Order o in Account.Orders)
+			{
+				if (o.Instrument.FullName == Instrument.FullName && 
+					o.Name.Contains("EntryA+_") &&
+					(o.OrderState == OrderState.Working || o.OrderState == OrderState.Accepted))
+				{
+					pendingEntry = o;
+					break;
+				}
+			}
+			
+			if (pendingEntry != null)
+			{
+				Log(Time[0] + " v1.11 RESTART: Found pending entry order: " + pendingEntry.Name + " @ " + pendingEntry.LimitPrice);
+				
+				// Evaluate if setup is still valid
+				double entryPrice = pendingEntry.LimitPrice;
+				bool isShort = pendingEntry.OrderAction == OrderAction.SellShort;
+				
+				// Check if price crossed the entry (opportunity may have passed)
+				bool entryCrossed = isShort ? (Low[0] <= entryPrice) : (High[0] >= entryPrice);
+				
+				if (entryCrossed && Position.MarketPosition == MarketPosition.Flat)
+				{
+					// Price crossed but we didn't get filled - cancel
+					Log(Time[0] + " v1.11 RESTART: Entry price crossed but not filled. Cancelling order.");
+					try { CancelOrder(pendingEntry); } catch {}
+					currentEntryState = EntryState.Idle;
+					return;
+				}
+				
+				// Check R/R - estimate SL at StopLossTicks from entry
+				double slDistance = StopLossTicks * TickSize;
+				double estimatedSL = isShort ? entryPrice + slDistance : entryPrice - slDistance;
+				
+				// Find a target to calculate R/R
+				double targetPrice = isShort ? GetCurrentLowVWAP() : GetCurrentHighVWAP();
+				if (targetPrice <= 0) targetPrice = isShort ? entryPrice - (slDistance * 2) : entryPrice + (slDistance * 2);
+				
+				double risk = Math.Abs(entryPrice - estimatedSL);
+				double reward = Math.Abs(targetPrice - entryPrice);
+				double rr = risk > 0 ? reward / risk : 0;
+				
+				if (rr < 1.0)
+				{
+					Log(Time[0] + " v1.11 RESTART: R/R too low (" + rr.ToString("F2") + "). Cancelling order.");
+					try { CancelOrder(pendingEntry); } catch {}
+					currentEntryState = EntryState.Idle;
+					return;
+				}
+				
+				// Setup still valid - adopt the order
+				Log(Time[0] + " v1.11 RESTART: Setup valid. R/R=" + rr.ToString("F2") + ". Adopting order.");
+				entryOrder = pendingEntry;
+				currentEntryState = EntryState.workingOrder;
+				isShortSetup = isShort;
+				setupAnchorPrice = estimatedSL;
+				return;
+			}
+			
+			// STEP 2: No pending order - check if we can find a valid setup to continue
+			SessionLevel validLevel = null;
+			foreach (var lvl in activeLevels)
+			{
+				if (lvl.IsMitigated) continue;
+				if (lvl.StartTime.Date == Time[0].Date) continue;
+				
+				bool wasTouched = false;
+				bool priceOnCorrectSide = false;
+				
+				if (lvl.IsResistance)
+				{
+					wasTouched = High[0] >= lvl.Price - (3 * TickSize);
+					priceOnCorrectSide = Close[0] < lvl.Price;
+				}
+				else
+				{
+					wasTouched = Low[0] <= lvl.Price + (3 * TickSize);
+					priceOnCorrectSide = Close[0] > lvl.Price;
+				}
+				
+				if (wasTouched && priceOnCorrectSide && lvl.EntryAttempts < MaxRetriesPerLevel)
+				{
+					validLevel = lvl;
+					break;
+				}
+			}
+			
+			if (validLevel != null)
+			{
+				Log(Time[0] + " v1.11 RESTART: Found valid level: " + validLevel.Name + ". Setting to WaitingForConfirmation.");
+				setupLevelName = validLevel.Name;
+				setupAnchorPrice = validLevel.Price;
+				isShortSetup = validLevel.IsResistance;
+				currentEntryState = EntryState.WaitingForConfirmation;
+				return;
+			}
+			
+			// STEP 3: Nothing valid found - reset to Idle
+			Log(Time[0] + " v1.11 RESTART: No valid setup found. Starting fresh.");
+			currentEntryState = EntryState.Idle;
+			setupLevelName = "";
+			setupAnchorPrice = 0;
+		}
 
 		// =========================================================
 		// STATE PERSISTENCE (XML)
@@ -782,23 +896,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 					}
 					else
 					{
-						// 2. Stuck Order Cleanup (only if NO position)
-						foreach(Order o in Account.Orders)
-						{
-							if (o.Instrument.FullName == Instrument.FullName && 
-								(o.OrderState == OrderState.Working || o.OrderState == OrderState.Accepted || o.OrderState == OrderState.CancelPending))
-							{
-								Log(Time[0] + " STARTUP FAILSAFE: Cancelling Stuck Order (no position): " + o.Name);
-								try 
-								{ 
-									CancelOrder(o); 
-								} 
-								catch (Exception ex) 
-								{ 
-									// Refined Log (v1.7.10): Don't spam "Warning" for expected foreign order failures
-								}
-							}
-						}
+						// v1.11.0: INTELLIGENT RESTART EVALUATION
+						// Instead of blindly cancelling orders, evaluate if setup is still valid
+						EvaluateRestartNoPosition();
 					}
 				}
 				
@@ -824,16 +924,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 					}
 				}
 				
-				// v1.10.39: RESET HISTORICAL STATE if no position
-				// Triggers detected during Historical processing should NOT persist into Realtime
-				if (!hasExistingPosition && currentEntryState != EntryState.Idle)
-				{
-					Log(Time[0] + " STARTUP RESET: Clearing historical state (" + currentEntryState + ") - No position, starting fresh.");
-					currentEntryState = EntryState.Idle;
-					setupLevelName = "";
-					setupAnchorPrice = 0;
-					waitingForVwapMitigation = false;
-				}
+				// v1.11.0: Historical state now handled by EvaluateRestartNoPosition()
 			}
 
 			if (CurrentBar < 20) return;

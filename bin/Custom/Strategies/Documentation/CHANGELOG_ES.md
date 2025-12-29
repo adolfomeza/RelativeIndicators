@@ -4,7 +4,26 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.41] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.0] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### Feature: Lógica Inteligente de Reinicio
+- **Nuevo método**: `EvaluateRestartNoPosition()` evalúa qué hacer al reiniciar
+- **CASO B (orden pendiente)**:
+  - Busca orden `EntryA+_` en Account.Orders
+  - Si precio cruzó la entrada → Cancela orden
+  - Si R/R < 1:1 → Cancela orden
+  - Si todo OK → Adopta la orden y continúa
+- **CASO C (sin nada)**:
+  - Busca nivel válido no-mitigado tocado recientemente
+  - Si precio está del lado correcto → WaitingForConfirmation
+  - Si no hay setup válido → Idle
+- **Mejoras sobre v1.10.39**:
+  - Ya no resetea ciegamente a Idle
+  - Evalúa si el setup puede continuar
+- **Log**: `v1.11 RESTART: Found pending entry order... R/R=1.50. Adopting order.`
+
+---
+
+## [1.10.41] - 2025-12-29
 ### Fix Crítico: Protección de Emergencia para Posiciones Adoptadas
 - **Problema**: Al reconectar, posiciones adoptadas quedaban sin SL/TP
   - Las órdenes fueron canceladas por el broker durante desconexión
