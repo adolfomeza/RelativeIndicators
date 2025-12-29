@@ -4,7 +4,25 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.11] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.12] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### FIX CRÍTICO: Prevenir Órdenes de Protección Duplicadas
+- **Problema Reportado**: Con 2 contratos de entrada:
+  - 2 SL (debería ser 1)
+  - 4 TP1 (debería ser 1)
+  - 1 TP2 (correcto)
+- **Causa Raíz**:
+  - `SubmitProtectionOrders()` se llama 2 veces (para TP1 y TP2)
+  - Línea 3269 **siempre creaba TP** sin verificar si ya existía uno activo
+  - Fix v1.11.6 para SL era insuficiente (no verificaba estado `Submitted`)
+- **Solución Aplicada**:
+  - **SL**: Verificar `slAlreadyActive` (Working/Accepted/Submitted) antes de crear
+  - **TP**: Verificar `tpAlreadyActive` (Working/Accepted/Submitted) antes de crear
+  - Logs nuevos: `TP1 CREATED`, `TP2 CREATED`, `SL ALREADY EXISTS`, `TP1 ALREADY EXISTS`
+- **Resultado Esperado**: 1 SL, 1 TP1, 1 TP2 por operación
+
+---
+
+## [1.11.11] - 2025-12-29
 ### Fix: Pintar Vela de Confirmación Única
 - **Problema**: Se pintaban múltiples velas consecutivas (todas las que confirmaban) en historial Live/Demo
   - Razón: Al no enviar orden, el estado `WaitingForConfirmation` no cambiaba, re-evaluando y re-pintando.

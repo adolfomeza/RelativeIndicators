@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.11"; // Fix: Single paint for confirmation candle
+		private const string StrategyVersion = "v1.11.12"; // FIX CRITICAL: Prevent duplicate SL and TP orders
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -3226,9 +3226,13 @@ setupLevelName = "";
 			bool shouldUpdateTP = (existingTP != null && (existingTP.OrderState == OrderState.Working || existingTP.OrderState == OrderState.Accepted));
 			
 			// STEP 1: Handle STOP LOSS (single for entire position)
-			// v1.11.6 FIX: Only handle SL if stopOrder is null OR needs quantity update
-			// Prevents creating duplicate SL orders when SubmitProtectionOrders is called twice
-			if (stopOrder == null)
+			// v1.11.12 FIX: Verificar tanto null como estado activo para evitar duplicados
+			bool slAlreadyActive = (stopOrder != null && 
+				(stopOrder.OrderState == OrderState.Working || 
+				 stopOrder.OrderState == OrderState.Accepted ||
+				 stopOrder.OrderState == OrderState.Submitted));
+			
+			if (stopOrder == null && !slAlreadyActive)
 			{
 				// Create new SL
 				string slTag = string.Format("{0}_{1:D2}", direction == "Short" ? "SL_Short" : "SL_Long", currentVwapNumber);
@@ -3236,6 +3240,10 @@ setupLevelName = "";
 				
 				stopOrder = SubmitOrderUnmanaged(0, slAction, OrderType.StopMarket, totalPositionQty, 0, slPrice, "", slTag);
 				Log(string.Format("SL CREATED: {0} @ {1} Qty={2}", slTag, slPrice, totalPositionQty));
+			}
+			else if (slAlreadyActive)
+			{
+				Log(string.Format("SL ALREADY EXISTS (State={0}), skipping creation", stopOrder.OrderState));
 			}
 			else if (shouldUpdateSL && stopOrder.Quantity != totalPositionQty)
 			{
@@ -3266,17 +3274,35 @@ setupLevelName = "";
 				}
 			}
 			
-			// Create TP (always, either first time or after cancel)
-			string tpBase = direction == "Short" ? 
-				(isTp1 ? "TP1_Short" : "TP2_Short") : 
-				(isTp1 ? "TP1_Long" : "TP2_Long");
-			string tpTag = string.Format("{0}_{1:D2}", tpBase, currentVwapNumber);
-			OrderAction tpAction = direction == "Short" ? OrderAction.BuyToCover : OrderAction.Sell;
+			// v1.11.12 FIX: Solo crear TP si NO existe uno activo
+			// Antes: siempre creaba TP causando 4 TP1 en lugar de 1
+			Order currentTP = isTp1 ? tp1Order : tp2Order;
+			bool tpAlreadyActive = (currentTP != null && 
+				(currentTP.OrderState == OrderState.Working || 
+				 currentTP.OrderState == OrderState.Accepted ||
+				 currentTP.OrderState == OrderState.Submitted));
 			
-			if (isTp1) {
-				tp1Order = SubmitOrderUnmanaged(0, tpAction, OrderType.Limit, tpQty, myTpPrice, 0, "", tpTag);
-			} else {
-				tp2Order = SubmitOrderUnmanaged(0, tpAction, OrderType.Limit, tpQty, myTpPrice, 0, "", tpTag);
+			if (!tpAlreadyActive)
+			{
+				// Create TP only if none exists
+				string tpBase = direction == "Short" ? 
+					(isTp1 ? "TP1_Short" : "TP2_Short") : 
+					(isTp1 ? "TP1_Long" : "TP2_Long");
+				string tpTag = string.Format("{0}_{1:D2}", tpBase, currentVwapNumber);
+				OrderAction tpAction = direction == "Short" ? OrderAction.BuyToCover : OrderAction.Sell;
+				
+				if (isTp1) {
+					tp1Order = SubmitOrderUnmanaged(0, tpAction, OrderType.Limit, tpQty, myTpPrice, 0, "", tpTag);
+					Log(string.Format("TP1 CREATED: {0} @ {1} Qty={2}", tpTag, myTpPrice, tpQty));
+				} else {
+					tp2Order = SubmitOrderUnmanaged(0, tpAction, OrderType.Limit, tpQty, myTpPrice, 0, "", tpTag);
+					Log(string.Format("TP2 CREATED: {0} @ {1} Qty={2}", tpTag, myTpPrice, tpQty));
+				}
+			}
+			else
+			{
+				Log(string.Format("{0} ALREADY EXISTS (State={1}), skipping creation", 
+					isTp1 ? "TP1" : "TP2", currentTP.OrderState));
 			}
 			// v1.10.34: TP labels removed for cleaner chart
 		}
