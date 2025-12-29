@@ -395,7 +395,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		// =========================================================
 		private void EvaluateRestartNoPosition()
 		{
-			Log(Time[0] + " v1.11 RESTART EVAL: Checking for pending orders or valid setup to continue...");
+			Log(Time[0] + " " + StrategyVersion + " RESTART EVAL: Checking for pending orders or valid setup to continue...");
 			
 			// STEP 1: Check for pending entry order in Account
 			Order pendingEntry = null;
@@ -412,7 +412,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 			
 			if (pendingEntry != null)
 			{
-				Log(Time[0] + " v1.11 RESTART: Found pending entry order: " + pendingEntry.Name + " @ " + pendingEntry.LimitPrice);
+				Log(Time[0] + " " + StrategyVersion + " RESTART: Found pending entry order: " + pendingEntry.Name + " @ " + pendingEntry.LimitPrice);
 				
 				// Evaluate if setup is still valid
 				double entryPrice = pendingEntry.LimitPrice;
@@ -424,7 +424,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				if (entryCrossed && Position.MarketPosition == MarketPosition.Flat)
 				{
 					// Price crossed but we didn't get filled - cancel
-					Log(Time[0] + " v1.11 RESTART: Entry price crossed but not filled. Cancelling order.");
+					Log(Time[0] + " " + StrategyVersion + " RESTART: Entry price crossed but not filled. Cancelling order.");
 					try { CancelOrder(pendingEntry); } catch {}
 					currentEntryState = EntryState.Idle;
 					return;
@@ -444,14 +444,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 				
 				if (rr < 1.0)
 				{
-					Log(Time[0] + " v1.11 RESTART: R/R too low (" + rr.ToString("F2") + "). Cancelling order.");
+					Log(Time[0] + " " + StrategyVersion + " RESTART: R/R too low (" + rr.ToString("F2") + "). Cancelling order.");
 					try { CancelOrder(pendingEntry); } catch {}
 					currentEntryState = EntryState.Idle;
 					return;
 				}
 				
 				// Setup still valid - adopt the order
-				Log(Time[0] + " v1.11 RESTART: Setup valid. R/R=" + rr.ToString("F2") + ". Adopting order.");
+				Log(Time[0] + " " + StrategyVersion + " RESTART: Setup valid. R/R=" + rr.ToString("F2") + ". Adopting order.");
 				entryOrder = pendingEntry;
 				currentEntryState = EntryState.workingOrder;
 				isShortSetup = isShort;
@@ -489,7 +489,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 			
 			if (validLevel != null)
 			{
-				Log(Time[0] + " v1.11 RESTART: Found valid level: " + validLevel.Name + ". Setting to WaitingForConfirmation.");
+				Log(Time[0] + " " + StrategyVersion + " RESTART: Found valid level: " + validLevel.Name + ". Setting to WaitingForConfirmation.");
 				setupLevelName = validLevel.Name;
 				setupAnchorPrice = validLevel.Price;
 				isShortSetup = validLevel.IsResistance;
@@ -498,7 +498,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 			}
 			
 			// STEP 3: Nothing valid found - reset to Idle
-			Log(Time[0] + " v1.11 RESTART: No valid setup found. Starting fresh.");
+			Log(Time[0] + " " + StrategyVersion + " RESTART: No valid setup found. Starting fresh.");
 			currentEntryState = EntryState.Idle;
 			setupLevelName = "";
 			setupAnchorPrice = 0;
