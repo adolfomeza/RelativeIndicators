@@ -4,7 +4,20 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.39] - 2025-12-28 ✅ VERSIÓN ACTUAL
+## [1.10.40] - 2025-12-28 ✅ VERSIÓN ACTUAL
+### Feature: Limpieza de Logs + Prefijo de Instrumento
+- **Problema**: Logs mezclados de 6 instrumentos, imposible diagnosticar
+- **Solución 1**: Método `Log()` ahora agrega prefijo `[INSTRUMENTO]` a cada mensaje
+  - Ejemplo: `[MNQ] STARTUP RESET: Clearing historical state...`
+  - Ejemplo: `[MGC] RECOVERED orphan SL: SL_Long_01 Qty=2`
+- **Solución 2**: Convertidos ~20 Print() directos a usar Log()
+  - Todos ahora respetan `EnableDebugLogs`
+  - Solo excepciones críticas siguen sin protección
+- **Resultado**: Logs limpios y fáciles de filtrar por instrumento
+
+---
+
+## [1.10.39] - 2025-12-28
 ### Fix: Limpiar Estado Histórico al Iniciar en Realtime
 - **Problema**: Al activar estrategia, estado mostraba `WaitingForConfirmation` inmediatamente
   - Triggers detectados durante procesamiento Historical persistían en Realtime

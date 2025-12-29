@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.10.39"; // Fix: Reset historical state on Realtime start
+		private const string StrategyVersion = "v1.10.40"; // Fix: Log cleanup + instrument prefix
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -162,11 +162,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private double visualAdhocLastVal = 0;
 		private int visualAdhocLastBar = -1;
 
-		// Forensic Logging
+		// Forensic Logging - v1.10.40: Added instrument prefix for multi-chart debugging
 		private void Log(string message)
 		{
-			// Simple Print only to debug activation crash
-			if (EnableDebugLogs) Print(message);
+			if (EnableDebugLogs)
+			{
+				string prefix = Instrument != null ? "[" + Instrument.MasterInstrument.Name + "] " : "";
+				Print(prefix + message);
+			}
 		}
 
 
@@ -217,7 +220,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 			}
 			else if (State == State.DataLoaded)
 			{
-				Print("DEBUG: OnStateChange(DataLoaded) IsUnmanaged = " + IsUnmanaged);
+				Log("DEBUG: OnStateChange(DataLoaded) IsUnmanaged = " + IsUnmanaged);
 				// Initialize Helper Indicators
 				atr = ATR(14); // For Dynamic Spacing
 				
@@ -412,7 +415,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				{
 					serializer.Serialize(writer, dataToSave);
 				}
-				Print(DateTime.Now + " State Saved: " + dataToSave.Count + " levels to " + path);
+				Log(DateTime.Now + " State Saved: " + dataToSave.Count + " levels to " + path);
 			}
 			catch (Exception ex)
 			{
@@ -524,7 +527,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 					string msg = "State Loaded: " + count + " levels restored.";
 					if (mitigatedCount > 0) msg += " (Auto-Mitigated " + mitigatedCount + " ghosts due to Gap).";
 					if (gapCount > 0) msg += " (Skipped " + gapCount + " stale levels. Load more days).";
-					Print(DateTime.Now + " " + msg);
+					Log(DateTime.Now + " " + msg);
 				}
 			}
 			catch (Exception ex)
@@ -610,7 +613,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 			{
 				lastWeeklyReset = lastFriday6pmChart;
 				
-				Print(Time[0] + " v1.10.37 WEEK RESET - State cleared for new trading week (Last Friday 6pm: " + lastFriday6pm + " NY)");
+				Log(Time[0] + " WEEK RESET - State cleared for new trading week (Last Friday 6pm: " + lastFriday6pm + " NY)");
 				
 				// Cancel pending entry if any
 				if (entryOrder != null && (entryOrder.OrderState == OrderState.Working || entryOrder.OrderState == OrderState.Accepted))
@@ -668,7 +671,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 							currentEntryState = EntryState.PositionActive;
 							isShortSetup = (p.MarketPosition == MarketPosition.Short);
 							
-							Print(Time[0] + " STARTUP ADOPT: Found position Qty=" + p.Quantity + 
+							Log(Time[0] + " STARTUP ADOPT: Found position Qty=" + p.Quantity + 
 								" Dir=" + p.MarketPosition + " - Adopting state and orders...");
 						}
 					}
@@ -684,22 +687,22 @@ namespace NinjaTrader.NinjaScript.Strategies
 								if (o.Name.StartsWith("SL_") || o.Name.Contains("_SL"))
 								{
 									stopOrder = o;
-									Print(Time[0] + " STARTUP ADOPT: Recovered SL order: " + o.Name + " Qty=" + o.Quantity);
+									Log(Time[0] + " STARTUP ADOPT: Recovered SL order: " + o.Name + " Qty=" + o.Quantity);
 								}
 								else if (o.Name.StartsWith("TP1_") || o.Name.Contains("_TP1"))
 								{
 									tp1Order = o;
-									Print(Time[0] + " STARTUP ADOPT: Recovered TP1 order: " + o.Name + " Qty=" + o.Quantity);
+									Log(Time[0] + " STARTUP ADOPT: Recovered TP1 order: " + o.Name + " Qty=" + o.Quantity);
 								}
 								else if (o.Name.StartsWith("TP2_") || o.Name.Contains("_TP2"))
 								{
 									tp2Order = o;
-									Print(Time[0] + " STARTUP ADOPT: Recovered TP2 order: " + o.Name + " Qty=" + o.Quantity);
+									Log(Time[0] + " STARTUP ADOPT: Recovered TP2 order: " + o.Name + " Qty=" + o.Quantity);
 								}
 							}
 						}
 						
-						Print(Time[0] + " STARTUP ADOPT COMPLETE: SL=" + (stopOrder != null) + 
+						Log(Time[0] + " STARTUP ADOPT COMPLETE: SL=" + (stopOrder != null) + 
 							" TP1=" + (tp1Order != null) + " TP2=" + (tp2Order != null));
 					}
 					else
@@ -750,7 +753,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				// Triggers detected during Historical processing should NOT persist into Realtime
 				if (!hasExistingPosition && currentEntryState != EntryState.Idle)
 				{
-					Print(Time[0] + " STARTUP RESET: Clearing historical state (" + currentEntryState + ") - No position, starting fresh.");
+					Log(Time[0] + " STARTUP RESET: Clearing historical state (" + currentEntryState + ") - No position, starting fresh.");
 					currentEntryState = EntryState.Idle;
 					setupLevelName = "";
 					setupAnchorPrice = 0;
@@ -2803,19 +2806,19 @@ setupLevelName = "";
 					if (stopOrder == null && (o.Name.StartsWith("SL_") || o.Name.Contains("_SL")))
 					{
 						stopOrder = o;
-						Print(Time[0] + " RECOVERED orphan SL: " + o.Name + " Qty=" + o.Quantity);
+						Log(Time[0] + " RECOVERED orphan SL: " + o.Name + " Qty=" + o.Quantity);
 					}
 					// Recover orphan TP1
 					if (tp1Order == null && (o.Name.StartsWith("TP1_") || o.Name.Contains("_TP1")))
 					{
 						tp1Order = o;
-						Print(Time[0] + " RECOVERED orphan TP1: " + o.Name + " Qty=" + o.Quantity);
+						Log(Time[0] + " RECOVERED orphan TP1: " + o.Name + " Qty=" + o.Quantity);
 					}
 					// Recover orphan TP2
 					if (tp2Order == null && (o.Name.StartsWith("TP2_") || o.Name.Contains("_TP2")))
 					{
 						tp2Order = o;
-						Print(Time[0] + " RECOVERED orphan TP2: " + o.Name + " Qty=" + o.Quantity);
+						Log(Time[0] + " RECOVERED orphan TP2: " + o.Name + " Qty=" + o.Quantity);
 					}
 				}
 			}
@@ -3307,7 +3310,7 @@ setupLevelName = "";
 								smtp.EnableSsl = true;
 								smtp.Send(mail);
 							}
-							Print("Email Sent to " + EmailTo);
+							Log("Email Sent to " + EmailTo);
 						}
 					}
 					catch (Exception ex)
@@ -3680,7 +3683,7 @@ setupLevelName = "";
 				}
 				else
 				{
-					Print(Time + " Partial Execution (" + execution.Order.Name + "). Position Active. Qty=" + Position.Quantity);
+					Log(Time + " Partial Execution (" + execution.Order.Name + "). Position Active. Qty=" + Position.Quantity);
 				}
 			}
 		}
