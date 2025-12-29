@@ -4,7 +4,16 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.18] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.19] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### Fix: Evitar Falsos Positivos de Detección de Posiciones Huérfanas
+- **Problema**: Después de cerrar posición (SL/TP fill), el mensaje "Safe Orphan Detected" aparecía incorrectamente
+- **Causa**: Delay de sincronización entre `Position.Flat` local y `Account.Positions`
+- **Solución**: Nueva variable `lastPositionCloseTime` + delay de 2 segundos en `CheckSafetyNet()`
+- **Resultado**: No más alertas de orphan inmediatamente después de un cierre válido
+
+---
+
+## [1.11.18] - 2025-12-29
 ### Fix: Logs Limpian Solo Su Propio Instrumento
 - **Cambio**: Al reiniciar estrategia, borra solo SU archivo de log (no el de otros)
 - **Antes (v1.11.16)**: Append con separador → acumulaba datos innecesarios

@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.18"; // Fix: Clear only own log on restart
+		private const string StrategyVersion = "v1.11.19"; // Fix: Prevent orphan false positives after position close
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -252,6 +252,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 		// v1.11.17: Lag Filter - Chart data freshness detection
 		private double currentChartLag = 0;
 		private bool isLagAlertActive = false;
+		
+		// v1.11.19: Orphan false positive prevention - delay after position close
+		private DateTime lastPositionCloseTime = DateTime.MinValue;
 		
 		private void Log(string message)
 		{
@@ -1948,6 +1951,13 @@ namespace NinjaTrader.NinjaScript.Strategies
 			// 0. ACCOUNT SYNC CHECK (Realtime Only)
 			if (State == State.Realtime && Account != null && Position.MarketPosition == MarketPosition.Flat)
 			{
+				// v1.11.19: Skip orphan check for 2 seconds after position close to avoid false positives
+				// (Account.Positions can have sync delay after SL/TP fill)
+				if ((DateTime.Now - lastPositionCloseTime).TotalSeconds < 2.0)
+				{
+					return; // Too soon after position close, skip check
+				}
+				
 				bool foundOrphan = false; 
 				
 				try 
@@ -4085,6 +4095,7 @@ setupLevelName = "";
 				{
 					bool isSLClose = execution.Order.Name.Contains("SL_");
 					Log(Time + " Position Closed (" + execution.Order.Name + "). Resetting to Idle.");
+					lastPositionCloseTime = DateTime.Now; // v1.11.19: Prevent orphan false positives
 					TriggerScreenshot("Exit_" + execution.Order.Name, DateTime.Now, executionId);
 					
 					// v1.10.26: Check if we can retry
