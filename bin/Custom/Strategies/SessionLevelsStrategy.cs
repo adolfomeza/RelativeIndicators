@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.10.38"; // Fix: Recover orders after connection loss
+		private const string StrategyVersion = "v1.10.39"; // Fix: Reset historical state on Realtime start
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -646,15 +646,17 @@ namespace NinjaTrader.NinjaScript.Strategies
 			// v1.10.28: Skip if overnight positions are allowed (user wants to keep positions)
 			if (State == State.Realtime && !isRealtimeInitialized)
 			{
-				isRealtimeInitialized = true;
+			isRealtimeInitialized = true;
 				realtimeStartBar = CurrentBar; // v1.10.28: Track when we went live
+				
+				// v1.10.39: Track if position exists (used for historical state reset later)
+				bool hasExistingPosition = false;
 				
 				// 1. Zombie Position Cleanup (ACCOUNT LEVEL - v1.7.8)
 				// Strategy 'Position' starts flat on reload, checking that is useless for Zombies.
 				// We must check if the Account has a position for this instrument.
 				if (Account != null)
 				{
-					bool hasExistingPosition = false;
 					
 					foreach(Position p in Account.Positions)
 					{
@@ -742,6 +744,17 @@ namespace NinjaTrader.NinjaScript.Strategies
 						skippedLevelsAtStartup.Add(lvl.Name);
 						if (EnableDebugLogs) Print(Time[0] + " STARTUP: Level '" + lvl.Name + "' is already being touched - will be skipped.");
 					}
+				}
+				
+				// v1.10.39: RESET HISTORICAL STATE if no position
+				// Triggers detected during Historical processing should NOT persist into Realtime
+				if (!hasExistingPosition && currentEntryState != EntryState.Idle)
+				{
+					Print(Time[0] + " STARTUP RESET: Clearing historical state (" + currentEntryState + ") - No position, starting fresh.");
+					currentEntryState = EntryState.Idle;
+					setupLevelName = "";
+					setupAnchorPrice = 0;
+					waitingForVwapMitigation = false;
 				}
 			}
 

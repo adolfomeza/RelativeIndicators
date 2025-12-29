@@ -4,7 +4,19 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.38] - 2025-12-28 ✅ VERSIÓN ACTUAL
+## [1.10.39] - 2025-12-28 ✅ VERSIÓN ACTUAL
+### Fix: Limpiar Estado Histórico al Iniciar en Realtime
+- **Problema**: Al activar estrategia, estado mostraba `WaitingForConfirmation` inmediatamente
+  - Triggers detectados durante procesamiento Historical persistían en Realtime
+  - Estrategia parecía tener setup activo sin haberlo detectado en vivo
+- **Solución**: Reset del estado al entrar en Realtime si no hay posición
+  - Si `hasExistingPosition == false` y `currentEntryState != Idle` → Reset a Idle
+- **Log**: `"STARTUP RESET: Clearing historical state (WaitingForConfirmation) - No position, starting fresh."`
+- **Resultado**: Estrategia siempre empieza en Idle esperando nuevos triggers
+
+---
+
+## [1.10.38] - 2025-12-28
 ### Fix Crítico: Recuperación de Órdenes Post-Desconexión
 - **Problema**: Al perder conexión a internet y reconectar:
   - Las referencias a órdenes (`stopOrder`, `tp1Order`, `tp2Order`) se perdían
