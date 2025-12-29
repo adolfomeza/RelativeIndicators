@@ -20,6 +20,10 @@ Este documento sirve como punto central de verdad para enlaces importantes, regl
     - **Timestamp**: Incluir `Time[0]` con fecha y hora para facilitar búsqueda
     - **Usar método `Log()`**: NUNCA usar `Print()` directamente. El método `Log()` ya incluye el prefijo automáticamente
     - Ejemplo: `[MNQ] 28/12/25 9:30:00 a.m. EXEC_DEBUG: Submitting Long Limit @ 25000`
+10. **Acceso a Logs**: El agente AI tiene permiso para leer/escribir la carpeta de logs de la estrategia sin pedir confirmación:
+    - **Ubicación**: `Documents\NinjaTrader 8\trace\SessionLevels\`
+    - **Archivos**: `[INSTRUMENTO]_[YYYYMMDD].txt` (ej. `MGC_20251229.txt`)
+    - **Propósito**: Debugging y análisis de ejecución
 
 ---
 
