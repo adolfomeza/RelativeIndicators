@@ -2159,8 +2159,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 			double globalRiskDisplay = ReadMaxSharedRisk();
 			
 			// v1.11.20: Calculate minimum risk in USD (what MinQuantity would cost if stopped out)
-			double tickValue = Instrument.MasterInstrument.PointValue * TickSize;
-			double minRiskUSD = StopLossTicks * MinQuantity * tickValue;
+			double minTickValue = Instrument.MasterInstrument.PointValue * TickSize;
+			double minRiskUSD = StopLossTicks * MinQuantity * minTickValue;
 
 			// v1.10.23: Show current level with age
 			string levelInfo = "-";
