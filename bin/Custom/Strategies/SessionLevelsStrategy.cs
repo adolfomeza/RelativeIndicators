@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.8"; // Feature: LabelTextOffset property
+		private const string StrategyVersion = "v1.11.9"; // Feature: Highlight confirmation candle
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -202,6 +202,35 @@ namespace NinjaTrader.NinjaScript.Strategies
 		{
 			get { return labelTextOffset; }
 			set { labelTextOffset = value; }
+		}
+		
+		// =========================================================
+		// v1.11.9: CONFIRMATION CANDLE HIGHLIGHT
+		// =========================================================
+		private bool highlightConfirmationCandle = true;
+		[NinjaScriptProperty]
+		[Display(Name="Highlight Confirmation Candle", Description="Color the candle that confirms VWAP separation.", Order=80, GroupName="Trigger Labels")]
+		public bool HighlightConfirmationCandle
+		{
+			get { return highlightConfirmationCandle; }
+			set { highlightConfirmationCandle = value; }
+		}
+		
+		private Brush confirmationCandleColor = Brushes.Yellow;
+		[NinjaScriptProperty]
+		[XmlIgnore]
+		[Display(Name="Confirmation Candle Color", Description="Color for the confirmation candle body.", Order=81, GroupName="Trigger Labels")]
+		public Brush ConfirmationCandleColor
+		{
+			get { return confirmationCandleColor; }
+			set { confirmationCandleColor = value; }
+		}
+		
+		[Browsable(false)]
+		public string ConfirmationCandleColorSerializable
+		{
+			get { return Serialize.BrushToString(confirmationCandleColor); }
+			set { confirmationCandleColor = Serialize.StringToBrush(value); }
 		}
 
 		// Visual State for Adhoc VWAP Line
@@ -2674,6 +2703,13 @@ namespace NinjaTrader.NinjaScript.Strategies
 								entryOrder = SubmitOrderUnmanaged(0, OrderAction.SellShort, OrderType.Limit, dynamicQuantity, limitPrice, 0, "", entryTag);
 								currentEntryState = EntryState.workingOrder;
 								Log(Time[0] + " Order Submitted (Short Consolidated). Qty=" + dynamicQuantity);
+								
+								// v1.11.9: Highlight confirmation candle (vela [1] que se separó del VWAP)
+								if (HighlightConfirmationCandle && CurrentBar > 1)
+								{
+									BarBrushes[1] = ConfirmationCandleColor;
+									CandleOutlineBrushes[1] = ConfirmationCandleColor;
+								}
 							}
 							else
 							{
@@ -2762,6 +2798,13 @@ namespace NinjaTrader.NinjaScript.Strategies
 				entryOrder = SubmitOrderUnmanaged(0, OrderAction.Buy, OrderType.Limit, dynamicQuantity, limitPrice, 0, "", entryTag);
 								currentEntryState = EntryState.workingOrder;
 								Log(Time[0] + " Order Submitted (Long Consolidated). Qty=" + dynamicQuantity);
+								
+								// v1.11.9: Highlight confirmation candle (vela [1] que se separó del VWAP)
+								if (HighlightConfirmationCandle && CurrentBar > 1)
+								{
+									BarBrushes[1] = ConfirmationCandleColor;
+									CandleOutlineBrushes[1] = ConfirmationCandleColor;
+								}
 							}
 							else
 							{

@@ -4,7 +4,17 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.8] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.9] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### Feature: Highlight Confirmation Candle (Vela de Separación)
+- **Nuevas propiedades** en grupo "Trigger Labels":
+  - `Highlight Confirmation Candle`: Activar/desactivar el color (default: ON)
+  - `Confirmation Candle Color`: Color del cuerpo de la vela (default: Yellow)
+- **Funcionamiento**: Colorea la vela [1] que confirma separación del VWAP
+- **Aplica a**: Short y Long cuando se envía la orden de entrada
+
+---
+
+## [1.11.8] - 2025-12-29
 ### Feature: Text Offset Configurable
 - **Nueva propiedad**: `Text Offset (Pixels)` en grupo "Trigger Labels"
 - **Default**: 12 pixels
