@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.10.37"; // Fix: Reset state at week end
+		private const string StrategyVersion = "v1.10.38"; // Fix: Recover orders after connection loss
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -654,33 +654,69 @@ namespace NinjaTrader.NinjaScript.Strategies
 				// We must check if the Account has a position for this instrument.
 				if (Account != null)
 				{
+					bool hasExistingPosition = false;
+					
 					foreach(Position p in Account.Positions)
 					{
 						if (p.Instrument == Instrument && p.MarketPosition != MarketPosition.Flat)
 						{
-							// v1.10.28: Skip zombie cleanup - this is an intentional overnight position
-							if (EnableDebugLogs) Print(Time[0] + " STARTUP: Found existing position. Qty=" + p.Quantity + " - Adopting (overnight allowed).");
-							// Don't close - just log and let strategy adopt it
+							hasExistingPosition = true;
+							
+							// v1.10.38: ADOPT position and its orders
+							currentEntryState = EntryState.PositionActive;
+							isShortSetup = (p.MarketPosition == MarketPosition.Short);
+							
+							Print(Time[0] + " STARTUP ADOPT: Found position Qty=" + p.Quantity + 
+								" Dir=" + p.MarketPosition + " - Adopting state and orders...");
 						}
 					}
-				}
-
-				// 2. Stuck Order Cleanup
-				if (Account != null)
-				{
-					foreach(Order o in Account.Orders)
+					
+					// v1.10.38: If we have a position, ADOPT orders instead of cancelling
+					if (hasExistingPosition)
 					{
-						if (o.Instrument.FullName == Instrument.FullName && (o.OrderState == OrderState.Working || o.OrderState == OrderState.Accepted || o.OrderState == OrderState.CancelPending))
+						foreach(Order o in Account.Orders)
 						{
-							if (EnableDebugLogs) Print(Time[0] + " STARTUP FAILSAFE: Cancelling Stuck Order: " + o.Name);
-							try 
-							{ 
-								CancelOrder(o); 
-							} 
-							catch (Exception ex) 
-							{ 
-								// Refined Log (v1.7.10): Don't spam "Warning" for expected foreign order failures
-								// Print(Time[0] + " FAILSAFE WARNING: Could not cancel old order (Not Owner?): " + ex.Message); 
+							if (o.Instrument.FullName == Instrument.FullName && 
+								(o.OrderState == OrderState.Working || o.OrderState == OrderState.Accepted))
+							{
+								if (o.Name.StartsWith("SL_") || o.Name.Contains("_SL"))
+								{
+									stopOrder = o;
+									Print(Time[0] + " STARTUP ADOPT: Recovered SL order: " + o.Name + " Qty=" + o.Quantity);
+								}
+								else if (o.Name.StartsWith("TP1_") || o.Name.Contains("_TP1"))
+								{
+									tp1Order = o;
+									Print(Time[0] + " STARTUP ADOPT: Recovered TP1 order: " + o.Name + " Qty=" + o.Quantity);
+								}
+								else if (o.Name.StartsWith("TP2_") || o.Name.Contains("_TP2"))
+								{
+									tp2Order = o;
+									Print(Time[0] + " STARTUP ADOPT: Recovered TP2 order: " + o.Name + " Qty=" + o.Quantity);
+								}
+							}
+						}
+						
+						Print(Time[0] + " STARTUP ADOPT COMPLETE: SL=" + (stopOrder != null) + 
+							" TP1=" + (tp1Order != null) + " TP2=" + (tp2Order != null));
+					}
+					else
+					{
+						// 2. Stuck Order Cleanup (only if NO position)
+						foreach(Order o in Account.Orders)
+						{
+							if (o.Instrument.FullName == Instrument.FullName && 
+								(o.OrderState == OrderState.Working || o.OrderState == OrderState.Accepted || o.OrderState == OrderState.CancelPending))
+							{
+								if (EnableDebugLogs) Print(Time[0] + " STARTUP FAILSAFE: Cancelling Stuck Order (no position): " + o.Name);
+								try 
+								{ 
+									CancelOrder(o); 
+								} 
+								catch (Exception ex) 
+								{ 
+									// Refined Log (v1.7.10): Don't spam "Warning" for expected foreign order failures
+								}
 							}
 						}
 					}
@@ -2741,6 +2777,36 @@ setupLevelName = "";
 		// v1.9.0: SINGLE-SL ARCHITECTURE
 		// Instead of creating SL1 and SL2, we create ONE SL for the entire position
 		// TP1 and TP2 remain independent
+		
+		// v1.10.38: ORPHAN RECOVERY - Check if orders exist in Account but lost reference
+		if (Account != null)
+		{
+			foreach(Order o in Account.Orders)
+			{
+				if (o.Instrument.FullName == Instrument.FullName && 
+					(o.OrderState == OrderState.Working || o.OrderState == OrderState.Accepted))
+				{
+					// Recover orphan SL
+					if (stopOrder == null && (o.Name.StartsWith("SL_") || o.Name.Contains("_SL")))
+					{
+						stopOrder = o;
+						Print(Time[0] + " RECOVERED orphan SL: " + o.Name + " Qty=" + o.Quantity);
+					}
+					// Recover orphan TP1
+					if (tp1Order == null && (o.Name.StartsWith("TP1_") || o.Name.Contains("_TP1")))
+					{
+						tp1Order = o;
+						Print(Time[0] + " RECOVERED orphan TP1: " + o.Name + " Qty=" + o.Quantity);
+					}
+					// Recover orphan TP2
+					if (tp2Order == null && (o.Name.StartsWith("TP2_") || o.Name.Contains("_TP2")))
+					{
+						tp2Order = o;
+						Print(Time[0] + " RECOVERED orphan TP2: " + o.Name + " Qty=" + o.Quantity);
+					}
+				}
+			}
+		}
 		
 		// 2. Determine Targets (TP1 vs TP2)
 		double avgEntry = Position.AveragePrice; 

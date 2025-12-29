@@ -4,7 +4,29 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.10.37] - 2025-12-28 ✅ VERSIÓN ACTUAL
+## [1.10.38] - 2025-12-28 ✅ VERSIÓN ACTUAL
+### Fix Crítico: Recuperación de Órdenes Post-Desconexión
+- **Problema**: Al perder conexión a internet y reconectar:
+  - Las referencias a órdenes (`stopOrder`, `tp1Order`, `tp2Order`) se perdían
+  - Las órdenes seguían activas en el broker
+  - La estrategia creaba NUEVAS órdenes → **Duplicados** (ej: 4 en SL cuando solo había 2)
+  - Mensaje "SAFE ORPHAN DETECTED" aparecía incorrectamente
+- **Solución 1**: Startup Failsafe ahora ADOPTA órdenes existentes
+  - Cuando detecta posición en la cuenta, busca órdenes SL/TP1/TP2 activas
+  - Asigna las referencias correctamente (`stopOrder = o`, etc.)
+  - Solo cancela órdenes "stuck" si NO hay posición
+- **Solución 2**: Verificación de duplicados en `SubmitProtectionOrders`
+  - Antes de crear nuevas órdenes, busca huérfanas en `Account.Orders`
+  - Recupera referencias perdidas antes de intentar crear
+- **Logs nuevos**:
+  - `STARTUP ADOPT: Found position Qty=X Dir=Long/Short - Adopting state and orders...`
+  - `STARTUP ADOPT: Recovered SL order: SL_Long_01 Qty=2`
+  - `RECOVERED orphan SL: SL_Long_01 Qty=2`
+- **Resultado**: No más órdenes duplicadas al reconectar, referencias recuperadas automáticamente
+
+---
+
+## [1.10.37] - 2025-12-28
 ### Feature: Reset Estado al Cierre de Semana
 - **Problema**: Al activar la estrategia el domingo, usaba señales/VWAP del viernes anterior
   - El estado (`currentEntryState`, `setupLevelName`, VWAP adhoc) persistía entre semanas
