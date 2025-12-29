@@ -4,7 +4,16 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.17] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.18] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### Fix: Logs Limpian Solo Su Propio Instrumento
+- **Cambio**: Al reiniciar estrategia, borra solo SU archivo de log (no el de otros)
+- **Antes (v1.11.16)**: Append con separador → acumulaba datos innecesarios
+- **Ahora**: `WriteAllText` sobrescribe solo `[INSTRUMENTO]_[FECHA].txt`
+- **Resultado**: Logs limpios por instrumento sin afectar otros
+
+---
+
+## [1.11.17] - 2025-12-29
 ### Feature: Filtro de Lag de Chart
 - **Nueva propiedad**: `Max Chart Lag (Seconds)` - Default: 0.75s
 - **Método**: `CheckChartLag()` verifica frescura de datos del chart

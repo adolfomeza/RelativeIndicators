@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.17"; // Feature: Lag Filter - Block orders on chart delay
+		private const string StrategyVersion = "v1.11.18"; // Fix: Clear only own log on restart
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -307,12 +307,12 @@ namespace NinjaTrader.NinjaScript.Strategies
 				string fileName = string.Format("{0}_{1:yyyyMMdd}.txt", instrumentName, DateTime.Now);
 				logFilePath = System.IO.Path.Combine(logsDir, fileName);
 				
-				// v1.11.16: APPEND separator instead of overwrite
-				// This preserves previous logs and adds a new session marker
+				// v1.11.18: Overwrite THIS instrument's log only
+				// Each instrument has its own file, so this won't affect other instruments
 				lock (logFileLock)
 				{
-					System.IO.File.AppendAllText(logFilePath, 
-						string.Format("\r\n\r\n============================================================\r\n=== {0} Strategy RESTART - {1:yyyy-MM-dd HH:mm:ss} ===\r\n============================================================\r\n\r\n", 
+					System.IO.File.WriteAllText(logFilePath, 
+						string.Format("=== {0} Strategy Log - Started {1:yyyy-MM-dd HH:mm:ss} ===\r\n\r\n", 
 							instrumentName, DateTime.Now));
 				}
 			}
