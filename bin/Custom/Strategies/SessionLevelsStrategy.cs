@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.9"; // Feature: Highlight confirmation candle
+		private const string StrategyVersion = "v1.11.10"; // Fix: Show confirmation candle in historical live/demo
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -2688,6 +2688,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 						// FIX (v1.10.36): Block Historical orders on live/demo (RESTORED v1.11.2 - orders were being sent to broker)
 						bool isPlayback = (Connection.PlaybackConnection != null);
 						bool canSubmitOrder = (State == State.Realtime) || (State == State.Historical && isPlayback);
+						// v1.11.10: Highlight confirmation candle (ALWAYS VISIBLE)
+						// Moved outside canSubmitOrder to show on historical chart
+						if (HighlightConfirmationCandle && CurrentBar > 1)
+						{
+							BarBrushes[1] = ConfirmationCandleColor;
+							CandleOutlineBrushes[1] = ConfirmationCandleColor;
+						}
+
 						if (canSubmitOrder)
 							{
 								if (entryOrder != null) 
@@ -2703,13 +2711,6 @@ namespace NinjaTrader.NinjaScript.Strategies
 								entryOrder = SubmitOrderUnmanaged(0, OrderAction.SellShort, OrderType.Limit, dynamicQuantity, limitPrice, 0, "", entryTag);
 								currentEntryState = EntryState.workingOrder;
 								Log(Time[0] + " Order Submitted (Short Consolidated). Qty=" + dynamicQuantity);
-								
-								// v1.11.9: Highlight confirmation candle (vela [1] que se separó del VWAP)
-								if (HighlightConfirmationCandle && CurrentBar > 1)
-								{
-									BarBrushes[1] = ConfirmationCandleColor;
-									CandleOutlineBrushes[1] = ConfirmationCandleColor;
-								}
 							}
 							else
 							{
@@ -2785,6 +2786,13 @@ namespace NinjaTrader.NinjaScript.Strategies
 						// FIX (v1.10.36): Block Historical orders on live/demo (RESTORED v1.11.2)
 						bool isPlaybackLong = (Connection.PlaybackConnection != null);
 						bool canSubmitOrderLong = (State == State.Realtime) || (State == State.Historical && isPlaybackLong);
+						// v1.11.10: Highlight confirmation candle (ALWAYS VISIBLE)
+						if (HighlightConfirmationCandle && CurrentBar > 1)
+						{
+							BarBrushes[1] = ConfirmationCandleColor;
+							CandleOutlineBrushes[1] = ConfirmationCandleColor;
+						}
+
 						if (canSubmitOrderLong)
 							{
 								// CONSOLIDATED ENTRY (v1.7.17)
@@ -2798,13 +2806,6 @@ namespace NinjaTrader.NinjaScript.Strategies
 				entryOrder = SubmitOrderUnmanaged(0, OrderAction.Buy, OrderType.Limit, dynamicQuantity, limitPrice, 0, "", entryTag);
 								currentEntryState = EntryState.workingOrder;
 								Log(Time[0] + " Order Submitted (Long Consolidated). Qty=" + dynamicQuantity);
-								
-								// v1.11.9: Highlight confirmation candle (vela [1] que se separó del VWAP)
-								if (HighlightConfirmationCandle && CurrentBar > 1)
-								{
-									BarBrushes[1] = ConfirmationCandleColor;
-									CandleOutlineBrushes[1] = ConfirmationCandleColor;
-								}
 							}
 							else
 							{

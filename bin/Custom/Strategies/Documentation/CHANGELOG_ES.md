@@ -4,7 +4,16 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.9] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.10] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### Fix: Mostrar Vela de Confirmación en Historial (Live/Demo)
+- **Problema**: Las velas amarillas no se veían en el chart histórico de cuentas Live/Demo
+  - Razón: La lógica estaba dentro del bloque de envío de orden (que está bloqueado para histórico)
+- **Solución**: Mover la lógica de pintado `BarBrushes[1]` fuera de `if (canSubmitOrder)`
+- **Resultado**: Las velas de confirmación se ven en el pasado igual que las etiquetas, incluso si la orden no se "envía"
+
+---
+
+## [1.11.9] - 2025-12-29
 ### Feature: Highlight Confirmation Candle (Vela de Separación)
 - **Nuevas propiedades** en grupo "Trigger Labels":
   - `Highlight Confirmation Candle`: Activar/desactivar el color (default: ON)
