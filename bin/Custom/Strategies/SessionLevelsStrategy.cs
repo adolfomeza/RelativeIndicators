@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.4"; // Fix: Clean triangle labels like NT executions
+		private const string StrategyVersion = "v1.11.2"; // REVERT: Block historical orders on live/demo accounts
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -172,25 +172,6 @@ namespace NinjaTrader.NinjaScript.Strategies
 			}
 		}
 
-
-		// =========================================================
-		// v1.11.4: NT-STYLE TRIGGER LABELS (triángulos limpios como ejecuciones)
-		// =========================================================
-		private void DrawTriggerLabel(string tag, bool isShort, int barsAgo, double anchorPrice)
-		{
-			// Colores: Rojo para Short, Verde para Long (como NT)
-			Brush color = isShort ? Brushes.Crimson : Brushes.LimeGreen;
-			
-			// Solo triángulo, sin texto - limpio como NT
-			if (isShort)
-			{
-				Draw.TriangleDown(this, tag, true, barsAgo, anchorPrice, color);
-			}
-			else
-			{
-				Draw.TriangleUp(this, tag, true, barsAgo, anchorPrice, color);
-			}
-		}
 
 		// =========================================================
 		// v1.11.0: INTELLIGENT RESTART EVALUATION (No Position)
@@ -2277,7 +2258,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 							// SHORT on external High
 							triggerTag = "TriggerShort_" + Time[0].Ticks;
 							triggerBar = CurrentBar;
-							DrawTriggerLabel(triggerTag, true, 0, High[0]);
+							Draw.ArrowDown(this, triggerTag, true, 0, High[0] + TickSize * 15, Brushes.Cyan);
+							Draw.Text(this, triggerTag + "_Txt", "Short", 0, High[0] + TickSize * 25, Brushes.Cyan);
 							
 							currentEntryState = EntryState.WaitingForConfirmation;
 							isShortSetup = true;
@@ -2310,7 +2292,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 							// LONG on external Low
 							triggerTag = "TriggerLong_" + Time[0].Ticks;
 							triggerBar = CurrentBar;
-							DrawTriggerLabel(triggerTag, false, 0, Low[0]);
+							Draw.ArrowUp(this, triggerTag, true, 0, Low[0] - TickSize * 15, Brushes.Lime);
+							Draw.Text(this, triggerTag + "_Txt", "Long", 0, Low[0] - TickSize * 25, Brushes.Lime);
 							
 							currentEntryState = EntryState.WaitingForConfirmation;
 							isShortSetup = false;
@@ -2438,7 +2421,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 							// Short Setup
 							triggerTag = "TriggerShort_" + Time[0].Ticks; // Store Tag
 							triggerBar = CurrentBar;
-							DrawTriggerLabel(triggerTag, true, 0, High[0]);
+							Draw.ArrowDown(this, triggerTag, true, 0, High[0] + TickSize * 15, Brushes.Cyan);
+							Draw.Text(this, triggerTag + "_Txt", "Short", 0, High[0] + TickSize * 25, Brushes.Cyan);
 							
 							currentEntryState = EntryState.WaitingForConfirmation;
 							isShortSetup = true;
@@ -2483,7 +2467,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 							// Long Setup
 							triggerTag = "TriggerLong_" + Time[0].Ticks;
 							triggerBar = CurrentBar;
-							DrawTriggerLabel(triggerTag, false, 0, Low[0]);
+							Draw.ArrowUp(this, triggerTag, true, 0, Low[0] - TickSize * 15, Brushes.Lime);
+							Draw.Text(this, triggerTag + "_Txt", "Long", 0, Low[0] - TickSize * 25, Brushes.Lime);
 							
 							currentEntryState = EntryState.WaitingForConfirmation;
 							isShortSetup = false; // Long
@@ -2533,11 +2518,13 @@ namespace NinjaTrader.NinjaScript.Strategies
 				// VISUALS
 				if (isShortSetup)
 				{
-					DrawTriggerLabel(triggerTag, true, 0, High[0]);
+					Draw.ArrowDown(this, triggerTag, true, 0, High[0] + TickSize * 15, Brushes.Cyan);
+					Draw.Text(this, triggerTag + "_Txt", "Short", 0, High[0] + TickSize * 25, Brushes.Cyan);
 				}
 				else
 				{
-					DrawTriggerLabel(triggerTag, false, 0, Low[0]);
+					Draw.ArrowUp(this, triggerTag, true, 0, Low[0] - TickSize * 15, Brushes.Lime);
+					Draw.Text(this, triggerTag + "_Txt", "Long", 0, Low[0] - TickSize * 25, Brushes.Lime);
 				}
 
 				// WICK GROWTH (Mid-Bar during Trigger)
