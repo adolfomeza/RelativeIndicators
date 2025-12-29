@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.20"; // Feature: Show min risk in status panel
+		private const string StrategyVersion = "v1.11.21"; // Feature: AllowBacktest for Strategy Analyzer
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -142,6 +142,11 @@ namespace NinjaTrader.NinjaScript.Strategies
 		[Range(0.1, 10)]
 		[Display(Name="Max Chart Lag (Seconds)", Description="Block orders when chart data is older than this threshold. Set higher if experiencing false positives.", Order=62, GroupName="General")]
 		public double MaxChartLagSeconds { get; set; } = 0.75;
+		
+		// v1.11.21: Strategy Analyzer Support - Enable backtest execution in Historical state
+		[NinjaScriptProperty]
+		[Display(Name="Allow Backtest", Description="Enable order execution in Strategy Analyzer. Keep OFF for live/demo accounts.", Order=63, GroupName="General")]
+		public bool AllowBacktest { get; set; } = false;
 
 		private bool showVisuals = true;
 		
@@ -2825,7 +2830,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 						// UPDATED (v1.7.30): Allow Historical for Strategy Analyzer
 						// FIX (v1.10.36): Block Historical orders on live/demo (RESTORED v1.11.2 - orders were being sent to broker)
 						bool isPlayback = (Connection.PlaybackConnection != null);
-						bool canSubmitOrder = (State == State.Realtime) || (State == State.Historical && isPlayback);
+						bool canSubmitOrder = (State == State.Realtime) || (State == State.Historical && (isPlayback || AllowBacktest));
 						// v1.11.11: Highlight confirmation candle (ONLY ONCE)
 						// Check visualConfirmationDone flag to avoid painting multiple candles
 						if (HighlightConfirmationCandle && CurrentBar > 1 && !visualConfirmationDone)
@@ -2932,7 +2937,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 							// UPDATED (v1.7.30): Allow Historical for Strategy Analyzer
 						// FIX (v1.10.36): Block Historical orders on live/demo (RESTORED v1.11.2)
 						bool isPlaybackLong = (Connection.PlaybackConnection != null);
-						bool canSubmitOrderLong = (State == State.Realtime) || (State == State.Historical && isPlaybackLong);
+						bool canSubmitOrderLong = (State == State.Realtime) || (State == State.Historical && (isPlaybackLong || AllowBacktest));
 						// v1.11.11: Highlight confirmation candle (ONLY ONCE)
 						if (HighlightConfirmationCandle && CurrentBar > 1 && !visualConfirmationDone)
 						{

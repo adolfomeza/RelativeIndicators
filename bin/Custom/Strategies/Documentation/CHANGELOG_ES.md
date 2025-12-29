@@ -4,7 +4,16 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.20] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.21] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### Feature: Soporte para Strategy Analyzer
+- **Nueva propiedad**: `Allow Backtest` (Default: OFF)
+- **Efecto**: Cuando está ON, permite ejecutar órdenes en modo Historical (backtest)
+- **Seguridad**: OFF por defecto para evitar órdenes accidentales en cuentas live/demo
+- **Uso**: Activar solo en Strategy Analyzer, no en charts en vivo
+
+---
+
+## [1.11.20] - 2025-12-29
 ### Feature: Mostrar Riesgo Mínimo en Panel de Estado
 - **Nueva info**: El panel ahora muestra `Risk: $XX (Min: $YY)`
 - **Min Risk**: Riesgo si se usa MinQuantity con StopLossTicks actual
