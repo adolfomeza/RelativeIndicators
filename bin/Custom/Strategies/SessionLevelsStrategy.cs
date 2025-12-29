@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.3"; // Feature: NT-style trigger labels
+		private const string StrategyVersion = "v1.11.4"; // Fix: Clean triangle labels like NT executions
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -174,27 +174,22 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 
 		// =========================================================
-		// v1.11.2: NT-STYLE TRIGGER LABELS (imita ejecuciones de NT)
+		// v1.11.4: NT-STYLE TRIGGER LABELS (triángulos limpios como ejecuciones)
 		// =========================================================
 		private void DrawTriggerLabel(string tag, bool isShort, int barsAgo, double anchorPrice)
 		{
-			// Colores estilo NT: Cyan/Magenta para Short, Lime/Green para Long
-			Brush textColor = isShort ? Brushes.White : Brushes.White;
-			Brush bgColor = isShort ? Brushes.Crimson : Brushes.ForestGreen;
-			string labelText = isShort ? "▼ Short" : "▲ Long";
+			// Colores: Rojo para Short, Verde para Long (como NT)
+			Brush color = isShort ? Brushes.Crimson : Brushes.LimeGreen;
 			
-			// yPixelOffset: negativo = arriba, positivo = abajo
-			int yPixelOffset = isShort ? -15 : 15;
-			
-			// Draw.Text con offset en pixels (se mantiene legible al hacer zoom)
-			Draw.Text(this, tag, true, labelText, barsAgo, anchorPrice, 
-				yPixelOffset, 
-				textColor, 
-				new SimpleFont("Arial", 10) { Bold = true }, 
-				TextAlignment.Center,
-				bgColor,
-				bgColor,
-				5); // 5% opacidad del borde (casi invisible)
+			// Solo triángulo, sin texto - limpio como NT
+			if (isShort)
+			{
+				Draw.TriangleDown(this, tag, true, barsAgo, anchorPrice, color);
+			}
+			else
+			{
+				Draw.TriangleUp(this, tag, true, barsAgo, anchorPrice, color);
+			}
 		}
 
 		// =========================================================
