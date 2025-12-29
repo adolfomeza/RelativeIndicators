@@ -4,7 +4,18 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.15] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.16] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### Fix: Logs Append en Lugar de Sobrescribir
+- **Problema**: Al cargar MES se borraban los logs de MGC
+- **Causa**: `ClearLogFile()` usaba `WriteAllText` (sobrescribir)
+- **Solución**: Cambiar a `AppendAllText` con separador visual
+  - Ahora agrega `=== RESTART ===` en lugar de borrar todo
+  - Preserva historial de sesiones anteriores
+- **Nota**: El usuario pidió que se limpie, pero esto causaba el problema. Ahora acumula con separadores.
+
+---
+
+## [1.11.15] - 2025-12-29
 ### Fix: Evitar Reset de Logs Entre Instancias
 - **Problema**: Al activar una estrategia, los logs de otros instrumentos se reseteaban a 1KB
 - **Causa**: Faltaba verificación `if (logFilePath == null)` en `Log()`

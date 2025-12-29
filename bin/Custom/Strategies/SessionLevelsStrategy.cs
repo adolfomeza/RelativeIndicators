@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.15"; // Fix: Prevent log file reset across instances
+		private const string StrategyVersion = "v1.11.16"; // Fix: Append to log instead of overwrite
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -297,11 +297,12 @@ namespace NinjaTrader.NinjaScript.Strategies
 				string fileName = string.Format("{0}_{1:yyyyMMdd}.txt", instrumentName, DateTime.Now);
 				logFilePath = System.IO.Path.Combine(logsDir, fileName);
 				
-				// Overwrite file with header
+				// v1.11.16: APPEND separator instead of overwrite
+				// This preserves previous logs and adds a new session marker
 				lock (logFileLock)
 				{
-					System.IO.File.WriteAllText(logFilePath, 
-						string.Format("=== {0} Strategy Log - Started {1:yyyy-MM-dd HH:mm:ss} ===\r\n\r\n", 
+					System.IO.File.AppendAllText(logFilePath, 
+						string.Format("\r\n\r\n============================================================\r\n=== {0} Strategy RESTART - {1:yyyy-MM-dd HH:mm:ss} ===\r\n============================================================\r\n\r\n", 
 							instrumentName, DateTime.Now));
 				}
 			}
