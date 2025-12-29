@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.2"; // REVERT: Block historical orders on live/demo accounts
+		private const string StrategyVersion = "v1.11.3"; // Feature: NT-style trigger labels
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -172,6 +172,30 @@ namespace NinjaTrader.NinjaScript.Strategies
 			}
 		}
 
+
+		// =========================================================
+		// v1.11.2: NT-STYLE TRIGGER LABELS (imita ejecuciones de NT)
+		// =========================================================
+		private void DrawTriggerLabel(string tag, bool isShort, int barsAgo, double anchorPrice)
+		{
+			// Colores estilo NT: Cyan/Magenta para Short, Lime/Green para Long
+			Brush textColor = isShort ? Brushes.White : Brushes.White;
+			Brush bgColor = isShort ? Brushes.Crimson : Brushes.ForestGreen;
+			string labelText = isShort ? "▼ Short" : "▲ Long";
+			
+			// yPixelOffset: negativo = arriba, positivo = abajo
+			int yPixelOffset = isShort ? -15 : 15;
+			
+			// Draw.Text con offset en pixels (se mantiene legible al hacer zoom)
+			Draw.Text(this, tag, true, labelText, barsAgo, anchorPrice, 
+				yPixelOffset, 
+				textColor, 
+				new SimpleFont("Arial", 10) { Bold = true }, 
+				TextAlignment.Center,
+				bgColor,
+				bgColor,
+				5); // 5% opacidad del borde (casi invisible)
+		}
 
 		// =========================================================
 		// v1.11.0: INTELLIGENT RESTART EVALUATION (No Position)
@@ -2258,8 +2282,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 							// SHORT on external High
 							triggerTag = "TriggerShort_" + Time[0].Ticks;
 							triggerBar = CurrentBar;
-							Draw.ArrowDown(this, triggerTag, true, 0, High[0] + TickSize * 15, Brushes.Cyan);
-							Draw.Text(this, triggerTag + "_Txt", "Short", 0, High[0] + TickSize * 25, Brushes.Cyan);
+							DrawTriggerLabel(triggerTag, true, 0, High[0]);
 							
 							currentEntryState = EntryState.WaitingForConfirmation;
 							isShortSetup = true;
@@ -2292,8 +2315,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 							// LONG on external Low
 							triggerTag = "TriggerLong_" + Time[0].Ticks;
 							triggerBar = CurrentBar;
-							Draw.ArrowUp(this, triggerTag, true, 0, Low[0] - TickSize * 15, Brushes.Lime);
-							Draw.Text(this, triggerTag + "_Txt", "Long", 0, Low[0] - TickSize * 25, Brushes.Lime);
+							DrawTriggerLabel(triggerTag, false, 0, Low[0]);
 							
 							currentEntryState = EntryState.WaitingForConfirmation;
 							isShortSetup = false;
@@ -2421,8 +2443,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 							// Short Setup
 							triggerTag = "TriggerShort_" + Time[0].Ticks; // Store Tag
 							triggerBar = CurrentBar;
-							Draw.ArrowDown(this, triggerTag, true, 0, High[0] + TickSize * 15, Brushes.Cyan);
-							Draw.Text(this, triggerTag + "_Txt", "Short", 0, High[0] + TickSize * 25, Brushes.Cyan);
+							DrawTriggerLabel(triggerTag, true, 0, High[0]);
 							
 							currentEntryState = EntryState.WaitingForConfirmation;
 							isShortSetup = true;
@@ -2467,8 +2488,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 							// Long Setup
 							triggerTag = "TriggerLong_" + Time[0].Ticks;
 							triggerBar = CurrentBar;
-							Draw.ArrowUp(this, triggerTag, true, 0, Low[0] - TickSize * 15, Brushes.Lime);
-							Draw.Text(this, triggerTag + "_Txt", "Long", 0, Low[0] - TickSize * 25, Brushes.Lime);
+							DrawTriggerLabel(triggerTag, false, 0, Low[0]);
 							
 							currentEntryState = EntryState.WaitingForConfirmation;
 							isShortSetup = false; // Long
@@ -2518,13 +2538,11 @@ namespace NinjaTrader.NinjaScript.Strategies
 				// VISUALS
 				if (isShortSetup)
 				{
-					Draw.ArrowDown(this, triggerTag, true, 0, High[0] + TickSize * 15, Brushes.Cyan);
-					Draw.Text(this, triggerTag + "_Txt", "Short", 0, High[0] + TickSize * 25, Brushes.Cyan);
+					DrawTriggerLabel(triggerTag, true, 0, High[0]);
 				}
 				else
 				{
-					Draw.ArrowUp(this, triggerTag, true, 0, Low[0] - TickSize * 15, Brushes.Lime);
-					Draw.Text(this, triggerTag + "_Txt", "Long", 0, Low[0] - TickSize * 25, Brushes.Lime);
+					DrawTriggerLabel(triggerTag, false, 0, Low[0]);
 				}
 
 				// WICK GROWTH (Mid-Bar during Trigger)

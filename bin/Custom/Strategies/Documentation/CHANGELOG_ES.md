@@ -4,7 +4,19 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.2] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.3] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### Feature: Etiquetas de Trigger Estilo NinjaTrader
+- **Nuevo método**: `DrawTriggerLabel()` crea etiquetas que imitan las ejecuciones de NT
+- **Características**:
+  - Fondo con color: Crimson (Short), ForestGreen (Long)
+  - Texto blanco con fuente Arial Bold
+  - Offset en pixels (no ticks) - se mantiene legible al hacer zoom
+  - Iconos unicode: ▼ Short, ▲ Long
+- **Resultado**: Etiquetas profesionales que se escalan correctamente
+
+---
+
+## [1.11.2] - 2025-12-29
 ### REVERT CRÍTICO: Restaurar Bloqueo de Órdenes Históricas
 - **Problema v1.11.1**: Las órdenes históricas se enviaban al broker real
   - MGC colocó una orden y desactivó la estrategia al recargar
