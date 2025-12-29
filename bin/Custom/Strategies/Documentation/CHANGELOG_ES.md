@@ -6,7 +6,7 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 
 ## [1.11.13] - 2025-12-29 ✅ VERSIÓN ACTUAL
 ### Feature: Logs a Archivo por Instrumento
-- **Ubicación**: `Strategies\Logs\[INSTRUMENTO]_[YYYYMMDD].txt`
+- **Ubicación**: `Documents\NinjaTrader 8\trace\SessionLevels\[INSTRUMENTO]_[YYYYMMDD].txt`
   - Ejemplo: `MGC_20251229.txt`, `ES_20251229.txt`
 - **Formato**: `HH:mm:ss.fff [mensaje]`
 - **Limpieza automática**: Al reiniciar la estrategia, el archivo se sobrescribe (no acumula)

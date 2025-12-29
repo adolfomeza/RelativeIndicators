@@ -257,12 +257,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 			// Write to file (buffered, low overhead)
 			try
 			{
-				if (logFilePath == null)
 				{
-					// Create Logs folder in Strategies directory
-					string logsDir = System.IO.Path.Combine(
-						System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
-						"Logs");
+					// Use NinjaTrader's trace folder (always exists)
+					string ntDocsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+					string logsDir = System.IO.Path.Combine(ntDocsPath, "NinjaTrader 8", "trace", "SessionLevels");
 					if (!System.IO.Directory.Exists(logsDir))
 						System.IO.Directory.CreateDirectory(logsDir);
 					
@@ -288,9 +286,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 				if (Instrument == null) return;
 				
 				string instrumentName = Instrument.MasterInstrument.Name;
-				string logsDir = System.IO.Path.Combine(
-					System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
-					"Logs");
+				string ntDocsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+				string logsDir = System.IO.Path.Combine(ntDocsPath, "NinjaTrader 8", "trace", "SessionLevels");
 				
 				if (!System.IO.Directory.Exists(logsDir))
 					System.IO.Directory.CreateDirectory(logsDir);
