@@ -2405,7 +2405,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 							if (EnableDebugLogs)
 							{
 								// Use Try/Catch for Bid/Ask in case data is missing
-								try { Print(string.Format("{0} | EXEC_DEBUG: Submitting Short Limit @ {1} (Raw: {2}). Bid={3} Ask={4}", Time[0], limitPrice, setupVWAP, GetCurrentBid(), GetCurrentAsk())); } catch {}
+								try { Log(string.Format("{0} | EXEC_DEBUG: Submitting Short Limit @ {1} (Raw: {2}). Bid={3} Ask={4}", Time[0], limitPrice, setupVWAP, GetCurrentBid(), GetCurrentAsk())); } catch {}
 							}
 
 							// ACCOUNTS FOR 1 Entry -> 1 OCO Group limitation
@@ -2496,7 +2496,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 							double limitPrice = Instrument.MasterInstrument.RoundToTickSize(setupVWAP);
 							if (EnableDebugLogs)
 							{
-								try { Print(string.Format("{0} | EXEC_DEBUG: Submitting Long Limit @ {1} (Raw: {2}). Bid={3} Ask={4}", Time[0], limitPrice, setupVWAP, GetCurrentBid(), GetCurrentAsk())); } catch {}
+								try { Log(string.Format("{0} | EXEC_DEBUG: Submitting Long Limit @ {1} (Raw: {2}). Bid={3} Ask={4}", Time[0], limitPrice, setupVWAP, GetCurrentBid(), GetCurrentAsk())); } catch {}
 							}
 							
 							// UPDATED (v1.7.30): Allow Historical for Strategy Analyzer
