@@ -713,7 +713,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 							if (o.Instrument.FullName == Instrument.FullName && 
 								(o.OrderState == OrderState.Working || o.OrderState == OrderState.Accepted || o.OrderState == OrderState.CancelPending))
 							{
-								if (EnableDebugLogs) Print(Time[0] + " STARTUP FAILSAFE: Cancelling Stuck Order (no position): " + o.Name);
+								Log(Time[0] + " STARTUP FAILSAFE: Cancelling Stuck Order (no position): " + o.Name);
 								try 
 								{ 
 									CancelOrder(o); 
@@ -745,7 +745,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 					if (isBeingTouched)
 					{
 						skippedLevelsAtStartup.Add(lvl.Name);
-						if (EnableDebugLogs) Print(Time[0] + " STARTUP: Level '" + lvl.Name + "' is already being touched - will be skipped.");
+						Log(Time[0] + " STARTUP: Level '" + lvl.Name + "' is already being touched - will be skipped.");
 					}
 				}
 				
@@ -810,7 +810,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				}
 				catch (Exception ex)
 				{
-					if (EnableDebugLogs) Print("Error loading TimeZones: " + ex.Message);
+					Log("Error loading TimeZones: " + ex.Message);
 					timeZonesLoaded = true; 
 				}
 			}
@@ -1881,9 +1881,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 			// Validación: evitar división por cero
 			if (riskInTicks <= 0 || tickValue <= 0)
 			{
-				if (EnableDebugLogs)
-					Print(string.Format("{0} DYNAMIC SIZING ERROR: Invalid risk calculation. RiskTicks={1:F2} TickValue=${2:F4} - Using MinQuantity", 
-						Time[0], riskInTicks, tickValue));
+				Log(string.Format("{0} DYNAMIC SIZING ERROR: Invalid risk calculation. RiskTicks={1:F2} TickValue=${2:F4} - Using MinQuantity", 
+					Time[0], riskInTicks, tickValue));
 				return MinQuantity;
 			}
 			
@@ -1970,7 +1969,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 					currentEntryState = EntryState.WaitingForConfirmation;
 					waitingForVwapMitigation = false;
 					
-					if (EnableDebugLogs) Print(string.Format("{0} VWAP#{1} CREATED @ {2:F2} - Ready for entry",
+					Log(string.Format("{0} VWAP#{1} CREATED @ {2:F2} - Ready for entry",
 						Time[0], currentVwapNumber, newAnchor));
 				}
 				
@@ -2252,7 +2251,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 						
 						if (lvl.IsResistance)
 						{
-					if (EnableDebugLogs) Print(Time[0] + " DEBUG: Trigger Short Detected on " + lvl.Name + " Price: " + lvl.Price);
+					Log(Time[0] + " DEBUG: Trigger Short Detected on " + lvl.Name + " Price: " + lvl.Price);
 							// Short Setup
 							triggerTag = "TriggerShort_" + Time[0].Ticks; // Store Tag
 							triggerBar = CurrentBar;
@@ -2298,7 +2297,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 						}
 						else
 						{
-					if (EnableDebugLogs) Print(Time[0] + " DEBUG: Trigger Long Detected on " + lvl.Name + " Price: " + lvl.Price);
+					Log(Time[0] + " DEBUG: Trigger Long Detected on " + lvl.Name + " Price: " + lvl.Price);
 							// Long Setup
 							triggerTag = "TriggerLong_" + Time[0].Ticks;
 							triggerBar = CurrentBar;
@@ -2385,7 +2384,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 						// --- RISK / REWARD CHECK ---
 						double projectedEntry = setupVWAP;
-						if (EnableDebugLogs) Print(string.Format("{0} | DEBUG_ENTRY: Calling GetOppositeLevelPrice. SetupName='{1}' SetupTime='{2}' RefPrice='{3}'", Time[0], setupLevelName, setupLevelTime, setupAnchorPrice));
+						Log(string.Format("{0} | DEBUG_ENTRY: Calling GetOppositeLevelPrice. SetupName='{1}' SetupTime='{2}' RefPrice='{3}'", Time[0], setupLevelName, setupLevelTime, setupAnchorPrice));
 						// Padding: Stop is placed 1 tick ABOVE the anchor for breathing room.
 						double projectedStop = setupAnchorPrice + TickSize; 
 						
@@ -2464,8 +2463,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 					else
 					{
 						// DEBUG: Why are we waiting?
-						if (EnableDebugLogs && CurrentBar % 10 == 0) // Limit spam
-							Print(string.Format("{0} | WAITING SHORT: High[1]={1:F2} VWAP={2:F2} Req={3:F2} ValidVWAP={4} Anchor={5}", 
+						if (CurrentBar % 10 == 0) // Limit spam
+							Log(string.Format("{0} | WAITING SHORT: High[1]={1:F2} VWAP={2:F2} Req={3:F2} ValidVWAP={4} Anchor={5}", 
 								Time[0], High[1], setupVWAP, (setupVWAP - TickSize), isValidVWAP(setupVWAP), setupAnchorPrice));
 					}
 					}
@@ -2477,7 +2476,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 					{
 						// --- RISK / REWARD CHECK ---
 						double projectedEntry = setupVWAP;
-						if (EnableDebugLogs) Print(string.Format("{0} | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='{1}' SetupTime='{2}' RefPrice='{3}'", Time[0], setupLevelName, setupLevelTime, setupAnchorPrice));
+						Log(string.Format("{0} | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='{1}' SetupTime='{2}' RefPrice='{3}'", Time[0], setupLevelName, setupLevelTime, setupAnchorPrice));
 						// Padding: Stop is placed 1 tick BELOW the anchor.
 						double projectedStop = setupAnchorPrice - TickSize;
 						
@@ -2686,9 +2685,9 @@ setupLevelName = "";
 							double newLimitPrice = priceChanged ? currentVWAP : entryOrder.LimitPrice;
 							ChangeOrder(entryOrder, newQuantity, newLimitPrice, 0);
 							
-							if (EnableDebugLogs && quantityChanged)
+							if (quantityChanged)
 							{
-								Print(string.Format("{0} | DYNAMIC QTY ADJUST: Old={1} New={2} (Stop moved to {3:F2})",
+								Log(string.Format("{0} | DYNAMIC QTY ADJUST: Old={1} New={2} (Stop moved to {3:F2})",
 									Time[0], entryOrder.Quantity, newQuantity, projectedStop));
 							}
 						}
@@ -3125,7 +3124,7 @@ setupLevelName = "";
 		else return 0; // Can't guess
 		
 		// DEBUG (v1.7.22): Log búsqueda
-		if (EnableDebugLogs) Print(string.Format("{0} | SEARCH_OPPOSITE: Looking for '{1}' from SAME DAY as '{2}' (RefDate: {3:yyyy-MM-dd})", Time[0], oppName, name, refTime.Date));
+		Log(string.Format("{0} | SEARCH_OPPOSITE: Looking for '{1}' from SAME DAY as '{2}' (RefDate: {3:yyyy-MM-dd})", Time[0], oppName, name, refTime.Date));
 		
 		// Perform Scan - SAME DAY (matching Date only, ignore time)
 		SessionLevel foundLvl = null;
@@ -3142,19 +3141,19 @@ setupLevelName = "";
 				bool sameDay = (l.StartTime.Date == refTime.Date);
 				
 				// DEBUG: Log candidato
-				if (EnableDebugLogs) Print(string.Format("   -> Candidate #{0}: {1} @ {2:F2} (Date: {3:yyyy-MM-dd}, SameDay: {4})", candidatesFound, l.Name, l.Price, l.StartTime.Date, sameDay));
+				Log(string.Format("   -> Candidate #{0}: {1} @ {2:F2} (Date: {3:yyyy-MM-dd}, SameDay: {4})", candidatesFound, l.Name, l.Price, l.StartTime.Date, sameDay));
 				
 				// SAME DAY CHECK: High and Low must be from same calendar day
 				if (sameDay)
 				{
 					foundLvl = l;
-					if (EnableDebugLogs) Print(string.Format("   -> ACCEPTED (Same Day): {0} @ {1:F2}", l.Name, l.Price));
+					Log(string.Format("   -> ACCEPTED (Same Day): {0} @ {1:F2}", l.Name, l.Price));
 					break;
 				}
 				else
 				{
 					rejectedByDate++;
-					if (EnableDebugLogs) Print(string.Format("   -> REJECTED (Different Day): {0:yyyy-MM-dd} != {1:yyyy-MM-dd}", l.StartTime.Date, refTime.Date));
+					Log(string.Format("   -> REJECTED (Different Day): {0:yyyy-MM-dd} != {1:yyyy-MM-dd}", l.StartTime.Date, refTime.Date));
 				}
 			}
 		}
@@ -3166,7 +3165,7 @@ setupLevelName = "";
 		}
 		
 		// DEBUG: Summary if not found
-		if (EnableDebugLogs) Print(string.Format("{0} | OPPOSITE NOT FOUND: '{1}' from same day (Found {2} candidates, {3} rejected by date mismatch)", Time[0], oppName, candidatesFound, rejectedByDate));
+		Log(string.Format("{0} | OPPOSITE NOT FOUND: '{1}' from same day (Found {2} candidates, {3} rejected by date mismatch)", Time[0], oppName, candidatesFound, rejectedByDate));
 		
 		return 0;
 	}
@@ -3236,7 +3235,7 @@ setupLevelName = "";
 									
 									// 6. Save
 									bitmap.Save(fullPath, System.Drawing.Imaging.ImageFormat.Png);
-									Print(Time[0] + " Snapshot Saved: " + fullPath);
+									Log(Time[0] + " Snapshot Saved: " + fullPath);
 									
 									// 7. Send Email (Async-ish)
 									if (EnableEmailAlerts)
@@ -3618,7 +3617,7 @@ setupLevelName = "";
 				if (Position.MarketPosition == MarketPosition.Flat)
 				{
 					bool isSLClose = execution.Order.Name.Contains("SL_");
-					if (EnableDebugLogs) Print(Time + " Position Closed (" + execution.Order.Name + "). Resetting to Idle.");
+					Log(Time + " Position Closed (" + execution.Order.Name + "). Resetting to Idle.");
 					TriggerScreenshot("Exit_" + execution.Order.Name, DateTime.Now, executionId);
 					
 					// v1.10.26: Check if we can retry
@@ -3643,7 +3642,7 @@ setupLevelName = "";
 						vwapCandleExtreme = isShortSetup ? setupAnchorPrice : setupAnchorPrice;
 						currentVwapNumber++;
 						
-						if (EnableDebugLogs) Print(string.Format("{0} VWAP RETRY: Waiting for price to break {1:F2} for VWAP#{2}",
+						Log(string.Format("{0} VWAP RETRY: Waiting for price to break {1:F2} for VWAP#{2}",
 							Time, vwapCandleExtreme, currentVwapNumber));
 					}
 					else
