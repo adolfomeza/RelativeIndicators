@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.0"; // Feature: Intelligent restart evaluation
+		private const string StrategyVersion = "v1.11.1"; // Fix: Allow historical executions for visualization
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
