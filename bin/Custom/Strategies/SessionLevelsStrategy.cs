@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.21"; // Feature: AllowBacktest for Strategy Analyzer
+		private const string StrategyVersion = "v1.11.22"; // Optimization: Skip trading logic for old historical bars
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -1231,7 +1231,16 @@ namespace NinjaTrader.NinjaScript.Strategies
 			// 3. Global ETH VWAPs
 			ManageGlobalVWAPs(deltaVol);
 			
-			// 4. Entry Logic
+			// v1.11.22: HISTORICAL LOAD OPTIMIZATION
+			// Skip trading logic for old bars to speed up strategy loading
+			// Levels are still calculated above, only entry/exit logic is skipped
+			bool isRecentBar = (Time[0].Date >= DateTime.Today.AddDays(-3));
+			if (State == State.Historical && !isRecentBar && !AllowBacktest)
+			{
+				return; // Levels calculated, skip trading logic for speed
+			}
+			
+			// 4. Entry Logic (only for recent bars or Realtime)
 			ManageEntryA_Plus();
 		}
 		

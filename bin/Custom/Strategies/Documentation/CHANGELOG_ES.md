@@ -4,7 +4,17 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.21] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.22] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### Optimization: Carga Histórica 10x Más Rápida
+- **Cambio**: Skip de `ManageEntryA_Plus()` para barras > 3 días antiguas
+- **Niveles**: Siguen calculándose para TODO el histórico (30 días)
+- **Trading Logic**: Solo se procesa últimos 3 días + Realtime
+- **Beneficio**: Carga de estrategia ~10x más rápida
+- **Nota**: Si `AllowBacktest = true`, procesa todo el histórico
+
+---
+
+## [1.11.21] - 2025-12-29
 ### Feature: Soporte para Strategy Analyzer
 - **Nueva propiedad**: `Allow Backtest` (Default: OFF)
 - **Efecto**: Cuando está ON, permite ejecutar órdenes en modo Historical (backtest)

@@ -1,25 +1,25 @@
 Title,Country,Date,Time,Impact,Forecast,Previous,URL
 Pending Home Sales m/m,USD,12-29-2025,3:00pm,Low,1.0%,1.9%,https://www.energyexch.com/calendar/233-us-pending-home-sales-mm
 Natural Gas Storage,USD,12-29-2025,5:00pm,High,-169B,-167B,https://www.energyexch.com/calendar/26-us-natural-gas-storage
-Crude Oil Inventories,USD,12-29-2025,6:00pm,High,-2.0M,-1.3M,https://www.energyexch.com/calendar/10-us-crude-oil-inventories
-Distillate Inventories,USD,12-29-2025,6:00pm,High,1.0M,1.7M,https://www.energyexch.com/calendar/678-us-distillate-inventories
-Gasoline Inventories,USD,12-29-2025,6:00pm,High,1.1M,4.8M,https://www.energyexch.com/calendar/679-us-gasoline-inventories
-Gov Budget Balance,BRL,12-30-2025,11:30am,Low,-14.3B,32.4B,https://www.energyexch.com/calendar/784-bz-gov-budget-balance
+Crude Oil Inventories,USD,12-29-2025,10:00pm,High,-2.0M,-1.3M,https://www.energyexch.com/calendar/10-us-crude-oil-inventories
+Distillate Inventories,USD,12-29-2025,10:00pm,High,1.0M,1.7M,https://www.energyexch.com/calendar/678-us-distillate-inventories
+Gasoline Inventories,USD,12-29-2025,10:00pm,High,1.1M,4.8M,https://www.energyexch.com/calendar/679-us-gasoline-inventories
+Gov Budget Balance,BRL,12-30-2025,11:30am,Low,-14.1B,32.4B,https://www.energyexch.com/calendar/784-bz-gov-budget-balance
 S&P/CS Composite-20 HPI y/y,USD,12-30-2025,2:00pm,Low,1.1%,1.4%,https://www.energyexch.com/calendar/240-us-spcs-composite-20-hpi-yy
-Chicago PMI,USD,12-30-2025,2:45pm,Low,39.6,36.3,https://www.energyexch.com/calendar/189-us-chicago-pmi
-Baker Hughes Oil Rig Count,USD,12-30-2025,6:00pm,Low,,409,https://www.energyexch.com/calendar/685-us-baker-hughes-oil-rig-count
+Chicago PMI,USD,12-30-2025,2:45pm,Low,39.8,36.3,https://www.energyexch.com/calendar/189-us-chicago-pmi
+Baker Hughes Oil Rig Count,USD,12-30-2025,6:00pm,Low,410,409,https://www.energyexch.com/calendar/685-us-baker-hughes-oil-rig-count
 FOMC Meeting Minutes,USD,12-30-2025,7:00pm,Medium,,,https://www.energyexch.com/calendar/304-us-fomc-meeting-minutes
 API Weekly Statistical Bulletin,USD,12-30-2025,9:30pm,Medium,,,https://www.energyexch.com/calendar/754-us-api-weekly-statistical-bulletin
-Manufacturing PMI,CNY,12-31-2025,1:30am,Low,49.4,49.2,https://www.energyexch.com/calendar/449-ch-manufacturing-pmi
-Non-Manufacturing PMI,CNY,12-31-2025,1:30am,Low,49.8,49.5,https://www.energyexch.com/calendar/520-ch-non-manufacturing-pmi
-RatingDog Manufacturing PMI,CNY,12-31-2025,1:45am,Low,49.7,49.9,https://www.energyexch.com/calendar/448-ch-ratingdog-manufacturing-pmi
-Unemployment Claims,USD,12-31-2025,1:30pm,Low,215K,214K,https://www.energyexch.com/calendar/11-us-unemployment-claims
+Manufacturing PMI,CNY,12-31-2025,1:30am,Low,49.2,49.2,https://www.energyexch.com/calendar/449-ch-manufacturing-pmi
+Non-Manufacturing PMI,CNY,12-31-2025,1:30am,Low,49.6,49.5,https://www.energyexch.com/calendar/520-ch-non-manufacturing-pmi
+RatingDog Manufacturing PMI,CNY,12-31-2025,1:45am,Low,49.8,49.9,https://www.energyexch.com/calendar/448-ch-ratingdog-manufacturing-pmi
+Unemployment Claims,USD,12-31-2025,1:30pm,Low,217K,214K,https://www.energyexch.com/calendar/11-us-unemployment-claims
 Crude Oil Inventories,USD,12-31-2025,3:30pm,High,,,https://www.energyexch.com/calendar/10-us-crude-oil-inventories
 Distillate Inventories,USD,12-31-2025,3:30pm,High,,,https://www.energyexch.com/calendar/678-us-distillate-inventories
 Gasoline Inventories,USD,12-31-2025,3:30pm,High,,,https://www.energyexch.com/calendar/679-us-gasoline-inventories
-Natural Gas Storage,USD,12-31-2025,5:00pm,High,,,https://www.energyexch.com/calendar/26-us-natural-gas-storage
+Natural Gas Storage,USD,12-31-2025,5:00pm,High,,-166B,https://www.energyexch.com/calendar/26-us-natural-gas-storage
 Manufacturing PMI,EUR,01-02-2026,8:15am,Low,51.2,51.5,https://www.energyexch.com/calendar/557-sp-manufacturing-pmi
-Manufacturing PMI,EUR,01-02-2026,8:45am,Low,50.1,50.6,https://www.energyexch.com/calendar/547-it-manufacturing-pmi
+Manufacturing PMI,EUR,01-02-2026,8:45am,Low,50.0,50.6,https://www.energyexch.com/calendar/547-it-manufacturing-pmi
 Final Manufacturing PMI,EUR,01-02-2026,8:55am,Low,47.7,47.7,https://www.energyexch.com/calendar/618-ge-final-manufacturing-pmi
 Final Manufacturing PMI,GBP,01-02-2026,9:30am,Low,51.2,51.2,https://www.energyexch.com/calendar/249-uk-final-manufacturing-pmi
 Manufacturing PMI,CAD,01-02-2026,2:30pm,Low,,48.4,https://www.energyexch.com/calendar/629-ca-manufacturing-pmi

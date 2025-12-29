@@ -2,22 +2,22 @@ Title,Country,Date,Time,Impact,Forecast,Previous,URL
 BOJ Summary of Opinions,JPY,12-28-2025,11:50pm,Low,,,https://www.forexfactory.com/calendar/633-jn-boj-summary-of-opinions
 Pending Home Sales m/m,USD,12-29-2025,3:00pm,Medium,1.0%,1.9%,https://www.forexfactory.com/calendar/233-us-pending-home-sales-mm
 Natural Gas Storage,USD,12-29-2025,5:00pm,Low,-169B,-167B,https://www.forexfactory.com/calendar/26-us-natural-gas-storage
-Crude Oil Inventories,USD,12-29-2025,6:00pm,Low,-2.0M,-1.3M,https://www.forexfactory.com/calendar/10-us-crude-oil-inventories
+Crude Oil Inventories,USD,12-29-2025,10:00pm,Low,-2.0M,-1.3M,https://www.forexfactory.com/calendar/10-us-crude-oil-inventories
 KOF Economic Barometer,CHF,12-30-2025,8:00am,Low,101.5,101.7,https://www.forexfactory.com/calendar/301-sz-kof-economic-barometer
-Spanish Flash CPI y/y,EUR,12-30-2025,8:00am,Low,2.9%,3.0%,https://www.forexfactory.com/calendar/592-sp-flash-cpi-yy
+Spanish Flash CPI y/y,EUR,12-30-2025,8:00am,Low,2.8%,3.0%,https://www.forexfactory.com/calendar/592-sp-flash-cpi-yy
 HPI m/m,USD,12-30-2025,2:00pm,Low,0.1%,0.0%,https://www.forexfactory.com/calendar/239-us-hpi-mm
 S&P/CS Composite-20 HPI y/y,USD,12-30-2025,2:00pm,Low,1.1%,1.4%,https://www.forexfactory.com/calendar/240-us-spcs-composite-20-hpi-yy
-Chicago PMI,USD,12-30-2025,2:45pm,Low,39.6,36.3,https://www.forexfactory.com/calendar/189-us-chicago-pmi
+Chicago PMI,USD,12-30-2025,2:45pm,Low,39.8,36.3,https://www.forexfactory.com/calendar/189-us-chicago-pmi
 FOMC Meeting Minutes,USD,12-30-2025,7:00pm,High,,,https://www.forexfactory.com/calendar/304-us-fomc-meeting-minutes
 API Weekly Statistical Bulletin,USD,12-30-2025,9:30pm,Low,,,https://www.forexfactory.com/calendar/754-us-api-weekly-statistical-bulletin
 Bank Holiday,JPY,12-31-2025,12:00am,Holiday,,,https://www.forexfactory.com/calendar/393-jn-bank-holiday
-Manufacturing PMI,CNY,12-31-2025,1:30am,Medium,49.4,49.2,https://www.forexfactory.com/calendar/449-ch-manufacturing-pmi
-Non-Manufacturing PMI,CNY,12-31-2025,1:30am,Low,49.8,49.5,https://www.forexfactory.com/calendar/520-ch-non-manufacturing-pmi
-RatingDog Manufacturing PMI,CNY,12-31-2025,1:45am,Low,49.7,49.9,https://www.forexfactory.com/calendar/448-ch-ratingdog-manufacturing-pmi
+Manufacturing PMI,CNY,12-31-2025,1:30am,Medium,49.2,49.2,https://www.forexfactory.com/calendar/449-ch-manufacturing-pmi
+Non-Manufacturing PMI,CNY,12-31-2025,1:30am,Low,49.6,49.5,https://www.forexfactory.com/calendar/520-ch-non-manufacturing-pmi
+RatingDog Manufacturing PMI,CNY,12-31-2025,1:45am,Low,49.8,49.9,https://www.forexfactory.com/calendar/448-ch-ratingdog-manufacturing-pmi
 German Bank Holiday,EUR,12-31-2025,7:02am,Holiday,,,https://www.forexfactory.com/calendar/391-ge-bank-holiday
-Unemployment Claims,USD,12-31-2025,1:30pm,High,215K,214K,https://www.forexfactory.com/calendar/11-us-unemployment-claims
+Unemployment Claims,USD,12-31-2025,1:30pm,High,217K,214K,https://www.forexfactory.com/calendar/11-us-unemployment-claims
 Crude Oil Inventories,USD,12-31-2025,3:30pm,Low,,,https://www.forexfactory.com/calendar/10-us-crude-oil-inventories
-Natural Gas Storage,USD,12-31-2025,5:00pm,Low,,,https://www.forexfactory.com/calendar/26-us-natural-gas-storage
+Natural Gas Storage,USD,12-31-2025,5:00pm,Low,,-166B,https://www.forexfactory.com/calendar/26-us-natural-gas-storage
 Bank Holiday,NZD,12-31-2025,8:00pm,Holiday,,,https://www.forexfactory.com/calendar/395-nz-bank-holiday
 Bank Holiday,AUD,12-31-2025,9:00pm,Holiday,,,https://www.forexfactory.com/calendar/394-au-bank-holiday
 Bank Holiday,JPY,01-01-2026,12:00am,Holiday,,,https://www.forexfactory.com/calendar/393-jn-bank-holiday
@@ -35,7 +35,7 @@ Bank Holiday,CNY,01-02-2026,12:01am,Holiday,,,https://www.forexfactory.com/calen
 Bank Holiday,CHF,01-02-2026,6:00am,Holiday,,,https://www.forexfactory.com/calendar/392-sz-bank-holiday
 Nationwide HPI m/m,GBP,01-02-2026,7:00am,Low,0.1%,0.3%,https://www.forexfactory.com/calendar/242-uk-nationwide-hpi-mm
 Spanish Manufacturing PMI,EUR,01-02-2026,8:15am,Low,51.2,51.5,https://www.forexfactory.com/calendar/557-sp-manufacturing-pmi
-Italian Manufacturing PMI,EUR,01-02-2026,8:45am,Low,50.1,50.6,https://www.forexfactory.com/calendar/547-it-manufacturing-pmi
+Italian Manufacturing PMI,EUR,01-02-2026,8:45am,Low,50.0,50.6,https://www.forexfactory.com/calendar/547-it-manufacturing-pmi
 French Final Manufacturing PMI,EUR,01-02-2026,8:50am,Low,50.6,50.6,https://www.forexfactory.com/calendar/617-fr-final-manufacturing-pmi
 German Final Manufacturing PMI,EUR,01-02-2026,8:55am,Low,47.7,47.7,https://www.forexfactory.com/calendar/618-ge-final-manufacturing-pmi
 Final Manufacturing PMI,EUR,01-02-2026,9:00am,Low,49.2,49.2,https://www.forexfactory.com/calendar/264-ez-final-manufacturing-pmi
