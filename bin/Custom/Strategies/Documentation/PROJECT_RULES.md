@@ -15,6 +15,11 @@ Este documento sirve como punto central de verdad para enlaces importantes, regl
 6.  **Idioma de Documentación**: Todos los documentos con extensión `.md` deben estar escritos en **ESPAÑOL** sin excepción.
 7.  **Sincronización de Versión**: Asegurar que la constante de versión en el código (`StrategyVersion`) coincida *exactamente* con la última entrada en `CHANGELOG_ES.md` y se muestre en el panel de estado.
 8.  **Limpieza de Artifacts**: Al completar exitosamente una implementación, mover todos los documentos temporales de planificación/implementación (de `.gemini/antigravity/brain/`) a una subcarpeta `completed/` para mantener el workspace limpio. Solo mantener abiertos documentos relevantes para trabajo actual.
+9.  **Formato de Logs**: Todos los logs de debug DEBEN seguir este formato:
+    - **Prefijo de instrumento**: `[MNQ]`, `[MGC]`, `[MCL]`, etc. al inicio de cada mensaje
+    - **Timestamp**: Incluir `Time[0]` con fecha y hora para facilitar búsqueda
+    - **Usar método `Log()`**: NUNCA usar `Print()` directamente. El método `Log()` ya incluye el prefijo automáticamente
+    - Ejemplo: `[MNQ] 28/12/25 9:30:00 a.m. EXEC_DEBUG: Submitting Long Limit @ 25000`
 
 ---
 
