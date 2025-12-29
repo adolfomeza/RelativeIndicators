@@ -156,6 +156,44 @@ namespace NinjaTrader.NinjaScript.Strategies
 			set { vwapMethod = value; }
 		}
 		
+		// =========================================================
+		// v1.11.5: TRIGGER LABEL SETTINGS
+		// =========================================================
+		private double labelDistanceATR = 0.3;
+		[NinjaScriptProperty]
+		[Display(Name="Label Distance (ATR)", Description="Distance from candle as ATR multiplier. Lower = closer to candle.", Order=70, GroupName="Trigger Labels")]
+		public double LabelDistanceATR
+		{
+			get { return labelDistanceATR; }
+			set { labelDistanceATR = Math.Max(0.1, value); }
+		}
+		
+		private int labelFontSize = 12;
+		[NinjaScriptProperty]
+		[Display(Name="Label Font Size", Description="Font size for trigger labels (8-20).", Order=71, GroupName="Trigger Labels")]
+		public int LabelFontSize
+		{
+			get { return labelFontSize; }
+			set { labelFontSize = Math.Max(8, Math.Min(20, value)); }
+		}
+		
+		private bool labelShowText = true;
+		[NinjaScriptProperty]
+		[Display(Name="Show Text", Description="Show 'Short'/'Long' text label.", Order=72, GroupName="Trigger Labels")]
+		public bool LabelShowText
+		{
+			get { return labelShowText; }
+			set { labelShowText = value; }
+		}
+		
+		private bool labelShowArrow = true;
+		[NinjaScriptProperty]
+		[Display(Name="Show Arrow", Description="Show arrow marker.", Order=73, GroupName="Trigger Labels")]
+		public bool LabelShowArrow
+		{
+			get { return labelShowArrow; }
+			set { labelShowArrow = value; }
+		}
 
 		// Visual State for Adhoc VWAP Line
 		private double visualAdhocPrevBarVal = 0;
@@ -179,26 +217,33 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private void DrawTriggerLabel(string tag, bool isShort, int barsAgo, double anchorPrice)
 		{
 			// Calcular offset basado en ATR (consistente entre instrumentos)
-			// Si ATR no está disponible, usar TickSize como fallback
-			double atrOffset = (atr != null && atr[0] > 0) ? atr[0] * 0.3 : TickSize * 10;
+			// Usa la propiedad LabelDistanceATR configurable desde el panel
+			double atrOffset = (atr != null && atr[0] > 0) ? atr[0] * LabelDistanceATR : TickSize * 10;
 			double textOffset = atrOffset * 1.5; // Texto un poco más lejos que la flecha
 			
-			// Colores: Cyan para Short, Lime para Long (como antes)
+			// Colores: Cyan para Short, Lime para Long
 			Brush color = isShort ? Brushes.Cyan : Brushes.Lime;
 			
 			// Calcular precios para flecha y texto
 			double arrowPrice = isShort ? anchorPrice + atrOffset : anchorPrice - atrOffset;
 			double textPrice = isShort ? anchorPrice + textOffset : anchorPrice - textOffset;
 			
-			// Dibujar flecha
-			if (isShort)
-				Draw.ArrowDown(this, tag, true, barsAgo, arrowPrice, color);
-			else
-				Draw.ArrowUp(this, tag, true, barsAgo, arrowPrice, color);
+			// Dibujar flecha (si está habilitado)
+			if (LabelShowArrow)
+			{
+				if (isShort)
+					Draw.ArrowDown(this, tag, true, barsAgo, arrowPrice, color);
+				else
+					Draw.ArrowUp(this, tag, true, barsAgo, arrowPrice, color);
+			}
 			
-			// Dibujar texto
-			string label = isShort ? "Short" : "Long";
-			Draw.Text(this, tag + "_Txt", label, barsAgo, textPrice, color);
+			// Dibujar texto (si está habilitado)
+			if (LabelShowText)
+			{
+				string label = isShort ? "Short" : "Long";
+				SimpleFont font = new SimpleFont("Arial", LabelFontSize);
+				Draw.Text(this, tag + "_Txt", true, label, barsAgo, textPrice, 0, color, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
+			}
 		}
 
 		// =========================================================
