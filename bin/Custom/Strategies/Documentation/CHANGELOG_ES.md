@@ -4,7 +4,16 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.19] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.20] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### Feature: Mostrar Riesgo Mínimo en Panel de Estado
+- **Nueva info**: El panel ahora muestra `Risk: $XX (Min: $YY)`
+- **Min Risk**: Riesgo si se usa MinQuantity con StopLossTicks actual
+  - Fórmula: `MinQuantity × StopLossTicks × TickValue`
+- **Utilidad**: Evaluar si instrumentos caros (ej. Micro Plata) exceden tu riesgo aceptable
+
+---
+
+## [1.11.19] - 2025-12-29
 ### Fix: Evitar Falsos Positivos de Detección de Posiciones Huérfanas
 - **Problema**: Después de cerrar posición (SL/TP fill), el mensaje "Safe Orphan Detected" aparecía incorrectamente
 - **Causa**: Delay de sincronización entre `Position.Flat` local y `Account.Positions`

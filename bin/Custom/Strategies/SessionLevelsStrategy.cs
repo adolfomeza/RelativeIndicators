@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.19"; // Fix: Prevent orphan false positives after position close
+		private const string StrategyVersion = "v1.11.20"; // Feature: Show min risk in status panel
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -2157,6 +2157,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 				WriteSharedRisk(localRiskDisplay);
 			}
 			double globalRiskDisplay = ReadMaxSharedRisk();
+			
+			// v1.11.20: Calculate minimum risk in USD (what MinQuantity would cost if stopped out)
+			double tickValue = Instrument.MasterInstrument.PointValue * TickSize;
+			double minRiskUSD = StopLossTicks * MinQuantity * tickValue;
 
 			// v1.10.23: Show current level with age
 			string levelInfo = "-";
@@ -2241,13 +2245,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 				}
 			}
 
-			string text = string.Format("Ver: {0}\nState: {1}\nLevel: {2}\nPosition: {3}\nPnL: {4} | Risk: {5:C0}{6}",
+			string text = string.Format("Ver: {0}\nState: {1}\nLevel: {2}\nPosition: {3}\nPnL: {4} | Risk: {5:C0} (Min: {6:C0}){7}",
 				StrategyVersion,
 				currentEntryState,
 				levelInfo,
 				Position.MarketPosition,
 				sessionPnL.ToString("C"),
 				globalRiskDisplay,
+				minRiskUSD,
 				orderInfo);
 				
 			Draw.TextFixed(this, "InfoPanel", text, TextPosition.TopRight, Brushes.White, new SimpleFont("Arial", 12), Brushes.Black, Brushes.Transparent, 100);
