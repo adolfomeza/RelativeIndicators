@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.10"; // Fix: Show confirmation candle in historical live/demo
+		private const string StrategyVersion = "v1.11.11"; // Fix: Single paint for confirmation candle
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -1420,6 +1420,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private DateTime setupLevelTime = DateTime.MinValue; // NEW (v1.5.8): Track time of the level we are trading
 		private double setupAnchorPrice = 0;
 		private bool isShortSetup = false; // true = Short, false = Long
+		private bool visualConfirmationDone = false; // v1.11.11: Control para pintar vela solo la primera vez
 		// Rejection Loop Protection (v1.7.1)
 		private int lastRejectionBar = -1;
 		// V_EXEC: Execution Variables
@@ -2376,6 +2377,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 							DrawTriggerLabel(triggerTag, true, 0, High[0]);
 							
 							currentEntryState = EntryState.WaitingForConfirmation;
+							visualConfirmationDone = false; // Reset visual flag
 							isShortSetup = true;
 							setupAnchorPrice = High[0]; // Current extreme
 							setupLevelName = externalName;
@@ -2409,6 +2411,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 							DrawTriggerLabel(triggerTag, false, 0, Low[0]);
 							
 							currentEntryState = EntryState.WaitingForConfirmation;
+							visualConfirmationDone = false; // Reset visual flag
 							isShortSetup = false;
 							setupAnchorPrice = Low[0];
 							setupLevelName = externalName;
@@ -2537,6 +2540,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 							DrawTriggerLabel(triggerTag, true, 0, High[0]);
 							
 							currentEntryState = EntryState.WaitingForConfirmation;
+							visualConfirmationDone = false; // Reset visual flag
 							isShortSetup = true;
 							setupAnchorPrice = High[0]; // ANCHOR START: Current Wick High
 							setupLevelName = lvl.Name;
@@ -2582,6 +2586,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 							DrawTriggerLabel(triggerTag, false, 0, Low[0]);
 							
 							currentEntryState = EntryState.WaitingForConfirmation;
+							visualConfirmationDone = false; // Reset visual flag
 							isShortSetup = false; // Long
 							setupAnchorPrice = Low[0]; // ANCHOR START: Current Wick Low
 							setupLevelName = lvl.Name;
@@ -2688,12 +2693,13 @@ namespace NinjaTrader.NinjaScript.Strategies
 						// FIX (v1.10.36): Block Historical orders on live/demo (RESTORED v1.11.2 - orders were being sent to broker)
 						bool isPlayback = (Connection.PlaybackConnection != null);
 						bool canSubmitOrder = (State == State.Realtime) || (State == State.Historical && isPlayback);
-						// v1.11.10: Highlight confirmation candle (ALWAYS VISIBLE)
-						// Moved outside canSubmitOrder to show on historical chart
-						if (HighlightConfirmationCandle && CurrentBar > 1)
+						// v1.11.11: Highlight confirmation candle (ONLY ONCE)
+						// Check visualConfirmationDone flag to avoid painting multiple candles
+						if (HighlightConfirmationCandle && CurrentBar > 1 && !visualConfirmationDone)
 						{
 							BarBrushes[1] = ConfirmationCandleColor;
 							CandleOutlineBrushes[1] = ConfirmationCandleColor;
+							visualConfirmationDone = true;
 						}
 
 						if (canSubmitOrder)
@@ -2786,11 +2792,12 @@ namespace NinjaTrader.NinjaScript.Strategies
 						// FIX (v1.10.36): Block Historical orders on live/demo (RESTORED v1.11.2)
 						bool isPlaybackLong = (Connection.PlaybackConnection != null);
 						bool canSubmitOrderLong = (State == State.Realtime) || (State == State.Historical && isPlaybackLong);
-						// v1.11.10: Highlight confirmation candle (ALWAYS VISIBLE)
-						if (HighlightConfirmationCandle && CurrentBar > 1)
+						// v1.11.11: Highlight confirmation candle (ONLY ONCE)
+						if (HighlightConfirmationCandle && CurrentBar > 1 && !visualConfirmationDone)
 						{
 							BarBrushes[1] = ConfirmationCandleColor;
 							CandleOutlineBrushes[1] = ConfirmationCandleColor;
+							visualConfirmationDone = true;
 						}
 
 						if (canSubmitOrderLong)

@@ -4,7 +4,18 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.10] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.11] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### Fix: Pintar Vela de Confirmación Única
+- **Problema**: Se pintaban múltiples velas consecutivas (todas las que confirmaban) en historial Live/Demo
+  - Razón: Al no enviar orden, el estado `WaitingForConfirmation` no cambiaba, re-evaluando y re-pintando.
+- **Solución**: Usar variable `visualConfirmationDone`
+  - Se resetea (`false`) al detectar nuevo setup (Paso 1)
+  - Se activa (`true`) al pintar la primera vela de confirmación (Paso 2)
+- **Resultado**: Solo la primera vela que confirma la separación se pinta de amarillo.
+
+---
+
+## [1.11.10] - 2025-12-29
 ### Fix: Mostrar Vela de Confirmación en Historial (Live/Demo)
 - **Problema**: Las velas amarillas no se veían en el chart histórico de cuentas Live/Demo
   - Razón: La lógica estaba dentro del bloque de envío de orden (que está bloqueado para histórico)
