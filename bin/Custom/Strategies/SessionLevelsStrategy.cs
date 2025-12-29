@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.5"; // Feature: ATR-based trigger label distance
+		private const string StrategyVersion = "v1.11.6"; // FIX CRITICAL: Prevent duplicate SL orders
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -3162,31 +3162,30 @@ setupLevelName = "";
 			bool shouldUpdateTP = (existingTP != null && (existingTP.OrderState == OrderState.Working || existingTP.OrderState == OrderState.Accepted));
 			
 			// STEP 1: Handle STOP LOSS (single for entire position)
-			if (shouldUpdateSL)
+			// v1.11.6 FIX: Only handle SL if stopOrder is null OR needs quantity update
+			// Prevents creating duplicate SL orders when SubmitProtectionOrders is called twice
+			if (stopOrder == null)
 			{
-				// SL exists - cancel and recreate with updated quantity
-				if (existingSL.Quantity != totalPositionQty)
-				{
-					Log(string.Format("SL UPDATE: Cancelling old SL (Qty={0}), creating new (Qty={1})", 
-						existingSL.Quantity, totalPositionQty));
-					try {
-						CancelOrder(existingSL);
-					} catch (Exception ex) {
-						Log("Warning: Could not cancel old SL: " + ex.Message);
-					}
-					shouldUpdateSL = false; // Force creation below
-				}
-			}
-			
-			// Create SL if it doesn't exist or we just cancelled it
-			if (!shouldUpdateSL)
-			{
+				// Create new SL
 				string slTag = string.Format("{0}_{1:D2}", direction == "Short" ? "SL_Short" : "SL_Long", currentVwapNumber);
 				OrderAction slAction = direction == "Short" ? OrderAction.BuyToCover : OrderAction.Sell;
 				
 				stopOrder = SubmitOrderUnmanaged(0, slAction, OrderType.StopMarket, totalPositionQty, 0, slPrice, "", slTag);
-				// v1.10.34: SL labels removed for cleaner chart
+				Log(string.Format("SL CREATED: {0} @ {1} Qty={2}", slTag, slPrice, totalPositionQty));
 			}
+			else if (shouldUpdateSL && stopOrder.Quantity != totalPositionQty)
+			{
+				// SL exists but needs quantity update
+				Log(string.Format("SL UPDATE: Cancelling old SL (Qty={0}), creating new (Qty={1})", 
+					stopOrder.Quantity, totalPositionQty));
+				try {
+					CancelOrder(stopOrder);
+					stopOrder = null; // Clear reference, will be recreated on next call
+				} catch (Exception ex) {
+					Log("Warning: Could not cancel old SL: " + ex.Message);
+				}
+			}
+			// Else: SL exists and has correct quantity, do nothing
 			
 			// STEP 2: Handle TAKE PROFIT (TP1 or TP2)
 			int tpQty = isTp1 ? (protectedTp1Qty + qty) : (protectedTp2Qty + qty);
