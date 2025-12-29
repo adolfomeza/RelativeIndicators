@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.13"; // Feature: File-based logging per instrument
+		private const string StrategyVersion = "v1.11.14"; // FIX CRITICAL: Prevent duplicate EnsureProtection calls
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -1491,6 +1491,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		// Protection State (v1.7.17)
 		private int protectedTp1Qty = 0;
 		private int protectedTp2Qty = 0;
+		private bool protectionOrdersCreated = false; // v1.11.14: Prevent duplicate creation
 		// v1.10.31: Trade VWAP - continues accumulating even when day changes
 		// Separate from global VWAP to keep TP1 moving with original day's VWAP
 		private SessionVWAP tradeVWAP = new SessionVWAP();
@@ -2040,6 +2041,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 			// RESET PROTECTION COUNTERS (v1.7.26) - Fix bucket allocation in SYNC path
 			protectedTp1Qty = 0;
 			protectedTp2Qty = 0;
+			protectionOrdersCreated = false; // v1.11.14: Reset flag for next trade
 			tradeVwapActive = false; // v1.10.31: Reset Trade VWAP
 				
 				// v1.10.12: Cancel orphan orders before nullifying references
@@ -3062,6 +3064,13 @@ setupLevelName = "";
 			// REFACTORED EnsureProtection (v1.7.17) - Consolidated Split Handling
 	private void EnsureProtection(string direction, string entrySignalName, int filledQty)
 	{
+		// v1.11.14: Prevent duplicate calls from multiple OnExecutionUpdate events
+		if (protectionOrdersCreated)
+		{
+			Log(Time[0] + " EnsureProtection SKIPPED: Orders already created this trade");
+			return;
+		}
+		
 		// v1.10.31: Initialize Trade VWAP on first fill
 		// Copy accumulators from global VWAP so it continues accumulating
 		if (!tradeVwapActive)
@@ -3109,6 +3118,10 @@ setupLevelName = "";
 		// Update State
 		protectedTp1Qty += forTp1;
 		protectedTp2Qty += forTp2;
+		
+		// v1.11.14: Mark protection orders as created
+		protectionOrdersCreated = true;
+		Log(Time[0] + " EnsureProtection COMPLETE: protectionOrdersCreated = true");
 	}
 	
 	// v1.10.0: Get daily high extreme (for LONG TP2)
@@ -4050,6 +4063,7 @@ setupLevelName = "";
 				// RESET PROTECTION COUNTERS (v1.7.24) - Fix bucket allocation
 				protectedTp1Qty = 0;
 				protectedTp2Qty = 0;
+				protectionOrdersCreated = false; // v1.11.14: Reset flag for next trade
 				tradeVwapActive = false; // v1.10.31: Reset Trade VWAP
 
 					// CLEARED

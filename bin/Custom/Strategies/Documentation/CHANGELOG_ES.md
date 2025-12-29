@@ -4,7 +4,26 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.13] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.14] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### FIX CRÍTICO: Prevenir Llamadas Duplicadas a EnsureProtection
+- **Problema Confirmado por Logs**:
+  ```
+  -> Protection Alloc: Filled=2 | ForTP1=1 | ForTP2=1
+  -> Protection Alloc: Filled=2 | ForTP1=1 | ForTP2=1  <-- DUPLICADO
+  TP1 CREATED: Qty=1  -> TP1 CREATED: Qty=2  <-- 2 órdenes creadas
+  ```
+- **Causa Raíz**: `OnExecutionUpdate` dispara `EnsureProtection` múltiples veces
+- **Solución**: Nuevo flag `protectionOrdersCreated`
+  - Verificación al inicio de `EnsureProtection()` - si ya está creado, skip
+  - Set a `true` después de crear órdenes
+  - Reset a `false` en ambos puntos de cleanup (line 2044, 4066)
+- **Logs nuevos**: 
+  - `EnsureProtection SKIPPED: Orders already created this trade`
+  - `EnsureProtection COMPLETE: protectionOrdersCreated = true`
+
+---
+
+## [1.11.13] - 2025-12-29
 ### Feature: Logs a Archivo por Instrumento
 - **Ubicación**: `Documents\NinjaTrader 8\trace\SessionLevels\[INSTRUMENTO]_[YYYYMMDD].txt`
   - Ejemplo: `MGC_20251229.txt`, `ES_20251229.txt`
