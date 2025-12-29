@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.12"; // FIX CRITICAL: Prevent duplicate SL and TP orders
+		private const string StrategyVersion = "v1.11.13"; // Feature: File-based logging per instrument
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -238,14 +238,75 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private double visualAdhocLastVal = 0;
 		private int visualAdhocLastBar = -1;
 
-		// Forensic Logging - v1.10.40: Added instrument prefix for multi-chart debugging
+		// v1.11.13: File-based logging per instrument for easier debugging
+		private static object logFileLock = new object();
+		private string logFilePath = null;
+		private DateTime lastLogFlush = DateTime.MinValue;
+		
 		private void Log(string message)
 		{
-			if (EnableDebugLogs)
+			if (!EnableDebugLogs) return;
+			
+			string instrumentName = Instrument != null ? Instrument.MasterInstrument.Name : "UNKNOWN";
+			string prefix = "[" + instrumentName + "] ";
+			string fullMessage = prefix + message;
+			
+			// Print to Output window
+			Print(fullMessage);
+			
+			// Write to file (buffered, low overhead)
+			try
 			{
-				string prefix = Instrument != null ? "[" + Instrument.MasterInstrument.Name + "] " : "";
-				Print(prefix + message);
+				if (logFilePath == null)
+				{
+					// Create Logs folder in Strategies directory
+					string logsDir = System.IO.Path.Combine(
+						System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
+						"Logs");
+					if (!System.IO.Directory.Exists(logsDir))
+						System.IO.Directory.CreateDirectory(logsDir);
+					
+					// One file per instrument per day
+					string fileName = string.Format("{0}_{1:yyyyMMdd}.txt", instrumentName, DateTime.Now);
+					logFilePath = System.IO.Path.Combine(logsDir, fileName);
+				}
+				
+				lock (logFileLock)
+				{
+					System.IO.File.AppendAllText(logFilePath, 
+						string.Format("{0:HH:mm:ss.fff} {1}\r\n", DateTime.Now, message));
+				}
 			}
+			catch { } // Silently ignore file errors to not disrupt trading
+		}
+		
+		// v1.11.13: Clear log file on strategy restart (overwrite instead of append)
+		private void ClearLogFile()
+		{
+			try
+			{
+				if (Instrument == null) return;
+				
+				string instrumentName = Instrument.MasterInstrument.Name;
+				string logsDir = System.IO.Path.Combine(
+					System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
+					"Logs");
+				
+				if (!System.IO.Directory.Exists(logsDir))
+					System.IO.Directory.CreateDirectory(logsDir);
+				
+				string fileName = string.Format("{0}_{1:yyyyMMdd}.txt", instrumentName, DateTime.Now);
+				logFilePath = System.IO.Path.Combine(logsDir, fileName);
+				
+				// Overwrite file with header
+				lock (logFileLock)
+				{
+					System.IO.File.WriteAllText(logFilePath, 
+						string.Format("=== {0} Strategy Log - Started {1:yyyy-MM-dd HH:mm:ss} ===\r\n\r\n", 
+							instrumentName, DateTime.Now));
+				}
+			}
+			catch { }
 		}
 
 
@@ -880,6 +941,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 			{
 			isRealtimeInitialized = true;
 				realtimeStartBar = CurrentBar; // v1.10.28: Track when we went live
+				
+				// v1.11.13: Clear log file on strategy restart
+				ClearLogFile();
 				
 				// v1.10.39: Track if position exists (used for historical state reset later)
 				bool hasExistingPosition = false;

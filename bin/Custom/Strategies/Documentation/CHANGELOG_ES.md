@@ -4,7 +4,21 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.12] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.13] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### Feature: Logs a Archivo por Instrumento
+- **Ubicación**: `Strategies\Logs\[INSTRUMENTO]_[YYYYMMDD].txt`
+  - Ejemplo: `MGC_20251229.txt`, `ES_20251229.txt`
+- **Formato**: `HH:mm:ss.fff [mensaje]`
+- **Limpieza automática**: Al reiniciar la estrategia, el archivo se sobrescribe (no acumula)
+- **Header**: Incluye timestamp de inicio `=== MGC Strategy Log - Started 2025-12-29 11:20:00 ===`
+- **Optimización**: 
+  - Lock para thread-safety (múltiples instrumentos)
+  - Try-catch silencioso para no interrumpir trading
+- **Uso**: Abrir archivo en Notepad y usar Ctrl+F para buscar
+
+---
+
+## [1.11.12] - 2025-12-29
 ### FIX CRÍTICO: Prevenir Órdenes de Protección Duplicadas
 - **Problema Reportado**: Con 2 contratos de entrada:
   - 2 SL (debería ser 1)
