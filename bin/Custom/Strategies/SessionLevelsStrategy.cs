@@ -243,9 +243,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 				string label = isShort ? "Short" : "Long";
 				SimpleFont font = new SimpleFont("Arial", LabelFontSize);
 				// v1.11.7: yPixelOffset para separar texto de la flecha
-				// Short: texto arriba de la flecha (negativo = hacia arriba)
-				// Long: texto abajo de la flecha (positivo = hacia abajo)
-				int textPixelOffset = isShort ? -12 : 12;
+				// En NT: positivo = arriba, negativo = abajo
+				// Short: texto ARRIBA de la flecha (positivo)
+				// Long: texto ABAJO de la flecha (negativo)
+				int textPixelOffset = isShort ? 12 : -12;
 				Draw.Text(this, tag + "_Txt", true, label, barsAgo, arrowPrice, textPixelOffset, color, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
 			}
 		}
