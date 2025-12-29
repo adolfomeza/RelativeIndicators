@@ -4,14 +4,24 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.1] - 2025-12-29 ✅ VERSIÓN ACTUAL
-### Fix: Restaurar Ejecuciones Históricas para Visualización
+## [1.11.2] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### REVERT CRÍTICO: Restaurar Bloqueo de Órdenes Históricas
+- **Problema v1.11.1**: Las órdenes históricas se enviaban al broker real
+  - MGC colocó una orden y desactivó la estrategia al recargar
+  - Con `IsUnmanaged = true`, las órdenes NO son simuladas
+- **Solución**: Restaurar bloqueo de v1.10.36
+  - Solo permite órdenes en `State.Historical` si es conexión Playback
+  - En cuenta live/demo: Solo órdenes en Realtime
+- **Conclusión**: NO es posible ver ejecuciones históricas en cuenta live/demo
+  - Para ver backtest histórico, usar Market Replay o Strategy Analyzer
+
+---
+
+## [1.11.1] - 2025-12-29 ❌ REVERTIDO
+### Fix FALLIDO: Restaurar Ejecuciones Históricas para Visualización
 - **Problema**: v1.10.36 bloqueaba órdenes históricas en cuentas live/demo
-  - No se veían los trades simulados históricos en el chart
-- **Solución**: Permitir órdenes históricas para visualización
-  - `EvaluateRestartNoPosition()` (v1.11.0) maneja la limpieza al entrar en Realtime
-  - Las órdenes históricas son simulación, no se envían al broker
-- **Resultado**: Ahora ves los trades históricos en el chart como antes
+- **Intento**: Permitir órdenes históricas para visualización
+- **FALLA**: Las órdenes se enviaron al broker real, causando desactivación
 
 ---
 

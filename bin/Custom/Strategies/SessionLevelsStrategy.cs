@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.1"; // Fix: Allow historical executions for visualization
+		private const string StrategyVersion = "v1.11.2"; // REVERT: Block historical orders on live/demo accounts
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -2576,8 +2576,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 							// ACCOUNTS FOR 1 Entry -> 1 OCO Group limitation
 						// UPDATED (v1.7.30): Allow Historical for Strategy Analyzer
-						// FIX (v1.11.1): Allow Historical for visualization. EvaluateRestartNoPosition() handles Realtime cleanup.
-						bool canSubmitOrder = (State == State.Realtime) || (State == State.Historical);
+						// FIX (v1.10.36): Block Historical orders on live/demo (RESTORED v1.11.2 - orders were being sent to broker)
+						bool isPlayback = (Connection.PlaybackConnection != null);
+						bool canSubmitOrder = (State == State.Realtime) || (State == State.Historical && isPlayback);
 						if (canSubmitOrder)
 							{
 								if (entryOrder != null) 
@@ -2665,8 +2666,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 							}
 							
 							// UPDATED (v1.7.30): Allow Historical for Strategy Analyzer
-						// FIX (v1.11.1): Allow Historical for visualization. EvaluateRestartNoPosition() handles Realtime cleanup.
-						bool canSubmitOrderLong = (State == State.Realtime) || (State == State.Historical);
+						// FIX (v1.10.36): Block Historical orders on live/demo (RESTORED v1.11.2)
+						bool isPlaybackLong = (Connection.PlaybackConnection != null);
+						bool canSubmitOrderLong = (State == State.Realtime) || (State == State.Historical && isPlaybackLong);
 						if (canSubmitOrderLong)
 							{
 								// CONSOLIDATED ENTRY (v1.7.17)
