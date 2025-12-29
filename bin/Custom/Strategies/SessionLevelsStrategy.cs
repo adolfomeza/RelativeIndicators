@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.14"; // FIX CRITICAL: Prevent duplicate EnsureProtection calls
+		private const string StrategyVersion = "v1.11.15"; // Fix: Prevent log file reset across instances
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -257,6 +257,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 			// Write to file (buffered, low overhead)
 			try
 			{
+				// v1.11.15: Only calculate path once per instance
+				if (logFilePath == null)
 				{
 					// Use NinjaTrader's trace folder (always exists)
 					string ntDocsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);

@@ -4,7 +4,17 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.14] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.15] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### Fix: Evitar Reset de Logs Entre Instancias
+- **Problema**: Al activar una estrategia, los logs de otros instrumentos se reseteaban a 1KB
+- **Causa**: Faltaba verificación `if (logFilePath == null)` en `Log()`
+  - Esto recalculaba el path en CADA llamada, causando comportamiento inesperado
+- **Solución**: Restaurar verificación para calcular path solo una vez por instancia
+- **Resultado**: Cada instancia mantiene su propio log sin afectar otros
+
+---
+
+## [1.11.14] - 2025-12-29
 ### FIX CRÍTICO: Prevenir Llamadas Duplicadas a EnsureProtection
 - **Problema Confirmado por Logs**:
   ```
