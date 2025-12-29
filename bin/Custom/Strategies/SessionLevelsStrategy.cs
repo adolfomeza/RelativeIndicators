@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.7"; // Fix: Separate arrow and text with pixel offset
+		private const string StrategyVersion = "v1.11.8"; // Feature: LabelTextOffset property
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -194,6 +194,15 @@ namespace NinjaTrader.NinjaScript.Strategies
 			get { return labelShowArrow; }
 			set { labelShowArrow = value; }
 		}
+		
+		private int labelTextOffset = 12;
+		[NinjaScriptProperty]
+		[Display(Name="Text Offset (Pixels)", Description="Distance in pixels between arrow and text. Positive = text above arrow.", Order=74, GroupName="Trigger Labels")]
+		public int LabelTextOffset
+		{
+			get { return labelTextOffset; }
+			set { labelTextOffset = value; }
+		}
 
 		// Visual State for Adhoc VWAP Line
 		private double visualAdhocPrevBarVal = 0;
@@ -242,11 +251,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 			{
 				string label = isShort ? "Short" : "Long";
 				SimpleFont font = new SimpleFont("Arial", LabelFontSize);
-				// v1.11.7: yPixelOffset para separar texto de la flecha
-				// En NT: positivo = arriba, negativo = abajo
-				// Short: texto ARRIBA de la flecha (positivo)
-				// Long: texto ABAJO de la flecha (negativo)
-				int textPixelOffset = isShort ? 12 : -12;
+				// v1.11.8: Usar propiedad LabelTextOffset configurable
+				// Short: texto ARRIBA de la flecha (valor positivo)
+				// Long: texto ABAJO de la flecha (valor negativo)
+				int textPixelOffset = isShort ? LabelTextOffset : -LabelTextOffset;
 				Draw.Text(this, tag + "_Txt", true, label, barsAgo, arrowPrice, textPixelOffset, color, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
 			}
 		}

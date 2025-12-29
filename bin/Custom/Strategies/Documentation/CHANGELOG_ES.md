@@ -4,7 +4,16 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.7] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.8] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### Feature: Text Offset Configurable
+- **Nueva propiedad**: `Text Offset (Pixels)` en grupo "Trigger Labels"
+- **Default**: 12 pixels
+- **Uso**: Ajustar distancia entre flecha y texto desde el panel
+- **Comportamiento**: Short usa valor positivo (arriba), Long usa negativo (abajo)
+
+---
+
+## [1.11.7] - 2025-12-29
 ### Fix: Separar Flecha y Texto en Trigger Labels
 - **Problema**: Texto y flecha estaban superpuestos
 - **Solución**: Usar `yPixelOffset` de 12 pixels para separar
