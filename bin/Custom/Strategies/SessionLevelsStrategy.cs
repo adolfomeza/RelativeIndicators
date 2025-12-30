@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.13.0"; // FEATURE: TradeAnalyzer CSV Export (MAE/MFE tracking)
+		private const string StrategyVersion = "v1.13.1"; // CRITICAL FIX: Prevent duplicate protection orders (concurrency lock)
 		
 		// v1.12.1: CONTROL BUTTONS (simplified to 2 buttons)
 		private TradingMode currentTradingMode = TradingMode.Normal;
@@ -43,6 +43,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private System.Windows.Controls.Button btnClose;
 		private System.Windows.Controls.StackPanel buttonPanel;
 		private bool buttonsInitialized = false;
+		private bool isProtectionProcessing = false; // v1.13.1: Concurrency lock
 		
 		// =========================================================
 		// v1.13.0: TRADE ANALYZER EXPORT
@@ -2195,6 +2196,7 @@ currentEntryState = EntryState.Idle;
 			protectedTp1Qty = 0;
 			protectedTp2Qty = 0;
 			protectionOrdersCreated = false; // v1.11.14: Reset flag for next trade
+			isProtectionProcessing = false; // v1.13.1: Reset lock
 			tradeOriginalQty = 0; // v1.11.23: Reset original trade qty
 			tradeOriginalTp1Price = 0; // v1.11.24: Reset original TP prices
 			tradeOriginalTp2Price = 0;
@@ -3444,11 +3446,15 @@ setupLevelName = "";
 	private void EnsureProtection(string direction, string entrySignalName, int filledQty)
 	{
 		// v1.11.14: Prevent duplicate calls from multiple OnExecutionUpdate events
-		if (protectionOrdersCreated)
+		// v1.11.14: Prevent duplicate calls from multiple OnExecutionUpdate events
+		// v1.13.1: Checking isProtectionProcessing to prevent race conditions
+		if (protectionOrdersCreated || isProtectionProcessing)
 		{
-			Log(Time[0] + " EnsureProtection SKIPPED: Orders already created this trade");
+			Log(Time[0] + " EnsureProtection SKIPPED: Already created or processing. Created=" + protectionOrdersCreated + " Processing=" + isProtectionProcessing);
 			return;
 		}
+		
+		isProtectionProcessing = true; // LOCK
 		
 		// v1.10.31: Initialize Trade VWAP on first fill
 		// Copy accumulators from global VWAP so it continues accumulating
@@ -3500,6 +3506,7 @@ setupLevelName = "";
 		
 		// v1.11.14: Mark protection orders as created
 		protectionOrdersCreated = true;
+		isProtectionProcessing = false; // UNLOCK
 		Log(Time[0] + " EnsureProtection COMPLETE: protectionOrdersCreated = true");
 	}
 	
@@ -4526,6 +4533,7 @@ setupLevelName = "";
 				protectedTp1Qty = 0;
 				protectedTp2Qty = 0;
 				protectionOrdersCreated = false; // v1.11.14: Reset flag for next trade
+				isProtectionProcessing = false; // v1.13.1: Reset lock
 				tradeOriginalQty = 0; // v1.11.23: Reset original trade qty
 				tradeOriginalTp1Price = 0; // v1.11.24: Reset original TP prices
 				tradeOriginalTp2Price = 0;

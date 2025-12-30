@@ -4,7 +4,13 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.13.0] - 2025-12-30 ✅ VERSIÓN ACTUAL
+## [1.13.1] - 2025-12-30 ✅ VERSIÓN ACTUAL (CRITICAL HOTFIX)
+### FIXED: Protección Duplicada (Concurrency Fix)
+- **Problema**: Se detectó en logs de MGC (Live) que `EnsureProtection` se ejecutaba múltiples veces simultáneamente (disparado por `OnExecutionUpdate` y `CheckSafetyNet` al mismo tiempo), creando órdenes de SL y TP duplicadas (ej: 12 contratos de SL para una posición de 7).
+- **Solución**: Se implementó una variable de bloqueo `isProtectionProcessing` en `EnsureProtection` para garantizar que solo un hilo de ejecución pueda procesar la creación de órdenes de protección a la vez.
+- **Cambio Adicional**: Se resetea el bloqueo `isProtectionProcessing` al limpiar las variables del trade.
+
+## [1.13.0] - 2025-12-30
 ### FEATURE: TradeAnalyzer CSV Export
 - **Exportación automática de trades** a CSV para análisis
 - **Tracking de MAE/MFE** (Maximum Adverse/Favorable Excursion) en tiempo real

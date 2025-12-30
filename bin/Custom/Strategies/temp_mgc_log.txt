@@ -1,0 +1,100 @@
+=== MGC Strategy Log - Started 2025-12-30 07:49:23 ===
+
+07:49:23.374 30/12/25 7:42:00 a. m. v1.12.1 RESTART EVAL: Checking for pending orders or valid setup to continue...
+07:49:23.374 30/12/25 7:42:00 a. m. v1.12.1 RESTART: No valid setup found. Starting fresh.
+08:19:30.189 30/12/25 8:20:00 a. m. DEBUG: Trigger Short Detected on USA High Price: 4413.9
+08:19:30.189 30/12/25 8:20:00 a. m. ENTRY ATTEMPT #1/20 on USA High
+08:19:30.190 INTERNAL LEVEL: USA High @ 4413.9 (External above: Asia High @ 4581.2)
+08:19:30.367 RE-ANCHOR: New High @ 4414.1 (Setup: USA High)
+08:19:30.733 RE-ANCHOR: New High @ 4414.3 (Setup: USA High)
+08:19:30.822 RE-ANCHOR: New High @ 4414.5 (Setup: USA High)
+08:19:30.931 RE-ANCHOR: New High @ 4414.6 (Setup: USA High)
+08:19:31.147 RE-ANCHOR: New High @ 4414.8 (Setup: USA High)
+08:19:31.296 RE-ANCHOR: New High @ 4415 (Setup: USA High)
+08:19:52.651 RE-ANCHOR: New High @ 4415.1 (Setup: USA High)
+08:21:00.450 30/12/25 8:22:00 a. m. | WAITING SHORT: High[1]=4415.00 VWAP=4414.84 Req=4414.74 ValidVWAP=True Anchor=4415.2
+08:28:00.305 30/12/25 8:29:00 a. m. | DEBUG_ENTRY: Calling GetOppositeLevelPrice. SetupName='USA High' SetupTime='29/12/25 10:30:00 a. m.' RefPrice='4415.2'
+08:28:00.306 30/12/25 8:29:00 a. m. | SEARCH_OPPOSITE: Looking for 'USA Low' from SAME DAY as 'USA High' (RefDate: 2025-12-29)
+08:28:00.306    -> Candidate #1: USA Low @ 4252.30 (Date: 2025-12-01, SameDay: False)
+08:28:00.306    -> REJECTED (Different Day): 2025-12-01 != 2025-12-29
+08:28:00.307    -> Candidate #2: USA Low @ 4193.50 (Date: 2025-12-02, SameDay: False)
+08:28:00.307    -> REJECTED (Different Day): 2025-12-02 != 2025-12-29
+08:28:00.307    -> Candidate #3: USA Low @ 4226.00 (Date: 2025-12-03, SameDay: False)
+08:28:00.307    -> REJECTED (Different Day): 2025-12-03 != 2025-12-29
+08:28:00.309    -> Candidate #4: USA Low @ 4220.40 (Date: 2025-12-04, SameDay: False)
+08:28:00.309    -> REJECTED (Different Day): 2025-12-04 != 2025-12-29
+08:28:00.310    -> Candidate #5: USA Low @ 4221.40 (Date: 2025-12-05, SameDay: False)
+08:28:00.310    -> REJECTED (Different Day): 2025-12-05 != 2025-12-29
+08:28:00.310    -> Candidate #6: USA Low @ 4204.00 (Date: 2025-12-08, SameDay: False)
+08:28:00.312    -> REJECTED (Different Day): 2025-12-08 != 2025-12-29
+08:28:00.312    -> Candidate #7: USA Low @ 4218.60 (Date: 2025-12-09, SameDay: False)
+08:28:00.313    -> REJECTED (Different Day): 2025-12-09 != 2025-12-29
+08:28:00.313    -> Candidate #8: USA Low @ 4208.00 (Date: 2025-12-10, SameDay: False)
+08:28:00.314    -> REJECTED (Different Day): 2025-12-10 != 2025-12-29
+08:28:00.314    -> Candidate #9: USA Low @ 4254.00 (Date: 2025-12-11, SameDay: False)
+08:28:00.315    -> REJECTED (Different Day): 2025-12-11 != 2025-12-29
+08:28:00.315    -> Candidate #10: USA Low @ 4286.30 (Date: 2025-12-12, SameDay: False)
+08:28:00.315    -> REJECTED (Different Day): 2025-12-12 != 2025-12-29
+08:28:00.316    -> Candidate #11: USA Low @ 4315.60 (Date: 2025-12-15, SameDay: False)
+08:28:00.317    -> REJECTED (Different Day): 2025-12-15 != 2025-12-29
+08:28:00.317    -> Candidate #12: USA Low @ 4322.90 (Date: 2025-12-16, SameDay: False)
+08:28:00.317    -> REJECTED (Different Day): 2025-12-16 != 2025-12-29
+08:28:00.317    -> Candidate #13: USA Low @ 4350.80 (Date: 2025-12-17, SameDay: False)
+08:28:00.319    -> REJECTED (Different Day): 2025-12-17 != 2025-12-29
+08:28:00.319    -> Candidate #14: USA Low @ 4338.00 (Date: 2025-12-18, SameDay: False)
+08:28:00.320    -> REJECTED (Different Day): 2025-12-18 != 2025-12-29
+08:28:00.320    -> Candidate #15: USA Low @ 4350.60 (Date: 2025-12-19, SameDay: False)
+08:28:00.320    -> REJECTED (Different Day): 2025-12-19 != 2025-12-29
+08:28:00.321    -> Candidate #16: USA Low @ 4447.50 (Date: 2025-12-22, SameDay: False)
+08:28:00.321    -> REJECTED (Different Day): 2025-12-22 != 2025-12-29
+08:28:00.323    -> Candidate #17: USA Low @ 4458.70 (Date: 2025-12-23, SameDay: False)
+08:28:00.324    -> REJECTED (Different Day): 2025-12-23 != 2025-12-29
+08:28:00.324    -> Candidate #18: USA Low @ 4474.00 (Date: 2025-12-24, SameDay: False)
+08:28:00.325    -> REJECTED (Different Day): 2025-12-24 != 2025-12-29
+08:28:00.327    -> Candidate #19: USA Low @ 4543.40 (Date: 2025-12-26, SameDay: False)
+08:28:00.338    -> REJECTED (Different Day): 2025-12-26 != 2025-12-29
+08:28:00.338    -> Candidate #20: USA Low @ 4319.40 (Date: 2025-12-29, SameDay: True)
+08:28:00.338    -> ACCEPTED (Same Day): USA Low @ 4319.40
+08:28:00.356 30/12/25 8:29:00 a. m. | EXEC_DEBUG: Submitting Short Limit @ 4412.9 (Raw: 4412.87120343839). Bid=4409.8 Ask=4410.1
+08:28:00.360 30/12/25 8:29:00 a. m. Order Submitted (Short Consolidated). Qty=4
+08:28:04.082 30/12/25 8:29:00 a. m. | DYNAMIC QTY ADJUST: Old=4 New=2 (Stop moved to 4415.30)
+08:28:42.516 30/12/25 8:29:00 a. m. | DYNAMIC QTY ADJUST: Old=2 New=3 (Stop moved to 4415.30)
+08:28:53.322 30/12/25 8:29:00 a. m. | DYNAMIC QTY ADJUST: Old=3 New=2 (Stop moved to 4415.30)
+08:29:35.049 30/12/25 8:30:00 a. m. | DYNAMIC QTY ADJUST: Old=2 New=3 (Stop moved to 4415.30)
+08:29:41.354 30/12/25 8:30:00 a. m. | DYNAMIC QTY ADJUST: Old=3 New=2 (Stop moved to 4415.30)
+08:30:08.577 30/12/25 8:31:00 a. m. | DYNAMIC QTY ADJUST: Old=2 New=3 (Stop moved to 4415.30)
+08:30:14.655 30/12/25 8:31:00 a. m. | DYNAMIC QTY ADJUST: Old=3 New=2 (Stop moved to 4415.30)
+08:30:45.592 30/12/25 8:31:00 a. m. | DYNAMIC QTY ADJUST: Old=2 New=3 (Stop moved to 4415.30)
+08:30:55.938 30/12/25 8:31:00 a. m. | DYNAMIC QTY ADJUST: Old=3 New=2 (Stop moved to 4415.30)
+08:33:41.479 30/12/25 8:34:00 a. m. | DYNAMIC QTY ADJUST: Old=2 New=3 (Stop moved to 4415.30)
+08:33:47.362 30/12/25 8:34:00 a. m. | DYNAMIC QTY ADJUST: Old=3 New=2 (Stop moved to 4415.30)
+08:34:49.350 30/12/25 8:35:00 a. m. | DYNAMIC QTY ADJUST: Old=2 New=3 (Stop moved to 4415.30)
+08:35:08.430 30/12/25 8:36:00 a. m. | DYNAMIC QTY ADJUST: Old=3 New=2 (Stop moved to 4415.30)
+08:35:19.000 30/12/25 8:36:00 a. m. | DYNAMIC QTY ADJUST: Old=2 New=3 (Stop moved to 4415.30)
+08:35:24.579 30/12/25 8:36:00 a. m. SYNC: Order Filled but State was Working. Forcing InPosition.
+08:35:24.584 30/12/25 8:36:00 a. m. SYNC: State is InPosition but MarketPosition is Flat. Resetting to Idle.
+08:35:24.606 30/12/25 8:36:00 a. m. TRADE VWAP: Initialized @ 4376.96657657155
+08:35:24.606    -> Protection Alloc: Filled=3 | ForTP1=2 (Need:2) | ForTP2=1
+08:35:24.611 30/12/25 8:36:00 a. m. CRITICAL: Safety Net Triggered! Position exists but State was Idle
+08:35:24.612    -> Protection Alloc: Filled=3 | ForTP1=2 (Need:2) | ForTP2=1
+08:35:24.619 FORCE TARGET: Using Validated Price: 4319.4
+08:35:24.620 TP CALC (Short): Entry=4411.9 | GlobalVWAP=4376.96677368941 | ZoneOpp=4319.4 (Val=4319.4) | TP1=4376.96677368941 TP2=4319.4 | Selected=4377
+08:35:24.621 SL CREATED: SL_Short_01 @ 4415.3 Qty=3
+08:35:24.639 FORCE TARGET: Using Validated Price: 4319.4
+08:35:24.639 TP CALC (Short): Entry=4411.9 | GlobalVWAP=4376.96677368941 | ZoneOpp=4319.4 (Val=4319.4) | TP1=4376.96677368941 TP2=4319.4 | Selected=4377
+08:35:24.640 SL CLEANUP: Clearing stale reference (State=Initialized)
+08:35:24.641 TP1 CREATED: TP1_Short_01 @ 4377 Qty=2
+08:35:24.641 SL CREATED: SL_Short_01 @ 4415.3 Qty=3
+08:35:24.643 TP1 CREATED: TP1_Short_01 @ 4377 Qty=2
+08:35:24.643 FORCE TARGET: Using Validated Price: 4319.4
+08:35:24.643 TP CALC (Short): Entry=4411.9 | GlobalVWAP=4376.96677368941 | ZoneOpp=4319.4 (Val=4319.4) | TP1=4376.96677368941 TP2=4319.4 | Selected=4319.4
+08:35:24.644 SL CLEANUP: Clearing stale reference (State=Initialized)
+08:35:24.645 SL CREATED: SL_Short_01 @ 4415.3 Qty=3
+08:35:24.646 FORCE TARGET: Using Validated Price: 4319.4
+08:35:24.646 TP CALC (Short): Entry=4411.9 | GlobalVWAP=4376.96677368941 | ZoneOpp=4319.4 (Val=4319.4) | TP1=4376.96677368941 TP2=4319.4 | Selected=4319.4
+08:35:24.646 SL CLEANUP: Clearing stale reference (State=Initialized)
+08:35:24.647 TP2 CREATED: TP2_Short_01 @ 4319.4 Qty=1
+08:35:24.647 SL CREATED: SL_Short_01 @ 4415.3 Qty=3
+08:35:24.648 TP2 CREATED: TP2_Short_01 @ 4319.4 Qty=2
+08:35:24.648 30/12/25 8:36:00 a. m. EnsureProtection COMPLETE: protectionOrdersCreated = true
+08:35:24.650 30/12/25 8:36:00 a. m. EnsureProtection COMPLETE: protectionOrdersCreated = true

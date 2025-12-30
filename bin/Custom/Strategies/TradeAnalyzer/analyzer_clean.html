@@ -1,0 +1,288 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relative Trade Analyzer</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <!-- <script src="backtest_data.js"></script> V_AUTO: Auto-generated backtest data DISABLED -->
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="title-wrapper">
+                <h1>Relative Trade Analyzer</h1>
+                <span class="version-badge">v1.4</span>
+            </div>
+            <div class="header-controls">
+                 <p>Drag & Drop your <code>RelativeVwap_Trades.csv</code> file to analyze performance.</p>
+                 <div class="header-buttons">
+                    <button id="add-files-btn" class="secondary-btn" style="display:none;">+ Add Data</button>
+                    <button id="params-btn" class="secondary-btn" onclick="forceReloadLocal()" title="Force Reload Data">â†» Load Data</button>
+                    <button id="clear-data-btn" class="icon-btn danger" style="display:none;" title="Clear All Data">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                    </button>
+                 </div>
+            </div>
+        </header>
+
+        <div id="drop-zone" class="drop-zone">
+            <div class="drop-content">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="upload-icon"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                <h3>Drop CSV File(s) Here</h3>
+                <p>Add more files anytime to combine results</p>
+                <input type="file" id="file-input" accept=".csv" multiple hidden>
+            </div>
+        </div>
+
+        <main id="dashboard" class="dashboard hidden">
+            <!-- Filters Control Bar -->
+            <div class="filters-container">
+                <div class="filter-group">
+                    <label for="filter-instrument">Instrument</label>
+                    <select id="filter-instrument"><option value="all">All</option></select>
+                </div>
+                <div class="filter-group">
+                    <label for="filter-direction">Direction</label>
+                    <select id="filter-direction">
+                        <option value="all">All</option>
+                        <option value="Long">Long</option>
+                        <option value="Short">Short</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filter-day">Day</label>
+                    <select id="filter-day">
+                        <option value="all">All</option>
+                        <option value="0">Sunday</option>
+                        <option value="1">Monday</option>
+                        <option value="2">Tuesday</option>
+                        <option value="3">Wednesday</option>
+                        <option value="4">Thursday</option>
+                        <option value="5">Friday</option>
+                        <option value="6">Saturday</option>
+                    </select>
+                </div>
+                <!-- Target Filter (TP1 vs TP2) -->
+                <div class="filter-group">
+                    <label for="filter-target">Target</label>
+                    <select id="filter-target">
+                        <option value="all">All</option>
+                        <option value="TP1">TP1 (Scalp)</option>
+                        <option value="TP2">TP2 (Runner)</option>
+                        <option value="SL">Stop Loss</option>
+                    </select>
+                </div>
+                <!-- Component Filter (Scalp vs Runner) -->
+                <div class="filter-group">
+                    <label for="filter-component">Component</label>
+                    <select id="filter-component">
+                        <option value="all">All</option>
+                        <option value="scalp">Scalp Only (.1)</option>
+                        <option value="runner">Runner Only (.2)</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filter-hour">Hour</label>
+                    <select id="filter-hour">
+                        <option value="all">All</option>
+                        <!-- Hours 0-23 will be populated by JS or fixed here, fixed is easier for now -->
+                         <option value="0">00:00</option><option value="1">01:00</option><option value="2">02:00</option>
+                         <option value="3">03:00</option><option value="4">04:00</option><option value="5">05:00</option>
+                         <option value="6">06:00</option><option value="7">07:00</option><option value="8">08:00</option>
+                         <option value="9">09:00</option><option value="10">10:00</option><option value="11">11:00</option>
+                         <option value="12">12:00</option><option value="13">13:00</option><option value="14">14:00</option>
+                         <option value="15">15:00</option><option value="16">16:00</option><option value="17">17:00</option>
+                         <option value="18">18:00</option><option value="19">19:00</option><option value="20">20:00</option>
+                         <option value="21">21:00</option><option value="22">22:00</option><option value="23">23:00</option>
+                    </select>
+                </div>
+                <button id="reset-filters-btn" class="secondary-btn">Reset</button>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
+                <button class="tab-btn" onclick="switchTab('temporal')">Time Analysis</button>
+                <button class="tab-btn" onclick="switchTab('advanced')">Advanced (MAE/MFE)</button>
+                <button class="tab-btn" onclick="switchTab('audit')">Audit & Edge</button>
+            </div>
+
+            <!-- TAB: OVERVIEW -->
+            <div id="tab-overview" class="tab-content active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-label">Net Profit</span>
+                        <span class="stat-value" id="stat-net-profit">$0.00</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Win Rate</span>
+                        <span class="stat-value" id="stat-win-rate">0%</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Profit Factor</span>
+                        <span class="stat-value" id="stat-profit-factor">0.00</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Exp. Value (EV)</span>
+                        <span class="stat-value" id="stat-ev">$0.00</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Avg Win / Loss</span>
+                        <span class="stat-value" id="stat-avg-win-loss">0 / 0</span>
+                    </div>
+                     <div class="stat-card">
+                        <span class="stat-label">Max Drawdown</span>
+                        <span class="stat-value" id="stat-max-dd">$0.00</span>
+                    </div>
+                </div>
+
+                <div class="charts-container">
+                    <div class="chart-card large">
+                        <h3>Equity Curve</h3>
+                        <canvas id="equityChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- NEW: Periodic Performance Chart -->
+                <div class="charts-container">
+                     <div class="chart-card large">
+                        <div class="chart-header-controls" style="display:flex; justify-content:space-between; align-items:center;">
+                            <h3>Performance History</h3>
+                            <div class="period-controls">
+                                <span style="font-size:0.8rem; color:var(--text-secondary); margin-right:5px;">Period:</span>
+                                <button class="secondary-btn active" onclick="setPeriod('D')">D</button>
+                                <button class="secondary-btn" onclick="setPeriod('W')">W</button>
+                                <button class="secondary-btn" onclick="setPeriod('M')">M</button>
+                                <button class="secondary-btn" onclick="setPeriod('Y')">Y</button>
+                                <div style="display:inline-block; width:10px;"></div>
+                                <span style="font-size:0.8rem; color:var(--text-secondary); margin-right:5px;">Type:</span>
+                                <button class="secondary-btn active" onclick="setChartType('bar')">Bar</button>
+                                <button class="secondary-btn" onclick="setChartType('line')">Line</button>
+                            </div>
+                        </div>
+                        <canvas id="periodicChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: TEMPORAL -->
+            <div id="tab-temporal" class="tab-content">
+                <div class="charts-container grid-2">
+                    <div class="chart-card">
+                        <h3>PnL by Hour of Day</h3>
+                        <canvas id="hourChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>PnL by Day of Week</h3>
+                        <canvas id="dayChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: ADVANCED -->
+            <div id="tab-advanced" class="tab-content">
+                <div class="charts-container grid-2">
+                    <div class="chart-card">
+                        <h3>MAE vs PnL (Risk Taken)</h3>
+                        <canvas id="maeChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>MFE vs PnL (Potential vs Realized)</h3>
+                        <canvas id="mfeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Trade List -->
+            <div class="table-container">
+                <h3>Trade Journal</h3>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Entry Time</th>
+                                <th>Exit Time</th>
+                                <th>Type</th>
+                                <th>Instrument</th>
+                                <th>Entry Price</th>
+                                <th>Exit Price</th>
+                                <th>Result</th>
+                                <th>MAE</th>
+                                <th>MFE</th>
+                                <th>PnL</th>
+                            </tr>
+                        </thead>
+                        <tbody id="trade-table-body">
+                            <!-- Rows injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="tab-audit" class="tab-content">
+                <div class="analysis-section">
+                    <h3>Statistical Edge Validation</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                             <span class="stat-label">T-Test Probability (Edge > 0)</span>
+                             <span class="stat-value" id="audit-ttest">--</span>
+                             <span class="stat-sub" id="audit-ttest-desc">Uncertain</span>
+                        </div>
+                        <div class="stat-card">
+                             <span class="stat-label">Monte Carlo (Luck Probability)</span>
+                             <span class="stat-value" id="audit-montecarlo">--</span>
+                             <span class="stat-sub" id="audit-montecarlo-desc">Simulating 1000 scenarios...</span>
+                        </div>
+                        <div class="stat-card">
+                             <span class="stat-label">Sharpe Ratio (Annualized)</span>
+                             <span class="stat-value" id="audit-sharpe">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="analysis-section">
+                    <h3>Risk Profile (MAE/MFE)</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                             <span class="stat-label">Avg MFE (Potential)</span>
+                             <span class="stat-value" id="audit-mfe">--</span>
+                        </div>
+                        <div class="stat-card">
+                             <span class="stat-label">Avg MAE (Pain)</span>
+                             <span class="stat-value" id="audit-mae">--</span>
+                        </div>
+                        <div class="stat-card">
+                             <span class="stat-label">Efficiency Ratio</span>
+                             <span class="stat-value" id="audit-efficiency">--</span>
+                             <span class="stat-sub">Net Profit / Total MFE</span>
+                        </div>
+                    </div>
+                    <!-- Future: Scatter Plot MFE vs MAE here -->
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+
+    <!-- v1.4: Script externalizado con Cache Busting -->
+    <script src="script.js?v=1.4.1"></script>
+    
+    <!-- FORCED CLEANER (Runs once) -->
+    <script>
+    if (!sessionStorage.getItem('cleaned_v1.4')) {
+        console.log("NUCLEAR OPTION: Clearing LocalStorage");
+        localStorage.clear();
+        sessionStorage.setItem('cleaned_v1.4', 'true');
+        location.reload();
+    }
+    </script>
+</body>
+</html>
