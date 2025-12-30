@@ -6,6 +6,17 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 
 ---
 
+## [2.5.7] - 2025-12-29
+### 🐛 Corrección de Mitigación Basada en Tipo de Apertura
+
+### Corregido
+- **Mitigación ahora usa IsGapLong/IsGapShort/IsRotational**: La lógica anterior marcaba zonas como mitigadas incorrectamente porque `TouchedFromAbove` se activaba al tocar el borde (no al entrar desde afuera).
+- **GAP LONG**: Si abrió arriba de la zona → solo se mitiga cuando baja X% desde UpperY
+- **GAP SHORT**: Si abrió abajo de la zona → solo se mitiga cuando sube X% desde LowerY
+- **ROTATIONAL**: Si abrió dentro → debe salir por un lado y recorrer X% para mitigarse
+
+---
+
 ## [2.5.6] - 2025-12-29
 ### ✨ Lógica de Mitigación Direccional
 

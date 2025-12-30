@@ -133,7 +133,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		private DashStyleHelper					dash1Style					= DashStyleHelper.Solid;
 		private TimeZoneInfo					globalTimeZone				= Core.Globals.GeneralOptions.TimeZoneInfo;
 		private TimeZoneInfo					customTimeZone;
-		private string							versionString				= "v2.5.6 - 2025-12-29";
+		private string							versionString				= "v2.5.7 - 2025-12-29";
 		private Series<DateTime>				tradingDate;
 		private Series<DateTime>				sessionBegin;
 		private Series<DateTime>				anchorTime;
@@ -1304,30 +1304,50 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 					double range = zone.UpperY - zone.LowerY;
 					double mitigationDistance = range * (zoneCutoffPercentage / 100.0);
 					
-					// Track entry direction
-					if (!zone.TouchedFromAbove && High[0] >= zone.UpperY)
-						zone.TouchedFromAbove = true;
-					if (!zone.TouchedFromBelow && Low[0] <= zone.LowerY)
-						zone.TouchedFromBelow = true;
+					// Calculate mitigation levels
+					double mitigationFromAbove = zone.UpperY - mitigationDistance; // Must drop this far from top
+					double mitigationFromBelow = zone.LowerY + mitigationDistance; // Must rise this far from bottom
 					
-					// Calculate mitigation levels based on entry direction
-					double mitigationFromAbove = zone.UpperY - mitigationDistance; // If entered from top, must go down this far
-					double mitigationFromBelow = zone.LowerY + mitigationDistance; // If entered from bottom, must go up this far
-					
-					// Check mitigation (only if not already mitigated)
+					// Check mitigation based on session open type (GAP or ROTATIONAL)
 					if (!zone.IsMitigated)
 					{
-						// Entered from above and price dropped enough
-						if (zone.TouchedFromAbove && Low[0] <= mitigationFromAbove)
+						// GAP LONG: Price opened ABOVE zone, must drop X% into zone to mitigate
+						if (zone.IsGapLong && Low[0] <= mitigationFromAbove)
 						{
 							zone.IsBreached = true;
 							zone.IsMitigated = true;
+							Print("DEBUG MITIGATED (GAP LONG): " + zone.Tag + " at " + Time[0] + " Low=" + Low[0] + " MitLevel=" + mitigationFromAbove);
 						}
-						// Entered from below and price rose enough
-						else if (zone.TouchedFromBelow && High[0] >= mitigationFromBelow)
+						// GAP SHORT: Price opened BELOW zone, must rise X% into zone to mitigate
+						else if (zone.IsGapShort && High[0] >= mitigationFromBelow)
 						{
 							zone.IsBreached = true;
 							zone.IsMitigated = true;
+							Print("DEBUG MITIGATED (GAP SHORT): " + zone.Tag + " at " + Time[0] + " High=" + High[0] + " MitLevel=" + mitigationFromBelow);
+						}
+						// ROTATIONAL: Price opened INSIDE zone - mitigate if price traverses X% of range
+						// Track max/min prices to calculate traversal
+						else if (zone.IsRotational)
+						{
+							// Track entry direction dynamically for rotational zones
+							if (!zone.TouchedFromAbove && High[0] >= zone.UpperY)
+								zone.TouchedFromAbove = true;
+							if (!zone.TouchedFromBelow && Low[0] <= zone.LowerY)
+								zone.TouchedFromBelow = true;
+							
+							// For rotational: must exit one side and re-enter and traverse X%
+							if (zone.TouchedFromAbove && Low[0] <= mitigationFromAbove)
+							{
+								zone.IsBreached = true;
+								zone.IsMitigated = true;
+								Print("DEBUG MITIGATED (ROTATIONAL FROM ABOVE): " + zone.Tag + " at " + Time[0]);
+							}
+							else if (zone.TouchedFromBelow && High[0] >= mitigationFromBelow)
+							{
+								zone.IsBreached = true;
+								zone.IsMitigated = true;
+								Print("DEBUG MITIGATED (ROTATIONAL FROM BELOW): " + zone.Tag + " at " + Time[0]);
+							}
 						}
 					}
 				}
