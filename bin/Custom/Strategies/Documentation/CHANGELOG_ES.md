@@ -4,7 +4,19 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.23] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.24] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### Fix: TP1/TP2 R/R Persiste Cuando Trade Cruza Sesiones
+- **Problema**: R/R de TP1 mostraba 0 cuando trade cruzaba de sesión
+- **Causa**: `activeTp1Price` podía perderse/recalcularse al cambiar sesión
+- **Solución**: Nuevas variables `tradeOriginalTp1Price` y `tradeOriginalTp2Price`
+  - Se guardan cuando se crean los TPs
+  - Se usan para cálculos del panel (persisten hasta trade close)
+  - Se resetean al cerrar posición
+- **Resultado**: TP1/TP2 reward y R/R ahora mantienen valores originales durante todo el trade
+
+---
+
+## [1.11.23] - 2025-12-29
 ### Fix: Cantidad TP2 en Panel Ahora Usa Cantidad Original del Trade
 - **Problema**: TP2 qty en panel cambiaba de 5 a 0 después de TP1 fill
 - **Causa**: Usaba `Position.Quantity` que reduce al llenarse TP1

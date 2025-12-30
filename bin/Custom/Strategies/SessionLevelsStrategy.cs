@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.23"; // Fix: TP2 qty in panel now uses original trade qty
+		private const string StrategyVersion = "v1.11.24"; // Fix: TP1/TP2 R/R now persists when trade crosses sessions
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -1554,6 +1554,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private int protectedTp2Qty = 0;
 		private bool protectionOrdersCreated = false; // v1.11.14: Prevent duplicate creation
 		private int tradeOriginalQty = 0; // v1.11.23: Original trade quantity for panel display (doesn't change after TP1 fill)
+		private double tradeOriginalTp1Price = 0; // v1.11.24: Original TP1 price for panel display
+		private double tradeOriginalTp2Price = 0; // v1.11.24: Original TP2 price for panel display
 		// v1.10.31: Trade VWAP - continues accumulating even when day changes
 		// Separate from global VWAP to keep TP1 moving with original day's VWAP
 		private SessionVWAP tradeVWAP = new SessionVWAP();
@@ -2112,6 +2114,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 			protectedTp2Qty = 0;
 			protectionOrdersCreated = false; // v1.11.14: Reset flag for next trade
 			tradeOriginalQty = 0; // v1.11.23: Reset original trade qty
+			tradeOriginalTp1Price = 0; // v1.11.24: Reset original TP prices
+			tradeOriginalTp2Price = 0;
 			tradeVwapActive = false; // v1.10.31: Reset Trade VWAP
 				
 				// v1.10.12: Cancel orphan orders before nullifying references
@@ -2204,8 +2208,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 				double tickValue = Instrument.MasterInstrument.PointValue * TickSize;
 				double avgEntry = 0;
 				double slPrice = 0;
-				double tp1Price = activeTp1Price;
-				double tp2Price = activeTp2Price;
+				// v1.11.24: Use original TP prices if available (don't change when session changes)
+				double tp1Price = tradeOriginalTp1Price > 0 ? tradeOriginalTp1Price : activeTp1Price;
+				double tp2Price = tradeOriginalTp2Price > 0 ? tradeOriginalTp2Price : activeTp2Price;
 				int totalQty = 0;
 				
 				// Get entry price
@@ -3383,8 +3388,8 @@ setupLevelName = "";
 		myTpPrice = Instrument.MasterInstrument.RoundToTickSize(myTpPrice);
 		slPrice = Instrument.MasterInstrument.RoundToTickSize(slPrice);
 
-		if (isTp1) activeTp1Price = myTpPrice;
-		else activeTp2Price = myTpPrice; 
+		if (isTp1) { activeTp1Price = myTpPrice; tradeOriginalTp1Price = myTpPrice; } // v1.11.24: Also save original
+		else { activeTp2Price = myTpPrice; tradeOriginalTp2Price = myTpPrice; } 
 
 		// DEBUG TARGETS
 		Log(string.Format("TP CALC ({0}): Entry={1} | GlobalVWAP={2} | ZoneOpp={3} (Val={4}) | TP1={5} TP2={6} | Selected={7}",
@@ -4171,6 +4176,8 @@ setupLevelName = "";
 				protectedTp2Qty = 0;
 				protectionOrdersCreated = false; // v1.11.14: Reset flag for next trade
 				tradeOriginalQty = 0; // v1.11.23: Reset original trade qty
+				tradeOriginalTp1Price = 0; // v1.11.24: Reset original TP prices
+				tradeOriginalTp2Price = 0;
 				tradeVwapActive = false; // v1.10.31: Reset Trade VWAP
 
 					// CLEARED
