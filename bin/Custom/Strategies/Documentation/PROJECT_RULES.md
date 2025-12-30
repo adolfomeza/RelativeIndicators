@@ -24,6 +24,7 @@ Este documento sirve como punto central de verdad para enlaces importantes, regl
     - **Ubicación**: `Documents\NinjaTrader 8\trace\SessionLevels\`
     - **Archivos**: `[INSTRUMENTO]_[YYYYMMDD].txt` (ej. `MGC_20251229.txt`)
     - **Propósito**: Debugging y análisis de ejecución
+11. **Documento para Clientes (`analisis_session_levels.md`)**: Este documento DEBE mantenerse actualizado con cada cambio significativo de la estrategia. Usar **lenguaje accesible** para clientes e inversores (no técnico). Incluir: cómo funciona, características, instrumentos compatibles, parámetros, y preguntas frecuentes. Sincronizar versión con `StrategyVersion`.
 
 ---
 
