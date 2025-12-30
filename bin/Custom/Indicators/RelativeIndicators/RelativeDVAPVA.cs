@@ -133,7 +133,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		private DashStyleHelper					dash1Style					= DashStyleHelper.Solid;
 		private TimeZoneInfo					globalTimeZone				= Core.Globals.GeneralOptions.TimeZoneInfo;
 		private TimeZoneInfo					customTimeZone;
-		private string							versionString				= "v2.5.3 - 2025-12-28";
+		private string							versionString				= "v2.5.4 - 2025-12-29";
 		private Series<DateTime>				tradingDate;
 		private Series<DateTime>				sessionBegin;
 		private Series<DateTime>				anchorTime;
@@ -1248,7 +1248,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 			
 			if (showSessionZones)
 			{
-				DateTime limitDate = DateTime.Now.Date.AddDays(-maxDaysToDraw);
+				DateTime limitDate = Time[0].Date.AddDays(-maxDaysToDraw);
 				
 				for (int i = activeZones.Count - 1; i >= 0; i--)
 				{

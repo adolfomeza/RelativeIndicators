@@ -6,6 +6,14 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 
 ---
 
+## [2.5.4] - 2025-12-29
+### 🐛 Corrección de Zonas PVA
+
+### Corregido
+- **Bug crítico**: Las zonas PVA no se pintaban en datos históricos. El filtro usaba `DateTime.Now.Date` en lugar de `Time[0].Date`, causando que todas las zonas históricas fueran omitidas durante el reprocesamiento del chart.
+
+---
+
 ## [2.5.3] - 2025-12-28
 ### 🔧 Corrección de Colores
 
