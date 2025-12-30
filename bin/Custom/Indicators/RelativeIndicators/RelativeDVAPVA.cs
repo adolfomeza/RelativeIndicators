@@ -133,7 +133,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		private DashStyleHelper					dash1Style					= DashStyleHelper.Solid;
 		private TimeZoneInfo					globalTimeZone				= Core.Globals.GeneralOptions.TimeZoneInfo;
 		private TimeZoneInfo					customTimeZone;
-		private string							versionString				= "v2.5.4 - 2025-12-29";
+		private string							versionString				= "v2.5.5 - 2025-12-29";
 		private Series<DateTime>				tradingDate;
 		private Series<DateTime>				sessionBegin;
 		private Series<DateTime>				anchorTime;
@@ -1302,10 +1302,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 					double range = zone.UpperY - zone.LowerY;
 					double cutoffY = zone.LowerY + (range * (zoneCutoffPercentage / 100.0));
 					
-					// Check if price crosses the cutoff line
+					// Check if price crosses the cutoff line (mitigates zone)
 					if (!zone.IsBreached && High[0] >= cutoffY && Low[0] <= cutoffY)
 					{
 						zone.IsBreached = true;
+						zone.IsMitigated = true; // Mark for closure at session end
 					}
 				}
 			}

@@ -6,6 +6,14 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 
 ---
 
+## [2.5.5] - 2025-12-29
+### 🐛 Corrección de Mitigación de Zonas
+
+### Corregido
+- **Bug**: Las zonas mitigadas no se cerraban al fin de sesión. La variable `IsMitigated` nunca se seteaba a `true` cuando el precio cruzaba el `cutoffY`. Ahora cuando `IsBreached = true`, también se marca `IsMitigated = true` para que la zona se cierre correctamente.
+
+---
+
 ## [2.5.4] - 2025-12-29
 ### 🐛 Corrección de Zonas PVA
 
