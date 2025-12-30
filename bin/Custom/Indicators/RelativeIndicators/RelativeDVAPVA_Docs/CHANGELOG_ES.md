@@ -6,6 +6,15 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 
 ---
 
+## [2.5.8] - 2025-12-29
+### ✨ Versión Visible en Chart + Debug Zones
+
+### Añadido
+- **Versión visible en chart**: Ahora la versión se muestra en la esquina superior izquierda del chart
+- **Debug log de creación de zonas**: Log `[v2.5.8] ZONE CREATED:` muestra el tipo de zona (GAP_LONG/GAP_SHORT/ROTATIONAL)
+
+---
+
 ## [2.5.7] - 2025-12-29
 ### 🐛 Corrección de Mitigación Basada en Tipo de Apertura
 

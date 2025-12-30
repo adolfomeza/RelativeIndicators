@@ -133,7 +133,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		private DashStyleHelper					dash1Style					= DashStyleHelper.Solid;
 		private TimeZoneInfo					globalTimeZone				= Core.Globals.GeneralOptions.TimeZoneInfo;
 		private TimeZoneInfo					customTimeZone;
-		private string							versionString				= "v2.5.7 - 2025-12-29";
+		private string							versionString				= "v2.5.8 - 2025-12-29";
 		private Series<DateTime>				tradingDate;
 		private Series<DateTime>				sessionBegin;
 		private Series<DateTime>				anchorTime;
@@ -995,6 +995,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 									{
 										activeZones.Add(zone);
 										allZones.Add(zone);
+										string zoneType = zone.IsGapLong ? "GAP_LONG" : (zone.IsGapShort ? "GAP_SHORT" : (zone.IsRotational ? "ROTATIONAL" : "UNKNOWN"));
+										Print("[v2.5.8] ZONE CREATED: " + zone.Tag + " Type=" + zoneType);
 									}
 								}
 								Draw.Rectangle(this, tag, false, Time[1], up1, Time[0], low1, Brushes.Transparent, sessionZoneBrush, sessionZoneOpacity);
@@ -1247,6 +1249,12 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				LowerBand2.Reset();
 				LowerBand3.Reset();
 			}	
+			
+			// Draw version text on chart (top-left corner)
+			if (IsFirstTickOfBar && CurrentBar > 0)
+			{
+				Draw.TextFixed(this, "VersionLabel", versionString, TextPosition.TopLeft, Brushes.Gray, new SimpleFont("Arial", 9), Brushes.Transparent, Brushes.Transparent, 0);
+			}
 			
 			if (showSessionZones)
 			{
