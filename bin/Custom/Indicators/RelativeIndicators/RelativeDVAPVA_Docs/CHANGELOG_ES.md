@@ -6,6 +6,18 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 
 ---
 
+## [2.5.9] - 2025-12-29
+### 🔧 Simplificación de Lógica de Mitigación
+
+### Cambiado
+- **Opción A implementada**: Solo usa la PRIMERA dirección de entrada:
+  - Si el precio toca `UpperY` primero → debe bajar X% para mitigar
+  - Si el precio toca `LowerY` primero → debe subir X% para mitigar
+- **Removida dependencia** de IsGapLong/IsGapShort/IsRotational para mitigación
+- Logs ahora muestran `[v2.5.9] MITIGATED FROM ABOVE/BELOW`
+
+---
+
 ## [2.5.8] - 2025-12-29
 ### ✨ Versión Visible en Chart + Debug Zones
 

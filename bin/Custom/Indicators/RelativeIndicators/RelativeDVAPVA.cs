@@ -133,7 +133,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		private DashStyleHelper					dash1Style					= DashStyleHelper.Solid;
 		private TimeZoneInfo					globalTimeZone				= Core.Globals.GeneralOptions.TimeZoneInfo;
 		private TimeZoneInfo					customTimeZone;
-		private string							versionString				= "v2.5.8 - 2025-12-29";
+		private string							versionString				= "v2.5.9 - 2025-12-29";
 		private Series<DateTime>				tradingDate;
 		private Series<DateTime>				sessionBegin;
 		private Series<DateTime>				anchorTime;
@@ -1253,7 +1253,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 			// Draw version text on chart (top-left corner)
 			if (IsFirstTickOfBar && CurrentBar > 0)
 			{
-				Draw.TextFixed(this, "VersionLabel", versionString, TextPosition.TopLeft, Brushes.Gray, new SimpleFont("Arial", 9), Brushes.Transparent, Brushes.Transparent, 0);
+				Draw.TextFixed(this, "VersionLabel", versionString, TextPosition.TopLeft, Brushes.Yellow, new SimpleFont("Arial", 16), Brushes.Transparent, Brushes.Black, 80);
 			}
 			
 			if (showSessionZones)
@@ -1316,46 +1316,32 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 					double mitigationFromAbove = zone.UpperY - mitigationDistance; // Must drop this far from top
 					double mitigationFromBelow = zone.LowerY + mitigationDistance; // Must rise this far from bottom
 					
-					// Check mitigation based on session open type (GAP or ROTATIONAL)
+					// Track FIRST entry direction only (once set, ignore the other)
+					if (!zone.TouchedFromAbove && !zone.TouchedFromBelow)
+					{
+						// Neither side touched yet - check which one gets touched first
+						if (High[0] >= zone.UpperY)
+							zone.TouchedFromAbove = true;
+						else if (Low[0] <= zone.LowerY)
+							zone.TouchedFromBelow = true;
+					}
+					
+					// Check mitigation based on first entry direction
 					if (!zone.IsMitigated)
 					{
-						// GAP LONG: Price opened ABOVE zone, must drop X% into zone to mitigate
-						if (zone.IsGapLong && Low[0] <= mitigationFromAbove)
+						// Entered from above (touched UpperY first) - must drop X% to mitigate
+						if (zone.TouchedFromAbove && Low[0] <= mitigationFromAbove)
 						{
 							zone.IsBreached = true;
 							zone.IsMitigated = true;
-							Print("DEBUG MITIGATED (GAP LONG): " + zone.Tag + " at " + Time[0] + " Low=" + Low[0] + " MitLevel=" + mitigationFromAbove);
+							Print("[v2.5.9] MITIGATED FROM ABOVE: " + zone.Tag + " Low=" + Low[0].ToString("F2") + " MitLevel=" + mitigationFromAbove.ToString("F2"));
 						}
-						// GAP SHORT: Price opened BELOW zone, must rise X% into zone to mitigate
-						else if (zone.IsGapShort && High[0] >= mitigationFromBelow)
+						// Entered from below (touched LowerY first) - must rise X% to mitigate
+						else if (zone.TouchedFromBelow && High[0] >= mitigationFromBelow)
 						{
 							zone.IsBreached = true;
 							zone.IsMitigated = true;
-							Print("DEBUG MITIGATED (GAP SHORT): " + zone.Tag + " at " + Time[0] + " High=" + High[0] + " MitLevel=" + mitigationFromBelow);
-						}
-						// ROTATIONAL: Price opened INSIDE zone - mitigate if price traverses X% of range
-						// Track max/min prices to calculate traversal
-						else if (zone.IsRotational)
-						{
-							// Track entry direction dynamically for rotational zones
-							if (!zone.TouchedFromAbove && High[0] >= zone.UpperY)
-								zone.TouchedFromAbove = true;
-							if (!zone.TouchedFromBelow && Low[0] <= zone.LowerY)
-								zone.TouchedFromBelow = true;
-							
-							// For rotational: must exit one side and re-enter and traverse X%
-							if (zone.TouchedFromAbove && Low[0] <= mitigationFromAbove)
-							{
-								zone.IsBreached = true;
-								zone.IsMitigated = true;
-								Print("DEBUG MITIGATED (ROTATIONAL FROM ABOVE): " + zone.Tag + " at " + Time[0]);
-							}
-							else if (zone.TouchedFromBelow && High[0] >= mitigationFromBelow)
-							{
-								zone.IsBreached = true;
-								zone.IsMitigated = true;
-								Print("DEBUG MITIGATED (ROTATIONAL FROM BELOW): " + zone.Tag + " at " + Time[0]);
-							}
+							Print("[v2.5.9] MITIGATED FROM BELOW: " + zone.Tag + " High=" + High[0].ToString("F2") + " MitLevel=" + mitigationFromBelow.ToString("F2"));
 						}
 					}
 				}
