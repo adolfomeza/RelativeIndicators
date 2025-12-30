@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.12.1"; // UI: Botones simplificados (AMBOS/LONG/SHORT/NINGUNO + CLOSE) abajo-derecha
+		private const string StrategyVersion = "v1.13.0"; // FEATURE: TradeAnalyzer CSV Export (MAE/MFE tracking)
 		
 		// v1.12.1: CONTROL BUTTONS (simplified to 2 buttons)
 		private TradingMode currentTradingMode = TradingMode.Normal;
@@ -43,6 +43,19 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private System.Windows.Controls.Button btnClose;
 		private System.Windows.Controls.StackPanel buttonPanel;
 		private bool buttonsInitialized = false;
+		
+		// =========================================================
+		// v1.13.0: TRADE ANALYZER EXPORT
+		// =========================================================
+		private double tradeMAE = 0;           // Maximum Adverse Excursion (worst unrealized PnL)
+		private double tradeMFE = 0;           // Maximum Favorable Excursion (best unrealized PnL)
+		private double tradeEntryPrice = 0;
+		private DateTime tradeEntryTime;
+		private string tradeSetupName = "";
+		private string tradeDirection = "";
+		private int tradeExportId = 0;         // Auto-incrementing ID for CSV
+		private string csvExportPath = "";
+		private bool isTrackingTrade = false;  // Flag to track MAE/MFE
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -576,6 +589,34 @@ namespace NinjaTrader.NinjaScript.Strategies
 				
 				// v1.12.0: Initialize control buttons
 				InitializeControlButtons();
+				
+				// v1.13.0: Initialize TradeAnalyzer CSV Export
+				try
+				{
+					string safeInstrument = Instrument.FullName.Replace("/", "-").Replace(":", "-").Replace(" ", "_");
+					string exportDir = System.IO.Path.Combine(NinjaTrader.Core.Globals.UserDataDir, "trace", "TradeAnalyzer");
+					
+					if (!System.IO.Directory.Exists(exportDir))
+						System.IO.Directory.CreateDirectory(exportDir);
+					
+					csvExportPath = System.IO.Path.Combine(exportDir, $"trades_export_{safeInstrument}.csv");
+					
+					// Create file with header if doesn't exist
+					if (!System.IO.File.Exists(csvExportPath))
+					{
+						string header = "ID,Instrument,EntryTime,Type,EntryPrice,ExitTime,ExitPrice,Result,PnL,MAE,MFE,Setup";
+						System.IO.File.WriteAllText(csvExportPath, header + Environment.NewLine);
+						Log("CSV EXPORT: Created " + csvExportPath);
+					}
+					else
+					{
+						Log("CSV EXPORT: Using existing " + csvExportPath);
+					}
+				}
+				catch (Exception ex)
+				{
+					Log("CSV EXPORT INIT ERROR: " + ex.Message);
+				}
 				
 				// CACHE SESSION TIMES (Optimization for MES)
 				try 
@@ -1269,6 +1310,20 @@ currentEntryState = EntryState.Idle;
 			
 			// 4. Entry Logic (only for recent bars or Realtime)
 			ManageEntryA_Plus();
+			
+			// v1.13.0: Track MAE/MFE for active trades
+			if (isTrackingTrade && Position.MarketPosition != MarketPosition.Flat)
+			{
+				double unrealizedPnL = Position.GetUnrealizedProfitLoss(PerformanceUnit.Currency, Close[0]);
+				
+				// Update MAE (worst point - negative values)
+				if (unrealizedPnL < tradeMAE)
+					tradeMAE = unrealizedPnL;
+				
+				// Update MFE (best point - positive values)
+				if (unrealizedPnL > tradeMFE)
+					tradeMFE = unrealizedPnL;
+			}
 		}
 		
 		private void CheckSession(string sessionName, TimeSpan startTs, TimeSpan endTs, Brush color, double deltaVol)
@@ -4275,6 +4330,17 @@ setupLevelName = "";
 						currentEntryState = EntryState.PositionActive;
 						tradeOriginalQty = quantity; // v1.11.23: Save original trade qty for panel display
 						Log(Time + " Entry Filled ("+n+") Qty=" + quantity + ". State -> PositionActive. TradeOriginalQty=" + tradeOriginalQty);
+						
+						// v1.13.0: Initialize TradeAnalyzer export variables
+						tradeExportId++;
+						tradeEntryPrice = execution.Order.AverageFillPrice;
+						tradeEntryTime = time;
+						tradeDirection = Position.MarketPosition == MarketPosition.Long ? "Long" : "Short";
+						tradeSetupName = setupLevelName;
+						tradeMAE = 0;
+						tradeMFE = 0;
+						isTrackingTrade = true;
+						Log(Time + " CSV EXPORT: Trade #" + tradeExportId + " started - " + tradeDirection + " @ " + tradeEntryPrice);
 					}
 					
 					// Ensure Protection Runs based on FILLED QTY
@@ -4367,6 +4433,49 @@ setupLevelName = "";
 					Log(Time + " Position Closed (" + execution.Order.Name + "). Resetting to Idle.");
 					lastPositionCloseTime = DateTime.Now; // v1.11.19: Prevent orphan false positives
 					TriggerScreenshot("Exit_" + execution.Order.Name, DateTime.Now, executionId);
+					
+					// v1.13.0: Export trade to CSV
+					if (isTrackingTrade && !string.IsNullOrEmpty(csvExportPath))
+					{
+						try
+						{
+							double exitPrice = execution.Order.AverageFillPrice;
+							
+							// Calculate PnL based on direction
+							double pnl = 0;
+							if (tradeDirection == "Long")
+								pnl = (exitPrice - tradeEntryPrice) * execution.Quantity * Instrument.MasterInstrument.PointValue;
+							else
+								pnl = (tradeEntryPrice - exitPrice) * execution.Quantity * Instrument.MasterInstrument.PointValue;
+							
+							string resultName = execution.Order.Name; // "TP1_Long", "SL_Short", etc.
+							
+							// Format CSV line
+							string line = string.Format("{0},{1},{2:yyyy-MM-dd HH:mm:ss},{3},{4},{5:yyyy-MM-dd HH:mm:ss},{6},{7},{8:F2},{9:F2},{10:F2},{11}",
+								tradeExportId,
+								Instrument.FullName,
+								tradeEntryTime,
+								tradeDirection,
+								tradeEntryPrice,
+								time,
+								exitPrice,
+								resultName,
+								pnl,
+								tradeMAE,
+								tradeMFE,
+								tradeSetupName.Replace(",", ";") // Avoid CSV delimiter issues
+							);
+							
+							System.IO.File.AppendAllText(csvExportPath, line + Environment.NewLine);
+							Log(Time + " CSV EXPORT: Trade #" + tradeExportId + " closed - " + resultName + " PnL=" + pnl.ToString("F2"));
+						}
+						catch (Exception ex)
+						{
+							Log(Time + " CSV EXPORT ERROR: " + ex.Message);
+						}
+						
+						isTrackingTrade = false;
+					}
 					
 					// v1.10.26: Check if we can retry
 					bool canRetry = false;

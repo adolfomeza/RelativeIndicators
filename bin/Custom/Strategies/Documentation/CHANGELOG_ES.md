@@ -4,7 +4,18 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.12.1] - 2025-12-30 ✅ VERSIÓN ACTUAL
+## [1.13.0] - 2025-12-30 ✅ VERSIÓN ACTUAL
+### FEATURE: TradeAnalyzer CSV Export
+- **Exportación automática de trades** a CSV para análisis
+- **Tracking de MAE/MFE** (Maximum Adverse/Favorable Excursion) en tiempo real
+- **Archivo CSV**: `trace/TradeAnalyzer/trades_export_{Instrumento}.csv`
+- **Formato CSV**: ID, Instrument, EntryTime, Type, EntryPrice, ExitTime, ExitPrice, Result, PnL, MAE, MFE, Setup
+- **Logs**: `CSV EXPORT: Trade #X started/closed`
+- **Variables nuevas**: `tradeMAE`, `tradeMFE`, `tradeExportId`, `csvExportPath`, `isTrackingTrade`
+
+---
+
+## [1.12.1] - 2025-12-30
 ### UI: Botones de Control Simplificados
 - **Cambios según feedback del usuario**:
   - Posición movida a **esquina inferior derecha**
