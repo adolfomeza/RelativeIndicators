@@ -67,6 +67,20 @@ header h1 {
     -webkit-text-fill-color: transparent;
 }
 
+/* Version Badge */
+.version-badge {
+    font-size: 0.65rem;
+    font-weight: 600;
+    background: var(--accent);
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: white;
+}
+
 .header-controls {
     display: flex;
     align-items: center;
