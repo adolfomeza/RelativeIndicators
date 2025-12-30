@@ -272,7 +272,17 @@
     </div>
 
 
-    <!-- v1.4: Script externalizado -->
-    <script src="script.js"></script>
+    <!-- v1.4: Script externalizado con Cache Busting -->
+    <script src="script.js?v=1.4.1"></script>
+    
+    <!-- FORCED CLEANER (Runs once) -->
+    <script>
+    if (!sessionStorage.getItem('cleaned_v1.4')) {
+        console.log("NUCLEAR OPTION: Clearing LocalStorage");
+        localStorage.clear();
+        sessionStorage.setItem('cleaned_v1.4', 'true');
+        location.reload();
+    }
+    </script>
 </body>
 </html>
