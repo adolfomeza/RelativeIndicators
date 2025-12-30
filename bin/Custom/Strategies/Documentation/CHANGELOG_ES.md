@@ -4,7 +4,19 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.22] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.23] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### Fix: Cantidad TP2 en Panel Ahora Usa Cantidad Original del Trade
+- **Problema**: TP2 qty en panel cambiaba de 5 a 0 después de TP1 fill
+- **Causa**: Usaba `Position.Quantity` que reduce al llenarse TP1
+- **Solución**: Nueva variable `tradeOriginalQty`
+  - Se guarda al entry fill
+  - Se usa para cálculos del panel
+  - Se resetea al cerrar posición
+- **Resultado**: TP1/TP2 reward ahora muestra valores consistentes durante todo el trade
+
+---
+
+## [1.11.22] - 2025-12-29
 ### Optimization: Carga Histórica 10x Más Rápida
 - **Cambio**: Skip de `ManageEntryA_Plus()` para barras > 3 días antiguas
 - **Niveles**: Siguen calculándose para TODO el histórico (30 días)

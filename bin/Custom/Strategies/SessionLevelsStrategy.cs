@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.22"; // Optimization: Skip trading logic for old historical bars
+		private const string StrategyVersion = "v1.11.23"; // Fix: TP2 qty in panel now uses original trade qty
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -1553,6 +1553,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private int protectedTp1Qty = 0;
 		private int protectedTp2Qty = 0;
 		private bool protectionOrdersCreated = false; // v1.11.14: Prevent duplicate creation
+		private int tradeOriginalQty = 0; // v1.11.23: Original trade quantity for panel display (doesn't change after TP1 fill)
 		// v1.10.31: Trade VWAP - continues accumulating even when day changes
 		// Separate from global VWAP to keep TP1 moving with original day's VWAP
 		private SessionVWAP tradeVWAP = new SessionVWAP();
@@ -2110,6 +2111,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 			protectedTp1Qty = 0;
 			protectedTp2Qty = 0;
 			protectionOrdersCreated = false; // v1.11.14: Reset flag for next trade
+			tradeOriginalQty = 0; // v1.11.23: Reset original trade qty
 			tradeVwapActive = false; // v1.10.31: Reset Trade VWAP
 				
 				// v1.10.12: Cancel orphan orders before nullifying references
@@ -2214,8 +2216,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 				else if (Position.MarketPosition != MarketPosition.Flat)
 					avgEntry = Position.AveragePrice;
 				
-				// Get quantity
-				if (Position.MarketPosition != MarketPosition.Flat)
+				// Get quantity (v1.11.23: Use tradeOriginalQty if available for consistent display)
+				if (tradeOriginalQty > 0)
+					totalQty = tradeOriginalQty; // Use original qty for panel calculations
+				else if (Position.MarketPosition != MarketPosition.Flat)
 					totalQty = Math.Abs(Position.Quantity);
 				else if (entryOrder != null)
 					totalQty = entryOrder.Quantity;
@@ -4023,7 +4027,8 @@ setupLevelName = "";
 					if (currentEntryState == EntryState.workingOrder)
 					{
 						currentEntryState = EntryState.PositionActive;
-						Log(Time + " Entry Filled ("+n+") Qty=" + quantity + ". State -> PositionActive.");
+						tradeOriginalQty = quantity; // v1.11.23: Save original trade qty for panel display
+						Log(Time + " Entry Filled ("+n+") Qty=" + quantity + ". State -> PositionActive. TradeOriginalQty=" + tradeOriginalQty);
 					}
 					
 					// Ensure Protection Runs based on FILLED QTY
@@ -4165,6 +4170,7 @@ setupLevelName = "";
 				protectedTp1Qty = 0;
 				protectedTp2Qty = 0;
 				protectionOrdersCreated = false; // v1.11.14: Reset flag for next trade
+				tradeOriginalQty = 0; // v1.11.23: Reset original trade qty
 				tradeVwapActive = false; // v1.10.31: Reset Trade VWAP
 
 					// CLEARED
