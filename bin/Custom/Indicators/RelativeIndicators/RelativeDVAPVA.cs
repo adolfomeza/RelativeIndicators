@@ -133,7 +133,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		private DashStyleHelper					dash1Style					= DashStyleHelper.Solid;
 		private TimeZoneInfo					globalTimeZone				= Core.Globals.GeneralOptions.TimeZoneInfo;
 		private TimeZoneInfo					customTimeZone;
-		private string							versionString				= "v2.5.5 - 2025-12-29";
+		private string							versionString				= "v2.5.6 - 2025-12-29";
 		private Series<DateTime>				tradingDate;
 		private Series<DateTime>				sessionBegin;
 		private Series<DateTime>				anchorTime;
@@ -212,6 +212,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 			
 			// Mitigation State
 			public bool IsMitigated;
+			public bool TouchedFromAbove; // Price touched UpperY
+			public bool TouchedFromBelow; // Price touched LowerY
 		}
 		private List<SessionZone> activeZones = new List<SessionZone>();
 		private List<SessionZone> allZones = new List<SessionZone>();
@@ -1300,13 +1302,33 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 					}
 
 					double range = zone.UpperY - zone.LowerY;
-					double cutoffY = zone.LowerY + (range * (zoneCutoffPercentage / 100.0));
+					double mitigationDistance = range * (zoneCutoffPercentage / 100.0);
 					
-					// Check if price crosses the cutoff line (mitigates zone)
-					if (!zone.IsBreached && High[0] >= cutoffY && Low[0] <= cutoffY)
+					// Track entry direction
+					if (!zone.TouchedFromAbove && High[0] >= zone.UpperY)
+						zone.TouchedFromAbove = true;
+					if (!zone.TouchedFromBelow && Low[0] <= zone.LowerY)
+						zone.TouchedFromBelow = true;
+					
+					// Calculate mitigation levels based on entry direction
+					double mitigationFromAbove = zone.UpperY - mitigationDistance; // If entered from top, must go down this far
+					double mitigationFromBelow = zone.LowerY + mitigationDistance; // If entered from bottom, must go up this far
+					
+					// Check mitigation (only if not already mitigated)
+					if (!zone.IsMitigated)
 					{
-						zone.IsBreached = true;
-						zone.IsMitigated = true; // Mark for closure at session end
+						// Entered from above and price dropped enough
+						if (zone.TouchedFromAbove && Low[0] <= mitigationFromAbove)
+						{
+							zone.IsBreached = true;
+							zone.IsMitigated = true;
+						}
+						// Entered from below and price rose enough
+						else if (zone.TouchedFromBelow && High[0] >= mitigationFromBelow)
+						{
+							zone.IsBreached = true;
+							zone.IsMitigated = true;
+						}
 					}
 				}
 			}

@@ -6,6 +6,17 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 
 ---
 
+## [2.5.6] - 2025-12-29
+### ✨ Lógica de Mitigación Direccional
+
+### Cambiado
+- **Mitigación direccional**: Ahora la zona rastrea desde qué lado entró el precio (arriba o abajo). El porcentaje de mitigación (`zoneCutoffPercentage`) se calcula desde el punto de entrada:
+  - Si entra desde arriba (tocó `UpperY`): debe recorrer X% hacia abajo
+  - Si entra desde abajo (tocó `LowerY`): debe recorrer X% hacia arriba
+- **Nuevos campos en SessionZone**: `TouchedFromAbove`, `TouchedFromBelow`
+
+---
+
 ## [2.5.5] - 2025-12-29
 ### 🐛 Corrección de Mitigación de Zonas
 
