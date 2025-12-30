@@ -64,21 +64,25 @@ header h1 {
     font-weight: 700;
     background: linear-gradient(to right, #818cf8, #6366f1);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+/* Title Wrapper */
+.title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 }
 
 /* Version Badge */
 .version-badge {
-    font-size: 0.65rem;
+    font-size: 0.7rem;
     font-weight: 600;
-    background: var(--accent);
-    color: white;
-    padding: 0.2rem 0.5rem;
+    background: #6366f1;
+    color: #ffffff;
+    padding: 0.25rem 0.6rem;
     border-radius: 4px;
-    margin-left: 0.5rem;
-    vertical-align: middle;
-    -webkit-background-clip: unset;
-    -webkit-text-fill-color: white;
 }
 
 .header-controls {
