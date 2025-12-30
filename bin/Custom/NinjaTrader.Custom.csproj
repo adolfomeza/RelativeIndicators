@@ -397,6 +397,7 @@
     <Compile Include="Strategies\RelativeLevelsData.cs" />
     <Compile Include="Strategies\RelativeLevelsStrategy.cs" />
     <Compile Include="Strategies\SessionLevelsStrategy.cs" />
+    <Compile Include="Indicators\RelativeIndicators\amaCurrentMonthVWAP.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Resource.resx">

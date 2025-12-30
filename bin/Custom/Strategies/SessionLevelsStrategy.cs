@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.25"; // Fix: Confirmation candle highlight now works on retries
+		private const string StrategyVersion = "v1.11.26"; // FIX CRÍTICO: SL no se creaba si stopOrder tenía referencia obsoleta
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -3409,13 +3409,20 @@ setupLevelName = "";
 			bool shouldUpdateTP = (existingTP != null && (existingTP.OrderState == OrderState.Working || existingTP.OrderState == OrderState.Accepted));
 			
 			// STEP 1: Handle STOP LOSS (single for entire position)
-			// v1.11.12 FIX: Verificar tanto null como estado activo para evitar duplicados
+			// v1.11.26 FIX: Crear SL si no existe O si la orden existente ya no está activa
 			bool slAlreadyActive = (stopOrder != null && 
 				(stopOrder.OrderState == OrderState.Working || 
 				 stopOrder.OrderState == OrderState.Accepted ||
 				 stopOrder.OrderState == OrderState.Submitted));
 			
-			if (stopOrder == null && !slAlreadyActive)
+			// v1.11.26: Si stopOrder tiene referencia pero NO está activa, limpiarla
+			if (stopOrder != null && !slAlreadyActive)
+			{
+				Log(string.Format("SL CLEANUP: Clearing stale reference (State={0})", stopOrder.OrderState));
+				stopOrder = null;
+			}
+			
+			if (stopOrder == null)
 			{
 				// Create new SL
 				string slTag = string.Format("{0}_{1:D2}", direction == "Short" ? "SL_Short" : "SL_Long", currentVwapNumber);
@@ -3440,7 +3447,6 @@ setupLevelName = "";
 					Log("Warning: Could not cancel old SL: " + ex.Message);
 				}
 			}
-			// Else: SL exists and has correct quantity, do nothing
 			
 			// STEP 2: Handle TAKE PROFIT (TP1 or TP2)
 			int tpQty = isTp1 ? (protectedTp1Qty + qty) : (protectedTp2Qty + qty);

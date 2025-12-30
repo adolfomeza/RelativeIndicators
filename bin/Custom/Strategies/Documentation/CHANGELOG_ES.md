@@ -4,7 +4,21 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.25] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.26] - 2025-12-30 ✅ VERSIÓN ACTUAL
+### FIX CRÍTICO: SL No Se Creaba en Reintentos (Trade Sin Protección)
+- **Problema**: MGC tomó trade sin SL - posición quedó desprotegida
+- **Causa Raíz**: Si `stopOrder` tenía referencia a orden vieja (estado Cancelled/Rejected/Filled):
+  - `slAlreadyActive = false` (no en Working/Accepted/Submitted)
+  - `stopOrder == null` era `false` (tenía referencia)
+  - Resultado: **NO entraba en ninguna rama y NO creaba SL**
+- **Solución v1.11.26**: Limpiar referencia obsoleta antes de verificar
+  - Si `stopOrder != null && !slAlreadyActive` → `stopOrder = null`
+  - Nuevo log: `SL CLEANUP: Clearing stale reference (State=X)`
+- **Resultado**: SL ahora siempre se crea cuando no hay uno activo
+
+---
+
+## [1.11.25] - 2025-12-29
 ### Fix: Vela de Confirmación Amarilla Ahora Funciona en Reintentos
 - **Problema**: La vela amarilla solo se pintaba en el primer intento, no en reintentos
 - **Causa**: `visualConfirmationDone` no se reseteaba cuando se iniciaba un retry

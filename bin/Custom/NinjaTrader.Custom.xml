@@ -5795,6 +5795,13 @@
             The ZLEMA (Zero-Lag Exponential Moving Average) is an EMA variant that attempts to adjust for lag.
             </summary>
         </member>
+        <member name="T:NinjaTrader.NinjaScript.Indicators.LizardIndicators.amaCurrentMonthVWAP">
+            <summary>
+            The Current Month VWAP is the volume weighted average price of the current month. 
+            The indicator further displays three upper and lower volatility bands.
+            </summary>
+            
+        </member>
         <member name="T:NinjaTrader.NinjaScript.Indicators.RelativeIndicators.RelativeDVAPVA_v2">
             <summary>
             The Current Day VWAP is the volume weighted average price of today's trading session. 
