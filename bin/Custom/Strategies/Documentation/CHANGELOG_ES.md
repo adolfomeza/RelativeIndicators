@@ -4,7 +4,19 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.26] - 2025-12-30 ✅ VERSIÓN ACTUAL
+## [1.11.27] - 2025-12-30 ✅ VERSIÓN ACTUAL
+### FIX: Validación de Distancia del SL (Prevenir Rechazo del Broker)
+- **Problema**: Al refrescar estrategia, SL a precio 4407.6 fue rechazado por el broker
+  - Error: "The current price is outside the price limits set for this product"
+  - Causa: `setupAnchorPrice` era de trade anterior, muy lejos del precio actual
+- **Solución v1.11.27**: Validar que SL no esté a más de 100 ticks del precio actual
+  - Si distancia > 100 ticks → usar fallback: `avgEntry ± (StopLossTicks × TickSize)`
+  - Log: `SL DISTANCE WARNING: Original SL X is Y ticks away. Using fallback Z`
+- **Aplica a**: SHORT y LONG setups
+
+---
+
+## [1.11.26] - 2025-12-30
 ### FIX CRÍTICO: SL No Se Creaba en Reintentos (Trade Sin Protección)
 - **Problema**: MGC tomó trade sin SL - posición quedó desprotegida
 - **Causa Raíz**: Si `stopOrder` tenía referencia a orden vieja (estado Cancelled/Rejected/Filled):

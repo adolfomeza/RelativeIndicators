@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.26"; // FIX CRÍTICO: SL no se creaba si stopOrder tenía referencia obsoleta
+		private const string StrategyVersion = "v1.11.27"; // FIX: Validación de distancia SL para evitar rechazo del broker
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -3318,6 +3318,16 @@ setupLevelName = "";
 			// FIXED (v1.7.21): SL siempre a 1 tick del anchor
 			slPrice = setupAnchorPrice + TickSize;
 			if (slPrice <= lastPrice) slPrice = lastPrice + (5 * TickSize); 
+			
+			// v1.11.27: Validate SL is not too far from current price (broker rejection protection)
+			// If SL is more than 100 ticks away, use fallback based on StopLossTicks
+			double slDistanceTicks = Math.Abs(slPrice - lastPrice) / TickSize;
+			if (slDistanceTicks > 100)
+			{
+				double fallbackSL = avgEntry + (StopLossTicks * TickSize);
+				Log(string.Format("SL DISTANCE WARNING: Original SL {0} is {1:F0} ticks away. Using fallback {2}", slPrice, slDistanceTicks, fallbackSL));
+				slPrice = fallbackSL;
+			} 
 
 			// v1.10.31: Use Trade VWAP if active (continues accumulating even on day change)
 			if (tradeVwapActive)
@@ -3345,6 +3355,16 @@ setupLevelName = "";
 			// FIXED (v1.7.21): SL siempre a 1 tick del anchor
 			slPrice = setupAnchorPrice - TickSize;
 			if (slPrice >= lastPrice) slPrice = lastPrice - (5 * TickSize); 
+			
+			// v1.11.27: Validate SL is not too far from current price (broker rejection protection)
+			// If SL is more than 100 ticks away, use fallback based on StopLossTicks
+			double slDistanceTicksLong = Math.Abs(slPrice - lastPrice) / TickSize;
+			if (slDistanceTicksLong > 100)
+			{
+				double fallbackSLLong = avgEntry - (StopLossTicks * TickSize);
+				Log(string.Format("SL DISTANCE WARNING: Original SL {0} is {1:F0} ticks away. Using fallback {2}", slPrice, slDistanceTicksLong, fallbackSLLong));
+				slPrice = fallbackSLLong;
+			} 
 
 			// v1.10.31: Use Trade VWAP if active (continues accumulating even on day change)
 			if (tradeVwapActive)
