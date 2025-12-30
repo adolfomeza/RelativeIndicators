@@ -117,7 +117,7 @@
     
     // --- Persistence Logic ---
     window.forceReloadLocal = () => {
-        const stored = localStorage.getItem('rta_trades');
+        const stored = localStorage.getItem('rta_trades_v1.4');
         if(stored) {
              console.log("Forcing reload from storage...");
              loadData();
@@ -129,12 +129,12 @@
 
     function saveData() {
         if(globalAllTrades.length > 0) {
-            localStorage.setItem('rta_trades', JSON.stringify(globalAllTrades));
+            localStorage.setItem('rta_trades_v1.4', JSON.stringify(globalAllTrades));
         }
     }
 
     function loadData() {
-        const stored = localStorage.getItem('rta_trades');
+        const stored = localStorage.getItem('rta_trades_v1.4');
         if(stored) {
             try {
                 const trades = JSON.parse(stored);
@@ -162,7 +162,7 @@
 
     function clearData() {
         if(confirm("Are you sure you want to clear all data?")) {
-            localStorage.removeItem('rta_trades');
+            localStorage.removeItem('rta_trades_v1.4');
             globalAllTrades = [];
             location.reload(); // Simplest way to reset all charts/state
         }
@@ -171,7 +171,7 @@
     if(clearDataBtn) clearDataBtn.addEventListener('click', clearData);
     
     // Load on start
-    const storedRaw = localStorage.getItem('rta_trades');
+    const storedRaw = localStorage.getItem('rta_trades_v1.4');
     if(storedRaw) {
         // Show clear button if ANY data exists (even if load fails later)
         if(clearDataBtn) clearDataBtn.style.display = 'inline-block';
