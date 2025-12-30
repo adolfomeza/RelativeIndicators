@@ -4,7 +4,18 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.12.0] - 2025-12-30 ✅ VERSIÓN ACTUAL
+## [1.12.1] - 2025-12-30 ✅ VERSIÓN ACTUAL
+### UI: Botones de Control Simplificados
+- **Cambios según feedback del usuario**:
+  - Posición movida a **esquina inferior derecha**
+  - Solo **2 botones**: Dirección + Close
+  - Botón de dirección **cicla**: ↕AMBOS → ↑LONG → ↓SHORT → ⏸NINGUNO
+  - Colores: Verde (Ambos), Azul (Long), Rojo (Short), Gris (Ninguno)
+- **Eliminadas variables**: `btnLongOnly`, `btnShortOnly`
+
+---
+
+## [1.12.0] - 2025-12-30
 ### FEATURE: Botones de Control Interactivos
 - **Nuevos botones en el chart** (esquina superior izquierda):
   - **▶ RUN / ⏸ PAUSE**: Toggle para pausar/reanudar trading

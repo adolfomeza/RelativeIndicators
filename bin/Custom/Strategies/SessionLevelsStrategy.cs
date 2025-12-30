@@ -35,13 +35,11 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.12.0"; // FEATURE: Botones de control (Pause, Long Only, Short Only, Close)
+		private const string StrategyVersion = "v1.12.1"; // UI: Botones simplificados (AMBOS/LONG/SHORT/NINGUNO + CLOSE) abajo-derecha
 		
-		// v1.12.0: CONTROL BUTTONS
+		// v1.12.1: CONTROL BUTTONS (simplified to 2 buttons)
 		private TradingMode currentTradingMode = TradingMode.Normal;
-		private System.Windows.Controls.Button btnPause;
-		private System.Windows.Controls.Button btnLongOnly;
-		private System.Windows.Controls.Button btnShortOnly;
+		private System.Windows.Controls.Button btnPause; // Direction button (cycles through modes)
 		private System.Windows.Controls.Button btnClose;
 		private System.Windows.Controls.StackPanel buttonPanel;
 		private bool buttonsInitialized = false;
@@ -2331,7 +2329,7 @@ currentEntryState = EntryState.Idle;
 		}
 		
 		// -------------------------------------------------------------------------
-		// v1.12.0: CONTROL BUTTONS (PAUSE, LONG ONLY, SHORT ONLY, CLOSE)
+		// v1.12.1: CONTROL BUTTONS (DIRECTION + CLOSE) - Bottom Right
 		// -------------------------------------------------------------------------
 		private void InitializeControlButtons()
 		{
@@ -2341,33 +2339,27 @@ currentEntryState = EntryState.Idle;
 			{
 				try
 				{
-					// Panel horizontal para botones
+					// Panel horizontal para botones - ABAJO A LA DERECHA
 					buttonPanel = new System.Windows.Controls.StackPanel();
 					buttonPanel.Orientation = Orientation.Horizontal;
-					buttonPanel.HorizontalAlignment = HorizontalAlignment.Left;
-					buttonPanel.VerticalAlignment = VerticalAlignment.Top;
-					buttonPanel.Margin = new Thickness(10, 10, 0, 0);
+					buttonPanel.HorizontalAlignment = HorizontalAlignment.Right;
+					buttonPanel.VerticalAlignment = VerticalAlignment.Bottom;
+					buttonPanel.Margin = new Thickness(0, 0, 10, 10);
 					
-					// Crear botones
-					btnPause = CreateControlButton("▶ RUN", Brushes.ForestGreen);
-					btnLongOnly = CreateControlButton("↑ LONG", Brushes.Gray);
-					btnShortOnly = CreateControlButton("↓ SHORT", Brushes.Gray);
+					// v1.12.1: Solo 2 botones
+					btnPause = CreateControlButton("↕ AMBOS", Brushes.ForestGreen); // Direction button
 					btnClose = CreateControlButton("✖ CLOSE", Brushes.Crimson);
 					
 					// Eventos
-					btnPause.Click += OnPauseClick;
-					btnLongOnly.Click += OnLongOnlyClick;
-					btnShortOnly.Click += OnShortOnlyClick;
+					btnPause.Click += OnDirectionClick; // Renamed from OnPauseClick
 					btnClose.Click += OnCloseClick;
 					
 					buttonPanel.Children.Add(btnPause);
-					buttonPanel.Children.Add(btnLongOnly);
-					buttonPanel.Children.Add(btnShortOnly);
 					buttonPanel.Children.Add(btnClose);
 					
 					UserControlCollection.Add(buttonPanel);
 					buttonsInitialized = true;
-					Log(Time[0] + " CONTROL BUTTONS: Initialized");
+					Log(Time[0] + " CONTROL BUTTONS: Initialized (Bottom Right)");
 				}
 				catch (Exception ex)
 				{
@@ -2380,48 +2372,35 @@ currentEntryState = EntryState.Idle;
 		{
 			var btn = new System.Windows.Controls.Button();
 			btn.Content = text;
-			btn.Width = 75;
-			btn.Height = 22;
-			btn.Margin = new Thickness(2);
+			btn.Width = 85;
+			btn.Height = 24;
+			btn.Margin = new Thickness(3);
 			btn.Background = bgColor;
 			btn.Foreground = Brushes.White;
 			btn.FontWeight = FontWeights.Bold;
-			btn.FontSize = 10;
+			btn.FontSize = 11;
 			btn.BorderThickness = new Thickness(0);
 			return btn;
 		}
 		
-		private void OnPauseClick(object sender, RoutedEventArgs e)
+		// v1.12.1: Single direction button cycles: AMBOS → LONG → SHORT → NINGUNO → AMBOS
+		private void OnDirectionClick(object sender, RoutedEventArgs e)
 		{
-			if (currentTradingMode == TradingMode.Paused)
+			switch (currentTradingMode)
 			{
-				currentTradingMode = TradingMode.Normal;
-				Log(Time[0] + " CONTROL: Trading RESUMED");
+				case TradingMode.Normal:
+					currentTradingMode = TradingMode.LongOnly;
+					break;
+				case TradingMode.LongOnly:
+					currentTradingMode = TradingMode.ShortOnly;
+					break;
+				case TradingMode.ShortOnly:
+					currentTradingMode = TradingMode.Paused; // NINGUNO
+					break;
+				case TradingMode.Paused:
+					currentTradingMode = TradingMode.Normal; // AMBOS
+					break;
 			}
-			else
-			{
-				currentTradingMode = TradingMode.Paused;
-				Log(Time[0] + " CONTROL: Trading PAUSED");
-			}
-			UpdateButtonStates();
-		}
-		
-		private void OnLongOnlyClick(object sender, RoutedEventArgs e)
-		{
-			if (currentTradingMode == TradingMode.LongOnly)
-				currentTradingMode = TradingMode.Normal;
-			else
-				currentTradingMode = TradingMode.LongOnly;
-			Log(Time[0] + " CONTROL: Mode = " + currentTradingMode);
-			UpdateButtonStates();
-		}
-		
-		private void OnShortOnlyClick(object sender, RoutedEventArgs e)
-		{
-			if (currentTradingMode == TradingMode.ShortOnly)
-				currentTradingMode = TradingMode.Normal;
-			else
-				currentTradingMode = TradingMode.ShortOnly;
 			Log(Time[0] + " CONTROL: Mode = " + currentTradingMode);
 			UpdateButtonStates();
 		}
@@ -2482,15 +2461,26 @@ currentEntryState = EntryState.Idle;
 			{
 				if (btnPause == null) return;
 				
-				// Pause button
-				btnPause.Content = currentTradingMode == TradingMode.Paused ? "⏸ PAUSE" : "▶ RUN";
-				btnPause.Background = currentTradingMode == TradingMode.Paused ? Brushes.Orange : Brushes.ForestGreen;
-				
-				// Long button
-				btnLongOnly.Background = currentTradingMode == TradingMode.LongOnly ? Brushes.DodgerBlue : Brushes.Gray;
-				
-				// Short button
-				btnShortOnly.Background = currentTradingMode == TradingMode.ShortOnly ? Brushes.Crimson : Brushes.Gray;
+				// v1.12.1: Direction button shows current mode
+				switch (currentTradingMode)
+				{
+					case TradingMode.Normal:
+						btnPause.Content = "↕ AMBOS";
+						btnPause.Background = Brushes.ForestGreen;
+						break;
+					case TradingMode.LongOnly:
+						btnPause.Content = "↑ LONG";
+						btnPause.Background = Brushes.DodgerBlue;
+						break;
+					case TradingMode.ShortOnly:
+						btnPause.Content = "↓ SHORT";
+						btnPause.Background = Brushes.OrangeRed;
+						break;
+					case TradingMode.Paused:
+						btnPause.Content = "⏸ NINGUNO";
+						btnPause.Background = Brushes.Gray;
+						break;
+				}
 			});
 		}
 		
@@ -2502,9 +2492,7 @@ currentEntryState = EntryState.Idle;
 			{
 				try
 				{
-					if (btnPause != null) btnPause.Click -= OnPauseClick;
-					if (btnLongOnly != null) btnLongOnly.Click -= OnLongOnlyClick;
-					if (btnShortOnly != null) btnShortOnly.Click -= OnShortOnlyClick;
+					if (btnPause != null) btnPause.Click -= OnDirectionClick;
 					if (btnClose != null) btnClose.Click -= OnCloseClick;
 					
 					if (buttonPanel != null && UserControlCollection.Contains(buttonPanel))
