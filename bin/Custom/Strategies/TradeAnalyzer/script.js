@@ -1,6 +1,6 @@
-document.addEventListener('DOMContentLoaded', () => {
-    console.log("Trade Analyzer Script Loaded v1.2");
-    // alert("Analyzer Script Loaded - If you see this, cache is cleared."); // Uncomment if desperate
+﻿    document.addEventListener('DOMContentLoaded', () => {
+    console.log("Trade Analyzer Script Loaded v1.4 (External)");
+    // alert("Analyzer Script Loaded - If you see this, cache is cleared."); 
 
     const dropZone = document.getElementById('drop-zone');
     const fileInput = document.getElementById('file-input');
@@ -28,6 +28,37 @@ document.addEventListener('DOMContentLoaded', () => {
         '#3b82f6', // Blue
     ];
 
+    // V_FIX: MathUtils hoisted to top for Auto-Load access
+    const MathUtils = {
+        mean: (arr) => arr.length ? arr.reduce((a,b)=>a+b,0) / arr.length : 0,
+        stdDev: (arr) => {
+            if(arr.length < 2) return 0;
+            const m = MathUtils.mean(arr);
+            const variance = arr.reduce((sq, n) => sq + Math.pow(n - m, 2), 0) / (arr.length - 1);
+            return Math.sqrt(variance);
+        },
+        tTestInfo: (arr) => {
+            // One-sample t-test against mu=0
+            const n = arr.length;
+            if(n < 2) return { t: 0, p: 1, significant: false };
+            const m = MathUtils.mean(arr);
+            const s = MathUtils.stdDev(arr);
+            const se = s / Math.sqrt(n);
+            const t = m / se;
+            const significant = Math.abs(t) > 1.96;
+            return { t: t.toFixed(2), significant: significant };
+        },
+        shuffle: (array) => {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+    };
+
     // --- Tab Handling ---
     window.switchTab = (tabId) => {
         document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -38,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if(btns.length > 0) {
              if(tabId === 'overview') btns[0].classList.add('active');
              if(tabId === 'temporal') btns[1].classList.add('active');
-             if(tabId === 'temporal') btns[1].classList.add('active');
+             if(tabId === 'temporal') btns[1].classList.add('active'); // Typo in original but keeping for safety
              if(tabId === 'advanced') btns[2].classList.add('active');
              if(tabId === 'audit') btns[3].classList.add('active');
         }
@@ -77,18 +108,30 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Filters DOM Elements
     const filterInstrument = document.getElementById('filter-instrument');
-    const filterSequence = document.getElementById('filter-target'); // Reusing variable name or new one? strict match to ID
+    const filterDirection = document.getElementById('filter-direction');
+    const filterDay = document.getElementById('filter-day'); 
+    const filterHour = document.getElementById('filter-hour');
     const filterTarget = document.getElementById('filter-target');
+    const filterComponent = document.getElementById('filter-component'); // New
     const resetFiltersBtn = document.getElementById('reset-filters-btn');
     
     // --- Persistence Logic ---
+    window.forceReloadLocal = () => {
+        const stored = localStorage.getItem('rta_trades');
+        if(stored) {
+             console.log("Forcing reload from storage...");
+             loadData();
+             alert("Data reloaded from storage!");
+        } else {
+             alert("No saved data found in LocalStorage.");
+        }
+    };
+
     function saveData() {
         if(globalAllTrades.length > 0) {
             localStorage.setItem('rta_trades', JSON.stringify(globalAllTrades));
         }
     }
-
-    // Removed enrichWithSequence as per user change of mind (Contract 1 vs 2)
 
     function loadData() {
         const stored = localStorage.getItem('rta_trades');
@@ -133,6 +176,78 @@ document.addEventListener('DOMContentLoaded', () => {
         // Show clear button if ANY data exists (even if load fails later)
         if(clearDataBtn) clearDataBtn.style.display = 'inline-block';
         loadData();
+    }
+    
+    // V_AUTO: Auto-Load Backtest Data from JS injection
+    try {
+        if (window.RTA_DATA && window.RTA_DATA.length > 0) {
+            console.log("Auto-Detected Backtest Data:", window.RTA_DATA.length);
+            
+            // Convert dates
+            const autoTrades = window.RTA_DATA.map(t => {
+                let d = new Date(t.entryTime);
+                // Fix for .NET trailing zeroes if invalid
+                if (isNaN(d.getTime())) {
+                     // Try replace T with space or remove nanoseconds
+                     d = new Date(t.entryTime.split('.')[0]); 
+                }
+                
+                let dExit = new Date(t.exitTime);
+                if (isNaN(dExit.getTime())) {
+                     dExit = new Date(t.exitTime.split('.')[0]);
+                }
+                
+                return {
+                    ...t,
+                    entryTime: d,
+                    exitTime: dExit,
+                    // Ensure numbers
+                    entryPrice: Number(t.entryPrice),
+                    exitPrice: Number(t.exitPrice),
+                    pnl: Number(t.pnl)
+                };
+            });
+            
+            handleAutoFiles(autoTrades);
+        }
+    } catch (err) {
+        alert("Auto-Load Error: " + err.message);
+        console.error(err);
+    }
+    
+    function handleAutoFiles(newTrades) {
+         // Same logic as handleFiles but skipping FileReader
+         let addedCount = 0;
+         let updatedCount = 0;
+         
+         const getTradeKey = (t) => `${t.id}_${t.instrument}_${t.entryTime.getTime()}_${t.entryPrice}_${t.pnl}`;
+         const tradeMap = new Map();
+         globalAllTrades.forEach((t, index) => tradeMap.set(getTradeKey(t), index));
+         
+         newTrades.forEach(t => {
+            const key = getTradeKey(t);
+            if(tradeMap.has(key)) {
+                globalAllTrades[tradeMap.get(key)] = t; 
+                updatedCount++;
+            } else {
+                globalAllTrades.push(t);
+                tradeMap.set(key, globalAllTrades.length - 1);
+                addedCount++;
+            }
+         });
+         
+         if (globalAllTrades.length > 0) {
+             console.log(`Auto Import: ${addedCount} New, ${updatedCount} Updated.`);
+             saveData(); 
+             populateFilters(globalAllTrades); 
+             applyFilters(); 
+             dashboard.classList.remove('hidden');
+             dropZone.style.display = 'none';
+             if(addFilesBtn) addFilesBtn.style.display = 'inline-block';
+             if(clearDataBtn) clearDataBtn.style.display = 'inline-block';
+             
+             // alert("Auto-Loaded Backtest Data!");
+         }
     }
     
     // --- Drag & Drop Handling ---
@@ -192,6 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const dayVal = filterDay.value; // 'all' or '0'-'6'
         const hourVal = filterHour.value; // 'all' or '0'-'23'
         const targetVal = filterTarget.value; // 'all', 'TP1', 'TP2', 'SL'
+        const compVal = filterComponent.value; // 'all', 'scalp', 'runner'
 
         const filtered = globalAllTrades.filter(t => {
             // Instrument
@@ -215,20 +331,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Target Filter (New)
             if(targetVal !== 'all') {
-                // Check if t.result (contains exit name) matches the target.
-                // Assuming user CSV puts ExitName in the 'result' column (Index 7).
-                // Or maybe the strategy logic ensures specific names.
-                // Case insensitive check
                 const res = (t.result || "").toUpperCase();
                 
                 if (targetVal === 'SL') {
-                    if (!res.includes('SL')) return false; // Must indicate stop
+                    // Match "SL" OR "LOSS"
+                    if (!res.includes('SL') && !res.includes('LOSS')) return false; 
                 } 
                 else if (targetVal === 'TP1') {
-                    if (!res.includes('TP1')) return false;
+                    // Match "TP1" OR ("WIN" but NOT "TP2")
+                    // This assumes "Win" implies at least TP1, and if it's not TP2, it's TP1.
+                    const isTP1 = res.includes('TP1');
+                    const isGenericWin = res.includes('WIN') && !res.includes('TP2');
+                    if (!isTP1 && !isGenericWin) return false;
                 }
                 else if (targetVal === 'TP2') {
                     if (!res.includes('TP2')) return false;
+                }
+            }
+            
+            // Component Filter (New)
+            if(compVal !== 'all') {
+                const idStr = String(t.id);
+                if (compVal === 'scalp') {
+                    if (!idStr.endsWith('.1')) return false;
+                }
+                else if (compVal === 'runner') {
+                    if (!idStr.endsWith('.2')) return false;
                 }
             }
             
@@ -239,7 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Filter Event Listeners
-    [filterInstrument, filterDirection, filterDay, filterHour, filterTarget].forEach(el => {
+    [filterInstrument, filterDirection, filterDay, filterHour, filterTarget, filterComponent].forEach(el => {
         el.addEventListener('change', applyFilters);
     });
 
@@ -250,9 +378,11 @@ document.addEventListener('DOMContentLoaded', () => {
              filterDay.value = 'all';
              filterHour.value = 'all';
              filterTarget.value = 'all';
+             filterComponent.value = 'all';
              applyFilters();
         });
     }
+
 
     function handleFiles(fileList) {
         const promises = Array.from(fileList).map(file => readFile(file));
@@ -289,6 +419,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (globalAllTrades.length > 0) {
                  console.log(`Processed Import: ${addedCount} New, ${updatedCount} Updated.`);
+                 
+                 // DEBUG: Print unique exit names to help with filtering issues
+                 const exitNames = [...new Set(globalAllTrades.map(t => t.result))];
+                 console.log("DEBUG: Unique Exit Names found in CSV:", exitNames);
+                 // alert("DEBUG: Exit names found: " + exitNames.join(", ")); // Optional: alert user directly
+
                  saveData(); // Save to localStorage
                  populateFilters(globalAllTrades); // Update instrument list
                  applyFilters(); // Apply current filters (or default 'all') to render
@@ -301,6 +437,9 @@ document.addEventListener('DOMContentLoaded', () => {
                  if (addedCount === 0 && updatedCount === 0) {
                      // Still nice to show success or nothing, instead of error.
                      console.log("Data refreshed. No changes detected.");
+                     alert("Data Refreshed! No new trades found, but existing data was re-scanned.");
+                 } else {
+                     alert(`Success! Added ${addedCount} new trades and updated ${updatedCount}.`);
                  }
             } else {
                 alert('No valid trades found in the uploaded CSV files.');
@@ -322,14 +461,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Parsing Logic ---
     function parseCSV(text) {
         const lines = text.trim().split('\n');
-        if (lines.length < 2) return []; 
+        if (lines.length < 2) {
+             console.warn("CSV has less than 2 lines.");
+             return []; 
+        }
 
-        const trades = [];
         // Detect Delimiter (Line 1 header usually has multiple)
         const header = lines[0];
-        const delimiter = header.includes(';') ? ';' : ','; 
+        const delimiter = header.includes(';') ? ';' : ','; // Simple detection
         console.log("Detected Delimiter:", delimiter);
 
+        const trades = [];
+        let skippedCount = 0;
+        
         for (let i = 1; i < lines.length; i++) {
             const line = lines[i].trim();
             if (!line) continue;
@@ -337,8 +481,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const cols = line.split(delimiter);
             
             // Relaxed check: Custom exports might have fewer columns. 
+            // We absolutely need: ID, Instrument, EntryTime(2), PnL. 
+            // Result is col 7. PnL is col 8. So if length < 9, critical data might be missing.
+            // But let's try to parse what we can.
             if (cols.length < 5) { // Absolute minimum
                 console.warn(`Row ${i} skipped: Not enough columns (${cols.length})`, line);
+                skippedCount++;
                 continue; 
             }
 
@@ -355,8 +503,10 @@ document.addEventListener('DOMContentLoaded', () => {
                              clean = clean.replace(/,/g, ""); 
                          }
                     } else if (clean.indexOf(',') > -1) {
+                         // Only comma: 1,50
                          clean = clean.replace(',', '.');
                     }
+                    // Remove currency symbols
                     clean = clean.replace(/[^0-9.-]/g, "");
                     return parseFloat(clean);
                 };
@@ -376,18 +526,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
                 
                 if (isNaN(trade.pnl)) {
+                    // Try parsing PnL from earlier/later col if offset? No, risky.
+                    console.warn(`Row ${i} skipped: Invalid PnL`, cols[8]);
+                    skippedCount++;
                     continue;
                 }
 
                 trades.push(trade);
             } catch (err) {
                 console.warn("Row parsing error", err);
+                skippedCount++;
             }
         }
         
         if (trades.length === 0) {
              alert(`Warning: Could not parse any trades.\n\nCheck:\n1. Is the CSV delimiter '${delimiter}' correct?\n2. Are dates/numbers in a valid format?\n3. Does the CSV have headers?\n\n(See Console F12 for details)`);
         }
+        
         return trades;
     }
 
@@ -509,7 +664,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function deriveStats(stats, finalEquity) {
         const totalTrades = stats.wins + stats.losses;
         stats.winRate = totalTrades > 0 ? (stats.wins / totalTrades * 100).toFixed(1) : 0;
-        stats.profitFactor = stats.grossLoss > 0 ? (stats.grossProfit / stats.grossLoss).toFixed(2) : "∞";
+        stats.profitFactor = stats.grossLoss > 0 ? (stats.grossProfit / stats.grossLoss).toFixed(2) : "âˆž";
         stats.netProfit = finalEquity;
         stats.avgWin = stats.wins > 0 ? stats.totalWinPnL / stats.wins : 0;
         stats.avgLoss = stats.losses > 0 ? stats.totalLossPnL / stats.losses : 0;
@@ -547,11 +702,6 @@ document.addEventListener('DOMContentLoaded', () => {
             tension: 0.2,
             pointRadius: 0,
             order: 10 // Draw BEHIND (Higher order = background layer in this context usually, or keep consistent)
-            // Actually, Chart.js "order": 0 is TOP. So Total should be high number to be bottom?
-            // "The dataset with the lowest order is drawn last (on top)."
-            // So default is 0. 
-            // We want Instruments on Top -> Order 0.
-            // Total on Bottom -> Order 1.
         }];
         datasets[0].order = 10; // Explicitly set Total to background
 
@@ -776,15 +926,11 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         
         if(currentChartType === 'line') {
-             // For line chart, maybe show cumulative? Or just connected points of periodic PnL? 
-             // "Performance History" usually implies discrete bars per period. 
-             // If user requested "Line", literally change type to line.
              dataset.type = 'line';
              dataset.fill = false;
              dataset.tension = 0.3;
              dataset.borderColor = '#6366f1'; // Unified color for line
              dataset.pointBackgroundColor = bgColors;
-             // If line, remove background color array (or keep for points)
         }
 
         charts.periodic = new Chart(ctx, {
@@ -837,6 +983,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${t.entryPrice.toFixed(2)}</td>
                 <td>${t.exitTime ? t.exitPrice.toFixed(2) : '-'}</td>
                 <td>${t.result}</td>
+                <td>${t.mae !== undefined ? formatCurrency(t.mae) : '-'}</td>
+                <td>${t.mfe !== undefined ? formatCurrency(t.mfe) : '-'}</td>
                 <td class="${pnlClass}">${formatCurrency(t.pnl)}</td>
             `;
             tbody.appendChild(tr);
@@ -845,38 +993,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- AUDIT & MATH LOGIC ---
     
-    const MathUtils = {
-        mean: (arr) => arr.length ? arr.reduce((a,b)=>a+b,0) / arr.length : 0,
-        stdDev: (arr) => {
-            if(arr.length < 2) return 0;
-            const m = MathUtils.mean(arr);
-            const variance = arr.reduce((sq, n) => sq + Math.pow(n - m, 2), 0) / (arr.length - 1);
-            return Math.sqrt(variance);
-        },
-        tTestInfo: (arr) => {
-            // One-sample t-test against mu=0
-            const n = arr.length;
-            if(n < 2) return { t: 0, p: 1, significant: false };
-            const m = MathUtils.mean(arr);
-            const s = MathUtils.stdDev(arr);
-            const se = s / Math.sqrt(n);
-            const t = m / se;
-            // Approx p-value for large N (using normal distribution approximation)
-            // This is a rough estimation sufficient for trading purposes
-            // Alpha 0.05 => T > 1.96
-            const significant = Math.abs(t) > 1.96;
-            return { t: t.toFixed(2), significant: significant };
-        },
-        shuffle: (array) => {
-            let currentIndex = array.length, randomIndex;
-            while (currentIndex != 0) {
-                randomIndex = Math.floor(Math.random() * currentIndex);
-                currentIndex--;
-                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-            }
-            return array;
-        }
-    };
+    // --- AUDIT & MATH LOGIC ---
+    // (MathUtils moved to top)
 
     function calculateAuditStats(trades) {
         if(!trades || trades.length === 0) return;
@@ -887,7 +1005,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const mfes = trades.map(t => t.mfe || 0);
 
         // 2. Risk Metrics
-        const avgMAE = MathUtils.mean(maes.filter(m => m > 0)); // Filter zeros if needed? Usually MAE is >= 0
+        const avgMAE = MathUtils.mean(maes.filter(m => m > 0)); 
         const avgMFE = MathUtils.mean(mfes.filter(m => m > 0));
         
         let totalMFE = mfes.reduce((a,b)=>a+b,0);
@@ -920,33 +1038,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function runMonteCarlo(pnls, actualProfit) {
         const ITERATIONS = 1000;
         let worseCount = 0;
-        
-        // Use a copy to shuffle
         let baseArr = [...pnls];
 
         for(let i=0; i<ITERATIONS; i++) {
             MathUtils.shuffle(baseArr);
-            // Calculate a metric for this random run (e.g., Total Profit, or Max DD)
-            // Here we compare Total Profit. 
-            // NOTE: Total Profit is mathematically INVARIANT to shuffling if position size is constant.
-            // BUT: Drawdown IS NOT. 
-            // So for "Luck" in Profit, we need to compare against a random entry strategy, NOT shuffling existing PnLs.
-            // Shuffling existing PnLs checks for "Sequence Luck" (Ordering).
-            // To check if the *Strategy* has edge, we usually test mean > 0 (T-Test).
-            // Shuffling PnL is good for MaxDD luck.
-            
-            // Let's implement "Sequence Luck" check on Drawdown instead?
-            // "Is my current Low Drawdown result of luck?"
-            
-            // OR: Bootstrap Resampling (Allow duplicates). 
-            // If we resample with replacement, the sum changes.
-            
-            // Let's do Resampling (Bootstrap)
             let randomProfit = 0;
+            // Bootstrap resampling logic could be better, but simple shuffle test for now
+            // Actually, let's do simple resampling (Bootstrapping) logic:
             for(let j=0; j<baseArr.length; j++) {
                  randomProfit += baseArr[Math.floor(Math.random() * baseArr.length)];
             }
-            
             if(randomProfit < actualProfit) worseCount++;
         }
         
