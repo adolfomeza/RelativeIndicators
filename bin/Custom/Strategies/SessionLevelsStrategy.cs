@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.27"; // FIX: Validación de distancia SL para evitar rechazo del broker
+		private const string StrategyVersion = "v1.11.28"; // FIX: Si no puede crear SL, cierra posición inmediatamente
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -1095,9 +1095,19 @@ namespace NinjaTrader.NinjaScript.Strategies
 										Log(Time[0] + " EMERGENCY TP CREATED: " + tpTag + " @ " + emergencyTpPrice + " Qty=" + posQty);
 									}
 									catch (Exception ex)
-									{
-										Log(Time[0] + " EMERGENCY ORDER FAILED: " + ex.Message);
-									}
+{
+Log(Time[0] + " EMERGENCY ORDER FAILED: " + ex.Message);
+// v1.11.28: CRITICAL - If cant protect, CLOSE
+Log(Time[0] + " CRITICAL: Cannot protect. CLOSING.");
+try {
+if (isShortSetup)
+SubmitOrderUnmanaged(0, OrderAction.BuyToCover, OrderType.Market, posQty, 0, 0, "", "EmergencyClose_Short");
+else
+SubmitOrderUnmanaged(0, OrderAction.Sell, OrderType.Market, posQty, 0, 0, "", "EmergencyClose_Long");
+Log(Time[0] + " EMERGENCY CLOSE: Qty=" + posQty);
+currentEntryState = EntryState.Idle;
+} catch (Exception ex2) { Log(Time[0] + " FATAL: " + ex2.Message); }
+}
 								}
 								else
 								{

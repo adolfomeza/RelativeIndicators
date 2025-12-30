@@ -4,7 +4,18 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.27] - 2025-12-30 ✅ VERSIÓN ACTUAL
+## [1.11.28] - 2025-12-30 ✅ VERSIÓN ACTUAL
+### FIX CRÍTICO: Cerrar Posición Si No Puede Crear SL de Emergencia
+- **Problema**: Si SL de emergencia era rechazado (precio fuera de límites), posición quedaba sin protección
+- **Solución v1.11.28**: Fallback de cierre inmediato
+  - Si `SubmitOrderUnmanaged` para SL falla → cerrar posición con orden de mercado
+  - Log: `CRITICAL: Cannot protect. CLOSING.`
+  - Log: `EMERGENCY CLOSE: Qty=X`
+- **Resultado**: No más posiciones huérfanas sin SL
+
+---
+
+## [1.11.27] - 2025-12-30
 ### FIX: Validación de Distancia del SL (Prevenir Rechazo del Broker)
 - **Problema**: Al refrescar estrategia, SL a precio 4407.6 fue rechazado por el broker
   - Error: "The current price is outside the price limits set for this product"
