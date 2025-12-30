@@ -24,14 +24,27 @@ using NinjaTrader.NinjaScript.DrawingTools;
 using System.Net;
 using System.Net.Mail;
 using System.IO;
+using System.Windows.Controls; // v1.12.0: For control buttons
 #endregion
 
 //This namespace holds Strategies in this folder and is required. Do not change it. 
 namespace NinjaTrader.NinjaScript.Strategies
 {
+	// v1.12.0: Trading Mode Control
+	public enum TradingMode { Normal, Paused, LongOnly, ShortOnly }
+	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.28"; // FIX: Si no puede crear SL, cierra posición inmediatamente
+		private const string StrategyVersion = "v1.12.0"; // FEATURE: Botones de control (Pause, Long Only, Short Only, Close)
+		
+		// v1.12.0: CONTROL BUTTONS
+		private TradingMode currentTradingMode = TradingMode.Normal;
+		private System.Windows.Controls.Button btnPause;
+		private System.Windows.Controls.Button btnLongOnly;
+		private System.Windows.Controls.Button btnShortOnly;
+		private System.Windows.Controls.Button btnClose;
+		private System.Windows.Controls.StackPanel buttonPanel;
+		private bool buttonsInitialized = false;
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -563,6 +576,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 				// Initialize Helper Indicators
 				atr = ATR(14); // For Dynamic Spacing
 				
+				// v1.12.0: Initialize control buttons
+				InitializeControlButtons();
+				
 				// CACHE SESSION TIMES (Optimization for MES)
 				try 
 				{
@@ -601,6 +617,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 				// Better approach: Leave orders ALIVE. 
 				// The NEW instance (Startup Failsafe) will detect the "Ghost Orders" and cancel them 
 				// right before submitting new ones or closing the position.
+				
+				// v1.12.0: Cleanup control buttons
+				CleanupControlButtons();
 			}
 		}
 
@@ -2312,6 +2331,190 @@ currentEntryState = EntryState.Idle;
 		}
 		
 		// -------------------------------------------------------------------------
+		// v1.12.0: CONTROL BUTTONS (PAUSE, LONG ONLY, SHORT ONLY, CLOSE)
+		// -------------------------------------------------------------------------
+		private void InitializeControlButtons()
+		{
+			if (buttonsInitialized || ChartControl == null) return;
+			
+			ChartControl.Dispatcher.InvokeAsync(() =>
+			{
+				try
+				{
+					// Panel horizontal para botones
+					buttonPanel = new System.Windows.Controls.StackPanel();
+					buttonPanel.Orientation = Orientation.Horizontal;
+					buttonPanel.HorizontalAlignment = HorizontalAlignment.Left;
+					buttonPanel.VerticalAlignment = VerticalAlignment.Top;
+					buttonPanel.Margin = new Thickness(10, 10, 0, 0);
+					
+					// Crear botones
+					btnPause = CreateControlButton("▶ RUN", Brushes.ForestGreen);
+					btnLongOnly = CreateControlButton("↑ LONG", Brushes.Gray);
+					btnShortOnly = CreateControlButton("↓ SHORT", Brushes.Gray);
+					btnClose = CreateControlButton("✖ CLOSE", Brushes.Crimson);
+					
+					// Eventos
+					btnPause.Click += OnPauseClick;
+					btnLongOnly.Click += OnLongOnlyClick;
+					btnShortOnly.Click += OnShortOnlyClick;
+					btnClose.Click += OnCloseClick;
+					
+					buttonPanel.Children.Add(btnPause);
+					buttonPanel.Children.Add(btnLongOnly);
+					buttonPanel.Children.Add(btnShortOnly);
+					buttonPanel.Children.Add(btnClose);
+					
+					UserControlCollection.Add(buttonPanel);
+					buttonsInitialized = true;
+					Log(Time[0] + " CONTROL BUTTONS: Initialized");
+				}
+				catch (Exception ex)
+				{
+					Log(Time[0] + " CONTROL BUTTONS ERROR: " + ex.Message);
+				}
+			});
+		}
+		
+		private System.Windows.Controls.Button CreateControlButton(string text, Brush bgColor)
+		{
+			var btn = new System.Windows.Controls.Button();
+			btn.Content = text;
+			btn.Width = 75;
+			btn.Height = 22;
+			btn.Margin = new Thickness(2);
+			btn.Background = bgColor;
+			btn.Foreground = Brushes.White;
+			btn.FontWeight = FontWeights.Bold;
+			btn.FontSize = 10;
+			btn.BorderThickness = new Thickness(0);
+			return btn;
+		}
+		
+		private void OnPauseClick(object sender, RoutedEventArgs e)
+		{
+			if (currentTradingMode == TradingMode.Paused)
+			{
+				currentTradingMode = TradingMode.Normal;
+				Log(Time[0] + " CONTROL: Trading RESUMED");
+			}
+			else
+			{
+				currentTradingMode = TradingMode.Paused;
+				Log(Time[0] + " CONTROL: Trading PAUSED");
+			}
+			UpdateButtonStates();
+		}
+		
+		private void OnLongOnlyClick(object sender, RoutedEventArgs e)
+		{
+			if (currentTradingMode == TradingMode.LongOnly)
+				currentTradingMode = TradingMode.Normal;
+			else
+				currentTradingMode = TradingMode.LongOnly;
+			Log(Time[0] + " CONTROL: Mode = " + currentTradingMode);
+			UpdateButtonStates();
+		}
+		
+		private void OnShortOnlyClick(object sender, RoutedEventArgs e)
+		{
+			if (currentTradingMode == TradingMode.ShortOnly)
+				currentTradingMode = TradingMode.Normal;
+			else
+				currentTradingMode = TradingMode.ShortOnly;
+			Log(Time[0] + " CONTROL: Mode = " + currentTradingMode);
+			UpdateButtonStates();
+		}
+		
+		private void OnCloseClick(object sender, RoutedEventArgs e)
+		{
+			ClosePositionManual();
+		}
+		
+		private void ClosePositionManual()
+		{
+			if (Position.MarketPosition == MarketPosition.Flat)
+			{
+				Log(Time[0] + " MANUAL CLOSE: No position to close");
+				return;
+			}
+			
+			int qty = Math.Abs(Position.Quantity);
+			
+			try
+			{
+				// Cancel existing orders first
+				if (stopOrder != null && (stopOrder.OrderState == OrderState.Working || stopOrder.OrderState == OrderState.Accepted))
+				{
+					CancelOrder(stopOrder);
+					Log(Time[0] + " MANUAL CLOSE: Cancelled SL");
+				}
+				if (tp1Order != null && (tp1Order.OrderState == OrderState.Working || tp1Order.OrderState == OrderState.Accepted))
+				{
+					CancelOrder(tp1Order);
+					Log(Time[0] + " MANUAL CLOSE: Cancelled TP1");
+				}
+				if (tp2Order != null && (tp2Order.OrderState == OrderState.Working || tp2Order.OrderState == OrderState.Accepted))
+				{
+					CancelOrder(tp2Order);
+					Log(Time[0] + " MANUAL CLOSE: Cancelled TP2");
+				}
+				
+				// Close position
+				if (Position.MarketPosition == MarketPosition.Long)
+					SubmitOrderUnmanaged(0, OrderAction.Sell, OrderType.Market, qty, 0, 0, "", "ManualClose_Long");
+				else
+					SubmitOrderUnmanaged(0, OrderAction.BuyToCover, OrderType.Market, qty, 0, 0, "", "ManualClose_Short");
+				
+				Log(Time[0] + " MANUAL CLOSE SUBMITTED: Qty=" + qty);
+				currentEntryState = EntryState.Idle;
+				setupLevelName = "";
+			}
+			catch (Exception ex)
+			{
+				Log(Time[0] + " MANUAL CLOSE FAILED: " + ex.Message);
+			}
+		}
+		
+		private void UpdateButtonStates()
+		{
+			ChartControl?.Dispatcher.InvokeAsync(() =>
+			{
+				if (btnPause == null) return;
+				
+				// Pause button
+				btnPause.Content = currentTradingMode == TradingMode.Paused ? "⏸ PAUSE" : "▶ RUN";
+				btnPause.Background = currentTradingMode == TradingMode.Paused ? Brushes.Orange : Brushes.ForestGreen;
+				
+				// Long button
+				btnLongOnly.Background = currentTradingMode == TradingMode.LongOnly ? Brushes.DodgerBlue : Brushes.Gray;
+				
+				// Short button
+				btnShortOnly.Background = currentTradingMode == TradingMode.ShortOnly ? Brushes.Crimson : Brushes.Gray;
+			});
+		}
+		
+		private void CleanupControlButtons()
+		{
+			if (ChartControl == null) return;
+			
+			ChartControl.Dispatcher.InvokeAsync(() =>
+			{
+				try
+				{
+					if (btnPause != null) btnPause.Click -= OnPauseClick;
+					if (btnLongOnly != null) btnLongOnly.Click -= OnLongOnlyClick;
+					if (btnShortOnly != null) btnShortOnly.Click -= OnShortOnlyClick;
+					if (btnClose != null) btnClose.Click -= OnCloseClick;
+					
+					if (buttonPanel != null && UserControlCollection.Contains(buttonPanel))
+						UserControlCollection.Remove(buttonPanel);
+				}
+				catch { }
+			});
+		}
+		
+		// -------------------------------------------------------------------------
 		// DYNAMIC POSITION SIZING (v1.8.0) + ATR Risk Scaling (v1.10.20)
 		// -------------------------------------------------------------------------
 		private int CalculateDynamicQuantity(double entryPrice, double stopPrice)
@@ -2378,6 +2581,20 @@ currentEntryState = EntryState.Idle;
 		// -------------------------------------------------------------------------
 		private void ManageEntryA_Plus()
 		{
+			// v1.12.0: Check trading mode before processing new entries
+			if (currentEntryState == EntryState.Idle)
+			{
+				// If paused, don't look for new setups
+				if (currentTradingMode == TradingMode.Paused)
+					return;
+				
+				// Check direction filter for new entries
+				if (currentTradingMode == TradingMode.LongOnly && isShortSetup)
+					return; // Skip short setups
+				if (currentTradingMode == TradingMode.ShortOnly && !isShortSetup)
+					return; // Skip long setups
+			}
+			
 			// v1.10.26: VWAP MITIGATION RETRY DETECTION
 			if (currentEntryState == EntryState.WaitingForVwapMitigation && waitingForVwapMitigation)
 			{

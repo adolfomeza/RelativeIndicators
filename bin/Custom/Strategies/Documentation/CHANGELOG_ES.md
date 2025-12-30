@@ -4,7 +4,22 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.28] - 2025-12-30 ✅ VERSIÓN ACTUAL
+## [1.12.0] - 2025-12-30 ✅ VERSIÓN ACTUAL
+### FEATURE: Botones de Control Interactivos
+- **Nuevos botones en el chart** (esquina superior izquierda):
+  - **▶ RUN / ⏸ PAUSE**: Toggle para pausar/reanudar trading
+  - **↑ LONG**: Solo permitir entradas Long (toggle)
+  - **↓ SHORT**: Solo permitir entradas Short (toggle)
+  - **✖ CLOSE**: Cerrar posición actual con orden de mercado
+- **Enum `TradingMode`**: Normal, Paused, LongOnly, ShortOnly
+- **Integración con ManageEntryA_Plus**: Respeta el modo activo antes de procesar nuevos setups
+- **Cierre Manual**: Cancela SL/TP1/TP2 antes de cerrar posición
+- **Logs**: `CONTROL: Trading PAUSED/RESUMED`, `CONTROL: Mode = X`, `MANUAL CLOSE`
+- **Tecnología**: WPF Buttons via `UserControlCollection`
+
+---
+
+## [1.11.28] - 2025-12-30
 ### FIX CRÍTICO: Cerrar Posición Si No Puede Crear SL de Emergencia
 - **Problema**: Si SL de emergencia era rechazado (precio fuera de límites), posición quedaba sin protección
 - **Solución v1.11.28**: Fallback de cierre inmediato
