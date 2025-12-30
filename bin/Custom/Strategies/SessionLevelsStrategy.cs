@@ -31,7 +31,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.11.24"; // Fix: TP1/TP2 R/R now persists when trade crosses sessions
+		private const string StrategyVersion = "v1.11.25"; // Fix: Confirmation candle highlight now works on retries
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -4151,6 +4151,7 @@ setupLevelName = "";
 						
 						Log(string.Format("{0} VWAP RETRY: Waiting for price to break {1:F2} for VWAP#{2}",
 							Time, vwapCandleExtreme, currentVwapNumber));
+						visualConfirmationDone = false; // v1.11.25: Reset to allow confirmation candle highlight on retries
 					}
 					else
 					{

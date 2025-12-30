@@ -4,7 +4,15 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.11.24] - 2025-12-29 ✅ VERSIÓN ACTUAL
+## [1.11.25] - 2025-12-29 ✅ VERSIÓN ACTUAL
+### Fix: Vela de Confirmación Amarilla Ahora Funciona en Reintentos
+- **Problema**: La vela amarilla solo se pintaba en el primer intento, no en reintentos
+- **Causa**: `visualConfirmationDone` no se reseteaba cuando se iniciaba un retry
+- **Solución**: Reset de `visualConfirmationDone = false` al iniciar `WaitingForVwapMitigation`
+
+---
+
+## [1.11.24] - 2025-12-29
 ### Fix: TP1/TP2 R/R Persiste Cuando Trade Cruza Sesiones
 - **Problema**: R/R de TP1 mostraba 0 cuando trade cruzaba de sesión
 - **Causa**: `activeTp1Price` podía perderse/recalcularse al cambiar sesión
