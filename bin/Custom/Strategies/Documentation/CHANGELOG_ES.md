@@ -4,7 +4,69 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.13.1] - 2025-12-30 ✅ VERSIÓN ACTUAL (CRITICAL HOTFIX)
+## [1.13.5] - 2025-12-30 ✅ VERSIÓN ACTUAL (FIX CRÍTICO)
+### FIXED: SL Duplicado en Llamadas Múltiples a SubmitProtectionOrders
+- **Problema**: Dos órdenes SL creadas para el mismo trade
+  - MNQ entró con 3 contratos @ 19:48
+  - Dos SL creadas con timestamps idénticos (7:48:04.080 PM)
+  - Total: 6 contratos en SL para entrada de solo 3
+- **Causa**: `EnsureProtection` llama `SubmitProtectionOrders` DOS veces (TP1, TP2)
+  - Primera llamada (TP1): Crea SL con `totalPositionQty`
+  - Segunda llamada (TP2): `stopOrder` aún `null` (asíncrono) → Crea OTRO SL
+  - Protección existente (`stopOrder == null` check) falla por timing
+- **Solución v1.13.5**: Flag global `slOrderCreatedThisEntry`
+  - Reset en cada nuevo entry fill (`OnExecutionUpdate`)
+  - Check `if (stopOrder == null && !slOrderCreatedThisEntry)` antes de crear SL
+  - Marca `slOrderCreatedThisEntry = true` después de crear SL
+  - Segunda llamada ve flag=true → Skip con log "SL SKIPPED: Already created in current entry"
+- **Resultado**: Solo 1 SL por trade, sin importar cuántas veces se llame `SubmitProtectionOrders`
+
+## [1.13.4] - 2025-12-30 (FIX)
+### FIXED: Múltiples Fills de "Exit on session close" No Se Exportaban
+- **Problema**: Último trade quedaba con 1 contrato sin exportar (PositionActive)
+  - NinjaTrader mostraba 9 trades, CSV solo tenía 8
+  - "Exit on session close" generaba 2 fills (1 contrato cada uno)
+  - Solo el primer fill se exportaba, el segundo quedaba sin ID
+- **Causa**: v1.13.3 usaba lógica `if (TP1) -> .1, else if (TP2) -> .2, else -> no suffix`
+  - Ambos fills de "Exit on session close" caían en `else` → mismo ID → solo se guardaba 1
+- **Solución**: Nuevo contador `tradeExitFillsCount`
+  - Se incrementa en cada export (`tradeExitFillsCount++`)
+  - Se resetea al iniciar nuevo trade (`tradeExitFillsCount = 0`)
+  - Genera IDs: `8.1`, `8.2`, etc. para TODOS los partial fills
+- **Lógica mejorada**:
+  - Si `tradeExitFillsCount == 1` y `Quantity >= 2` → ID sin sufijo (ambos contratos juntos)
+  - Si `tradeExitFillsCount > 1` o `Quantity == 1` → ID con sufijo `.1`, `.2`, etc.
+- **Resultado**: Ahora exporta TODOS los fills, incluyendo múltiples "Exit on session close"
+
+## [1.13.3] - 2025-12-30
+### FEATURE: Export CSV por Cada Fill de Salida (Partial Fills)
+- **Necesidad**: Analizar performance de TP1 vs TP2 por separado (preparación para múltiples salidas futuras)
+- **Cambio**: CSV ahora exporta **1 línea por cada fill de exit** (no solo cuando Position == Flat)
+  - TP1 fill → Exporta inmediatamente con ID `X.1`
+  - TP2 fill → Exporta inmediatamente con ID `X.2`
+  - SL fill (ambos contratos) → Exporta con ID `X`
+- **IDs Split**: 
+  - `1.1` = Trade #1, Scalp (TP1)
+  - `1.2` = Trade #1, Runner (TP2)
+  - `2` = Trade #2, ambos contratos cerrados juntos (SL)
+- **Beneficio**: Permite estudios granulares:
+  - Win rate TP1 vs TP2
+  - Cuántos trades llegan a TP2
+  - Performance individual de cada salida
+- **Resultado**: NinjaTrader muestra 9 trades → CSV ahora tendrá 9 líneas (antes solo 8)
+
+## [1.13.2] - 2025-12-30
+### FIXED: CSV Export Corrupto (Null-Safe tradeSetupName)
+- **Problema**: CSV exportado tenía líneas vacías/corruptas - 9 trades en NT pero solo 1 en CSV
+- **Causa**: `tradeSetupName.Replace(",", ";")` fallaba cuando `tradeSetupName` era null/empty, causando excepción silenciosa que corrompía el archivo
+- **Solución**: Validación null-safe antes del Replace:
+  ```csharp
+  string safeSetupName = string.IsNullOrEmpty(tradeSetupName) ? "" : tradeSetupName.Replace(",", ";");
+  ```
+- **Logs confirmaron**: 8 trades exportados (`CSV EXPORT: Trade #1-8`) pero archivo corrupto
+- **Resultado**: CSV ahora exporta todos los trades correctamente sin corrupción
+
+## [1.13.1] - 2025-12-30
 ### FIXED: Protección Duplicada (Concurrency Fix)
 - **Problema**: Se detectó en logs de MGC (Live) que `EnsureProtection` se ejecutaba múltiples veces simultáneamente (disparado por `OnExecutionUpdate` y `CheckSafetyNet` al mismo tiempo), creando órdenes de SL y TP duplicadas (ej: 12 contratos de SL para una posición de 7).
 - **Solución**: Se implementó una variable de bloqueo `isProtectionProcessing` en `EnsureProtection` para garantizar que solo un hilo de ejecución pueda procesar la creación de órdenes de protección a la vez.

@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.13.1"; // CRITICAL FIX: Prevent duplicate protection orders (concurrency lock)
+		private const string StrategyVersion = "v1.13.5"; // FIX: Prevent duplicate SL creation in SubmitProtectionOrders
 		
 		// v1.12.1: CONTROL BUTTONS (simplified to 2 buttons)
 		private TradingMode currentTradingMode = TradingMode.Normal;
@@ -55,8 +55,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private string tradeSetupName = "";
 		private string tradeDirection = "";
 		private int tradeExportId = 0;         // Auto-incrementing ID for CSV
+		private int tradeExitFillsCount = 0;   // v1.13.4: Count exit fills for split IDs
 		private string csvExportPath = "";
 		private bool isTrackingTrade = false;  // Flag to track MAE/MFE
+		private bool slOrderCreatedThisEntry = false; // v1.13.5: Prevent duplicate SL creation
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -3719,14 +3721,20 @@ setupLevelName = "";
 				stopOrder = null;
 			}
 			
-			if (stopOrder == null)
+			// v1.13.5: Also check if SL already created in this call to EnsureProtection
+			if (stopOrder == null && !slOrderCreatedThisEntry)
 			{
 				// Create new SL
 				string slTag = string.Format("{0}_{1:D2}", direction == "Short" ? "SL_Short" : "SL_Long", currentVwapNumber);
 				OrderAction slAction = direction == "Short" ? OrderAction.BuyToCover : OrderAction.Sell;
 				
-				stopOrder = SubmitOrderUnmanaged(0, slAction, OrderType.StopMarket, totalPositionQty, 0, slPrice, "", slTag);
+				stopOrder = SubmitOrderUnmanaged(0, slAction, OrderType.StopMarket, totalPositionQty, 0,slPrice, "", slTag);
+				slOrderCreatedThisEntry = true; // v1.13.5: Mark SL as created
 				Log(string.Format("SL CREATED: {0} @ {1} Qty={2}", slTag, slPrice, totalPositionQty));
+			}
+			else if (slOrderCreatedThisEntry)
+			{
+				Log("SL SKIPPED: Already created in current entry (duplicate prevention)");
 			}
 			else if (slAlreadyActive)
 			{
@@ -4340,13 +4348,15 @@ setupLevelName = "";
 						
 						// v1.13.0: Initialize TradeAnalyzer export variables
 						tradeExportId++;
+						tradeExitFillsCount = 0; // v1.13.4: Reset exit fills counter
+				slOrderCreatedThisEntry = false; // v1.13.5: Reset SL duplication flag
 						tradeEntryPrice = execution.Order.AverageFillPrice;
 						tradeEntryTime = time;
 						tradeDirection = Position.MarketPosition == MarketPosition.Long ? "Long" : "Short";
 						tradeSetupName = setupLevelName;
 						tradeMAE = 0;
 						tradeMFE = 0;
-						isTrackingTrade = true;
+						isTrackingTrade = true; // Flag to track MAE/MFE
 						Log(Time + " CSV EXPORT: Trade #" + tradeExportId + " started - " + tradeDirection + " @ " + tradeEntryPrice);
 					}
 					
@@ -4434,6 +4444,60 @@ setupLevelName = "";
 			
 			if (execution.Order.OrderState == OrderState.Filled && isExitOrder)
 			{
+				// v1.13.3: Export CSV on EACH exit fill (not only when flat)
+				if (isTrackingTrade && !string.IsNullOrEmpty(csvExportPath))
+				{
+					try
+					{
+						double exitPrice = execution.Order.AverageFillPrice;
+						
+						// Calculate PnL based on direction
+						double pnl = 0;
+						if (tradeDirection == "Long")
+							pnl = (exitPrice - tradeEntryPrice) * execution.Quantity * Instrument.MasterInstrument.PointValue;
+						else
+							pnl = (tradeEntryPrice - exitPrice) * execution.Quantity * Instrument.MasterInstrument.PointValue;
+						
+						string resultName = execution.Order.Name; // "TP1_Long", "SL_Short", etc.
+						
+						// v1.13.4: Increment fill counter and generate sub-ID
+						tradeExitFillsCount++;
+						
+						// Use fill counter for unique IDs: 1.1, 1.2, etc (handles TP1, TP2, and multiple 'Exit on session close')
+						string tradeId;
+						if (tradeExitFillsCount == 1 && execution.Quantity >= 2)
+							tradeId = tradeExportId.ToString(); // First fill of whole position (both contracts closed together)
+						else
+							tradeId = tradeExportId + "." + tradeExitFillsCount; // Partial fill: 1.1, 1.2, etc
+						
+						// Format CSV line - Ensure all values are valid
+						string safeSetupName = string.IsNullOrEmpty(tradeSetupName) ? "" : tradeSetupName.Replace(",", ";");
+						
+						string line = string.Format("{0},{1},{2:yyyy-MM-dd HH:mm:ss},{3},{4},{5:yyyy-MM-dd HH:mm:ss},{6},{7},{8:F2},{9:F2},{10:F2},{11}",
+							tradeId,
+							Instrument.FullName,
+							tradeEntryTime,
+							tradeDirection,
+							tradeEntryPrice,
+							time,
+							exitPrice,
+							resultName,
+							pnl,
+							tradeMAE,
+							tradeMFE,
+							safeSetupName
+						);
+						
+						System.IO.File.AppendAllText(csvExportPath, line + Environment.NewLine);
+						Log(Time + " CSV EXPORT: Trade #" + tradeId + " closed - " + resultName + " PnL=" + pnl.ToString("F2"));
+					}
+					catch (Exception ex)
+					{
+						Log(Time + " CSV EXPORT ERROR: " + ex.Message);
+					}
+				}
+				
+				// Only stop tracking when position is FULLY closed
 				if (Position.MarketPosition == MarketPosition.Flat)
 				{
 					bool isSLClose = execution.Order.Name.Contains("SL_");
@@ -4441,48 +4505,7 @@ setupLevelName = "";
 					lastPositionCloseTime = DateTime.Now; // v1.11.19: Prevent orphan false positives
 					TriggerScreenshot("Exit_" + execution.Order.Name, DateTime.Now, executionId);
 					
-					// v1.13.0: Export trade to CSV
-					if (isTrackingTrade && !string.IsNullOrEmpty(csvExportPath))
-					{
-						try
-						{
-							double exitPrice = execution.Order.AverageFillPrice;
-							
-							// Calculate PnL based on direction
-							double pnl = 0;
-							if (tradeDirection == "Long")
-								pnl = (exitPrice - tradeEntryPrice) * execution.Quantity * Instrument.MasterInstrument.PointValue;
-							else
-								pnl = (tradeEntryPrice - exitPrice) * execution.Quantity * Instrument.MasterInstrument.PointValue;
-							
-							string resultName = execution.Order.Name; // "TP1_Long", "SL_Short", etc.
-							
-							// Format CSV line
-							string line = string.Format("{0},{1},{2:yyyy-MM-dd HH:mm:ss},{3},{4},{5:yyyy-MM-dd HH:mm:ss},{6},{7},{8:F2},{9:F2},{10:F2},{11}",
-								tradeExportId,
-								Instrument.FullName,
-								tradeEntryTime,
-								tradeDirection,
-								tradeEntryPrice,
-								time,
-								exitPrice,
-								resultName,
-								pnl,
-								tradeMAE,
-								tradeMFE,
-								tradeSetupName.Replace(",", ";") // Avoid CSV delimiter issues
-							);
-							
-							System.IO.File.AppendAllText(csvExportPath, line + Environment.NewLine);
-							Log(Time + " CSV EXPORT: Trade #" + tradeExportId + " closed - " + resultName + " PnL=" + pnl.ToString("F2"));
-						}
-						catch (Exception ex)
-						{
-							Log(Time + " CSV EXPORT ERROR: " + ex.Message);
-						}
-						
-						isTrackingTrade = false;
-					}
+					isTrackingTrade = false;
 					
 					// v1.10.26: Check if we can retry
 					bool canRetry = false;
