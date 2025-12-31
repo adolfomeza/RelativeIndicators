@@ -19,7 +19,7 @@ Este documento sirve como punto central de verdad para el indicador **RelativeDV
 ## Reglas de Desarrollo
 1.  **Versionado**: Seguir SemVer (Major.Minor.Patch) y registrar cambios en `CHANGELOG_ES.md`.
 2.  **Backups**: Antes de cambios críticos, crear backup con extensión `.bak`.
-3.  **Commits Automáticos**: Cada cambio debe ser registrado en CHANGELOG y subido a GitHub automáticamente.
+3.  **Registro en Git**: Todos los cambios deben ser subidos a Git para mantener un registro histórico detallado. Esto es obligatorio.
 4.  **Idioma**: Todos los documentos `.md` deben estar en **ESPAÑOL**.
 5.  **Sincronización de Versión**: La constante `versionString` en el código debe coincidir con `CHANGELOG_ES.md`.
 

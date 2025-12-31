@@ -6,6 +6,35 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 
 ---
 
+## [2.5.21] - 2025-12-30
+### 🧹 Reorganización de Propiedades
+
+### Cambiado
+- **Organización de UI**: Se han reagrupado todas las propiedades del indicador en el panel de configuración para mayor claridad.
+  - **1. Configuración Principal**: Sesión, Tipo de cálculo.
+  - **2. Bandas VWAP**: Multiplicadores y toggles de visualización.
+  - **3. Zonas PVA**: Configuración de las nuevas zonas simplificadas.
+  - **4. Visuales**: Todos los colores, estilos y opacidades.
+  - **5. Otros**: Versión y Debug.
+  - **Z_Hidden**: Propiedades legadas ocultas (Session Zones antiguas, lógica de señales desactivada) colocadas al final para limpiar la interfaz.
+- **Correcciones**:
+  - Solucionado error de compilación por atributos duplicados (`CS0579`).
+  - **Refinamiento Visual:**
+  - Separación de propiedades de VWAP y Bandas.
+  - Movidos colores de Bandas 0.5 y 1.5 al grupo "4. Visuales".
+  - **Nueva Agrupación de Señales:** Creado grupo "5. Señales" para facilitar la configuración de IPB, EF, BPB y RPB.
+  - **Visibilidad Restaurada:** Las propiedades de activación y estilo de las señales (IPB, EF, BPB, RPB) ahora son visibles y configurables desde la UI.
+  - **Corrección de Renderizado:** Se ha eliminado la dependencia errónea que ocultaba las señales IPB/EF si las Bandas DVA estaban desactivadas. Ahora las señales se dibujan independientemente.
+  - **Corrección de Colores BPB/RPB:** Se han eliminado colores fijos (Amarillo) en las señales BPB/RPB para respetar los colores configurados por el usuario.
+  - **Mejora:** Se eliminaron los filtros restrictivos `Max Candle Width` y `Filter Broad Bars` para permitir una generación de señales más fluida, basada puramente en la acción del precio y volumen.
+- **Visibilidad:** Se ha expuesto la propiedad `Allow Multiple IPB` en la configuración (Grupo 5. Señales) para permitir múltiples señales IPB en una misma tendencia, desactivada por defecto para filtrar ruido.
+  - Renombrado grupo "5. Otros" a "6. Otros".
+  - Ocultadas propiedades internas `Serializable` de la UI.
+  - **Refinamiento Visual**: Se han separado y ordenado secuencialmente las propiedades del VWAP y de las Bandas (inc. 0.5 y 1.5 SD) para facilitar la configuración.
+  - **Limpieza UI**: Se han ocultado propiedades técnicas internas (`Serializable`) que aparecían erróneamente en el grupo "Misc".
+
+---
+
 ## [2.5.20] - 2025-12-30
 ### 🎨 Ajuste de Z-Order
 
