@@ -6,7 +6,8 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 
 ---
 
-## [2.5.21] - 2025-12-30
+## [2.5.22] - 2025-12-30
+### 🧠 Filtro Adaptativo (Smart ADR)
 ### 🧹 Reorganización de Propiedades
 
 ### Cambiado
@@ -28,6 +29,10 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
   - **Corrección de Colores BPB/RPB:** Se han eliminado colores fijos (Amarillo) en las señales BPB/RPB para respetar los colores configurados por el usuario.
   - **Mejora:** Se eliminaron los filtros restrictivos `Max Candle Width` y `Filter Broad Bars` para permitir una generación de señales más fluida, basada puramente en la acción del precio y volumen.
 - **Visibilidad:** Se ha expuesto la propiedad `Allow Multiple IPB` en la configuración (Grupo 5. Señales) para permitir múltiples señales IPB en una misma tendencia, desactivada por defecto para filtrar ruido.
+- **Nuevo:** Implementado **Filtro Adaptativo de Volatilidad** para el inicio de sesión (Grupo 5. Señales).
+  - Utiliza el historial completo de "Días Cargados" para calcular un Rango Promedio de Sesión.
+  - Bloquea señales hasta que el DVA se expanda al menos un X% (Default 5%) de este rango promedio.
+  - Soluciona el problema de señales falsas en la apertura del mercado o en sesiones nocturnas (ETH) de baja volatilidad.
   - Renombrado grupo "5. Otros" a "6. Otros".
   - Ocultadas propiedades internas `Serializable` de la UI.
   - **Refinamiento Visual**: Se han separado y ordenado secuencialmente las propiedades del VWAP y de las Bandas (inc. 0.5 y 1.5 SD) para facilitar la configuración.
