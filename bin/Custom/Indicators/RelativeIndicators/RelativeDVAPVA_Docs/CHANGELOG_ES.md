@@ -20,6 +20,11 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
   - **Z_Hidden**: Propiedades legadas ocultas (Session Zones antiguas, lógica de señales desactivada) colocadas al final para limpiar la interfaz.
 - **Correcciones**:
   - Solucionado error de compilación por atributos duplicados (`CS0579`).
+  - **Nuevo Feature: Extreme Fade Bands (Dual Session Confluence):**
+    - **Motor Dual:** Calcula simultáneamente RTH y ETH (Full) en una sola instancia del indicador.
+    - **Trigger de Confluencia:** El VWAP Anclado se activa solo cuando el precio toca la intersección de las bandas Main y Secondary (Confluencia Extrema).
+    - **Visualización Secundaria:** Opción `Show Secondary Bands` (Activa por defecto). Muestra las bandas de la sesión oculta con líneas punteadas grises (SD2/SD3) para identificar visualmente la confluencia.
+    - Propiedades: `Show Anchored VWAP`, `Show Secondary Bands`, `Anchor Source Band` (SD2/SD3), `Anchor Side` (Upper/Lower/Both).
   - **Refinamiento Visual:**
   - Separación de propiedades de VWAP y Bandas.
   - Movidos colores de Bandas 0.5 y 1.5 al grupo "4. Visuales".

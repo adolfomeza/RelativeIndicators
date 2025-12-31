@@ -67,6 +67,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
 		private bool							showDVABands				= true;
 		private bool							showSessionVWAPLine			= true;
+		private bool							showDVAInnerBands			= true;
 		private double							open						= 0.0;
 		private double							high						= 0.0;
 		private double							low							= 0.0;
@@ -254,6 +255,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		
 		private List<SimplePvaZone> pvaZones = new List<SimplePvaZone>();
 
+		// Helper Check for Extreme Fade Bands - MOVED TO GLOBAL ENUMS
+		
 		// IPB/EF Logic Variables
 		public enum MarketState
 		{
@@ -469,6 +472,30 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		private bool showBPB = true;
 		private bool showRPB = true;
 		
+		// Extreme Fade Bands (Anchored VWAP) Variables
+		private bool showAnchoredVWAP = false; // Disabled by default
+		private ExtremeFadeSource anchoredVWAPSource = ExtremeFadeSource.SD3;
+		private ExtremeFadeSide anchoredVWAPSide = ExtremeFadeSide.Upper;
+		private SessionVWAP anchoredVWAP = new SessionVWAP();
+		private bool isAnchorActive = false;
+		private int anchorStartBar = -1;
+		
+		// Dual Session (Hidden/Secondary) Variables
+		private bool enableDualSession = true; // Always on for this feature?
+		private bool showSecondaryBands = true; // Default True as requested
+		private double secVolSum = 0;
+		private double secPvSum = 0;
+		private double secSumSquaredDiffs = 0;
+		private double secVWAP = 0;
+		private double secStdDev = 0;
+		private double secUpperBand2 = 0;
+		private double secLowerBand2 = 0;
+		private double secUpperBand3 = 0;
+		private double secLowerBand3 = 0;
+		private double secCount = 0;
+		private TimeSpan tsSecondaryStart;
+		private TimeSpan tsSecondaryEnd;
+		
 		// Market Analyzer Properties
 		[Browsable(false)]
 		[XmlIgnore]
@@ -578,6 +605,17 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				// New 1.5 SD Plots (Transparent by default)
 				AddPlot(new Stroke(Brushes.Transparent, 1), PlotStyle.Line, "Upper Band SD 1.5");
 				AddPlot(new Stroke(Brushes.Transparent, 1), PlotStyle.Line, "Lower Band SD 1.5");
+				// Anchored VWAP (Extreme Fade Feature) - Index 11
+				AddPlot(new Stroke(Brushes.White, 3), PlotStyle.Line, "Anchored VWAP"); // Thicker white line by default
+				
+				// Secondary Session Bands (Visual Reference) - Indices 12-15
+				// Default style: Dashed, somewhat transparent or distinct
+				Stroke secStroke = new Stroke(Brushes.LightGray, DashStyleHelper.Dash, 1);
+				AddPlot(secStroke, PlotStyle.Line, "Sec Upper Band SD 3"); // 12
+				AddPlot(secStroke, PlotStyle.Line, "Sec Upper Band SD 2"); // 13
+				AddPlot(secStroke, PlotStyle.Line, "Sec Lower Band SD 2"); // 14
+				AddPlot(secStroke, PlotStyle.Line, "Sec Lower Band SD 3"); // 15
+				
 				SetZOrder(-300);
 			}
 			else if (State == State.Configure)
@@ -589,6 +627,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				Plots[4].Brush = innerBandBrush.Clone();
 				Plots[5].Brush = middleBandBrush.Clone();
 				Plots[6].Brush = outerBandBrush.Clone();
+
+
+
 				Plots[0].Width = plot0Width;
 				Plots[0].PlotStyle = plot0Style;
 				Plots[0].DashStyleHelper = dash0Style;			
@@ -647,6 +688,21 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				outerAreaBrush	= outerBandBrush.Clone();
 				outerAreaBrush.Opacity = (float) outerAreaOpacity/100.0;
 				outerAreaBrush.Freeze();
+
+				// Visibility Overrides (MOVED TO END - Visual Only - Logic Remains Active)
+				if (!showSessionVWAPLine) Plots[0].Brush = Brushes.Transparent;
+				if (!showDVAInnerBands)
+				{
+					// Hide SD1 (+/- 1.0)
+					Plots[3].Brush = Brushes.Transparent;
+					Plots[4].Brush = Brushes.Transparent;
+					// Hide SD0.5 (+/- 0.5)
+					Plots[7].Brush = Brushes.Transparent;
+					Plots[8].Brush = Brushes.Transparent;
+					// Hide SD1.5 (+/- 1.5)
+					Plots[9].Brush = Brushes.Transparent;
+					Plots[10].Brush = Brushes.Transparent;
+				}
 				if (sessionZoneBrush != null) sessionZoneBrush.Freeze();
 				if (zoneLineBrush != null) zoneLineBrush.Freeze();
 				if (zoneTextBrush != null) zoneTextBrush.Freeze();
@@ -1584,6 +1640,46 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 						if (sessionRanges.Count > 0) averageRecentRange = sum / sessionRanges.Count;
 					}
 
+					// -------------------------------------------------------------------------
+			// DUAL SESSION INITIALIZATION (First Bar)
+			// -------------------------------------------------------------------------
+			if (IsFirstTickOfBar && Bars.IsFirstBarOfSession && enableDualSession)
+			{
+				try
+				{
+					// If Main is Custom (RTH), Secondary is Full (Exchange)
+					if (sessionType == SessionTypeVWAPD.Custom_Hours)
+					{
+						// Secondary = Full Session (Approximate as 18:00 start or use Exchange schedule)
+						// For simplicity in this logic, we assume Full Session resets at the start of the trading day (17:00/18:00)
+						// NinjaTrader's Bars.IsFirstBarOfSession usually handles the "Full Day" boundary.
+						// So we set Secondary to "Always On" relative to the bars?
+						// Or better: Use the Exchange Times for Secondary.
+						// We'll treat Secondary as "Full" -> 00:00 to 24:00 (Reset at session start)
+						tsSecondaryStart = TimeSpan.FromHours(0); 
+						tsSecondaryEnd = TimeSpan.FromHours(24);
+					}
+					else
+					{
+						// Main is Full, Secondary is RTH (Custom)
+						// Use the inputs provided in the indicator parameters
+						if (string.IsNullOrEmpty(S_CustomSessionStart)) S_CustomSessionStart = "09:30";
+						if (string.IsNullOrEmpty(S_CustomSessionEnd)) S_CustomSessionEnd = "16:00";
+						
+						tsSecondaryStart = TimeSpan.Parse(S_CustomSessionStart);
+						tsSecondaryEnd = TimeSpan.Parse(S_CustomSessionEnd);
+					}
+				}
+				catch { /* Ignore parse errors */ }
+				
+				// Reset Secondary Calculation
+				secVolSum = 0; secPvSum = 0; secSumSquaredDiffs = 0; secCount = 0;
+			}
+			
+			// -------------------------------------------------------------------------
+			// PRIMARY CALCULATION (Existing)
+			// -------------------------------------------------------------------------
+			// Check if new session (Primary)
 					// 2. Reset for NEW session
 					currentSessionHigh = High[0];
 					currentSessionLow = Low[0];
@@ -1994,6 +2090,172 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                 }
 				}
 			
+				// -------------------------------------------------------------------------
+				// 7. Secondary Session Calculation (Dual Engine)
+				// -------------------------------------------------------------------------
+				if (enableDualSession)
+				{
+					TimeSpan now = Time[0].TimeOfDay;
+					// Standardize Logic: Is Inside Window?
+					bool insideSec = false;
+					if (tsSecondaryStart < tsSecondaryEnd)
+						insideSec = (now >= tsSecondaryStart && now < tsSecondaryEnd);
+					else // Cross-day (e.g. 18:00 to 17:00)
+						insideSec = (now >= tsSecondaryStart || now < tsSecondaryEnd);
+						
+					// Detect Reset (Start of Session)
+					// Simple logic: If inside now, and (previous was outside OR prev time > current time implies midnight cross in some cases OR just explicit Start check)
+					// Robust check: If inside, check if we just crossed StartTime.
+					// Or maintain a 'secSessionBar' counter.
+					
+					bool isSecStart = false;
+					if (insideSec)
+					{
+						// Check bar time vs StartTime. If close to start time (within a few mins? No, exact match or first bar after).
+						// Better: Check active state.
+						if (secCount == 0 || (CurrentBar > 0 && Time[0].Date != Time[1].Date && tsSecondaryStart.Hours == 0) ) 
+							isSecStart = true;
+							
+						// Intraday Trigger: If now >= Start and prev < Start (handling wrap)
+						if (CurrentBar > 0)
+						{
+							TimeSpan prev = Time[1].TimeOfDay;
+							// If Start=09:30. Prev=09:29 (Outside), Now=09:30 (Inside) -> Reset.
+							// If Start=18:00. Prev=17:59 (Outside), Now=18:00 (Inside) -> Reset.
+							
+							// If !insidePrev && insideNow -> Reset?
+							bool insidePrev = false;
+							if (tsSecondaryStart < tsSecondaryEnd) insidePrev = (prev >= tsSecondaryStart && prev < tsSecondaryEnd);
+							else insidePrev = (prev >= tsSecondaryStart || prev < tsSecondaryEnd);
+							
+							if (!insidePrev) isSecStart = true;
+						}
+					}
+					else 
+					{
+						// Outside session
+						secCount = 0; // Mark inactive
+					}
+					
+					if (insideSec)
+					{
+						double o = Open[0]; double h = High[0]; double l = Low[0]; double c = Close[0];
+						double vol = Volume[0];
+						double price = (h + l + c) / 3.0; // Standard Typical Price
+						
+						if (isSecStart)
+						{
+							secVolSum = vol;
+							secPvSum = vol * price;
+							secSumSquaredDiffs = 0; // Simplification for SD: need full variance algo
+							// To do correct SD without storing history, we need: sum(w*x^2) and sum(w*x) 
+							// Variance = (Sum(Vol * Price^2) / Sum(Vol)) - VWAP^2
+							secSumSquaredDiffs = vol * price * price; // Current Square Sum
+							secCount = 1;
+						}
+						else
+						{
+							secVolSum += vol;
+							secPvSum += vol * price;
+							secSumSquaredDiffs += vol * price * price;
+							secCount++;
+						}
+						
+						// Calculate Values
+						if (secVolSum > 0)
+						{
+							secVWAP = secPvSum / secVolSum;
+							double variance = (secSumSquaredDiffs / secVolSum) - (secVWAP * secVWAP);
+							secStdDev = (variance > 0) ? Math.Sqrt(variance) : 0;
+							
+							// Calculate Bands (SD 2 and 3)
+							secUpperBand2 = secVWAP + (multiplier2 * secStdDev);
+							secLowerBand2 = secVWAP - (multiplier2 * secStdDev);
+							secUpperBand3 = secVWAP + (multiplier3 * secStdDev);
+							secLowerBand3 = secVWAP - (multiplier3 * secStdDev);
+						}
+					}
+					
+					// Update Visual Plots for Secondary Session
+					if (showSecondaryBands && insideSec && secVolSum > 0)
+					{
+						Values[12][0] = secUpperBand3;
+					Values[13][0] = secUpperBand2;
+					Values[14][0] = secLowerBand2;
+					Values[15][0] = secLowerBand3;
+					
+				// No additional drawing needed - Plots 12-15 display automatically
+			}
+					else
+					{
+						Values[12][0] = double.NaN;
+						Values[13][0] = double.NaN;
+						Values[14][0] = double.NaN;
+						Values[15][0] = double.NaN;
+					}
+				}
+			
+				// -------------------------------------------------------------------------
+				// 6. Extreme Fade Bands (Anchored VWAP) Logic
+				// -------------------------------------------------------------------------
+				if (showAnchoredVWAP)
+				{
+					// Determine Trigger Bands (Main)
+					double upperTrigger = (anchoredVWAPSource == ExtremeFadeSource.SD2) ? UpperBand2[0] : UpperBand3[0];
+					double lowerTrigger = (anchoredVWAPSource == ExtremeFadeSource.SD2) ? LowerBand2[0] : LowerBand3[0];
+					
+					// Determine Trigger Bands (Secondary)
+					double secUpperTrigger = (anchoredVWAPSource == ExtremeFadeSource.SD2) ? secUpperBand2 : secUpperBand3;
+					double secLowerTrigger = (anchoredVWAPSource == ExtremeFadeSource.SD2) ? secLowerBand2 : secLowerBand3;
+					
+					// Trigger Logic: INTERSECTION / CONFLUENCE
+					// High must touch Main Upper AND Secondary Upper (assuming valid secondary)
+					// If DualSession disabled or inactive, fallback to Single?? 
+					// User requested Fusion, so we strictly enforce Dual Confluence if enabled.
+					
+					bool triggerUpper = false;
+					bool triggerLower = false;
+					
+					if (enableDualSession && secCount > 0)
+					{
+						triggerUpper = (anchoredVWAPSide == ExtremeFadeSide.Upper || anchoredVWAPSide == ExtremeFadeSide.Both) 
+										&& (High[0] >= upperTrigger && High[0] >= secUpperTrigger);
+										
+						triggerLower = (anchoredVWAPSide == ExtremeFadeSide.Lower || anchoredVWAPSide == ExtremeFadeSide.Both) 
+										&& (Low[0] <= lowerTrigger && Low[0] <= secLowerTrigger);
+					}
+					else // Fallback if Dual Disabled (Old behavior)
+					{
+						triggerUpper = (anchoredVWAPSide == ExtremeFadeSide.Upper || anchoredVWAPSide == ExtremeFadeSide.Both) && High[0] >= upperTrigger;
+						triggerLower = (anchoredVWAPSide == ExtremeFadeSide.Lower || anchoredVWAPSide == ExtremeFadeSide.Both) && Low[0] <= lowerTrigger;
+					}
+					
+					// Reset on NEW Touch (Re-Anchor)
+					if (triggerUpper || triggerLower)
+					{
+						anchoredVWAP.Reset(Volume[0], Close[0]);
+						isAnchorActive = true;
+						anchorStartBar = CurrentBar;
+						Values[11][0] = anchoredVWAP.CurrentValue;
+					}
+					else if (isAnchorActive)
+					{
+						// Accumulate if active
+						anchoredVWAP.Accumulate(Volume[0], Close[0]);
+						Values[11][0] = anchoredVWAP.CurrentValue;
+					}
+					else
+					{
+						// Not active
+						Values[11][0] = double.NaN;
+					}
+				}
+				else
+				{
+					Values[11][0] = double.NaN;
+					isAnchorActive = false;
+				}
+
 				// -------------------------------------------------------------------------
 				// BPB / RPB Logic (Prior Value)
 				// -------------------------------------------------------------------------
@@ -3162,6 +3424,22 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             get { return outerAreaOpacity; }
             set { outerAreaOpacity = value; }
         }
+
+		[NinjaScriptProperty]
+		[Display(ResourceType = typeof(Custom.Resource), Name = "Show Session VWAP", Description = "Toggle visibility of the Session VWAP Line", GroupName = "4. Visuales", Order = 19)]
+		public bool ShowVWAPLine
+		{
+			get { return showSessionVWAPLine; }
+			set { showSessionVWAPLine = value; }
+		}
+
+		[NinjaScriptProperty]
+		[Display(ResourceType = typeof(Custom.Resource), Name = "Show DVA Inner Bands", Description = "Toggle visibility of DVA Inner Bands (SD +/- 1, 0.5, 1.5)", GroupName = "4. Visuales", Order = 20)]
+		public bool ShowDVAInnerBands
+		{
+			get { return showDVAInnerBands; }
+			set { showDVAInnerBands = value; }
+		}
 		
 		[XmlIgnore]
 
@@ -3488,6 +3766,42 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		{
 			get { return textEFShort; }
 			set { textEFShort = value; }
+		}
+
+		// -------------------------------------------------------------------------
+		// 6. Extreme Fade Bands (Anchored VWAP) Properties
+		// -------------------------------------------------------------------------
+
+		[NinjaScriptProperty]
+		[Display(Name = "Show Anchored VWAP", Description = "Activates Anchored VWAP on extreme band touch", GroupName = "6. Extreme Fade Bands", Order = 0)]
+		public bool ShowAnchoredVWAP
+		{
+			get { return showAnchoredVWAP; }
+			set { showAnchoredVWAP = value; }
+		}
+
+		[NinjaScriptProperty]
+		[Display(Name = "Show Secondary Bands", Description = "Visualizes the bands of the secondary session (RTH/ETH)", GroupName = "6. Extreme Fade Bands", Order = 0)]
+		public bool ShowSecondaryBands
+		{
+			get { return showSecondaryBands; }
+			set { showSecondaryBands = value; }
+		}
+
+		[NinjaScriptProperty]
+		[Display(Name = "Anchor Source Band", Description = "Which DVA band triggers the anchor?", GroupName = "6. Extreme Fade Bands", Order = 1)]
+		public ExtremeFadeSource AnchoredVWAPSource
+		{
+			get { return anchoredVWAPSource; }
+			set { anchoredVWAPSource = value; }
+		}
+
+		[NinjaScriptProperty]
+		[Display(Name = "Anchor Side", Description = "Which side triggers the anchor?", GroupName = "6. Extreme Fade Bands", Order = 2)]
+		public ExtremeFadeSide AnchoredVWAPSide
+		{
+			get { return anchoredVWAPSide; }
+			set { anchoredVWAPSide = value; }
 		}
 
 		[Range(1, 100)]
@@ -4172,7 +4486,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 						}
 						firstPlotIndex = Math.Max(firstBarIndex, firstBarIdxToPaint);
 						
-						if(showDVABands && innerAreaOpacity > 0) 
+						if(showDVABands && showDVAInnerBands && innerAreaOpacity > 0) 
 						{
 							SharpDX.Direct2D1.PathGeometry 	pathI;
 							SharpDX.Direct2D1.GeometrySink 	sinkI;
@@ -5059,6 +5373,38 @@ namespace NinjaTrader.NinjaScript.Indicators
 
 #region Global Enums
 
+	public enum ExtremeFadeSource
+	{
+		SD2,
+		SD3
+	}
+	
+	public enum ExtremeFadeSide
+	{
+		Upper,
+		Lower,
+		Both
+	}
+
+	public class SessionVWAP
+	{
+		public double VolSum;
+		public double PvSum;
+		public double CurrentValue => VolSum == 0 ? 0 : PvSum / VolSum;
+		
+		public void Reset(double vol, double price)
+		{
+			VolSum = vol;
+			PvSum = vol * price;
+		}
+		
+		public void Accumulate(double vol, double price)
+		{
+			VolSum += vol;
+			PvSum += vol * price;
+		}
+	}
+
 public enum SessionTypeVWAPD 
 {
 	Full_Session, 
@@ -5112,18 +5458,18 @@ namespace NinjaTrader.NinjaScript.Indicators
 	public partial class Indicator : NinjaTrader.Gui.NinjaScript.IndicatorRenderBase
 	{
 		private RelativeIndicators.RelativeDVAPVA_v2[] cacheRelativeDVAPVA_v2;
-		public RelativeIndicators.RelativeDVAPVA_v2 RelativeDVAPVA_v2(bool showPVA, int pvaWidth, DashStyleHelper pvaStyle, int pvaOpacity, int pvaCutoffPercent, SessionTypeVWAPD sessionType, BandTypeVWAPD bandType, TimeZonesVWAPD customTZSelector, string s_CustomSessionStart, string s_CustomSessionEnd, double multiplierSD1, double multiplierSD2, double multiplierSD3, bool showDVABands, bool showSessionVWAPLine, double multiplierQR1, double multiplierQR2, double multiplierQR3, bool showSessionZones, int zoneCutoffPercentage, int sessionZoneOpacity, int zoneLineWidth, int zoneTextSize, string zoneLabelUpper, string zoneLabelLower, int zoneTextBackgroundOpacity, int maxDaysToDraw, int textSizeIPB, int lineWidthIPB, DashStyleHelper lineStyleIPB, int lineLengthIPB, string textIPBLong, string textIPBShort, int textSizeEF, int lineWidthEF, DashStyleHelper lineStyleEF, string textEFLong, string textEFShort, int lineLengthEF, MitigationTriggerMode mitigationTrigger, AcceptanceMode acceptanceModeProp, int breakoutConfirmationBars, double breakoutConfirmationDistance, int breakoutMinTimeMinutes, double rPBDepthPercent, bool showDebugState, string textBPBLong, bool showIPB, bool allowMultipleIPB, bool showRPB, int signalCooldown, bool showEF, bool allowMultipleEF, bool useAdaptiveFilter, int adaptiveFilterThreshold, bool allowRotation, int minFailureDuration, bool showBPB, string textBPBShort, string textRPBLong, string textRPBShort, int textSizeBPB_RPB, int lineWidthBPB_RPB, DashStyleHelper lineStyleBPB_RPB, int lineLengthBPB_RPB, string colorButtonTextRotationalShortSerializable, string colorButtonTextBreakoutLongSerializable, string colorButtonTextBreakoutShortSerializable, string colorButtonTextRPBLongSerializable, string colorButtonTextRPBShortSerializable, string colorButtonTextNeutralSerializable, string colorButtonEFLongSerializable, string colorButtonEFShortSerializable, string colorButtonIPBLongSerializable, string colorButtonIPBShortSerializable, string colorButtonTextEFLongSerializable, string colorButtonTextEFShortSerializable, string colorButtonTextIPBLongSerializable, string colorButtonTextIPBShortSerializable, string colorButtonPendingSerializable, string colorButtonTextPendingSerializable, string historicalSignalColorSerializable, bool useAlerts, bool alertOnBPB, bool alertOnRPB, bool alertOnIPB, bool alertOnEF, string alertSound, bool sendEmail, string emailAddress, bool attachScreenshot)
+		public RelativeIndicators.RelativeDVAPVA_v2 RelativeDVAPVA_v2(bool showPVA, int pvaWidth, DashStyleHelper pvaStyle, int pvaOpacity, int pvaCutoffPercent, SessionTypeVWAPD sessionType, BandTypeVWAPD bandType, TimeZonesVWAPD customTZSelector, string s_CustomSessionStart, string s_CustomSessionEnd, double multiplierSD1, double multiplierSD2, double multiplierSD3, bool showDVABands, bool showSessionVWAPLine, double multiplierQR1, double multiplierQR2, double multiplierQR3, bool showVWAPLine, bool showDVAInnerBands, bool showSessionZones, int zoneCutoffPercentage, int sessionZoneOpacity, int zoneLineWidth, int zoneTextSize, string zoneLabelUpper, string zoneLabelLower, int zoneTextBackgroundOpacity, int maxDaysToDraw, int textSizeIPB, int lineWidthIPB, DashStyleHelper lineStyleIPB, int lineLengthIPB, string textIPBLong, string textIPBShort, int textSizeEF, int lineWidthEF, DashStyleHelper lineStyleEF, string textEFLong, string textEFShort, bool showAnchoredVWAP, bool showSecondaryBands, ExtremeFadeSource anchoredVWAPSource, ExtremeFadeSide anchoredVWAPSide, int lineLengthEF, MitigationTriggerMode mitigationTrigger, AcceptanceMode acceptanceModeProp, int breakoutConfirmationBars, double breakoutConfirmationDistance, int breakoutMinTimeMinutes, double rPBDepthPercent, bool showDebugState, string textBPBLong, bool showIPB, bool allowMultipleIPB, bool showRPB, int signalCooldown, bool showEF, bool allowMultipleEF, bool useAdaptiveFilter, int adaptiveFilterThreshold, bool allowRotation, int minFailureDuration, bool showBPB, string textBPBShort, string textRPBLong, string textRPBShort, int textSizeBPB_RPB, int lineWidthBPB_RPB, DashStyleHelper lineStyleBPB_RPB, int lineLengthBPB_RPB, string colorButtonTextRotationalShortSerializable, string colorButtonTextBreakoutLongSerializable, string colorButtonTextBreakoutShortSerializable, string colorButtonTextRPBLongSerializable, string colorButtonTextRPBShortSerializable, string colorButtonTextNeutralSerializable, string colorButtonEFLongSerializable, string colorButtonEFShortSerializable, string colorButtonIPBLongSerializable, string colorButtonIPBShortSerializable, string colorButtonTextEFLongSerializable, string colorButtonTextEFShortSerializable, string colorButtonTextIPBLongSerializable, string colorButtonTextIPBShortSerializable, string colorButtonPendingSerializable, string colorButtonTextPendingSerializable, string historicalSignalColorSerializable, bool useAlerts, bool alertOnBPB, bool alertOnRPB, bool alertOnIPB, bool alertOnEF, string alertSound, bool sendEmail, string emailAddress, bool attachScreenshot)
 		{
-			return RelativeDVAPVA_v2(Input, showPVA, pvaWidth, pvaStyle, pvaOpacity, pvaCutoffPercent, sessionType, bandType, customTZSelector, s_CustomSessionStart, s_CustomSessionEnd, multiplierSD1, multiplierSD2, multiplierSD3, showDVABands, showSessionVWAPLine, multiplierQR1, multiplierQR2, multiplierQR3, showSessionZones, zoneCutoffPercentage, sessionZoneOpacity, zoneLineWidth, zoneTextSize, zoneLabelUpper, zoneLabelLower, zoneTextBackgroundOpacity, maxDaysToDraw, textSizeIPB, lineWidthIPB, lineStyleIPB, lineLengthIPB, textIPBLong, textIPBShort, textSizeEF, lineWidthEF, lineStyleEF, textEFLong, textEFShort, lineLengthEF, mitigationTrigger, acceptanceModeProp, breakoutConfirmationBars, breakoutConfirmationDistance, breakoutMinTimeMinutes, rPBDepthPercent, showDebugState, textBPBLong, showIPB, allowMultipleIPB, showRPB, signalCooldown, showEF, allowMultipleEF, useAdaptiveFilter, adaptiveFilterThreshold, allowRotation, minFailureDuration, showBPB, textBPBShort, textRPBLong, textRPBShort, textSizeBPB_RPB, lineWidthBPB_RPB, lineStyleBPB_RPB, lineLengthBPB_RPB, colorButtonTextRotationalShortSerializable, colorButtonTextBreakoutLongSerializable, colorButtonTextBreakoutShortSerializable, colorButtonTextRPBLongSerializable, colorButtonTextRPBShortSerializable, colorButtonTextNeutralSerializable, colorButtonEFLongSerializable, colorButtonEFShortSerializable, colorButtonIPBLongSerializable, colorButtonIPBShortSerializable, colorButtonTextEFLongSerializable, colorButtonTextEFShortSerializable, colorButtonTextIPBLongSerializable, colorButtonTextIPBShortSerializable, colorButtonPendingSerializable, colorButtonTextPendingSerializable, historicalSignalColorSerializable, useAlerts, alertOnBPB, alertOnRPB, alertOnIPB, alertOnEF, alertSound, sendEmail, emailAddress, attachScreenshot);
+			return RelativeDVAPVA_v2(Input, showPVA, pvaWidth, pvaStyle, pvaOpacity, pvaCutoffPercent, sessionType, bandType, customTZSelector, s_CustomSessionStart, s_CustomSessionEnd, multiplierSD1, multiplierSD2, multiplierSD3, showDVABands, showSessionVWAPLine, multiplierQR1, multiplierQR2, multiplierQR3, showVWAPLine, showDVAInnerBands, showSessionZones, zoneCutoffPercentage, sessionZoneOpacity, zoneLineWidth, zoneTextSize, zoneLabelUpper, zoneLabelLower, zoneTextBackgroundOpacity, maxDaysToDraw, textSizeIPB, lineWidthIPB, lineStyleIPB, lineLengthIPB, textIPBLong, textIPBShort, textSizeEF, lineWidthEF, lineStyleEF, textEFLong, textEFShort, showAnchoredVWAP, showSecondaryBands, anchoredVWAPSource, anchoredVWAPSide, lineLengthEF, mitigationTrigger, acceptanceModeProp, breakoutConfirmationBars, breakoutConfirmationDistance, breakoutMinTimeMinutes, rPBDepthPercent, showDebugState, textBPBLong, showIPB, allowMultipleIPB, showRPB, signalCooldown, showEF, allowMultipleEF, useAdaptiveFilter, adaptiveFilterThreshold, allowRotation, minFailureDuration, showBPB, textBPBShort, textRPBLong, textRPBShort, textSizeBPB_RPB, lineWidthBPB_RPB, lineStyleBPB_RPB, lineLengthBPB_RPB, colorButtonTextRotationalShortSerializable, colorButtonTextBreakoutLongSerializable, colorButtonTextBreakoutShortSerializable, colorButtonTextRPBLongSerializable, colorButtonTextRPBShortSerializable, colorButtonTextNeutralSerializable, colorButtonEFLongSerializable, colorButtonEFShortSerializable, colorButtonIPBLongSerializable, colorButtonIPBShortSerializable, colorButtonTextEFLongSerializable, colorButtonTextEFShortSerializable, colorButtonTextIPBLongSerializable, colorButtonTextIPBShortSerializable, colorButtonPendingSerializable, colorButtonTextPendingSerializable, historicalSignalColorSerializable, useAlerts, alertOnBPB, alertOnRPB, alertOnIPB, alertOnEF, alertSound, sendEmail, emailAddress, attachScreenshot);
 		}
 
-		public RelativeIndicators.RelativeDVAPVA_v2 RelativeDVAPVA_v2(ISeries<double> input, bool showPVA, int pvaWidth, DashStyleHelper pvaStyle, int pvaOpacity, int pvaCutoffPercent, SessionTypeVWAPD sessionType, BandTypeVWAPD bandType, TimeZonesVWAPD customTZSelector, string s_CustomSessionStart, string s_CustomSessionEnd, double multiplierSD1, double multiplierSD2, double multiplierSD3, bool showDVABands, bool showSessionVWAPLine, double multiplierQR1, double multiplierQR2, double multiplierQR3, bool showSessionZones, int zoneCutoffPercentage, int sessionZoneOpacity, int zoneLineWidth, int zoneTextSize, string zoneLabelUpper, string zoneLabelLower, int zoneTextBackgroundOpacity, int maxDaysToDraw, int textSizeIPB, int lineWidthIPB, DashStyleHelper lineStyleIPB, int lineLengthIPB, string textIPBLong, string textIPBShort, int textSizeEF, int lineWidthEF, DashStyleHelper lineStyleEF, string textEFLong, string textEFShort, int lineLengthEF, MitigationTriggerMode mitigationTrigger, AcceptanceMode acceptanceModeProp, int breakoutConfirmationBars, double breakoutConfirmationDistance, int breakoutMinTimeMinutes, double rPBDepthPercent, bool showDebugState, string textBPBLong, bool showIPB, bool allowMultipleIPB, bool showRPB, int signalCooldown, bool showEF, bool allowMultipleEF, bool useAdaptiveFilter, int adaptiveFilterThreshold, bool allowRotation, int minFailureDuration, bool showBPB, string textBPBShort, string textRPBLong, string textRPBShort, int textSizeBPB_RPB, int lineWidthBPB_RPB, DashStyleHelper lineStyleBPB_RPB, int lineLengthBPB_RPB, string colorButtonTextRotationalShortSerializable, string colorButtonTextBreakoutLongSerializable, string colorButtonTextBreakoutShortSerializable, string colorButtonTextRPBLongSerializable, string colorButtonTextRPBShortSerializable, string colorButtonTextNeutralSerializable, string colorButtonEFLongSerializable, string colorButtonEFShortSerializable, string colorButtonIPBLongSerializable, string colorButtonIPBShortSerializable, string colorButtonTextEFLongSerializable, string colorButtonTextEFShortSerializable, string colorButtonTextIPBLongSerializable, string colorButtonTextIPBShortSerializable, string colorButtonPendingSerializable, string colorButtonTextPendingSerializable, string historicalSignalColorSerializable, bool useAlerts, bool alertOnBPB, bool alertOnRPB, bool alertOnIPB, bool alertOnEF, string alertSound, bool sendEmail, string emailAddress, bool attachScreenshot)
+		public RelativeIndicators.RelativeDVAPVA_v2 RelativeDVAPVA_v2(ISeries<double> input, bool showPVA, int pvaWidth, DashStyleHelper pvaStyle, int pvaOpacity, int pvaCutoffPercent, SessionTypeVWAPD sessionType, BandTypeVWAPD bandType, TimeZonesVWAPD customTZSelector, string s_CustomSessionStart, string s_CustomSessionEnd, double multiplierSD1, double multiplierSD2, double multiplierSD3, bool showDVABands, bool showSessionVWAPLine, double multiplierQR1, double multiplierQR2, double multiplierQR3, bool showVWAPLine, bool showDVAInnerBands, bool showSessionZones, int zoneCutoffPercentage, int sessionZoneOpacity, int zoneLineWidth, int zoneTextSize, string zoneLabelUpper, string zoneLabelLower, int zoneTextBackgroundOpacity, int maxDaysToDraw, int textSizeIPB, int lineWidthIPB, DashStyleHelper lineStyleIPB, int lineLengthIPB, string textIPBLong, string textIPBShort, int textSizeEF, int lineWidthEF, DashStyleHelper lineStyleEF, string textEFLong, string textEFShort, bool showAnchoredVWAP, bool showSecondaryBands, ExtremeFadeSource anchoredVWAPSource, ExtremeFadeSide anchoredVWAPSide, int lineLengthEF, MitigationTriggerMode mitigationTrigger, AcceptanceMode acceptanceModeProp, int breakoutConfirmationBars, double breakoutConfirmationDistance, int breakoutMinTimeMinutes, double rPBDepthPercent, bool showDebugState, string textBPBLong, bool showIPB, bool allowMultipleIPB, bool showRPB, int signalCooldown, bool showEF, bool allowMultipleEF, bool useAdaptiveFilter, int adaptiveFilterThreshold, bool allowRotation, int minFailureDuration, bool showBPB, string textBPBShort, string textRPBLong, string textRPBShort, int textSizeBPB_RPB, int lineWidthBPB_RPB, DashStyleHelper lineStyleBPB_RPB, int lineLengthBPB_RPB, string colorButtonTextRotationalShortSerializable, string colorButtonTextBreakoutLongSerializable, string colorButtonTextBreakoutShortSerializable, string colorButtonTextRPBLongSerializable, string colorButtonTextRPBShortSerializable, string colorButtonTextNeutralSerializable, string colorButtonEFLongSerializable, string colorButtonEFShortSerializable, string colorButtonIPBLongSerializable, string colorButtonIPBShortSerializable, string colorButtonTextEFLongSerializable, string colorButtonTextEFShortSerializable, string colorButtonTextIPBLongSerializable, string colorButtonTextIPBShortSerializable, string colorButtonPendingSerializable, string colorButtonTextPendingSerializable, string historicalSignalColorSerializable, bool useAlerts, bool alertOnBPB, bool alertOnRPB, bool alertOnIPB, bool alertOnEF, string alertSound, bool sendEmail, string emailAddress, bool attachScreenshot)
 		{
 			if (cacheRelativeDVAPVA_v2 != null)
 				for (int idx = 0; idx < cacheRelativeDVAPVA_v2.Length; idx++)
-					if (cacheRelativeDVAPVA_v2[idx] != null && cacheRelativeDVAPVA_v2[idx].ShowPVA == showPVA && cacheRelativeDVAPVA_v2[idx].PvaWidth == pvaWidth && cacheRelativeDVAPVA_v2[idx].PvaStyle == pvaStyle && cacheRelativeDVAPVA_v2[idx].PvaOpacity == pvaOpacity && cacheRelativeDVAPVA_v2[idx].PvaCutoffPercent == pvaCutoffPercent && cacheRelativeDVAPVA_v2[idx].SessionType == sessionType && cacheRelativeDVAPVA_v2[idx].BandType == bandType && cacheRelativeDVAPVA_v2[idx].CustomTZSelector == customTZSelector && cacheRelativeDVAPVA_v2[idx].S_CustomSessionStart == s_CustomSessionStart && cacheRelativeDVAPVA_v2[idx].S_CustomSessionEnd == s_CustomSessionEnd && cacheRelativeDVAPVA_v2[idx].MultiplierSD1 == multiplierSD1 && cacheRelativeDVAPVA_v2[idx].MultiplierSD2 == multiplierSD2 && cacheRelativeDVAPVA_v2[idx].MultiplierSD3 == multiplierSD3 && cacheRelativeDVAPVA_v2[idx].ShowDVABands == showDVABands && cacheRelativeDVAPVA_v2[idx].ShowSessionVWAPLine == showSessionVWAPLine && cacheRelativeDVAPVA_v2[idx].MultiplierQR1 == multiplierQR1 && cacheRelativeDVAPVA_v2[idx].MultiplierQR2 == multiplierQR2 && cacheRelativeDVAPVA_v2[idx].MultiplierQR3 == multiplierQR3 && cacheRelativeDVAPVA_v2[idx].ShowSessionZones == showSessionZones && cacheRelativeDVAPVA_v2[idx].ZoneCutoffPercentage == zoneCutoffPercentage && cacheRelativeDVAPVA_v2[idx].SessionZoneOpacity == sessionZoneOpacity && cacheRelativeDVAPVA_v2[idx].ZoneLineWidth == zoneLineWidth && cacheRelativeDVAPVA_v2[idx].ZoneTextSize == zoneTextSize && cacheRelativeDVAPVA_v2[idx].ZoneLabelUpper == zoneLabelUpper && cacheRelativeDVAPVA_v2[idx].ZoneLabelLower == zoneLabelLower && cacheRelativeDVAPVA_v2[idx].ZoneTextBackgroundOpacity == zoneTextBackgroundOpacity && cacheRelativeDVAPVA_v2[idx].MaxDaysToDraw == maxDaysToDraw && cacheRelativeDVAPVA_v2[idx].TextSizeIPB == textSizeIPB && cacheRelativeDVAPVA_v2[idx].LineWidthIPB == lineWidthIPB && cacheRelativeDVAPVA_v2[idx].LineStyleIPB == lineStyleIPB && cacheRelativeDVAPVA_v2[idx].LineLengthIPB == lineLengthIPB && cacheRelativeDVAPVA_v2[idx].TextIPBLong == textIPBLong && cacheRelativeDVAPVA_v2[idx].TextIPBShort == textIPBShort && cacheRelativeDVAPVA_v2[idx].TextSizeEF == textSizeEF && cacheRelativeDVAPVA_v2[idx].LineWidthEF == lineWidthEF && cacheRelativeDVAPVA_v2[idx].LineStyleEF == lineStyleEF && cacheRelativeDVAPVA_v2[idx].TextEFLong == textEFLong && cacheRelativeDVAPVA_v2[idx].TextEFShort == textEFShort && cacheRelativeDVAPVA_v2[idx].LineLengthEF == lineLengthEF && cacheRelativeDVAPVA_v2[idx].MitigationTrigger == mitigationTrigger && cacheRelativeDVAPVA_v2[idx].AcceptanceModeProp == acceptanceModeProp && cacheRelativeDVAPVA_v2[idx].BreakoutConfirmationBars == breakoutConfirmationBars && cacheRelativeDVAPVA_v2[idx].BreakoutConfirmationDistance == breakoutConfirmationDistance && cacheRelativeDVAPVA_v2[idx].BreakoutMinTimeMinutes == breakoutMinTimeMinutes && cacheRelativeDVAPVA_v2[idx].RPBDepthPercent == rPBDepthPercent && cacheRelativeDVAPVA_v2[idx].ShowDebugState == showDebugState && cacheRelativeDVAPVA_v2[idx].TextBPBLong == textBPBLong && cacheRelativeDVAPVA_v2[idx].ShowIPB == showIPB && cacheRelativeDVAPVA_v2[idx].AllowMultipleIPB == allowMultipleIPB && cacheRelativeDVAPVA_v2[idx].ShowRPB == showRPB && cacheRelativeDVAPVA_v2[idx].SignalCooldown == signalCooldown && cacheRelativeDVAPVA_v2[idx].ShowEF == showEF && cacheRelativeDVAPVA_v2[idx].AllowMultipleEF == allowMultipleEF && cacheRelativeDVAPVA_v2[idx].UseAdaptiveFilter == useAdaptiveFilter && cacheRelativeDVAPVA_v2[idx].AdaptiveFilterThreshold == adaptiveFilterThreshold && cacheRelativeDVAPVA_v2[idx].AllowRotation == allowRotation && cacheRelativeDVAPVA_v2[idx].MinFailureDuration == minFailureDuration && cacheRelativeDVAPVA_v2[idx].ShowBPB == showBPB && cacheRelativeDVAPVA_v2[idx].TextBPBShort == textBPBShort && cacheRelativeDVAPVA_v2[idx].TextRPBLong == textRPBLong && cacheRelativeDVAPVA_v2[idx].TextRPBShort == textRPBShort && cacheRelativeDVAPVA_v2[idx].TextSizeBPB_RPB == textSizeBPB_RPB && cacheRelativeDVAPVA_v2[idx].LineWidthBPB_RPB == lineWidthBPB_RPB && cacheRelativeDVAPVA_v2[idx].LineStyleBPB_RPB == lineStyleBPB_RPB && cacheRelativeDVAPVA_v2[idx].LineLengthBPB_RPB == lineLengthBPB_RPB && cacheRelativeDVAPVA_v2[idx].ColorButtonTextRotationalShortSerializable == colorButtonTextRotationalShortSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonTextBreakoutLongSerializable == colorButtonTextBreakoutLongSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonTextBreakoutShortSerializable == colorButtonTextBreakoutShortSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonTextRPBLongSerializable == colorButtonTextRPBLongSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonTextRPBShortSerializable == colorButtonTextRPBShortSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonTextNeutralSerializable == colorButtonTextNeutralSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonEFLongSerializable == colorButtonEFLongSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonEFShortSerializable == colorButtonEFShortSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonIPBLongSerializable == colorButtonIPBLongSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonIPBShortSerializable == colorButtonIPBShortSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonTextEFLongSerializable == colorButtonTextEFLongSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonTextEFShortSerializable == colorButtonTextEFShortSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonTextIPBLongSerializable == colorButtonTextIPBLongSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonTextIPBShortSerializable == colorButtonTextIPBShortSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonPendingSerializable == colorButtonPendingSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonTextPendingSerializable == colorButtonTextPendingSerializable && cacheRelativeDVAPVA_v2[idx].HistoricalSignalColorSerializable == historicalSignalColorSerializable && cacheRelativeDVAPVA_v2[idx].UseAlerts == useAlerts && cacheRelativeDVAPVA_v2[idx].AlertOnBPB == alertOnBPB && cacheRelativeDVAPVA_v2[idx].AlertOnRPB == alertOnRPB && cacheRelativeDVAPVA_v2[idx].AlertOnIPB == alertOnIPB && cacheRelativeDVAPVA_v2[idx].AlertOnEF == alertOnEF && cacheRelativeDVAPVA_v2[idx].AlertSound == alertSound && cacheRelativeDVAPVA_v2[idx].SendEmail == sendEmail && cacheRelativeDVAPVA_v2[idx].EmailAddress == emailAddress && cacheRelativeDVAPVA_v2[idx].AttachScreenshot == attachScreenshot && cacheRelativeDVAPVA_v2[idx].EqualsInput(input))
+					if (cacheRelativeDVAPVA_v2[idx] != null && cacheRelativeDVAPVA_v2[idx].ShowPVA == showPVA && cacheRelativeDVAPVA_v2[idx].PvaWidth == pvaWidth && cacheRelativeDVAPVA_v2[idx].PvaStyle == pvaStyle && cacheRelativeDVAPVA_v2[idx].PvaOpacity == pvaOpacity && cacheRelativeDVAPVA_v2[idx].PvaCutoffPercent == pvaCutoffPercent && cacheRelativeDVAPVA_v2[idx].SessionType == sessionType && cacheRelativeDVAPVA_v2[idx].BandType == bandType && cacheRelativeDVAPVA_v2[idx].CustomTZSelector == customTZSelector && cacheRelativeDVAPVA_v2[idx].S_CustomSessionStart == s_CustomSessionStart && cacheRelativeDVAPVA_v2[idx].S_CustomSessionEnd == s_CustomSessionEnd && cacheRelativeDVAPVA_v2[idx].MultiplierSD1 == multiplierSD1 && cacheRelativeDVAPVA_v2[idx].MultiplierSD2 == multiplierSD2 && cacheRelativeDVAPVA_v2[idx].MultiplierSD3 == multiplierSD3 && cacheRelativeDVAPVA_v2[idx].ShowDVABands == showDVABands && cacheRelativeDVAPVA_v2[idx].ShowSessionVWAPLine == showSessionVWAPLine && cacheRelativeDVAPVA_v2[idx].MultiplierQR1 == multiplierQR1 && cacheRelativeDVAPVA_v2[idx].MultiplierQR2 == multiplierQR2 && cacheRelativeDVAPVA_v2[idx].MultiplierQR3 == multiplierQR3 && cacheRelativeDVAPVA_v2[idx].ShowVWAPLine == showVWAPLine && cacheRelativeDVAPVA_v2[idx].ShowDVAInnerBands == showDVAInnerBands && cacheRelativeDVAPVA_v2[idx].ShowSessionZones == showSessionZones && cacheRelativeDVAPVA_v2[idx].ZoneCutoffPercentage == zoneCutoffPercentage && cacheRelativeDVAPVA_v2[idx].SessionZoneOpacity == sessionZoneOpacity && cacheRelativeDVAPVA_v2[idx].ZoneLineWidth == zoneLineWidth && cacheRelativeDVAPVA_v2[idx].ZoneTextSize == zoneTextSize && cacheRelativeDVAPVA_v2[idx].ZoneLabelUpper == zoneLabelUpper && cacheRelativeDVAPVA_v2[idx].ZoneLabelLower == zoneLabelLower && cacheRelativeDVAPVA_v2[idx].ZoneTextBackgroundOpacity == zoneTextBackgroundOpacity && cacheRelativeDVAPVA_v2[idx].MaxDaysToDraw == maxDaysToDraw && cacheRelativeDVAPVA_v2[idx].TextSizeIPB == textSizeIPB && cacheRelativeDVAPVA_v2[idx].LineWidthIPB == lineWidthIPB && cacheRelativeDVAPVA_v2[idx].LineStyleIPB == lineStyleIPB && cacheRelativeDVAPVA_v2[idx].LineLengthIPB == lineLengthIPB && cacheRelativeDVAPVA_v2[idx].TextIPBLong == textIPBLong && cacheRelativeDVAPVA_v2[idx].TextIPBShort == textIPBShort && cacheRelativeDVAPVA_v2[idx].TextSizeEF == textSizeEF && cacheRelativeDVAPVA_v2[idx].LineWidthEF == lineWidthEF && cacheRelativeDVAPVA_v2[idx].LineStyleEF == lineStyleEF && cacheRelativeDVAPVA_v2[idx].TextEFLong == textEFLong && cacheRelativeDVAPVA_v2[idx].TextEFShort == textEFShort && cacheRelativeDVAPVA_v2[idx].ShowAnchoredVWAP == showAnchoredVWAP && cacheRelativeDVAPVA_v2[idx].ShowSecondaryBands == showSecondaryBands && cacheRelativeDVAPVA_v2[idx].AnchoredVWAPSource == anchoredVWAPSource && cacheRelativeDVAPVA_v2[idx].AnchoredVWAPSide == anchoredVWAPSide && cacheRelativeDVAPVA_v2[idx].LineLengthEF == lineLengthEF && cacheRelativeDVAPVA_v2[idx].MitigationTrigger == mitigationTrigger && cacheRelativeDVAPVA_v2[idx].AcceptanceModeProp == acceptanceModeProp && cacheRelativeDVAPVA_v2[idx].BreakoutConfirmationBars == breakoutConfirmationBars && cacheRelativeDVAPVA_v2[idx].BreakoutConfirmationDistance == breakoutConfirmationDistance && cacheRelativeDVAPVA_v2[idx].BreakoutMinTimeMinutes == breakoutMinTimeMinutes && cacheRelativeDVAPVA_v2[idx].RPBDepthPercent == rPBDepthPercent && cacheRelativeDVAPVA_v2[idx].ShowDebugState == showDebugState && cacheRelativeDVAPVA_v2[idx].TextBPBLong == textBPBLong && cacheRelativeDVAPVA_v2[idx].ShowIPB == showIPB && cacheRelativeDVAPVA_v2[idx].AllowMultipleIPB == allowMultipleIPB && cacheRelativeDVAPVA_v2[idx].ShowRPB == showRPB && cacheRelativeDVAPVA_v2[idx].SignalCooldown == signalCooldown && cacheRelativeDVAPVA_v2[idx].ShowEF == showEF && cacheRelativeDVAPVA_v2[idx].AllowMultipleEF == allowMultipleEF && cacheRelativeDVAPVA_v2[idx].UseAdaptiveFilter == useAdaptiveFilter && cacheRelativeDVAPVA_v2[idx].AdaptiveFilterThreshold == adaptiveFilterThreshold && cacheRelativeDVAPVA_v2[idx].AllowRotation == allowRotation && cacheRelativeDVAPVA_v2[idx].MinFailureDuration == minFailureDuration && cacheRelativeDVAPVA_v2[idx].ShowBPB == showBPB && cacheRelativeDVAPVA_v2[idx].TextBPBShort == textBPBShort && cacheRelativeDVAPVA_v2[idx].TextRPBLong == textRPBLong && cacheRelativeDVAPVA_v2[idx].TextRPBShort == textRPBShort && cacheRelativeDVAPVA_v2[idx].TextSizeBPB_RPB == textSizeBPB_RPB && cacheRelativeDVAPVA_v2[idx].LineWidthBPB_RPB == lineWidthBPB_RPB && cacheRelativeDVAPVA_v2[idx].LineStyleBPB_RPB == lineStyleBPB_RPB && cacheRelativeDVAPVA_v2[idx].LineLengthBPB_RPB == lineLengthBPB_RPB && cacheRelativeDVAPVA_v2[idx].ColorButtonTextRotationalShortSerializable == colorButtonTextRotationalShortSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonTextBreakoutLongSerializable == colorButtonTextBreakoutLongSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonTextBreakoutShortSerializable == colorButtonTextBreakoutShortSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonTextRPBLongSerializable == colorButtonTextRPBLongSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonTextRPBShortSerializable == colorButtonTextRPBShortSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonTextNeutralSerializable == colorButtonTextNeutralSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonEFLongSerializable == colorButtonEFLongSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonEFShortSerializable == colorButtonEFShortSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonIPBLongSerializable == colorButtonIPBLongSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonIPBShortSerializable == colorButtonIPBShortSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonTextEFLongSerializable == colorButtonTextEFLongSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonTextEFShortSerializable == colorButtonTextEFShortSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonTextIPBLongSerializable == colorButtonTextIPBLongSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonTextIPBShortSerializable == colorButtonTextIPBShortSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonPendingSerializable == colorButtonPendingSerializable && cacheRelativeDVAPVA_v2[idx].ColorButtonTextPendingSerializable == colorButtonTextPendingSerializable && cacheRelativeDVAPVA_v2[idx].HistoricalSignalColorSerializable == historicalSignalColorSerializable && cacheRelativeDVAPVA_v2[idx].UseAlerts == useAlerts && cacheRelativeDVAPVA_v2[idx].AlertOnBPB == alertOnBPB && cacheRelativeDVAPVA_v2[idx].AlertOnRPB == alertOnRPB && cacheRelativeDVAPVA_v2[idx].AlertOnIPB == alertOnIPB && cacheRelativeDVAPVA_v2[idx].AlertOnEF == alertOnEF && cacheRelativeDVAPVA_v2[idx].AlertSound == alertSound && cacheRelativeDVAPVA_v2[idx].SendEmail == sendEmail && cacheRelativeDVAPVA_v2[idx].EmailAddress == emailAddress && cacheRelativeDVAPVA_v2[idx].AttachScreenshot == attachScreenshot && cacheRelativeDVAPVA_v2[idx].EqualsInput(input))
 						return cacheRelativeDVAPVA_v2[idx];
-			return CacheIndicator<RelativeIndicators.RelativeDVAPVA_v2>(new RelativeIndicators.RelativeDVAPVA_v2(){ ShowPVA = showPVA, PvaWidth = pvaWidth, PvaStyle = pvaStyle, PvaOpacity = pvaOpacity, PvaCutoffPercent = pvaCutoffPercent, SessionType = sessionType, BandType = bandType, CustomTZSelector = customTZSelector, S_CustomSessionStart = s_CustomSessionStart, S_CustomSessionEnd = s_CustomSessionEnd, MultiplierSD1 = multiplierSD1, MultiplierSD2 = multiplierSD2, MultiplierSD3 = multiplierSD3, ShowDVABands = showDVABands, ShowSessionVWAPLine = showSessionVWAPLine, MultiplierQR1 = multiplierQR1, MultiplierQR2 = multiplierQR2, MultiplierQR3 = multiplierQR3, ShowSessionZones = showSessionZones, ZoneCutoffPercentage = zoneCutoffPercentage, SessionZoneOpacity = sessionZoneOpacity, ZoneLineWidth = zoneLineWidth, ZoneTextSize = zoneTextSize, ZoneLabelUpper = zoneLabelUpper, ZoneLabelLower = zoneLabelLower, ZoneTextBackgroundOpacity = zoneTextBackgroundOpacity, MaxDaysToDraw = maxDaysToDraw, TextSizeIPB = textSizeIPB, LineWidthIPB = lineWidthIPB, LineStyleIPB = lineStyleIPB, LineLengthIPB = lineLengthIPB, TextIPBLong = textIPBLong, TextIPBShort = textIPBShort, TextSizeEF = textSizeEF, LineWidthEF = lineWidthEF, LineStyleEF = lineStyleEF, TextEFLong = textEFLong, TextEFShort = textEFShort, LineLengthEF = lineLengthEF, MitigationTrigger = mitigationTrigger, AcceptanceModeProp = acceptanceModeProp, BreakoutConfirmationBars = breakoutConfirmationBars, BreakoutConfirmationDistance = breakoutConfirmationDistance, BreakoutMinTimeMinutes = breakoutMinTimeMinutes, RPBDepthPercent = rPBDepthPercent, ShowDebugState = showDebugState, TextBPBLong = textBPBLong, ShowIPB = showIPB, AllowMultipleIPB = allowMultipleIPB, ShowRPB = showRPB, SignalCooldown = signalCooldown, ShowEF = showEF, AllowMultipleEF = allowMultipleEF, UseAdaptiveFilter = useAdaptiveFilter, AdaptiveFilterThreshold = adaptiveFilterThreshold, AllowRotation = allowRotation, MinFailureDuration = minFailureDuration, ShowBPB = showBPB, TextBPBShort = textBPBShort, TextRPBLong = textRPBLong, TextRPBShort = textRPBShort, TextSizeBPB_RPB = textSizeBPB_RPB, LineWidthBPB_RPB = lineWidthBPB_RPB, LineStyleBPB_RPB = lineStyleBPB_RPB, LineLengthBPB_RPB = lineLengthBPB_RPB, ColorButtonTextRotationalShortSerializable = colorButtonTextRotationalShortSerializable, ColorButtonTextBreakoutLongSerializable = colorButtonTextBreakoutLongSerializable, ColorButtonTextBreakoutShortSerializable = colorButtonTextBreakoutShortSerializable, ColorButtonTextRPBLongSerializable = colorButtonTextRPBLongSerializable, ColorButtonTextRPBShortSerializable = colorButtonTextRPBShortSerializable, ColorButtonTextNeutralSerializable = colorButtonTextNeutralSerializable, ColorButtonEFLongSerializable = colorButtonEFLongSerializable, ColorButtonEFShortSerializable = colorButtonEFShortSerializable, ColorButtonIPBLongSerializable = colorButtonIPBLongSerializable, ColorButtonIPBShortSerializable = colorButtonIPBShortSerializable, ColorButtonTextEFLongSerializable = colorButtonTextEFLongSerializable, ColorButtonTextEFShortSerializable = colorButtonTextEFShortSerializable, ColorButtonTextIPBLongSerializable = colorButtonTextIPBLongSerializable, ColorButtonTextIPBShortSerializable = colorButtonTextIPBShortSerializable, ColorButtonPendingSerializable = colorButtonPendingSerializable, ColorButtonTextPendingSerializable = colorButtonTextPendingSerializable, HistoricalSignalColorSerializable = historicalSignalColorSerializable, UseAlerts = useAlerts, AlertOnBPB = alertOnBPB, AlertOnRPB = alertOnRPB, AlertOnIPB = alertOnIPB, AlertOnEF = alertOnEF, AlertSound = alertSound, SendEmail = sendEmail, EmailAddress = emailAddress, AttachScreenshot = attachScreenshot }, input, ref cacheRelativeDVAPVA_v2);
+			return CacheIndicator<RelativeIndicators.RelativeDVAPVA_v2>(new RelativeIndicators.RelativeDVAPVA_v2(){ ShowPVA = showPVA, PvaWidth = pvaWidth, PvaStyle = pvaStyle, PvaOpacity = pvaOpacity, PvaCutoffPercent = pvaCutoffPercent, SessionType = sessionType, BandType = bandType, CustomTZSelector = customTZSelector, S_CustomSessionStart = s_CustomSessionStart, S_CustomSessionEnd = s_CustomSessionEnd, MultiplierSD1 = multiplierSD1, MultiplierSD2 = multiplierSD2, MultiplierSD3 = multiplierSD3, ShowDVABands = showDVABands, ShowSessionVWAPLine = showSessionVWAPLine, MultiplierQR1 = multiplierQR1, MultiplierQR2 = multiplierQR2, MultiplierQR3 = multiplierQR3, ShowVWAPLine = showVWAPLine, ShowDVAInnerBands = showDVAInnerBands, ShowSessionZones = showSessionZones, ZoneCutoffPercentage = zoneCutoffPercentage, SessionZoneOpacity = sessionZoneOpacity, ZoneLineWidth = zoneLineWidth, ZoneTextSize = zoneTextSize, ZoneLabelUpper = zoneLabelUpper, ZoneLabelLower = zoneLabelLower, ZoneTextBackgroundOpacity = zoneTextBackgroundOpacity, MaxDaysToDraw = maxDaysToDraw, TextSizeIPB = textSizeIPB, LineWidthIPB = lineWidthIPB, LineStyleIPB = lineStyleIPB, LineLengthIPB = lineLengthIPB, TextIPBLong = textIPBLong, TextIPBShort = textIPBShort, TextSizeEF = textSizeEF, LineWidthEF = lineWidthEF, LineStyleEF = lineStyleEF, TextEFLong = textEFLong, TextEFShort = textEFShort, ShowAnchoredVWAP = showAnchoredVWAP, ShowSecondaryBands = showSecondaryBands, AnchoredVWAPSource = anchoredVWAPSource, AnchoredVWAPSide = anchoredVWAPSide, LineLengthEF = lineLengthEF, MitigationTrigger = mitigationTrigger, AcceptanceModeProp = acceptanceModeProp, BreakoutConfirmationBars = breakoutConfirmationBars, BreakoutConfirmationDistance = breakoutConfirmationDistance, BreakoutMinTimeMinutes = breakoutMinTimeMinutes, RPBDepthPercent = rPBDepthPercent, ShowDebugState = showDebugState, TextBPBLong = textBPBLong, ShowIPB = showIPB, AllowMultipleIPB = allowMultipleIPB, ShowRPB = showRPB, SignalCooldown = signalCooldown, ShowEF = showEF, AllowMultipleEF = allowMultipleEF, UseAdaptiveFilter = useAdaptiveFilter, AdaptiveFilterThreshold = adaptiveFilterThreshold, AllowRotation = allowRotation, MinFailureDuration = minFailureDuration, ShowBPB = showBPB, TextBPBShort = textBPBShort, TextRPBLong = textRPBLong, TextRPBShort = textRPBShort, TextSizeBPB_RPB = textSizeBPB_RPB, LineWidthBPB_RPB = lineWidthBPB_RPB, LineStyleBPB_RPB = lineStyleBPB_RPB, LineLengthBPB_RPB = lineLengthBPB_RPB, ColorButtonTextRotationalShortSerializable = colorButtonTextRotationalShortSerializable, ColorButtonTextBreakoutLongSerializable = colorButtonTextBreakoutLongSerializable, ColorButtonTextBreakoutShortSerializable = colorButtonTextBreakoutShortSerializable, ColorButtonTextRPBLongSerializable = colorButtonTextRPBLongSerializable, ColorButtonTextRPBShortSerializable = colorButtonTextRPBShortSerializable, ColorButtonTextNeutralSerializable = colorButtonTextNeutralSerializable, ColorButtonEFLongSerializable = colorButtonEFLongSerializable, ColorButtonEFShortSerializable = colorButtonEFShortSerializable, ColorButtonIPBLongSerializable = colorButtonIPBLongSerializable, ColorButtonIPBShortSerializable = colorButtonIPBShortSerializable, ColorButtonTextEFLongSerializable = colorButtonTextEFLongSerializable, ColorButtonTextEFShortSerializable = colorButtonTextEFShortSerializable, ColorButtonTextIPBLongSerializable = colorButtonTextIPBLongSerializable, ColorButtonTextIPBShortSerializable = colorButtonTextIPBShortSerializable, ColorButtonPendingSerializable = colorButtonPendingSerializable, ColorButtonTextPendingSerializable = colorButtonTextPendingSerializable, HistoricalSignalColorSerializable = historicalSignalColorSerializable, UseAlerts = useAlerts, AlertOnBPB = alertOnBPB, AlertOnRPB = alertOnRPB, AlertOnIPB = alertOnIPB, AlertOnEF = alertOnEF, AlertSound = alertSound, SendEmail = sendEmail, EmailAddress = emailAddress, AttachScreenshot = attachScreenshot }, input, ref cacheRelativeDVAPVA_v2);
 		}
 	}
 }
@@ -5132,14 +5478,14 @@ namespace NinjaTrader.NinjaScript.MarketAnalyzerColumns
 {
 	public partial class MarketAnalyzerColumn : MarketAnalyzerColumnBase
 	{
-		public Indicators.RelativeIndicators.RelativeDVAPVA_v2 RelativeDVAPVA_v2(bool showPVA, int pvaWidth, DashStyleHelper pvaStyle, int pvaOpacity, int pvaCutoffPercent, SessionTypeVWAPD sessionType, BandTypeVWAPD bandType, TimeZonesVWAPD customTZSelector, string s_CustomSessionStart, string s_CustomSessionEnd, double multiplierSD1, double multiplierSD2, double multiplierSD3, bool showDVABands, bool showSessionVWAPLine, double multiplierQR1, double multiplierQR2, double multiplierQR3, bool showSessionZones, int zoneCutoffPercentage, int sessionZoneOpacity, int zoneLineWidth, int zoneTextSize, string zoneLabelUpper, string zoneLabelLower, int zoneTextBackgroundOpacity, int maxDaysToDraw, int textSizeIPB, int lineWidthIPB, DashStyleHelper lineStyleIPB, int lineLengthIPB, string textIPBLong, string textIPBShort, int textSizeEF, int lineWidthEF, DashStyleHelper lineStyleEF, string textEFLong, string textEFShort, int lineLengthEF, MitigationTriggerMode mitigationTrigger, AcceptanceMode acceptanceModeProp, int breakoutConfirmationBars, double breakoutConfirmationDistance, int breakoutMinTimeMinutes, double rPBDepthPercent, bool showDebugState, string textBPBLong, bool showIPB, bool allowMultipleIPB, bool showRPB, int signalCooldown, bool showEF, bool allowMultipleEF, bool useAdaptiveFilter, int adaptiveFilterThreshold, bool allowRotation, int minFailureDuration, bool showBPB, string textBPBShort, string textRPBLong, string textRPBShort, int textSizeBPB_RPB, int lineWidthBPB_RPB, DashStyleHelper lineStyleBPB_RPB, int lineLengthBPB_RPB, string colorButtonTextRotationalShortSerializable, string colorButtonTextBreakoutLongSerializable, string colorButtonTextBreakoutShortSerializable, string colorButtonTextRPBLongSerializable, string colorButtonTextRPBShortSerializable, string colorButtonTextNeutralSerializable, string colorButtonEFLongSerializable, string colorButtonEFShortSerializable, string colorButtonIPBLongSerializable, string colorButtonIPBShortSerializable, string colorButtonTextEFLongSerializable, string colorButtonTextEFShortSerializable, string colorButtonTextIPBLongSerializable, string colorButtonTextIPBShortSerializable, string colorButtonPendingSerializable, string colorButtonTextPendingSerializable, string historicalSignalColorSerializable, bool useAlerts, bool alertOnBPB, bool alertOnRPB, bool alertOnIPB, bool alertOnEF, string alertSound, bool sendEmail, string emailAddress, bool attachScreenshot)
+		public Indicators.RelativeIndicators.RelativeDVAPVA_v2 RelativeDVAPVA_v2(bool showPVA, int pvaWidth, DashStyleHelper pvaStyle, int pvaOpacity, int pvaCutoffPercent, SessionTypeVWAPD sessionType, BandTypeVWAPD bandType, TimeZonesVWAPD customTZSelector, string s_CustomSessionStart, string s_CustomSessionEnd, double multiplierSD1, double multiplierSD2, double multiplierSD3, bool showDVABands, bool showSessionVWAPLine, double multiplierQR1, double multiplierQR2, double multiplierQR3, bool showVWAPLine, bool showDVAInnerBands, bool showSessionZones, int zoneCutoffPercentage, int sessionZoneOpacity, int zoneLineWidth, int zoneTextSize, string zoneLabelUpper, string zoneLabelLower, int zoneTextBackgroundOpacity, int maxDaysToDraw, int textSizeIPB, int lineWidthIPB, DashStyleHelper lineStyleIPB, int lineLengthIPB, string textIPBLong, string textIPBShort, int textSizeEF, int lineWidthEF, DashStyleHelper lineStyleEF, string textEFLong, string textEFShort, bool showAnchoredVWAP, bool showSecondaryBands, ExtremeFadeSource anchoredVWAPSource, ExtremeFadeSide anchoredVWAPSide, int lineLengthEF, MitigationTriggerMode mitigationTrigger, AcceptanceMode acceptanceModeProp, int breakoutConfirmationBars, double breakoutConfirmationDistance, int breakoutMinTimeMinutes, double rPBDepthPercent, bool showDebugState, string textBPBLong, bool showIPB, bool allowMultipleIPB, bool showRPB, int signalCooldown, bool showEF, bool allowMultipleEF, bool useAdaptiveFilter, int adaptiveFilterThreshold, bool allowRotation, int minFailureDuration, bool showBPB, string textBPBShort, string textRPBLong, string textRPBShort, int textSizeBPB_RPB, int lineWidthBPB_RPB, DashStyleHelper lineStyleBPB_RPB, int lineLengthBPB_RPB, string colorButtonTextRotationalShortSerializable, string colorButtonTextBreakoutLongSerializable, string colorButtonTextBreakoutShortSerializable, string colorButtonTextRPBLongSerializable, string colorButtonTextRPBShortSerializable, string colorButtonTextNeutralSerializable, string colorButtonEFLongSerializable, string colorButtonEFShortSerializable, string colorButtonIPBLongSerializable, string colorButtonIPBShortSerializable, string colorButtonTextEFLongSerializable, string colorButtonTextEFShortSerializable, string colorButtonTextIPBLongSerializable, string colorButtonTextIPBShortSerializable, string colorButtonPendingSerializable, string colorButtonTextPendingSerializable, string historicalSignalColorSerializable, bool useAlerts, bool alertOnBPB, bool alertOnRPB, bool alertOnIPB, bool alertOnEF, string alertSound, bool sendEmail, string emailAddress, bool attachScreenshot)
 		{
-			return indicator.RelativeDVAPVA_v2(Input, showPVA, pvaWidth, pvaStyle, pvaOpacity, pvaCutoffPercent, sessionType, bandType, customTZSelector, s_CustomSessionStart, s_CustomSessionEnd, multiplierSD1, multiplierSD2, multiplierSD3, showDVABands, showSessionVWAPLine, multiplierQR1, multiplierQR2, multiplierQR3, showSessionZones, zoneCutoffPercentage, sessionZoneOpacity, zoneLineWidth, zoneTextSize, zoneLabelUpper, zoneLabelLower, zoneTextBackgroundOpacity, maxDaysToDraw, textSizeIPB, lineWidthIPB, lineStyleIPB, lineLengthIPB, textIPBLong, textIPBShort, textSizeEF, lineWidthEF, lineStyleEF, textEFLong, textEFShort, lineLengthEF, mitigationTrigger, acceptanceModeProp, breakoutConfirmationBars, breakoutConfirmationDistance, breakoutMinTimeMinutes, rPBDepthPercent, showDebugState, textBPBLong, showIPB, allowMultipleIPB, showRPB, signalCooldown, showEF, allowMultipleEF, useAdaptiveFilter, adaptiveFilterThreshold, allowRotation, minFailureDuration, showBPB, textBPBShort, textRPBLong, textRPBShort, textSizeBPB_RPB, lineWidthBPB_RPB, lineStyleBPB_RPB, lineLengthBPB_RPB, colorButtonTextRotationalShortSerializable, colorButtonTextBreakoutLongSerializable, colorButtonTextBreakoutShortSerializable, colorButtonTextRPBLongSerializable, colorButtonTextRPBShortSerializable, colorButtonTextNeutralSerializable, colorButtonEFLongSerializable, colorButtonEFShortSerializable, colorButtonIPBLongSerializable, colorButtonIPBShortSerializable, colorButtonTextEFLongSerializable, colorButtonTextEFShortSerializable, colorButtonTextIPBLongSerializable, colorButtonTextIPBShortSerializable, colorButtonPendingSerializable, colorButtonTextPendingSerializable, historicalSignalColorSerializable, useAlerts, alertOnBPB, alertOnRPB, alertOnIPB, alertOnEF, alertSound, sendEmail, emailAddress, attachScreenshot);
+			return indicator.RelativeDVAPVA_v2(Input, showPVA, pvaWidth, pvaStyle, pvaOpacity, pvaCutoffPercent, sessionType, bandType, customTZSelector, s_CustomSessionStart, s_CustomSessionEnd, multiplierSD1, multiplierSD2, multiplierSD3, showDVABands, showSessionVWAPLine, multiplierQR1, multiplierQR2, multiplierQR3, showVWAPLine, showDVAInnerBands, showSessionZones, zoneCutoffPercentage, sessionZoneOpacity, zoneLineWidth, zoneTextSize, zoneLabelUpper, zoneLabelLower, zoneTextBackgroundOpacity, maxDaysToDraw, textSizeIPB, lineWidthIPB, lineStyleIPB, lineLengthIPB, textIPBLong, textIPBShort, textSizeEF, lineWidthEF, lineStyleEF, textEFLong, textEFShort, showAnchoredVWAP, showSecondaryBands, anchoredVWAPSource, anchoredVWAPSide, lineLengthEF, mitigationTrigger, acceptanceModeProp, breakoutConfirmationBars, breakoutConfirmationDistance, breakoutMinTimeMinutes, rPBDepthPercent, showDebugState, textBPBLong, showIPB, allowMultipleIPB, showRPB, signalCooldown, showEF, allowMultipleEF, useAdaptiveFilter, adaptiveFilterThreshold, allowRotation, minFailureDuration, showBPB, textBPBShort, textRPBLong, textRPBShort, textSizeBPB_RPB, lineWidthBPB_RPB, lineStyleBPB_RPB, lineLengthBPB_RPB, colorButtonTextRotationalShortSerializable, colorButtonTextBreakoutLongSerializable, colorButtonTextBreakoutShortSerializable, colorButtonTextRPBLongSerializable, colorButtonTextRPBShortSerializable, colorButtonTextNeutralSerializable, colorButtonEFLongSerializable, colorButtonEFShortSerializable, colorButtonIPBLongSerializable, colorButtonIPBShortSerializable, colorButtonTextEFLongSerializable, colorButtonTextEFShortSerializable, colorButtonTextIPBLongSerializable, colorButtonTextIPBShortSerializable, colorButtonPendingSerializable, colorButtonTextPendingSerializable, historicalSignalColorSerializable, useAlerts, alertOnBPB, alertOnRPB, alertOnIPB, alertOnEF, alertSound, sendEmail, emailAddress, attachScreenshot);
 		}
 
-		public Indicators.RelativeIndicators.RelativeDVAPVA_v2 RelativeDVAPVA_v2(ISeries<double> input , bool showPVA, int pvaWidth, DashStyleHelper pvaStyle, int pvaOpacity, int pvaCutoffPercent, SessionTypeVWAPD sessionType, BandTypeVWAPD bandType, TimeZonesVWAPD customTZSelector, string s_CustomSessionStart, string s_CustomSessionEnd, double multiplierSD1, double multiplierSD2, double multiplierSD3, bool showDVABands, bool showSessionVWAPLine, double multiplierQR1, double multiplierQR2, double multiplierQR3, bool showSessionZones, int zoneCutoffPercentage, int sessionZoneOpacity, int zoneLineWidth, int zoneTextSize, string zoneLabelUpper, string zoneLabelLower, int zoneTextBackgroundOpacity, int maxDaysToDraw, int textSizeIPB, int lineWidthIPB, DashStyleHelper lineStyleIPB, int lineLengthIPB, string textIPBLong, string textIPBShort, int textSizeEF, int lineWidthEF, DashStyleHelper lineStyleEF, string textEFLong, string textEFShort, int lineLengthEF, MitigationTriggerMode mitigationTrigger, AcceptanceMode acceptanceModeProp, int breakoutConfirmationBars, double breakoutConfirmationDistance, int breakoutMinTimeMinutes, double rPBDepthPercent, bool showDebugState, string textBPBLong, bool showIPB, bool allowMultipleIPB, bool showRPB, int signalCooldown, bool showEF, bool allowMultipleEF, bool useAdaptiveFilter, int adaptiveFilterThreshold, bool allowRotation, int minFailureDuration, bool showBPB, string textBPBShort, string textRPBLong, string textRPBShort, int textSizeBPB_RPB, int lineWidthBPB_RPB, DashStyleHelper lineStyleBPB_RPB, int lineLengthBPB_RPB, string colorButtonTextRotationalShortSerializable, string colorButtonTextBreakoutLongSerializable, string colorButtonTextBreakoutShortSerializable, string colorButtonTextRPBLongSerializable, string colorButtonTextRPBShortSerializable, string colorButtonTextNeutralSerializable, string colorButtonEFLongSerializable, string colorButtonEFShortSerializable, string colorButtonIPBLongSerializable, string colorButtonIPBShortSerializable, string colorButtonTextEFLongSerializable, string colorButtonTextEFShortSerializable, string colorButtonTextIPBLongSerializable, string colorButtonTextIPBShortSerializable, string colorButtonPendingSerializable, string colorButtonTextPendingSerializable, string historicalSignalColorSerializable, bool useAlerts, bool alertOnBPB, bool alertOnRPB, bool alertOnIPB, bool alertOnEF, string alertSound, bool sendEmail, string emailAddress, bool attachScreenshot)
+		public Indicators.RelativeIndicators.RelativeDVAPVA_v2 RelativeDVAPVA_v2(ISeries<double> input , bool showPVA, int pvaWidth, DashStyleHelper pvaStyle, int pvaOpacity, int pvaCutoffPercent, SessionTypeVWAPD sessionType, BandTypeVWAPD bandType, TimeZonesVWAPD customTZSelector, string s_CustomSessionStart, string s_CustomSessionEnd, double multiplierSD1, double multiplierSD2, double multiplierSD3, bool showDVABands, bool showSessionVWAPLine, double multiplierQR1, double multiplierQR2, double multiplierQR3, bool showVWAPLine, bool showDVAInnerBands, bool showSessionZones, int zoneCutoffPercentage, int sessionZoneOpacity, int zoneLineWidth, int zoneTextSize, string zoneLabelUpper, string zoneLabelLower, int zoneTextBackgroundOpacity, int maxDaysToDraw, int textSizeIPB, int lineWidthIPB, DashStyleHelper lineStyleIPB, int lineLengthIPB, string textIPBLong, string textIPBShort, int textSizeEF, int lineWidthEF, DashStyleHelper lineStyleEF, string textEFLong, string textEFShort, bool showAnchoredVWAP, bool showSecondaryBands, ExtremeFadeSource anchoredVWAPSource, ExtremeFadeSide anchoredVWAPSide, int lineLengthEF, MitigationTriggerMode mitigationTrigger, AcceptanceMode acceptanceModeProp, int breakoutConfirmationBars, double breakoutConfirmationDistance, int breakoutMinTimeMinutes, double rPBDepthPercent, bool showDebugState, string textBPBLong, bool showIPB, bool allowMultipleIPB, bool showRPB, int signalCooldown, bool showEF, bool allowMultipleEF, bool useAdaptiveFilter, int adaptiveFilterThreshold, bool allowRotation, int minFailureDuration, bool showBPB, string textBPBShort, string textRPBLong, string textRPBShort, int textSizeBPB_RPB, int lineWidthBPB_RPB, DashStyleHelper lineStyleBPB_RPB, int lineLengthBPB_RPB, string colorButtonTextRotationalShortSerializable, string colorButtonTextBreakoutLongSerializable, string colorButtonTextBreakoutShortSerializable, string colorButtonTextRPBLongSerializable, string colorButtonTextRPBShortSerializable, string colorButtonTextNeutralSerializable, string colorButtonEFLongSerializable, string colorButtonEFShortSerializable, string colorButtonIPBLongSerializable, string colorButtonIPBShortSerializable, string colorButtonTextEFLongSerializable, string colorButtonTextEFShortSerializable, string colorButtonTextIPBLongSerializable, string colorButtonTextIPBShortSerializable, string colorButtonPendingSerializable, string colorButtonTextPendingSerializable, string historicalSignalColorSerializable, bool useAlerts, bool alertOnBPB, bool alertOnRPB, bool alertOnIPB, bool alertOnEF, string alertSound, bool sendEmail, string emailAddress, bool attachScreenshot)
 		{
-			return indicator.RelativeDVAPVA_v2(input, showPVA, pvaWidth, pvaStyle, pvaOpacity, pvaCutoffPercent, sessionType, bandType, customTZSelector, s_CustomSessionStart, s_CustomSessionEnd, multiplierSD1, multiplierSD2, multiplierSD3, showDVABands, showSessionVWAPLine, multiplierQR1, multiplierQR2, multiplierQR3, showSessionZones, zoneCutoffPercentage, sessionZoneOpacity, zoneLineWidth, zoneTextSize, zoneLabelUpper, zoneLabelLower, zoneTextBackgroundOpacity, maxDaysToDraw, textSizeIPB, lineWidthIPB, lineStyleIPB, lineLengthIPB, textIPBLong, textIPBShort, textSizeEF, lineWidthEF, lineStyleEF, textEFLong, textEFShort, lineLengthEF, mitigationTrigger, acceptanceModeProp, breakoutConfirmationBars, breakoutConfirmationDistance, breakoutMinTimeMinutes, rPBDepthPercent, showDebugState, textBPBLong, showIPB, allowMultipleIPB, showRPB, signalCooldown, showEF, allowMultipleEF, useAdaptiveFilter, adaptiveFilterThreshold, allowRotation, minFailureDuration, showBPB, textBPBShort, textRPBLong, textRPBShort, textSizeBPB_RPB, lineWidthBPB_RPB, lineStyleBPB_RPB, lineLengthBPB_RPB, colorButtonTextRotationalShortSerializable, colorButtonTextBreakoutLongSerializable, colorButtonTextBreakoutShortSerializable, colorButtonTextRPBLongSerializable, colorButtonTextRPBShortSerializable, colorButtonTextNeutralSerializable, colorButtonEFLongSerializable, colorButtonEFShortSerializable, colorButtonIPBLongSerializable, colorButtonIPBShortSerializable, colorButtonTextEFLongSerializable, colorButtonTextEFShortSerializable, colorButtonTextIPBLongSerializable, colorButtonTextIPBShortSerializable, colorButtonPendingSerializable, colorButtonTextPendingSerializable, historicalSignalColorSerializable, useAlerts, alertOnBPB, alertOnRPB, alertOnIPB, alertOnEF, alertSound, sendEmail, emailAddress, attachScreenshot);
+			return indicator.RelativeDVAPVA_v2(input, showPVA, pvaWidth, pvaStyle, pvaOpacity, pvaCutoffPercent, sessionType, bandType, customTZSelector, s_CustomSessionStart, s_CustomSessionEnd, multiplierSD1, multiplierSD2, multiplierSD3, showDVABands, showSessionVWAPLine, multiplierQR1, multiplierQR2, multiplierQR3, showVWAPLine, showDVAInnerBands, showSessionZones, zoneCutoffPercentage, sessionZoneOpacity, zoneLineWidth, zoneTextSize, zoneLabelUpper, zoneLabelLower, zoneTextBackgroundOpacity, maxDaysToDraw, textSizeIPB, lineWidthIPB, lineStyleIPB, lineLengthIPB, textIPBLong, textIPBShort, textSizeEF, lineWidthEF, lineStyleEF, textEFLong, textEFShort, showAnchoredVWAP, showSecondaryBands, anchoredVWAPSource, anchoredVWAPSide, lineLengthEF, mitigationTrigger, acceptanceModeProp, breakoutConfirmationBars, breakoutConfirmationDistance, breakoutMinTimeMinutes, rPBDepthPercent, showDebugState, textBPBLong, showIPB, allowMultipleIPB, showRPB, signalCooldown, showEF, allowMultipleEF, useAdaptiveFilter, adaptiveFilterThreshold, allowRotation, minFailureDuration, showBPB, textBPBShort, textRPBLong, textRPBShort, textSizeBPB_RPB, lineWidthBPB_RPB, lineStyleBPB_RPB, lineLengthBPB_RPB, colorButtonTextRotationalShortSerializable, colorButtonTextBreakoutLongSerializable, colorButtonTextBreakoutShortSerializable, colorButtonTextRPBLongSerializable, colorButtonTextRPBShortSerializable, colorButtonTextNeutralSerializable, colorButtonEFLongSerializable, colorButtonEFShortSerializable, colorButtonIPBLongSerializable, colorButtonIPBShortSerializable, colorButtonTextEFLongSerializable, colorButtonTextEFShortSerializable, colorButtonTextIPBLongSerializable, colorButtonTextIPBShortSerializable, colorButtonPendingSerializable, colorButtonTextPendingSerializable, historicalSignalColorSerializable, useAlerts, alertOnBPB, alertOnRPB, alertOnIPB, alertOnEF, alertSound, sendEmail, emailAddress, attachScreenshot);
 		}
 	}
 }
@@ -5148,14 +5494,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public partial class Strategy : NinjaTrader.Gui.NinjaScript.StrategyRenderBase
 	{
-		public Indicators.RelativeIndicators.RelativeDVAPVA_v2 RelativeDVAPVA_v2(bool showPVA, int pvaWidth, DashStyleHelper pvaStyle, int pvaOpacity, int pvaCutoffPercent, SessionTypeVWAPD sessionType, BandTypeVWAPD bandType, TimeZonesVWAPD customTZSelector, string s_CustomSessionStart, string s_CustomSessionEnd, double multiplierSD1, double multiplierSD2, double multiplierSD3, bool showDVABands, bool showSessionVWAPLine, double multiplierQR1, double multiplierQR2, double multiplierQR3, bool showSessionZones, int zoneCutoffPercentage, int sessionZoneOpacity, int zoneLineWidth, int zoneTextSize, string zoneLabelUpper, string zoneLabelLower, int zoneTextBackgroundOpacity, int maxDaysToDraw, int textSizeIPB, int lineWidthIPB, DashStyleHelper lineStyleIPB, int lineLengthIPB, string textIPBLong, string textIPBShort, int textSizeEF, int lineWidthEF, DashStyleHelper lineStyleEF, string textEFLong, string textEFShort, int lineLengthEF, MitigationTriggerMode mitigationTrigger, AcceptanceMode acceptanceModeProp, int breakoutConfirmationBars, double breakoutConfirmationDistance, int breakoutMinTimeMinutes, double rPBDepthPercent, bool showDebugState, string textBPBLong, bool showIPB, bool allowMultipleIPB, bool showRPB, int signalCooldown, bool showEF, bool allowMultipleEF, bool useAdaptiveFilter, int adaptiveFilterThreshold, bool allowRotation, int minFailureDuration, bool showBPB, string textBPBShort, string textRPBLong, string textRPBShort, int textSizeBPB_RPB, int lineWidthBPB_RPB, DashStyleHelper lineStyleBPB_RPB, int lineLengthBPB_RPB, string colorButtonTextRotationalShortSerializable, string colorButtonTextBreakoutLongSerializable, string colorButtonTextBreakoutShortSerializable, string colorButtonTextRPBLongSerializable, string colorButtonTextRPBShortSerializable, string colorButtonTextNeutralSerializable, string colorButtonEFLongSerializable, string colorButtonEFShortSerializable, string colorButtonIPBLongSerializable, string colorButtonIPBShortSerializable, string colorButtonTextEFLongSerializable, string colorButtonTextEFShortSerializable, string colorButtonTextIPBLongSerializable, string colorButtonTextIPBShortSerializable, string colorButtonPendingSerializable, string colorButtonTextPendingSerializable, string historicalSignalColorSerializable, bool useAlerts, bool alertOnBPB, bool alertOnRPB, bool alertOnIPB, bool alertOnEF, string alertSound, bool sendEmail, string emailAddress, bool attachScreenshot)
+		public Indicators.RelativeIndicators.RelativeDVAPVA_v2 RelativeDVAPVA_v2(bool showPVA, int pvaWidth, DashStyleHelper pvaStyle, int pvaOpacity, int pvaCutoffPercent, SessionTypeVWAPD sessionType, BandTypeVWAPD bandType, TimeZonesVWAPD customTZSelector, string s_CustomSessionStart, string s_CustomSessionEnd, double multiplierSD1, double multiplierSD2, double multiplierSD3, bool showDVABands, bool showSessionVWAPLine, double multiplierQR1, double multiplierQR2, double multiplierQR3, bool showVWAPLine, bool showDVAInnerBands, bool showSessionZones, int zoneCutoffPercentage, int sessionZoneOpacity, int zoneLineWidth, int zoneTextSize, string zoneLabelUpper, string zoneLabelLower, int zoneTextBackgroundOpacity, int maxDaysToDraw, int textSizeIPB, int lineWidthIPB, DashStyleHelper lineStyleIPB, int lineLengthIPB, string textIPBLong, string textIPBShort, int textSizeEF, int lineWidthEF, DashStyleHelper lineStyleEF, string textEFLong, string textEFShort, bool showAnchoredVWAP, bool showSecondaryBands, ExtremeFadeSource anchoredVWAPSource, ExtremeFadeSide anchoredVWAPSide, int lineLengthEF, MitigationTriggerMode mitigationTrigger, AcceptanceMode acceptanceModeProp, int breakoutConfirmationBars, double breakoutConfirmationDistance, int breakoutMinTimeMinutes, double rPBDepthPercent, bool showDebugState, string textBPBLong, bool showIPB, bool allowMultipleIPB, bool showRPB, int signalCooldown, bool showEF, bool allowMultipleEF, bool useAdaptiveFilter, int adaptiveFilterThreshold, bool allowRotation, int minFailureDuration, bool showBPB, string textBPBShort, string textRPBLong, string textRPBShort, int textSizeBPB_RPB, int lineWidthBPB_RPB, DashStyleHelper lineStyleBPB_RPB, int lineLengthBPB_RPB, string colorButtonTextRotationalShortSerializable, string colorButtonTextBreakoutLongSerializable, string colorButtonTextBreakoutShortSerializable, string colorButtonTextRPBLongSerializable, string colorButtonTextRPBShortSerializable, string colorButtonTextNeutralSerializable, string colorButtonEFLongSerializable, string colorButtonEFShortSerializable, string colorButtonIPBLongSerializable, string colorButtonIPBShortSerializable, string colorButtonTextEFLongSerializable, string colorButtonTextEFShortSerializable, string colorButtonTextIPBLongSerializable, string colorButtonTextIPBShortSerializable, string colorButtonPendingSerializable, string colorButtonTextPendingSerializable, string historicalSignalColorSerializable, bool useAlerts, bool alertOnBPB, bool alertOnRPB, bool alertOnIPB, bool alertOnEF, string alertSound, bool sendEmail, string emailAddress, bool attachScreenshot)
 		{
-			return indicator.RelativeDVAPVA_v2(Input, showPVA, pvaWidth, pvaStyle, pvaOpacity, pvaCutoffPercent, sessionType, bandType, customTZSelector, s_CustomSessionStart, s_CustomSessionEnd, multiplierSD1, multiplierSD2, multiplierSD3, showDVABands, showSessionVWAPLine, multiplierQR1, multiplierQR2, multiplierQR3, showSessionZones, zoneCutoffPercentage, sessionZoneOpacity, zoneLineWidth, zoneTextSize, zoneLabelUpper, zoneLabelLower, zoneTextBackgroundOpacity, maxDaysToDraw, textSizeIPB, lineWidthIPB, lineStyleIPB, lineLengthIPB, textIPBLong, textIPBShort, textSizeEF, lineWidthEF, lineStyleEF, textEFLong, textEFShort, lineLengthEF, mitigationTrigger, acceptanceModeProp, breakoutConfirmationBars, breakoutConfirmationDistance, breakoutMinTimeMinutes, rPBDepthPercent, showDebugState, textBPBLong, showIPB, allowMultipleIPB, showRPB, signalCooldown, showEF, allowMultipleEF, useAdaptiveFilter, adaptiveFilterThreshold, allowRotation, minFailureDuration, showBPB, textBPBShort, textRPBLong, textRPBShort, textSizeBPB_RPB, lineWidthBPB_RPB, lineStyleBPB_RPB, lineLengthBPB_RPB, colorButtonTextRotationalShortSerializable, colorButtonTextBreakoutLongSerializable, colorButtonTextBreakoutShortSerializable, colorButtonTextRPBLongSerializable, colorButtonTextRPBShortSerializable, colorButtonTextNeutralSerializable, colorButtonEFLongSerializable, colorButtonEFShortSerializable, colorButtonIPBLongSerializable, colorButtonIPBShortSerializable, colorButtonTextEFLongSerializable, colorButtonTextEFShortSerializable, colorButtonTextIPBLongSerializable, colorButtonTextIPBShortSerializable, colorButtonPendingSerializable, colorButtonTextPendingSerializable, historicalSignalColorSerializable, useAlerts, alertOnBPB, alertOnRPB, alertOnIPB, alertOnEF, alertSound, sendEmail, emailAddress, attachScreenshot);
+			return indicator.RelativeDVAPVA_v2(Input, showPVA, pvaWidth, pvaStyle, pvaOpacity, pvaCutoffPercent, sessionType, bandType, customTZSelector, s_CustomSessionStart, s_CustomSessionEnd, multiplierSD1, multiplierSD2, multiplierSD3, showDVABands, showSessionVWAPLine, multiplierQR1, multiplierQR2, multiplierQR3, showVWAPLine, showDVAInnerBands, showSessionZones, zoneCutoffPercentage, sessionZoneOpacity, zoneLineWidth, zoneTextSize, zoneLabelUpper, zoneLabelLower, zoneTextBackgroundOpacity, maxDaysToDraw, textSizeIPB, lineWidthIPB, lineStyleIPB, lineLengthIPB, textIPBLong, textIPBShort, textSizeEF, lineWidthEF, lineStyleEF, textEFLong, textEFShort, showAnchoredVWAP, showSecondaryBands, anchoredVWAPSource, anchoredVWAPSide, lineLengthEF, mitigationTrigger, acceptanceModeProp, breakoutConfirmationBars, breakoutConfirmationDistance, breakoutMinTimeMinutes, rPBDepthPercent, showDebugState, textBPBLong, showIPB, allowMultipleIPB, showRPB, signalCooldown, showEF, allowMultipleEF, useAdaptiveFilter, adaptiveFilterThreshold, allowRotation, minFailureDuration, showBPB, textBPBShort, textRPBLong, textRPBShort, textSizeBPB_RPB, lineWidthBPB_RPB, lineStyleBPB_RPB, lineLengthBPB_RPB, colorButtonTextRotationalShortSerializable, colorButtonTextBreakoutLongSerializable, colorButtonTextBreakoutShortSerializable, colorButtonTextRPBLongSerializable, colorButtonTextRPBShortSerializable, colorButtonTextNeutralSerializable, colorButtonEFLongSerializable, colorButtonEFShortSerializable, colorButtonIPBLongSerializable, colorButtonIPBShortSerializable, colorButtonTextEFLongSerializable, colorButtonTextEFShortSerializable, colorButtonTextIPBLongSerializable, colorButtonTextIPBShortSerializable, colorButtonPendingSerializable, colorButtonTextPendingSerializable, historicalSignalColorSerializable, useAlerts, alertOnBPB, alertOnRPB, alertOnIPB, alertOnEF, alertSound, sendEmail, emailAddress, attachScreenshot);
 		}
 
-		public Indicators.RelativeIndicators.RelativeDVAPVA_v2 RelativeDVAPVA_v2(ISeries<double> input , bool showPVA, int pvaWidth, DashStyleHelper pvaStyle, int pvaOpacity, int pvaCutoffPercent, SessionTypeVWAPD sessionType, BandTypeVWAPD bandType, TimeZonesVWAPD customTZSelector, string s_CustomSessionStart, string s_CustomSessionEnd, double multiplierSD1, double multiplierSD2, double multiplierSD3, bool showDVABands, bool showSessionVWAPLine, double multiplierQR1, double multiplierQR2, double multiplierQR3, bool showSessionZones, int zoneCutoffPercentage, int sessionZoneOpacity, int zoneLineWidth, int zoneTextSize, string zoneLabelUpper, string zoneLabelLower, int zoneTextBackgroundOpacity, int maxDaysToDraw, int textSizeIPB, int lineWidthIPB, DashStyleHelper lineStyleIPB, int lineLengthIPB, string textIPBLong, string textIPBShort, int textSizeEF, int lineWidthEF, DashStyleHelper lineStyleEF, string textEFLong, string textEFShort, int lineLengthEF, MitigationTriggerMode mitigationTrigger, AcceptanceMode acceptanceModeProp, int breakoutConfirmationBars, double breakoutConfirmationDistance, int breakoutMinTimeMinutes, double rPBDepthPercent, bool showDebugState, string textBPBLong, bool showIPB, bool allowMultipleIPB, bool showRPB, int signalCooldown, bool showEF, bool allowMultipleEF, bool useAdaptiveFilter, int adaptiveFilterThreshold, bool allowRotation, int minFailureDuration, bool showBPB, string textBPBShort, string textRPBLong, string textRPBShort, int textSizeBPB_RPB, int lineWidthBPB_RPB, DashStyleHelper lineStyleBPB_RPB, int lineLengthBPB_RPB, string colorButtonTextRotationalShortSerializable, string colorButtonTextBreakoutLongSerializable, string colorButtonTextBreakoutShortSerializable, string colorButtonTextRPBLongSerializable, string colorButtonTextRPBShortSerializable, string colorButtonTextNeutralSerializable, string colorButtonEFLongSerializable, string colorButtonEFShortSerializable, string colorButtonIPBLongSerializable, string colorButtonIPBShortSerializable, string colorButtonTextEFLongSerializable, string colorButtonTextEFShortSerializable, string colorButtonTextIPBLongSerializable, string colorButtonTextIPBShortSerializable, string colorButtonPendingSerializable, string colorButtonTextPendingSerializable, string historicalSignalColorSerializable, bool useAlerts, bool alertOnBPB, bool alertOnRPB, bool alertOnIPB, bool alertOnEF, string alertSound, bool sendEmail, string emailAddress, bool attachScreenshot)
+		public Indicators.RelativeIndicators.RelativeDVAPVA_v2 RelativeDVAPVA_v2(ISeries<double> input , bool showPVA, int pvaWidth, DashStyleHelper pvaStyle, int pvaOpacity, int pvaCutoffPercent, SessionTypeVWAPD sessionType, BandTypeVWAPD bandType, TimeZonesVWAPD customTZSelector, string s_CustomSessionStart, string s_CustomSessionEnd, double multiplierSD1, double multiplierSD2, double multiplierSD3, bool showDVABands, bool showSessionVWAPLine, double multiplierQR1, double multiplierQR2, double multiplierQR3, bool showVWAPLine, bool showDVAInnerBands, bool showSessionZones, int zoneCutoffPercentage, int sessionZoneOpacity, int zoneLineWidth, int zoneTextSize, string zoneLabelUpper, string zoneLabelLower, int zoneTextBackgroundOpacity, int maxDaysToDraw, int textSizeIPB, int lineWidthIPB, DashStyleHelper lineStyleIPB, int lineLengthIPB, string textIPBLong, string textIPBShort, int textSizeEF, int lineWidthEF, DashStyleHelper lineStyleEF, string textEFLong, string textEFShort, bool showAnchoredVWAP, bool showSecondaryBands, ExtremeFadeSource anchoredVWAPSource, ExtremeFadeSide anchoredVWAPSide, int lineLengthEF, MitigationTriggerMode mitigationTrigger, AcceptanceMode acceptanceModeProp, int breakoutConfirmationBars, double breakoutConfirmationDistance, int breakoutMinTimeMinutes, double rPBDepthPercent, bool showDebugState, string textBPBLong, bool showIPB, bool allowMultipleIPB, bool showRPB, int signalCooldown, bool showEF, bool allowMultipleEF, bool useAdaptiveFilter, int adaptiveFilterThreshold, bool allowRotation, int minFailureDuration, bool showBPB, string textBPBShort, string textRPBLong, string textRPBShort, int textSizeBPB_RPB, int lineWidthBPB_RPB, DashStyleHelper lineStyleBPB_RPB, int lineLengthBPB_RPB, string colorButtonTextRotationalShortSerializable, string colorButtonTextBreakoutLongSerializable, string colorButtonTextBreakoutShortSerializable, string colorButtonTextRPBLongSerializable, string colorButtonTextRPBShortSerializable, string colorButtonTextNeutralSerializable, string colorButtonEFLongSerializable, string colorButtonEFShortSerializable, string colorButtonIPBLongSerializable, string colorButtonIPBShortSerializable, string colorButtonTextEFLongSerializable, string colorButtonTextEFShortSerializable, string colorButtonTextIPBLongSerializable, string colorButtonTextIPBShortSerializable, string colorButtonPendingSerializable, string colorButtonTextPendingSerializable, string historicalSignalColorSerializable, bool useAlerts, bool alertOnBPB, bool alertOnRPB, bool alertOnIPB, bool alertOnEF, string alertSound, bool sendEmail, string emailAddress, bool attachScreenshot)
 		{
-			return indicator.RelativeDVAPVA_v2(input, showPVA, pvaWidth, pvaStyle, pvaOpacity, pvaCutoffPercent, sessionType, bandType, customTZSelector, s_CustomSessionStart, s_CustomSessionEnd, multiplierSD1, multiplierSD2, multiplierSD3, showDVABands, showSessionVWAPLine, multiplierQR1, multiplierQR2, multiplierQR3, showSessionZones, zoneCutoffPercentage, sessionZoneOpacity, zoneLineWidth, zoneTextSize, zoneLabelUpper, zoneLabelLower, zoneTextBackgroundOpacity, maxDaysToDraw, textSizeIPB, lineWidthIPB, lineStyleIPB, lineLengthIPB, textIPBLong, textIPBShort, textSizeEF, lineWidthEF, lineStyleEF, textEFLong, textEFShort, lineLengthEF, mitigationTrigger, acceptanceModeProp, breakoutConfirmationBars, breakoutConfirmationDistance, breakoutMinTimeMinutes, rPBDepthPercent, showDebugState, textBPBLong, showIPB, allowMultipleIPB, showRPB, signalCooldown, showEF, allowMultipleEF, useAdaptiveFilter, adaptiveFilterThreshold, allowRotation, minFailureDuration, showBPB, textBPBShort, textRPBLong, textRPBShort, textSizeBPB_RPB, lineWidthBPB_RPB, lineStyleBPB_RPB, lineLengthBPB_RPB, colorButtonTextRotationalShortSerializable, colorButtonTextBreakoutLongSerializable, colorButtonTextBreakoutShortSerializable, colorButtonTextRPBLongSerializable, colorButtonTextRPBShortSerializable, colorButtonTextNeutralSerializable, colorButtonEFLongSerializable, colorButtonEFShortSerializable, colorButtonIPBLongSerializable, colorButtonIPBShortSerializable, colorButtonTextEFLongSerializable, colorButtonTextEFShortSerializable, colorButtonTextIPBLongSerializable, colorButtonTextIPBShortSerializable, colorButtonPendingSerializable, colorButtonTextPendingSerializable, historicalSignalColorSerializable, useAlerts, alertOnBPB, alertOnRPB, alertOnIPB, alertOnEF, alertSound, sendEmail, emailAddress, attachScreenshot);
+			return indicator.RelativeDVAPVA_v2(input, showPVA, pvaWidth, pvaStyle, pvaOpacity, pvaCutoffPercent, sessionType, bandType, customTZSelector, s_CustomSessionStart, s_CustomSessionEnd, multiplierSD1, multiplierSD2, multiplierSD3, showDVABands, showSessionVWAPLine, multiplierQR1, multiplierQR2, multiplierQR3, showVWAPLine, showDVAInnerBands, showSessionZones, zoneCutoffPercentage, sessionZoneOpacity, zoneLineWidth, zoneTextSize, zoneLabelUpper, zoneLabelLower, zoneTextBackgroundOpacity, maxDaysToDraw, textSizeIPB, lineWidthIPB, lineStyleIPB, lineLengthIPB, textIPBLong, textIPBShort, textSizeEF, lineWidthEF, lineStyleEF, textEFLong, textEFShort, showAnchoredVWAP, showSecondaryBands, anchoredVWAPSource, anchoredVWAPSide, lineLengthEF, mitigationTrigger, acceptanceModeProp, breakoutConfirmationBars, breakoutConfirmationDistance, breakoutMinTimeMinutes, rPBDepthPercent, showDebugState, textBPBLong, showIPB, allowMultipleIPB, showRPB, signalCooldown, showEF, allowMultipleEF, useAdaptiveFilter, adaptiveFilterThreshold, allowRotation, minFailureDuration, showBPB, textBPBShort, textRPBLong, textRPBShort, textSizeBPB_RPB, lineWidthBPB_RPB, lineStyleBPB_RPB, lineLengthBPB_RPB, colorButtonTextRotationalShortSerializable, colorButtonTextBreakoutLongSerializable, colorButtonTextBreakoutShortSerializable, colorButtonTextRPBLongSerializable, colorButtonTextRPBShortSerializable, colorButtonTextNeutralSerializable, colorButtonEFLongSerializable, colorButtonEFShortSerializable, colorButtonIPBLongSerializable, colorButtonIPBShortSerializable, colorButtonTextEFLongSerializable, colorButtonTextEFShortSerializable, colorButtonTextIPBLongSerializable, colorButtonTextIPBShortSerializable, colorButtonPendingSerializable, colorButtonTextPendingSerializable, historicalSignalColorSerializable, useAlerts, alertOnBPB, alertOnRPB, alertOnIPB, alertOnEF, alertSound, sendEmail, emailAddress, attachScreenshot);
 		}
 	}
 }
