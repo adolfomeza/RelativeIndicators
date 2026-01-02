@@ -568,15 +568,14 @@ if st.sidebar.button("🗑️ BORRAR (SOLO BACKTEST)"):
 # Data Source Selector (v2.0: Separated by execution context)
 # Sticky Selection via Query Params
 qp_source = st.query_params.get("src", "backtest")
-idx_source = {"backtest": 0, "playback": 1, "demo": 2, "live": 3}.get(qp_source, 0)
+idx_source = {"backtest": 0, "playback": 1, "DEMO": 2}.get(qp_source, 0)
 
 def on_src_change():
     val = st.session_state.data_source_persist
     source_map = {
         "📊 Backtest (Strategy Analyzer)": "backtest",
         "⏪ Playback (Market Replay)": "playback",
-        "🎮 Demo (Cuenta Simulada)": "demo",
-        "💰 Live (Cuenta Real)": "live"
+        "📁 DEMO": "DEMO"
     }
     st.query_params["src"] = source_map.get(val, "backtest")
 
@@ -585,8 +584,7 @@ data_source = st.sidebar.radio(
     [
         "📊 Backtest (Strategy Analyzer)",
         "⏪ Playback (Market Replay)",
-        "🎮 Demo (Cuenta Simulada)",
-        "💰 Live (Cuenta Real)"
+        "📁 DEMO"
     ], 
     index=idx_source,
     key="data_source_persist",
@@ -601,10 +599,8 @@ if data_source == "📊 Backtest (Strategy Analyzer)":
     default_path = os.path.join(trade_exports_dir, "backtest", "*.csv")
 elif data_source == "⏪ Playback (Market Replay)":
     default_path = os.path.join(trade_exports_dir, "playback", "*.csv")
-elif data_source == "🎮 Demo (Cuenta Simulada)":
-    default_path = os.path.join(trade_exports_dir, "demo", "*.csv")
-elif data_source == "💰 Live (Cuenta Real)":
-    default_path = os.path.join(trade_exports_dir, "live", "*.csv")
+elif data_source == "📁 DEMO":
+    default_path = os.path.join(trade_exports_dir, "DEMO", "*.csv")
 
 
 

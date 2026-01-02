@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.10"; // CSV Export: Fixed path bug
+		private const string StrategyVersion = "v1.14.11"; // Auto-detection: Use Account.Name as folder
 		
 		// v1.12.1: CONTROL BUTTONS (simplified to 2 buttons)
 		private TradingMode currentTradingMode = TradingMode.Normal;
@@ -611,10 +611,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 						"bin", "Custom", "Strategies", "TradeExports");
 					
 					// Determine context subfolder based on execution state and account
-					string contextFolder = "live"; // Default for real account
+					// v1.14.11: Usar nombre exacto de cuenta para auto-detección en Streamlit
+					string contextFolder;
 					
 					// 1. Backtest detection: Strategy Analyzer has no ChartControl
-					// Note: ChartControl might be null in some other headless cases, but generally means Strategy Analyzer here
 					if (ChartControl == null)
 					{
 						contextFolder = "backtest";
@@ -625,14 +625,19 @@ namespace NinjaTrader.NinjaScript.Strategies
 					{
 						contextFolder = "playback";
 					}
-					// 3. Demo detection: Check account name
+					// 3. Use Account Name directly for automatic detection
 					else if (Account != null)
 					{
-						string accountName = Account.Name;
-						if (accountName.StartsWith("Sim") || accountName.ToLower().Contains("demo") || accountName.ToLower().Contains("paper"))
-							contextFolder = "demo";
+						// Sanitize account name for folder path (remove invalid chars)
+						contextFolder = Account.Name.Replace("/", "-").Replace(":", "-").Replace(" ", "_");
+					}
+					else
+					{
+						// Fallback if no account info available
+						contextFolder = "unknown";
 					}
 					
+					Log("DEBUG_CONTEXT: Account = '" + (Account != null ? Account.Name : "null") + "', Context = '" + contextFolder + "'");
 					string exportDir = System.IO.Path.Combine(strategiesDir, contextFolder);
 
 					
