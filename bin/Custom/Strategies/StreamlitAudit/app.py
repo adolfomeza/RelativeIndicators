@@ -533,6 +533,14 @@ def load_market_data(instrument, date_obj):
 # --- 2. SIDEBAR FILTERS ---
 st.sidebar.title("🎛️ Panel de Control")
 
+# API Status Indicator
+analyzer = get_analyzer()
+if analyzer is not None:
+    st.sidebar.success("🤖 IA: Activa")
+else:
+    st.sidebar.warning("⚠️ IA: Sin API Key (.env)")
+
+
 # Force Reset Logic
 if st.sidebar.button("🗑️ BORRAR (SOLO BACKTEST)"):
     try:
@@ -560,7 +568,7 @@ if st.sidebar.button("🗑️ BORRAR (SOLO BACKTEST)"):
 # Data Source Selector (v2.0: Separated by execution context)
 # Sticky Selection via Query Params
 qp_source = st.query_params.get("src", "backtest")
-idx_source = {"backtest": 0, "playback": 1, "demo": 2, "live": 3, "historico": 4}.get(qp_source, 0)
+idx_source = {"backtest": 0, "playback": 1, "demo": 2, "live": 3}.get(qp_source, 0)
 
 def on_src_change():
     val = st.session_state.data_source_persist
@@ -568,8 +576,7 @@ def on_src_change():
         "📊 Backtest (Strategy Analyzer)": "backtest",
         "⏪ Playback (Market Replay)": "playback",
         "🎮 Demo (Cuenta Simulada)": "demo",
-        "💰 Live (Cuenta Real)": "live",
-        "📁 Histórico Consolidado": "historico"
+        "💰 Live (Cuenta Real)": "live"
     }
     st.query_params["src"] = source_map.get(val, "backtest")
 
@@ -579,8 +586,7 @@ data_source = st.sidebar.radio(
         "📊 Backtest (Strategy Analyzer)",
         "⏪ Playback (Market Replay)",
         "🎮 Demo (Cuenta Simulada)",
-        "💰 Live (Cuenta Real)",
-        "📁 Histórico Consolidado"
+        "💰 Live (Cuenta Real)"
     ], 
     index=idx_source,
     key="data_source_persist",
@@ -599,10 +605,6 @@ elif data_source == "🎮 Demo (Cuenta Simulada)":
     default_path = os.path.join(trade_exports_dir, "demo", "*.csv")
 elif data_source == "💰 Live (Cuenta Real)":
     default_path = os.path.join(trade_exports_dir, "live", "*.csv")
-else:
-    # Histórico consolidado (legacy)
-    base_dir = r"C:\Users\prueba\Documents\NinjaTrader 8"
-    default_path = os.path.join(base_dir, "LiveTradeLogs", "live_log.csv")
 
 
 
@@ -689,12 +691,14 @@ if 'Account' in df.columns:
         df = df[df['Account'] == selected_acc]
 
 # Apply Commission (Net PnL)
+# Apply Commission (Net PnL)
 # Assuming CSV 'PnL' is Gross. We subtract commission per row (since each row is 1 contract)
 if commission > 0:
     df['PnL'] = df['PnL'] - commission
     df['PnL_Gross'] = df['PnL'] + commission # Keep gross for reference if needed
 
 # --- 3. METRICS ENGINE ---
+
 # Validation: Check for duplicates
 if 'EntryTime' in df.columns:
     init_len = len(df)
@@ -712,7 +716,71 @@ avg_win = trade_gb[trade_gb > 0].mean() if not trade_gb[trade_gb > 0].empty else
 avg_loss = trade_gb[trade_gb <= 0].mean() if not trade_gb[trade_gb <= 0].empty else 0
 pf = abs(trade_gb[trade_gb > 0].sum() / trade_gb[trade_gb <= 0].sum()) if trade_gb[trade_gb <= 0].sum() != 0 else 0
 
+# --- CHAT INTERACTIVO CON IA (después de calcular métricas) ---
+st.sidebar.markdown("---")
+st.sidebar.markdown("### 🤖 Asistente IA")
+
+# Check if AI is available
+if get_analyzer() is None:
+    st.sidebar.info("💡 Configura GEMINI_API_KEY en .env para habilitar chat")
+else:
+    # Initialize chat history
+    if 'chat_history' not in st.session_state:
+        st.session_state.chat_history = []
+    
+    # Chat input
+    user_question = st.sidebar.text_input(
+        "Pregunta sobre tus trades:",
+        placeholder="Ej: ¿Por qué MNQ tiene mejor WR que MES?",
+        key="ai_chat_input"
+    )
+    
+    if st.sidebar.button("💬 Enviar", key="ai_chat_send", use_container_width=True) and user_question:
+        # Prepare context (all variables are now available)
+        context = {
+            "total_pnl": f"${total_pnl:,.2f}",
+            "total_trades": total_trades,
+            "win_rate": f"{win_rate:.1f}%",
+            "profit_factor": f"{pf:.2f}",
+            "instruments": ", ".join(df['Instrument'].unique().tolist()),
+            "setups": ", ".join(df['SetupName'].unique().tolist()),
+            "date_range": f"{min_date} to {max_date}",
+            "selected_instrument": selected_inst,
+            "selected_setup": selected_setup
+        }
+        
+        # Get AI response
+        with st.spinner("🧠 Analizando tu pregunta..."):
+            response = get_analyzer().chat(user_question, context)
+        
+        # Save to history
+        st.session_state.chat_history.append({
+            "question": user_question,
+            "answer": response
+        })
+        
+        # Force rerun to show new message
+        st.rerun()
+    
+    # Display chat history (reversed, most recent first)
+    if st.session_state.chat_history:
+        st.sidebar.markdown("#### 💬 Historial")
+        
+        # Show last 5 conversations
+        for i, msg in enumerate(reversed(st.session_state.chat_history[-5:])):
+            with st.sidebar.expander(f"Q: {msg['question'][:35]}...", expanded=(i==0)):
+                st.markdown(f"**Pregunta:** {msg['question']}")
+                st.markdown("---")
+                st.markdown(msg['answer'])
+        
+        # Clear history button
+        if len(st.session_state.chat_history) > 0:
+            if st.sidebar.button("🗑️ Limpiar Historial", use_container_width=True):
+                st.session_state.chat_history = []
+                st.rerun()
+
 # --- UI LAYOUT ---
+
 st.title("🔬 Auditor de Microestructura Quant")
 st.markdown(f"**Dataset:** {len(df)} Ejecuciones | **Trades Lógicos:** {total_trades}")
 
@@ -903,7 +971,7 @@ with tab2:
     # AI Analysis for Tier Performance
     tier_summary = tier_stats.to_string(index=False)
     show_ai_analysis(
-        chart_name="Análisis de Escala",
+        chart_name="Distribución de Tiers",
         chart_type="tier_analysis",
         data={"tier_data": tier_summary},
         key_suffix="tab2_tiers"
@@ -941,7 +1009,7 @@ with tab3:
         chart_type="drawdown",
         data={
             "max_dd": abs(drawdown.min()),
-            "current_dd": drawdown[-1] if len(drawdown) > 0 else 0,
+            "current_dd": abs(drawdown[-1]) if len(drawdown) > 0 else 0,
             "dd_periods": dd_periods
         },
         key_suffix="tab3_drawdown"
@@ -1166,6 +1234,23 @@ with tab5:
     *   **Ley de los Grandes Números:** Si tienes pocos datos (<50 trades), Monte Carlo asume que tu futuro será una repetición exacta de ese breve pasado. Eso es peligroso. A mayor muestra (10 años), más confiable es la proyección.
     {capital_advice}
     """)
+    
+    # AI Analysis for Monte Carlo (only show if simulation was run)
+    if 'worst_drawdown_mc' in locals() and worst_drawdown_mc != 0:
+        show_ai_analysis(
+            chart_name="Simulación Monte Carlo",
+            chart_type="monte_carlo",
+            data={
+                "n_sims": n_sims,
+                "risk_of_ruin": 0,  # Placeholder - would need actual calculation
+                "worst_dd": abs(worst_drawdown_mc) if worst_drawdown_mc < 0 else 0,
+                "best_case": max([sim[-1] for sim in simulations]) if 'simulations' in locals() and simulations else 0,
+                "worst_case": min([sim[-1] for sim in simulations]) if 'simulations' in locals() and simulations else 0,
+                "suggested_capital": rec_capital
+            },
+            key_suffix="tab5_montecarlo"
+        )
+
 
 with tab6:
     st.header("📅 Calendario de Trading")
@@ -1478,8 +1563,32 @@ with tab6:
             else:
                 st.info(f"No trades found for {sel_date.date()} in current dataset.")
                 
+        # AI Analysis for Calendar (at month level)
+        if 'month_stats' in locals() and not month_stats.empty:
+            month_pnl = month_stats['DailyPnL'].sum()
+            best_day_idx = month_stats['DailyPnL'].idxmax()
+            worst_day_idx = month_stats['DailyPnL'].idxmin()
+            green_days = (month_stats['DailyPnL'] > 0).sum()
+            red_days = (month_stats['DailyPnL'] < 0).sum()
+            
+            show_ai_analysis(
+                chart_name="Patrones de Calendario",
+                chart_type="calendar",
+                data={
+                    "month_pnl": month_pnl,
+                    "best_day": best_day_idx.strftime('%d'),  # best_day_idx is already the date (index)
+                    "best_day_pnl": month_stats.loc[best_day_idx, 'DailyPnL'],
+                    "worst_day": worst_day_idx.strftime('%d'),  # worst_day_idx is already the date (index)
+                    "worst_day_pnl": month_stats.loc[worst_day_idx, 'DailyPnL'],
+                    "green_days": green_days,
+                    "red_days": red_days
+                },
+                key_suffix="tab6_calendar"
+            )
+                
     else:
         st.info("No data available for calendar.")
+
 
 with tab7:
     st.header("⏰ Análisis de Microestructura Temporal")
@@ -1543,14 +1652,26 @@ with tab7:
 
             
         st.info(f"""
-        🧠 **Insight de Experto Quant: El Ritmo del Mercado**
-        
+        🧠 **Insight de Experto Quant: Edges Temporales**  
         {time_insight}
         
-        *   **Filtros Temporales:** A menudo, la forma más rápida de mejorar un Profit Factor es simplemente **NO operar** en las horas o días "tóxicos".
-        *   **Microestructura:** Si ves pérdidas consistentes (Barras Rojas), no es mala suerte. Es un cambio estructural en la volatilidad y liquidez que tu estrategia no soporta.
-        *   **Acción:** Identifica las barras rojas grandes en los gráficos de arriba. "Menos es más".
+        *   **Acción:** Evita horas donde pierdes consistentemente. Los mejores traders *eliminan momentos tóxicos* en lugar de operar todo el día.
+        *   **Dato:** Las horas de empalme de sesiones (9-11 AM ET, donde Europa todavía opera) suelen ser las más líquidas pero también más erráticas. Verifica si tus ganancias están ahí o en NY pure (11 AM-4 PM).
         """)
+        
+        # AI Analysis for Hourly Patterns
+        hourly_stats_ai = df.groupby('Hour').agg({
+            'PnL': ['sum', 'mean', 'count']
+        }).round(2)
+        
+        show_ai_analysis(
+            chart_name="Patrones Horarios",
+            chart_type="hourly",
+            data={"hourly_data": hourly_stats_ai.to_string()},
+            key_suffix="tab7_hourly"
+        )
+    else:
+        st.warning("No hay datos temporales para analizar.")
 
     # -------------------------------------------------------------------------
     # TAB 8: LEVEL ANALYSIS (New)
@@ -1672,6 +1793,27 @@ with tab7:
             
             {pen_insight}
             """)
+            
+            # AI Analysis for Levels (Penetration + Stats)
+            if 'zone_stats' in locals() and not zone_stats.empty:
+                best_zone = zone_stats.iloc[0]['Zone']
+                best_zone_pnl = zone_stats.iloc[0]['PnL']
+                worst_zone = zone_stats.iloc[-1]['Zone']
+                worst_zone_pnl = zone_stats.iloc[-1]['PnL']
+                
+                show_ai_analysis(
+                    chart_name="Análisis de Niveles",
+                    chart_type="levels_analysis",
+                    data={
+                        "best_zone": best_zone,
+                        "best_zone_pnl": best_zone_pnl,
+                        "worst_zone": worst_zone,
+                        "worst_zone_pnl": worst_zone_pnl,
+                        "total_pnl": zone_stats['PnL'].sum(),
+                        "penetration_insight": pen_insight
+                    },
+                    key_suffix="tab8_levels"
+                )
 
             # --- INTERACTION MATRIX (Who Breaks Who?) ---
             st.markdown("---")
@@ -1758,7 +1900,7 @@ with tab7:
                         )
                         st.plotly_chart(fig_short, use_container_width=True)
                     else:
-                        st.info("No hay datos de Shorts")
+                        st.info("No hay datos de Shorts para la matriz.")
                 
                 st.markdown("---")
                 
@@ -1796,6 +1938,25 @@ with tab7:
                         'PnL_Total': '${:,.0f}',
                         'PnL_Promedio': '${:.2f}'
                     }), use_container_width=True)
+                    
+                    # AI Analysis for Interaction Matrix
+                    if 'combo_stats' in locals() and not combo_stats.empty:
+                        best_combo = f"{combo_stats.iloc[0]['Sesión_Trading']} atacando {combo_stats.iloc[0]['Nivel_Origen']}"
+                        best_combo_pnl = combo_stats.iloc[0]['PnL_Total']
+                        worst_combo = f"{combo_stats.iloc[-1]['Sesión_Trading']} atacando {combo_stats.iloc[-1]['Nivel_Origen']}"
+                        worst_combo_pnl = combo_stats.iloc[-1]['PnL_Total']
+                        
+                        show_ai_analysis(
+                            chart_name="Matriz de Interacción",
+                            chart_type="interaction_matrix",
+                            data={
+                                "best_combo": best_combo,
+                                "best_pnl": best_combo_pnl,
+                                "worst_combo": worst_combo,
+                                "worst_pnl": worst_combo_pnl
+                            },
+                            key_suffix="tab8_matrix"
+                        )
                     
                     # v2.2.2: GRANULAR ANALYSIS BY DIRECTION (Long vs Short)
                     st.markdown("---")

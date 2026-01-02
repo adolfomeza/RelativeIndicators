@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.9"; // UI: Info Panel Background 50%
+		private const string StrategyVersion = "v1.14.10"; // CSV Export: Fixed path bug
 		
 		// v1.12.1: CONTROL BUTTONS (simplified to 2 buttons)
 		private TradingMode currentTradingMode = TradingMode.Normal;
@@ -605,9 +605,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 					string safeInstrument = Instrument.FullName.Replace("/", "-").Replace(":", "-").Replace(" ", "_");
 					
 					// v1.14.0: Export to Strategies/TradeExports/{context}/ folder
-					string strategiesDir = System.IO.Path.GetDirectoryName(System.IO.Path.GetDirectoryName(
-						NinjaTrader.Core.Globals.UserDataDir.TrimEnd(System.IO.Path.DirectorySeparatorChar)));
-					strategiesDir = System.IO.Path.Combine(strategiesDir, "bin", "Custom", "Strategies", "TradeExports");
+					// FIX: Use UserDataDir directly, it already points to "Documents\NinjaTrader 8"
+					string strategiesDir = System.IO.Path.Combine(
+						NinjaTrader.Core.Globals.UserDataDir.TrimEnd(System.IO.Path.DirectorySeparatorChar),
+						"bin", "Custom", "Strategies", "TradeExports");
 					
 					// Determine context subfolder based on execution state and account
 					string contextFolder = "live"; // Default for real account

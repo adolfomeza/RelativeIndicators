@@ -4,7 +4,16 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.14.9] - 2026-01-02 ✅ VERSIÓN ACTUAL (RECOMPILE REQUIRED)
+
+## [1.14.10] - 2026-01-02 ✅ VERSIÓN ACTUAL (RECOMPILE REQUIRED)
+### FIX CRÍTICO: CSV Export Path Bug
+- **Problema**: Los archivos CSV de backtest se guardaban en ubicación incorrecta (`C:\Users\[usuario]\bin\...` en lugar de `C:\Users\[usuario]\Documents\NinjaTrader 8\bin\...`)
+- **Causa**: Lógica de `Globals.UserDataDir` con doble `GetDirectoryName` subía 2 niveles desde la carpeta correcta
+- **Solución**: Usar `Globals.UserDataDir` directamente sin subir niveles - ya apunta a `Documents\NinjaTrader 8`
+- **Impacto**: Los archivos CSV ahora se exportan correctamente a `TradeExports\backtest\` donde la aplicación Streamlit los espera
+- **Código afectado**: `OnStateChange(State.DataLoaded)` líneas 607-611
+
+## [1.14.9] - 2026-01-02
 ### UI: Info Panel Legibility
 - **Cambio**: Se agregó un fondo negro con 50% de opacidad al Panel de Estado (InfoPanel) para mejorar la lectura sobre el gráfico.
 

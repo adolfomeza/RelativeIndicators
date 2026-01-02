@@ -295,6 +295,59 @@ Incluye:
 4. Niveles a PRIORIZAR (mayor tamaño)
 5. Interacción entre sesiones (agresor vs defensor)"""
             },
+
+            "levels_analysis": {
+                "brief": f"""{base_context}
+
+Analiza niveles y penetración en 2-3 líneas:
+Mejor zona: {{best_zone}} (${{best_zone_pnl}})
+Peor zona: {{worst_zone}} (${{worst_zone_pnl}})
+
+Insight MAE:
+{{penetration_insight}}
+
+Recomendación rápida de ajuste.""",
+
+                "full": f"""{base_context}
+
+Análisis DETALLADO de niveles y penetración:
+Mejor zona: {{best_zone}} (${{best_zone_pnl}})
+Peor zona: {{worst_zone}} (${{worst_zone_pnl}})
+Total PnL Zonas: ${{total_pnl}}
+
+Insight de Penetración (MAE):
+{{penetration_insight}}
+
+Incluye:
+1. ¿Los niveles respetados generan suficiente recorrido (MFE)?
+2. ¿La mejor zona justifica aumentar tamaño de posición?
+3. Análisis de la "Zona Muerta" de penetración - ¿dónde poner el SL?
+4. Estrategia sugerida para la peor zona (¿Fade o ignorar?)
+5. Evaluación de robustez de la ruptura"""
+            },
+            
+            "interaction_matrix": {
+                "brief": f"""{base_context}
+
+Analiza interacción de sesiones en 2-3 líneas:
+Mejor combinación: {{best_combo}} (${{best_pnl}})
+Peor combinación: {{worst_combo}} (${{worst_pnl}})
+
+Identifica qué sesión 'domina' los niveles de las otras.""",
+                
+                "full": f"""{base_context}
+
+Análisis DETALLADO de Matriz Agresor vs Defensor:
+Mejor combinación: {{best_combo}} (${{best_pnl}})
+Peor combinación: {{worst_combo}} (${{worst_pnl}})
+
+Incluye:
+1. ¿Qué sesión (Agresor) es más efectiva rompiendo niveles?
+2. ¿Qué niveles (Defensor) son más frágiles?
+3. Análisis de patrones Long vs Short (¿alguna asimetría?)
+4. Combinaciones tóxicas a evitar (Ej: Asia rompiendo High de USA)
+5. Recomendación táctica por sesión de trading actual"""
+            },
             
             "chat": {
                 "system": f"""{base_context}
@@ -307,7 +360,7 @@ análisis cuantitativo cuando se solicite. Sé conversacional pero preciso."""
             }
         }
     
-    @st.cache_data(ttl=300)  # Cache por 5 minutos
+    @st.cache_data(ttl=1800)  # Cache por 30 minutos (optimizado para sesiones largas)
     def analyze_chart(_self, chart_type: str, data: dict, brief: bool = True) -> str:
         """
         Genera análisis para un gráfico específico
@@ -407,17 +460,27 @@ def show_ai_analysis(chart_name: str, chart_type: str, data: dict, key_suffix: s
     with st.container():
         st.markdown("---")
         
-        # Análisis breve (siempre visible)
+        # Análisis breve visible directamente
+        st.subheader(f"🧠 Análisis IA: {chart_name}")
+        
         with st.spinner("🧠 Analizando..."):
             brief_analysis = analyzer.analyze_chart(chart_type, data, brief=True)
         
-        st.markdown(f"🧠 **Análisis IA:**")
         st.markdown(brief_analysis)
         
-        # Botón para análisis completo
-        if st.button(f"📝 Ver Análisis Completo", key=unique_key):
-            with st.spinner("Generando análisis detallado..."):
-                full_analysis = analyzer.analyze_chart(chart_type, data, brief=False)
-            
-            with st.expander("📋 Análisis Detallado", expanded=True):
-                st.markdown(full_analysis)
+        # Botones de acción
+        col1, col2 = st.columns([3, 1])
+        
+        with col1:
+            if st.button(f"📝 Ver Análisis Completo", key=f"{unique_key}_full"):
+                with st.spinner("Generando análisis detallado..."):
+                    full_analysis = analyzer.analyze_chart(chart_type, data, brief=False)
+                
+                # Mostrar en sub-expander
+                with st.expander("📋 Análisis Detallado", expanded=True):
+                    st.markdown(full_analysis)
+        
+        with col2:
+            # Botón de copiar (placeholder - requiere JS personalizado)
+                if st.button(f"📋 Copiar", key=f"{unique_key}_copy", help="Copiar análisis"):
+                    st.info("💡 Puedes seleccionar y copiar el texto arriba", icon="ℹ️")
