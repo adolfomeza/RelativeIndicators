@@ -5,7 +5,20 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [1.14.10] - 2026-01-02 ✅ VERSIÓN ACTUAL (RECOMPILE REQUIRED)
+## [1.14.11] - 2026-01-02 ✅ VERSIÓN ACTUAL (RECOMPILE REQUIRED)
+### FEATURE: Auto-Detection System for Accounts
+- **Cambio**: La estrategia ahora usa el nombre exacto de la cuenta (`Account.Name`) como nombre de carpeta
+- **Beneficio**: Sistema escalable - cada nueva cuenta crea automáticamente su propia carpeta en `TradeExports/`
+- **Eliminado**: Lógica hardcoded de detección demo/live (Sim, demo, paper)
+- **Estructura**:
+  - Backtest → `TradeExports/backtest/`
+  - Playback → `TradeExports/playback/`
+  - Cuenta "DEMO" → `TradeExports/DEMO/`
+  - Cuenta "MyCuenta" → `TradeExports/MyCuenta/`
+- **Streamlit**: Agregada opción "DEMO" al selector (manual por ahora)
+- **Código afectado**: `OnStateChange(State.DataLoaded)` líneas 613-640
+
+## [1.14.10] - 2026-01-02
 ### FIX CRÍTICO: CSV Export Path Bug
 - **Problema**: Los archivos CSV de backtest se guardaban en ubicación incorrecta (`C:\Users\[usuario]\bin\...` en lugar de `C:\Users\[usuario]\Documents\NinjaTrader 8\bin\...`)
 - **Causa**: Lógica de `Globals.UserDataDir` con doble `GetDirectoryName` subía 2 niveles desde la carpeta correcta
