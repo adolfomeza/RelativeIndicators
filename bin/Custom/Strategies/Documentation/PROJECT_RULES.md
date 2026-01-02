@@ -39,6 +39,22 @@ Este documento sirve como punto central de verdad para enlaces importantes, regl
       4. Solo entonces implementar fix
     - Esta regla evita introducir nuevos bugs al "adivinar" soluciones
 
+## 🔐 REGLA CRÍTICA: SEGURIDAD DE API KEYS
+
+13. **Protección de Credenciales y API Keys**:
+    - **NUNCA** subir archivos `.env`, credentials, o API keys a Git
+    - Verificar que `.gitignore` incluya: `.env`, `*.key`, `credentials.json`, etc.
+    - Si se crea un archivo con secretos:
+      1. Agregarlo a `.gitignore` ANTES del primer commit
+      2. Verificar con `git status` que NO aparece en staged files
+    - **Si una key es expuesta accidentalmente**:
+      1. Regenerar la key inmediatamente en el proveedor
+      2. Eliminar del historial de Git con `git rm --cached`
+      3. Notificar al usuario que regenere la key
+    - **Archivos sensibles conocidos**:
+      - `StreamlitAudit/.env` (API key de Gemini)
+      - Cualquier archivo con `key`, `secret`, `token`, `password` en el nombre
+
 ---
 
 ## Prompt de Contexto para AI Assistant
@@ -60,7 +76,8 @@ Estamos trabajando en `SessionLevelsStrategy.cs`, una estrategia avanzada que:
 - Maneja niveles internos vs externos, invalidación, y retry logic
 
 ### Archivos Clave
-- **Estrategia principal**: `SessionLevelsStrategy.cs` (~3600 líneas)
+- **Estrategia principal**: `SessionLevelsStrategy.cs` (~4800+ líneas)
+- **App de análisis**: `StreamlitAudit/app.py` (Streamlit con IA Gemini)
 - **Reglas del proyecto**: `Documentation/PROJECT_RULES.md`
 - **Historial de cambios**: `Documentation/CHANGELOG_ES.md`
 - **API Referencia**: https://developer.ninjatrader.com/docs/desktop
@@ -71,5 +88,8 @@ Estamos trabajando en `SessionLevelsStrategy.cs`, una estrategia avanzada que:
 3. Sigue versionado SemVer y sincroniza `StrategyVersion` con el changelog
 4. Commits automáticos a GitHub tras cada cambio funcional
 5. Todos los documentos deben estar en ESPAÑOL
-**Limpieza de Artifacts**: Al completar exitosamente una implementación, mover todos los documentos temporales de planificación/implementación (de `.gemini/antigravity/brain/`) a una subcarpeta `completed/` para mantener el workspace limpio. Solo mantener abiertos documentos relevantes para trabajo actual.
-```**Sincronización de Versión**: Asegurar que la constante de versión en el código (`StrategyVersion`) coincida *exactamente* con la última entrada en `CHANGELOG_ES.md` y se muestre en el panel de estado.
+6. NUNCA subir archivos `.env` o API keys a Git
+7. Limpieza de Artifacts: Al completar una implementación, mover documentos temporales a `completed/`
+8. Sincronización de Versión: Asegurar que `StrategyVersion` coincida exactamente con `CHANGELOG_ES.md`
+```
+
