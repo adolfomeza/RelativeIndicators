@@ -4,7 +4,159 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.13.5] - 2025-12-30 ✅ VERSIÓN ACTUAL (FIX CRÍTICO)
+## [1.14.0] - 2026-01-02 ✅ VERSIÓN ACTUAL
+### FEATURE: Separación de CSV por Contexto de Ejecución
+- **Solicitud**: Separar archivos de backtest, playback, demo y live para análisis aislado
+- **Cambios**:
+  1. **Nueva estructura de carpetas** en `Strategies/TradeExports/`:
+     - `backtest/` ← Strategy Analyzer
+     - `playback/` ← Market Replay
+     - `demo/` ← Cuentas Sim (Sim101, Sim102, etc.)
+     - `live/` ← Cuenta Real
+  2. **Detección automática de contexto**:
+     - `State.Historical` → backtest
+     - `State.Playback` → playback
+     - `Account.Name.StartsWith("Sim")` → demo
+     - Default → live
+  3. **App Streamlit actualizada** con 5 fuentes de datos:
+     - 📊 Backtest (Strategy Analyzer)
+     - ⏪ Playback (Market Replay)
+     - 🎮 Demo (Cuenta Simulada)
+     - 💰 Live (Cuenta Real)
+     - 📁 Histórico Consolidado
+  4. **Rutas portables**: Todo dentro de `Strategies/` para fácil migración de PC
+- **Uso**: Al ejecutar la estrategia, los trades se exportan automáticamente al folder correcto
+
+## [1.13.16] - 2026-01-01
+
+### FEATURE: Tracking de Comisiones en CSV Export
+- **Solicitud**: Incluir comisiones en el análisis para ver PnL real
+- **Cambios**: 
+  - Nuevas columnas en CSV: `Commission`, `NetPnL`
+  - Comisiones calculadas según instrumento (NinjaTrader Free Plan):
+    - Micros (MES, MNQ, M2K, MYM): $0.91/lado
+    - Bitcoin (MBT, MET): $1.56/lado
+    - Commodities (MCL, MGC, MHG): $0.77/lado
+    - Currencies (6E, 6J, 6A): $1.26/lado
+    - Granos (ZS, ZW, ZC): $1.52/lado
+  - `NetPnL = PnL - Commission`
+- **Uso**: El Trade Analyzer mostrará PnL bruto y neto
+
+## [1.13.15] - 2026-01-01
+### FEATURE: Logging de Niveles vs Precio en WEEK RESET
+- **Solicitud**: Investigar por qué instrumentos no tocan niveles en ciertas semanas
+- **Cambios**: En cada WEEK RESET, ahora muestra todos los niveles activos con:
+  - Nombre del nivel y precio
+  - Si el precio actual está ABOVE o BELOW
+  - Distancia en ticks
+- **Formato del log**:
+```
+LEVEL SUMMARY (Price=6000.5):
+  Asia: High @ 6010.2 | Currently BELOW by 39 ticks
+  Europe: Low @ 5990.1 | Currently ABOVE by 42 ticks
+```
+- **Uso**: Correr backtest → buscar "LEVEL SUMMARY" para ver distancias de niveles
+
+## [1.13.14] - 2026-01-01
+### FEATURE: Logging Diagnóstico para R:R Rechazados
+- **Solicitud**: Investigar por qué algunos instrumentos tienen 0 trades en ciertas semanas
+- **Cambios**:
+  1. Logging detallado cuando `ValidateRiskReward` rechaza un trade
+  2. Muestra: TP1 (VWAP), TP2 (Level), target seleccionado, risk, reward, ratio, y razón exacta
+- **Formato del log**:
+```
+R/R REJECTED (Long): Entry=6900 SL=6895 | TP1(VWAP)=6902 TP2(Level)=6910 | Selected=6902 | Risk=5.00 Reward=2.00 Ratio=0.40 | Reason: R:R 0.40 < Min 1
+```
+- **Uso**: Correr backtest → revisar logs para ver por qué trades fueron rechazados
+
+## [1.13.13] - 2026-01-01
+### FIX CRÍTICO: TP1/TP2 No Se Exportaban al CSV
+- **Problema**: El filtro "TP1 (Scalp)" y "TP2 (Runner)" en Trade Analyzer no mostraban datos
+- **Causa Raíz**: La condición `isExitOrder` buscaba `"TP_"` pero las órdenes se llaman `"TP1_"` y `"TP2_"`
+- **Solución**: Cambiada condición de `Contains("TP_")` a `Contains("TP1_") || Contains("TP2_")`
+- **Impacto**: Ahora todos los trades (SL, TP1, TP2) se exportan correctamente al CSV
+
+## [1.13.12] - 2025-12-31
+### FEATURE: Risk-Reward en CSV y Gráfico de Distribución
+- **Solicitud**: Agregar columna R:R y gráfico de distribución TP1 vs TP2 (campana de Gauss)
+- **Cambios en Estrategia**:
+  1. Nueva variable `tradeRiskUSD` - calcula riesgo en USD cuando se crea el SL
+  2. Nueva columna `RiskReward` (col 14) en CSV export - calcula `PnL / RiskUSD`
+- **Cambios en Trade Analyzer App (v1.5)**:
+  1. Parser lee columna `riskReward` (col 14)
+  2. Nuevo gráfico "R:R Distribution" en tab Advanced - histograma TP1 (azul) vs TP2 (naranja)
+- **Uso**: Correr backtest → CSV tendrá columna R:R → App muestra distribución
+
+## [1.13.11] - 2025-12-31
+### FEATURE: Número de Intento en CSV Export
+- **Solicitud**: Agregar columna "Attempt" para analizar qué número de VWAP/intento funciona mejor
+- **Cambios**:
+  1. Nueva variable `tradeAttemptNumber` para guardar `currentVwapNumber` al iniciar trade
+  2. Nueva columna en CSV export: `...,Setup,Attempt` (13 columnas ahora)
+- **Uso**: Al correr backtest, el CSV tendrá la columna Attempt (1, 2, 3, etc.)
+- **Nota**: Los CSV existentes no tendrán la columna - deben regenerarse con nuevo backtest
+
+## [1.13.10] - 2025-12-31
+### FIX: Condición de Carrera Causando 100 Contratos Huérfanos
+- **Problema**: MBT mostró 100 contratos huérfanos en órdenes de protección después de cerrar por SL
+- **Causa**: Race condition entre cierre de posición y `CheckSafetyNet`
+  - Posición cierra → flags se resetean 
+  - `CheckSafetyNet` detecta "zombie position" 51ms después
+  - `EnsureProtection` crea órdenes con cantidad incorrecta (del broker, no de la estrategia)
+- **Solución v1.13.10** - Dos válvulas de seguridad en `EnsureProtection`:
+  1. **Delay de 3 segundos**: Rechazar si `lastPositionCloseTime` fue hace menos de 3s
+  2. **Cap de 50 contratos**: Rechazar si `filledQty > 50` como cantidad absurda
+- **Resultado**: Previene creación de órdenes huérfanas con cantidades incorrectas
+
+## [1.13.9] - 2025-12-31
+### NOTA: AutoScale en VWAPs
+- **Investigación**: Se intentó deshabilitar AutoScale en los plots de VWAP (HighVWAP, LowVWAP)
+- **Resultado**: `Plot.IsAutoScale` **NO EXISTE** en NinjaTrader para estrategias
+- **Solución Manual**: Si el gráfico hace zoom out por VWAPs distantes:
+  1. Click derecho en el gráfico → Properties
+  2. Desmarcar "Auto Scale" en la pestaña Chart
+  3. O usar "Fixed scale" con valores mínimo/máximo manuales
+- **Niveles**: Ya tienen AutoScale deshabilitado (2do parámetro = false en `Draw.Line`)
+
+## [1.13.8] - 2025-12-31
+### FIXED: Órdenes TP Huérfanas No Se Cancelaban al Cerrar por SL
+- **Problema**: Al cerrar posición por SL, las órdenes TP1 y TP2 quedaban activas (huérfanas)
+- **Causa**: La lógica de cancelación solo verificaba `OrderState.Working`
+  - Las órdenes también pueden estar en estado `Accepted` que es igualmente activo
+- **Solución v1.13.8**:
+  - Verificar **ambos estados** (`Working` y `Accepted`) antes de cancelar
+  - Agregar `try-catch` para evitar errores si la cancelación falla
+  - Agregar logging: `"CLEANUP: Cancelled orphan tp1Order"`
+- **Resultado**: Al cerrar por SL, las órdenes TP huérfanas se cancelan automáticamente
+
+## [1.13.7] - 2025-12-31 (FIX CRÍTICO)
+### FIXED: SL/TP con Cantidad Incorrecta al Entrar Nueva Posición
+- **Problema Reportado**: Al entrar con 10 contratos, SL mostraba 20, y TP1/TP2 mostraban 5/5
+  - Los contratos en las órdenes de protección estaban duplicados o incorrectos
+  - Problema persistente desde conversaciones anteriores (MGC, M2K)
+- **Causa Raíz Identificada**: `stopOrder` **NO SE LIMPIABA** al cerrar posición
+  - En `OnExecutionUpdate` línea ~4600-4606, se reseteaban: `entryOrder`, `tp1Order`, `tp2Order`, `stopOrder1`, `stopOrder2`
+  - **FALTABA**: `stopOrder = null` (referencia principal del SL único)
+  - Al siguiente trade: `stopOrder` tenía referencia "stale" (orden vieja Filled/Cancelled)
+  - La lógica en `SubmitProtectionOrders` veía `stopOrder != null` y creaba lógica errónea
+- **Segunda Causa**: `slOrderCreatedThisEntry` solo se reseteaba en el fill de entrada (línea 4387)
+  - No se reseteaba al cerrar posición → podía bloquear creación de SL en trades sucesivos
+- **Solución v1.13.7**:
+  1. Agregar `stopOrder = null` en la sección de cleanup cuando `Position == Flat`
+  2. Agregar `slOrderCreatedThisEntry = false` en la misma sección de cleanup
+- **Código Afectado**: `OnExecutionUpdate()` - bloque de limpieza cuando posición se cierra
+- **Resultado**: Las órdenes de protección ahora usan cantidades correctas basadas en la entrada actual
+
+## [1.13.6] - 2025-12-31
+### FEATURE: Logging Diagnóstico Integral y Estabilidad
+- **Problema**: Congelamientos y problemas de estabilidad reportados en el gráfico.
+- **Cambios**:
+  - **Try-Catch en OnBarUpdate**: Se envuelve toda la lógica crítica para capturar y loguear excepciones (CRITICAL ERROR) en lugar de congelar la estrategia.
+  - **OnRender Override**: Se añade `OnRender` con bloque try-catch seguro para prevenir errores de dibujado.
+  - **Heartbeat Logging**: Loguea "HEATBEAT" cada 500 barras (Historical) o 10 segundos (Realtime) si `EnableDebugLogs` está activo, para confirmar que la estrategia sigue viva.
+- **Objetivo**: Identificar la causa raíz de los congelamientos mediante logs detallados en la próxima sesión.
+
+## [1.13.5] - 2025-12-30 (FIX CRÍTICO)
 ### FIXED: SL Duplicado en Llamadas Múltiples a SubmitProtectionOrders
 - **Problema**: Dos órdenes SL creadas para el mismo trade
   - MNQ entró con 3 contratos @ 19:48

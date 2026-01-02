@@ -26,6 +26,19 @@ Este documento sirve como punto central de verdad para enlaces importantes, regl
     - **Propósito**: Debugging y análisis de ejecución
 11. **Documento para Clientes (`analisis_session_levels.md`)**: Este documento DEBE mantenerse actualizado con cada cambio significativo de la estrategia. Usar **lenguaje accesible** para clientes e inversores (no técnico). Incluir: cómo funciona, características, instrumentos compatibles, parámetros, y preguntas frecuentes. Sincronizar versión con `StrategyVersion`.
 
+## ⚠️ REGLA CRÍTICA: NO ADIVINAR
+
+12. **Identificación Perfecta del Problema ANTES de Cambios**:
+    - **PROHIBIDO** hacer cambios de código basados en "creo que", "puede ser", "probablemente"
+    - El problema DEBE estar **perfectamente identificado** con evidencia en logs antes de modificar código
+    - Si no hay certeza del problema: **SOLO AGREGAR LOGS DIAGNÓSTICOS** y esperar a que se reproduzca
+    - Flujo correcto:
+      1. Problema reportado → Agregar logs diagnósticos relevantes
+      2. Esperar a que el problema se reproduzca
+      3. Analizar logs para identificar causa raíz exacta
+      4. Solo entonces implementar fix
+    - Esta regla evita introducir nuevos bugs al "adivinar" soluciones
+
 ---
 
 ## Prompt de Contexto para AI Assistant

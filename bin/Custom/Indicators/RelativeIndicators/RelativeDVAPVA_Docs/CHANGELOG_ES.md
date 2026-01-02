@@ -6,6 +6,14 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 
 ---
 
+## [2.5.23] - 2025-12-31
+### 🌊 Visualización de Confluencia (Dual Session)
+- **Mejora Gráfica**: Implementado método `OnRender` (Direct2D) para visualizar de manera eficiente las zonas de confluencia entre las sesiones Primaria y Secundaria.
+- **Intersecciones Rellenas**: Ahora se dibuja un área rellena (`Filled Geometry`) exactamente donde las bandas de ambas sesiones se superponen, facilitando la identificación visual de la "Zona de Confluencia".
+- **Propiedades Visuales**:
+  - `Confluence Opacity`: Control de opacidad para el área de intersección (Default 30%).
+  - `Confluence Color`: Color del área de confluencia (Default RoyalBlue, configurable).
+
 ## [2.5.22] - 2025-12-30
 ### 🧠 Filtro Adaptativo (Smart ADR)
 ### 🧹 Reorganización de Propiedades
@@ -15,7 +23,8 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
   - **1. Configuración Principal**: Sesión, Tipo de cálculo.
   - **2. Bandas VWAP**: Multiplicadores y toggles de visualización.
   - **3. Zonas PVA**: Configuración de las nuevas zonas simplificadas.
-  - **4. Visuales**: Todos los colores, estilos y opacidades.
+  - **4. Visuales**: Todos los colores, e
+  stilos y opacidades.
   - **5. Otros**: Versión y Debug.
   - **Z_Hidden**: Propiedades legadas ocultas (Session Zones antiguas, lógica de señales desactivada) colocadas al final para limpiar la interfaz.
 - **Correcciones**:

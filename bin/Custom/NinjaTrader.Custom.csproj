@@ -398,7 +398,7 @@
     <Compile Include="Strategies\RelativeLevelsStrategy.cs" />
     <Compile Include="Strategies\SessionLevelsStrategy.cs" />
     <Compile Include="Indicators\RelativeIndicators\amaCurrentMonthVWAP.cs" />
-    <Compile Include="Strategies\Backup_Gemini\SessionLevelsStrategy_v1.13.5_20251230_200834.cs" />
+    <Compile Include="Strategies\Backup_Gemini\SessionLevelsStrategy_20260102_0856.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Resource.resx">

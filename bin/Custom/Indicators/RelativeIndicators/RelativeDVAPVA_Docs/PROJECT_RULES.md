@@ -20,8 +20,9 @@ Este documento sirve como punto central de verdad para el indicador **RelativeDV
 1.  **Versionado**: Seguir SemVer (Major.Minor.Patch) y registrar cambios en `CHANGELOG_ES.md`.
 2.  **Backups**: Antes de cambios críticos, crear backup con extensión `.bak`.
 3.  **Registro en Git**: Todos los cambios deben ser subidos a Git para mantener un registro histórico detallado. Esto es obligatorio.
-4.  **Idioma**: Todos los documentos `.md` deben estar en **ESPAÑOL**.
+4.  **Idioma Documentación**: Todos los documentos `.md` deben estar en **ESPAÑOL**.
 5.  **Sincronización de Versión**: La constante `versionString` en el código debe coincidir con `CHANGELOG_ES.md`.
+6.  **Idioma Comunicación**: TODAS las respuestas y explicaciones al usuario deben ser estrictamente en **ESPAÑOL**.
 
 ---
 
@@ -53,4 +54,5 @@ Estamos trabajando en **RelativeDVAPVA.cs**, un indicador avanzado que:
 3. Sigue versionado SemVer
 4. Commits automáticos a GitHub tras cada cambio funcional
 5. Todos los documentos deben estar en ESPAÑOL
+6. IMPORTANTE: Responde SIEMPRE en ESPAÑOL al usuario.
 ```

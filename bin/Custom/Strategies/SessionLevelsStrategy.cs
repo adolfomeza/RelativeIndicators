@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.13.5"; // FIX: Prevent duplicate SL creation in SubmitProtectionOrders
+		private const string StrategyVersion = "v1.14.0"; // FEATURE: CSV export separated by context (backtest/playback/demo/live)
 		
 		// v1.12.1: CONTROL BUTTONS (simplified to 2 buttons)
 		private TradingMode currentTradingMode = TradingMode.Normal;
@@ -56,6 +56,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private string tradeDirection = "";
 		private int tradeExportId = 0;         // Auto-incrementing ID for CSV
 		private int tradeExitFillsCount = 0;   // v1.13.4: Count exit fills for split IDs
+		private int tradeAttemptNumber = 0;    // v1.13.11: VWAP attempt number for analysis
+		private double tradeRiskUSD = 0;       // v1.13.12: Original risk in USD for R:R calculation
 		private string csvExportPath = "";
 		private bool isTrackingTrade = false;  // Flag to track MAE/MFE
 		private bool slOrderCreatedThisEntry = false; // v1.13.5: Prevent duplicate SL creation
@@ -576,6 +578,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 				// IsUnmanaged moved to top
 				
 				// Add Plots for VWAP
+				// Note: Plot AutoScale cannot be disabled in NinjaTrader strategies
+				// User should disable AutoScale manually in Chart properties if needed
 				AddPlot(Brushes.White, "HighVWAP"); // Values[0]
 				AddPlot(Brushes.White, "LowVWAP");  // Values[1]
 				// Trade VWAP is calculated internally but NOT plotted (v1.10.31)
@@ -593,21 +597,48 @@ namespace NinjaTrader.NinjaScript.Strategies
 				// v1.12.0: Initialize control buttons
 				InitializeControlButtons();
 				
-				// v1.13.0: Initialize TradeAnalyzer CSV Export
+				// v1.14.0: Initialize TradeAnalyzer CSV Export (Separated by Context)
 				try
 				{
 					string safeInstrument = Instrument.FullName.Replace("/", "-").Replace(":", "-").Replace(" ", "_");
-					string exportDir = System.IO.Path.Combine(NinjaTrader.Core.Globals.UserDataDir, "trace", "TradeAnalyzer");
+					
+					// v1.14.0: Export to Strategies/TradeExports/{context}/ folder
+					string strategiesDir = System.IO.Path.GetDirectoryName(System.IO.Path.GetDirectoryName(
+						NinjaTrader.Core.Globals.UserDataDir.TrimEnd(System.IO.Path.DirectorySeparatorChar)));
+					strategiesDir = System.IO.Path.Combine(strategiesDir, "bin", "Custom", "Strategies", "TradeExports");
+					
+					// Determine context subfolder based on execution state and account
+					string contextFolder = "live"; // Default for real account
+					
+					if (State == State.Historical)
+					{
+						contextFolder = "backtest";
+					}
+					else if (State == State.Playback)
+					{
+						contextFolder = "playback";
+					}
+					else if (Account != null)
+					{
+						// Check for simulation/demo account (Sim101, Sim102, etc.)
+						string accountName = Account.Name;
+						if (accountName.StartsWith("Sim") || accountName.ToLower().Contains("demo") || accountName.ToLower().Contains("paper"))
+							contextFolder = "demo";
+					}
+					
+					string exportDir = System.IO.Path.Combine(strategiesDir, contextFolder);
+
 					
 					if (!System.IO.Directory.Exists(exportDir))
 						System.IO.Directory.CreateDirectory(exportDir);
 					
-					csvExportPath = System.IO.Path.Combine(exportDir, $"trades_export_{safeInstrument}.csv");
+					csvExportPath = System.IO.Path.Combine(exportDir, $"{safeInstrument}.csv");
 					
 					// Create file with header if doesn't exist
 					if (!System.IO.File.Exists(csvExportPath))
 					{
-						string header = "ID,Instrument,EntryTime,Type,EntryPrice,ExitTime,ExitPrice,Result,PnL,MAE,MFE,Setup";
+						// v1.13.16: Added Commission and NetPnL columns
+						string header = "ID,Instrument,EntryTime,Type,EntryPrice,ExitTime,ExitPrice,Result,PnL,Commission,NetPnL,MAE,MFE,Setup,Attempt,RiskReward";
 						System.IO.File.WriteAllText(csvExportPath, header + Environment.NewLine);
 						Log("CSV EXPORT: Created " + csvExportPath);
 					}
@@ -620,6 +651,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				{
 					Log("CSV EXPORT INIT ERROR: " + ex.Message);
 				}
+
 				
 				// CACHE SESSION TIMES (Optimization for MES)
 				try 
@@ -1015,6 +1047,26 @@ namespace NinjaTrader.NinjaScript.Strategies
 				
 				Log(Time[0] + " WEEK RESET - State cleared for new trading week (Last Friday 6pm: " + lastFriday6pm + " NY)");
 				
+				// v1.13.15: Diagnostic logging - show active levels vs current price at week start
+				if (activeLevels != null && activeLevels.Count > 0)
+				{
+					Log("LEVEL SUMMARY (Price=" + Close[0] + "):");
+					foreach (var lvl in activeLevels)
+					{
+						if (!lvl.IsMitigated)
+						{
+							string above = Close[0] > lvl.Price ? "ABOVE" : "BELOW";
+							double dist = Math.Abs(Close[0] - lvl.Price);
+							double distTicks = dist / TickSize;
+						Log(string.Format("  {0} @ {1} | Currently {2} by {3:F0} ticks", lvl.Name, lvl.Price, above, distTicks));
+						}
+					}
+				}
+				else
+				{
+					Log("LEVEL SUMMARY: No active levels at week start!");
+				}
+				
 				// Cancel pending entry if any
 				if (entryOrder != null && (entryOrder.OrderState == OrderState.Working || entryOrder.OrderState == OrderState.Accepted))
 				{
@@ -1044,6 +1096,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 		protected override void OnBarUpdate()
 		{
+			try
+			{
+			// v1.13.7: Heartbeat REMOVED - was spamming output
+
 			// v1.7.7: STARTUP CLEANUP FAILSAFE
 			// Must run inside OnBarUpdate when State is Realtime to allow Order Submission
 			// v1.10.28: Skip if overnight positions are allowed (user wants to keep positions)
@@ -1063,9 +1119,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 				// We must check if the Account has a position for this instrument.
 				if (Account != null)
 				{
-					
+					// v1.13.10: DIAGNOSTIC LOGS for reconnection debugging
+					Log($"DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty={Position.Quantity} MarketPosition={Position.MarketPosition}");
+					int posCount = 0;
 					foreach(Position p in Account.Positions)
 					{
+						posCount++;
+						Log($"DEBUG_RECONNECT: Account.Position[{posCount}] Instrument={p.Instrument.FullName} Qty={p.Quantity} Dir={p.MarketPosition}");
+						
 						if (p.Instrument == Instrument && p.MarketPosition != MarketPosition.Flat)
 						{
 							hasExistingPosition = true;
@@ -1078,6 +1139,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 								" Dir=" + p.MarketPosition + " - Adopting state and orders...");
 						}
 					}
+					Log($"DEBUG_RECONNECT: Total Account.Positions count = {posCount}");
 					
 					// v1.10.38: If we have a position, ADOPT orders instead of cancelling
 					if (hasExistingPosition)
@@ -1327,8 +1389,28 @@ currentEntryState = EntryState.Idle;
 				if (unrealizedPnL > tradeMFE)
 					tradeMFE = unrealizedPnL;
 			}
+			}
+			catch (Exception ex)
+			{
+				if (EnableDebugLogs)
+					Log($"CRITICAL ERROR in OnBarUpdate at Bar {CurrentBar}: {ex.ToString()}");
+			}
 		}
 		
+		// v1.13.6: Diagnostic OnRender
+		protected override void OnRender(ChartControl chartControl, ChartScale chartScale)
+		{
+			try
+			{
+				base.OnRender(chartControl, chartScale);
+			}
+			catch (Exception ex)
+			{
+				// Print to console only to avoid IO lock storms in render loop
+				Print($"Render Error: {ex.Message}");
+			}
+		}
+
 		private void CheckSession(string sessionName, TimeSpan startTs, TimeSpan endTs, Brush color, double deltaVol)
 		{
 			if (nyTimeZone == null || chartTimeZone == null) return;
@@ -2126,6 +2208,7 @@ currentEntryState = EntryState.Idle;
 			if (Position.MarketPosition != MarketPosition.Flat && currentEntryState != EntryState.PositionActive)
 			{
 				Log(Time[0] + " CRITICAL: Safety Net Triggered! Position exists but State was " + currentEntryState);
+				Log($"DEBUG_SAFETYNET: Position.Qty={Position.Quantity} Position.MarketPosition={Position.MarketPosition} tradeOriginalQty={tradeOriginalQty}");
 				
 				// --- SMART ADOPTION LOGIC (Strategy Position) ---
 				// ... (Existing Logic) ...
@@ -3456,6 +3539,9 @@ setupLevelName = "";
 			return;
 		}
 		
+		// v1.13.10: DIAGNOSTIC LOGS for 100 contract bug investigation
+		Log($"DEBUG_PROTECTION: EnsureProtection CALLED - Direction={direction} FilledQty={filledQty} Position.Qty={Position.Quantity} Position.MarketPosition={Position.MarketPosition} SecsSinceClose={(DateTime.Now - lastPositionCloseTime).TotalSeconds:F1}");
+		
 		isProtectionProcessing = true; // LOCK
 		
 		// v1.10.31: Initialize Trade VWAP on first fill
@@ -3730,7 +3816,11 @@ setupLevelName = "";
 				
 				stopOrder = SubmitOrderUnmanaged(0, slAction, OrderType.StopMarket, totalPositionQty, 0,slPrice, "", slTag);
 				slOrderCreatedThisEntry = true; // v1.13.5: Mark SL as created
-				Log(string.Format("SL CREATED: {0} @ {1} Qty={2}", slTag, slPrice, totalPositionQty));
+				
+				// v1.13.12: Calculate and store risk in USD for R:R analysis
+				tradeRiskUSD = Math.Abs(avgEntry - slPrice) * totalPositionQty * Instrument.MasterInstrument.PointValue;
+				
+				Log(string.Format("SL CREATED: {0} @ {1} Qty={2} Risk=${3:F2}", slTag, slPrice, totalPositionQty, tradeRiskUSD));
 			}
 			else if (slOrderCreatedThisEntry)
 			{
@@ -4141,6 +4231,7 @@ setupLevelName = "";
 		private double GetCurrentLowVWAP() { return ethLowVWAP.CurrentValue; }
 	
 	// CONTINUOUS R/R VALIDATION (v1.7.28)
+	// v1.13.14: Added detailed diagnostic logging
 	private bool ValidateRiskReward(bool isShort, double entryPrice, double stopPrice, out double risk, out double reward, out double ratio)
 	{
 		// Calculate both targets
@@ -4165,8 +4256,18 @@ setupLevelName = "";
 		
 		ratio = (risk > 0) ? (reward / risk) : 0;
 		
+		// v1.13.14: Detailed diagnostic logging when R:R fails
+		bool isValid = validDirection && risk > 0 && ratio >= MinRiskRewardRatio;
+		if (!isValid)
+		{
+			string dir = isShort ? "Short" : "Long";
+			string reason = !validDirection ? "Invalid Direction" : (risk <= 0 ? "Zero Risk" : $"R:R {ratio:F2} < Min {MinRiskRewardRatio}");
+			Log(string.Format("R/R REJECTED ({0}): Entry={1} SL={2} | TP1(VWAP)={3} TP2(Level)={4} | Selected={5} | Risk={6:F4} Reward={7:F4} Ratio={8:F2} | Reason: {9}",
+				dir, entryPrice, stopPrice, tp1Target, tp2Target, closestTarget, risk, reward, ratio, reason));
+		}
+		
 		// Return true if valid
-		return validDirection && risk > 0 && ratio >= MinRiskRewardRatio;
+		return isValid;
 	}
 		
 		private double GetSetupVWAP(bool isShort)
@@ -4352,8 +4453,9 @@ setupLevelName = "";
 				slOrderCreatedThisEntry = false; // v1.13.5: Reset SL duplication flag
 						tradeEntryPrice = execution.Order.AverageFillPrice;
 						tradeEntryTime = time;
-						tradeDirection = Position.MarketPosition == MarketPosition.Long ? "Long" : "Short";
+							tradeDirection = Position.MarketPosition == MarketPosition.Long ? "Long" : "Short";
 						tradeSetupName = setupLevelName;
+						tradeAttemptNumber = currentVwapNumber; // v1.13.11: Save attempt number for CSV
 						tradeMAE = 0;
 						tradeMFE = 0;
 						isTrackingTrade = true; // Flag to track MAE/MFE
@@ -4440,7 +4542,8 @@ setupLevelName = "";
 			
 			// CRITICAL FIX: Only reset if we are truly FLAT. include "Exit on session close"
 			// Also checking if it is an Unmanaged Exit order (SL/TP) OR the System Session Close
-			bool isExitOrder = (execution.Order.Name.Contains("SL_") || execution.Order.Name.Contains("TP_") || execution.Order.Name == "Exit on session close");
+			// v1.13.13 FIX: TP orders are named TP1_ and TP2_, not TP_ - was causing TPs to not export to CSV!
+			bool isExitOrder = (execution.Order.Name.Contains("SL_") || execution.Order.Name.Contains("TP1_") || execution.Order.Name.Contains("TP2_") || execution.Order.Name == "Exit on session close");
 			
 			if (execution.Order.OrderState == OrderState.Filled && isExitOrder)
 			{
@@ -4473,7 +4576,42 @@ setupLevelName = "";
 						// Format CSV line - Ensure all values are valid
 						string safeSetupName = string.IsNullOrEmpty(tradeSetupName) ? "" : tradeSetupName.Replace(",", ";");
 						
-						string line = string.Format("{0},{1},{2:yyyy-MM-dd HH:mm:ss},{3},{4},{5:yyyy-MM-dd HH:mm:ss},{6},{7},{8:F2},{9:F2},{10:F2},{11}",
+						// v1.13.11: Added Attempt column for retry analysis
+						// v1.13.12: Added RiskReward column for R:R distribution chart
+						// v1.13.16: Added Commission calculation (NinjaTrader Free Plan rates)
+						double riskReward = (tradeRiskUSD > 0) ? (pnl / tradeRiskUSD) : 0;
+						
+						// Calculate commission based on instrument (2 sides per trade)
+						// NinjaTrader Free Plan All-In Rates
+						// LOGIC: Micros typically start with "M" (MES, MNQ, MCL, MGC, M6E, MBT...)
+						//        Full-size do NOT start with "M" (ES, NQ, CL, GC, 6E, ZS, BTC...)
+						string instName = Instrument.MasterInstrument.Name.ToUpper();
+						bool isMicro = instName.StartsWith("M") && !instName.StartsWith("MY"); // MYM is exception (micro dow)
+						if (instName.StartsWith("MYM") || instName.StartsWith("M2K")) isMicro = true; // Explicitly micro
+						
+						double commissionPerSide;
+						if (isMicro)
+						{
+							// MICRO CONTRACTS
+							if (instName.Contains("MBT") || instName.Contains("MET")) commissionPerSide = 1.56; // Micro Bitcoin/Ether
+							else if (instName.Contains("MCL") || instName.Contains("MGC") || instName.Contains("MHG")) commissionPerSide = 0.77; // Micro commodities
+							else commissionPerSide = 0.91; // Micro indices (MES, MNQ, M2K, MYM, M6E, etc.)
+						}
+						else
+						{
+							// FULL-SIZE CONTRACTS
+							if (instName.StartsWith("6E") || instName.StartsWith("6J") || instName.StartsWith("6A") || instName.StartsWith("6B")) commissionPerSide = 3.09; // Full currencies
+							else if (instName.StartsWith("ZS") || instName.StartsWith("ZW") || instName.StartsWith("ZC") || instName.StartsWith("ZJ")) commissionPerSide = 2.85; // Full grains
+							else if (instName.StartsWith("CL") || instName.StartsWith("GC") || instName.StartsWith("HG")) commissionPerSide = 2.29; // Full commodities
+							else if (instName.StartsWith("ES") || instName.StartsWith("NQ") || instName.StartsWith("YM") || instName.StartsWith("RTY")) commissionPerSide = 2.29; // Full indices
+							else if (instName.StartsWith("BTC") || instName.StartsWith("ETH")) commissionPerSide = 6.00; // Full crypto
+							else commissionPerSide = 2.50; // Default full-size
+						}
+						
+						double commission = execution.Quantity * 2 * commissionPerSide; // 2 sides (entry + exit)
+						double netPnl = pnl - commission;
+						
+						string line = string.Format("{0},{1},{2:yyyy-MM-dd HH:mm:ss},{3},{4},{5:yyyy-MM-dd HH:mm:ss},{6},{7},{8:F2},{9:F2},{10:F2},{11:F2},{12:F2},{13},{14},{15:F2}",
 							tradeId,
 							Instrument.FullName,
 							tradeEntryTime,
@@ -4483,9 +4621,13 @@ setupLevelName = "";
 							exitPrice,
 							resultName,
 							pnl,
+							commission,
+							netPnl,
 							tradeMAE,
 							tradeMFE,
-							safeSetupName
+							safeSetupName,
+							tradeAttemptNumber,
+							riskReward
 						);
 						
 						System.IO.File.AppendAllText(csvExportPath, line + Environment.NewLine);
@@ -4544,13 +4686,32 @@ setupLevelName = "";
 					}
 					
 					// CLEANUP: Force Cancel any remaining working orders to prevent "Zombie Orders" on Chart
-					// v1.10.17: Also cancel stopOrder (Single-SL architecture v1.9.0+)
-					if (stopOrder != null && stopOrder.OrderState == OrderState.Working) CancelOrder(stopOrder);
-					if (entryOrder != null && entryOrder.OrderState == OrderState.Working) CancelOrder(entryOrder);
-					if (stopOrder1 != null && stopOrder1.OrderState == OrderState.Working) CancelOrder(stopOrder1);
-					if (stopOrder2 != null && stopOrder2.OrderState == OrderState.Working) CancelOrder(stopOrder2);
-					if (tp1Order != null && tp1Order.OrderState == OrderState.Working) CancelOrder(tp1Order);
-					if (tp2Order != null && tp2Order.OrderState == OrderState.Working) CancelOrder(tp2Order);
+				// v1.10.17: Also cancel stopOrder (Single-SL architecture v1.9.0+)
+				// v1.13.7: Check both Working AND Accepted states
+				if (stopOrder != null && (stopOrder.OrderState == OrderState.Working || stopOrder.OrderState == OrderState.Accepted)) 
+				{
+					try { CancelOrder(stopOrder); Log("CLEANUP: Cancelled orphan stopOrder"); } catch {}
+				}
+				if (entryOrder != null && (entryOrder.OrderState == OrderState.Working || entryOrder.OrderState == OrderState.Accepted)) 
+				{
+					try { CancelOrder(entryOrder); Log("CLEANUP: Cancelled orphan entryOrder"); } catch {}
+				}
+				if (stopOrder1 != null && (stopOrder1.OrderState == OrderState.Working || stopOrder1.OrderState == OrderState.Accepted)) 
+				{
+					try { CancelOrder(stopOrder1); } catch {}
+				}
+				if (stopOrder2 != null && (stopOrder2.OrderState == OrderState.Working || stopOrder2.OrderState == OrderState.Accepted)) 
+				{
+					try { CancelOrder(stopOrder2); } catch {}
+				}
+				if (tp1Order != null && (tp1Order.OrderState == OrderState.Working || tp1Order.OrderState == OrderState.Accepted)) 
+				{
+					try { CancelOrder(tp1Order); Log("CLEANUP: Cancelled orphan tp1Order"); } catch {}
+				}
+				if (tp2Order != null && (tp2Order.OrderState == OrderState.Working || tp2Order.OrderState == OrderState.Accepted)) 
+				{
+					try { CancelOrder(tp2Order); Log("CLEANUP: Cancelled orphan tp2Order"); } catch {}
+				}
 
 				// RESET PROTECTION COUNTERS (v1.7.24) - Fix bucket allocation
 				protectedTp1Qty = 0;
@@ -4563,11 +4724,13 @@ setupLevelName = "";
 				tradeVwapActive = false; // v1.10.31: Reset Trade VWAP
 
 					// CLEARED
-					entryOrder = null;
-					tp1Order = null;
-					tp2Order = null; 
-					stopOrder1 = null;
-					stopOrder2 = null;
+				entryOrder = null;
+				tp1Order = null;
+				tp2Order = null; 
+				stopOrder = null; // v1.13.7: CRITICAL FIX - Clear main SL reference
+				stopOrder1 = null;
+				stopOrder2 = null;
+				slOrderCreatedThisEntry = false; // v1.13.7: Also reset SL creation flag here
 					
 					// FIXED (v1.7.3): Clear Cache on Successful Exit too!
 					cachedOppositeLevel = null;
