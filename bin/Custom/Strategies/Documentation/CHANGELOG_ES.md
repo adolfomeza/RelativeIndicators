@@ -4,7 +4,15 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.14.6] - 2026-01-02 ✅ VERSIÓN ACTUAL (RECOMPILE REQUIRED)
+## [1.14.9] - 2026-01-02 ✅ VERSIÓN ACTUAL (RECOMPILE REQUIRED)
+### UI: Info Panel Legibility
+- **Cambio**: Se agregó un fondo negro con 50% de opacidad al Panel de Estado (InfoPanel) para mejorar la lectura sobre el gráfico.
+
+## [1.14.8/7] - 2026-01-02
+### FIX: Errores de Compilación
+- Corrección de sintaxis en `SessionIterator` y llaves faltantes de la versión 1.14.5.
+
+## [1.14.6] - 2026-01-02
 ### FIX: Visualización de Alerta Lag (Sticky Alert)
 - **Problema**: La alerta visual de "LAG BLOCKED" se quedaba pegada en pantalla indefinidamente hasta que la estrategia intentaba meter otro trade, incluso si el lag ya se había resuelto hace horas.
 - **Solución**: Se agregó una llamada pasiva a `CheckChartLag()` en cada tick de `OnBarUpdate`.

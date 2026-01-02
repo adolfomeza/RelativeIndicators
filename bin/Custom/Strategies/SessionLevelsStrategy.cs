@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.6"; // FIX: Continuous Lag Monitor (Visuals)
+		private const string StrategyVersion = "v1.14.9"; // UI: Info Panel Background 50%
 		
 		// v1.12.1: CONTROL BUTTONS (simplified to 2 buttons)
 		private TradingMode currentTradingMode = TradingMode.Normal;
@@ -139,6 +139,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private TimeSpan tsAsiaStart, tsAsiaEnd;
 		private TimeSpan tsEuStart, tsEuEnd;
 		private TimeSpan tsUsaStart, tsUsaEnd;
+		private SessionIterator sessionIterator; // v1.14.7 fix
 		
 		// OPTIMIZATION (v1.7.3): Cache Opposite Level to avoid loops
 		private SessionLevel cachedOppositeLevel = null;
@@ -659,6 +660,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 				
 				// CACHE SESSION TIMES (Optimization for MES)
+				if (sessionIterator == null) sessionIterator = new SessionIterator(Bars);
+
 				try 
 				{
 					tsAsiaStart = TimeSpan.Parse(AsiaStartTime);
@@ -2103,7 +2106,10 @@ currentEntryState = EntryState.Idle;
 			
 			// v1.14.5: DYNAMIC SESSION AWARENESS (Holidays/Early Closes)
 			// Instead of fixed "16:00" string, we ask NinjaTrader for the TRUE session end of this bar.
-			DateTime actualSessionEnd = Bars.Session.GetNextEnd(Time[0]);
+			// FIX v1.14.7: Use SessionIterator properly
+			if (sessionIterator == null) sessionIterator = new SessionIterator(Bars);
+			sessionIterator.GetNextSession(Time[0], true);
+			DateTime actualSessionEnd = sessionIterator.ActualSessionEnd;
 			
 			// Determine if this is a "Friday-like" closing event
 			// 1. Is it actually Friday?
@@ -2154,6 +2160,7 @@ currentEntryState = EntryState.Idle;
 				}
 			}
 		}
+	}
 
 
 		
@@ -2477,7 +2484,8 @@ currentEntryState = EntryState.Idle;
 				minRiskUSD,
 				orderInfo);
 				
-			Draw.TextFixed(this, "InfoPanel", text, TextPosition.TopRight, Brushes.White, new SimpleFont("Arial", 12), Brushes.Black, Brushes.Transparent, 100);
+			// v1.14.9: UI Polish - Black Background 50%
+			Draw.TextFixed(this, "InfoPanel", text, TextPosition.TopRight, Brushes.White, new SimpleFont("Arial", 12), Brushes.Black, Brushes.Black, 50);
 			
 			if (gapDetected || gapCount > 0)
 			{
