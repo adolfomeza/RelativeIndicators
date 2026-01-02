@@ -39,6 +39,12 @@ Este documento sirve como punto central de verdad para enlaces importantes, regl
       4. Solo entonces implementar fix
     - Esta regla evita introducir nuevos bugs al "adivinar" soluciones
 
+3. **Protocolo de Resolución de Problemas (MANDATORIO)**:
+    - **Fase 1: Análisis**: Investigar logs y código para entender QUÉ pasó y POR QUÉ.
+    - **Fase 2: Explicación**: Explicar al usuario detalladamente el hallazgo en lenguaje claro.
+    - **Fase 3: Propuesta**: Proponer una solución específica y esperar aprobación.
+    - **Fase 4: Ejecución**: Solo tras recibir un "SÍ" explícito, aplicar el código.
+
 ## 🔐 REGLA CRÍTICA: SEGURIDAD DE API KEYS
 
 13. **Protección de Credenciales y API Keys**:

@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.0"; // FEATURE: CSV export separated by context (backtest/playback/demo/live)
+		private const string StrategyVersion = "v1.14.6"; // FIX: Continuous Lag Monitor (Visuals)
 		
 		// v1.12.1: CONTROL BUTTONS (simplified to 2 buttons)
 		private TradingMode currentTradingMode = TradingMode.Normal;
@@ -44,6 +44,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private System.Windows.Controls.StackPanel buttonPanel;
 		private bool buttonsInitialized = false;
 		private bool isProtectionProcessing = false; // v1.13.1: Concurrency lock
+		private bool failsafeTriggered = false; // v1.14.2: Prevent infinite loop in CheckHardStop
 		
 		// =========================================================
 		// v1.13.0: TRADE ANALYZER EXPORT
@@ -610,17 +611,21 @@ namespace NinjaTrader.NinjaScript.Strategies
 					// Determine context subfolder based on execution state and account
 					string contextFolder = "live"; // Default for real account
 					
-					if (State == State.Historical)
+					// 1. Backtest detection: Strategy Analyzer has no ChartControl
+					// Note: ChartControl might be null in some other headless cases, but generally means Strategy Analyzer here
+					if (ChartControl == null)
 					{
 						contextFolder = "backtest";
 					}
-					else if (State == State.Playback)
+					// 2. Playback detection: Check if Playback Connection is active
+					else if (NinjaTrader.Cbi.Connection.PlaybackConnection != null && 
+							 NinjaTrader.Cbi.Connection.PlaybackConnection.Status == NinjaTrader.Cbi.ConnectionStatus.Connected)
 					{
 						contextFolder = "playback";
 					}
+					// 3. Demo detection: Check account name
 					else if (Account != null)
 					{
-						// Check for simulation/demo account (Sim101, Sim102, etc.)
 						string accountName = Account.Name;
 						if (accountName.StartsWith("Sim") || accountName.ToLower().Contains("demo") || accountName.ToLower().Contains("paper"))
 							contextFolder = "demo";
@@ -1342,6 +1347,10 @@ currentEntryState = EntryState.Idle;
 				}
 			}
 
+			// v1.14.6: Continuous Lag Monitoring (Visuals only)
+			// Ensure visual alert clears when lag dissipates, even if no trade is attempting
+			CheckChartLag();
+
 			// 0. Calculate Volume Delta for VWAP
 			if (IsFirstTickOfBar) lastVol = 0;
 			double deltaVol = Volume[0] - lastVol;
@@ -2029,6 +2038,8 @@ currentEntryState = EntryState.Idle;
 		private void CheckHardStop()
 		{
 			if (Position.MarketPosition == MarketPosition.Flat) return;
+			// FIX v1.14.2: Prevent infinite loop if position close takes time
+			if (failsafeTriggered) return;
 			
 			// Validate Anchor
 			if (setupAnchorPrice <= 0 || setupAnchorPrice == double.MaxValue || setupAnchorPrice == double.MinValue) return;
@@ -2043,7 +2054,8 @@ currentEntryState = EntryState.Idle;
 				// If Price is ABOVE Anchor + Buffer
 				if (High[0] >= (setupAnchorPrice + checkBuffer))
 				{
-						Log(Time[0] + " FAILSAFE: Price (" + Close[0] + ") violated Anchor (" + setupAnchorPrice + "). Forcing ExitShort.");
+						Log(Time[0] + " FAILSAFE: Price (High=" + High[0] + ") violated Anchor (" + setupAnchorPrice + "). Forcing ExitShort.");
+						failsafeTriggered = true; // Lock immediately
 						ClosePositionUnmanaged("Anchor Violation");
 						// Reset handled in OnExecutionUpdate
 						return;
@@ -2054,7 +2066,8 @@ currentEntryState = EntryState.Idle;
 				// If Price is BELOW Anchor - Buffer
 				if (Low[0] <= (setupAnchorPrice - checkBuffer))
 				{
-						Log(Time[0] + " FAILSAFE: Price (" + Close[0] + ") violated Anchor (" + setupAnchorPrice + "). Forcing ExitLong.");
+						Log(Time[0] + " FAILSAFE: Price (Low=" + Low[0] + ") violated Anchor (" + setupAnchorPrice + "). Forcing ExitLong.");
+						failsafeTriggered = true; // Lock immediately
 						ClosePositionUnmanaged("Anchor Violation");
 						// Reset handled in OnExecutionUpdate
 						return;
@@ -2088,12 +2101,29 @@ currentEntryState = EntryState.Idle;
 			// Broadened window to catch exact 16:00:00 bars and any immediate post-close processing.
 			TimeSpan gapBuffer = TimeSpan.FromMinutes(5);
 			
-			// v1.10.28: Solo cerrar posiciones los VIERNES (antes del weekend)
-			// Lunes-Jueves: permitir overnight
-			bool isFriday = nyTime.DayOfWeek == DayOfWeek.Friday;
+			// v1.14.5: DYNAMIC SESSION AWARENESS (Holidays/Early Closes)
+			// Instead of fixed "16:00" string, we ask NinjaTrader for the TRUE session end of this bar.
+			DateTime actualSessionEnd = Bars.Session.GetNextEnd(Time[0]);
 			
-			if (isFriday && nyTimeOfDay >= cutoffTime && nyTimeOfDay <= tsUsaEnd.Add(gapBuffer))
+			// Determine if this is a "Friday-like" closing event
+			// 1. Is it actually Friday?
+			// 2. OR is it an Early Close (Holiday)? e.g. 13:00 close on a Tuesday.
+			
+			// Convert Actual Close to NY Time for consistency with "15:30" logic
+			DateTime nyClose = TimeZoneInfo.ConvertTime(actualSessionEnd, chartTimeZone, nyTimeZone);
+			bool isFriday = nyTime.DayOfWeek == DayOfWeek.Friday;
+			// Early Close Definition: Market closes before 15:30 NY Time (Standard is 16:00 or 17:00)
+			bool isEarlyClose = nyClose.TimeOfDay < TimeSpan.FromHours(15.5);
+			
+			// Trigger logic if Friday OR Early Holiday
+			if (isFriday || isEarlyClose)
 			{
+				DateTime dynamicCutoff = actualSessionEnd.Subtract(exitBuffer);
+				
+				// Check Window: From Cutoff (End-30s) up to End+5min (Gap/Cleanup)
+				if (Time[0] >= dynamicCutoff && Time[0] <= actualSessionEnd.Add(gapBuffer))
+				{
+					// LOGIC ACTIVATED (Indent matches original block)
 				// 3. Execution Logic - ONLY ON FRIDAYS
 				
 				// A) Close Positions
@@ -3483,16 +3513,23 @@ setupLevelName = "";
 						return;
 					}
 					
-					// 2. Check R/R Preservation (RELAXED - NO CANCEL)
-					// If order is already working, don't cancel for minor R/R fluctuations to prevent thrashing.
-					// Only cancel if risk becomes absurd or negative.
-					if (risk <= 0 || (reward / risk) < (MinRiskRewardRatio * 0.5)) // Only cancel if it drops drastically (e.g. half)
+					// 2. CHECK TARGET TOUCH (v1.14.4)
+					// If price already hit the target while we are waiting/chasing, the setup is invalid.
+					bool targetTouched = false;
+					if (isShortSetup && Low[0] <= targetPrice) targetTouched = true;
+					if (!isShortSetup && High[0] >= targetPrice) targetTouched = true;
+					
+					if (targetTouched)
 					{
-						// Log(Time[0] + string.Format(" WARNING: R/R Degraded. R:{0:F2} Rw:{1:F2} Ratio:{2:F2}. Keeping Order.", risk, reward, (risk>0?reward/risk:0)));
-						// if (entryOrder1 != null) CancelOrder(entryOrder1); // DISABLED CANCELLATION
-						// if (entryOrder2 != null) CancelOrder(entryOrder2); // DISABLED CANCELLATION
-						// return;
+						Log(string.Format("{0} CANCEL: Target Touched ({1}) before Entry. Setup invalidated.", Time[0], targetPrice));
+						if (entryOrder != null) CancelOrder(entryOrder);
+						currentEntryState = EntryState.Idle; // Reset
+						setupLevelName = "";
+						return;
 					}
+
+					// 3. CHECK R/R PRESERVATION (STRICT) - Handled above by Strict Validation Block
+					// (Relaxed block removed v1.14.3 to enforce strict R/R > 1.0)
 
 					// UPDATE ORDER PRICE (Trailing)
 					// Only update if price difference is significant (e.g. 1 tick) to avoid spamming modification
@@ -3530,12 +3567,10 @@ setupLevelName = "";
 			// REFACTORED EnsureProtection (v1.7.17) - Consolidated Split Handling
 	private void EnsureProtection(string direction, string entrySignalName, int filledQty)
 	{
-		// v1.11.14: Prevent duplicate calls from multiple OnExecutionUpdate events
-		// v1.11.14: Prevent duplicate calls from multiple OnExecutionUpdate events
-		// v1.13.1: Checking isProtectionProcessing to prevent race conditions
-		if (protectionOrdersCreated || isProtectionProcessing)
+		// FIX v1.14.1 (Partial Fills): Removed protectionOrdersCreated check to allow multiple fills to update qty
+		if (isProtectionProcessing)
 		{
-			Log(Time[0] + " EnsureProtection SKIPPED: Already created or processing. Created=" + protectionOrdersCreated + " Processing=" + isProtectionProcessing);
+			Log(Time[0] + " EnsureProtection SKIPPED: Loop detected (isProtectionProcessing=true)");
 			return;
 		}
 		
@@ -4538,6 +4573,8 @@ setupLevelName = "";
 				
 				// Clear Cache
 				cachedOppositeLevel = null;
+				
+				failsafeTriggered = false; // v1.14.2: Reset failsafe lock
 			}
 			
 			// CRITICAL FIX: Only reset if we are truly FLAT. include "Exit on session close"

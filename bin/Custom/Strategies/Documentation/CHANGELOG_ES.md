@@ -4,7 +4,51 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.14.0] - 2026-01-02 ✅ VERSIÓN ACTUAL
+## [1.14.6] - 2026-01-02 ✅ VERSIÓN ACTUAL (RECOMPILE REQUIRED)
+### FIX: Visualización de Alerta Lag (Sticky Alert)
+- **Problema**: La alerta visual de "LAG BLOCKED" se quedaba pegada en pantalla indefinidamente hasta que la estrategia intentaba meter otro trade, incluso si el lag ya se había resuelto hace horas.
+- **Solución**: Se agregó una llamada pasiva a `CheckChartLag()` en cada tick de `OnBarUpdate`.
+  - Impacto: Cero en rendimiento.
+  - Beneficio: La alerta desaparece sola apenas se restablece la conexión/datos.
+
+## [1.14.5] - 2026-01-02
+### FEATURE: Dynamic Session Awareness (Feriados/Early Closes)
+- **Problema**: La lógica de "Cierre Viernes" usaba una hora fija (16:00). Si el mercado tenía un cierre temprano (ej. 13:00 por festivo), la estrategia no cerraba posiciones.
+- **Solución**:
+  - Se implementó `Bars.Session.GetNextEnd(Time[0])` para leer el horario real de cierre de la sesión desde el template de NinjaTrader.
+  - **Nueva Regla**: Se fuerza el cierre ("Exit on Session") si es **Viernes** O si se detecta un **Cierre Temprano** (antes de las 15:30 NY) cualquier día de la semana.
+  - Esto garantiza que en días festivos (Monday Early Close) o Viernes, la estrategia proteja la cuenta cerrando posiciones y cancelando órdenes.
+
+## [1.14.4] - 2026-01-02
+### FEATURE: Cancelación por Touch-First
+- **Problema**: La estrategia seguía persiguiendo el precio con la orden de entrada incluso si el mercado ya había tocado el Target (TP1) y rebotado.
+- **Solución**: Se agregó una validación en `ManageEntryA_Plus`. Si el precio High/Low toca el `targetPrice` mientras la orden está en estado `Working`, se cancela inmediatamente la orden y se resetea el setup.
+
+## [1.14.3] - 2026-01-02
+### CLEANUP: R/R Logic Cleanup (MES Issue)
+- **Cambio**: Se eliminó el bloque de código muerto/conflictivo llamado "Relaxed R/R Preservation".
+- **Comportamiento Final**: La estrategia mantiene estrictamente el comportamiento de cancelar cualquier orden de trabajo (Pending) si el R/R cae por debajo del mínimo (1.0) en cualquier momento, asegurando que no se tomen trades degradados.
+
+## [1.14.2] - 2026-01-02
+### FIX CRÍTICO: Loop Infinito de Órdenes (Catastrophic Failsafe)
+- **Problema**: `CheckHardStop` enviaba órdenes de cierre repetidamente en cada tick mientras la posición se cerraba, causando cientos de órdenes (460 contratos en M2K) y Margin Call.
+- **Causa**: Falta de una bandera que indicara que el proceso de cierre de emergencia ya había comenzado.
+- **Solución**:
+  - Nueva variable `failsafeTriggered`.
+  - Bloqueo inmediato: Si `failsafeTriggered` es true, `CheckHardStop` retorna sin hacer nada.
+  - Reset automático: Se libera la variable cuando la posición se confirma cerrada (`OnExecutionUpdate`).
+- **Mejora Adicional**: Mensaje de log ahora muestra `High` (Short) o `Low` (Long) en lugar de `Close` para evitar confusión sobre por qué se violó el anchor.
+
+## [1.14.1] - 2026-01-02
+### FIX CRÍTICO: Protección en Partial Fills (Discrepancia de Cantidad)
+- **Problema**: Si la orden de entrada se llena parcialmente (ej: 1 de 10 contratos), y luego se llena el resto, la estrategia NO aumentaba la protección.
+- **Causa**: La lógica de `EnsureProtection` tenía un lock (`protectionOrdersCreated`) que impedía actualizaciones subsecuentes.
+- **Solución v1.14.1**: 
+  - Removido el chequeo de `protectionOrdersCreated` al inicio de `EnsureProtection`.
+  - Ahora permite recalcular y agregar órdenes de protección cuando la cantidad llena aumenta.
+- **Nota**: El código ya tenía el fix comentado, pero la versión no se había incrementado ni compilado.
+
+## [1.14.0] - 2026-01-02
 ### FEATURE: Separación de CSV por Contexto de Ejecución
 - **Solicitud**: Separar archivos de backtest, playback, demo y live para análisis aislado
 - **Cambios**:
@@ -13,10 +57,10 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
      - `playback/` ← Market Replay
      - `demo/` ← Cuentas Sim (Sim101, Sim102, etc.)
      - `live/` ← Cuenta Real
-  2. **Detección automática de contexto**:
-     - `State.Historical` → backtest
-     - `State.Playback` → playback
-     - `Account.Name.StartsWith("Sim")` → demo
+  2. **Detección automática de contexto** (Fix v1.14.0):
+     - `ChartControl == null` → backtest
+     - `Connection.PlaybackConnection` → playback
+     - `Account.Name` ("Sim"/"Demo") → demo
      - Default → live
   3. **App Streamlit actualizada** con 5 fuentes de datos:
      - 📊 Backtest (Strategy Analyzer)
