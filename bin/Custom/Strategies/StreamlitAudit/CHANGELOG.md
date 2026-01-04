@@ -1,5 +1,36 @@
 # Changelog - Streamlit Trading Analysis App
 
+## [v2.8.2] - 2026-01-04
+
+### Fixed: Calendar Tab Jump on Page Reload 📅
+- **Problema:** Al recargar la página (F5), la app saltaba automáticamente al tab "Calendario" si previamente habías clickeado en un día del calendario.
+- **Causa:** El query param `audit_date` persistía en la URL y el script JS de restauración de tab se re-ejecutaba en cada recarga.
+- **Solución:** Limpiar el query param `audit_date` inmediatamente después de guardarlo en `session_state` con `del st.query_params["audit_date"]`.
+- **Resultado:** Al recargar, la app se mantiene en el tab "Tablero" (comportamiento normal) en lugar de saltar al Calendario.
+
+---
+
+## [v2.8.1] - 2026-01-04
+
+### Fixed: AI Cache Cost Display 💰
+Corrección en cómo se muestra y acumula el costo de la sesión de IA.
+- **Antes:** Al volver a una pestaña, se sumaba el costo del análisis (incluso si venía de caché) al total de la sesión, dando la impresión de un doble cobro.
+- **Ahora:** El contador de "Sesión Actual" solo incrementa cuando realmente se hace una llamada a la API (Cache Miss). Si el dato viene de memoria, el costo de sesión no aumenta.
+- **Beneficio:** Transparencia total. El usuario ve exactamente lo que está gastando *ahora*, sin "cobros fantasma".
+
+### Fixed: Calendar Tab Interaction 📅
+Corrección del comportamiento al hacer clic en un día del calendario.
+- **Problema:** Al hacer clic en un día, la app se recargaba y volvía a la primera pestaña (Dashboard), perdiendo el foco.
+- **Solución:** Mejora en el script JS de restauración de pestaña con polling más robusto y selectores actualizados.
+- **Resultado:** Al hacer clic en un día, la app se mantiene en la pestaña "Calendario" y muestra el detalle del día seleccionado correctamente.
+
+### Fixed: Month Selector Persistence 🗓️
+Corrección de estado en el selector de meses.
+- **Problema:** Al seleccionar un mes, la selección se perdía al recargar la página.
+- **Solución:** Se agregó una `key` única al widget para persistir su estado.
+
+---
+
 ## [v2.8.0] - 2026-01-03
 
 ### Added: R-Ladder MFE Analysis 📊

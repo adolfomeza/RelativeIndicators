@@ -1982,7 +1982,15 @@ with tab6:
         available_months = sorted(available_months, reverse=True) # Newest first
         st.markdown("---")
     
-        selected_month_str = st.selectbox("Seleccionar Mes", available_months)
+        # 1. Month Selector
+        # Determine default index from URL if available
+        default_ix = 0
+        if "audit_month" in st.query_params:
+            url_month = st.query_params["audit_month"]
+            if url_month in available_months:
+                default_ix = available_months.index(url_month)
+        
+        selected_month_str = st.selectbox("Seleccionar Mes", available_months, index=default_ix, key="calendar_month_selector")
         
         # Filter for selected month
         y_str, m_str = selected_month_str.split('-')
@@ -2008,21 +2016,36 @@ with tab6:
                     # Valid date format YYYY-MM-DD
                     st.session_state.selected_date_audit = pd.to_datetime(clicked_date_str)
                     
+                    # v2.3.0: Clear query param after processing to prevent tab jump on page reload
+                    del st.query_params["audit_date"]
+                    
                     # INJECT JS TO RESTORE TAB (Auto-Click "Calendario")
                     # This runs after the reload triggered by the link
                     js_restore_tab = """
                     <script>
-                        // Wait for DOM to be ready
                         function clickCalendarTab() {
                             const tabs = window.parent.document.querySelectorAll('button[data-baseweb="tab"]');
+                            let found = false;
                             tabs.forEach(tab => {
-                                if (tab.innerText.includes("Calendario")) {
+                                // Check both text content and inner divs
+                                if (tab.innerText && tab.innerText.includes("Calendario")) {
                                     tab.click();
+                                    found = true;
                                 }
                             });
+                            return found;
                         }
-                        // Small delay to ensure Streamlit loaded the tabs
-                        setTimeout(clickCalendarTab, 500);
+                        
+                        function attemptRestore(count) {
+                            if (count > 5) return; // Max retries
+                            const success = clickCalendarTab();
+                            if (!success) {
+                                setTimeout(() => attemptRestore(count + 1), 500);
+                            }
+                        }
+                        
+                        // Start polling
+                        setTimeout(() => attemptRestore(0), 500);
                     </script>
                     """
                     components.html(js_restore_tab, height=0)
@@ -2059,13 +2082,14 @@ with tab6:
                     # Look up data
                     current_date = pd.Timestamp(year=year_sel, month=month_sel, day=day_num)
                     date_str = current_date.strftime("%Y-%m-%d")
+                    current_month_str = f"{year_sel}-{month_sel:02d}"
                     
                     pnl_txt = ""
                     trades_txt = ""
                     cell_class = "cal-day"
                     
                     # Interactivity Wrapper: Link to self with param
-                    link_start = f'<a href="?audit_date={date_str}" target="_self" style="text-decoration:none; color:inherit; display:block; height:100%;">'
+                    link_start = f'<a href="?audit_date={date_str}&audit_month={current_month_str}" target="_self" style="text-decoration:none; color:inherit; display:block; height:100%;">'
                     link_end = '</a>'
                     
                     if current_date in month_stats.index:
@@ -3518,6 +3542,35 @@ REPORTE:
                             st.markdown(response.text)
                         except Exception as e:
                             st.warning(f"Error en análisis IA: {e}")
+
+            st.markdown("---")
+            st.subheader("⚙️ Configuración Automática para NinjaTrader")
+            st.caption("Guarda estos ajustes para que la Estrategia los cargue automáticamente (requiere activar 'Auto Load AI Config' en NinjaTrader).")
+            
+            with st.form("ai_config_form"):
+                col_cfg1, col_cfg2 = st.columns(2)
+                with col_cfg1:
+                    zones_input = st.text_area("Zonas Habilitadas (Separadas por comas, Ej: Asia High, USA Low)", value="", help="Deja vacío para habilitar todas.")
+                with col_cfg2:
+                    max_age_input = st.number_input("Edad Máxima Niveles (Días)", min_value=0, max_value=365, value=0, help="0 = Sin límite")
+                
+                submitted = st.form_submit_button("💾 Guardar Archivo ai_config.json")
+                
+                if submitted:
+                    import json
+                    config_data = {
+                        "enabled_zones": [z.strip() for z in zones_input.split(',') if z.strip()],
+                        "max_age": int(max_age_input),
+                        "generated_at": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    }
+                    
+                    try:
+                        with open("ai_config.json", "w") as f:
+                            json.dump(config_data, f, indent=4)
+                        st.success("✅ Archivo ai_config.json guardado exitosamente! NinjaTrader lo leerá al reiniciar la estrategia.")
+                        st.code(json.dumps(config_data, indent=4), language="json")
+                    except Exception as e:
+                        st.error(f"Error guardando archivo: {e}")
         else:
             st.info("⏳ Generando reporte automáticamente...")
 
