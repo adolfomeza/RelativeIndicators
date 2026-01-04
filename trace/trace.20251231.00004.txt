@@ -1,0 +1,851 @@
+******************* Session Start (Version 8.1.6.2) *******************
+2025-12-31 18:15:57:149 Cbi.Globals.MachineId: True/True 280CB754932A645C8D63C782E8605C43
+2025-12-31 18:15:57:151 NinjaTrader.Gui.LoginInternal user='joelbencomo' mode='Simulation'
+2025-12-31 18:15:57:332 Core.Instrumentation.ActivitySource: enabled=True randomPercent=17.77914 enabledSessionsPercent=100 chartMs=250 enabledTypes='ChartPerformance Application NinjaScript Adapter Login '
+2025-12-31 18:15:57:358 Core.Instrumentation.LogActivity: activityType=Login errorCode=NoError errorMessage=''
+2025-12-31 18:15:59:995 (Simulation) NinjaTrader.Core.Authentication.GetAccessToken6
+2025-12-31 18:16:00:001 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.7150822' renewSecs='2399.8575411'
+2025-12-31 18:16:12:648 Cbi.UserEntitlement.VerifyAsync.0 apiUrl='https://live.tradovateapi.com'
+2025-12-31 18:16:15:020 Cbi.UserEntitlement.VerifyAsync.98: Evaluation expiration=2026-12-31, Evaluation expiration=2026-12-31
+2025-12-31 18:16:17:753 PrimaryMonitorWPFDPIScale=1.00
+2025-12-31 18:16:18:050 Cbi.UserEntitlement.VerifyAsync.99: subscription=Free licensedProviders='Playback Simulator NinjaTrader NinjaTrader Continuum NinjaTrader FXCM IQFeed E-Signal External FOREX.com Interactive Brokers Barchart.com Kinetick FXCM Coinbase cTrader Schwab Rithmic for NinjaTrader Brokerage Custom0 Custom2 Custom3 Custom4 Custom6 Custom7 Custom8 Custom9 Custom10 Provider13 Custom14 Provider26 Custom15 Custom16 Custom17 Custom18 Custom19 Custom20 Custom21 Custom22 Custom23 Custom24 Custom25 Custom26 Custom27 Custom28 Custom29 Custom30 Custom31 Custom32 Custom33 Custom34 Custom35 Custom36 Custom37 Custom38 Custom39 Custom40'
+2025-12-31 18:16:18:096 InstallDir='C:\Program Files\NinjaTrader 8\'
+2025-12-31 18:16:18:096 UserDataDir='C:\Users\prueba\Documents\NinjaTrader 8\'
+2025-12-31 18:16:18:096 MachineID='280CB754932A645C8D63C782E8605C43'
+2025-12-31 18:16:18:096 OS='Microsoft Windows NT 10.0.26200.0'/'Win32NT'
+2025-12-31 18:16:18:096 OSLanguage='en-US'
+2025-12-31 18:16:18:096 OSEnvironment='64bit'
+2025-12-31 18:16:18:096 Processors=12
+2025-12-31 18:16:18:096 ThreadPool: minWorkerThreads=12 maxWorkerThreads=32767 minCompletionPortThreads=12 maxCompletionPortThreads=1000
+2025-12-31 18:16:19:153 ProcessorSpeed=2.6 GHz
+2025-12-31 18:16:19:153 PhysicalMemory=24576 MB
+2025-12-31 18:16:19:173 DisplayAdapters=2/NVIDIA GeForce GTX 1650|Intel(R) UHD Graphics
+2025-12-31 18:16:19:173 Monitors=2/1920x1080|1920x1080
+2025-12-31 18:16:19:173 .NET/CLR Version='4.8'/64bit
+2025-12-31 18:16:19:173 SQLiteVersion='1.0.116.0'
+2025-12-31 18:16:19:173 ApplicationTimezone=EST +1 hour(s)
+2025-12-31 18:16:19:173 ApplicationTimezone=UTC -4 hour(s)
+2025-12-31 18:16:19:173 LocalTimezone=EST +1 hour(s)
+2025-12-31 18:16:19:173 LocalTimezone=UTC -4 hour(s)
+2025-12-31 18:16:19:315 DirectXRenderingHW
+2025-12-31 18:16:19:316 Copying custom assemblies...
+2025-12-31 18:16:19:329 Loading custom assemblies...
+2025-12-31 18:16:19:330 Loading C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\NinjaTrader.Custom.dll...
+2025-12-31 18:16:19:518 Loading C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\NinjaTrader.Vendor.dll...
+2025-12-31 18:16:19:531 Deleting temporary files...
+2025-12-31 18:16:19:734 Copying db and restoring templates...
+2025-12-31 18:16:19:740 Loading third party assemblies...
+2025-12-31 18:16:19:762 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\ASCENDO_NewsEvents.dll...
+2025-12-31 18:16:20:573 Cbi.VendorLicense.Verify.1: trying 'https://license.ninjatrader.com/vendorlicensenew/ASCENDO/IndicatorNewsEvents/2/R-280CB754932A645C8D63C782E8605C43.xml' ...
+2025-12-31 18:16:25:750 Cbi.VendorLicense.Verify.1: good
+2025-12-31 18:16:25:768 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\WindowsInput.dll...
+2025-12-31 18:16:25:769 Initializing database...
+2025-12-31 18:16:25:769 Loading master instruments...
+2025-12-31 18:16:25:885 (Db) Cbi.DB.get_Current.CreateConnection.Start
+2025-12-31 18:16:25:886 (Db) Cbi.DB: connectionString='Data Source="C:\Users\prueba\Documents\NinjaTrader 8\db\NinjaTrader.sqlite";Version=3;Synchronous=Full;Journal Mode=Off;Pooling=True;Max Pool Size=100;foreign keys=true;'
+2025-12-31 18:16:26:329 (Db) Cbi.DB.get_Current.CreateConnection.End
+2025-12-31 18:16:26:401 Loading instruments...
+2025-12-31 18:16:26:603 Loading accounts...
+2025-12-31 18:16:26:670 Loading users...
+2025-12-31 18:16:26:691 Downloading server info...
+2025-12-31 18:16:26:691 Starting instrument management...
+2025-12-31 18:16:26:710 Starting timer...
+2025-12-31 18:16:26:710 Creating file type watcher...
+2025-12-31 18:16:26:713 Setting ATI...
+2025-12-31 18:16:26:729 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2025-12-31 18:16:26:734 Connecting ATI server...
+2025-12-31 18:16:26:734 Server.AtiServer.Connect0
+2025-12-31 18:16:26:734 Starting adapter server...
+2025-12-31 18:16:26:737 Server.AtiServer.Connect1: Port='36973'
+2025-12-31 18:16:26:737 Server.AtiServer.Connect2
+2025-12-31 18:16:26:751 Starting bars dictionary...
+2025-12-31 18:16:26:751 Starting recorder...
+2025-12-31 18:16:26:755 Starting server(s)...
+2025-12-31 18:16:26:782 Core.Globals.ApplicationStart.Commission: minVersion=1 maxVersion=3150
+2025-12-31 18:16:26:782 Core.Globals.ApplicationStart.InstrumentList: minVersion=-475 maxVersion=475
+2025-12-31 18:16:26:782 Core.Globals.ApplicationStart.MasterInstrument: minVersion=1 maxVersion=9897
+2025-12-31 18:16:26:782 Core.Globals.ApplicationStart.Risk: minVersion=1 maxVersion=14172
+2025-12-31 18:16:26:782 Core.Globals.ApplicationStart.TradingHours: minVersion=1 maxVersion=5111
+2025-12-31 18:16:26:926 ChartHotKeys: Alerts='' DisableAllAlerts='' EnableAllAlerts='' DataSeries='Ctrl+F' Indicators='Ctrl+I' Strategies='Ctrl+S' Properties='Ctrl+T' CrosshairPointer='Ctrl+R' CrosshairLocal='Ctrl+Q' CrosshairGlobal='Ctrl+G' CrosshairGlobal2='Ctrl+N' CrosshairLock='Ctrl+L' AutoScaleAndReturn='' CyclePlotExecutions='Ctrl+E' ReloadHistoricalData='Ctrl+Shift+R' ReloadNinjaScript='F5' SaveChartImage='Alt+S' ShowDataBox='Ctrl+D' ShowChartTrader='' ShowChartTraderHidden='' ShowIndicators='' ShowScrollBar='' SnapModeBar='Ctrl+Shift+F3' SnapModeBarTick='Ctrl+Shift+F4' SnapModeBarObject='' SnapModeDisabled='Ctrl+Shift+F5' SnapModeTick='Ctrl+Shift+F6' StayInDrawMode='Ctrl+Shift+F2' ZoomIn='Ctrl+Alt+Z' ZoomOut='Ctrl+Alt+O' BarSpacingPlus='Ctrl+Down' BarSpacingMinus='Ctrl+Up' BarWidthPlus='Alt+Down' BarWidthMinus='Alt+Up' Arc='Ctrl+F7' AndrewsPitchfork='Ctrl+F8' ArrowDown='Alt+F3' ArrowLine='Ctrl+F2' ArrowUp='Alt+F2' Diamond='Alt+F5' Dot='Alt+F6' Ellipse='Ctrl+F11' ExtendedLine='F4' FibonacciCircle='F11' FibonacciExtension='F9' FibonacciRetracement='F8' FibonacciTimeExtension='F10' GannFan='Ctrl+F9' HorizontalLine='F6' Line='F2' Path='' Polygon='' VolumeProfile='' VWAP='' Ray='F3' Rectangle='Ctrl+F12' RegressionChannel='Ctrl+F9' HideDrawingObjects='' RemoveDrawingObjects='Ctrl+Shift+F7' RegionHighlightX='Shift+F1' RegionHighlightY='Shift+F2' RiskReward='Ctrl+F4' Ruler='Ctrl+F3' Square='Alt+F7' Text='F12' TimeCycles='' TrendChannel='Ctrl+2' Triangle='Ctrl+F6' TriangleDown='Alt+F9' TriangleUp='Alt+F8' VerticalLine='F7'
+2025-12-31 18:16:26:929 GlobalHotKeys: CloseWorkspace='' NextWorkspace='Shift+F3' PreviousWorkspace='' SaveWorkspace='' SaveAllWorkspaces='' NewAccountData='' NewTradePerformance='' NewAlertsLog='' NewBasicEntry='' NewChart='' NewFxBoard='' NewFxPro='' NewHotListAnalyzer='' NewLevel2='' NewMarketAnalyzer='' NewMarketWatch='' NewNews='' NewNinjaScriptEditor='' NewNinjaScriptOutput='' NewOrderTicket='' NewStrategyAnalyzer='' NewDynamicDom='' NewStaticDom='' NewTimeAndSales='' CancelAllOrders='' FlattenEverything='' OpenInstrumentManager='' OpenInstrumentList='' OpenDatabase='' OpenHotKeyManager='' OpenHistoricalData='' OpenCommission='' OpenRisk='' OpenTradingHoursManager='' OpenRemoveNinjaScript='' CloseOtherTabs='' CloseTab='' DuplicateInNewTab='' DuplicateInNewWindow='' Export='' Find='Ctrl+F' MoveToNewWindow='' Print='Ctrl+P' Replace='Ctrl+H' Share='Ctrl+Shift+S' LoadTemplate='' SaveTemplate='' SaveTemplateAsDefault=''
+2025-12-31 18:16:26:929 MarketAnalyzerHotKeys: AddBlankRow='' AddLabelRow='' Columns='' Alerts='' EnableAllAlerts='' DisableAllAlerts='' AutoSort='' RowFilter='' ReloadHistorical='Ctrl+Shift+R' ReloadNinjaScript='F5'
+2025-12-31 18:16:26:929 NinjaScriptEditorHotKeys: InsertCodeSnippet='F2' FindNext='F3' Compile='F5' GoToLine='Ctrl+G' CommentSelection='Ctrl+K' InlineSyntaxChecking='Ctrl+Alt+S' CollapseToDefinitions='' ExpandAllOutlining='' StartOutlining='' StopOutlining='' HideSelection='' StopHidingSelection='' ToggleAllOutlining='' ToggleOutlining='' Save='Ctrl+S' Undo='Ctrl+Z' Redo='Ctrl+Y'
+2025-12-31 18:16:26:936 OrderEntryHotKeys: BuyAsk='' BuyBid='' BuyMarket='' SellAsk='' SellBid='' SellMarket='' BreakevenAtmStrategy='' BreakevenPosition='' CancelLastOrder='' CloseAtmStrategy='' ClosePosition='' DecreaseLastOrderPrice='' IncreaseLastOrderPrice='' ModifyLastOrder2Fill='' Reverse='' OcoOrder='' SimulatedOrder=''
+2025-12-31 18:16:26:937 SuperDomHotKeys: Center='' Columns='' Indicators='' ReloadAllHistoricalData='Ctrl+Shift+R' ReloadNinjaScript='F5'
+2025-12-31 18:16:26:937 OrderEntryHotKeys=disabled
+2025-12-31 18:16:26:938 AutoClose=disabled
+2025-12-31 18:16:27:460 Core.Instrumentation.LogActivity: activityType=Application errorCode=NoError errorMessage=''
+2025-12-31 18:16:41:565 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-31 18:16:41:913 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-31 18:16:42:142 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-31 18:16:42:366 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-31 18:16:42:566 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-31 18:16:42:747 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-31 18:16:42:951 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-31 18:16:43:166 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-31 18:16:43:466 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-31 18:16:43:679 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-31 18:16:44:147 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-31 18:16:45:178 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-31 18:16:47:330 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-31 18:16:47:537 Core.Instrumentation.LogActivity: activityType=NinjaScript errorCode=NoError errorMessage=''
+2025-12-31 18:16:47:954 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-31 18:16:48:821 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-31 18:16:49:639 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-31 18:16:50:270 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-31 18:16:50:934 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-31 18:16:51:495 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-31 18:16:52:100 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-31 18:16:52:613 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-31 18:16:54:229 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-31 18:16:58:365 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-31 18:17:01:135 11 Chart Chart1Tab1 1 Ser 3 Ind 2 DrawObj Chart2Tab1 1 Ser 3 Ind 2 DrawObj Chart3Tab1 1 Ser 4 Ind 1 DrawObj Chart4Tab1 1 Ser 3 Ind 1 DrawObj Chart5Tab1 1 Ser 3 Ind 1 DrawObj Chart6Tab1 1 Ser 3 Ind 1 DrawObj Chart7Tab1 1 Ser 4 Ind 1 DrawObj Chart8Tab1 1 Ser 3 Ind 1 DrawObj Chart9Tab1 1 Ser 3 Ind 1 DrawObj Chart10Tab1 1 Ser 3 Ind 1 DrawObj Chart11Tab1 1 Ser 3 Ind 1 DrawObj 
+2025-12-31 18:17:02:438 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=9 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=263 TradingHours=0
+2025-12-31 18:17:04:115 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.01ms InstrumentLists=0.68ms MasterInstruments=0.08ms Messages=0.44ms Risks=0.16ms RolloverCollection=1673.97ms TradingHours=0.06ms
+2025-12-31 18:17:04:117 Starting server message polling timer with interval 3600 seconds...
+2025-12-31 18:38:42:823 (Simulation) Gui.ControlCenter.OnConnect
+2025-12-31 18:38:42:907 (Simulation) Cbi.Connection.Connect0: status=Disconnected assembly=8.1.6.2 date=2025-12-31 runAsProcess=False
+2025-12-31 18:38:42:920 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2025-12-31 18:38:42:924 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2025-12-31 18:38:42:933 (Simulation) Cbi.Connection.Connect1
+2025-12-31 18:38:42:947 (Simulation) Cbi.Connection.Connect2
+2025-12-31 18:38:42:947 (Simulation) Cbi.Connection.Connect3
+2025-12-31 18:38:42:960 (Simulation) Cbi.Connection.CreateAccount: account='Sim101' displayName='Sim101' fcm='' denomination=UsDollar forexLotSize=10000
+2025-12-31 18:38:42:964 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connecting previousStatus=Disconnected message=''
+2025-12-31 18:38:42:968 (Simulation) Cbi.Account.OnConnectionStatus.PositionExecutions: account='Sim101'
+2025-12-31 18:38:42:969 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2025-12-31 18:38:42:971 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connecting priceStatus=Connecting
+2025-12-31 18:38:42:981 (Simulation) Cbi.Connection.Connect4
+2025-12-31 18:38:43:580 (Simulation) Cbi.Connection.Connect5
+2025-12-31 18:38:43:893 (Simulation) Tradovate.Adapter.Connect: user='joelbencomo' accountType='Simulation' useLocalOcoSimulation=True
+2025-12-31 18:38:43:944 (Simulation) Cbi.Connection.Connect9 ok
+2025-12-31 18:38:43:980 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=True foundConnected=False
+2025-12-31 18:38:43:980 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connecting
+2025-12-31 18:38:43:981 Core.Instrumentation.LogActivity: activityType=Adapter errorCode=NoError errorMessage=''
+2025-12-31 18:38:44:253 (Simulation) Tradovate.Adapter.StartTradeWebSocket
+2025-12-31 18:38:44:534 (Simulation) Tradovate.Adapter.StartTradeWebSocket1
+2025-12-31 18:38:44:535 (Simulation) Tradovate.Adapter.StartWebSocketTradeSendWorker
+2025-12-31 18:38:44:535 (Simulation) Tradovate.Adapter.StartWebSocketTradeReceiveWorker
+2025-12-31 18:38:44:548 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage
+2025-12-31 18:38:44:899 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2025-12-31 18:38:45:243 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2025-12-31 18:38:45:250 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2025-12-31 18:38:45:251 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2025-12-31 18:38:45:256 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2025-12-31 18:38:46:601 (Simulation) Cbi.Connection.CreateAccount: account='DEMO619219' displayName='DEMO' fcm='' denomination=UsDollar forexLotSize=1
+2025-12-31 18:38:46:601 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connecting previousStatus=Disconnected message=''
+2025-12-31 18:38:46:602 (Simulation) Cbi.Account.OnConnectionStatus.PositionExecutions: account='DEMO619219'
+2025-12-31 18:38:46:614 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=CashValue currency=UsDollar value=*****
+2025-12-31 18:38:46:614 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2025-12-31 18:38:46:638 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665999_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88220 quantity=42 marketPosition=Short operation=Add orderID='356274665999' isSod=False time='2025-12-31 11:23:46' statementDate='1800-01-01'
+2025-12-31 18:38:46:653 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666799_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=87970 quantity=1 marketPosition=Long operation=Add orderID='356274666799' isSod=False time='2025-12-31 17:17:53' statementDate='1800-01-01'
+2025-12-31 18:38:46:654 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665999_1' exitId='356274666799_1' profitCurrencyBeforeCommissionAndFees=25
+2025-12-31 18:38:46:654 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666020_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88220 quantity=52 marketPosition=Short operation=Add orderID='356274666020' isSod=False time='2025-12-31 11:23:46' statementDate='1800-01-01'
+2025-12-31 18:38:46:654 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665745_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88230 quantity=2 marketPosition=Long operation=Add orderID='356274665745' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:654 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665999_1' exitId='356274665745_1' profitCurrencyBeforeCommissionAndFees=-2
+2025-12-31 18:38:46:654 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666904_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=87960 quantity=2 marketPosition=Short operation=Add orderID='356274666904' isSod=False time='2025-12-31 17:18:52' statementDate='1800-01-01'
+2025-12-31 18:38:46:655 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666752_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=87970 quantity=1 marketPosition=Long operation=Add orderID='356274666752' isSod=False time='2025-12-31 17:17:53' statementDate='1800-01-01'
+2025-12-31 18:38:46:655 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665999_1' exitId='356274666752_1' profitCurrencyBeforeCommissionAndFees=25
+2025-12-31 18:38:46:656 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666062_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88220 quantity=100 marketPosition=Long operation=Add orderID='356274666062' isSod=False time='2025-12-31 11:23:49' statementDate='1800-01-01'
+2025-12-31 18:38:46:656 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665999_1' exitId='356274666062_1' profitCurrencyBeforeCommissionAndFees=0
+2025-12-31 18:38:46:656 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666020_1' exitId='356274666062_1' profitCurrencyBeforeCommissionAndFees=0
+2025-12-31 18:38:46:656 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666904_1' exitId='356274666062_1' profitCurrencyBeforeCommissionAndFees=-52
+2025-12-31 18:38:46:656 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665650_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88220 quantity=2 marketPosition=Short operation=Add orderID='356274665650' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:656 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666062_1' exitId='356274665650_1' profitCurrencyBeforeCommissionAndFees=0
+2025-12-31 18:38:46:656 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666797_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=87970 quantity=1 marketPosition=Long operation=Add orderID='356274666797' isSod=False time='2025-12-31 17:17:53' statementDate='1800-01-01'
+2025-12-31 18:38:46:658 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665273_1' account='DEMO619219' instrument='M2K 03-26' exchange=Globex price=2515.1 quantity=20 marketPosition=Short operation=Add orderID='356274665273' isSod=False time='2025-12-30 20:47:53' statementDate='1800-01-01'
+2025-12-31 18:38:46:658 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666135_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=87705 quantity=2 marketPosition=Long operation=Add orderID='356274666135' isSod=False time='2025-12-31 12:50:14' statementDate='1800-01-01'
+2025-12-31 18:38:46:658 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666340_1' account='DEMO619219' instrument='MCL 02-26' exchange=Nymex price=57.37 quantity=5 marketPosition=Short operation=Add orderID='356274666340' isSod=False time='2025-12-31 15:30:54' statementDate='1800-01-01'
+2025-12-31 18:38:46:659 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666340_2' account='DEMO619219' instrument='MCL 02-26' exchange=Nymex price=57.37 quantity=2 marketPosition=Short operation=Add orderID='356274666340' isSod=False time='2025-12-31 15:30:59' statementDate='1800-01-01'
+2025-12-31 18:38:46:659 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666340_3' account='DEMO619219' instrument='MCL 02-26' exchange=Nymex price=57.37 quantity=1 marketPosition=Short operation=Add orderID='356274666340' isSod=False time='2025-12-31 15:31:39' statementDate='1800-01-01'
+2025-12-31 18:38:46:659 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665326_1' account='DEMO619219' instrument='MCL 02-26' exchange=Nymex price=58.55 quantity=12 marketPosition=Long operation=Add orderID='356274665326' isSod=False time='2025-12-31 09:51:49' statementDate='1800-01-01'
+2025-12-31 18:38:46:659 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666340_1' exitId='356274665326_1' profitCurrencyBeforeCommissionAndFees=-590
+2025-12-31 18:38:46:659 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666340_2' exitId='356274665326_1' profitCurrencyBeforeCommissionAndFees=-236
+2025-12-31 18:38:46:659 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666340_3' exitId='356274665326_1' profitCurrencyBeforeCommissionAndFees=-118
+2025-12-31 18:38:46:659 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665326_2' account='DEMO619219' instrument='MCL 02-26' exchange=Nymex price=58.55 quantity=2 marketPosition=Long operation=Add orderID='356274665326' isSod=False time='2025-12-31 09:51:49' statementDate='1800-01-01'
+2025-12-31 18:38:46:659 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665714_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88230 quantity=1 marketPosition=Long operation=Add orderID='356274665714' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:659 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665796_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88240 quantity=10 marketPosition=Long operation=Add orderID='356274665796' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:659 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665538_1' account='DEMO619219' instrument='ZW 03-26' exchange=Globex price=511.5 quantity=1 marketPosition=Long operation=Add orderID='356274665538' isSod=False time='2025-12-31 11:32:41' statementDate='1800-01-01'
+2025-12-31 18:38:46:659 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665690_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88220 quantity=2 marketPosition=Short operation=Add orderID='356274665690' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:659 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666062_1' exitId='356274665690_1' profitCurrencyBeforeCommissionAndFees=0
+2025-12-31 18:38:46:660 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665679_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88220 quantity=2 marketPosition=Short operation=Add orderID='356274665679' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:660 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666062_1' exitId='356274665679_1' profitCurrencyBeforeCommissionAndFees=0
+2025-12-31 18:38:46:660 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665392_1' account='DEMO619219' instrument='MNQ 03-26' exchange=Globex price=25705.75 quantity=3 marketPosition=Short operation=Add orderID='356274665392' isSod=False time='2025-12-31 10:00:03' statementDate='1800-01-01'
+2025-12-31 18:38:46:660 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665859_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88240 quantity=9 marketPosition=Long operation=Add orderID='356274665859' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:660 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665688_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88220 quantity=2 marketPosition=Short operation=Add orderID='356274665688' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:660 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666062_1' exitId='356274665688_1' profitCurrencyBeforeCommissionAndFees=0
+2025-12-31 18:38:46:660 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666872_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=87935 quantity=14 marketPosition=Short operation=Add orderID='356274666872' isSod=False time='2025-12-31 17:18:08' statementDate='1800-01-01'
+2025-12-31 18:38:46:661 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666797_1' exitId='356274666872_1' profitCurrencyBeforeCommissionAndFees=-3.5
+2025-12-31 18:38:46:661 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666135_1' exitId='356274666872_1' profitCurrencyBeforeCommissionAndFees=46
+2025-12-31 18:38:46:661 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665714_1' exitId='356274666872_1' profitCurrencyBeforeCommissionAndFees=-29.5
+2025-12-31 18:38:46:661 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665796_1' exitId='356274666872_1' profitCurrencyBeforeCommissionAndFees=-305
+2025-12-31 18:38:46:661 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666801_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=87970 quantity=1 marketPosition=Long operation=Add orderID='356274666801' isSod=False time='2025-12-31 17:17:53' statementDate='1800-01-01'
+2025-12-31 18:38:46:661 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665967_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88220 quantity=22 marketPosition=Short operation=Add orderID='356274665967' isSod=False time='2025-12-31 11:23:46' statementDate='1800-01-01'
+2025-12-31 18:38:46:661 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665859_1' exitId='356274665967_1' profitCurrencyBeforeCommissionAndFees=-18
+2025-12-31 18:38:46:661 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666801_1' exitId='356274665967_1' profitCurrencyBeforeCommissionAndFees=25
+2025-12-31 18:38:46:662 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665574_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88370 quantity=3 marketPosition=Long operation=Add orderID='356274665574' isSod=False time='2025-12-31 11:17:20' statementDate='1800-01-01'
+2025-12-31 18:38:46:662 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665967_1' exitId='356274665574_1' profitCurrencyBeforeCommissionAndFees=-45
+2025-12-31 18:38:46:662 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665574_2' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88370 quantity=2 marketPosition=Long operation=Add orderID='356274665574' isSod=False time='2025-12-31 11:17:22' statementDate='1800-01-01'
+2025-12-31 18:38:46:662 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665967_1' exitId='356274665574_2' profitCurrencyBeforeCommissionAndFees=-30
+2025-12-31 18:38:46:662 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665357_1' account='DEMO619219' instrument='M2K 03-26' exchange=Globex price=2519.8 quantity=27 marketPosition=Short operation=Add orderID='356274665357' isSod=False time='2025-12-31 09:55:02' statementDate='1800-01-01'
+2025-12-31 18:38:46:662 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665778_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88235 quantity=6 marketPosition=Long operation=Add orderID='356274665778' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:662 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665967_1' exitId='356274665778_1' profitCurrencyBeforeCommissionAndFees=-9
+2025-12-31 18:38:46:662 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666756_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=87970 quantity=2 marketPosition=Long operation=Add orderID='356274666756' isSod=False time='2025-12-31 17:17:53' statementDate='1800-01-01'
+2025-12-31 18:38:46:662 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665967_1' exitId='356274666756_1' profitCurrencyBeforeCommissionAndFees=25
+2025-12-31 18:38:46:666 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665661_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88220 quantity=2 marketPosition=Short operation=Add orderID='356274665661' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:666 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666756_1' exitId='356274665661_1' profitCurrencyBeforeCommissionAndFees=25
+2025-12-31 18:38:46:666 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666113_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88290 quantity=100 marketPosition=Long operation=Add orderID='356274666113' isSod=False time='2025-12-31 11:29:22' statementDate='1800-01-01'
+2025-12-31 18:38:46:666 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665661_1' exitId='356274666113_1' profitCurrencyBeforeCommissionAndFees=-7
+2025-12-31 18:38:46:666 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665595_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88220 quantity=3 marketPosition=Short operation=Add orderID='356274665595' isSod=False time='2025-12-31 11:23:44' statementDate='1800-01-01'
+2025-12-31 18:38:46:666 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666113_1' exitId='356274665595_1' profitCurrencyBeforeCommissionAndFees=-21
+2025-12-31 18:38:46:666 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665787_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88240 quantity=10 marketPosition=Long operation=Add orderID='356274665787' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:667 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666779_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=87970 quantity=2 marketPosition=Long operation=Add orderID='356274666779' isSod=False time='2025-12-31 17:17:53' statementDate='1800-01-01'
+2025-12-31 18:38:46:667 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665861_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88240 quantity=9 marketPosition=Long operation=Add orderID='356274665861' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:667 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666053_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88220 quantity=100 marketPosition=Long operation=Add orderID='356274666053' isSod=False time='2025-12-31 11:23:49' statementDate='1800-01-01'
+2025-12-31 18:38:46:667 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666788_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=87970 quantity=2 marketPosition=Long operation=Add orderID='356274666788' isSod=False time='2025-12-31 17:17:53' statementDate='1800-01-01'
+2025-12-31 18:38:46:667 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665366_1' account='DEMO619219' instrument='M2K 03-26' exchange=Globex price=2520.3 quantity=27 marketPosition=Long operation=Add orderID='356274665366' isSod=False time='2025-12-31 09:55:10' statementDate='1800-01-01'
+2025-12-31 18:38:46:667 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665273_1' exitId='356274665366_1' profitCurrencyBeforeCommissionAndFees=-520.000000000027
+2025-12-31 18:38:46:667 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665357_1' exitId='356274665366_1' profitCurrencyBeforeCommissionAndFees=-17.5
+2025-12-31 18:38:46:667 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665389_1' account='DEMO619219' instrument='MES 03-26' exchange=Globex price=6949.75 quantity=6 marketPosition=Short operation=Add orderID='356274665389' isSod=False time='2025-12-31 10:00:04' statementDate='1800-01-01'
+2025-12-31 18:38:46:668 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666732_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=87935 quantity=2 marketPosition=Short operation=Add orderID='356274666732' isSod=False time='2025-12-31 17:17:52' statementDate='1800-01-01'
+2025-12-31 18:38:46:668 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666113_1' exitId='356274666732_1' profitCurrencyBeforeCommissionAndFees=-71
+2025-12-31 18:38:46:668 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665939_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88220 quantity=12 marketPosition=Short operation=Add orderID='356274665939' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:668 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666113_1' exitId='356274665939_1' profitCurrencyBeforeCommissionAndFees=-84
+2025-12-31 18:38:46:668 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666565_1' account='DEMO619219' instrument='MES 03-26' exchange=Globex price=6901 quantity=2 marketPosition=Short operation=Add orderID='356274666565' isSod=False time='2025-12-31 16:21:26' statementDate='1800-01-01'
+2025-12-31 18:38:46:668 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665541_1' account='DEMO619219' instrument='ZW 03-26' exchange=Globex price=509.75 quantity=1 marketPosition=Long operation=Add orderID='356274665541' isSod=False time='2025-12-31 11:07:36' statementDate='1800-01-01'
+2025-12-31 18:38:46:668 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665843_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88240 quantity=10 marketPosition=Long operation=Add orderID='356274665843' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:668 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666544_1' account='DEMO619219' instrument='MES 03-26' exchange=Globex price=6904.75 quantity=2 marketPosition=Long operation=Add orderID='356274666544' isSod=False time='2025-12-31 16:20:00' statementDate='1800-01-01'
+2025-12-31 18:38:46:669 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665389_1' exitId='356274666544_1' profitCurrencyBeforeCommissionAndFees=450
+2025-12-31 18:38:46:669 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666321_1' account='DEMO619219' instrument='MCL 02-26' exchange=Nymex price=57.41 quantity=8 marketPosition=Long operation=Add orderID='356274666321' isSod=False time='2025-12-31 15:28:09' statementDate='1800-01-01'
+2025-12-31 18:38:46:669 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665805_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88240 quantity=10 marketPosition=Long operation=Add orderID='356274665805' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:669 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665426_1' account='DEMO619219' instrument='MES 03-26' exchange=Globex price=6926.25 quantity=3 marketPosition=Long operation=Add orderID='356274665426' isSod=False time='2025-12-31 10:46:38' statementDate='1800-01-01'
+2025-12-31 18:38:46:669 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665389_1' exitId='356274665426_1' profitCurrencyBeforeCommissionAndFees=352.5
+2025-12-31 18:38:46:669 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666826_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=87970 quantity=1 marketPosition=Long operation=Add orderID='356274666826' isSod=False time='2025-12-31 17:17:54' statementDate='1800-01-01'
+2025-12-31 18:38:46:669 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665663_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88220 quantity=2 marketPosition=Short operation=Add orderID='356274665663' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:669 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666113_1' exitId='356274665663_1' profitCurrencyBeforeCommissionAndFees=-14
+2025-12-31 18:38:46:669 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665304_1' account='DEMO619219' instrument='M2K 03-26' exchange=Globex price=2514.4 quantity=20 marketPosition=Long operation=Add orderID='356274665304' isSod=False time='2025-12-30 20:54:20' statementDate='1800-01-01'
+2025-12-31 18:38:46:669 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665357_1' exitId='356274665304_1' profitCurrencyBeforeCommissionAndFees=540.000000000009
+2025-12-31 18:38:46:669 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665181_1' account='DEMO619219' instrument='MNQ 03-26' exchange=Globex price=25657.75 quantity=4 marketPosition=Short operation=Add orderID='356274665181' isSod=False time='2025-12-30 19:57:28' statementDate='1800-01-01'
+2025-12-31 18:38:46:670 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665877_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88240 quantity=8 marketPosition=Long operation=Add orderID='356274665877' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:671 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665769_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88230 quantity=6 marketPosition=Long operation=Add orderID='356274665769' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:673 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665315_1' account='DEMO619219' instrument='MCL 02-26' exchange=Nymex price=58.51 quantity=14 marketPosition=Short operation=Add orderID='356274665315' isSod=False time='2025-12-31 09:38:36' statementDate='1800-01-01'
+2025-12-31 18:38:46:673 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665326_1' exitId='356274665315_1' profitCurrencyBeforeCommissionAndFees=-15.9999999999997
+2025-12-31 18:38:46:673 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665326_2' exitId='356274665315_1' profitCurrencyBeforeCommissionAndFees=-7.99999999999983
+2025-12-31 18:38:46:673 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666321_1' exitId='356274665315_1' profitCurrencyBeforeCommissionAndFees=880.000000000001
+2025-12-31 18:38:46:674 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666209_1' account='DEMO619219' instrument='MCL 02-26' exchange=Nymex price=57.54 quantity=5 marketPosition=Long operation=Add orderID='356274666209' isSod=False time='2025-12-31 14:55:01' statementDate='1800-01-01'
+2025-12-31 18:38:46:675 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665825_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88240 quantity=10 marketPosition=Long operation=Add orderID='356274665825' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:676 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666824_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=87970 quantity=1 marketPosition=Long operation=Add orderID='356274666824' isSod=False time='2025-12-31 17:17:54' statementDate='1800-01-01'
+2025-12-31 18:38:46:676 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665756_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88230 quantity=4 marketPosition=Long operation=Add orderID='356274665756' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:677 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665952_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88220 quantity=22 marketPosition=Short operation=Add orderID='356274665952' isSod=False time='2025-12-31 11:23:46' statementDate='1800-01-01'
+2025-12-31 18:38:46:677 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666113_1' exitId='356274665952_1' profitCurrencyBeforeCommissionAndFees=-154
+2025-12-31 18:38:46:678 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665254_1' account='DEMO619219' instrument='M2K 03-26' exchange=Globex price=2515.1 quantity=20 marketPosition=Short operation=Add orderID='356274665254' isSod=False time='2025-12-30 20:47:53' statementDate='1800-01-01'
+2025-12-31 18:38:46:678 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665823_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88240 quantity=10 marketPosition=Long operation=Add orderID='356274665823' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:681 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665927_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88220 quantity=6 marketPosition=Short operation=Add orderID='356274665927' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:681 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666113_1' exitId='356274665927_1' profitCurrencyBeforeCommissionAndFees=-42
+2025-12-31 18:38:46:681 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666031_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88225 quantity=52 marketPosition=Short operation=Add orderID='356274666031' isSod=False time='2025-12-31 11:23:46' statementDate='1800-01-01'
+2025-12-31 18:38:46:681 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666113_1' exitId='356274666031_1' profitCurrencyBeforeCommissionAndFees=-338
+2025-12-31 18:38:46:681 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665841_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88240 quantity=10 marketPosition=Long operation=Add orderID='356274665841' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:681 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665424_1' account='DEMO619219' instrument='MES 03-26' exchange=Globex price=6939.25 quantity=3 marketPosition=Long operation=Add orderID='356274665424' isSod=False time='2025-12-31 10:36:07' statementDate='1800-01-01'
+2025-12-31 18:38:46:681 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665389_1' exitId='356274665424_1' profitCurrencyBeforeCommissionAndFees=52.5
+2025-12-31 18:38:46:681 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666565_1' exitId='356274665424_1' profitCurrencyBeforeCommissionAndFees=-382.5
+2025-12-31 18:38:46:682 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666040_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88220 quantity=100 marketPosition=Long operation=Add orderID='356274666040' isSod=False time='2025-12-31 11:23:49' statementDate='1800-01-01'
+2025-12-31 18:38:46:682 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666073_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88210 quantity=100 marketPosition=Short operation=Add orderID='356274666073' isSod=False time='2025-12-31 11:23:49' statementDate='1800-01-01'
+2025-12-31 18:38:46:682 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665787_1' exitId='356274666073_1' profitCurrencyBeforeCommissionAndFees=-30
+2025-12-31 18:38:46:682 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666779_1' exitId='356274666073_1' profitCurrencyBeforeCommissionAndFees=48
+2025-12-31 18:38:46:682 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665861_1' exitId='356274666073_1' profitCurrencyBeforeCommissionAndFees=-27
+2025-12-31 18:38:46:682 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666053_1' exitId='356274666073_1' profitCurrencyBeforeCommissionAndFees=-79
+2025-12-31 18:38:46:683 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666288_1' account='DEMO619219' instrument='MCL 02-26' exchange=Nymex price=57.45 quantity=5 marketPosition=Short operation=Add orderID='356274666288' isSod=False time='2025-12-31 15:21:30' statementDate='1800-01-01'
+2025-12-31 18:38:46:683 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666209_1' exitId='356274666288_1' profitCurrencyBeforeCommissionAndFees=-44.9999999999982
+2025-12-31 18:38:46:683 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666842_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=87970 quantity=1 marketPosition=Long operation=Add orderID='356274666842' isSod=False time='2025-12-31 17:17:54' statementDate='1800-01-01'
+2025-12-31 18:38:46:683 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665904_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88240 quantity=6 marketPosition=Long operation=Add orderID='356274665904' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:683 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665712_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88230 quantity=1 marketPosition=Long operation=Add orderID='356274665712' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:683 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665203_1' account='DEMO619219' instrument='M2K 03-26' exchange=Globex price=2515.5 quantity=4 marketPosition=Short operation=Add orderID='356274665203' isSod=False time='2025-12-30 20:43:34' statementDate='1800-01-01'
+2025-12-31 18:38:46:683 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665814_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88240 quantity=10 marketPosition=Long operation=Add orderID='356274665814' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:684 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665401_1' account='DEMO619219' instrument='MNQ 03-26' exchange=Globex price=25717.75 quantity=3 marketPosition=Long operation=Add orderID='356274665401' isSod=False time='2025-12-31 10:01:13' statementDate='1800-01-01'
+2025-12-31 18:38:46:684 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665392_1' exitId='356274665401_1' profitCurrencyBeforeCommissionAndFees=-72
+2025-12-31 18:38:46:684 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666608_1' account='DEMO619219' instrument='MES 03-26' exchange=Globex price=6904.5 quantity=2 marketPosition=Long operation=Add orderID='356274666608' isSod=False time='2025-12-31 16:38:46' statementDate='1800-01-01'
+2025-12-31 18:38:46:684 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666743_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=87930 quantity=1 marketPosition=Long operation=Add orderID='356274666743' isSod=False time='2025-12-31 17:17:53' statementDate='1800-01-01'
+2025-12-31 18:38:46:684 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665886_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88240 quantity=6 marketPosition=Long operation=Add orderID='356274665886' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:684 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665913_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88240 quantity=4 marketPosition=Long operation=Add orderID='356274665913' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:684 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666637_1' account='DEMO619219' instrument='MES 03-26' exchange=Globex price=6897 quantity=2 marketPosition=Short operation=Add orderID='356274666637' isSod=False time='2025-12-31 16:55:00' statementDate='1800-01-01'
+2025-12-31 18:38:46:684 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666608_1' exitId='356274666637_1' profitCurrencyBeforeCommissionAndFees=-75
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666104_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88225 quantity=100 marketPosition=Short operation=Add orderID='356274666104' isSod=False time='2025-12-31 11:23:49' statementDate='1800-01-01'
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666053_1' exitId='356274666104_1' profitCurrencyBeforeCommissionAndFees=10.5
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666788_1' exitId='356274666104_1' profitCurrencyBeforeCommissionAndFees=51
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665843_1' exitId='356274666104_1' profitCurrencyBeforeCommissionAndFees=-15
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665805_1' exitId='356274666104_1' profitCurrencyBeforeCommissionAndFees=-15
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666826_1' exitId='356274666104_1' profitCurrencyBeforeCommissionAndFees=25.5
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665877_1' exitId='356274666104_1' profitCurrencyBeforeCommissionAndFees=-12
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665769_1' exitId='356274666104_1' profitCurrencyBeforeCommissionAndFees=-3
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665825_1' exitId='356274666104_1' profitCurrencyBeforeCommissionAndFees=-15
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666824_1' exitId='356274666104_1' profitCurrencyBeforeCommissionAndFees=25.5
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665756_1' exitId='356274666104_1' profitCurrencyBeforeCommissionAndFees=-2
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665823_1' exitId='356274666104_1' profitCurrencyBeforeCommissionAndFees=-15
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665841_1' exitId='356274666104_1' profitCurrencyBeforeCommissionAndFees=-15
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666040_1' exitId='356274666104_1' profitCurrencyBeforeCommissionAndFees=3.5
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665888_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88240 quantity=6 marketPosition=Long operation=Add orderID='356274665888' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665528_1' account='DEMO619219' instrument='ZW 03-26' exchange=Globex price=511.5 quantity=2 marketPosition=Short operation=Add orderID='356274665528' isSod=False time='2025-12-31 10:46:11' statementDate='1800-01-01'
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665538_1' exitId='356274665528_1' profitCurrencyBeforeCommissionAndFees=0
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665541_1' exitId='356274665528_1' profitCurrencyBeforeCommissionAndFees=87.5
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665982_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88220 quantity=32 marketPosition=Short operation=Add orderID='356274665982' isSod=False time='2025-12-31 11:23:46' statementDate='1800-01-01'
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666040_1' exitId='356274665982_1' profitCurrencyBeforeCommissionAndFees=0
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665194_5' account='DEMO619219' instrument='M2K 03-26' exchange=Globex price=2515.9 quantity=5 marketPosition=Long operation=Add orderID='356274665194' isSod=False time='2025-12-30 20:42:09' statementDate='1800-01-01'
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665254_1' exitId='356274665194_5' profitCurrencyBeforeCommissionAndFees=-20.0000000000045
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665194_1' account='DEMO619219' instrument='M2K 03-26' exchange=Globex price=2515.9 quantity=4 marketPosition=Long operation=Add orderID='356274665194' isSod=False time='2025-12-30 20:42:06' statementDate='1800-01-01'
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665254_1' exitId='356274665194_1' profitCurrencyBeforeCommissionAndFees=-16.0000000000036
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665194_6' account='DEMO619219' instrument='M2K 03-26' exchange=Globex price=2515.9 quantity=2 marketPosition=Long operation=Add orderID='356274665194' isSod=False time='2025-12-30 20:42:09' statementDate='1800-01-01'
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665254_1' exitId='356274665194_6' profitCurrencyBeforeCommissionAndFees=-8.00000000000182
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665194_4' account='DEMO619219' instrument='M2K 03-26' exchange=Globex price=2515.9 quantity=5 marketPosition=Long operation=Add orderID='356274665194' isSod=False time='2025-12-30 20:42:09' statementDate='1800-01-01'
+2025-12-31 18:38:46:685 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665254_1' exitId='356274665194_4' profitCurrencyBeforeCommissionAndFees=-20.0000000000045
+2025-12-31 18:38:46:686 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665194_2' account='DEMO619219' instrument='M2K 03-26' exchange=Globex price=2515.9 quantity=4 marketPosition=Long operation=Add orderID='356274665194' isSod=False time='2025-12-30 20:42:06' statementDate='1800-01-01'
+2025-12-31 18:38:46:686 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665254_1' exitId='356274665194_2' profitCurrencyBeforeCommissionAndFees=-16.0000000000036
+2025-12-31 18:38:46:687 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665194_3' account='DEMO619219' instrument='M2K 03-26' exchange=Globex price=2515.9 quantity=4 marketPosition=Long operation=Add orderID='356274665194' isSod=False time='2025-12-30 20:42:06' statementDate='1800-01-01'
+2025-12-31 18:38:46:687 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665203_1' exitId='356274665194_3' profitCurrencyBeforeCommissionAndFees=-8.00000000000182
+2025-12-31 18:38:46:688 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665716_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88230 quantity=2 marketPosition=Long operation=Add orderID='356274665716' isSod=False time='2025-12-31 11:23:45' statementDate='1800-01-01'
+2025-12-31 18:38:46:688 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666086_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=88210 quantity=100 marketPosition=Short operation=Add orderID='356274666086' isSod=False time='2025-12-31 11:23:49' statementDate='1800-01-01'
+2025-12-31 18:38:46:688 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666040_1' exitId='356274666086_1' profitCurrencyBeforeCommissionAndFees=-61
+2025-12-31 18:38:46:688 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666842_1' exitId='356274666086_1' profitCurrencyBeforeCommissionAndFees=24
+2025-12-31 18:38:46:688 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665904_1' exitId='356274666086_1' profitCurrencyBeforeCommissionAndFees=-18
+2025-12-31 18:38:46:688 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665712_1' exitId='356274666086_1' profitCurrencyBeforeCommissionAndFees=-2
+2025-12-31 18:38:46:688 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665814_1' exitId='356274666086_1' profitCurrencyBeforeCommissionAndFees=-30
+2025-12-31 18:38:46:688 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666743_1' exitId='356274666086_1' profitCurrencyBeforeCommissionAndFees=28
+2025-12-31 18:38:46:688 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665886_1' exitId='356274666086_1' profitCurrencyBeforeCommissionAndFees=-18
+2025-12-31 18:38:46:688 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665913_1' exitId='356274666086_1' profitCurrencyBeforeCommissionAndFees=-12
+2025-12-31 18:38:46:688 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665888_1' exitId='356274666086_1' profitCurrencyBeforeCommissionAndFees=-18
+2025-12-31 18:38:46:688 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665716_1' exitId='356274666086_1' profitCurrencyBeforeCommissionAndFees=-4
+2025-12-31 18:38:46:688 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274666754_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=87970 quantity=2 marketPosition=Long operation=Add orderID='356274666754' isSod=False time='2025-12-31 17:17:53' statementDate='1800-01-01'
+2025-12-31 18:38:46:688 (Simulation) Cbi.Account.OnAddTrade: entryId='356274666086_1' exitId='356274666754_1' profitCurrencyBeforeCommissionAndFees=48
+2025-12-31 18:38:46:689 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665077_1' account='DEMO619219' instrument='MNQ 03-26' exchange=Globex price=25651 quantity=3 marketPosition=Long operation=Add orderID='356274665077' isSod=False time='2025-12-30 19:48:03' statementDate='1800-01-01'
+2025-12-31 18:38:46:689 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665181_1' exitId='356274665077_1' profitCurrencyBeforeCommissionAndFees=40.5
+2025-12-31 18:38:46:689 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274665077_2' account='DEMO619219' instrument='MNQ 03-26' exchange=Globex price=25651 quantity=1 marketPosition=Long operation=Add orderID='356274665077' isSod=False time='2025-12-30 19:48:03' statementDate='1800-01-01'
+2025-12-31 18:38:46:689 (Simulation) Cbi.Account.OnAddTrade: entryId='356274665181_1' exitId='356274665077_2' profitCurrencyBeforeCommissionAndFees=13.5
+2025-12-31 18:38:46:697 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc0
+2025-12-31 18:38:46:704 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2025-12-31 18:38:46:751 (Simulation) Cbi.Account.CreateOrder: orderId='356274666569' account='DEMO619219' name='' orderState=Cancelled instrument='MES 03-26' orderAction=Sell orderType='Limit' limitPrice=6936.75 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2719 time='2025-12-31 16:20:07' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:46:752 (Simulation) Cbi.Account.CreateOrder: orderId='356274666859' account='DEMO619219' name='' orderState=Cancelled instrument='MBT 01-26' orderAction=Sell orderType='Limit' limitPrice=88840 stopPrice=0 quantity=7 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2720 time='2025-12-31 17:17:58' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:46:752 (Simulation) Cbi.Account.CreateOrder: orderId='356274665999' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=42 tif=Gtc oco='' filled=42 averageFillPrice=88220 onBehalfOf='' id=2721 time='2025-12-31 11:23:46' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:46:964 (Simulation) Cbi.Account.CreateOrder: orderId='356274666799' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=1 tif=Gtc oco='' filled=1 averageFillPrice=87970 onBehalfOf='' id=2722 time='2025-12-31 17:17:53' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:46:972 (Simulation) Cbi.Account.CreateOrder: orderId='356274666293' account='DEMO619219' name='' orderState=Cancelled instrument='MCL 02-26' orderAction=Sell orderType='Limit' limitPrice=58.22 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2723 time='2025-12-31 14:55:01' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:46:972 (Simulation) Cbi.Account.CreateOrder: orderId='356274666020' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=52 tif=Gtc oco='' filled=52 averageFillPrice=88220 onBehalfOf='' id=2724 time='2025-12-31 11:23:46' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:46:986 (Simulation) Cbi.Account.CreateOrder: orderId='356274665745' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=88230 onBehalfOf='' id=2725 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:46:997 (Simulation) Cbi.Account.CreateOrder: orderId='356274666904' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=2 tif=Day oco='' filled=2 averageFillPrice=87960 onBehalfOf='' id=2726 time='2025-12-31 17:18:52' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:007 (Simulation) Cbi.Account.CreateOrder: orderId='356274666752' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Limit' limitPrice=88840 stopPrice=0 quantity=1 tif=Gtc oco='' filled=1 averageFillPrice=87970 onBehalfOf='' id=2727 time='2025-12-31 17:17:53' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:019 (Simulation) Cbi.Account.CreateOrder: orderId='356274666640' account='DEMO619219' name='' orderState=Cancelled instrument='MES 03-26' orderAction=Sell orderType='Limit' limitPrice=6912 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2728 time='2025-12-31 16:38:46' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:019 (Simulation) Cbi.Account.CreateOrder: orderId='356274666062' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=100 tif=Gtc oco='' filled=100 averageFillPrice=88220 onBehalfOf='' id=2729 time='2025-12-31 11:23:49' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:029 (Simulation) Cbi.Account.CreateOrder: orderId='356274665650' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=88220 onBehalfOf='' id=2730 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:042 (Simulation) Cbi.Account.CreateOrder: orderId='356274666797' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=1 tif=Gtc oco='' filled=1 averageFillPrice=87970 onBehalfOf='' id=2731 time='2025-12-31 17:17:53' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:054 (Simulation) Cbi.Account.CreateOrder: orderId='356274665273' account='DEMO619219' name='' orderState=Filled instrument='M2K 03-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=20 tif=Gtc oco='' filled=20 averageFillPrice=2515.1 onBehalfOf='' id=2732 time='2025-12-30 20:47:53' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:065 (Simulation) Cbi.Account.CreateOrder: orderId='356274666135' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Limit' limitPrice=87705 stopPrice=0 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=87705 onBehalfOf='' id=2733 time='2025-12-31 12:47:02' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:077 (Simulation) Cbi.Account.CreateOrder: orderId='356274666340' account='DEMO619219' name='' orderState=Filled instrument='MCL 02-26' orderAction=Sell orderType='Stop Market' limitPrice=0 stopPrice=57.37 quantity=8 tif=Gtc oco='' filled=8 averageFillPrice=57.37 onBehalfOf='' id=2734 time='2025-12-31 15:28:09' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:088 (Simulation) Cbi.Account.CreateOrder: orderId='356274665326' account='DEMO619219' name='' orderState=Filled instrument='MCL 02-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=58.55 quantity=14 tif=Gtc oco='' filled=14 averageFillPrice=58.55 onBehalfOf='' id=2735 time='2025-12-31 09:38:36' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:100 (Simulation) Cbi.Account.CreateOrder: orderId='356274665714' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Limit' limitPrice=89270 stopPrice=0 quantity=1 tif=Gtc oco='' filled=1 averageFillPrice=88230 onBehalfOf='' id=2736 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:109 (Simulation) Cbi.Account.CreateOrder: orderId='356274665796' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=10 tif=Gtc oco='' filled=10 averageFillPrice=88240 onBehalfOf='' id=2737 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:121 (Simulation) Cbi.Account.CreateOrder: orderId='356274665538' account='DEMO619219' name='' orderState=Filled instrument='ZW 03-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=511.5 quantity=1 tif=Gtc oco='' filled=1 averageFillPrice=511.5 onBehalfOf='' id=2738 time='2025-12-31 10:46:11' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:135 (Simulation) Cbi.Account.CreateOrder: orderId='356274666857' account='DEMO619219' name='' orderState=Cancelled instrument='MBT 01-26' orderAction=Sell orderType='Limit' limitPrice=88155 stopPrice=0 quantity=7 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2739 time='2025-12-31 17:17:58' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:135 (Simulation) Cbi.Account.CreateOrder: orderId='356274665690' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=88220 onBehalfOf='' id=2740 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:145 (Simulation) Cbi.Account.CreateOrder: orderId='356274665679' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=88220 onBehalfOf='' id=2741 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:158 (Simulation) Cbi.Account.CreateOrder: orderId='356274665922' account='DEMO619219' name='' orderState=Cancelled instrument='MBT 01-26' orderAction=Sell orderType='Limit' limitPrice=88835 stopPrice=0 quantity=3 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2742 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:158 (Simulation) Cbi.Account.CreateOrder: orderId='356274665392' account='DEMO619219' name='' orderState=Filled instrument='MNQ 03-26' orderAction=Sell orderType='Limit' limitPrice=25705.75 stopPrice=0 quantity=3 tif=Gtc oco='' filled=3 averageFillPrice=25705.75 onBehalfOf='' id=2743 time='2025-12-31 10:00:00' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:167 (Simulation) Cbi.Account.CreateOrder: orderId='356274665859' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=9 tif=Gtc oco='' filled=9 averageFillPrice=88240 onBehalfOf='' id=2744 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:181 (Simulation) Cbi.Account.CreateOrder: orderId='356274666345' account='DEMO619219' name='' orderState=Cancelled instrument='MCL 02-26' orderAction=Sell orderType='Limit' limitPrice=58.22 stopPrice=0 quantity=4 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2745 time='2025-12-31 15:28:09' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:181 (Simulation) Cbi.Account.CreateOrder: orderId='356274665688' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=88220 onBehalfOf='' id=2746 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:192 (Simulation) Cbi.Account.CreateOrder: orderId='356274666642' account='DEMO619219' name='' orderState=Cancelled instrument='MES 03-26' orderAction=Sell orderType='Limit' limitPrice=6921.75 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2747 time='2025-12-31 16:38:46' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:192 (Simulation) Cbi.Account.CreateOrder: orderId='356274666872' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=14 tif=Gtc oco='' filled=14 averageFillPrice=87935 onBehalfOf='' id=2748 time='2025-12-31 17:18:08' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:204 (Simulation) Cbi.Account.CreateOrder: orderId='356274666854' account='DEMO619219' name='' orderState=Cancelled instrument='MBT 01-26' orderAction=Sell orderType='Stop Market' limitPrice=0 stopPrice=87445 quantity=14 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2749 time='2025-12-31 17:17:57' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:204 (Simulation) Cbi.Account.CreateOrder: orderId='356274666801' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=1 tif=Gtc oco='' filled=1 averageFillPrice=87970 onBehalfOf='' id=2750 time='2025-12-31 17:17:53' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:219 (Simulation) Cbi.Account.CreateOrder: orderId='356274665406' account='DEMO619219' name='' orderState=Cancelled instrument='MNQ 03-26' orderAction=Buy orderType='Limit' limitPrice=25575.25 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2751 time='2025-12-31 10:00:03' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:219 (Simulation) Cbi.Account.CreateOrder: orderId='356274665967' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=22 tif=Gtc oco='' filled=22 averageFillPrice=88220 onBehalfOf='' id=2752 time='2025-12-31 11:23:46' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:229 (Simulation) Cbi.Account.CreateOrder: orderId='356274665574' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Limit' limitPrice=88370 stopPrice=0 quantity=5 tif=Gtc oco='' filled=5 averageFillPrice=88370 onBehalfOf='' id=2753 time='2025-12-31 11:15:00' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:243 (Simulation) Cbi.Account.CreateOrder: orderId='356274665357' account='DEMO619219' name='' orderState=Filled instrument='M2K 03-26' orderAction=Sell orderType='Limit' limitPrice=2519.7 stopPrice=0 quantity=27 tif=Gtc oco='' filled=27 averageFillPrice=2519.8 onBehalfOf='' id=2754 time='2025-12-31 09:55:02' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:252 (Simulation) Cbi.Account.CreateOrder: orderId='356274665778' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=6 tif=Gtc oco='' filled=6 averageFillPrice=88235 onBehalfOf='' id=2755 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:266 (Simulation) Cbi.Account.CreateOrder: orderId='356274666756' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=87970 onBehalfOf='' id=2756 time='2025-12-31 17:17:53' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:276 (Simulation) Cbi.Account.CreateOrder: orderId='356274665661' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=88220 onBehalfOf='' id=2757 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:289 (Simulation) Cbi.Account.CreateOrder: orderId='356274666113' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=100 tif=Day oco='' filled=100 averageFillPrice=88290 onBehalfOf='' id=2758 time='2025-12-31 11:29:22' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:303 (Simulation) Cbi.Account.CreateOrder: orderId='356274665371' account='DEMO619219' name='' orderState=Cancelled instrument='M2K 03-26' orderAction=Buy orderType='Limit' limitPrice=2508.6 stopPrice=0 quantity=13 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2759 time='2025-12-31 09:55:02' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:303 (Simulation) Cbi.Account.CreateOrder: orderId='356274666377' account='DEMO619219' name='' orderState=Cancelled instrument='MCL 02-26' orderAction=Buy orderType='Limit' limitPrice=57.4 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2760 time='2025-12-31 15:44:00' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:303 (Simulation) Cbi.Account.CreateOrder: orderId='356274665595' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Stop Market' limitPrice=0 stopPrice=88250 quantity=3 tif=Gtc oco='' filled=3 averageFillPrice=88220 onBehalfOf='' id=2761 time='2025-12-31 11:17:20' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:312 (Simulation) Cbi.Account.CreateOrder: orderId='356274665787' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=10 tif=Gtc oco='' filled=10 averageFillPrice=88240 onBehalfOf='' id=2762 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:327 (Simulation) Cbi.Account.CreateOrder: orderId='356274666779' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=87970 onBehalfOf='' id=2763 time='2025-12-31 17:17:53' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:336 (Simulation) Cbi.Account.CreateOrder: orderId='356274665861' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=9 tif=Gtc oco='' filled=9 averageFillPrice=88240 onBehalfOf='' id=2764 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:349 (Simulation) Cbi.Account.CreateOrder: orderId='356274666053' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=100 tif=Gtc oco='' filled=100 averageFillPrice=88220 onBehalfOf='' id=2765 time='2025-12-31 11:23:49' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:361 (Simulation) Cbi.Account.CreateOrder: orderId='356274666788' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=87970 onBehalfOf='' id=2766 time='2025-12-31 17:17:53' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:373 (Simulation) Cbi.Account.CreateOrder: orderId='356274665366' account='DEMO619219' name='' orderState=Filled instrument='M2K 03-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=2520.1 quantity=27 tif=Gtc oco='' filled=27 averageFillPrice=2520.3 onBehalfOf='' id=2767 time='2025-12-31 09:55:02' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:387 (Simulation) Cbi.Account.CreateOrder: orderId='356274665389' account='DEMO619219' name='' orderState=Filled instrument='MES 03-26' orderAction=Sell orderType='Limit' limitPrice=6949.75 stopPrice=0 quantity=6 tif=Gtc oco='' filled=6 averageFillPrice=6949.75 onBehalfOf='' id=2768 time='2025-12-31 09:59:01' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:397 (Simulation) Cbi.Account.CreateOrder: orderId='356274666732' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Limit' limitPrice=87715 stopPrice=0 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=87935 onBehalfOf='' id=2769 time='2025-12-31 17:17:52' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:412 (Simulation) Cbi.Account.CreateOrder: orderId='356274665145' account='DEMO619219' name='' orderState=Cancelled instrument='MNQ 03-26' orderAction=Sell orderType='Stop Market' limitPrice=0 stopPrice=25643.25 quantity=3 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2770 time='2025-12-30 19:48:04' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:412 (Simulation) Cbi.Account.CreateOrder: orderId='356274665152' account='DEMO619219' name='' orderState=Cancelled instrument='MNQ 03-26' orderAction=Sell orderType='Limit' limitPrice=25818.75 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2771 time='2025-12-30 19:48:04' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:412 (Simulation) Cbi.Account.CreateOrder: orderId='356274665939' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=12 tif=Gtc oco='' filled=12 averageFillPrice=88220 onBehalfOf='' id=2772 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:422 (Simulation) Cbi.Account.CreateOrder: orderId='356274666565' account='DEMO619219' name='' orderState=Filled instrument='MES 03-26' orderAction=Sell orderType='Stop Market' limitPrice=0 stopPrice=6901 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=6901 onBehalfOf='' id=2773 time='2025-12-31 16:20:07' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:437 (Simulation) Cbi.Account.CreateOrder: orderId='356274665541' account='DEMO619219' name='' orderState=Filled instrument='ZW 03-26' orderAction=Buy orderType='Limit' limitPrice=509.75 stopPrice=0 quantity=1 tif=Gtc oco='' filled=1 averageFillPrice=509.75 onBehalfOf='' id=2774 time='2025-12-31 10:46:11' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:451 (Simulation) Cbi.Account.CreateOrder: orderId='356274665843' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=10 tif=Gtc oco='' filled=10 averageFillPrice=88240 onBehalfOf='' id=2775 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:464 (Simulation) Cbi.Account.CreateOrder: orderId='356274665925' account='DEMO619219' name='' orderState=Cancelled instrument='MBT 01-26' orderAction=Sell orderType='Limit' limitPrice=89270 stopPrice=0 quantity=3 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2776 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:464 (Simulation) Cbi.Account.CreateOrder: orderId='356274665597' account='DEMO619219' name='' orderState=Cancelled instrument='MBT 01-26' orderAction=Sell orderType='Limit' limitPrice=89270 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2777 time='2025-12-31 11:17:20' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:464 (Simulation) Cbi.Account.CreateOrder: orderId='356274666544' account='DEMO619219' name='' orderState=Filled instrument='MES 03-26' orderAction=Buy orderType='Limit' limitPrice=6904.75 stopPrice=0 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=6904.75 onBehalfOf='' id=2778 time='2025-12-31 16:17:00' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:478 (Simulation) Cbi.Account.CreateOrder: orderId='356274666321' account='DEMO619219' name='' orderState=Filled instrument='MCL 02-26' orderAction=Buy orderType='Limit' limitPrice=57.41 stopPrice=0 quantity=8 tif=Gtc oco='' filled=8 averageFillPrice=57.41 onBehalfOf='' id=2779 time='2025-12-31 15:28:00' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:489 (Simulation) Cbi.Account.CreateOrder: orderId='356274665805' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=10 tif=Gtc oco='' filled=10 averageFillPrice=88240 onBehalfOf='' id=2780 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:502 (Simulation) Cbi.Account.CreateOrder: orderId='356274665426' account='DEMO619219' name='' orderState=Filled instrument='MES 03-26' orderAction=Buy orderType='Limit' limitPrice=6926.25 stopPrice=0 quantity=3 tif=Gtc oco='' filled=3 averageFillPrice=6926.25 onBehalfOf='' id=2781 time='2025-12-31 10:00:04' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:512 (Simulation) Cbi.Account.CreateOrder: orderId='356274666826' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=1 tif=Gtc oco='' filled=1 averageFillPrice=87970 onBehalfOf='' id=2782 time='2025-12-31 17:17:54' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:526 (Simulation) Cbi.Account.CreateOrder: orderId='356274665663' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=88220 onBehalfOf='' id=2783 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:540 (Simulation) Cbi.Account.CreateOrder: orderId='356274665304' account='DEMO619219' name='' orderState=Filled instrument='M2K 03-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=20 tif=Day oco='' filled=20 averageFillPrice=2514.4 onBehalfOf='' id=2784 time='2025-12-30 20:54:20' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:550 (Simulation) Cbi.Account.CreateOrder: orderId='356274665181' account='DEMO619219' name='' orderState=Filled instrument='MNQ 03-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=4 tif=Day oco='' filled=4 averageFillPrice=25657.75 onBehalfOf='' id=2785 time='2025-12-30 19:57:28' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:566 (Simulation) Cbi.Account.CreateOrder: orderId='356274665331' account='DEMO619219' name='' orderState=Cancelled instrument='MCL 02-26' orderAction=Buy orderType='Limit' limitPrice=57.87 stopPrice=0 quantity=7 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2786 time='2025-12-31 09:38:36' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:566 (Simulation) Cbi.Account.CreateOrder: orderId='356274665877' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=8 tif=Gtc oco='' filled=8 averageFillPrice=88240 onBehalfOf='' id=2787 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:577 (Simulation) Cbi.Account.CreateOrder: orderId='356274666153' account='DEMO619219' name='' orderState=Cancelled instrument='MBT 01-26' orderAction=Sell orderType='Limit' limitPrice=88160 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2788 time='2025-12-31 12:50:14' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:577 (Simulation) Cbi.Account.CreateOrder: orderId='356274665404' account='DEMO619219' name='' orderState=Cancelled instrument='MNQ 03-26' orderAction=Buy orderType='Limit' limitPrice=25625.75 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2789 time='2025-12-31 10:00:03' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:577 (Simulation) Cbi.Account.CreateOrder: orderId='356274666148' account='DEMO619219' name='' orderState=Cancelled instrument='MBT 01-26' orderAction=Sell orderType='Stop Market' limitPrice=0 stopPrice=87445 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2790 time='2025-12-31 12:50:14' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:577 (Simulation) Cbi.Account.CreateOrder: orderId='356274665769' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=6 tif=Gtc oco='' filled=6 averageFillPrice=88230 onBehalfOf='' id=2791 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:592 (Simulation) Cbi.Account.CreateOrder: orderId='356274665315' account='DEMO619219' name='' orderState=Filled instrument='MCL 02-26' orderAction=Sell orderType='Limit' limitPrice=58.51 stopPrice=0 quantity=14 tif=Gtc oco='' filled=14 averageFillPrice=58.51 onBehalfOf='' id=2792 time='2025-12-31 09:38:03' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:603 (Simulation) Cbi.Account.CreateOrder: orderId='356274666209' account='DEMO619219' name='' orderState=Filled instrument='MCL 02-26' orderAction=Buy orderType='Limit' limitPrice=57.54 stopPrice=0 quantity=5 tif=Gtc oco='' filled=5 averageFillPrice=57.54 onBehalfOf='' id=2793 time='2025-12-31 14:37:03' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:616 (Simulation) Cbi.Account.CreateOrder: orderId='356274665206' account='DEMO619219' name='' orderState=Cancelled instrument='M2K 03-26' orderAction=Sell orderType='Limit' limitPrice=2516.5 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2794 time='2025-12-30 20:42:06' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:616 (Simulation) Cbi.Account.CreateOrder: orderId='356274665825' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=10 tif=Gtc oco='' filled=10 averageFillPrice=88240 onBehalfOf='' id=2795 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:631 (Simulation) Cbi.Account.CreateOrder: orderId='356274665329' account='DEMO619219' name='' orderState=Cancelled instrument='MCL 02-26' orderAction=Buy orderType='Limit' limitPrice=58.2 stopPrice=0 quantity=7 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2796 time='2025-12-31 09:38:36' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:631 (Simulation) Cbi.Account.CreateOrder: orderId='356274666824' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=1 tif=Gtc oco='' filled=1 averageFillPrice=87970 onBehalfOf='' id=2797 time='2025-12-31 17:17:54' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:642 (Simulation) Cbi.Account.CreateOrder: orderId='356274665756' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=4 tif=Gtc oco='' filled=4 averageFillPrice=88230 onBehalfOf='' id=2798 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:656 (Simulation) Cbi.Account.CreateOrder: orderId='356274665952' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=22 tif=Gtc oco='' filled=22 averageFillPrice=88220 onBehalfOf='' id=2799 time='2025-12-31 11:23:46' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:668 (Simulation) Cbi.Account.CreateOrder: orderId='356274665254' account='DEMO619219' name='' orderState=Filled instrument='M2K 03-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=20 tif=Gtc oco='' filled=20 averageFillPrice=2515.1 onBehalfOf='' id=2800 time='2025-12-30 20:47:53' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:682 (Simulation) Cbi.Account.CreateOrder: orderId='356274665823' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=10 tif=Gtc oco='' filled=10 averageFillPrice=88240 onBehalfOf='' id=2801 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:696 (Simulation) Cbi.Account.CreateOrder: orderId='356274665599' account='DEMO619219' name='' orderState=Cancelled instrument='MBT 01-26' orderAction=Sell orderType='Limit' limitPrice=88840 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2802 time='2025-12-31 11:17:20' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:696 (Simulation) Cbi.Account.CreateOrder: orderId='356274665927' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=6 tif=Gtc oco='' filled=6 averageFillPrice=88220 onBehalfOf='' id=2803 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:707 (Simulation) Cbi.Account.CreateOrder: orderId='356274666031' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=52 tif=Gtc oco='' filled=52 averageFillPrice=88225 onBehalfOf='' id=2804 time='2025-12-31 11:23:46' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:721 (Simulation) Cbi.Account.CreateOrder: orderId='356274665150' account='DEMO619219' name='' orderState=Cancelled instrument='MNQ 03-26' orderAction=Sell orderType='Stop Market' limitPrice=0 stopPrice=25643.25 quantity=3 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2805 time='2025-12-30 19:48:04' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:721 (Simulation) Cbi.Account.CreateOrder: orderId='356274665841' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=10 tif=Gtc oco='' filled=10 averageFillPrice=88240 onBehalfOf='' id=2806 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:732 (Simulation) Cbi.Account.CreateOrder: orderId='356274665424' account='DEMO619219' name='' orderState=Filled instrument='MES 03-26' orderAction=Buy orderType='Limit' limitPrice=6939.25 stopPrice=0 quantity=3 tif=Gtc oco='' filled=3 averageFillPrice=6939.25 onBehalfOf='' id=2807 time='2025-12-31 10:00:04' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:746 (Simulation) Cbi.Account.CreateOrder: orderId='356274665543' account='DEMO619219' name='' orderState=Cancelled instrument='ZW 03-26' orderAction=Buy orderType='Limit' limitPrice=508 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2808 time='2025-12-31 10:46:11' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:746 (Simulation) Cbi.Account.CreateOrder: orderId='356274666040' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=100 tif=Gtc oco='' filled=100 averageFillPrice=88220 onBehalfOf='' id=2809 time='2025-12-31 11:23:49' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:758 (Simulation) Cbi.Account.CreateOrder: orderId='356274666729' account='DEMO619219' name='' orderState=Cancelled instrument='MBT 01-26' orderAction=Sell orderType='Stop Market' limitPrice=0 stopPrice=87700 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2810 time='2025-12-31 17:17:52' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:758 (Simulation) Cbi.Account.CreateOrder: orderId='356274666073' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=100 tif=Gtc oco='' filled=100 averageFillPrice=88210 onBehalfOf='' id=2811 time='2025-12-31 11:23:49' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:771 (Simulation) Cbi.Account.CreateOrder: orderId='356274666288' account='DEMO619219' name='' orderState=Filled instrument='MCL 02-26' orderAction=Sell orderType='Stop Market' limitPrice=0 stopPrice=57.45 quantity=5 tif=Gtc oco='' filled=5 averageFillPrice=57.45 onBehalfOf='' id=2812 time='2025-12-31 14:55:01' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:787 (Simulation) Cbi.Account.CreateOrder: orderId='356274666842' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=1 tif=Gtc oco='' filled=1 averageFillPrice=87970 onBehalfOf='' id=2813 time='2025-12-31 17:17:54' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:797 (Simulation) Cbi.Account.CreateOrder: orderId='356274665904' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=6 tif=Gtc oco='' filled=6 averageFillPrice=88240 onBehalfOf='' id=2814 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:812 (Simulation) Cbi.Account.CreateOrder: orderId='356274665712' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Limit' limitPrice=88840 stopPrice=0 quantity=1 tif=Gtc oco='' filled=1 averageFillPrice=88230 onBehalfOf='' id=2815 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:823 (Simulation) Cbi.Account.CreateOrder: orderId='356274665203' account='DEMO619219' name='' orderState=Filled instrument='M2K 03-26' orderAction=Sell orderType='Stop Market' limitPrice=0 stopPrice=2515.5 quantity=4 tif=Gtc oco='' filled=4 averageFillPrice=2515.5 onBehalfOf='' id=2816 time='2025-12-30 20:42:06' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:840 (Simulation) Cbi.Account.CreateOrder: orderId='356274665814' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=10 tif=Gtc oco='' filled=10 averageFillPrice=88240 onBehalfOf='' id=2817 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:853 (Simulation) Cbi.Account.CreateOrder: orderId='356274666567' account='DEMO619219' name='' orderState=Cancelled instrument='MES 03-26' orderAction=Sell orderType='Limit' limitPrice=6924.25 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2818 time='2025-12-31 16:20:07' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:853 (Simulation) Cbi.Account.CreateOrder: orderId='356274665401' account='DEMO619219' name='' orderState=Filled instrument='MNQ 03-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=25715.25 quantity=3 tif=Gtc oco='' filled=3 averageFillPrice=25717.75 onBehalfOf='' id=2819 time='2025-12-31 10:00:03' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:863 (Simulation) Cbi.Account.CreateOrder: orderId='356274665148' account='DEMO619219' name='' orderState=Cancelled instrument='MNQ 03-26' orderAction=Sell orderType='Limit' limitPrice=25664.75 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2820 time='2025-12-30 19:48:04' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:863 (Simulation) Cbi.Account.CreateOrder: orderId='356274666608' account='DEMO619219' name='' orderState=Filled instrument='MES 03-26' orderAction=Buy orderType='Limit' limitPrice=6904.5 stopPrice=0 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=6904.5 onBehalfOf='' id=2821 time='2025-12-31 16:36:00' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:877 (Simulation) Cbi.Account.CreateOrder: orderId='356274666743' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Limit' limitPrice=88155 stopPrice=0 quantity=1 tif=Gtc oco='' filled=1 averageFillPrice=87930 onBehalfOf='' id=2822 time='2025-12-31 17:17:53' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:886 (Simulation) Cbi.Account.CreateOrder: orderId='356274665886' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=6 tif=Gtc oco='' filled=6 averageFillPrice=88240 onBehalfOf='' id=2823 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:900 (Simulation) Cbi.Account.CreateOrder: orderId='356274665913' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=4 tif=Gtc oco='' filled=4 averageFillPrice=88240 onBehalfOf='' id=2824 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:909 (Simulation) Cbi.Account.CreateOrder: orderId='356274666637' account='DEMO619219' name='' orderState=Filled instrument='MES 03-26' orderAction=Sell orderType='Stop Market' limitPrice=0 stopPrice=6897 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=6897 onBehalfOf='' id=2825 time='2025-12-31 16:38:46' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:922 (Simulation) Cbi.Account.CreateOrder: orderId='356274666104' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=100 tif=Gtc oco='' filled=100 averageFillPrice=88225 onBehalfOf='' id=2826 time='2025-12-31 11:23:49' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:936 (Simulation) Cbi.Account.CreateOrder: orderId='356274665888' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=6 tif=Gtc oco='' filled=6 averageFillPrice=88240 onBehalfOf='' id=2827 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:947 (Simulation) Cbi.Account.CreateOrder: orderId='356274665528' account='DEMO619219' name='' orderState=Filled instrument='ZW 03-26' orderAction=Sell orderType='Limit' limitPrice=511.5 stopPrice=0 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=511.5 onBehalfOf='' id=2828 time='2025-12-31 10:42:02' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:960 (Simulation) Cbi.Account.CreateOrder: orderId='356274665982' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=32 tif=Gtc oco='' filled=32 averageFillPrice=88220 onBehalfOf='' id=2829 time='2025-12-31 11:23:46' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:969 (Simulation) Cbi.Account.CreateOrder: orderId='356274665208' account='DEMO619219' name='' orderState=Cancelled instrument='M2K 03-26' orderAction=Sell orderType='Limit' limitPrice=2546.9 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2830 time='2025-12-30 20:42:06' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:969 (Simulation) Cbi.Account.CreateOrder: orderId='356274666343' account='DEMO619219' name='' orderState=Cancelled instrument='MCL 02-26' orderAction=Sell orderType='Limit' limitPrice=57.96 stopPrice=0 quantity=4 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2831 time='2025-12-31 15:28:09' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:969 (Simulation) Cbi.Account.CreateOrder: orderId='356274665194' account='DEMO619219' name='' orderState=Filled instrument='M2K 03-26' orderAction=Buy orderType='Limit' limitPrice=2515.9 stopPrice=0 quantity=24 tif=Gtc oco='' filled=24 averageFillPrice=2515.9 onBehalfOf='' id=2832 time='2025-12-30 20:42:06' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:984 (Simulation) Cbi.Account.CreateOrder: orderId='356274666151' account='DEMO619219' name='' orderState=Cancelled instrument='MBT 01-26' orderAction=Sell orderType='Limit' limitPrice=88840 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2833 time='2025-12-31 12:50:14' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:984 (Simulation) Cbi.Account.CreateOrder: orderId='356274665716' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=88230 onBehalfOf='' id=2834 time='2025-12-31 11:23:45' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:47:996 (Simulation) Cbi.Account.CreateOrder: orderId='356274666086' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=100 tif=Gtc oco='' filled=100 averageFillPrice=88210 onBehalfOf='' id=2835 time='2025-12-31 11:23:49' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:48:009 (Simulation) Cbi.Account.CreateOrder: orderId='356274666064' account='DEMO619219' name='' orderState=Rejected instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=100 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2836 time='2025-12-31 11:23:49' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:48:009 (Simulation) Cbi.Account.CreateOrder: orderId='356274666291' account='DEMO619219' name='' orderState=Cancelled instrument='MCL 02-26' orderAction=Sell orderType='Limit' limitPrice=57.98 stopPrice=0 quantity=3 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2837 time='2025-12-31 14:55:01' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:48:009 (Simulation) Cbi.Account.CreateOrder: orderId='356274665369' account='DEMO619219' name='' orderState=Cancelled instrument='M2K 03-26' orderAction=Buy orderType='Limit' limitPrice=2513.3 stopPrice=0 quantity=14 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2838 time='2025-12-31 09:55:02' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:48:009 (Simulation) Cbi.Account.CreateOrder: orderId='356274665421' account='DEMO619219' name='' orderState=Cancelled instrument='MES 03-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=6949.75 quantity=3 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2839 time='2025-12-31 10:00:04' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:48:009 (Simulation) Cbi.Account.CreateOrder: orderId='356274666754' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=87970 onBehalfOf='' id=2840 time='2025-12-31 17:17:53' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:48:022 (Simulation) Cbi.Account.CreateOrder: orderId='356274665077' account='DEMO619219' name='' orderState=Filled instrument='MNQ 03-26' orderAction=Buy orderType='Limit' limitPrice=25651 stopPrice=0 quantity=4 tif=Gtc oco='' filled=4 averageFillPrice=25651 onBehalfOf='' id=2841 time='2025-12-30 19:42:20' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2025-12-31 18:38:48:033 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2025-12-31 18:38:48:034 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connected previousStatus=Connecting message=''
+2025-12-31 18:38:48:034 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connected previousStatus=Connecting message=''
+2025-12-31 18:38:48:062 (Simulation) Cbi.Account.Restore.Start: account='Sim101' fcm=''
+2025-12-31 18:38:48:064 (Simulation) Cbi.Account.Restore.Start: account='DEMO619219' fcm=''
+2025-12-31 18:38:48:097 (Simulation) Cbi.Account.Restore.End: account='Sim101' fcm=''
+2025-12-31 18:38:48:197 (Simulation) Cbi.Account.Restore.End: account='DEMO619219' fcm=''
+2025-12-31 18:38:48:209 (Simulation) Core.Connection.Statistics: connectAttempts=1/4629.6ms
+2025-12-31 18:38:48:209 (Simulation) Cbi.Connection.ConnectionStatusCallback: autoClosePositionTime='12/17/2025 00:00:00' autoClosePosition=False
+2025-12-31 18:38:48:211 Server.HdsClient.Connect: type=HDS server='hds-us-nt-007.ninjatrader.com' port=31655 system='' useSsl=True
+2025-12-31 18:38:48:227 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2025-12-31 18:38:48:266 (Simulation) Tradovate.Adapter.QueryNotificationsAsync0
+2025-12-31 18:38:48:456 (Simulation) QueryNotificationResponse Live
+2025-12-31 18:38:48:472 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2025-12-31 18:38:48:472 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2025-12-31 18:38:48:582 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2025-12-31 18:38:48:583 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2025-12-31 18:38:48:600 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:48:600 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:48:600 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 01-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:48:601 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 01-26' from='27/11/25 12:00:00 a. m.' to='19/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:48:601 Cbi.Instrument.RequestBars (to Provider): instrument='6E 12-25' from='11/12/25 12:00:00 a. m.' to='11/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:48:601 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:48:602 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:48:604 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:48:605 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:48:605 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:48:605 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 02-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:48:605 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:48:607 Cbi.Instrument.RequestBars (to Provider): instrument='6E 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:48:607 Cbi.Instrument.RequestBars (to Provider): instrument='MES 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:48:607 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:48:607 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:48:668 (Simulation) QueryNotificationResponse Demo
+2025-12-31 18:38:50:219 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='Sim101' accountItem=CashValue currency=UsDollar value=*****
+2025-12-31 18:38:50:219 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=GrossRealizedProfitLoss currency=UsDollar value=*****
+2025-12-31 18:38:50:219 (Simulation) Cbi.Account.OnTimerTick.Simulator.Roll: account='Sim101' fcm='' fcmDate='2025-12-31'
+2025-12-31 18:38:51:842 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='30/11/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:51:904 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:51:951 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:52:023 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 01-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:52:399 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:52:450 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:52:717 Cbi.Instrument.RequestBars (to Provider): instrument='MES 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:52:904 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:53:099 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 02-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:54:157 Cbi.Instrument.RequestBars (to Provider): instrument='6E 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:54:220 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:54:244 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:54:246 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:38:54:646 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:39:00:603 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=Panic errorMessage='Chart Render Time: 262.74 ms'
+2025-12-31 18:39:50:373 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-26' from='30/11/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:40:08:279 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:40:08:810 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:40:22:659 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 01-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 18:51:08:232 (Simulation) Tradovate.Adapter.ProcessFillEntity data='{
+  "id": 356274666124,
+  "orderId": 356274665538,
+  "contractId": 3525979,
+  "timestamp": "2025-12-31T15:32:41.333Z",
+  "tradeDate": {
+    "year": 2025,
+    "month": 12,
+    "day": 31
+  },
+  "action": "Buy",
+  "qty": 1,
+  "price": 511.5,
+  "active": true,
+  "finallyPaired": 1,
+  "external": false
+}'
+2025-12-31 18:51:08:341 (Simulation) Tradovate.Adapter.ProcessFillEntity data='{
+  "id": 356274665531,
+  "orderId": 356274665528,
+  "contractId": 3525979,
+  "timestamp": "2025-12-31T14:46:11.644Z",
+  "tradeDate": {
+    "year": 2025,
+    "month": 12,
+    "day": 31
+  },
+  "action": "Sell",
+  "qty": 2,
+  "price": 511.5,
+  "active": true,
+  "finallyPaired": 2,
+  "external": false
+}'
+2025-12-31 18:51:08:341 (Simulation) Tradovate.Adapter.ProcessFillEntity data='{
+  "id": 356274665562,
+  "orderId": 356274665541,
+  "contractId": 3525979,
+  "timestamp": "2025-12-31T15:07:36.863Z",
+  "tradeDate": {
+    "year": 2025,
+    "month": 12,
+    "day": 31
+  },
+  "action": "Buy",
+  "qty": 1,
+  "price": 509.75,
+  "active": true,
+  "finallyPaired": 1,
+  "external": false
+}'
+2025-12-31 18:51:08:349 (Simulation) Tradovate.Adapter.ProcessPositionLogEntity data='{
+  "id": 356274666931,
+  "accountId": 1931663,
+  "contractId": 3525979,
+  "timestamp": "2025-12-31T22:51:08.099Z",
+  "tradeDate": {
+    "year": 2026,
+    "month": 1,
+    "day": 1
+  },
+  "netPos": 0,
+  "bought": 0,
+  "boughtValue": 0.0,
+  "sold": 0,
+  "soldValue": 0.0,
+  "archived": false,
+  "positionChangeType": "NewSession"
+}'
+2025-12-31 18:51:08:461 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274665538,
+  "accountId": 1931663,
+  "contractId": 3525979,
+  "timestamp": "2025-12-31T14:46:11.768Z",
+  "action": "Buy",
+  "ordStatus": "Filled",
+  "executionProviderId": 1,
+  "archived": true,
+  "external": false,
+  "admin": false
+}'
+2025-12-31 18:51:08:461 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274665541,
+  "accountId": 1931663,
+  "contractId": 3525979,
+  "timestamp": "2025-12-31T14:46:11.820Z",
+  "action": "Buy",
+  "ordStatus": "Filled",
+  "executionProviderId": 1,
+  "archived": true,
+  "external": false,
+  "admin": false
+}'
+2025-12-31 18:51:08:461 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274665528,
+  "accountId": 1931663,
+  "contractId": 3525979,
+  "timestamp": "2025-12-31T14:42:02.313Z",
+  "action": "Sell",
+  "ordStatus": "Filled",
+  "executionProviderId": 1,
+  "archived": true,
+  "external": false,
+  "admin": false
+}'
+2025-12-31 18:55:59:877 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2025-12-31 18:55:59:884 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2025-12-31 18:56:00:174 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2025-12-31 18:56:00:174 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9594195' renewSecs='2399.97970975'
+2025-12-31 19:02:27:784 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 12-25' from='7/12/25 7:00:00 p. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 19:02:28:110 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='7/12/25 7:00:00 p. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 19:02:28:782 Cbi.Instrument.RequestBars (to Provider): instrument='6E 12-25' from='7/12/25 7:00:00 p. m.' to='11/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 19:02:29:282 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 01-26' from='7/12/25 9:00:00 p. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 19:02:29:282 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-26' from='7/12/25 9:00:00 p. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 19:02:29:282 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='7/12/25 7:00:00 p. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 19:02:29:282 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 01-26' from='7/12/25 7:00:00 p. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 19:02:29:282 Cbi.Instrument.RequestBars (to Provider): instrument='MES 12-25' from='12/12/25 5:00:00 p. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 19:02:29:447 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='12/12/25 5:00:00 p. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 19:02:29:455 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 12-25' from='7/12/25 7:00:00 p. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 19:02:29:455 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='12/12/25 5:00:00 p. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 19:02:32:944 Cbi.Instrument.RequestBars (to Provider): instrument='6E 03-26' from='11/12/25 12:00:00 a. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 19:03:23:473 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 02-25' from='30/12/24 12:00:00 a. m.' to='14/1/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:24:017 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 03-25' from='14/1/25 12:00:00 a. m.' to='14/2/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:24:642 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 04-25' from='16/2/25 12:00:00 a. m.' to='14/3/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:25:298 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 05-25' from='16/3/25 12:00:00 a. m.' to='16/4/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:25:971 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 06-25' from='16/4/25 12:00:00 a. m.' to='14/5/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:26:580 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 07-25' from='14/5/25 12:00:00 a. m.' to='13/6/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:27:235 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 08-25' from='15/6/25 12:00:00 a. m.' to='16/7/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:27:908 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 09-25' from='16/7/25 12:00:00 a. m.' to='14/8/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:28:501 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 10-25' from='14/8/25 12:00:00 a. m.' to='16/9/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:29:111 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 11-25' from='16/9/25 12:00:00 a. m.' to='15/10/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:29:704 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 12-25' from='15/10/25 12:00:00 a. m.' to='14/11/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:30:580 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-25' from='30/12/24 12:00:00 a. m.' to='28/1/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:30:696 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 01-26' from='16/11/25 12:00:00 a. m.' to='15/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:31:252 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 04-25' from='28/1/25 12:00:00 a. m.' to='26/3/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:31:553 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 02-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:32:473 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 06-25' from='26/3/25 12:00:00 a. m.' to='27/5/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:33:564 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 08-25' from='27/5/25 12:00:00 a. m.' to='25/7/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:34:525 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 12-25' from='27/7/25 12:00:00 a. m.' to='21/11/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:36:518 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='23/11/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:37:407 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-25' from='30/12/24 12:00:00 a. m.' to='14/2/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:38:115 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 05-25' from='17/2/25 12:00:00 a. m.' to='17/4/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:38:940 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 07-25' from='20/4/25 12:00:00 a. m.' to='17/6/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:39:731 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 09-25' from='17/6/25 12:00:00 a. m.' to='18/8/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:40:550 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 12-25' from='18/8/25 12:00:00 a. m.' to='17/11/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:41:665 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-26' from='17/11/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:43:643 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-25' from='30/12/24 12:00:00 a. m.' to='25/2/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:44:501 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 05-25' from='25/2/25 12:00:00 a. m.' to='25/4/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:45:438 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 07-25' from='27/4/25 12:00:00 a. m.' to='25/6/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:46:394 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 09-25' from='25/6/25 12:00:00 a. m.' to='26/8/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:47:362 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 12-25' from='26/8/25 12:00:00 a. m.' to='24/11/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:48:638 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='24/11/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:50:321 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 03-25' from='30/12/24 12:00:00 a. m.' to='18/2/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:51:012 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 05-25' from='18/2/25 12:00:00 a. m.' to='17/4/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:51:892 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 07-25' from='20/4/25 12:00:00 a. m.' to='18/6/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:52:846 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 11-25' from='19/6/25 12:00:00 a. m.' to='21/10/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:54:377 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 01-26' from='21/10/25 12:00:00 a. m.' to='19/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:55:191 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:58:785 Cbi.Instrument.RequestBars (to Provider): instrument='6E 03-25' from='30/12/24 12:00:00 a. m.' to='13/3/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:03:59:800 Cbi.Instrument.RequestBars (to Provider): instrument='6E 06-25' from='13/3/25 12:00:00 a. m.' to='12/6/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:01:189 Cbi.Instrument.RequestBars (to Provider): instrument='6E 09-25' from='12/6/25 12:00:00 a. m.' to='11/9/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:02:681 Cbi.Instrument.RequestBars (to Provider): instrument='6E 12-25' from='11/9/25 12:00:00 a. m.' to='11/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:03:892 Cbi.Instrument.RequestBars (to Provider): instrument='6E 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:06:393 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-25' from='30/12/24 12:00:00 a. m.' to='14/3/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:07:392 Cbi.Instrument.RequestBars (to Provider): instrument='MES 06-25' from='16/3/25 12:00:00 a. m.' to='13/6/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:08:553 Cbi.Instrument.RequestBars (to Provider): instrument='MES 09-25' from='15/6/25 12:00:00 a. m.' to='12/9/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:10:128 Cbi.Instrument.RequestBars (to Provider): instrument='MES 12-25' from='14/9/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:11:206 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:13:847 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-25' from='30/12/24 12:00:00 a. m.' to='14/3/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:14:768 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 06-25' from='16/3/25 12:00:00 a. m.' to='13/6/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:15:970 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 09-25' from='15/6/25 12:00:00 a. m.' to='12/9/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:17:510 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='14/9/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:18:600 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:21:579 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 01-25' from='30/12/24 12:00:00 a. m.' to='27/1/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:22:220 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 02-25' from='27/1/25 12:00:00 a. m.' to='20/2/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:22:877 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 03-25' from='20/2/25 12:00:00 a. m.' to='24/3/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:23:579 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 04-25' from='24/3/25 12:00:00 a. m.' to='21/4/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:24:236 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 05-25' from='21/4/25 12:00:00 a. m.' to='22/5/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:25:001 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 06-25' from='22/5/25 12:00:00 a. m.' to='23/6/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:25:693 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 07-25' from='23/6/25 12:00:00 a. m.' to='21/7/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:26:345 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 08-25' from='21/7/25 12:00:00 a. m.' to='21/8/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:27:025 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 09-25' from='21/8/25 12:00:00 a. m.' to='22/9/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:27:722 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 10-25' from='22/9/25 12:00:00 a. m.' to='27/10/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:28:383 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 11-25' from='27/10/25 12:00:00 a. m.' to='21/11/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:29:237 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 12-25' from='23/11/25 12:00:00 a. m.' to='22/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:29:915 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 01-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:31:007 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='14/3/25 12:00:00 a. m.' to='14/3/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:32:237 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 06-25' from='13/6/25 12:00:00 a. m.' to='13/6/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:34:752 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:35:189 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:37:298 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-25' from='30/12/24 12:00:00 a. m.' to='14/3/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:38:330 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 06-25' from='16/3/25 12:00:00 a. m.' to='13/6/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:39:596 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 09-25' from='15/6/25 12:00:00 a. m.' to='12/9/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:40:893 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 12-25' from='14/9/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:04:41:939 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-31 19:17:04:142 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2025-12-31 19:17:04:769 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2025-12-31 19:17:04:770 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.41ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2025-12-31 19:33:41:638 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='29/12/25 11:00:00 p. m.' to='30/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 19:36:00:164 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2025-12-31 19:36:00:164 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2025-12-31 19:36:00:444 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2025-12-31 19:36:00:444 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9590308' renewSecs='2399.9795154'
+2025-12-31 20:06:55:194 (Simulation) Tradovate.Adapter.CheckConnectionLatency: Connection latency is SLOW. Ping reply is 11,615 ms
+2025-12-31 20:06:55:195 WARNING: Your connection is experiencing high latency: 11,615 ms. This may negatively impact trading and market data services.
+2025-12-31 20:07:14:509 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage exception='An internal WebSocket error occurred. Please see the innerException, if present, for more details.  Unable to read data from the transport connection: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.' webSocketErrorCode='Success'
+2025-12-31 20:07:14:517 (Simulation) Tradovate.Adapter.OnDisconnectMarketData errorMsg='An internal WebSocket error occurred. Please see the innerException, if present, for more details. ' tradeStatus='Connected' mdStatus='ConnectionLost'
+2025-12-31 20:07:14:517 (Simulation) Tradovate.Adapter.OnDisconnectMarketData: Milliseconds from last marketDataHeartbeatTime 19,323
+2025-12-31 20:07:14:517 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2025-12-31 20:07:14:517 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2025-12-31 20:07:14:520 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2025-12-31 20:07:14:520 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=ConnectionLost
+2025-12-31 20:07:14:520 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=True foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2025-12-31 20:07:14:520 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=ConnectionLost
+2025-12-31 20:07:15:024 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2025-12-31 20:07:16:609 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage exception='An internal WebSocket error occurred. Please see the innerException, if present, for more details.  Unable to read data from the transport connection: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.' webSocketErrorCode='Success'
+2025-12-31 20:07:16:616 (Simulation) Tradovate.Adapter.OnDisconnectTrade errorMsg='An internal WebSocket error occurred. Please see the innerException, if present, for more details. ' tradeStatus='ConnectionLost' mdStatus='ConnectionLost'
+2025-12-31 20:07:16:616 (Simulation) Tradovate.Adapter.OnDisconnectTrade: Milliseconds from last tradeHeartbeatTime: 21,422
+2025-12-31 20:07:16:616 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=ConnectionLost priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2025-12-31 20:07:16:616 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=ConnectionLost previousStatus=Connected message=''
+2025-12-31 20:07:16:616 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=ConnectionLost previousStatus=Connected message=''
+2025-12-31 20:07:16:633 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=ConnectionLost priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2025-12-31 20:07:16:633 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=ConnectionLost priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2025-12-31 20:07:16:633 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=ConnectionLost priceStatus=ConnectionLost
+2025-12-31 20:07:16:633 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=True foundTradeLoss=True foundConnectingStatus=False foundConnected=False
+2025-12-31 20:07:16:633 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Disconnecting
+2025-12-31 20:07:26:921 (Simulation) Tradovate.Adapter.StartTradeWebSocket
+2025-12-31 20:07:30:725 ERROR: Connection lost to the NinjaTrader Historical Data Server: hds-us-nt-007.ninjatrader.com
+2025-12-31 20:07:32:994 (Simulation) Tradovate.Adapter.StartTradeWebSocket1
+2025-12-31 20:07:32:994 (Simulation) Tradovate.Adapter.StartWebSocketTradeSendWorker
+2025-12-31 20:07:32:995 (Simulation) Tradovate.Adapter.StartWebSocketTradeReceiveWorker
+2025-12-31 20:07:32:995 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage
+2025-12-31 20:07:33:543 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc0
+2025-12-31 20:07:33:543 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2025-12-31 20:07:34:677 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2025-12-31 20:07:35:185 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2025-12-31 20:07:35:454 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2025-12-31 20:07:35:454 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2025-12-31 20:07:35:454 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2025-12-31 20:07:35:455 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2025-12-31 20:07:35:593 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2025-12-31 20:07:35:593 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connected previousStatus=ConnectionLost message=''
+2025-12-31 20:07:35:593 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connected previousStatus=ConnectionLost message=''
+2025-12-31 20:07:35:614 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2025-12-31 20:07:35:614 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2025-12-31 20:07:35:614 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2025-12-31 20:07:35:614 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2025-12-31 20:07:35:615 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2025-12-31 20:07:40:733 Server.HdsClient.Connect: type=HDS server='hds-us-nt-012.ninjatrader.com' port=31655 system='' useSsl=True
+2025-12-31 20:16:00:437 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2025-12-31 20:16:00:437 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2025-12-31 20:16:00:733 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2025-12-31 20:16:00:733 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9615396' renewSecs='2399.9807698'
+2025-12-31 20:17:04:154 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2025-12-31 20:17:04:604 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2025-12-31 20:17:04:604 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.29ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2025-12-31 20:56:00:730 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2025-12-31 20:56:00:730 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2025-12-31 20:56:01:013 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2025-12-31 20:56:01:013 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9611835' renewSecs='2399.98059175'
+2025-12-31 21:17:04:200 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2025-12-31 21:17:04:629 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2025-12-31 21:17:04:630 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.28ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2025-12-31 21:36:01:014 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2025-12-31 21:36:01:014 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2025-12-31 21:36:01:291 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2025-12-31 21:36:01:291 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.959781' renewSecs='2399.9798905'
+2025-12-31 22:16:01:285 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2025-12-31 22:16:01:285 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2025-12-31 22:16:01:567 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2025-12-31 22:16:01:567 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9582183' renewSecs='2399.97910915'
+2025-12-31 22:17:04:245 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2025-12-31 22:17:04:755 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2025-12-31 22:17:04:756 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.30ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2025-12-31 22:39:48:406 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 03-26' from='21/12/25 9:00:00 p. m.' to='30/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 22:39:48:518 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='21/12/25 7:00:00 p. m.' to='30/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 22:39:48:559 Cbi.Instrument.RequestBars (to Provider): instrument='6E 03-26' from='21/12/25 7:00:00 p. m.' to='30/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 22:39:48:593 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='21/12/25 7:00:00 p. m.' to='30/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 22:39:48:595 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-26' from='21/12/25 9:00:00 p. m.' to='30/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 22:39:49:143 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 12-25' from='21/12/25 7:00:00 p. m.' to='22/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 22:39:49:207 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='30/12/25 5:00:00 p. m.' to='30/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 22:39:49:615 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='21/12/25 7:00:00 p. m.' to='30/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 22:39:50:378 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='29/12/25 11:00:00 p. m.' to='30/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 22:39:50:379 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 02-26' from='21/12/25 7:00:00 p. m.' to='30/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 22:39:53:688 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 01-26' from='22/12/25 12:00:00 a. m.' to='30/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 22:39:57:936 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='30/12/25 4:00:00 p. m.' to='30/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 22:56:01:562 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2025-12-31 22:56:01:562 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2025-12-31 22:56:01:833 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2025-12-31 22:56:01:833 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9603685' renewSecs='2399.98018425'
+2025-12-31 23:07:21:460 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 02-26' from='30/12/25 5:00:00 p. m.' to='30/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 23:07:21:476 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='30/12/25 5:00:00 p. m.' to='30/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 23:07:21:487 Cbi.Instrument.RequestBars (to Provider): instrument='6E 03-26' from='30/12/25 5:00:00 p. m.' to='30/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 23:07:22:050 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-26' from='30/12/25 3:00:00 p. m.' to='30/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 23:07:22:865 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='30/12/25 5:00:00 p. m.' to='30/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 23:07:23:078 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 03-26' from='30/12/25 3:00:00 p. m.' to='30/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 23:07:23:078 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='30/12/25 5:00:00 p. m.' to='30/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 23:07:23:078 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='30/12/25 5:00:00 p. m.' to='30/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 23:07:23:685 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='30/12/25 5:00:00 p. m.' to='30/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 23:07:23:695 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='30/12/25 5:00:00 p. m.' to='30/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-31 23:17:04:259 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2025-12-31 23:17:04:688 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2025-12-31 23:17:04:689 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.40ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2025-12-31 23:36:01:835 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2025-12-31 23:36:01:835 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2025-12-31 23:36:02:111 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2025-12-31 23:36:02:111 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9595577' renewSecs='2399.97977885'
+2025-12-31 23:49:34:468 Finalizing addon 'NinjaTrader.NinjaScript.AddOns.NewsUpdate'
+2025-12-31 23:49:34:625 Shutting down NinjaTrader
+2025-12-31 23:49:34:625 Disconnecting 'Simulation'
+2025-12-31 23:49:34:628 (Simulation) Cbi.Connection.Disconnect
+2025-12-31 23:49:34:631 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Disconnecting priceStatus=Disconnecting previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError=''
+2025-12-31 23:49:34:632 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Disconnecting previousStatus=Connected message=''
+2025-12-31 23:49:34:632 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Disconnecting previousStatus=Connected message=''
+2025-12-31 23:49:34:634 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close1
+2025-12-31 23:49:34:643 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close3
+2025-12-31 23:49:34:643 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close4
+2025-12-31 23:49:34:643 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close5
+2025-12-31 23:49:34:643 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close6a
+2025-12-31 23:49:34:644 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close7
+2025-12-31 23:49:34:644 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close8
+2025-12-31 23:49:34:671 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2025-12-31 23:49:35:186 (Simulation) Tradovate.Adapter.DisposeTrade0
+2025-12-31 23:49:36:204 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Disconnected priceStatus=Disconnected previousStatus=Disconnecting previousPriceStatus=Disconnecting errorCode=NoError nativeError=''
+2025-12-31 23:49:36:204 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Disconnected previousStatus=Disconnecting message=''
+2025-12-31 23:49:36:204 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Disconnected previousStatus=Disconnecting message=''
+2025-12-31 23:49:36:205 Flushing DB thread
+2025-12-31 23:49:36:206 Shutting down instrument management
+2025-12-31 23:49:36:207 Shutting down instrument threads
+2025-12-31 23:49:36:216 Shutting down recorder
+2025-12-31 23:49:36:221 Shutting down file type watcher
+2025-12-31 23:49:36:221 Shutting down ATI server
+2025-12-31 23:49:36:221 Shutting down auto trade component
+2025-12-31 23:49:36:223 Shutting down SMTP server
+2025-12-31 23:49:36:237 Shutting down adapter server
+2025-12-31 23:49:36:251 Shutting down server(s)
+2025-12-31 23:49:36:255 Shutting down mail thread
+2025-12-31 23:49:36:255 Shutting down sound thread
+2025-12-31 23:49:36:255 Shutting down timer
+2025-12-31 23:49:36:255 Shutting down alerts timer
+2025-12-31 23:49:36:255 Shutting down message timer
+2025-12-31 23:49:36:255 Shutting down db
+2025-12-31 23:49:36:255 Flushing DB thread
+2025-12-31 23:49:36:346 Shutting down bars dictionary
+2025-12-31 23:49:36:387 Shutting down user entitlement threads
+2025-12-31 23:49:36:399 Shutting down logs
+2025-12-31 23:49:36:423 Shutting down bars types
+2025-12-31 23:49:36:426 Shutting down UI threads
+2025-12-31 23:49:36:463 ************************ Session End ************************

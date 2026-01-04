@@ -1,0 +1,20 @@
+2025-12-19 13:50:36:487|2|4|Session Break (Version 8.1.6.2)
+2025-12-19 13:50:55:388|1|4|Global simulation mode disabled
+2025-12-19 13:50:57:511|1|4|Vendor assembly 'ASCENDO_NewsEvents' version='3.0.0.0' loaded.
+2025-12-19 13:50:57:512|1|4|Vendor assembly 'WindowsInput' version='1.0.4.0' loaded.
+2025-12-19 13:51:01:283|1|2|Using IS (is-us-nt-005.ninjatrader.com/31658)
+2025-12-19 13:51:01:288|1|4|Automated trading disabled
+2025-12-19 13:51:01:486|1|32|Order entry hot keys disabled
+2025-12-19 13:51:01:487|1|4|Auto close enabled=False
+2025-12-19 13:51:05:968|1|4|Restoring workspace 'Relative Trading Software'...
+2025-12-19 13:51:16:339|1|2|Simulation: Primary connection=Connecting, Price feed=Connecting
+2025-12-19 13:51:19:318|1|2|Simulation: Primary connection=Connected, Price feed=Connected
+2025-12-19 13:51:19:416|1|2|Time to auto close position='12:00:00 a. m.', Enabled=False
+2025-12-19 13:51:19:417|1|2|Using HDS (hds-us-nt-018.ninjatrader.com/31655)
+2025-12-19 14:35:03:605|1|4|Enabling NinjaScript strategy 'AxionValueProtocol/377632261' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=True / triggering 30 seconds before close SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On price change IsUnmanaged=False MaxRestarts=2880 in 6 minutes
+2025-12-19 14:36:37:001|1|4|Disabling NinjaScript strategy 'AxionValueProtocol/377632261'
+2025-12-19 14:51:19:846|1|2|Simulation: Primary connection=Connected, Price feed=Connection lost
+2025-12-19 14:51:23:037|1|2|Simulation: Primary connection=Connected, Price feed=Connected
+2025-12-19 16:23:48:197|1|4|Workspace Relative Trading Software saved
+2025-12-19 16:23:48:896|1|2|Simulation: Primary connection=Disconnecting, Price feed=Disconnecting
+2025-12-19 16:23:50:457|1|2|Simulation: Primary connection=Disconnected, Price feed=Disconnected

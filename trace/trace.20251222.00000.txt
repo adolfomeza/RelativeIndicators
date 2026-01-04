@@ -1,0 +1,151 @@
+2025-12-22 00:04:51:133 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2025-12-22 00:04:51:133 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2025-12-22 00:04:51:446 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2025-12-22 00:04:51:446 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9456926' renewSecs='2399.9728463'
+2025-12-22 00:06:24:939 Core.Instrumentation.LogActivity: activityType=Application errorCode=Panic errorMessage=''
+2025-12-22 00:06:24:946 *************** unhandled exception trapped ***************
+2025-12-22 00:06:24:946 Cuota insuficiente para procesar este comando
+2025-12-22 00:06:24:946 System.ComponentModel.Win32Exception (0x80004005): Cuota insuficiente para procesar este comando
+   at System.Windows.Interop.HwndTarget.UpdateWindowSettings(Boolean enableRenderTarget, Nullable`1 channelSet)
+   at System.Windows.Interop.HwndTarget.UpdateWindowPos(IntPtr lParam)
+   at System.Windows.Interop.HwndTarget.HandleMessage(WindowMessage msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Interop.HwndSource.HwndTargetFilterMessage(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndWrapper.WndProc(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndSubclass.DispatcherCallbackOperation(Object o)
+   at System.Windows.Threading.ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
+   at System.Windows.Threading.ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
+2025-12-22 00:06:27:698 ERROR: There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2025-12-22 00:07:48:256 *************** unhandled exception trapped ***************
+2025-12-22 00:07:48:256 Cuota insuficiente para procesar este comando
+2025-12-22 00:07:48:256 System.ComponentModel.Win32Exception (0x80004005): Cuota insuficiente para procesar este comando
+   at System.Windows.Interop.HwndTarget.UpdateWindowSettings(Boolean enableRenderTarget, Nullable`1 channelSet)
+   at System.Windows.Interop.HwndTarget.UpdateWindowPos(IntPtr lParam)
+   at System.Windows.Interop.HwndTarget.HandleMessage(WindowMessage msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Interop.HwndSource.HwndTargetFilterMessage(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndWrapper.WndProc(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndSubclass.DispatcherCallbackOperation(Object o)
+   at System.Windows.Threading.ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
+   at System.Windows.Threading.ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
+2025-12-22 00:07:50:118 ERROR: There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2025-12-22 00:07:52:530 *************** unhandled exception trapped ***************
+2025-12-22 00:07:52:530 Cuota insuficiente para procesar este comando
+2025-12-22 00:07:52:530 System.ComponentModel.Win32Exception (0x80004005): Cuota insuficiente para procesar este comando
+   at System.Windows.Interop.HwndTarget.UpdateWindowSettings(Boolean enableRenderTarget, Nullable`1 channelSet)
+   at System.Windows.Interop.HwndTarget.UpdateWindowPos(IntPtr lParam)
+   at System.Windows.Interop.HwndTarget.HandleMessage(WindowMessage msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Interop.HwndSource.HwndTargetFilterMessage(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndWrapper.WndProc(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndSubclass.DispatcherCallbackOperation(Object o)
+   at System.Windows.Threading.ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
+   at System.Windows.Threading.ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
+2025-12-22 00:07:54:432 ERROR: There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2025-12-22 00:08:12:411 *************** unhandled exception trapped ***************
+2025-12-22 00:08:12:411 Cuota insuficiente para procesar este comando
+2025-12-22 00:08:12:411 System.ComponentModel.Win32Exception (0x80004005): Cuota insuficiente para procesar este comando
+   at System.Windows.Interop.HwndTarget.UpdateWindowSettings(Boolean enableRenderTarget, Nullable`1 channelSet)
+   at System.Windows.Interop.HwndTarget.UpdateWindowPos(IntPtr lParam)
+   at System.Windows.Interop.HwndTarget.HandleMessage(WindowMessage msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Interop.HwndSource.HwndTargetFilterMessage(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndWrapper.WndProc(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndSubclass.DispatcherCallbackOperation(Object o)
+   at System.Windows.Threading.ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
+   at System.Windows.Threading.ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
+2025-12-22 00:08:12:413 *************** unhandled exception trapped ***************
+2025-12-22 00:08:12:414 Cuota insuficiente para procesar este comando
+2025-12-22 00:08:12:414 System.ComponentModel.Win32Exception (0x80004005): Cuota insuficiente para procesar este comando
+   at System.Windows.Interop.HwndTarget.UpdateWindowSettings(Boolean enableRenderTarget, Nullable`1 channelSet)
+   at System.Windows.Interop.HwndTarget.UpdateWindowPos(IntPtr lParam)
+   at System.Windows.Interop.HwndTarget.HandleMessage(WindowMessage msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Interop.HwndSource.HwndTargetFilterMessage(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndWrapper.WndProc(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndSubclass.DispatcherCallbackOperation(Object o)
+   at System.Windows.Threading.ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
+   at System.Windows.Threading.ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
+2025-12-22 00:08:12:414 *************** unhandled exception trapped ***************
+2025-12-22 00:08:12:414 Cuota insuficiente para procesar este comando
+2025-12-22 00:08:12:415 System.ComponentModel.Win32Exception (0x80004005): Cuota insuficiente para procesar este comando
+   at System.Windows.Interop.HwndTarget.UpdateWindowSettings(Boolean enableRenderTarget, Nullable`1 channelSet)
+   at System.Windows.Interop.HwndTarget.UpdateWindowPos(IntPtr lParam)
+   at System.Windows.Interop.HwndTarget.HandleMessage(WindowMessage msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Interop.HwndSource.HwndTargetFilterMessage(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndWrapper.WndProc(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndSubclass.DispatcherCallbackOperation(Object o)
+   at System.Windows.Threading.ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
+   at System.Windows.Threading.ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
+2025-12-22 00:08:12:415 *************** unhandled exception trapped ***************
+2025-12-22 00:08:12:415 Cuota insuficiente para procesar este comando
+2025-12-22 00:08:12:415 System.ComponentModel.Win32Exception (0x80004005): Cuota insuficiente para procesar este comando
+   at System.Windows.Interop.HwndTarget.UpdateWindowSettings(Boolean enableRenderTarget, Nullable`1 channelSet)
+   at System.Windows.Interop.HwndTarget.OnResize()
+   at System.Windows.Interop.HwndTarget.HandleMessage(WindowMessage msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Interop.HwndSource.HwndTargetFilterMessage(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndWrapper.WndProc(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndSubclass.DispatcherCallbackOperation(Object o)
+   at System.Windows.Threading.ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
+   at System.Windows.Threading.ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
+2025-12-22 00:08:12:490 *************** unhandled exception trapped ***************
+2025-12-22 00:08:12:490 Cuota insuficiente para procesar este comando
+2025-12-22 00:08:12:490 System.ComponentModel.Win32Exception (0x80004005): Cuota insuficiente para procesar este comando
+   at System.Windows.Interop.HwndTarget.UpdateWindowSettings(Boolean enableRenderTarget, Nullable`1 channelSet)
+   at System.Windows.Interop.HwndTarget.UpdateWindowPos(IntPtr lParam)
+   at System.Windows.Interop.HwndTarget.HandleMessage(WindowMessage msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Interop.HwndSource.HwndTargetFilterMessage(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndWrapper.WndProc(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndSubclass.DispatcherCallbackOperation(Object o)
+   at System.Windows.Threading.ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
+   at System.Windows.Threading.ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
+2025-12-22 00:08:12:492 *************** unhandled exception trapped ***************
+2025-12-22 00:08:12:492 Cuota insuficiente para procesar este comando
+2025-12-22 00:08:12:492 System.ComponentModel.Win32Exception (0x80004005): Cuota insuficiente para procesar este comando
+   at System.Windows.Interop.HwndTarget.UpdateWindowSettings(Boolean enableRenderTarget, Nullable`1 channelSet)
+   at System.Windows.Interop.HwndTarget.UpdateWindowPos(IntPtr lParam)
+   at System.Windows.Interop.HwndTarget.HandleMessage(WindowMessage msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Interop.HwndSource.HwndTargetFilterMessage(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndWrapper.WndProc(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndSubclass.DispatcherCallbackOperation(Object o)
+   at System.Windows.Threading.ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
+   at System.Windows.Threading.ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
+2025-12-22 00:08:12:492 *************** unhandled exception trapped ***************
+2025-12-22 00:08:12:492 Cuota insuficiente para procesar este comando
+2025-12-22 00:08:12:492 System.ComponentModel.Win32Exception (0x80004005): Cuota insuficiente para procesar este comando
+   at System.Windows.Interop.HwndTarget.UpdateWindowSettings(Boolean enableRenderTarget, Nullable`1 channelSet)
+   at System.Windows.Interop.HwndTarget.OnResize()
+   at System.Windows.Interop.HwndTarget.HandleMessage(WindowMessage msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Interop.HwndSource.HwndTargetFilterMessage(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndWrapper.WndProc(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndSubclass.DispatcherCallbackOperation(Object o)
+   at System.Windows.Threading.ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
+   at System.Windows.Threading.ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
+2025-12-22 00:08:12:503 *************** unhandled exception trapped ***************
+2025-12-22 00:08:12:503 Cuota insuficiente para procesar este comando
+2025-12-22 00:08:12:503 System.ComponentModel.Win32Exception (0x80004005): Cuota insuficiente para procesar este comando
+   at System.Windows.Interop.HwndTarget.UpdateWindowSettings(Boolean enableRenderTarget, Nullable`1 channelSet)
+   at System.Windows.Interop.HwndTarget.UpdateWindowPos(IntPtr lParam)
+   at System.Windows.Interop.HwndTarget.HandleMessage(WindowMessage msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Interop.HwndSource.HwndTargetFilterMessage(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndWrapper.WndProc(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndSubclass.DispatcherCallbackOperation(Object o)
+   at System.Windows.Threading.ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
+   at System.Windows.Threading.ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
+2025-12-22 00:08:12:504 *************** unhandled exception trapped ***************
+2025-12-22 00:08:12:504 Cuota insuficiente para procesar este comando
+2025-12-22 00:08:12:504 System.ComponentModel.Win32Exception (0x80004005): Cuota insuficiente para procesar este comando
+   at System.Windows.Interop.HwndTarget.UpdateWindowSettings(Boolean enableRenderTarget, Nullable`1 channelSet)
+   at System.Windows.Interop.HwndTarget.UpdateWindowPos(IntPtr lParam)
+   at System.Windows.Interop.HwndTarget.HandleMessage(WindowMessage msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Interop.HwndSource.HwndTargetFilterMessage(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndWrapper.WndProc(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndSubclass.DispatcherCallbackOperation(Object o)
+   at System.Windows.Threading.ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
+   at System.Windows.Threading.ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
+2025-12-22 00:08:12:506 *************** unhandled exception trapped ***************
+2025-12-22 00:08:12:506 Cuota insuficiente para procesar este comando
+2025-12-22 00:08:12:506 System.ComponentModel.Win32Exception (0x80004005): Cuota insuficiente para procesar este comando
+   at System.Windows.Interop.HwndTarget.UpdateWindowSettings(Boolean enableRenderTarget, Nullable`1 channelSet)
+   at System.Windows.Interop.HwndTarget.UpdateWindowPos(IntPtr lParam)
+   at System.Windows.Interop.HwndTarget.HandleMessage(WindowMessage msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Interop.HwndSource.HwndTargetFilterMessage(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndWrapper.WndProc(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndSubclass.DispatcherCallbackOperation(Object o)
+   at System.Windows.Threading.ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
+   at System.Windows.Threading.ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)

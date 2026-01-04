@@ -1,0 +1,47 @@
+2025-12-31 00:01:01:007 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2025-12-31 00:01:01:007 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2025-12-31 00:01:01:286 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2025-12-31 00:01:01:286 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9616688' renewSecs='2399.9808344'
+2025-12-31 00:41:01:284 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2025-12-31 00:41:01:284 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2025-12-31 00:41:01:560 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2025-12-31 00:41:01:560 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9603586' renewSecs='2399.9801793'
+2025-12-31 00:41:13:297 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2025-12-31 00:41:13:805 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2025-12-31 00:41:13:805 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.21ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2025-12-31 01:21:01:549 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2025-12-31 01:21:01:549 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2025-12-31 01:21:01:822 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2025-12-31 01:21:01:823 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9606463' renewSecs='2399.98032315'
+2025-12-31 01:41:13:309 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2025-12-31 01:41:13:801 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2025-12-31 01:41:13:801 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.26ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.01ms
+2025-12-31 02:01:01:822 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2025-12-31 02:01:01:822 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2025-12-31 02:01:02:166 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2025-12-31 02:01:02:166 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9355845' renewSecs='2399.96779225'
+2025-12-31 02:04:18:507 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=Panic errorMessage='Chart Render Time: 2839.64 ms'
+2025-12-31 02:30:48:807 Finalizing addon 'NinjaTrader.NinjaScript.AddOns.NewsUpdate'
+2025-12-31 02:30:48:925 Shutting down NinjaTrader
+2025-12-31 02:30:48:926 Shutting down instrument management
+2025-12-31 02:30:48:927 Shutting down instrument threads
+2025-12-31 02:30:48:933 Shutting down recorder
+2025-12-31 02:30:48:936 Shutting down file type watcher
+2025-12-31 02:30:48:936 Shutting down ATI server
+2025-12-31 02:30:48:937 Shutting down auto trade component
+2025-12-31 02:30:48:939 Shutting down SMTP server
+2025-12-31 02:30:48:951 Shutting down adapter server
+2025-12-31 02:30:48:966 Shutting down server(s)
+2025-12-31 02:30:48:969 Shutting down mail thread
+2025-12-31 02:30:48:969 Shutting down sound thread
+2025-12-31 02:30:48:969 Shutting down timer
+2025-12-31 02:30:48:969 Shutting down alerts timer
+2025-12-31 02:30:48:969 Shutting down message timer
+2025-12-31 02:30:48:969 Shutting down db
+2025-12-31 02:30:48:969 Flushing DB thread
+2025-12-31 02:30:49:053 Shutting down bars dictionary
+2025-12-31 02:30:49:069 Shutting down user entitlement threads
+2025-12-31 02:30:49:080 Shutting down logs
+2025-12-31 02:30:49:091 Shutting down bars types
+2025-12-31 02:30:49:098 Shutting down UI threads
+2025-12-31 02:30:49:119 ************************ Session End ************************

@@ -1,0 +1,232 @@
+******************* Session Start (Version 8.1.6.2) *******************
+2025-12-20 20:32:01:182 Cbi.Globals.MachineId: True/True 280CB754932A645C8D63C782E8605C43
+2025-12-20 20:32:01:201 NinjaTrader.Gui.LoginInternal user='joelbencomo' mode='Simulation'
+2025-12-20 20:32:01:767 Core.Instrumentation.ActivitySource: enabled=True randomPercent=56.07444 enabledSessionsPercent=100 chartMs=250 enabledTypes='ChartPerformance Application NinjaScript Adapter Login '
+2025-12-20 20:32:01:789 Core.Instrumentation.LogActivity: activityType=Login errorCode=NoError errorMessage=''
+2025-12-20 20:32:03:772 (Simulation) NinjaTrader.Core.Authentication.GetAccessToken6
+2025-12-20 20:32:03:777 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.8298483' renewSecs='2399.91492415'
+2025-12-20 20:32:05:650 Cbi.UserEntitlement.VerifyAsync.0 apiUrl='https://live.tradovateapi.com'
+2025-12-20 20:32:06:471 Cbi.UserEntitlement.VerifyAsync.98: Evaluation expiration=2026-12-31, Evaluation expiration=2026-12-31
+2025-12-20 20:32:16:707 PrimaryMonitorWPFDPIScale=1.00
+2025-12-20 20:32:17:221 Cbi.UserEntitlement.VerifyAsync.99: subscription=Free licensedProviders='Playback Simulator NinjaTrader Rithmic for NinjaTrader Brokerage Custom0 Custom2 Custom3 Custom4 Custom6 Custom7 Custom8 Custom9 Custom10 Provider13 Custom14 Provider26 Custom15 Custom16 Custom17 Custom18 Custom19 Custom20 Custom21 Custom22 Custom23 Custom24 Custom25 Custom26 Custom27 Custom28 Custom29 Custom30 Custom31 Custom32 Custom33 Custom34 Custom35 Custom36 Custom37 Custom38 Custom39 Custom40'
+2025-12-20 20:32:17:493 InstallDir='C:\Program Files\NinjaTrader 8\'
+2025-12-20 20:32:17:493 UserDataDir='C:\Users\prueba\Documents\NinjaTrader 8\'
+2025-12-20 20:32:17:493 MachineID='280CB754932A645C8D63C782E8605C43'
+2025-12-20 20:32:17:493 OS='Microsoft Windows NT 10.0.26200.0'/'Win32NT'
+2025-12-20 20:32:17:493 OSLanguage='en-US'
+2025-12-20 20:32:17:493 OSEnvironment='64bit'
+2025-12-20 20:32:17:493 Processors=12
+2025-12-20 20:32:17:493 ThreadPool: minWorkerThreads=12 maxWorkerThreads=32767 minCompletionPortThreads=12 maxCompletionPortThreads=1000
+2025-12-20 20:32:18:530 ProcessorSpeed=2.6 GHz
+2025-12-20 20:32:18:530 PhysicalMemory=24576 MB
+2025-12-20 20:32:19:993 DisplayAdapters=2/NVIDIA GeForce GTX 1650|Intel(R) UHD Graphics
+2025-12-20 20:32:19:993 Monitors=1/1920x1080
+2025-12-20 20:32:19:993 .NET/CLR Version='4.8'/64bit
+2025-12-20 20:32:19:993 SQLiteVersion='1.0.116.0'
+2025-12-20 20:32:19:993 ApplicationTimezone=EST +1 hour(s)
+2025-12-20 20:32:19:993 ApplicationTimezone=UTC -4 hour(s)
+2025-12-20 20:32:19:993 LocalTimezone=EST +1 hour(s)
+2025-12-20 20:32:19:993 LocalTimezone=UTC -4 hour(s)
+2025-12-20 20:32:20:139 DirectXRenderingHW
+2025-12-20 20:32:20:145 Copying custom assemblies...
+2025-12-20 20:32:20:157 Loading custom assemblies...
+2025-12-20 20:32:20:157 Loading C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\NinjaTrader.Custom.dll...
+2025-12-20 20:32:20:323 Loading C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\NinjaTrader.Vendor.dll...
+2025-12-20 20:32:20:336 Deleting temporary files...
+2025-12-20 20:32:20:534 Copying db and restoring templates...
+2025-12-20 20:32:20:545 Loading third party assemblies...
+2025-12-20 20:32:20:578 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\ASCENDO_NewsEvents.dll...
+2025-12-20 20:32:21:445 Cbi.VendorLicense.Verify.1: trying 'https://license.ninjatrader.com/vendorlicensenew/ASCENDO/IndicatorNewsEvents/2/R-280CB754932A645C8D63C782E8605C43.xml' ...
+2025-12-20 20:32:27:719 Cbi.VendorLicense.Verify.1: good
+2025-12-20 20:32:27:729 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\WindowsInput.dll...
+2025-12-20 20:32:27:729 Initializing database...
+2025-12-20 20:32:27:729 Loading master instruments...
+2025-12-20 20:32:29:200 (Db) Cbi.DB.get_Current.CreateConnection.Start
+2025-12-20 20:32:29:202 (Db) Cbi.DB: connectionString='Data Source="C:\Users\prueba\Documents\NinjaTrader 8\db\NinjaTrader.sqlite";Version=3;Synchronous=Full;Journal Mode=Off;Pooling=True;Max Pool Size=100;foreign keys=true;'
+2025-12-20 20:32:29:619 (Db) Cbi.DB.get_Current.CreateConnection.End
+2025-12-20 20:32:29:677 Loading instruments...
+2025-12-20 20:32:29:870 Loading accounts...
+2025-12-20 20:32:29:985 Loading users...
+2025-12-20 20:32:30:002 Downloading server info...
+2025-12-20 20:32:30:002 Starting instrument management...
+2025-12-20 20:32:30:028 Starting timer...
+2025-12-20 20:32:30:028 Creating file type watcher...
+2025-12-20 20:32:30:028 Setting ATI...
+2025-12-20 20:32:30:043 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2025-12-20 20:32:30:049 Connecting ATI server...
+2025-12-20 20:32:30:049 Server.AtiServer.Connect0
+2025-12-20 20:32:30:049 Starting adapter server...
+2025-12-20 20:32:30:052 Server.AtiServer.Connect1: Port='36973'
+2025-12-20 20:32:30:053 Server.AtiServer.Connect2
+2025-12-20 20:32:30:064 Starting bars dictionary...
+2025-12-20 20:32:30:064 Starting recorder...
+2025-12-20 20:32:30:068 Starting server(s)...
+2025-12-20 20:32:30:099 Core.Globals.ApplicationStart.Commission: minVersion=1 maxVersion=3138
+2025-12-20 20:32:30:099 Core.Globals.ApplicationStart.InstrumentList: minVersion=1 maxVersion=475
+2025-12-20 20:32:30:099 Core.Globals.ApplicationStart.MasterInstrument: minVersion=1 maxVersion=9897
+2025-12-20 20:32:30:099 Core.Globals.ApplicationStart.Risk: minVersion=1 maxVersion=14062
+2025-12-20 20:32:30:099 Core.Globals.ApplicationStart.TradingHours: minVersion=1 maxVersion=5111
+2025-12-20 20:32:30:197 ChartHotKeys: Alerts='' DisableAllAlerts='' EnableAllAlerts='' DataSeries='Ctrl+F' Indicators='Ctrl+I' Strategies='Ctrl+S' Properties='Ctrl+T' CrosshairPointer='Ctrl+R' CrosshairLocal='Ctrl+Q' CrosshairGlobal='Ctrl+G' CrosshairGlobal2='Ctrl+N' CrosshairLock='Ctrl+L' AutoScaleAndReturn='' CyclePlotExecutions='Ctrl+E' ReloadHistoricalData='Ctrl+Shift+R' ReloadNinjaScript='F5' SaveChartImage='Alt+S' ShowDataBox='Ctrl+D' ShowChartTrader='' ShowChartTraderHidden='' ShowIndicators='' ShowScrollBar='' SnapModeBar='' SnapModeBarTick='' SnapModeBarObject='' SnapModeDisabled='' SnapModeTick='' StayInDrawMode='' ZoomIn='Ctrl+Alt+Z' ZoomOut='Ctrl+Alt+O' BarSpacingPlus='Ctrl+Down' BarSpacingMinus='Ctrl+Up' BarWidthPlus='Alt+Down' BarWidthMinus='Alt+Up' Arc='Ctrl+F7' AndrewsPitchfork='Ctrl+F8' ArrowDown='Alt+F3' ArrowLine='Ctrl+F2' ArrowUp='Alt+F2' Diamond='Alt+F5' Dot='Alt+F6' Ellipse='Ctrl+F11' ExtendedLine='F4' FibonacciCircle='F11' FibonacciExtension='F9' FibonacciRetracement='F8' FibonacciTimeExtension='F10' GannFan='Ctrl+F9' HorizontalLine='F6' Line='F2' Path='Ctrl+4' Polygon='Alt+F10' VolumeProfile='Ctrl+3' VWAP='Ctrl+5' Ray='F3' Rectangle='Ctrl+F12' RegressionChannel='Ctrl+F10' HideDrawingObjects='' RemoveDrawingObjects='' RegionHighlightX='Shift+F1' RegionHighlightY='Shift+F2' RiskReward='Ctrl+F4' Ruler='Ctrl+F3' Square='Alt+F7' Text='F12' TimeCycles='Alt+F11' TrendChannel='Ctrl+2' Triangle='Ctrl+F6' TriangleDown='Alt+F9' TriangleUp='Alt+F8' VerticalLine='F7'
+2025-12-20 20:32:30:199 GlobalHotKeys: CloseWorkspace='' NextWorkspace='Shift+F3' PreviousWorkspace='' SaveWorkspace='' SaveAllWorkspaces='' NewAccountData='' NewTradePerformance='' NewAlertsLog='' NewBasicEntry='' NewChart='' NewFxBoard='' NewFxPro='' NewHotListAnalyzer='' NewLevel2='' NewMarketAnalyzer='' NewMarketWatch='' NewNews='' NewNinjaScriptEditor='' NewNinjaScriptOutput='' NewOrderTicket='' NewStrategyAnalyzer='' NewDynamicDom='' NewStaticDom='' NewTimeAndSales='' CancelAllOrders='' FlattenEverything='' OpenInstrumentManager='' OpenInstrumentList='' OpenDatabase='' OpenHotKeyManager='' OpenHistoricalData='' OpenCommission='' OpenRisk='' OpenTradingHoursManager='' OpenRemoveNinjaScript='' CloseOtherTabs='' CloseTab='' DuplicateInNewTab='' DuplicateInNewWindow='' Export='' Find='Ctrl+F' MoveToNewWindow='' Print='Ctrl+P' Replace='Ctrl+H' Share='Ctrl+Shift+S' LoadTemplate='' SaveTemplate='' SaveTemplateAsDefault=''
+2025-12-20 20:32:30:199 MarketAnalyzerHotKeys: AddBlankRow='' AddLabelRow='' Columns='' Alerts='' EnableAllAlerts='' DisableAllAlerts='' AutoSort='' RowFilter='' ReloadHistorical='Ctrl+Shift+R' ReloadNinjaScript='F5'
+2025-12-20 20:32:30:206 NinjaScriptEditorHotKeys: InsertCodeSnippet='F2' FindNext='F3' Compile='F5' GoToLine='Ctrl+G' CommentSelection='Ctrl+K' InlineSyntaxChecking='Ctrl+Alt+S' CollapseToDefinitions='' ExpandAllOutlining='' StartOutlining='' StopOutlining='' HideSelection='' StopHidingSelection='' ToggleAllOutlining='' ToggleOutlining='' Save='Ctrl+S' Undo='Ctrl+Z' Redo='Ctrl+Y'
+2025-12-20 20:32:30:208 OrderEntryHotKeys: BuyAsk='' BuyBid='' BuyMarket='' SellAsk='' SellBid='' SellMarket='' BreakevenAtmStrategy='' BreakevenPosition='' CancelLastOrder='' CloseAtmStrategy='' ClosePosition='' DecreaseLastOrderPrice='' IncreaseLastOrderPrice='' ModifyLastOrder2Fill='' Reverse='' OcoOrder='' SimulatedOrder=''
+2025-12-20 20:32:30:208 SuperDomHotKeys: Center='' Columns='' Indicators='' ReloadAllHistoricalData='Ctrl+Shift+R' ReloadNinjaScript='F5'
+2025-12-20 20:32:30:208 OrderEntryHotKeys=disabled
+2025-12-20 20:32:30:209 AutoClose=disabled
+2025-12-20 20:32:30:666 Core.Instrumentation.LogActivity: activityType=Application errorCode=NoError errorMessage=''
+2025-12-20 20:33:01:695 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-20 20:33:02:414 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-20 20:33:04:747 Core.Instrumentation.LogActivity: activityType=NinjaScript errorCode=NoError errorMessage=''
+2025-12-20 20:33:05:044 1 Chart Chart1Tab1 1 Ser 4 Ind 1 DrawObj 
+2025-12-20 20:33:06:108 (Simulation) Cbi.Connection.Connect0: status=Disconnected assembly=8.1.6.2 date=2025-12-20 runAsProcess=False
+2025-12-20 20:33:06:121 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2025-12-20 20:33:06:125 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2025-12-20 20:33:06:136 (Simulation) Cbi.Connection.Connect1
+2025-12-20 20:33:06:145 (Simulation) Cbi.Connection.Connect2
+2025-12-20 20:33:06:145 (Simulation) Cbi.Connection.Connect3
+2025-12-20 20:33:06:152 (Simulation) Cbi.Connection.CreateAccount: account='Sim101' displayName='Sim101' fcm='' denomination=UsDollar forexLotSize=10000
+2025-12-20 20:33:06:159 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connecting previousStatus=Disconnected message=''
+2025-12-20 20:33:06:164 (Simulation) Cbi.Account.OnConnectionStatus.PositionExecutions: account='Sim101'
+2025-12-20 20:33:06:168 (Simulation) Cbi.Connection.Connect4
+2025-12-20 20:33:06:203 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2025-12-20 20:33:06:204 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connecting priceStatus=Connecting
+2025-12-20 20:33:06:418 (Simulation) Cbi.Connection.Connect5
+2025-12-20 20:33:06:422 (Simulation) Tradovate.Adapter.Connect: user='joelbencomo' accountType='Simulation' useLocalOcoSimulation=True
+2025-12-20 20:33:06:455 (Simulation) Cbi.Connection.Connect9 ok
+2025-12-20 20:33:06:582 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=True foundConnected=False
+2025-12-20 20:33:06:583 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connecting
+2025-12-20 20:33:06:583 Core.Instrumentation.LogActivity: activityType=Adapter errorCode=NoError errorMessage=''
+2025-12-20 20:33:21:806 (Simulation) Tradovate.Adapter.StartTradeWebSocket
+2025-12-20 20:33:30:301 (Simulation) Tradovate.Adapter.StartTradeWebSocket1
+2025-12-20 20:33:30:302 (Simulation) Tradovate.Adapter.StartWebSocketTradeSendWorker
+2025-12-20 20:33:30:302 (Simulation) Tradovate.Adapter.StartWebSocketTradeReceiveWorker
+2025-12-20 20:33:30:307 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage
+2025-12-20 20:35:00:411 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2025-12-20 20:35:00:811 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2025-12-20 20:35:00:812 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2025-12-20 20:35:00:813 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2025-12-20 20:35:00:823 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2025-12-20 20:35:17:591 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage exception='An internal WebSocket error occurred. Please see the innerException, if present, for more details.  Unable to read data from the transport connection: Se ha forzado la interrupción de una conexión existente por el host remoto.' webSocketErrorCode='Success'
+2025-12-20 20:35:17:594 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2025-12-20 20:35:18:113 (Simulation) Tradovate.Adapter.DisposeTrade0
+2025-12-20 20:35:19:141 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Disconnected priceStatus=Disconnected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2025-12-20 20:35:19:142 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Disconnected previousStatus=Connecting message=''
+2025-12-20 20:35:19:147 Flushing DB thread
+2025-12-20 20:35:19:147 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Disconnected priceStatus=Disconnected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2025-12-20 20:35:19:147 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Disconnected priceStatus=Disconnected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2025-12-20 20:35:19:147 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Using args status=Disconnected
+2025-12-20 20:38:27:697 (Simulation) Gui.ControlCenter.OnConnect
+2025-12-20 20:38:27:699 (Simulation) Cbi.Connection.Connect0: status=Disconnected assembly=8.1.6.2 date=2025-12-20 runAsProcess=False
+2025-12-20 20:38:27:699 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2025-12-20 20:38:27:699 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2025-12-20 20:38:27:700 (Simulation) Cbi.Connection.Connect1
+2025-12-20 20:38:27:702 (Simulation) Cbi.Connection.Connect2
+2025-12-20 20:38:27:702 (Simulation) Cbi.Connection.Connect3
+2025-12-20 20:38:27:702 (Simulation) Cbi.Connection.CreateAccount: account='Sim101' displayName='Sim101' fcm='' denomination=UsDollar forexLotSize=10000
+2025-12-20 20:38:27:702 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connecting previousStatus=Disconnected message=''
+2025-12-20 20:38:27:702 (Simulation) Cbi.Account.OnConnectionStatus.PositionExecutions: account='Sim101'
+2025-12-20 20:38:27:702 (Simulation) Cbi.Connection.Connect4
+2025-12-20 20:38:27:702 (Simulation) Cbi.Connection.Connect5
+2025-12-20 20:38:27:702 (Simulation) Tradovate.Adapter.Connect: user='joelbencomo' accountType='Simulation' useLocalOcoSimulation=True
+2025-12-20 20:38:27:703 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2025-12-20 20:38:27:703 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connecting priceStatus=Connecting
+2025-12-20 20:38:27:703 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=True foundConnected=False
+2025-12-20 20:38:27:703 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connecting
+2025-12-20 20:38:27:707 (Simulation) Cbi.Connection.Connect9 ok
+2025-12-20 20:38:30:086 (Simulation) Tradovate.Adapter.StartTradeWebSocket
+2025-12-20 20:38:38:567 (Simulation) Tradovate.Adapter.StartTradeWebSocket1
+2025-12-20 20:38:38:567 (Simulation) Tradovate.Adapter.StartWebSocketTradeSendWorker
+2025-12-20 20:38:38:567 (Simulation) Tradovate.Adapter.StartWebSocketTradeReceiveWorker
+2025-12-20 20:38:38:567 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage
+2025-12-20 20:38:42:563 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2025-12-20 20:38:43:550 (Simulation) Cbi.Connection.CreateAccount: account='DEMO619219' displayName='DEMO' fcm='' denomination=UsDollar forexLotSize=1
+2025-12-20 20:38:43:550 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connecting previousStatus=Disconnected message=''
+2025-12-20 20:38:43:551 (Simulation) Cbi.Account.OnConnectionStatus.PositionExecutions: account='DEMO619219'
+2025-12-20 20:38:43:563 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc0
+2025-12-20 20:38:43:569 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2025-12-20 20:38:51:969 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2025-12-20 20:38:51:969 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2025-12-20 20:38:51:969 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2025-12-20 20:38:51:970 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2025-12-20 20:38:55:001 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2025-12-20 20:38:55:002 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connected previousStatus=Connecting message=''
+2025-12-20 20:38:55:002 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connected previousStatus=Connecting message=''
+2025-12-20 20:38:55:025 (Simulation) Cbi.Account.Restore.Start: account='Sim101' fcm=''
+2025-12-20 20:38:55:026 (Simulation) Cbi.Account.Restore.Start: account='DEMO619219' fcm=''
+2025-12-20 20:38:55:047 (Simulation) Cbi.Account.Restore.End: account='DEMO619219' fcm=''
+2025-12-20 20:38:55:054 (Simulation) Cbi.Account.Restore.End: account='Sim101' fcm=''
+2025-12-20 20:38:55:054 (Simulation) Core.Connection.Statistics: connectAttempts=1/27351.2ms
+2025-12-20 20:38:55:054 (Simulation) Cbi.Connection.ConnectionStatusCallback: autoClosePositionTime='12/17/2025 00:00:00' autoClosePosition=False
+2025-12-20 20:38:55:055 Server.HdsClient.Connect: type=HDS server='hds-us-nt-020.ninjatrader.com' port=31655 system='' useSsl=True
+2025-12-20 20:38:55:076 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2025-12-20 20:38:55:077 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2025-12-20 20:38:55:077 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2025-12-20 20:38:55:104 (Simulation) Tradovate.Adapter.QueryNotificationsAsync0
+2025-12-20 20:38:55:130 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2025-12-20 20:38:55:130 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2025-12-20 20:38:55:163 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='19/12/25 12:00:00 a. m.' to='20/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-20 20:38:55:178 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-20 20:38:55:834 (Simulation) QueryNotificationResponse Live
+2025-12-20 20:38:56:110 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='Sim101' accountItem=CashValue currency=UsDollar value=*****
+2025-12-20 20:38:56:110 (Simulation) Cbi.Account.OnTimerTick.Simulator.Roll: account='Sim101' fcm='' fcmDate='2025-12-20'
+2025-12-20 20:39:00:810 (Simulation) QueryNotificationResponse Demo
+2025-12-20 20:39:09:240 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-20 20:39:56:439 (Simulation) Tradovate.Adapter.CheckConnectionLatency: Connection latency is SLOW. Ping reply is 12,338 ms
+2025-12-20 20:39:56:439 WARNING: Your connection is experiencing high latency: 12,338 ms. This may negatively impact trading and market data services.
+2025-12-20 20:41:28:709 (Simulation) Tradovate.Adapter.CheckConnectionLatency: Connection latency has been restored
+2025-12-20 20:47:29:687 (Simulation) Tradovate.Adapter.CheckConnectionLatency: Connection latency is SLOW. Ping reply is 60,116 ms
+2025-12-20 20:47:29:687 WARNING: Your connection is experiencing high latency: 60,116 ms. This may negatively impact trading and market data services.
+2025-12-20 20:48:03:945 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage2 NormalClosure Bye
+2025-12-20 20:48:03:954 (Simulation) Tradovate.Adapter.OnDisconnectMarketData errorMsg='Bye' tradeStatus='Connected' mdStatus='ConnectionLost'
+2025-12-20 20:48:03:954 (Simulation) Tradovate.Adapter.OnDisconnectMarketData: Milliseconds from last marketDataHeartbeatTime 11
+2025-12-20 20:48:03:954 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='Bye'
+2025-12-20 20:48:03:954 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='Bye'
+2025-12-20 20:48:03:954 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='Bye'
+2025-12-20 20:48:03:954 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=ConnectionLost
+2025-12-20 20:48:03:954 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=True foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2025-12-20 20:48:03:954 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=ConnectionLost
+2025-12-20 20:48:04:049 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage exception='The remote party closed the WebSocket connection without completing the close handshake. ' webSocketErrorCode='ConnectionClosedPrematurely'
+2025-12-20 20:48:04:058 (Simulation) Tradovate.Adapter.OnDisconnectTrade errorMsg='The remote party closed the WebSocket connection without completing the close handshake.' tradeStatus='ConnectionLost' mdStatus='ConnectionLost'
+2025-12-20 20:48:04:058 (Simulation) Tradovate.Adapter.OnDisconnectTrade: Milliseconds from last tradeHeartbeatTime: 11
+2025-12-20 20:48:04:058 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=ConnectionLost priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2025-12-20 20:48:04:058 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=ConnectionLost previousStatus=Connected message=''
+2025-12-20 20:48:04:058 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=ConnectionLost previousStatus=Connected message=''
+2025-12-20 20:48:04:089 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=ConnectionLost priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2025-12-20 20:48:04:089 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=ConnectionLost priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2025-12-20 20:48:04:089 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=ConnectionLost priceStatus=ConnectionLost
+2025-12-20 20:48:04:089 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=True foundTradeLoss=True foundConnectingStatus=False foundConnected=False
+2025-12-20 20:48:04:089 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Disconnecting
+2025-12-20 20:48:04:455 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2025-12-20 20:48:26:208 (Simulation) Gui.ControlCenter.OnDisconnect
+2025-12-20 20:48:26:216 (Simulation) Cbi.Connection.Disconnect
+2025-12-20 20:48:26:216 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Disconnecting priceStatus=Disconnecting previousStatus=ConnectionLost previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2025-12-20 20:48:26:217 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Disconnecting previousStatus=ConnectionLost message=''
+2025-12-20 20:48:26:217 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Disconnecting previousStatus=ConnectionLost message=''
+2025-12-20 20:48:26:217 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Disconnecting priceStatus=Disconnecting previousStatus=ConnectionLost previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2025-12-20 20:48:26:217 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close1
+2025-12-20 20:48:26:223 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Disconnecting priceStatus=Disconnecting previousStatus=ConnectionLost previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2025-12-20 20:48:26:223 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Disconnecting priceStatus=Disconnecting
+2025-12-20 20:48:26:223 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=False
+2025-12-20 20:48:26:223 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Disconnected
+2025-12-20 20:48:26:224 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close3
+2025-12-20 20:48:26:224 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close4
+2025-12-20 20:48:26:224 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close5
+2025-12-20 20:48:26:224 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close6a
+2025-12-20 20:48:26:226 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close7
+2025-12-20 20:48:26:226 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close8
+2025-12-20 20:48:26:250 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2025-12-20 20:48:26:256 Core.Instrumentation.LogActivity: activityType=Application errorCode=Panic errorMessage=''
+2025-12-20 20:48:26:256 *************** unhandled exception trapped ***************
+2025-12-20 20:48:26:256 The semaphore has been disposed.
+2025-12-20 20:48:26:256 System.ObjectDisposedException: The semaphore has been disposed.
+   at System.Threading.SemaphoreSlim.CheckDispose()
+   at System.Threading.SemaphoreSlim.Release(Int32 releaseCount)
+   at NinjaTrader.Tradovate.Adapter.<OnDisconnectMarketData>d__137.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+2025-12-20 20:49:40:286 (Simulation) Tradovate.Adapter.DisposeTrade0

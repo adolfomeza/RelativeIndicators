@@ -1,0 +1,1125 @@
+******************* Session Start (Version 8.1.6.2) *******************
+2025-12-28 15:12:43:932 WARNING: Session Break (Version 8.1.6.2)
+2025-12-28 15:12:52:680 Cbi.Globals.MachineId: True/True 280CB754932A645C8D63C782E8605C43
+2025-12-28 15:12:52:680 NinjaTrader.Gui.LoginInternal user='joelbencomo' mode='Simulation'
+2025-12-28 15:12:52:850 Core.Instrumentation.ActivitySource: enabled=True randomPercent=70.46558 enabledSessionsPercent=100 chartMs=250 enabledTypes='ChartPerformance Application NinjaScript Adapter Login '
+2025-12-28 15:12:52:877 Core.Instrumentation.LogActivity: activityType=Login errorCode=NoError errorMessage=''
+2025-12-28 15:12:53:565 (Simulation) NinjaTrader.Core.Authentication.GetAccessToken6
+2025-12-28 15:12:53:569 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.8552979' renewSecs='2399.92764895'
+2025-12-28 15:12:54:210 Cbi.UserEntitlement.VerifyAsync.0 apiUrl='https://live.tradovateapi.com'
+2025-12-28 15:12:54:665 Cbi.UserEntitlement.VerifyAsync.98: Evaluation expiration=2026-12-31, Evaluation expiration=2026-12-31
+2025-12-28 15:12:55:070 PrimaryMonitorWPFDPIScale=1.00
+2025-12-28 15:12:55:350 Cbi.UserEntitlement.VerifyAsync.99: subscription=Free licensedProviders='Playback Simulator NinjaTrader NinjaTrader Continuum NinjaTrader FXCM IQFeed E-Signal External FOREX.com Interactive Brokers Barchart.com Kinetick FXCM Coinbase cTrader Schwab Rithmic for NinjaTrader Brokerage Custom0 Custom2 Custom3 Custom4 Custom6 Custom7 Custom8 Custom9 Custom10 Provider13 Custom14 Provider26 Custom15 Custom16 Custom17 Custom18 Custom19 Custom20 Custom21 Custom22 Custom23 Custom24 Custom25 Custom26 Custom27 Custom28 Custom29 Custom30 Custom31 Custom32 Custom33 Custom34 Custom35 Custom36 Custom37 Custom38 Custom39 Custom40'
+2025-12-28 15:12:55:392 InstallDir='C:\Program Files\NinjaTrader 8\'
+2025-12-28 15:12:55:392 UserDataDir='C:\Users\prueba\Documents\NinjaTrader 8\'
+2025-12-28 15:12:55:392 MachineID='280CB754932A645C8D63C782E8605C43'
+2025-12-28 15:12:55:392 OS='Microsoft Windows NT 10.0.26200.0'/'Win32NT'
+2025-12-28 15:12:55:392 OSLanguage='en-US'
+2025-12-28 15:12:55:392 OSEnvironment='64bit'
+2025-12-28 15:12:55:392 Processors=12
+2025-12-28 15:12:55:392 ThreadPool: minWorkerThreads=12 maxWorkerThreads=32767 minCompletionPortThreads=12 maxCompletionPortThreads=1000
+2025-12-28 15:12:56:451 ProcessorSpeed=2.6 GHz
+2025-12-28 15:12:56:451 PhysicalMemory=24576 MB
+2025-12-28 15:12:56:473 DisplayAdapters=2/NVIDIA GeForce GTX 1650|Intel(R) UHD Graphics
+2025-12-28 15:12:56:473 Monitors=2/1920x1080|1920x1080
+2025-12-28 15:12:56:473 .NET/CLR Version='4.8'/64bit
+2025-12-28 15:12:56:473 SQLiteVersion='1.0.116.0'
+2025-12-28 15:12:56:473 ApplicationTimezone=EST +1 hour(s)
+2025-12-28 15:12:56:473 ApplicationTimezone=UTC -4 hour(s)
+2025-12-28 15:12:56:473 LocalTimezone=EST +1 hour(s)
+2025-12-28 15:12:56:473 LocalTimezone=UTC -4 hour(s)
+2025-12-28 15:12:56:600 DirectXRenderingHW
+2025-12-28 15:12:56:600 Copying custom assemblies...
+2025-12-28 15:12:56:610 Loading custom assemblies...
+2025-12-28 15:12:56:610 Loading C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\NinjaTrader.Custom.dll...
+2025-12-28 15:12:56:770 Loading C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\NinjaTrader.Vendor.dll...
+2025-12-28 15:12:56:783 Deleting temporary files...
+2025-12-28 15:12:56:993 Creating directory 'C:\Users\prueba\Documents\NinjaTrader 8\db\cache'...
+2025-12-28 15:12:56:995 Creating directory 'C:\Users\prueba\Documents\NinjaTrader 8\db\day'...
+2025-12-28 15:12:56:995 Creating directory 'C:\Users\prueba\Documents\NinjaTrader 8\db\messages'...
+2025-12-28 15:12:56:996 Creating directory 'C:\Users\prueba\Documents\NinjaTrader 8\db\minute'...
+2025-12-28 15:12:56:996 Creating directory 'C:\Users\prueba\Documents\NinjaTrader 8\db\snapshot'...
+2025-12-28 15:12:56:997 Creating directory 'C:\Users\prueba\Documents\NinjaTrader 8\db\tick'...
+2025-12-28 15:12:56:998 Copying db and restoring templates...
+2025-12-28 15:12:57:003 Loading third party assemblies...
+2025-12-28 15:12:57:023 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\ASCENDO_NewsEvents.dll...
+2025-12-28 15:12:57:850 Cbi.VendorLicense.Verify.1: trying 'https://license.ninjatrader.com/vendorlicensenew/ASCENDO/IndicatorNewsEvents/2/R-280CB754932A645C8D63C782E8605C43.xml' ...
+2025-12-28 15:12:58:014 Cbi.VendorLicense.Verify.1: good
+2025-12-28 15:12:58:031 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\WindowsInput.dll...
+2025-12-28 15:12:58:031 Initializing database...
+2025-12-28 15:12:58:031 Loading master instruments...
+2025-12-28 15:12:58:154 (Db) Cbi.DB.get_Current.CreateConnection.Start
+2025-12-28 15:12:58:156 (Db) Cbi.DB: connectionString='Data Source="C:\Users\prueba\Documents\NinjaTrader 8\db\NinjaTrader.sqlite";Version=3;Synchronous=Full;Journal Mode=Off;Pooling=True;Max Pool Size=100;foreign keys=true;'
+2025-12-28 15:12:58:564 (Db) Cbi.DB.get_Current.CreateConnection.End
+2025-12-28 15:12:58:630 Loading instruments...
+2025-12-28 15:12:58:830 Loading accounts...
+2025-12-28 15:12:58:894 Loading users...
+2025-12-28 15:12:58:911 Downloading server info...
+2025-12-28 15:12:58:911 Starting instrument management...
+2025-12-28 15:12:58:933 Starting timer...
+2025-12-28 15:12:58:933 Creating file type watcher...
+2025-12-28 15:12:58:934 Setting ATI...
+2025-12-28 15:12:58:951 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2025-12-28 15:12:58:956 Connecting ATI server...
+2025-12-28 15:12:58:958 Server.AtiServer.Connect0
+2025-12-28 15:12:58:958 Starting adapter server...
+2025-12-28 15:12:58:960 Server.AtiServer.Connect1: Port='36973'
+2025-12-28 15:12:58:960 Server.AtiServer.Connect2
+2025-12-28 15:12:58:975 Starting bars dictionary...
+2025-12-28 15:12:58:975 Starting recorder...
+2025-12-28 15:12:58:980 Starting server(s)...
+2025-12-28 15:12:59:009 Core.Globals.ApplicationStart.Commission: minVersion=1 maxVersion=3138
+2025-12-28 15:12:59:009 Core.Globals.ApplicationStart.InstrumentList: minVersion=1 maxVersion=475
+2025-12-28 15:12:59:009 Core.Globals.ApplicationStart.MasterInstrument: minVersion=1 maxVersion=9897
+2025-12-28 15:12:59:009 Core.Globals.ApplicationStart.Risk: minVersion=-14121 maxVersion=1
+2025-12-28 15:12:59:009 Core.Globals.ApplicationStart.TradingHours: minVersion=1 maxVersion=5111
+2025-12-28 15:12:59:118 ChartHotKeys: Alerts='' DisableAllAlerts='' EnableAllAlerts='' DataSeries='Ctrl+F' Indicators='Ctrl+I' Strategies='Ctrl+S' Properties='Ctrl+T' CrosshairPointer='Ctrl+R' CrosshairLocal='Ctrl+Q' CrosshairGlobal='Ctrl+G' CrosshairGlobal2='Ctrl+N' CrosshairLock='Ctrl+L' AutoScaleAndReturn='' CyclePlotExecutions='Ctrl+E' ReloadHistoricalData='Ctrl+Shift+R' ReloadNinjaScript='F5' SaveChartImage='Alt+S' ShowDataBox='Ctrl+D' ShowChartTrader='' ShowChartTraderHidden='' ShowIndicators='' ShowScrollBar='' SnapModeBar='' SnapModeBarTick='' SnapModeBarObject='' SnapModeDisabled='' SnapModeTick='' StayInDrawMode='' ZoomIn='Ctrl+Alt+Z' ZoomOut='Ctrl+Alt+O' BarSpacingPlus='Ctrl+Down' BarSpacingMinus='Ctrl+Up' BarWidthPlus='Alt+Down' BarWidthMinus='Alt+Up' Arc='Ctrl+F7' AndrewsPitchfork='Ctrl+F8' ArrowDown='Alt+F3' ArrowLine='Ctrl+F2' ArrowUp='Alt+F2' Diamond='Alt+F5' Dot='Alt+F6' Ellipse='Ctrl+F11' ExtendedLine='F4' FibonacciCircle='F11' FibonacciExtension='F9' FibonacciRetracement='F8' FibonacciTimeExtension='F10' GannFan='Ctrl+F9' HorizontalLine='F6' Line='F2' Path='Ctrl+4' Polygon='Alt+F10' VolumeProfile='Ctrl+3' VWAP='Ctrl+5' Ray='F3' Rectangle='Ctrl+F12' RegressionChannel='Ctrl+F10' HideDrawingObjects='' RemoveDrawingObjects='' RegionHighlightX='Shift+F1' RegionHighlightY='Shift+F2' RiskReward='Ctrl+F4' Ruler='Ctrl+F3' Square='Alt+F7' Text='F12' TimeCycles='Alt+F11' TrendChannel='Ctrl+2' Triangle='Ctrl+F6' TriangleDown='Alt+F9' TriangleUp='Alt+F8' VerticalLine='F7'
+2025-12-28 15:12:59:121 GlobalHotKeys: CloseWorkspace='' NextWorkspace='Shift+F3' PreviousWorkspace='' SaveWorkspace='' SaveAllWorkspaces='' NewAccountData='' NewTradePerformance='' NewAlertsLog='' NewBasicEntry='' NewChart='' NewFxBoard='' NewFxPro='' NewHotListAnalyzer='' NewLevel2='' NewMarketAnalyzer='' NewMarketWatch='' NewNews='' NewNinjaScriptEditor='' NewNinjaScriptOutput='' NewOrderTicket='' NewStrategyAnalyzer='' NewDynamicDom='' NewStaticDom='' NewTimeAndSales='' CancelAllOrders='' FlattenEverything='' OpenInstrumentManager='' OpenInstrumentList='' OpenDatabase='' OpenHotKeyManager='' OpenHistoricalData='' OpenCommission='' OpenRisk='' OpenTradingHoursManager='' OpenRemoveNinjaScript='' CloseOtherTabs='' CloseTab='' DuplicateInNewTab='' DuplicateInNewWindow='' Export='' Find='Ctrl+F' MoveToNewWindow='' Print='Ctrl+P' Replace='Ctrl+H' Share='Ctrl+Shift+S' LoadTemplate='' SaveTemplate='' SaveTemplateAsDefault=''
+2025-12-28 15:12:59:121 MarketAnalyzerHotKeys: AddBlankRow='' AddLabelRow='' Columns='' Alerts='' EnableAllAlerts='' DisableAllAlerts='' AutoSort='' RowFilter='' ReloadHistorical='Ctrl+Shift+R' ReloadNinjaScript='F5'
+2025-12-28 15:12:59:122 NinjaScriptEditorHotKeys: InsertCodeSnippet='F2' FindNext='F3' Compile='F5' GoToLine='Ctrl+G' CommentSelection='Ctrl+K' InlineSyntaxChecking='Ctrl+Alt+S' CollapseToDefinitions='' ExpandAllOutlining='' StartOutlining='' StopOutlining='' HideSelection='' StopHidingSelection='' ToggleAllOutlining='' ToggleOutlining='' Save='Ctrl+S' Undo='Ctrl+Z' Redo='Ctrl+Y'
+2025-12-28 15:12:59:128 OrderEntryHotKeys: BuyAsk='' BuyBid='' BuyMarket='' SellAsk='' SellBid='' SellMarket='' BreakevenAtmStrategy='' BreakevenPosition='' CancelLastOrder='' CloseAtmStrategy='' ClosePosition='' DecreaseLastOrderPrice='' IncreaseLastOrderPrice='' ModifyLastOrder2Fill='' Reverse='' OcoOrder='' SimulatedOrder=''
+2025-12-28 15:12:59:128 SuperDomHotKeys: Center='' Columns='' Indicators='' ReloadAllHistoricalData='Ctrl+Shift+R' ReloadNinjaScript='F5'
+2025-12-28 15:12:59:128 OrderEntryHotKeys=disabled
+2025-12-28 15:12:59:130 AutoClose=disabled
+2025-12-28 15:12:59:593 Core.Instrumentation.LogActivity: activityType=Application errorCode=NoError errorMessage=''
+2025-12-28 15:13:00:141 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=9 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=263 TradingHours=0
+2025-12-28 15:13:01:568 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.01ms InstrumentLists=0.43ms MasterInstruments=0.06ms Messages=0.31ms Risks=0.08ms RolloverCollection=1426.12ms TradingHours=0.07ms
+2025-12-28 15:13:01:569 Starting server message polling timer with interval 3600 seconds...
+2025-12-28 15:13:04:823 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-28 15:13:05:034 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-28 15:13:05:147 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-28 15:13:05:254 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-28 15:13:05:367 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-28 15:13:07:262 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-28 15:13:08:676 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-28 15:13:10:518 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-28 15:13:10:637 Core.Instrumentation.LogActivity: activityType=NinjaScript errorCode=NoError errorMessage=''
+2025-12-28 15:13:11:084 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-28 15:13:11:784 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-28 15:13:12:350 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-28 15:13:13:323 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-28 15:13:16:090 6 Chart Chart1Tab1 1 Ser 2 Ind 0 DrawObj Chart2Tab1 1 Ser 2 Ind 0 DrawObj Chart3Tab1 1 Ser 2 Ind 0 DrawObj Chart4Tab1 1 Ser 2 Ind 0 DrawObj Chart5Tab1 1 Ser 2 Ind 1 DrawObj Chart6Tab1 1 Ser 2 Ind 0 DrawObj 
+2025-12-28 15:14:25:790 (Simulation) Gui.ControlCenter.OnConnect
+2025-12-28 15:14:25:862 (Simulation) Cbi.Connection.Connect0: status=Disconnected assembly=8.1.6.2 date=2025-12-28 runAsProcess=False
+2025-12-28 15:14:25:879 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2025-12-28 15:14:25:882 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2025-12-28 15:14:25:892 (Simulation) Cbi.Connection.Connect1
+2025-12-28 15:14:25:901 (Simulation) Cbi.Connection.Connect2
+2025-12-28 15:14:25:901 (Simulation) Cbi.Connection.Connect3
+2025-12-28 15:14:25:908 (Simulation) Cbi.Connection.CreateAccount: account='Sim101' displayName='Sim101' fcm='' denomination=UsDollar forexLotSize=10000
+2025-12-28 15:14:25:913 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2025-12-28 15:14:25:914 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connecting priceStatus=Connecting
+2025-12-28 15:14:25:919 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connecting previousStatus=Disconnected message=''
+2025-12-28 15:14:25:923 (Simulation) Cbi.Account.OnConnectionStatus.PositionExecutions: account='Sim101'
+2025-12-28 15:14:25:928 (Simulation) Cbi.Connection.Connect4
+2025-12-28 15:14:26:168 (Simulation) Cbi.Connection.Connect5
+2025-12-28 15:14:26:172 (Simulation) Tradovate.Adapter.Connect: user='joelbencomo' accountType='Simulation' useLocalOcoSimulation=True
+2025-12-28 15:14:26:312 (Simulation) Cbi.Connection.Connect9 ok
+2025-12-28 15:14:26:340 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=True foundConnected=False
+2025-12-28 15:14:26:341 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connecting
+2025-12-28 15:14:26:341 Core.Instrumentation.LogActivity: activityType=Adapter errorCode=NoError errorMessage=''
+2025-12-28 15:14:26:520 (Simulation) Tradovate.Adapter.StartTradeWebSocket
+2025-12-28 15:14:26:740 (Simulation) Tradovate.Adapter.StartTradeWebSocket1
+2025-12-28 15:14:26:740 (Simulation) Tradovate.Adapter.StartWebSocketTradeSendWorker
+2025-12-28 15:14:26:741 (Simulation) Tradovate.Adapter.StartWebSocketTradeReceiveWorker
+2025-12-28 15:14:26:746 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage
+2025-12-28 15:14:27:100 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2025-12-28 15:14:27:439 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2025-12-28 15:14:27:440 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2025-12-28 15:14:27:441 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2025-12-28 15:14:27:446 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2025-12-28 15:14:27:819 (Simulation) Cbi.Connection.CreateAccount: account='DEMO619219' displayName='DEMO' fcm='' denomination=UsDollar forexLotSize=1
+2025-12-28 15:14:27:819 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connecting previousStatus=Disconnected message=''
+2025-12-28 15:14:27:819 (Simulation) Cbi.Account.OnConnectionStatus.PositionExecutions: account='DEMO619219'
+2025-12-28 15:14:27:827 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=CashValue currency=UsDollar value=*****
+2025-12-28 15:14:27:829 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc0
+2025-12-28 15:14:27:829 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2025-12-28 15:14:27:830 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connected previousStatus=Connecting message=''
+2025-12-28 15:14:27:830 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connected previousStatus=Connecting message=''
+2025-12-28 15:14:27:835 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2025-12-28 15:14:27:853 (Simulation) Cbi.Account.Restore.Start: account='Sim101' fcm=''
+2025-12-28 15:14:27:854 SQLite error (17): statement aborts at 48: [SELECT Id,Account,BarIndex,Commission,Exchange,ExecutionId,Fee,Instrument,IsEntry,IsEntryStrategy,IsExit,IsExitStrategy,LotSize,MarketPosition,MaxPrice,MinPrice,Name,OrderId,Position,P
+2025-12-28 15:14:27:854 (Simulation) Cbi.Account.Restore.Start: account='DEMO619219' fcm=''
+2025-12-28 15:14:27:857 SQLite error (17): statement aborts at 39: [SELECT Account,Id,AvgFillPrice,Data,Filled,Gtd,Instrument,Name,LimitPrice,Oco,OrderAction,OrderEntry,OrderId,OrderState,OrderType,Quantity,StatementDate,StopPrice,Time,TimeInForce FROM
+2025-12-28 15:14:27:867 SQLite error (17): statement aborts at 29: [SELECT AvgFillPrice,Comment,[Error],Filled,LimitPrice,Nr,OrderId,OrderState,Quantity,ServerName,StatementDate,StopPrice,Time FROM OrderUpdates WHERE [Order]=? ORDER BY Nr] database sch
+2025-12-28 15:14:27:900 (Simulation) Cbi.Account.Restore.End: account='DEMO619219' fcm=''
+2025-12-28 15:14:27:910 (Simulation) Cbi.Account.Restore.End: account='Sim101' fcm=''
+2025-12-28 15:14:27:912 (Simulation) Core.Connection.Statistics: connectAttempts=1/1743.9ms
+2025-12-28 15:14:27:912 (Simulation) Cbi.Connection.ConnectionStatusCallback: autoClosePositionTime='12/17/2025 00:00:00' autoClosePosition=False
+2025-12-28 15:14:27:913 Server.HdsClient.Connect: type=HDS server='hds-us-nt-009.ninjatrader.com' port=31655 system='' useSsl=True
+2025-12-28 15:14:28:104 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2025-12-28 15:14:28:104 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2025-12-28 15:14:28:104 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2025-12-28 15:14:28:240 (Simulation) Tradovate.Adapter.QueryNotificationsAsync0
+2025-12-28 15:14:28:260 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2025-12-28 15:14:28:260 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2025-12-28 15:14:28:296 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='11/12/25 12:00:00 a. m.' to='28/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 15:14:28:297 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='24/11/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 15:14:28:297 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='24/11/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 15:14:28:298 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 01-26' from='24/11/25 12:00:00 a. m.' to='15/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 15:14:28:298 Cbi.Instrument.RequestBars (to Provider): instrument='MES 12-25' from='24/11/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 15:14:28:298 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='28/11/25 12:00:00 a. m.' to='28/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 15:14:28:298 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='11/12/25 12:00:00 a. m.' to='28/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 15:14:28:298 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='11/12/25 12:00:00 a. m.' to='28/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 15:14:28:298 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 12-25' from='24/11/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 15:14:28:298 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 02-26' from='12/12/25 12:00:00 a. m.' to='28/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 15:14:28:299 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='11/12/25 12:00:00 a. m.' to='28/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 15:14:28:322 (Simulation) QueryNotificationResponse Live
+2025-12-28 15:14:28:542 (Simulation) QueryNotificationResponse Demo
+2025-12-28 15:14:29:275 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='Sim101' accountItem=CashValue currency=UsDollar value=*****
+2025-12-28 15:14:29:276 (Simulation) Cbi.Account.OnTimerTick.Simulator.Roll: account='Sim101' fcm='' fcmDate='2025-12-27'
+2025-12-28 15:14:30:165 Cbi.Instrument.RequestBars (to Provider): instrument='MES 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 15:14:30:188 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 15:14:30:236 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='27/11/25 12:00:00 a. m.' to='26/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 15:14:30:401 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 15:14:30:573 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='26/12/25 12:00:00 a. m.' to='26/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 15:14:30:619 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='26/12/25 12:00:00 a. m.' to='26/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 15:14:30:638 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 15:14:31:322 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='26/12/25 12:00:00 a. m.' to='26/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 15:14:31:368 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='26/12/25 12:00:00 a. m.' to='26/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 15:34:29:677 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='25/12/25 12:00:00 a. m.' to='26/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-28 15:34:36:965 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 15:34:37:232 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='26/12/25 12:00:00 a. m.' to='26/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 15:52:26:089 ERROR: Strategy 'SessionLevelsStrategy/378061502': An order has been ignored since the stop price ‘25666’ near the bar stamped ‘12/15/2025 10:30:00’ is invalid based on the price range of the bar. This is an invalid order and subsequent orders may also be ignored.
+2025-12-28 15:52:53:516 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2025-12-28 15:52:53:519 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2025-12-28 15:52:53:792 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2025-12-28 15:52:53:793 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9612395' renewSecs='2399.98061975'
+2025-12-28 15:59:17:977 ERROR: Strategy 'SessionLevelsStrategy/378061502': An order has been ignored since the stop price ‘25666’ near the bar stamped ‘12/15/2025 10:30:00’ is invalid based on the price range of the bar. This is an invalid order and subsequent orders may also be ignored.
+2025-12-28 16:01:00:929 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='26/12/25 12:00:00 a. m.' to='26/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 16:12:05:958 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-28 16:13:01:188 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='14/12/25 7:00:00 p. m.' to='19/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-28 16:13:01:569 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2025-12-28 16:13:02:060 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2025-12-28 16:13:02:060 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.18ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2025-12-28 16:21:52:864 ERROR: Connection lost to the NinjaTrader Historical Data Server: hds-us-nt-009.ninjatrader.com
+2025-12-28 16:21:53:399 (Simulation) Tradovate.Adapter.CheckConnectionLatency: Connection latency is SLOW. Ping reply is 29,182 ms
+2025-12-28 16:21:53:399 WARNING: Your connection is experiencing high latency: 29,182 ms. This may negatively impact trading and market data services.
+2025-12-28 16:21:56:176 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage2 NormalClosure Bye
+2025-12-28 16:21:56:183 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage2 NormalClosure Bye
+2025-12-28 16:21:56:184 (Simulation) Tradovate.Adapter.OnDisconnectTrade errorMsg='Bye' tradeStatus='ConnectionLost' mdStatus='Connected'
+2025-12-28 16:21:56:184 (Simulation) Tradovate.Adapter.OnDisconnectTrade: Milliseconds from last tradeHeartbeatTime: 12
+2025-12-28 16:21:56:184 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=ConnectionLost priceStatus=Connected previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='Bye'
+2025-12-28 16:21:56:184 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=ConnectionLost previousStatus=Connected message=''
+2025-12-28 16:21:56:184 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=ConnectionLost previousStatus=Connected message=''
+2025-12-28 16:21:56:191 (Simulation) Tradovate.Adapter.OnDisconnectMarketData errorMsg='Bye' tradeStatus='ConnectionLost' mdStatus='ConnectionLost'
+2025-12-28 16:21:56:191 (Simulation) Tradovate.Adapter.OnDisconnectMarketData: Milliseconds from last marketDataHeartbeatTime 2,376
+2025-12-28 16:21:56:191 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=ConnectionLost priceStatus=ConnectionLost previousStatus=ConnectionLost previousPriceStatus=Connected errorCode=NoError nativeError='Bye'
+2025-12-28 16:21:56:192 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=ConnectionLost priceStatus=ConnectionLost previousStatus=ConnectionLost previousPriceStatus=Connected errorCode=NoError nativeError='Bye'
+2025-12-28 16:21:56:193 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=ConnectionLost priceStatus=ConnectionLost previousStatus=ConnectionLost previousPriceStatus=Connected errorCode=NoError nativeError='Bye'
+2025-12-28 16:21:56:193 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=ConnectionLost priceStatus=ConnectionLost
+2025-12-28 16:21:56:193 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=True foundTradeLoss=True foundConnectingStatus=False foundConnected=False
+2025-12-28 16:21:56:194 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Disconnecting
+2025-12-28 16:21:56:210 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=ConnectionLost priceStatus=Connected previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='Bye'
+2025-12-28 16:21:56:213 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=ConnectionLost priceStatus=Connected previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='Bye'
+2025-12-28 16:21:56:213 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=ConnectionLost priceStatus=ConnectionLost
+2025-12-28 16:21:56:213 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=True foundTradeLoss=True foundConnectingStatus=False foundConnected=False
+2025-12-28 16:21:56:213 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Disconnecting
+2025-12-28 16:21:56:708 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2025-12-28 16:22:01:637 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2025-12-28 16:22:01:637 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2025-12-28 16:22:01:637 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2025-12-28 16:22:01:638 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2025-12-28 16:22:01:930 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2025-12-28 16:22:02:395 (Simulation) Tradovate.Adapter.StartTradeWebSocket
+2025-12-28 16:22:02:879 Server.HdsClient.Connect: type=HDS server='hds-us-nt-018.ninjatrader.com' port=31655 system='' useSsl=True
+2025-12-28 16:22:04:937 (Simulation) Tradovate.Adapter.StartTradeWebSocket1
+2025-12-28 16:22:04:937 (Simulation) Tradovate.Adapter.StartWebSocketTradeSendWorker
+2025-12-28 16:22:04:937 (Simulation) Tradovate.Adapter.StartWebSocketTradeReceiveWorker
+2025-12-28 16:22:04:938 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage
+2025-12-28 16:22:07:741 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc0
+2025-12-28 16:22:07:741 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2025-12-28 16:22:07:741 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2025-12-28 16:22:07:741 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connected previousStatus=ConnectionLost message=''
+2025-12-28 16:22:07:741 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connected previousStatus=ConnectionLost message=''
+2025-12-28 16:22:07:758 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2025-12-28 16:22:07:759 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2025-12-28 16:22:07:759 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2025-12-28 16:22:07:759 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2025-12-28 16:22:07:759 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2025-12-28 16:26:25:569 (Simulation) Tradovate.Adapter.CheckConnectionLatency: Connection latency is SLOW. Ping reply is 15,133 ms
+2025-12-28 16:26:25:569 WARNING: Your connection is experiencing high latency: 15,133 ms. This may negatively impact trading and market data services.
+2025-12-28 16:27:43:366 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='7/12/25 7:00:00 p. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-28 16:32:53:792 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2025-12-28 16:32:53:792 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2025-12-28 16:32:54:711 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2025-12-28 16:32:54:711 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.8621779' renewSecs='2399.93108895'
+2025-12-28 16:36:12:208 (Simulation) Tradovate.Adapter.CheckConnectionLatency: Connection latency has been restored
+2025-12-28 16:54:31:384 (Simulation) Tradovate.Adapter.CheckConnectionLatency: Connection latency is SLOW. Ping reply is 15,110 ms
+2025-12-28 16:54:31:384 WARNING: Your connection is experiencing high latency: 15,110 ms. This may negatively impact trading and market data services.
+2025-12-28 16:56:41:328 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage exception='An internal WebSocket error occurred. Please see the innerException, if present, for more details.  Unable to read data from the transport connection: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.' webSocketErrorCode='Success'
+2025-12-28 16:56:41:328 (Simulation) Tradovate.Adapter.OnDisconnectMarketData errorMsg='An internal WebSocket error occurred. Please see the innerException, if present, for more details. ' tradeStatus='Connected' mdStatus='ConnectionLost'
+2025-12-28 16:56:41:328 (Simulation) Tradovate.Adapter.OnDisconnectMarketData: Milliseconds from last marketDataHeartbeatTime 13,727
+2025-12-28 16:56:41:328 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2025-12-28 16:56:41:328 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2025-12-28 16:56:41:328 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2025-12-28 16:56:41:328 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=ConnectionLost
+2025-12-28 16:56:41:328 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=True foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2025-12-28 16:56:41:328 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=ConnectionLost
+2025-12-28 16:56:41:828 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2025-12-28 16:56:42:941 (Simulation) Tradovate.Adapter.CheckConnectionLatency: Connection latency is SLOW. Ping reply is 15,339 ms
+2025-12-28 16:56:42:941 WARNING: Your connection is experiencing high latency: 15,339 ms. This may negatively impact trading and market data services.
+2025-12-28 16:56:44:489 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2025-12-28 16:56:44:489 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2025-12-28 16:56:44:489 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2025-12-28 16:56:44:489 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2025-12-28 16:56:44:678 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2025-12-28 16:56:44:678 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2025-12-28 16:56:44:678 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2025-12-28 16:56:44:678 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2025-12-28 16:56:44:678 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2025-12-28 16:56:44:678 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2025-12-28 17:01:52:412 ERROR: Connection lost to the NinjaTrader Historical Data Server: hds-us-nt-018.ninjatrader.com
+2025-12-28 17:02:02:418 Server.HdsClient.Connect: type=HDS server='hds-us-nt-019.ninjatrader.com' port=31655 system='' useSsl=True
+2025-12-28 17:02:09:601 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage2 NormalClosure Bye
+2025-12-28 17:02:09:601 (Simulation) Tradovate.Adapter.OnDisconnectMarketData errorMsg='Bye' tradeStatus='Connected' mdStatus='ConnectionLost'
+2025-12-28 17:02:09:601 (Simulation) Tradovate.Adapter.OnDisconnectMarketData: Milliseconds from last marketDataHeartbeatTime 566
+2025-12-28 17:02:09:601 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='Bye'
+2025-12-28 17:02:09:601 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='Bye'
+2025-12-28 17:02:09:601 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='Bye'
+2025-12-28 17:02:09:601 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage exception='The remote party closed the WebSocket connection without completing the close handshake. ' webSocketErrorCode='ConnectionClosedPrematurely'
+2025-12-28 17:02:09:601 (Simulation) Tradovate.Adapter.OnDisconnectTrade errorMsg='The remote party closed the WebSocket connection without completing the close handshake.' tradeStatus='ConnectionLost' mdStatus='ConnectionLost'
+2025-12-28 17:02:09:601 (Simulation) Tradovate.Adapter.OnDisconnectTrade: Milliseconds from last tradeHeartbeatTime: 593
+2025-12-28 17:02:09:601 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=ConnectionLost priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2025-12-28 17:02:09:602 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=ConnectionLost previousStatus=Connected message=''
+2025-12-28 17:02:09:602 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=ConnectionLost
+2025-12-28 17:02:09:602 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=True foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2025-12-28 17:02:09:602 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=ConnectionLost previousStatus=Connected message=''
+2025-12-28 17:02:09:602 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=ConnectionLost
+2025-12-28 17:02:09:616 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=ConnectionLost priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2025-12-28 17:02:09:616 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=ConnectionLost priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2025-12-28 17:02:09:616 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=ConnectionLost priceStatus=ConnectionLost
+2025-12-28 17:02:09:616 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=True foundTradeLoss=True foundConnectingStatus=False foundConnected=False
+2025-12-28 17:02:09:616 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Disconnecting
+2025-12-28 17:02:10:106 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2025-12-28 17:02:20:357 ERROR: Strategy 'SessionLevelsStrategy/378061502' lost price connection for more than 10 seconds and will be restarted.
+2025-12-28 17:02:20:370 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378061502' connection='Simulation' orderStatus='ConnectionLost' priceStatus='ConnectionLost'
+2025-12-28 17:02:20:370 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378061502' connection='Simulation' orderStatus='ConnectionLost' priceStatus='ConnectionLost'
+2025-12-28 17:02:21:364 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2025-12-28 17:02:22:015 (Simulation) Tradovate.Adapter.StartTradeWebSocket
+2025-12-28 17:02:29:779 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2025-12-28 17:02:32:211 (Simulation) Tradovate.Adapter.StartTradeWebSocket1
+2025-12-28 17:02:32:211 (Simulation) Tradovate.Adapter.StartWebSocketTradeSendWorker
+2025-12-28 17:02:32:212 (Simulation) Tradovate.Adapter.StartWebSocketTradeReceiveWorker
+2025-12-28 17:02:32:212 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage
+2025-12-28 17:02:32:212 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2025-12-28 17:02:32:487 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2025-12-28 17:02:32:487 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2025-12-28 17:02:32:487 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2025-12-28 17:02:32:487 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2025-12-28 17:02:32:765 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc0
+2025-12-28 17:02:32:765 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2025-12-28 17:02:32:765 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2025-12-28 17:02:32:765 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connected previousStatus=ConnectionLost message=''
+2025-12-28 17:02:32:765 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connected previousStatus=ConnectionLost message=''
+2025-12-28 17:02:32:783 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2025-12-28 17:02:32:783 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378061502' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2025-12-28 17:02:32:783 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable.Timer.Start: strategy='/378061502'
+2025-12-28 17:02:32:783 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2025-12-28 17:02:32:783 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2025-12-28 17:02:32:783 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2025-12-28 17:02:32:783 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2025-12-28 17:02:34:476 ERROR: Connection lost to the NinjaTrader Historical Data Server: hds-us-nt-019.ninjatrader.com
+2025-12-28 17:02:42:780 (Simulation) NinjaScript.StrategyBase.OnRestartTimerTick: strategy='/378061502'
+2025-12-28 17:02:44:484 Server.HdsClient.Connect: type=HDS server='hds-us-nt-015.ninjatrader.com' port=31655 system='' useSsl=True
+2025-12-28 17:03:37:903 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='23/11/25 7:00:00 p. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-28 17:12:54:658 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2025-12-28 17:12:54:658 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2025-12-28 17:12:54:938 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2025-12-28 17:12:54:938 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9614117' renewSecs='2399.98070585'
+2025-12-28 17:13:01:594 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2025-12-28 17:13:02:037 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2025-12-28 17:13:02:038 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.23ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2025-12-28 17:45:14:598 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='29/12/24 12:00:00 a. m.' to='14/3/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 17:45:15:456 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 06-25' from='16/3/25 12:00:00 a. m.' to='13/6/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 17:45:16:353 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 09-25' from='15/6/25 12:00:00 a. m.' to='12/9/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 17:45:17:461 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='14/9/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 17:45:18:295 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='26/12/25 12:00:00 a. m.' to='26/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 17:46:09:878 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='29/12/24 7:00:00 p. m.' to='14/3/25 11:59:59 p. m.' period='1 Tick'
+2025-12-28 17:50:09:505 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 06-25' from='16/3/25 12:00:00 a. m.' to='13/6/25 11:59:59 p. m.' period='1 Tick'
+2025-12-28 17:52:54:926 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2025-12-28 17:52:54:926 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2025-12-28 17:52:55:272 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2025-12-28 17:52:55:272 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9504021' renewSecs='2399.97520105'
+2025-12-28 17:56:12:318 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 09-25' from='15/6/25 12:00:00 a. m.' to='12/9/25 11:59:59 p. m.' period='1 Tick'
+2025-12-28 17:58:16:856 ERROR: Strategy 'SessionLevelsStrategy/378061502': An order has been ignored since the stop price ‘22428.25’ near the bar stamped ‘01/16/2025 03:35:00’ is invalid based on the price range of the bar. This is an invalid order and subsequent orders may also be ignored.
+2025-12-28 18:00:00:695 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='Sim101' accountItem=Commission currency=UsDollar value=*****
+2025-12-28 18:00:00:695 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='Sim101' accountItem=Fee currency=UsDollar value=*****
+2025-12-28 18:00:00:695 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='Sim101' accountItem=GrossRealizedProfitLoss currency=UsDollar value=*****
+2025-12-28 18:00:00:695 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='Sim101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2025-12-28 18:00:00:695 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='Sim101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2025-12-28 18:00:00:695 (Simulation) Cbi.Account.OnTimerTick.Simulator.Roll: account='Sim101' fcm='' fcmDate='2025-12-28'
+2025-12-28 18:01:14:329 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='14/9/25 12:00:00 a. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-28 18:09:48:371 (Simulation) Tradovate.Adapter.CheckConnectionLatency: Connection latency is SLOW. Ping reply is 26,627 ms
+2025-12-28 18:09:48:371 WARNING: Your connection is experiencing high latency: 26,627 ms. This may negatively impact trading and market data services.
+2025-12-28 18:10:42:589 ERROR: Strategy 'SessionLevelsStrategy/378061510': An order has been ignored since the stop price ‘6806.75’ near the bar stamped ‘12/18/2025 05:49:00’ is invalid based on the price range of the bar. This is an invalid order and subsequent orders may also be ignored.
+2025-12-28 18:11:41:090 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='25/12/25 7:00:00 p. m.' to='26/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-28 18:11:42:524 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='28/12/25 12:00:00 a. m.' to='28/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-28 18:12:37:664 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='23/12/25 7:00:00 p. m.' to='26/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-28 18:12:39:175 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='28/12/25 12:00:00 a. m.' to='28/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-28 18:12:50:532 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='26/12/25 12:00:00 a. m.' to='26/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 18:13:01:605 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2025-12-28 18:13:02:070 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2025-12-28 18:13:02:071 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.28ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2025-12-28 18:14:11:898 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='26/12/25 5:00:00 p. m.' to='26/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-28 18:14:12:358 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='28/12/25 12:00:00 a. m.' to='28/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-28 18:15:15:321 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='21/12/25 7:00:00 p. m.' to='26/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-28 18:15:18:714 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='28/12/25 12:00:00 a. m.' to='28/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-28 18:15:23:036 (Simulation) Tradovate.Adapter.CheckConnectionLatency: Connection latency has been restored
+2025-12-28 18:15:42:289 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='21/12/25 12:00:00 a. m.' to='28/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-28 18:15:46:574 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='26/12/25 5:00:00 p. m.' to='26/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-28 18:15:47:059 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='28/12/25 12:00:00 a. m.' to='28/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-28 18:16:31:028 ERROR: Strategy 'SessionLevelsStrategy/378061506': An order has been ignored since the stop price ‘2505’ near the bar stamped ‘12/02/2025 05:11:00’ is invalid based on the price range of the bar. This is an invalid order and subsequent orders may also be ignored.
+2025-12-28 18:16:36:336 ERROR: Strategy 'SessionLevelsStrategy/378061509': An order has been ignored since the stop price ‘57.57’ near the bar stamped ‘12/12/2025 05:37:00’ is invalid based on the price range of the bar. This is an invalid order and subsequent orders may also be ignored.
+2025-12-28 18:16:50:779 ERROR: Strategy 'SessionLevelsStrategy/378061503': An order has been ignored since the stop price ‘48309’ near the bar stamped ‘12/03/2025 14:12:00’ is invalid based on the price range of the bar. This is an invalid order and subsequent orders may also be ignored.
+2025-12-28 18:17:35:897 (Simulation) Cbi.Account.CreateOrder: orderId='46514242a4784e01ae4b267fc837486c' account='DEMO619219' name='SL_Long_18' orderState=Initialized instrument='MCL 02-26' orderAction=Sell orderType='Stop Market' limitPrice=0 stopPrice=56.65 quantity=10 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2158 time='2025-12-28 18:17:35' gtd='2099-12-01' statementDate='2025-12-28' id=-1 comment=''
+2025-12-28 18:17:35:911 (Simulation) Cbi.Account.CreateOrder: orderId='b13071e976af4a4ba1aadf76a7b250dd' account='DEMO619219' name='TP1_Long_18' orderState=Initialized instrument='MCL 02-26' orderAction=Sell orderType='Limit' limitPrice=57.65 stopPrice=0 quantity=5 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2159 time='2025-12-28 18:17:35' gtd='2099-12-01' statementDate='2025-12-28' id=-1 comment=''
+2025-12-28 18:17:35:911 (Simulation) Cbi.Account.CreateOrder: orderId='edad0f958e6b4ab7aa70be924381f4da' account='DEMO619219' name='TP2_Long_18' orderState=Initialized instrument='MCL 02-26' orderAction=Sell orderType='Limit' limitPrice=58.7 stopPrice=0 quantity=5 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2160 time='2025-12-28 18:17:35' gtd='2099-12-01' statementDate='2025-12-28' id=-1 comment=''
+2025-12-28 18:17:35:928 (Simulation) Cbi.Account.Submit0: realOrderState=Initialized isPendingSubmit=False orderId='46514242a4784e01ae4b267fc837486c' account='DEMO619219' name='SL_Long_18' orderState=Initialized instrument='MCL 02-26' orderAction=Sell orderType='Stop Market' limitPrice=0 stopPrice=56.65 quantity=10 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2158 time='2025-12-28 18:17:35' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:17:35:928 (Simulation) Cbi.Account.Submit1: realOrderState=Initialized orderId='46514242a4784e01ae4b267fc837486c' account='DEMO619219' name='SL_Long_18' orderState=Initialized instrument='MCL 02-26' orderAction=Sell orderType='Stop Market' limitPrice=0 stopPrice=56.65 quantity=10 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2158 time='2025-12-28 18:17:35' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:17:35:929 (Simulation) Cbi.Account.Submit0: realOrderState=Initialized isPendingSubmit=False orderId='b13071e976af4a4ba1aadf76a7b250dd' account='DEMO619219' name='TP1_Long_18' orderState=Initialized instrument='MCL 02-26' orderAction=Sell orderType='Limit' limitPrice=57.65 stopPrice=0 quantity=5 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2159 time='2025-12-28 18:17:35' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:17:35:929 (Simulation) Cbi.Account.Submit1: realOrderState=Initialized orderId='b13071e976af4a4ba1aadf76a7b250dd' account='DEMO619219' name='TP1_Long_18' orderState=Initialized instrument='MCL 02-26' orderAction=Sell orderType='Limit' limitPrice=57.65 stopPrice=0 quantity=5 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2159 time='2025-12-28 18:17:35' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:17:35:929 (Simulation) Cbi.Account.Submit0: realOrderState=Initialized isPendingSubmit=False orderId='edad0f958e6b4ab7aa70be924381f4da' account='DEMO619219' name='TP2_Long_18' orderState=Initialized instrument='MCL 02-26' orderAction=Sell orderType='Limit' limitPrice=58.7 stopPrice=0 quantity=5 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2160 time='2025-12-28 18:17:35' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:17:35:929 (Simulation) Cbi.Account.Submit1: realOrderState=Initialized orderId='edad0f958e6b4ab7aa70be924381f4da' account='DEMO619219' name='TP2_Long_18' orderState=Initialized instrument='MCL 02-26' orderAction=Sell orderType='Limit' limitPrice=58.7 stopPrice=0 quantity=5 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2160 time='2025-12-28 18:17:35' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:17:35:955 (Simulation) Tradovate.Adapter.Submit0: count=1
+2025-12-28 18:17:35:955 (Simulation) Tradovate.Adapter.Submit1: orderId='46514242a4784e01ae4b267fc837486c' account='DEMO619219' name='SL_Long_18' orderState=Initialized instrument='MCL 02-26' orderAction=Sell orderType='Stop Market' limitPrice=0 stopPrice=56.65 quantity=10 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2158 time='2025-12-28 18:17:35' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:17:36:157 (Simulation) Tradovate.Adapter.Submit0: count=1
+2025-12-28 18:17:36:157 (Simulation) Tradovate.Adapter.Submit1: orderId='b13071e976af4a4ba1aadf76a7b250dd' account='DEMO619219' name='TP1_Long_18' orderState=Initialized instrument='MCL 02-26' orderAction=Sell orderType='Limit' limitPrice=57.65 stopPrice=0 quantity=5 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2159 time='2025-12-28 18:17:35' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:17:36:160 (Simulation) Tradovate.Adapter.Submit0: count=1
+2025-12-28 18:17:36:160 (Simulation) Tradovate.Adapter.Submit1: orderId='edad0f958e6b4ab7aa70be924381f4da' account='DEMO619219' name='TP2_Long_18' orderState=Initialized instrument='MCL 02-26' orderAction=Sell orderType='Limit' limitPrice=58.7 stopPrice=0 quantity=5 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2160 time='2025-12-28 18:17:35' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:17:36:268 (Simulation) Tradovate.Adapter.TradeMessageReceive3 status='200' data='{
+  "orderId": 356274661011
+}'
+2025-12-28 18:17:36:295 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274661011,
+  "accountId": 1931663,
+  "contractId": 3643481,
+  "timestamp": "2025-12-28T22:17:36.198Z",
+  "action": "Sell",
+  "ordStatus": "PendingNew",
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2025-12-28 18:17:36:402 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274661011,
+  "orderId": 356274661011,
+  "timestamp": "2025-12-28T22:17:36.198Z",
+  "clOrdId": "46514242a4784e01ae4b267fc837486c",
+  "commandType": "New",
+  "commandStatus": "Pending",
+  "senderId": 619219,
+  "userSessionId": 1702333080,
+  "isAutomated": true
+}'
+2025-12-28 18:17:36:538 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Submitted oldOrderId='46514242a4784e01ae4b267fc837486c' orderId='356274661011' account='DEMO619219' name='SL_Long_18' orderState=Submitted instrument='MCL 02-26' orderAction=Sell limitPrice=0 stopPrice=56.65 quantity=10 orderType='Stop Market' filled=0 averageFillPrice=0 time='2025-12-28 18:17:36' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2025-12-28 18:17:36:597 (Simulation) Tradovate.Adapter.ProcessOrderVersionEntity data='{
+  "id": 356274661011,
+  "orderId": 356274661011,
+  "orderQty": 10,
+  "orderType": "Stop",
+  "stopPrice": 56.65,
+  "timeInForce": "GTC"
+}'
+2025-12-28 18:17:36:708 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274661012,
+  "commandId": 356274661011,
+  "timestamp": "2025-12-28T22:17:36.200Z",
+  "commandStatus": "RiskPassed"
+}'
+2025-12-28 18:17:36:771 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274661011,
+  "orderId": 356274661011,
+  "timestamp": "2025-12-28T22:17:36.198Z",
+  "clOrdId": "46514242a4784e01ae4b267fc837486c",
+  "commandType": "New",
+  "commandStatus": "RiskPassed",
+  "senderId": 619219,
+  "userSessionId": 1702333080,
+  "isAutomated": true
+}'
+2025-12-28 18:17:36:771 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274661011,
+  "accountId": 1931663,
+  "contractId": 3643481,
+  "timestamp": "2025-12-28T22:17:36.198Z",
+  "action": "Sell",
+  "ordStatus": "PendingNew",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2025-12-28 18:17:36:782 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274661013,
+  "commandId": 356274661011,
+  "timestamp": "2025-12-28T22:17:36.201Z",
+  "commandStatus": "ExecutionRejected",
+  "rejectReason": "SessionClosed",
+  "text": "Cannot place order outside of market hours. Please check contract specifications or quote info to view market hours."
+}'
+2025-12-28 18:17:36:812 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Rejected orderId='356274661011' account='DEMO619219' name='SL_Long_18' orderState=Rejected instrument='MCL 02-26' orderAction=Sell limitPrice=0 stopPrice=56.65 quantity=10 orderType='Stop Market' filled=0 averageFillPrice=0 time='2025-12-28 18:17:36' statementDate='1800-01-01' error=OrderRejected comment='Cannot place order outside of market hours. Please check contract specifications or quote info to view market hours.' nr=-1
+2025-12-28 18:17:36:814 Strategy.StrategyBase.Process.CancelOrdersClosePositions1: orderId='356274661011' account='DEMO619219' name='SL_Long_18' orderState=Rejected instrument='MCL 02-26' orderAction=Sell orderType='Stop Market' limitPrice=0 stopPrice=56.65 quantity=10 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2158 time='2025-12-28 18:17:36' gtd='2099-12-01' statementDate='1800-01-01'
+2025-12-28 18:17:36:815 NinjaScript.StrategyBase.Process.CancelOrdersClosePositions2: isTerminal='False'
+2025-12-28 18:17:36:820 NinjaScript.StrategyBase.CancelAllOrders: orderId='b13071e976af4a4ba1aadf76a7b250dd' account='DEMO619219' name='TP1_Long_18' orderState=Initialized instrument='MCL 02-26' orderAction=Sell orderType='Limit' limitPrice=57.65 stopPrice=0 quantity=5 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2159 time='2025-12-28 18:17:35' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:17:36:820 NinjaScript.StrategyBase.CancelAllOrders: orderId='edad0f958e6b4ab7aa70be924381f4da' account='DEMO619219' name='TP2_Long_18' orderState=Initialized instrument='MCL 02-26' orderAction=Sell orderType='Limit' limitPrice=58.7 stopPrice=0 quantity=5 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2160 time='2025-12-28 18:17:35' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:17:36:820 (Simulation) Cbi.Account.Cancel0: realOrderState=Initialized orderId='b13071e976af4a4ba1aadf76a7b250dd' account='DEMO619219' name='TP1_Long_18' orderState=CancelPending instrument='MCL 02-26' orderAction=Sell orderType='Limit' limitPrice=57.65 stopPrice=0 quantity=5 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2159 time='2025-12-28 18:17:36' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:17:36:820 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=CancelPending orderId='b13071e976af4a4ba1aadf76a7b250dd' account='DEMO619219' name='TP1_Long_18' orderState=CancelPending instrument='MCL 02-26' orderAction=Sell limitPrice=57.65 stopPrice=0 quantity=5 orderType='Limit' filled=0 averageFillPrice=0 time='2025-12-28 18:17:36' statementDate='2025-12-28' error=NoError comment='' nr=1
+2025-12-28 18:17:36:821 (Simulation) Cbi.Account.QueueCancel: realOrderState=Initialized orderId='b13071e976af4a4ba1aadf76a7b250dd' account='DEMO619219' name='TP1_Long_18' orderState=CancelPending instrument='MCL 02-26' orderAction=Sell orderType='Limit' limitPrice=57.65 stopPrice=0 quantity=5 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2159 time='2025-12-28 18:17:36' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:17:36:821 (Simulation) Cbi.Account.Cancel0: realOrderState=Initialized orderId='edad0f958e6b4ab7aa70be924381f4da' account='DEMO619219' name='TP2_Long_18' orderState=CancelPending instrument='MCL 02-26' orderAction=Sell orderType='Limit' limitPrice=58.7 stopPrice=0 quantity=5 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2160 time='2025-12-28 18:17:36' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:17:36:821 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=CancelPending orderId='edad0f958e6b4ab7aa70be924381f4da' account='DEMO619219' name='TP2_Long_18' orderState=CancelPending instrument='MCL 02-26' orderAction=Sell limitPrice=58.7 stopPrice=0 quantity=5 orderType='Limit' filled=0 averageFillPrice=0 time='2025-12-28 18:17:36' statementDate='2025-12-28' error=NoError comment='' nr=-1
+2025-12-28 18:17:36:822 (Simulation) Cbi.Account.QueueCancel: realOrderState=Initialized orderId='edad0f958e6b4ab7aa70be924381f4da' account='DEMO619219' name='TP2_Long_18' orderState=CancelPending instrument='MCL 02-26' orderAction=Sell orderType='Limit' limitPrice=58.7 stopPrice=0 quantity=5 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2160 time='2025-12-28 18:17:36' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:17:36:834 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274661011,
+  "orderId": 356274661011,
+  "timestamp": "2025-12-28T22:17:36.198Z",
+  "clOrdId": "46514242a4784e01ae4b267fc837486c",
+  "commandType": "New",
+  "commandStatus": "ExecutionRejected",
+  "senderId": 619219,
+  "userSessionId": 1702333080,
+  "isAutomated": true
+}'
+2025-12-28 18:17:36:834 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274661011,
+  "accountId": 1931663,
+  "contractId": 3643481,
+  "timestamp": "2025-12-28T22:17:36.198Z",
+  "action": "Sell",
+  "ordStatus": "Rejected",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2025-12-28 18:17:36:834 (Simulation) Tradovate.Adapter.TradeMessageReceive3 status='200' data='{
+  "orderId": 356274661016
+}'
+2025-12-28 18:17:36:834 (Simulation) Tradovate.Adapter.TradeMessageReceive3 status='200' data='{
+  "orderId": 356274661014
+}'
+2025-12-28 18:17:36:834 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274661014,
+  "accountId": 1931663,
+  "contractId": 3643481,
+  "timestamp": "2025-12-28T22:17:36.254Z",
+  "action": "Sell",
+  "ordStatus": "PendingNew",
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2025-12-28 18:17:36:834 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274661014,
+  "orderId": 356274661014,
+  "timestamp": "2025-12-28T22:17:36.254Z",
+  "clOrdId": "edad0f958e6b4ab7aa70be924381f4da",
+  "commandType": "New",
+  "commandStatus": "Pending",
+  "senderId": 619219,
+  "userSessionId": 1702333080,
+  "isAutomated": true
+}'
+2025-12-28 18:17:36:834 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Submitted oldOrderId='edad0f958e6b4ab7aa70be924381f4da' orderId='356274661014' account='DEMO619219' name='TP2_Long_18' orderState=Submitted instrument='MCL 02-26' orderAction=Sell limitPrice=58.7 stopPrice=0 quantity=5 orderType='Limit' filled=0 averageFillPrice=0 time='2025-12-28 18:17:36' statementDate='1800-01-01' error=NoError comment='' nr=2
+2025-12-28 18:17:36:861 (Simulation) Tradovate.Adapter.ProcessOrderVersionEntity data='{
+  "id": 356274661014,
+  "orderId": 356274661014,
+  "orderQty": 5,
+  "orderType": "Limit",
+  "price": 58.7,
+  "timeInForce": "GTC"
+}'
+2025-12-28 18:17:36:873 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274661015,
+  "commandId": 356274661014,
+  "timestamp": "2025-12-28T22:17:36.257Z",
+  "commandStatus": "RiskPassed"
+}'
+2025-12-28 18:17:36:873 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274661014,
+  "orderId": 356274661014,
+  "timestamp": "2025-12-28T22:17:36.254Z",
+  "clOrdId": "edad0f958e6b4ab7aa70be924381f4da",
+  "commandType": "New",
+  "commandStatus": "RiskPassed",
+  "senderId": 619219,
+  "userSessionId": 1702333080,
+  "isAutomated": true
+}'
+2025-12-28 18:17:36:873 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274661016,
+  "accountId": 1931663,
+  "contractId": 3643481,
+  "timestamp": "2025-12-28T22:17:36.254Z",
+  "action": "Sell",
+  "ordStatus": "PendingNew",
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2025-12-28 18:17:36:873 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274661016,
+  "orderId": 356274661016,
+  "timestamp": "2025-12-28T22:17:36.254Z",
+  "clOrdId": "b13071e976af4a4ba1aadf76a7b250dd",
+  "commandType": "New",
+  "commandStatus": "Pending",
+  "senderId": 619219,
+  "userSessionId": 1702333080,
+  "isAutomated": true
+}'
+2025-12-28 18:17:36:873 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Submitted oldOrderId='b13071e976af4a4ba1aadf76a7b250dd' orderId='356274661016' account='DEMO619219' name='TP1_Long_18' orderState=Submitted instrument='MCL 02-26' orderAction=Sell limitPrice=57.65 stopPrice=0 quantity=5 orderType='Limit' filled=0 averageFillPrice=0 time='2025-12-28 18:17:36' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2025-12-28 18:17:36:902 (Simulation) Tradovate.Adapter.ProcessOrderVersionEntity data='{
+  "id": 356274661016,
+  "orderId": 356274661016,
+  "orderQty": 5,
+  "orderType": "Limit",
+  "price": 57.65,
+  "timeInForce": "GTC"
+}'
+2025-12-28 18:17:36:902 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274661017,
+  "commandId": 356274661016,
+  "timestamp": "2025-12-28T22:17:36.258Z",
+  "commandStatus": "RiskPassed"
+}'
+2025-12-28 18:17:36:902 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274661016,
+  "orderId": 356274661016,
+  "timestamp": "2025-12-28T22:17:36.254Z",
+  "clOrdId": "b13071e976af4a4ba1aadf76a7b250dd",
+  "commandType": "New",
+  "commandStatus": "RiskPassed",
+  "senderId": 619219,
+  "userSessionId": 1702333080,
+  "isAutomated": true
+}'
+2025-12-28 18:17:36:902 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274661014,
+  "accountId": 1931663,
+  "contractId": 3643481,
+  "timestamp": "2025-12-28T22:17:36.254Z",
+  "action": "Sell",
+  "ordStatus": "PendingNew",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2025-12-28 18:17:36:902 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274661018,
+  "commandId": 356274661014,
+  "timestamp": "2025-12-28T22:17:36.258Z",
+  "commandStatus": "ExecutionRejected",
+  "rejectReason": "SessionClosed",
+  "text": "Cannot place order outside of market hours. Please check contract specifications or quote info to view market hours."
+}'
+2025-12-28 18:17:36:902 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Rejected orderId='356274661014' account='DEMO619219' name='TP2_Long_18' orderState=Rejected instrument='MCL 02-26' orderAction=Sell limitPrice=58.7 stopPrice=0 quantity=5 orderType='Limit' filled=0 averageFillPrice=0 time='2025-12-28 18:17:36' statementDate='1800-01-01' error=OrderRejected comment='Cannot place order outside of market hours. Please check contract specifications or quote info to view market hours.' nr=-1
+2025-12-28 18:17:36:902 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274661014,
+  "orderId": 356274661014,
+  "timestamp": "2025-12-28T22:17:36.254Z",
+  "clOrdId": "edad0f958e6b4ab7aa70be924381f4da",
+  "commandType": "New",
+  "commandStatus": "ExecutionRejected",
+  "senderId": 619219,
+  "userSessionId": 1702333080,
+  "isAutomated": true
+}'
+2025-12-28 18:17:36:902 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274661014,
+  "accountId": 1931663,
+  "contractId": 3643481,
+  "timestamp": "2025-12-28T22:17:36.254Z",
+  "action": "Sell",
+  "ordStatus": "Rejected",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2025-12-28 18:17:36:902 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274661016,
+  "accountId": 1931663,
+  "contractId": 3643481,
+  "timestamp": "2025-12-28T22:17:36.254Z",
+  "action": "Sell",
+  "ordStatus": "PendingNew",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2025-12-28 18:17:36:902 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274661019,
+  "commandId": 356274661016,
+  "timestamp": "2025-12-28T22:17:36.259Z",
+  "commandStatus": "ExecutionRejected",
+  "rejectReason": "SessionClosed",
+  "text": "Cannot place order outside of market hours. Please check contract specifications or quote info to view market hours."
+}'
+2025-12-28 18:17:36:903 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Rejected orderId='356274661016' account='DEMO619219' name='TP1_Long_18' orderState=Rejected instrument='MCL 02-26' orderAction=Sell limitPrice=57.65 stopPrice=0 quantity=5 orderType='Limit' filled=0 averageFillPrice=0 time='2025-12-28 18:17:36' statementDate='1800-01-01' error=OrderRejected comment='Cannot place order outside of market hours. Please check contract specifications or quote info to view market hours.' nr=-1
+2025-12-28 18:17:36:903 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274661016,
+  "orderId": 356274661016,
+  "timestamp": "2025-12-28T22:17:36.254Z",
+  "clOrdId": "b13071e976af4a4ba1aadf76a7b250dd",
+  "commandType": "New",
+  "commandStatus": "ExecutionRejected",
+  "senderId": 619219,
+  "userSessionId": 1702333080,
+  "isAutomated": true
+}'
+2025-12-28 18:17:36:903 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274661016,
+  "accountId": 1931663,
+  "contractId": 3643481,
+  "timestamp": "2025-12-28T22:17:36.254Z",
+  "action": "Sell",
+  "ordStatus": "Rejected",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2025-12-28 18:17:36:918 (Simulation) Cbi.Account.CreateOrder: orderId='12d3b18b0a2f4fa3b98b1bd89c6ed0ea' account='DEMO619219' name='StopCancelClose' orderState=Initialized instrument='MCL 02-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=10 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2161 time='2025-12-28 18:17:36' gtd='2099-12-01' statementDate='2025-12-28' id=-1 comment=''
+2025-12-28 18:17:36:921 (Simulation) Cbi.Account.Submit0: realOrderState=Initialized isPendingSubmit=False orderId='12d3b18b0a2f4fa3b98b1bd89c6ed0ea' account='DEMO619219' name='StopCancelClose' orderState=Initialized instrument='MCL 02-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=10 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2161 time='2025-12-28 18:17:36' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:17:36:921 (Simulation) Cbi.Account.Submit1: realOrderState=Initialized orderId='12d3b18b0a2f4fa3b98b1bd89c6ed0ea' account='DEMO619219' name='StopCancelClose' orderState=Initialized instrument='MCL 02-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=10 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2161 time='2025-12-28 18:17:36' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:17:36:925 (Simulation) Tradovate.Adapter.Submit0: count=1
+2025-12-28 18:17:36:925 (Simulation) Tradovate.Adapter.Submit1: orderId='12d3b18b0a2f4fa3b98b1bd89c6ed0ea' account='DEMO619219' name='StopCancelClose' orderState=Initialized instrument='MCL 02-26' orderAction=Sell orderType='Market' limitPrice=0 stopPrice=0 quantity=10 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2161 time='2025-12-28 18:17:36' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:17:37:025 (Simulation) Tradovate.Adapter.TradeMessageReceive3 status='200' data='{
+  "orderId": 356274661020
+}'
+2025-12-28 18:17:37:025 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274661020,
+  "accountId": 1931663,
+  "contractId": 3643481,
+  "timestamp": "2025-12-28T22:17:36.967Z",
+  "action": "Sell",
+  "ordStatus": "PendingNew",
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2025-12-28 18:17:37:027 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274661020,
+  "orderId": 356274661020,
+  "timestamp": "2025-12-28T22:17:36.967Z",
+  "clOrdId": "12d3b18b0a2f4fa3b98b1bd89c6ed0ea",
+  "commandType": "New",
+  "commandStatus": "Pending",
+  "senderId": 619219,
+  "userSessionId": 1702333080,
+  "isAutomated": true
+}'
+2025-12-28 18:17:37:027 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Submitted oldOrderId='12d3b18b0a2f4fa3b98b1bd89c6ed0ea' orderId='356274661020' account='DEMO619219' name='StopCancelClose' orderState=Submitted instrument='MCL 02-26' orderAction=Sell limitPrice=0 stopPrice=0 quantity=10 orderType='Market' filled=0 averageFillPrice=0 time='2025-12-28 18:17:36' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2025-12-28 18:17:37:061 (Simulation) Tradovate.Adapter.ProcessOrderVersionEntity data='{
+  "id": 356274661020,
+  "orderId": 356274661020,
+  "orderQty": 10,
+  "orderType": "Market",
+  "timeInForce": "GTC"
+}'
+2025-12-28 18:17:37:061 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274661021,
+  "commandId": 356274661020,
+  "timestamp": "2025-12-28T22:17:36.969Z",
+  "commandStatus": "RiskPassed"
+}'
+2025-12-28 18:17:37:061 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274661020,
+  "orderId": 356274661020,
+  "timestamp": "2025-12-28T22:17:36.967Z",
+  "clOrdId": "12d3b18b0a2f4fa3b98b1bd89c6ed0ea",
+  "commandType": "New",
+  "commandStatus": "RiskPassed",
+  "senderId": 619219,
+  "userSessionId": 1702333080,
+  "isAutomated": true
+}'
+2025-12-28 18:17:37:061 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274661020,
+  "accountId": 1931663,
+  "contractId": 3643481,
+  "timestamp": "2025-12-28T22:17:36.967Z",
+  "action": "Sell",
+  "ordStatus": "PendingNew",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2025-12-28 18:17:37:061 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274661022,
+  "commandId": 356274661020,
+  "timestamp": "2025-12-28T22:17:36.970Z",
+  "commandStatus": "ExecutionRejected",
+  "rejectReason": "SessionClosed",
+  "text": "Cannot place order outside of market hours. Please check contract specifications or quote info to view market hours."
+}'
+2025-12-28 18:17:37:061 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Rejected orderId='356274661020' account='DEMO619219' name='StopCancelClose' orderState=Rejected instrument='MCL 02-26' orderAction=Sell limitPrice=0 stopPrice=0 quantity=10 orderType='Market' filled=0 averageFillPrice=0 time='2025-12-28 18:17:36' statementDate='1800-01-01' error=OrderRejected comment='Cannot place order outside of market hours. Please check contract specifications or quote info to view market hours.' nr=-1
+2025-12-28 18:17:37:061 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274661020,
+  "orderId": 356274661020,
+  "timestamp": "2025-12-28T22:17:36.967Z",
+  "clOrdId": "12d3b18b0a2f4fa3b98b1bd89c6ed0ea",
+  "commandType": "New",
+  "commandStatus": "ExecutionRejected",
+  "senderId": 619219,
+  "userSessionId": 1702333080,
+  "isAutomated": true
+}'
+2025-12-28 18:17:37:061 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274661020,
+  "accountId": 1931663,
+  "contractId": 3643481,
+  "timestamp": "2025-12-28T22:17:36.967Z",
+  "action": "Sell",
+  "ordStatus": "Rejected",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2025-12-28 18:17:39:465 ERROR: There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2025-12-28 18:17:39:470 ERROR: There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2025-12-28 18:17:39:477 ERROR: There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2025-12-28 18:17:39:477 ERROR: There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2025-12-28 18:17:39:477 ERROR: There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2025-12-28 18:18:12:351 (Simulation) Cbi.Account.CreateOrder: orderId='7469e4169754429cb4b69fbd1a8c9a4a' account='DEMO619219' name='SL_Short_18' orderState=Initialized instrument='M2K 03-26' orderAction=BuyToCover orderType='Stop Market' limitPrice=0 stopPrice=2590 quantity=8 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2162 time='2025-12-28 18:18:12' gtd='2099-12-01' statementDate='2025-12-28' id=-1 comment=''
+2025-12-28 18:18:12:351 (Simulation) Cbi.Account.CreateOrder: orderId='8eb2431470374b3aad28c88498191318' account='DEMO619219' name='TP2_Short_18' orderState=Initialized instrument='M2K 03-26' orderAction=BuyToCover orderType='Limit' limitPrice=2506.4 stopPrice=0 quantity=8 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2163 time='2025-12-28 18:18:12' gtd='2099-12-01' statementDate='2025-12-28' id=-1 comment=''
+2025-12-28 18:18:12:351 (Simulation) Cbi.Account.Submit0: realOrderState=Initialized isPendingSubmit=False orderId='7469e4169754429cb4b69fbd1a8c9a4a' account='DEMO619219' name='SL_Short_18' orderState=Initialized instrument='M2K 03-26' orderAction=BuyToCover orderType='Stop Market' limitPrice=0 stopPrice=2590 quantity=8 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2162 time='2025-12-28 18:18:12' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:18:12:351 (Simulation) Cbi.Account.Submit1: realOrderState=Initialized orderId='7469e4169754429cb4b69fbd1a8c9a4a' account='DEMO619219' name='SL_Short_18' orderState=Initialized instrument='M2K 03-26' orderAction=BuyToCover orderType='Stop Market' limitPrice=0 stopPrice=2590 quantity=8 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2162 time='2025-12-28 18:18:12' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:18:12:351 (Simulation) Cbi.Account.Submit0: realOrderState=Initialized isPendingSubmit=False orderId='8eb2431470374b3aad28c88498191318' account='DEMO619219' name='TP2_Short_18' orderState=Initialized instrument='M2K 03-26' orderAction=BuyToCover orderType='Limit' limitPrice=2506.4 stopPrice=0 quantity=8 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2163 time='2025-12-28 18:18:12' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:18:12:351 (Simulation) Cbi.Account.Submit1: realOrderState=Initialized orderId='8eb2431470374b3aad28c88498191318' account='DEMO619219' name='TP2_Short_18' orderState=Initialized instrument='M2K 03-26' orderAction=BuyToCover orderType='Limit' limitPrice=2506.4 stopPrice=0 quantity=8 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2163 time='2025-12-28 18:18:12' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:18:12:352 (Simulation) Tradovate.Adapter.Submit0: count=1
+2025-12-28 18:18:12:352 (Simulation) Tradovate.Adapter.Submit1: orderId='7469e4169754429cb4b69fbd1a8c9a4a' account='DEMO619219' name='SL_Short_18' orderState=Initialized instrument='M2K 03-26' orderAction=BuyToCover orderType='Stop Market' limitPrice=0 stopPrice=2590 quantity=8 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2162 time='2025-12-28 18:18:12' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:18:12:352 (Simulation) Tradovate.Adapter.Submit0: count=1
+2025-12-28 18:18:12:352 (Simulation) Tradovate.Adapter.Submit1: orderId='8eb2431470374b3aad28c88498191318' account='DEMO619219' name='TP2_Short_18' orderState=Initialized instrument='M2K 03-26' orderAction=BuyToCover orderType='Limit' limitPrice=2506.4 stopPrice=0 quantity=8 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2163 time='2025-12-28 18:18:12' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:18:12:452 (Simulation) Tradovate.Adapter.TradeMessageReceive3 status='200' data='{
+  "orderId": 356274661023
+}'
+2025-12-28 18:18:12:452 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274661023,
+  "accountId": 1931663,
+  "contractId": 4214188,
+  "timestamp": "2025-12-28T22:18:12.394Z",
+  "action": "Buy",
+  "ordStatus": "PendingNew",
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2025-12-28 18:18:12:452 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274661023,
+  "orderId": 356274661023,
+  "timestamp": "2025-12-28T22:18:12.394Z",
+  "clOrdId": "7469e4169754429cb4b69fbd1a8c9a4a",
+  "commandType": "New",
+  "commandStatus": "Pending",
+  "senderId": 619219,
+  "userSessionId": 1702333080,
+  "isAutomated": true
+}'
+2025-12-28 18:18:12:452 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Submitted oldOrderId='7469e4169754429cb4b69fbd1a8c9a4a' orderId='356274661023' account='DEMO619219' name='SL_Short_18' orderState=Submitted instrument='M2K 03-26' orderAction=BuyToCover limitPrice=0 stopPrice=2590 quantity=8 orderType='Stop Market' filled=0 averageFillPrice=0 time='2025-12-28 18:18:12' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2025-12-28 18:18:12:473 (Simulation) Tradovate.Adapter.ProcessOrderVersionEntity data='{
+  "id": 356274661023,
+  "orderId": 356274661023,
+  "orderQty": 8,
+  "orderType": "Stop",
+  "stopPrice": 2590.0,
+  "timeInForce": "GTC"
+}'
+2025-12-28 18:18:12:473 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274661024,
+  "commandId": 356274661023,
+  "timestamp": "2025-12-28T22:18:12.396Z",
+  "commandStatus": "RiskPassed"
+}'
+2025-12-28 18:18:12:473 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274661023,
+  "orderId": 356274661023,
+  "timestamp": "2025-12-28T22:18:12.394Z",
+  "clOrdId": "7469e4169754429cb4b69fbd1a8c9a4a",
+  "commandType": "New",
+  "commandStatus": "RiskPassed",
+  "senderId": 619219,
+  "userSessionId": 1702333080,
+  "isAutomated": true
+}'
+2025-12-28 18:18:12:473 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274661023,
+  "accountId": 1931663,
+  "contractId": 4214188,
+  "timestamp": "2025-12-28T22:18:12.394Z",
+  "action": "Buy",
+  "ordStatus": "PendingNew",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2025-12-28 18:18:12:473 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274661025,
+  "commandId": 356274661023,
+  "timestamp": "2025-12-28T22:18:12.397Z",
+  "commandStatus": "ExecutionRejected",
+  "rejectReason": "SessionClosed",
+  "text": "Cannot place order outside of market hours. Please check contract specifications or quote info to view market hours."
+}'
+2025-12-28 18:18:12:473 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Rejected orderId='356274661023' account='DEMO619219' name='SL_Short_18' orderState=Rejected instrument='M2K 03-26' orderAction=BuyToCover limitPrice=0 stopPrice=2590 quantity=8 orderType='Stop Market' filled=0 averageFillPrice=0 time='2025-12-28 18:18:12' statementDate='1800-01-01' error=OrderRejected comment='Cannot place order outside of market hours. Please check contract specifications or quote info to view market hours.' nr=-1
+2025-12-28 18:18:12:473 Strategy.StrategyBase.Process.CancelOrdersClosePositions1: orderId='356274661023' account='DEMO619219' name='SL_Short_18' orderState=Rejected instrument='M2K 03-26' orderAction=BuyToCover orderType='Stop Market' limitPrice=0 stopPrice=2590 quantity=8 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2162 time='2025-12-28 18:18:12' gtd='2099-12-01' statementDate='1800-01-01'
+2025-12-28 18:18:12:473 NinjaScript.StrategyBase.Process.CancelOrdersClosePositions2: isTerminal='False'
+2025-12-28 18:18:12:473 NinjaScript.StrategyBase.CancelAllOrders: orderId='8eb2431470374b3aad28c88498191318' account='DEMO619219' name='TP2_Short_18' orderState=Initialized instrument='M2K 03-26' orderAction=BuyToCover orderType='Limit' limitPrice=2506.4 stopPrice=0 quantity=8 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2163 time='2025-12-28 18:18:12' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:18:12:473 (Simulation) Cbi.Account.Cancel0: realOrderState=Initialized orderId='8eb2431470374b3aad28c88498191318' account='DEMO619219' name='TP2_Short_18' orderState=CancelPending instrument='M2K 03-26' orderAction=BuyToCover orderType='Limit' limitPrice=2506.4 stopPrice=0 quantity=8 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2163 time='2025-12-28 18:18:12' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:18:12:473 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=CancelPending orderId='8eb2431470374b3aad28c88498191318' account='DEMO619219' name='TP2_Short_18' orderState=CancelPending instrument='M2K 03-26' orderAction=BuyToCover limitPrice=2506.4 stopPrice=0 quantity=8 orderType='Limit' filled=0 averageFillPrice=0 time='2025-12-28 18:18:12' statementDate='2025-12-28' error=NoError comment='' nr=-1
+2025-12-28 18:18:12:473 (Simulation) Cbi.Account.QueueCancel: realOrderState=Initialized orderId='8eb2431470374b3aad28c88498191318' account='DEMO619219' name='TP2_Short_18' orderState=CancelPending instrument='M2K 03-26' orderAction=BuyToCover orderType='Limit' limitPrice=2506.4 stopPrice=0 quantity=8 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2163 time='2025-12-28 18:18:12' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:18:12:474 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274661023,
+  "orderId": 356274661023,
+  "timestamp": "2025-12-28T22:18:12.394Z",
+  "clOrdId": "7469e4169754429cb4b69fbd1a8c9a4a",
+  "commandType": "New",
+  "commandStatus": "ExecutionRejected",
+  "senderId": 619219,
+  "userSessionId": 1702333080,
+  "isAutomated": true
+}'
+2025-12-28 18:18:12:474 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274661023,
+  "accountId": 1931663,
+  "contractId": 4214188,
+  "timestamp": "2025-12-28T22:18:12.394Z",
+  "action": "Buy",
+  "ordStatus": "Rejected",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2025-12-28 18:18:12:530 (Simulation) Tradovate.Adapter.TradeMessageReceive3 status='200' data='{
+  "orderId": 356274661026
+}'
+2025-12-28 18:18:12:530 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274661026,
+  "accountId": 1931663,
+  "contractId": 4214188,
+  "timestamp": "2025-12-28T22:18:12.472Z",
+  "action": "Buy",
+  "ordStatus": "PendingNew",
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2025-12-28 18:18:12:530 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274661026,
+  "orderId": 356274661026,
+  "timestamp": "2025-12-28T22:18:12.472Z",
+  "clOrdId": "8eb2431470374b3aad28c88498191318",
+  "commandType": "New",
+  "commandStatus": "Pending",
+  "senderId": 619219,
+  "userSessionId": 1702333080,
+  "isAutomated": true
+}'
+2025-12-28 18:18:12:530 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Submitted oldOrderId='8eb2431470374b3aad28c88498191318' orderId='356274661026' account='DEMO619219' name='TP2_Short_18' orderState=Submitted instrument='M2K 03-26' orderAction=BuyToCover limitPrice=2506.4 stopPrice=0 quantity=8 orderType='Limit' filled=0 averageFillPrice=0 time='2025-12-28 18:18:12' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2025-12-28 18:18:12:541 (Simulation) Tradovate.Adapter.ProcessOrderVersionEntity data='{
+  "id": 356274661026,
+  "orderId": 356274661026,
+  "orderQty": 8,
+  "orderType": "Limit",
+  "price": 2506.4,
+  "timeInForce": "GTC"
+}'
+2025-12-28 18:18:12:541 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274661027,
+  "commandId": 356274661026,
+  "timestamp": "2025-12-28T22:18:12.474Z",
+  "commandStatus": "RiskPassed"
+}'
+2025-12-28 18:18:12:541 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274661026,
+  "orderId": 356274661026,
+  "timestamp": "2025-12-28T22:18:12.472Z",
+  "clOrdId": "8eb2431470374b3aad28c88498191318",
+  "commandType": "New",
+  "commandStatus": "RiskPassed",
+  "senderId": 619219,
+  "userSessionId": 1702333080,
+  "isAutomated": true
+}'
+2025-12-28 18:18:12:541 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274661026,
+  "accountId": 1931663,
+  "contractId": 4214188,
+  "timestamp": "2025-12-28T22:18:12.472Z",
+  "action": "Buy",
+  "ordStatus": "PendingNew",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2025-12-28 18:18:12:541 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274661028,
+  "commandId": 356274661026,
+  "timestamp": "2025-12-28T22:18:12.475Z",
+  "commandStatus": "ExecutionRejected",
+  "rejectReason": "SessionClosed",
+  "text": "Cannot place order outside of market hours. Please check contract specifications or quote info to view market hours."
+}'
+2025-12-28 18:18:12:541 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Rejected orderId='356274661026' account='DEMO619219' name='TP2_Short_18' orderState=Rejected instrument='M2K 03-26' orderAction=BuyToCover limitPrice=2506.4 stopPrice=0 quantity=8 orderType='Limit' filled=0 averageFillPrice=0 time='2025-12-28 18:18:12' statementDate='1800-01-01' error=OrderRejected comment='Cannot place order outside of market hours. Please check contract specifications or quote info to view market hours.' nr=-1
+2025-12-28 18:18:12:541 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274661026,
+  "orderId": 356274661026,
+  "timestamp": "2025-12-28T22:18:12.472Z",
+  "clOrdId": "8eb2431470374b3aad28c88498191318",
+  "commandType": "New",
+  "commandStatus": "ExecutionRejected",
+  "senderId": 619219,
+  "userSessionId": 1702333080,
+  "isAutomated": true
+}'
+2025-12-28 18:18:12:541 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274661026,
+  "accountId": 1931663,
+  "contractId": 4214188,
+  "timestamp": "2025-12-28T22:18:12.472Z",
+  "action": "Buy",
+  "ordStatus": "Rejected",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2025-12-28 18:18:12:561 (Simulation) Cbi.Account.CreateOrder: orderId='b225fbe1e9324850b53b2e820d25c458' account='DEMO619219' name='StopCancelClose' orderState=Initialized instrument='M2K 03-26' orderAction=BuyToCover orderType='Market' limitPrice=0 stopPrice=0 quantity=8 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2164 time='2025-12-28 18:18:12' gtd='2099-12-01' statementDate='2025-12-28' id=-1 comment=''
+2025-12-28 18:18:12:561 (Simulation) Cbi.Account.Submit0: realOrderState=Initialized isPendingSubmit=False orderId='b225fbe1e9324850b53b2e820d25c458' account='DEMO619219' name='StopCancelClose' orderState=Initialized instrument='M2K 03-26' orderAction=BuyToCover orderType='Market' limitPrice=0 stopPrice=0 quantity=8 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2164 time='2025-12-28 18:18:12' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:18:12:561 (Simulation) Cbi.Account.Submit1: realOrderState=Initialized orderId='b225fbe1e9324850b53b2e820d25c458' account='DEMO619219' name='StopCancelClose' orderState=Initialized instrument='M2K 03-26' orderAction=BuyToCover orderType='Market' limitPrice=0 stopPrice=0 quantity=8 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2164 time='2025-12-28 18:18:12' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:18:12:562 (Simulation) Tradovate.Adapter.Submit0: count=1
+2025-12-28 18:18:12:562 (Simulation) Tradovate.Adapter.Submit1: orderId='b225fbe1e9324850b53b2e820d25c458' account='DEMO619219' name='StopCancelClose' orderState=Initialized instrument='M2K 03-26' orderAction=BuyToCover orderType='Market' limitPrice=0 stopPrice=0 quantity=8 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=2164 time='2025-12-28 18:18:12' gtd='2099-12-01' statementDate='2025-12-28'
+2025-12-28 18:18:12:660 (Simulation) Tradovate.Adapter.TradeMessageReceive3 status='200' data='{
+  "orderId": 356274661029
+}'
+2025-12-28 18:18:12:660 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274661029,
+  "accountId": 1931663,
+  "contractId": 4214188,
+  "timestamp": "2025-12-28T22:18:12.604Z",
+  "action": "Buy",
+  "ordStatus": "PendingNew",
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2025-12-28 18:18:12:662 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274661029,
+  "orderId": 356274661029,
+  "timestamp": "2025-12-28T22:18:12.604Z",
+  "clOrdId": "b225fbe1e9324850b53b2e820d25c458",
+  "commandType": "New",
+  "commandStatus": "Pending",
+  "senderId": 619219,
+  "userSessionId": 1702333080,
+  "isAutomated": true
+}'
+2025-12-28 18:18:12:662 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Submitted oldOrderId='b225fbe1e9324850b53b2e820d25c458' orderId='356274661029' account='DEMO619219' name='StopCancelClose' orderState=Submitted instrument='M2K 03-26' orderAction=BuyToCover limitPrice=0 stopPrice=0 quantity=8 orderType='Market' filled=0 averageFillPrice=0 time='2025-12-28 18:18:12' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2025-12-28 18:18:12:672 (Simulation) Tradovate.Adapter.ProcessOrderVersionEntity data='{
+  "id": 356274661029,
+  "orderId": 356274661029,
+  "orderQty": 8,
+  "orderType": "Market",
+  "timeInForce": "GTC"
+}'
+2025-12-28 18:18:12:673 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274661030,
+  "commandId": 356274661029,
+  "timestamp": "2025-12-28T22:18:12.607Z",
+  "commandStatus": "RiskPassed"
+}'
+2025-12-28 18:18:12:673 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274661029,
+  "orderId": 356274661029,
+  "timestamp": "2025-12-28T22:18:12.604Z",
+  "clOrdId": "b225fbe1e9324850b53b2e820d25c458",
+  "commandType": "New",
+  "commandStatus": "RiskPassed",
+  "senderId": 619219,
+  "userSessionId": 1702333080,
+  "isAutomated": true
+}'
+2025-12-28 18:18:12:673 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274661029,
+  "accountId": 1931663,
+  "contractId": 4214188,
+  "timestamp": "2025-12-28T22:18:12.604Z",
+  "action": "Buy",
+  "ordStatus": "PendingNew",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2025-12-28 18:18:12:673 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274661031,
+  "commandId": 356274661029,
+  "timestamp": "2025-12-28T22:18:12.607Z",
+  "commandStatus": "ExecutionRejected",
+  "rejectReason": "SessionClosed",
+  "text": "Cannot place order outside of market hours. Please check contract specifications or quote info to view market hours."
+}'
+2025-12-28 18:18:12:673 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Rejected orderId='356274661029' account='DEMO619219' name='StopCancelClose' orderState=Rejected instrument='M2K 03-26' orderAction=BuyToCover limitPrice=0 stopPrice=0 quantity=8 orderType='Market' filled=0 averageFillPrice=0 time='2025-12-28 18:18:12' statementDate='1800-01-01' error=OrderRejected comment='Cannot place order outside of market hours. Please check contract specifications or quote info to view market hours.' nr=-1
+2025-12-28 18:18:12:673 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274661029,
+  "orderId": 356274661029,
+  "timestamp": "2025-12-28T22:18:12.604Z",
+  "clOrdId": "b225fbe1e9324850b53b2e820d25c458",
+  "commandType": "New",
+  "commandStatus": "ExecutionRejected",
+  "senderId": 619219,
+  "userSessionId": 1702333080,
+  "isAutomated": true
+}'
+2025-12-28 18:18:12:673 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274661029,
+  "accountId": 1931663,
+  "contractId": 4214188,
+  "timestamp": "2025-12-28T22:18:12.604Z",
+  "action": "Buy",
+  "ordStatus": "Rejected",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2025-12-28 18:18:14:317 ERROR: There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2025-12-28 18:18:14:336 ERROR: There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2025-12-28 18:18:14:428 ERROR: There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2025-12-28 18:18:14:561 ERROR: There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2025-12-28 18:19:39:488 ERROR: Strategy 'SessionLevelsStrategy/378061505': An order has been ignored since the stop price ‘4483.4’ near the bar stamped ‘12/22/2025 17:29:00’ is invalid based on the price range of the bar. This is an invalid order and subsequent orders may also be ignored.
+2025-12-28 18:23:29:643 Cbi.Instrument.RequestBars (to Provider): instrument='MES 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 18:23:30:610 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='26/12/25 12:00:00 a. m.' to='26/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-28 18:27:50:304 Core.Instrumentation.LogActivity: activityType=Application errorCode=Panic errorMessage=''
+2025-12-28 18:27:50:321 *************** unhandled exception trapped ***************
+2025-12-28 18:27:50:321 Cuota insuficiente para procesar este comando
+2025-12-28 18:27:50:321 System.ComponentModel.Win32Exception (0x80004005): Cuota insuficiente para procesar este comando
+   at System.Windows.Interop.HwndTarget.UpdateWindowSettings(Boolean enableRenderTarget, Nullable`1 channelSet)
+   at System.Windows.Interop.HwndTarget.UpdateWindowPos(IntPtr lParam)
+   at System.Windows.Interop.HwndTarget.HandleMessage(WindowMessage msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Interop.HwndSource.HwndTargetFilterMessage(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndWrapper.WndProc(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndSubclass.DispatcherCallbackOperation(Object o)
+   at System.Windows.Threading.ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
+   at System.Windows.Threading.ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
+2025-12-28 18:27:52:344 ERROR: There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2025-12-28 18:28:05:591 *************** unhandled exception trapped ***************
+2025-12-28 18:28:05:592 Cuota insuficiente para procesar este comando
+2025-12-28 18:28:05:592 System.ComponentModel.Win32Exception (0x80004005): Cuota insuficiente para procesar este comando
+   at System.Windows.Interop.HwndTarget.UpdateWindowSettings(Boolean enableRenderTarget, Nullable`1 channelSet)
+   at System.Windows.Interop.HwndTarget.UpdateWindowPos(IntPtr lParam)
+   at System.Windows.Interop.HwndTarget.HandleMessage(WindowMessage msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Interop.HwndSource.HwndTargetFilterMessage(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndWrapper.WndProc(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndSubclass.DispatcherCallbackOperation(Object o)
+   at System.Windows.Threading.ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
+   at System.Windows.Threading.ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
+2025-12-28 18:28:07:521 ERROR: There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."

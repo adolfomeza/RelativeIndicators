@@ -1,0 +1,150 @@
+******************* Session Start (Version 8.1.6.2) *******************
+2025-12-22 15:40:12:226 ERROR: There are no email share services defined. You need to define one and set "Default" to true for email to work.
+2025-12-22 15:40:12:538 System.ArgumentNullException: Value cannot be null.
+Parameter name: uriString
+   at System.Uri..ctor(String uriString)
+   at NinjaTrader.Core.UriConverter.ConvertUri(String uriToConvert, Boolean isDev, Boolean isBeta)
+2025-12-22 15:40:30:773 Cbi.Globals.MachineId: True/True 280CB754932A645C8D63C782E8605C43
+2025-12-22 15:40:30:800 NinjaTrader.Gui.LoginInternal user='joelbencomo' mode='Simulation'
+2025-12-22 15:40:31:088 Core.Instrumentation.ActivitySource: enabled=True randomPercent=84.3561 enabledSessionsPercent=100 chartMs=250 enabledTypes='ChartPerformance Application NinjaScript Adapter Login '
+2025-12-22 15:40:31:119 Core.Instrumentation.LogActivity: activityType=Login errorCode=NoError errorMessage=''
+2025-12-22 15:40:31:898 Core.Instrumentation.LogActivity: activityType=Login errorCode=Panic errorMessage='Incorrect username or password. Please try again, noting that passwords are case-sensitive.'
+2025-12-22 15:40:31:906 NinjaTrader.Core.Authentication.Authenticate: error on connect: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2025-12-22 15:41:41:854 NinjaTrader.Gui.LoginInternal user='joelbencomo' mode='Simulation'
+2025-12-22 15:41:41:854 Core.Instrumentation.LogActivity: activityType=Login errorCode=NoError errorMessage=''
+2025-12-22 15:41:42:464 (Simulation) NinjaTrader.Core.Authentication.GetAccessToken6
+2025-12-22 15:41:42:473 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.7990434' renewSecs='2399.8995217'
+2025-12-22 15:41:43:363 Cbi.UserEntitlement.VerifyAsync.0 apiUrl='https://live.tradovateapi.com'
+2025-12-22 15:41:44:176 Cbi.UserEntitlement.VerifyAsync.98: Evaluation expiration=2026-12-31, Evaluation expiration=2026-12-31
+2025-12-22 15:41:44:750 PrimaryMonitorWPFDPIScale=1.00
+2025-12-22 15:41:45:272 Cbi.UserEntitlement.VerifyAsync.99: subscription=Free licensedProviders='Playback Simulator NinjaTrader NinjaTrader Continuum NinjaTrader FXCM IQFeed E-Signal External FOREX.com Interactive Brokers Barchart.com Kinetick FXCM Coinbase cTrader Schwab Rithmic for NinjaTrader Brokerage Custom0 Custom2 Custom3 Custom4 Custom6 Custom7 Custom8 Custom9 Custom10 Provider13 Custom14 Provider26 Custom15 Custom16 Custom17 Custom18 Custom19 Custom20 Custom21 Custom22 Custom23 Custom24 Custom25 Custom26 Custom27 Custom28 Custom29 Custom30 Custom31 Custom32 Custom33 Custom34 Custom35 Custom36 Custom37 Custom38 Custom39 Custom40'
+2025-12-22 15:41:45:404 InstallDir='C:\Program Files\NinjaTrader 8\'
+2025-12-22 15:41:45:404 UserDataDir='C:\Users\prueba\Documents\NinjaTrader 8\'
+2025-12-22 15:41:45:404 MachineID='280CB754932A645C8D63C782E8605C43'
+2025-12-22 15:41:45:404 OS='Microsoft Windows NT 10.0.26200.0'/'Win32NT'
+2025-12-22 15:41:45:404 OSLanguage='en-US'
+2025-12-22 15:41:45:404 OSEnvironment='64bit'
+2025-12-22 15:41:45:404 Processors=12
+2025-12-22 15:41:45:404 ThreadPool: minWorkerThreads=12 maxWorkerThreads=32767 minCompletionPortThreads=12 maxCompletionPortThreads=1000
+2025-12-22 15:41:46:510 ProcessorSpeed=2.6 GHz
+2025-12-22 15:41:46:511 PhysicalMemory=24576 MB
+2025-12-22 15:41:49:821 DisplayAdapters=2/NVIDIA GeForce GTX 1650|Intel(R) UHD Graphics
+2025-12-22 15:41:49:822 Monitors=1/1920x1080
+2025-12-22 15:41:49:822 .NET/CLR Version='4.8'/64bit
+2025-12-22 15:41:49:823 SQLiteVersion='1.0.116.0'
+2025-12-22 15:41:49:823 ApplicationTimezone=EST +1 hour(s)
+2025-12-22 15:41:49:823 ApplicationTimezone=UTC -4 hour(s)
+2025-12-22 15:41:49:823 LocalTimezone=EST +1 hour(s)
+2025-12-22 15:41:49:823 LocalTimezone=UTC -4 hour(s)
+2025-12-22 15:41:50:169 DirectXRenderingHW
+2025-12-22 15:41:50:170 Copying custom assemblies...
+2025-12-22 15:41:50:196 Loading custom assemblies...
+2025-12-22 15:41:50:197 Loading C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\NinjaTrader.Custom.dll...
+2025-12-22 15:41:50:606 Loading C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\NinjaTrader.Vendor.dll...
+2025-12-22 15:41:50:633 Deleting temporary files...
+2025-12-22 15:41:51:174 Copying db and restoring templates...
+2025-12-22 15:41:51:198 Loading third party assemblies...
+2025-12-22 15:41:51:255 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\ASCENDO_NewsEvents.dll...
+2025-12-22 15:41:52:749 Cbi.VendorLicense.Verify.1: trying 'https://license.ninjatrader.com/vendorlicensenew/ASCENDO/IndicatorNewsEvents/2/R-280CB754932A645C8D63C782E8605C43.xml' ...
+2025-12-22 15:41:53:339 Cbi.VendorLicense.Verify.1: good
+2025-12-22 15:41:53:354 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\WindowsInput.dll...
+2025-12-22 15:41:53:355 Initializing database...
+2025-12-22 15:41:53:355 Loading master instruments...
+2025-12-22 15:41:53:535 (Db) Cbi.DB.get_Current.CreateConnection.Start
+2025-12-22 15:41:53:537 (Db) Cbi.DB: connectionString='Data Source="C:\Users\prueba\Documents\NinjaTrader 8\db\NinjaTrader.sqlite";Version=3;Synchronous=Full;Journal Mode=Off;Pooling=True;Max Pool Size=100;foreign keys=true;'
+2025-12-22 15:41:54:167 (Db) Cbi.DB.get_Current.CreateConnection.End
+2025-12-22 15:41:54:274 Loading instruments...
+2025-12-22 15:41:54:602 Loading accounts...
+2025-12-22 15:41:54:773 Loading users...
+2025-12-22 15:41:54:814 Downloading server info...
+2025-12-22 15:41:54:814 Starting instrument management...
+2025-12-22 15:41:54:851 Starting timer...
+2025-12-22 15:41:54:851 Creating file type watcher...
+2025-12-22 15:41:54:852 Setting ATI...
+2025-12-22 15:41:54:887 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2025-12-22 15:41:54:900 Connecting ATI server...
+2025-12-22 15:41:54:901 Server.AtiServer.Connect0
+2025-12-22 15:41:54:901 Starting adapter server...
+2025-12-22 15:41:54:909 Server.AtiServer.Connect1: Port='36973'
+2025-12-22 15:41:54:909 Server.AtiServer.Connect2
+2025-12-22 15:41:54:942 Starting bars dictionary...
+2025-12-22 15:41:54:942 Starting recorder...
+2025-12-22 15:41:54:949 Starting server(s)...
+2025-12-22 15:41:55:030 Core.Globals.ApplicationStart.Commission: minVersion=1 maxVersion=3138
+2025-12-22 15:41:55:030 Core.Globals.ApplicationStart.InstrumentList: minVersion=1 maxVersion=475
+2025-12-22 15:41:55:030 Core.Globals.ApplicationStart.MasterInstrument: minVersion=1 maxVersion=9897
+2025-12-22 15:41:55:030 Core.Globals.ApplicationStart.Risk: minVersion=1 maxVersion=14089
+2025-12-22 15:41:55:030 Core.Globals.ApplicationStart.TradingHours: minVersion=1 maxVersion=5111
+2025-12-22 15:41:55:330 ChartHotKeys: Alerts='' DisableAllAlerts='' EnableAllAlerts='' DataSeries='Ctrl+F' Indicators='Ctrl+I' Strategies='Ctrl+S' Properties='Ctrl+T' CrosshairPointer='Ctrl+R' CrosshairLocal='Ctrl+Q' CrosshairGlobal='Ctrl+G' CrosshairGlobal2='Ctrl+N' CrosshairLock='Ctrl+L' AutoScaleAndReturn='' CyclePlotExecutions='Ctrl+E' ReloadHistoricalData='Ctrl+Shift+R' ReloadNinjaScript='F5' SaveChartImage='Alt+S' ShowDataBox='Ctrl+D' ShowChartTrader='' ShowChartTraderHidden='' ShowIndicators='' ShowScrollBar='' SnapModeBar='' SnapModeBarTick='' SnapModeBarObject='' SnapModeDisabled='' SnapModeTick='' StayInDrawMode='' ZoomIn='Ctrl+Alt+Z' ZoomOut='Ctrl+Alt+O' BarSpacingPlus='Ctrl+Down' BarSpacingMinus='Ctrl+Up' BarWidthPlus='Alt+Down' BarWidthMinus='Alt+Up' Arc='Ctrl+F7' AndrewsPitchfork='Ctrl+F8' ArrowDown='Alt+F3' ArrowLine='Ctrl+F2' ArrowUp='Alt+F2' Diamond='Alt+F5' Dot='Alt+F6' Ellipse='Ctrl+F11' ExtendedLine='F4' FibonacciCircle='F11' FibonacciExtension='F9' FibonacciRetracement='F8' FibonacciTimeExtension='F10' GannFan='Ctrl+F9' HorizontalLine='F6' Line='F2' Path='Ctrl+4' Polygon='Alt+F10' VolumeProfile='Ctrl+3' VWAP='Ctrl+5' Ray='F3' Rectangle='Ctrl+F12' RegressionChannel='Ctrl+F10' HideDrawingObjects='' RemoveDrawingObjects='' RegionHighlightX='Shift+F1' RegionHighlightY='Shift+F2' RiskReward='Ctrl+F4' Ruler='Ctrl+F3' Square='Alt+F7' Text='F12' TimeCycles='Alt+F11' TrendChannel='Ctrl+2' Triangle='Ctrl+F6' TriangleDown='Alt+F9' TriangleUp='Alt+F8' VerticalLine='F7'
+2025-12-22 15:41:55:334 GlobalHotKeys: CloseWorkspace='' NextWorkspace='Shift+F3' PreviousWorkspace='' SaveWorkspace='' SaveAllWorkspaces='' NewAccountData='' NewTradePerformance='' NewAlertsLog='' NewBasicEntry='' NewChart='' NewFxBoard='' NewFxPro='' NewHotListAnalyzer='' NewLevel2='' NewMarketAnalyzer='' NewMarketWatch='' NewNews='' NewNinjaScriptEditor='' NewNinjaScriptOutput='' NewOrderTicket='' NewStrategyAnalyzer='' NewDynamicDom='' NewStaticDom='' NewTimeAndSales='' CancelAllOrders='' FlattenEverything='' OpenInstrumentManager='' OpenInstrumentList='' OpenDatabase='' OpenHotKeyManager='' OpenHistoricalData='' OpenCommission='' OpenRisk='' OpenTradingHoursManager='' OpenRemoveNinjaScript='' CloseOtherTabs='' CloseTab='' DuplicateInNewTab='' DuplicateInNewWindow='' Export='' Find='Ctrl+F' MoveToNewWindow='' Print='Ctrl+P' Replace='Ctrl+H' Share='Ctrl+Shift+S' LoadTemplate='' SaveTemplate='' SaveTemplateAsDefault=''
+2025-12-22 15:41:55:335 MarketAnalyzerHotKeys: AddBlankRow='' AddLabelRow='' Columns='' Alerts='' EnableAllAlerts='' DisableAllAlerts='' AutoSort='' RowFilter='' ReloadHistorical='Ctrl+Shift+R' ReloadNinjaScript='F5'
+2025-12-22 15:41:55:346 NinjaScriptEditorHotKeys: InsertCodeSnippet='F2' FindNext='F3' Compile='F5' GoToLine='Ctrl+G' CommentSelection='Ctrl+K' InlineSyntaxChecking='Ctrl+Alt+S' CollapseToDefinitions='' ExpandAllOutlining='' StartOutlining='' StopOutlining='' HideSelection='' StopHidingSelection='' ToggleAllOutlining='' ToggleOutlining='' Save='Ctrl+S' Undo='Ctrl+Z' Redo='Ctrl+Y'
+2025-12-22 15:41:55:348 OrderEntryHotKeys: BuyAsk='' BuyBid='' BuyMarket='' SellAsk='' SellBid='' SellMarket='' BreakevenAtmStrategy='' BreakevenPosition='' CancelLastOrder='' CloseAtmStrategy='' ClosePosition='' DecreaseLastOrderPrice='' IncreaseLastOrderPrice='' ModifyLastOrder2Fill='' Reverse='' OcoOrder='' SimulatedOrder=''
+2025-12-22 15:41:55:349 SuperDomHotKeys: Center='' Columns='' Indicators='' ReloadAllHistoricalData='Ctrl+Shift+R' ReloadNinjaScript='F5'
+2025-12-22 15:41:55:349 OrderEntryHotKeys=disabled
+2025-12-22 15:41:55:351 AutoClose=disabled
+2025-12-22 15:41:56:569 Core.Instrumentation.LogActivity: activityType=Application errorCode=NoError errorMessage=''
+2025-12-22 15:42:02:939 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=9 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=263 TradingHours=0
+2025-12-22 15:42:03:540 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-22 15:42:04:041 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-22 15:42:04:400 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-22 15:42:04:741 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-22 15:42:05:135 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-22 15:42:05:401 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.01ms InstrumentLists=0.93ms MasterInstruments=0.07ms Messages=0.53ms Risks=0.23ms RolloverCollection=2458.36ms TradingHours=0.07ms
+2025-12-22 15:42:05:403 Starting server message polling timer with interval 3600 seconds...
+2025-12-22 15:42:09:214 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-22 15:42:09:803 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-22 15:42:13:174 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-22 15:42:13:536 Core.Instrumentation.LogActivity: activityType=NinjaScript errorCode=NoError errorMessage=''
+2025-12-22 15:42:14:103 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-22 15:42:15:133 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-22 15:42:16:123 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-22 15:42:17:946 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-22 15:42:19:864 6 Chart Chart1Tab1 1 Ser 2 Ind 0 DrawObj Chart2Tab1 1 Ser 2 Ind 0 DrawObj Chart3Tab1 1 Ser 2 Ind 0 DrawObj Chart4Tab1 1 Ser 2 Ind 0 DrawObj Chart5Tab1 1 Ser 2 Ind 0 DrawObj Chart6Tab1 1 Ser 2 Ind 0 DrawObj 
+2025-12-22 15:45:22:880 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-22 15:45:23:128 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-22 16:21:42:391 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2025-12-22 16:21:42:408 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2025-12-22 16:21:42:638 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2025-12-22 16:21:42:638 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9540646' renewSecs='2399.9770323'
+2025-12-22 16:42:05:428 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2025-12-22 16:42:05:811 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2025-12-22 16:42:05:813 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.05ms Messages=1.32ms Risks=0.01ms RolloverCollection=0.01ms TradingHours=0.00ms
+2025-12-22 22:03:22:873 Loss of DirectX device detected. Attempting to recreate...
+2025-12-22 22:03:22:920 Successfully recreated DirectX device. Device Type: Hardware
+2025-12-22 22:03:23:684 ERROR: Unable to load server side config file: The remote name could not be resolved: 'license2.ninjatrader.com'
+2025-12-22 22:03:23:684 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2025-12-22 22:03:23:690 Server.HdsClient.Connect.SocketError: e.SocketError=HostNotFound: 
+2025-12-22 22:03:23:692 ERROR: Connection lost to the NinjaTrader Information Server: is-us-nt-005.ninjatrader.com
+2025-12-22 22:03:33:701 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2025-12-22 22:03:33:704 Server.HdsClient.Connect.SocketError: e.SocketError=HostNotFound: 
+2025-12-22 22:04:55:902 Loss of DirectX device detected. Attempting to recreate...
+2025-12-22 22:04:56:360 Successfully recreated DirectX device. Device Type: Hardware
+2025-12-22 22:05:01:003 (Simulation) Cbi.AuthenticatedUser0: Sleeping thread while acquiring a valid NT AccessToken
+2025-12-22 22:05:01:400 (Simulation) NinjaTrader.Core.Authentication.GetAccessToken6
+2025-12-22 22:05:01:400 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4800.2825627' renewSecs='2400.14128135'
+2025-12-22 22:05:01:405 (Simulation) Cbi.AuthenticatedUser1: Thread released
+2025-12-22 22:05:01:637 Finalizing addon 'NinjaTrader.NinjaScript.AddOns.NewsUpdate'
+2025-12-22 22:05:01:967 Shutting down NinjaTrader
+2025-12-22 22:05:01:967 Shutting down instrument management
+2025-12-22 22:05:01:969 Shutting down instrument threads
+2025-12-22 22:05:01:977 Shutting down recorder
+2025-12-22 22:05:01:979 Shutting down file type watcher
+2025-12-22 22:05:01:979 Shutting down ATI server
+2025-12-22 22:05:02:002 Shutting down auto trade component
+2025-12-22 22:05:02:003 Shutting down SMTP server
+2025-12-22 22:05:02:013 Shutting down adapter server
+2025-12-22 22:05:02:028 Shutting down server(s)
+2025-12-22 22:05:02:031 Shutting down mail thread
+2025-12-22 22:05:02:053 Shutting down sound thread
+2025-12-22 22:05:02:053 Shutting down timer
+2025-12-22 22:05:02:053 Shutting down alerts timer
+2025-12-22 22:05:02:053 Shutting down message timer
+2025-12-22 22:05:02:053 Shutting down db
+2025-12-22 22:05:02:054 Flushing DB thread
+2025-12-22 22:05:02:192 Shutting down bars dictionary
+2025-12-22 22:05:02:234 Shutting down user entitlement threads
+2025-12-22 22:05:02:255 Shutting down logs
+2025-12-22 22:05:02:265 Shutting down bars types
+2025-12-22 22:05:02:267 Shutting down UI threads
+2025-12-22 22:05:02:279 ************************ Session End ************************

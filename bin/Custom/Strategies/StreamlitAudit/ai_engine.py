@@ -567,6 +567,12 @@ análisis cuantitativo cuando se solicite. Sé conversacional pero preciso."""
             # Persistir uso automáticamente (solo si no es cache hit, el código corre)
             update_usage_history(usage['cost_usd'], usage['total_tokens'])
             
+            # v2.2.4: Actualizar sesión solo si realmente se ejecuta (Gasto Nuevo)
+            # Como st.cache_data no 'replay' los side-effects, esto solo corre en cache MISS
+            if 'ai_usage_stats' in st.session_state:
+                st.session_state.ai_usage_stats['cost'] += usage['cost_usd']
+                st.session_state.ai_usage_stats['tokens'] += usage['total_tokens']
+            
             return response.text, usage
             
         except Exception as e:
@@ -655,10 +661,7 @@ def show_ai_analysis(chart_name: str, chart_type: str, data: dict, key_suffix: s
         with st.spinner("🧠 Analizando..."):
             brief_analysis, usage = analyzer.analyze_chart(chart_type, data, brief=True)
             
-            # Actualizar estadísticas globales si hay uso nuevo
-            if usage:
-                st.session_state.ai_usage_stats['cost'] += usage['cost_usd']
-                st.session_state.ai_usage_stats['tokens'] += usage['total_tokens']
+            # stats update moved inside analyze_chart to avoid phantom costs on cache hit
         
         # Mostrar widget de costo
         if usage:
@@ -674,9 +677,7 @@ def show_ai_analysis(chart_name: str, chart_type: str, data: dict, key_suffix: s
                 with st.spinner("Generando análisis detallado..."):
                     full_analysis, full_usage = analyzer.analyze_chart(chart_type, data, brief=False)
                     
-                    if full_usage:
-                        st.session_state.ai_usage_stats['cost'] += full_usage['cost_usd']
-                        st.session_state.ai_usage_stats['tokens'] += full_usage['total_tokens']
+                    pass # stats update handled inside analyze_chart
                 
                 # Mostrar en sub-expander
                 with st.expander("📋 Análisis Detallado", expanded=True):

@@ -1,0 +1,140 @@
+2025-12-25 10:18:06:531|2|4|Session Break (Version 8.1.6.2)
+2025-12-25 10:18:21:387|1|4|Global simulation mode disabled
+2025-12-25 10:18:22:925|1|4|Vendor assembly 'ASCENDO_NewsEvents' version='3.0.0.0' loaded.
+2025-12-25 10:18:22:925|1|4|Vendor assembly 'WindowsInput' version='1.0.4.0' loaded.
+2025-12-25 10:18:23:919|1|2|Using IS (is-us-nt-006.ninjatrader.com/31658)
+2025-12-25 10:18:23:925|1|4|Automated trading disabled
+2025-12-25 10:18:24:150|1|32|Order entry hot keys disabled
+2025-12-25 10:18:24:151|1|4|Auto close enabled=False
+2025-12-25 10:18:29:077|1|4|Restoring workspace 'Relative Trading Software'...
+2025-12-25 10:19:25:138|1|2|Playback: Primary connection=Connecting, Price feed=Connecting
+2025-12-25 10:19:25:253|1|2|Playback: Primary connection=Connected, Price feed=Connected
+2025-12-25 10:19:25:256|1|2|Time to auto close position='12:00:00 a. m.', Enabled=False
+2025-12-25 10:19:25:262|1|2|Using HDS (hds-us-nt-017.ninjatrader.com/31655)
+2025-12-25 10:19:25:766|1|2|Simulation account 'Playback101' reset
+2025-12-25 10:19:44:993|3|524288|Error on executing DB command: code = Constraint (19), message = System.Data.SQLite.SQLiteException (0x800027AF): constraint failed
+FOREIGN KEY constraint failed
+   at System.Data.SQLite.SQLite3.Reset(SQLiteStatement stmt)
+   at System.Data.SQLite.SQLite3.Step(SQLiteStatement stmt)
+   at System.Data.SQLite.SQLiteDataReader.NextResult()
+   at System.Data.SQLite.SQLiteDataReader..ctor(SQLiteCommand cmd, CommandBehavior behave)
+   at System.Data.SQLite.SQLiteCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.SQLite.SQLiteCommand.ExecuteNonQuery(CommandBehavior behavior)
+   at NinjaTrader.NinjaScript.StrategyBase.DbAdd()
+   at NinjaTrader.Cbi.DB.DBThread()
+2025-12-25 10:19:58:249|1|2|Simulation account 'Playback101' reset
+2025-12-25 10:20:34:491|1|2|Simulation account 'Playback101' reset
+2025-12-25 10:20:55:276|3|524288|Error on executing DB command: code = Constraint (19), message = System.Data.SQLite.SQLiteException (0x800027AF): constraint failed
+FOREIGN KEY constraint failed
+   at System.Data.SQLite.SQLite3.Reset(SQLiteStatement stmt)
+   at System.Data.SQLite.SQLite3.Step(SQLiteStatement stmt)
+   at System.Data.SQLite.SQLiteDataReader.NextResult()
+   at System.Data.SQLite.SQLiteDataReader..ctor(SQLiteCommand cmd, CommandBehavior behave)
+   at System.Data.SQLite.SQLiteCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.SQLite.SQLiteCommand.ExecuteNonQuery(CommandBehavior behavior)
+   at NinjaTrader.NinjaScript.StrategyBase.DbAdd()
+   at NinjaTrader.Cbi.DB.DBThread()
+2025-12-25 10:20:55:430|3|4|Strategy 'SessionLevelsStrategy/378061501': An order has been ignored since the stop price ‘6941.25’ near the bar stamped ‘12/11/2025 11:25:00’ is invalid based on the price range of the bar. This is an invalid order and subsequent orders may also be ignored.
+2025-12-25 10:20:55:577|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378061501' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=True / triggering 30 seconds before close SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2025-12-25 10:20:55:596|1|4|NinjaScript strategy 'SessionLevelsStrategy/378061501' submitting order
+2025-12-25 10:20:55:647|1|32|Order='c496ddf612184a5aa2dddc8f0bbbe9f9/Playback101' Name='TP1_Long' New state='Submitted' Instrument='MES 03-26' Action='Sell' Limit price=6936.5 Stop price=0 Quantity=1 Type='Limit' Time in force=GTC Oco='OCO_Long_1_639022548555443471' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-25 10:20:55:647|1|32|Order='c496ddf612184a5aa2dddc8f0bbbe9f9/Playback101' Name='TP1_Long' New state='Rejected' Instrument='MES 03-26' Action='Sell' Limit price=6936.5 Stop price=0 Quantity=1 Type='Limit' Time in force=GTC Oco='OCO_Long_1_639022548555443471' Filled=0 Fill price=0 Error='Order rejected' Native error='There is no market data available to drive the simulation engine.'
+2025-12-25 10:20:55:648|0|32|Playback101, There is no market data available to drive the simulation engine. affected Order: Sell 1 Limit @ 6936.5
+2025-12-25 10:20:55:648|1|4|NinjaScript strategy 'SessionLevelsStrategy/378061501' submitting order
+2025-12-25 10:20:55:659|1|32|Order='e9071e3657744089adb3fe5816eb77ae/Playback101' Name='TP2_Long' New state='Submitted' Instrument='MES 03-26' Action='Sell' Limit price=6937.25 Stop price=0 Quantity=1 Type='Limit' Time in force=GTC Oco='OCO_Long_2_639022548555443471' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-25 10:20:55:659|1|32|Order='e9071e3657744089adb3fe5816eb77ae/Playback101' Name='TP2_Long' New state='Rejected' Instrument='MES 03-26' Action='Sell' Limit price=6937.25 Stop price=0 Quantity=1 Type='Limit' Time in force=GTC Oco='OCO_Long_2_639022548555443471' Filled=0 Fill price=0 Error='Order rejected' Native error='There is no market data available to drive the simulation engine.'
+2025-12-25 10:20:55:659|0|32|Playback101, There is no market data available to drive the simulation engine. affected Order: Sell 1 Limit @ 6937.25
+2025-12-25 10:20:57:865|3|16|There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2025-12-25 10:20:57:866|3|16|There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2025-12-25 10:21:38:146|3|4|Strategy 'SessionLevelsStrategy/378061503': An order has been ignored since the stop price ‘47808’ near the bar stamped ‘11/14/2025 04:16:00’ is invalid based on the price range of the bar. This is an invalid order and subsequent orders may also be ignored.
+2025-12-25 10:21:52:077|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378061503' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=True / triggering 30 seconds before close SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2025-12-25 10:27:07:044|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378061503'
+2025-12-25 10:27:08:398|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378061501'
+2025-12-25 10:27:08:408|3|524288|Error on executing DB command: code = Constraint (19), message = System.Data.SQLite.SQLiteException (0x800027AF): constraint failed
+FOREIGN KEY constraint failed
+   at System.Data.SQLite.SQLite3.Reset(SQLiteStatement stmt)
+   at System.Data.SQLite.SQLite3.Step(SQLiteStatement stmt)
+   at System.Data.SQLite.SQLiteDataReader.NextResult()
+   at System.Data.SQLite.SQLiteDataReader..ctor(SQLiteCommand cmd, CommandBehavior behave)
+   at System.Data.SQLite.SQLiteCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.SQLite.SQLiteCommand.ExecuteNonQuery(CommandBehavior behavior)
+   at NinjaTrader.NinjaScript.StrategyBase.DbAdd()
+   at NinjaTrader.Cbi.DB.DBThread()
+2025-12-25 10:27:18:409|3|524288|Error on executing DB command: code = Constraint (19), message = System.Data.SQLite.SQLiteException (0x800027AF): constraint failed
+FOREIGN KEY constraint failed
+   at System.Data.SQLite.SQLite3.Reset(SQLiteStatement stmt)
+   at System.Data.SQLite.SQLite3.Step(SQLiteStatement stmt)
+   at System.Data.SQLite.SQLiteDataReader.NextResult()
+   at System.Data.SQLite.SQLiteDataReader..ctor(SQLiteCommand cmd, CommandBehavior behave)
+   at System.Data.SQLite.SQLiteCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.SQLite.SQLiteCommand.ExecuteNonQuery(CommandBehavior behavior)
+   at NinjaTrader.NinjaScript.StrategyBase.DbAdd()
+   at NinjaTrader.Cbi.DB.DBThread()
+2025-12-25 10:28:39:427|3|524288|Error on executing DB command: code = Constraint (19), message = System.Data.SQLite.SQLiteException (0x800027AF): constraint failed
+FOREIGN KEY constraint failed
+   at System.Data.SQLite.SQLite3.Reset(SQLiteStatement stmt)
+   at System.Data.SQLite.SQLite3.Step(SQLiteStatement stmt)
+   at System.Data.SQLite.SQLiteDataReader.NextResult()
+   at System.Data.SQLite.SQLiteDataReader..ctor(SQLiteCommand cmd, CommandBehavior behave)
+   at System.Data.SQLite.SQLiteCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.SQLite.SQLiteCommand.ExecuteNonQuery(CommandBehavior behavior)
+   at NinjaTrader.NinjaScript.StrategyBase.DbAdd()
+   at NinjaTrader.Cbi.DB.DBThread()
+2025-12-25 10:28:48:869|3|4|Strategy 'SessionLevelsStrategy/378061501': An order has been ignored since the stop price ‘6941.25’ near the bar stamped ‘12/11/2025 11:25:00’ is invalid based on the price range of the bar. This is an invalid order and subsequent orders may also be ignored.
+2025-12-25 10:28:48:982|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378061501' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=True / triggering 30 seconds before close SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2025-12-25 10:28:48:990|1|4|NinjaScript strategy 'SessionLevelsStrategy/378061501' submitting order
+2025-12-25 10:28:49:002|1|32|Order='592c306d7027484181c0b324242dbf47/Playback101' Name='TP1_Long' New state='Submitted' Instrument='MES 03-26' Action='Sell' Limit price=6936.5 Stop price=0 Quantity=1 Type='Limit' Time in force=GTC Oco='OCO_Long_1_639022553289522203' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-25 10:28:49:002|1|32|Order='592c306d7027484181c0b324242dbf47/Playback101' Name='TP1_Long' New state='Rejected' Instrument='MES 03-26' Action='Sell' Limit price=6936.5 Stop price=0 Quantity=1 Type='Limit' Time in force=GTC Oco='OCO_Long_1_639022553289522203' Filled=0 Fill price=0 Error='Order rejected' Native error='There is no market data available to drive the simulation engine.'
+2025-12-25 10:28:49:002|0|32|Playback101, There is no market data available to drive the simulation engine. affected Order: Sell 1 Limit @ 6936.5
+2025-12-25 10:28:49:002|1|4|NinjaScript strategy 'SessionLevelsStrategy/378061501' submitting order
+2025-12-25 10:28:49:012|1|32|Order='277e3787eeb34f0987be5a36eecebb1f/Playback101' Name='TP2_Long' New state='Submitted' Instrument='MES 03-26' Action='Sell' Limit price=6937.25 Stop price=0 Quantity=1 Type='Limit' Time in force=GTC Oco='OCO_Long_2_639022553289522203' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-25 10:28:49:012|1|32|Order='277e3787eeb34f0987be5a36eecebb1f/Playback101' Name='TP2_Long' New state='Rejected' Instrument='MES 03-26' Action='Sell' Limit price=6937.25 Stop price=0 Quantity=1 Type='Limit' Time in force=GTC Oco='OCO_Long_2_639022553289522203' Filled=0 Fill price=0 Error='Order rejected' Native error='There is no market data available to drive the simulation engine.'
+2025-12-25 10:28:49:012|0|32|Playback101, There is no market data available to drive the simulation engine. affected Order: Sell 1 Limit @ 6937.25
+2025-12-25 10:28:49:430|3|524288|Error on executing DB command: code = Constraint (19), message = System.Data.SQLite.SQLiteException (0x800027AF): constraint failed
+FOREIGN KEY constraint failed
+   at System.Data.SQLite.SQLite3.Reset(SQLiteStatement stmt)
+   at System.Data.SQLite.SQLite3.Step(SQLiteStatement stmt)
+   at System.Data.SQLite.SQLiteDataReader.NextResult()
+   at System.Data.SQLite.SQLiteDataReader..ctor(SQLiteCommand cmd, CommandBehavior behave)
+   at System.Data.SQLite.SQLiteCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.SQLite.SQLiteCommand.ExecuteNonQuery(CommandBehavior behavior)
+   at NinjaTrader.NinjaScript.StrategyBase.DbAdd()
+   at NinjaTrader.Cbi.DB.DBThread()
+2025-12-25 10:28:51:007|3|16|There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2025-12-25 10:28:51:029|3|16|There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2025-12-25 10:28:59:431|3|524288|Error on executing DB command: code = Constraint (19), message = System.Data.SQLite.SQLiteException (0x800027AF): constraint failed
+FOREIGN KEY constraint failed
+   at System.Data.SQLite.SQLite3.Reset(SQLiteStatement stmt)
+   at System.Data.SQLite.SQLite3.Step(SQLiteStatement stmt)
+   at System.Data.SQLite.SQLiteDataReader.NextResult()
+   at System.Data.SQLite.SQLiteDataReader..ctor(SQLiteCommand cmd, CommandBehavior behave)
+   at System.Data.SQLite.SQLiteCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.SQLite.SQLiteCommand.ExecuteNonQuery(CommandBehavior behavior)
+   at NinjaTrader.NinjaScript.StrategyBase.DbAdd()
+   at NinjaTrader.Cbi.DB.DBThread()
+2025-12-25 10:34:14:257|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378061501'
+2025-12-25 10:34:14:269|3|524288|Error on executing DB command: code = Constraint (19), message = System.Data.SQLite.SQLiteException (0x800027AF): constraint failed
+FOREIGN KEY constraint failed
+   at System.Data.SQLite.SQLite3.Reset(SQLiteStatement stmt)
+   at System.Data.SQLite.SQLite3.Step(SQLiteStatement stmt)
+   at System.Data.SQLite.SQLiteDataReader.NextResult()
+   at System.Data.SQLite.SQLiteDataReader..ctor(SQLiteCommand cmd, CommandBehavior behave)
+   at System.Data.SQLite.SQLiteCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.SQLite.SQLiteCommand.ExecuteNonQuery(CommandBehavior behavior)
+   at NinjaTrader.NinjaScript.StrategyBase.DbAdd()
+   at NinjaTrader.Cbi.DB.DBThread()
+2025-12-25 10:34:15:909|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378061501' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=True / triggering 30 seconds before close SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2025-12-25 10:34:24:354|3|524288|Error on executing DB command: code = Constraint (19), message = System.Data.SQLite.SQLiteException (0x800027AF): constraint failed
+FOREIGN KEY constraint failed
+   at System.Data.SQLite.SQLite3.Reset(SQLiteStatement stmt)
+   at System.Data.SQLite.SQLite3.Step(SQLiteStatement stmt)
+   at System.Data.SQLite.SQLiteDataReader.NextResult()
+   at System.Data.SQLite.SQLiteDataReader..ctor(SQLiteCommand cmd, CommandBehavior behave)
+   at System.Data.SQLite.SQLiteCommand.ExecuteReader(CommandBehavior behavior)
+   at System.Data.SQLite.SQLiteCommand.ExecuteNonQuery(CommandBehavior behavior)
+   at NinjaTrader.NinjaScript.StrategyBase.DbAdd()
+   at NinjaTrader.Cbi.DB.DBThread()
+2025-12-25 10:43:12:054|1|4|Workspace Relative Trading Software saved
+2025-12-25 10:43:12:198|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378061501'
+2025-12-25 10:43:12:433|1|2|Playback: Primary connection=Disconnecting, Price feed=Disconnecting
+2025-12-25 10:43:12:445|1|2|Playback: Primary connection=Disconnected, Price feed=Disconnected

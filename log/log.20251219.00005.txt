@@ -1,0 +1,40 @@
+2025-12-19 22:41:47:788|2|4|Session Break (Version 8.1.6.2)
+2025-12-19 22:42:46:353|1|4|Global simulation mode disabled
+2025-12-19 22:42:47:959|1|4|Vendor assembly 'ASCENDO_NewsEvents' version='3.0.0.0' loaded.
+2025-12-19 22:42:47:959|1|4|Vendor assembly 'WindowsInput' version='1.0.4.0' loaded.
+2025-12-19 22:42:50:728|1|2|Using IS (is-us-nt-006.ninjatrader.com/31658)
+2025-12-19 22:42:50:733|1|4|Automated trading disabled
+2025-12-19 22:42:50:903|1|32|Order entry hot keys disabled
+2025-12-19 22:42:50:903|1|4|Auto close enabled=False
+2025-12-19 22:42:55:050|1|4|Restoring workspace 'Relative Trading Software'...
+2025-12-19 22:43:02:486|1|2|Simulation: Primary connection=Connecting, Price feed=Connecting
+2025-12-19 22:43:04:432|1|2|Simulation: Primary connection=Connected, Price feed=Connected
+2025-12-19 22:43:04:487|1|2|Time to auto close position='12:00:00 a. m.', Enabled=False
+2025-12-19 22:43:04:487|1|2|Using HDS (hds-us-nt-018.ninjatrader.com/31655)
+2025-12-19 22:47:31:323|1|2|Simulation: Primary connection=Disconnecting, Price feed=Disconnecting
+2025-12-19 22:47:32:876|1|2|Simulation: Primary connection=Disconnected, Price feed=Disconnected
+2025-12-19 22:47:34:898|1|2|Playback: Primary connection=Connecting, Price feed=Connecting
+2025-12-19 22:47:34:947|1|2|Playback: Primary connection=Connected, Price feed=Connected
+2025-12-19 22:47:34:947|1|2|Time to auto close position='12:00:00 a. m.', Enabled=False
+2025-12-19 22:47:34:947|1|2|Using HDS (hds-us-nt-016.ninjatrader.com/31655)
+2025-12-19 22:47:35:099|1|2|Simulation account 'Playback101' reset
+2025-12-19 22:49:47:206|1|2|Playback: Primary connection=Disconnecting, Price feed=Disconnecting
+2025-12-19 22:49:47:214|1|2|Playback: Primary connection=Disconnected, Price feed=Disconnected
+2025-12-19 22:49:48:816|1|2|Simulation: Primary connection=Connecting, Price feed=Connecting
+2025-12-19 22:49:50:268|1|2|Simulation: Primary connection=Connected, Price feed=Connected
+2025-12-19 22:49:50:278|1|2|Time to auto close position='12:00:00 a. m.', Enabled=False
+2025-12-19 22:49:50:278|1|2|Using HDS (hds-us-nt-019.ninjatrader.com/31655)
+2025-12-19 23:07:54:377|1|2|Simulation: Primary connection=Disconnecting, Price feed=Disconnecting
+2025-12-19 23:07:55:901|1|2|Simulation: Primary connection=Disconnected, Price feed=Disconnected
+2025-12-19 23:08:10:227|1|2|Playback: Primary connection=Connecting, Price feed=Connecting
+2025-12-19 23:08:10:255|1|2|Playback: Primary connection=Connected, Price feed=Connected
+2025-12-19 23:08:10:255|1|2|Time to auto close position='12:00:00 a. m.', Enabled=False
+2025-12-19 23:08:10:255|1|2|Using HDS (hds-us-nt-009.ninjatrader.com/31655)
+2025-12-19 23:08:10:370|1|2|Simulation account 'Playback101' reset
+2025-12-19 23:24:33:712|1|2|Simulation account 'Playback101' reset
+2025-12-19 23:31:08:420|1|2|Simulation account 'Playback101' reset
+2025-12-19 23:33:31:780|1|2|Simulation account 'Playback101' reset
+2025-12-19 23:47:29:391|1|2|Simulation account 'Playback101' reset
+2025-12-19 23:56:08:368|1|4|Workspace Relative Trading Software saved
+2025-12-19 23:56:08:670|1|2|Playback: Primary connection=Disconnecting, Price feed=Disconnecting
+2025-12-19 23:56:08:671|1|2|Playback: Primary connection=Disconnected, Price feed=Disconnected

@@ -1,0 +1,27 @@
+2026-01-04 15:01:23:948|2|4|Session Break (Version 8.1.6.2)
+2026-01-04 15:01:39:715|1|4|Global simulation mode disabled
+2026-01-04 15:01:41:069|1|4|Vendor assembly 'AddonSuiteManager.Addon.Standalone' version='1.0.0.1' loaded.
+2026-01-04 15:01:42:252|1|4|Vendor assembly 'ASCENDO_NewsEvents' version='3.0.0.0' loaded.
+2026-01-04 15:01:43:048|1|4|Vendor assembly 'ReplayDataPlusManager.Addon.Standalone' version='1.0.0.1' loaded.
+2026-01-04 15:01:43:048|1|4|Vendor assembly 'WindowsInput' version='1.0.4.0' loaded.
+2026-01-04 15:01:45:528|1|2|Using IS (is-us-nt-006.ninjatrader.com/31658)
+2026-01-04 15:01:45:534|1|4|Automated trading disabled
+2026-01-04 15:01:45:760|1|32|Order entry hot keys disabled
+2026-01-04 15:01:45:761|1|4|Auto close enabled=False
+2026-01-04 15:01:50:790|1|4|Restoring workspace 'Relative Trading Software'...
+2026-01-04 15:02:28:055|1|2|Playback: Primary connection=Connecting, Price feed=Connecting
+2026-01-04 15:02:28:133|1|2|Playback: Primary connection=Connected, Price feed=Connected
+2026-01-04 15:02:28:151|1|2|Time to auto close position='12:00:00 a. m.', Enabled=False
+2026-01-04 15:02:28:152|1|2|Using HDS (hds-us-nt-019.ninjatrader.com/31655)
+2026-01-04 15:02:29:719|1|2|Simulation account 'Playback101' reset
+2026-01-04 15:02:57:485|1|2|Simulation account 'Playback101' reset
+2026-01-04 15:04:05:659|1|2|Simulation account 'Playback101' reset
+2026-01-04 15:09:09:594|1|16|Backtesting with Tick Replay was not designed to provide higher accuracy concerning order fills and execution in historical. For higher granularity you can utilize Order Fill Resolution 'high' outside of Tick Replay.
+2026-01-04 15:09:10:880|3|4|Strategy 'SessionLevelsStrategy/378426600': An order has been ignored since the stop price ‘18840.75’ near the bar stamped ‘01/10/2024 05:34:00’ is invalid based on the price range of the bar. This is an invalid order and subsequent orders may also be ignored.
+2026-01-04 15:10:27:691|3|2|Connection lost to the NinjaTrader Historical Data Server: hds-us-nt-019.ninjatrader.com
+2026-01-04 15:10:37:708|1|2|Using HDS (hds-us-nt-014.ninjatrader.com/31655)
+2026-01-04 15:10:38:090|1|2|Connection restored to the NinjaTrader Historical Data Server: hds-us-nt-014.ninjatrader.com
+2026-01-04 15:11:01:737|1|4|Workspace Relative Trading Software not saved
+2026-01-04 15:11:14:588|3|16|Chart rendering failed. There is likely a problem with a chart object's OnRender method. D2D error = 'HRESULT: [0x88990001], Module: [SharpDX.Direct2D1], ApiCode: [D2DERR_WRONG_STATE/WrongState], Message: El objeto no se encontraba en el estado correcto para procesar el método. '
+2026-01-04 15:11:16:380|1|2|Playback: Primary connection=Disconnecting, Price feed=Disconnecting
+2026-01-04 15:11:16:391|1|2|Playback: Primary connection=Disconnected, Price feed=Disconnected

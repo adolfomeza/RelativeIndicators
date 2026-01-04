@@ -1,0 +1,9 @@
+2025-12-31 23:49:46:879|2|4|Session Break (Version 8.1.6.2)
+2025-12-31 23:50:35:865|1|4|Global simulation mode disabled
+2025-12-31 23:50:37:570|1|4|Vendor assembly 'ASCENDO_NewsEvents' version='3.0.0.0' loaded.
+2025-12-31 23:50:37:570|1|4|Vendor assembly 'WindowsInput' version='1.0.4.0' loaded.
+2025-12-31 23:50:38:574|1|2|Using IS (is-us-nt-006.ninjatrader.com/31658)
+2025-12-31 23:50:38:580|1|4|Automated trading disabled
+2025-12-31 23:50:38:815|1|32|Order entry hot keys disabled
+2025-12-31 23:50:38:817|1|4|Auto close enabled=False
+2025-12-31 23:50:43:930|1|4|Restoring workspace 'Relative Trading Software'...

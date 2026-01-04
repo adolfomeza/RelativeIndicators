@@ -1,0 +1,24 @@
+2025-12-31 18:15:36:850|2|4|Session Break (Version 8.1.6.2)
+2025-12-31 18:16:19:315|1|4|Global simulation mode disabled
+2025-12-31 18:16:25:768|1|4|Vendor assembly 'ASCENDO_NewsEvents' version='3.0.0.0' loaded.
+2025-12-31 18:16:25:768|1|4|Vendor assembly 'WindowsInput' version='1.0.4.0' loaded.
+2025-12-31 18:16:26:729|1|2|Using IS (is-us-nt-005.ninjatrader.com/31658)
+2025-12-31 18:16:26:734|1|4|Automated trading disabled
+2025-12-31 18:16:26:937|1|32|Order entry hot keys disabled
+2025-12-31 18:16:26:938|1|4|Auto close enabled=False
+2025-12-31 18:16:38:251|1|4|Restoring workspace 'Relative Trading Software'...
+2025-12-31 18:17:16:724|1|16|Backtesting with Tick Replay was not designed to provide higher accuracy concerning order fills and execution in historical. For higher granularity you can utilize Order Fill Resolution 'high' outside of Tick Replay.
+2025-12-31 18:38:42:920|1|2|Simulation: Primary connection=Connecting, Price feed=Connecting
+2025-12-31 18:38:48:033|1|2|Simulation: Primary connection=Connected, Price feed=Connected
+2025-12-31 18:38:48:209|1|2|Time to auto close position='12:00:00 a. m.', Enabled=False
+2025-12-31 18:38:48:211|1|2|Using HDS (hds-us-nt-007.ninjatrader.com/31655)
+2025-12-31 20:06:55:195|2|2|Your connection is experiencing high latency: 11,615 ms. This may negatively impact trading and market data services.
+2025-12-31 20:07:14:517|1|2|Simulation: Primary connection=Connected, Price feed=Connection lost
+2025-12-31 20:07:16:616|1|2|Simulation: Primary connection=Connection lost, Price feed=Connection lost
+2025-12-31 20:07:30:725|3|2|Connection lost to the NinjaTrader Historical Data Server: hds-us-nt-007.ninjatrader.com
+2025-12-31 20:07:35:593|1|2|Simulation: Primary connection=Connected, Price feed=Connected
+2025-12-31 20:07:40:733|1|2|Using HDS (hds-us-nt-012.ninjatrader.com/31655)
+2025-12-31 20:07:41:125|1|2|Connection restored to the NinjaTrader Historical Data Server: hds-us-nt-012.ninjatrader.com
+2025-12-31 23:49:34:090|1|4|Workspace Relative Trading Software saved
+2025-12-31 23:49:34:632|1|2|Simulation: Primary connection=Disconnecting, Price feed=Disconnecting
+2025-12-31 23:49:36:204|1|2|Simulation: Primary connection=Disconnected, Price feed=Disconnected

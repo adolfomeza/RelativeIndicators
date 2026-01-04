@@ -1,0 +1,189 @@
+2026-01-04 00:19:51:692 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-04 00:19:51:692 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-04 00:19:51:983 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-04 00:19:51:983 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9610532' renewSecs='2399.9805266'
+2026-01-04 00:20:07:840 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-04 00:20:08:347 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-04 00:20:08:347 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.34ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-04 00:59:51:966 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-04 00:59:51:966 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-04 00:59:52:258 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-04 00:59:52:258 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9661438' renewSecs='2399.9830719'
+2026-01-04 01:20:07:832 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-04 01:20:08:345 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-04 01:20:08:346 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.24ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-04 01:39:52:257 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-04 01:39:52:257 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-04 01:39:52:544 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-04 01:39:52:544 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9664424' renewSecs='2399.9832212'
+2026-01-04 02:19:52:550 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-04 02:19:52:550 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-04 02:19:52:842 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-04 02:19:52:842 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9649375' renewSecs='2399.98246875'
+2026-01-04 02:20:07:846 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-04 02:20:08:332 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-04 02:20:08:333 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.31ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-04 02:59:52:832 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-04 02:59:52:832 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-04 02:59:53:105 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-04 02:59:53:105 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.964506' renewSecs='2399.982253'
+2026-01-04 03:20:07:855 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-04 03:20:08:356 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-04 03:20:08:357 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.28ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-04 03:39:53:106 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-04 03:39:53:106 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-04 03:39:53:381 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-04 03:39:53:382 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9619049' renewSecs='2399.98095245'
+2026-01-04 04:19:53:374 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-04 04:19:53:374 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-04 04:19:53:654 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-04 04:19:53:654 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9592822' renewSecs='2399.9796411'
+2026-01-04 04:20:07:877 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-04 04:20:08:308 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-04 04:20:08:308 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.29ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-04 04:59:53:651 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-04 04:59:53:651 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-04 04:59:54:095 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-04 04:59:54:095 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9601326' renewSecs='2399.9800663'
+2026-01-04 05:20:07:914 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-04 05:20:08:376 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-04 05:20:08:377 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.34ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-04 05:39:54:087 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-04 05:39:54:087 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-04 05:39:54:376 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-04 05:39:54:376 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9570729' renewSecs='2399.97853645'
+2026-01-04 06:19:54:370 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-04 06:19:54:370 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-04 06:19:54:652 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-04 06:19:54:652 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9616137' renewSecs='2399.98080685'
+2026-01-04 06:20:07:925 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-04 06:20:08:400 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-04 06:20:08:400 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.35ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-04 06:59:54:644 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-04 06:59:54:644 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-04 06:59:54:920 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-04 06:59:54:920 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9603589' renewSecs='2399.98017945'
+2026-01-04 07:20:07:927 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-04 07:20:08:471 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-04 07:20:08:471 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.33ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-04 07:39:54:915 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-04 07:39:54:915 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-04 07:39:55:211 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-04 07:39:55:211 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9573005' renewSecs='2399.97865025'
+2026-01-04 08:19:55:200 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-04 08:19:55:200 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-04 08:19:55:492 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-04 08:19:55:492 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9591941' renewSecs='2399.97959705'
+2026-01-04 08:20:07:946 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-04 08:20:08:426 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-04 08:20:08:427 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.28ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-04 08:59:55:480 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-04 08:59:55:480 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-04 08:59:56:110 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-04 08:59:56:110 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9293388' renewSecs='2399.9646694'
+2026-01-04 09:20:07:966 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-04 09:20:08:467 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-04 09:20:08:468 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.35ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-04 09:39:56:083 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-04 09:39:56:083 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-04 09:39:56:362 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-04 09:39:56:362 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.960353' renewSecs='2399.9801765'
+2026-01-04 10:19:56:349 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-04 10:19:56:349 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-04 10:19:56:622 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-04 10:19:56:622 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9626906' renewSecs='2399.9813453'
+2026-01-04 10:20:07:976 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-04 10:20:08:398 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-04 10:20:08:399 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.29ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-04 10:59:56:618 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-04 10:59:56:618 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-04 10:59:56:904 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-04 10:59:56:904 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.961711' renewSecs='2399.9808555'
+2026-01-04 11:20:07:986 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-04 11:20:08:447 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-04 11:20:08:447 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.34ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-04 11:39:56:891 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-04 11:39:56:891 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-04 11:39:57:175 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-04 11:39:57:176 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9576425' renewSecs='2399.97882125'
+2026-01-04 12:19:57:166 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-04 12:19:57:166 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-04 12:19:57:471 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-04 12:19:57:471 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9481556' renewSecs='2399.9740778'
+2026-01-04 12:20:08:024 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-04 12:20:08:494 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-04 12:20:08:495 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.40ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-04 12:59:57:465 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-04 12:59:57:465 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-04 12:59:57:771 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-04 12:59:57:771 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9494641' renewSecs='2399.97473205'
+2026-01-04 13:08:41:630 ERROR: Connection lost to the NinjaTrader Historical Data Server: hds-us-nt-017.ninjatrader.com
+2026-01-04 13:08:51:635 Server.HdsClient.Connect: type=HDS server='hds-us-nt-012.ninjatrader.com' port=31655 system='' useSsl=True
+2026-01-04 13:20:08:031 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-04 13:20:08:529 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-04 13:20:08:529 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.32ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-04 13:39:57:765 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-04 13:39:57:765 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-04 13:39:58:055 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-04 13:39:58:055 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9595165' renewSecs='2399.97975825'
+2026-01-04 14:02:44:484 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='2/1/26 12:00:00 a. m.' to='2/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-04 14:04:44:443 ERROR: Connection lost to the NinjaTrader Historical Data Server: hds-us-nt-012.ninjatrader.com
+2026-01-04 14:04:54:456 Server.HdsClient.Connect: type=HDS server='hds-us-nt-015.ninjatrader.com' port=31655 system='' useSsl=True
+2026-01-04 14:19:58:042 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-04 14:19:58:042 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-04 14:19:58:314 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-04 14:19:58:316 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9594069' renewSecs='2399.97970345'
+2026-01-04 14:20:08:056 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-04 14:20:08:530 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-04 14:20:08:530 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.32ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-04 14:59:58:306 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-04 14:59:58:306 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-04 14:59:58:583 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-04 14:59:58:583 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9561007' renewSecs='2399.97805035'
+2026-01-04 15:01:15:041 SQLite error (1555): abort at 19 in [INSERT INTO Strategies(Id,Category,Classname,IsReplay,IsResetOnNewTradingDay,IsTerminal,Name,ServerId,Template,Userdata,Workspace) Values (?,?,?,?,?,?,?,?,?,?,?)]: UNIQUE constraint failed: Str
+2026-01-04 15:01:15:292 ERROR: Error on executing DB command: code = Constraint (19), message = System.Data.SQLite.SQLiteException (0x800027AF): constraint failed UNIQUE constraint failed: Strategies.Id    at System.Data.SQLite.SQLite3.Reset(SQLiteStatement stmt)    at System.Data.SQLite.SQLite3.Step(SQLiteStatement stmt)    at System.Data.SQLite.SQLiteDataReader.NextResult()    at System.Data.SQLite.SQLiteDataReader..ctor(SQLiteCommand cmd, CommandBehavior behave)    at System.Data.SQLite.SQLiteCommand.ExecuteReader(CommandBehavior behavior)    at System.Data.SQLite.SQLiteCommand.ExecuteNonQuery(CommandBehavior behavior)    at NinjaTrader.NinjaScript.StrategyBase.DbAdd()    at NinjaTrader.Cbi.DB.DBThread()
+2026-01-04 15:01:15:610 Finalizing addon 'AddonSuiteManager.Addon.Standalone.AddonSuiteManager'
+2026-01-04 15:01:15:610 Finalizing addon 'NinjaTrader.NinjaScript.AddOns.NewsUpdate'
+2026-01-04 15:01:15:610 Finalizing addon 'ReplayDataPlus.Addon.Standalone.ReplayDataPlusManager'
+2026-01-04 15:01:16:028 Shutting down NinjaTrader
+2026-01-04 15:01:16:028 Disconnecting 'Simulation'
+2026-01-04 15:01:16:032 (Simulation) Cbi.Connection.Disconnect
+2026-01-04 15:01:16:036 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Disconnecting priceStatus=Disconnecting previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError=''
+2026-01-04 15:01:16:036 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Disconnecting previousStatus=Connected message=''
+2026-01-04 15:01:16:036 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Disconnecting previousStatus=Connected message=''
+2026-01-04 15:01:16:036 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close1
+2026-01-04 15:01:16:044 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close3
+2026-01-04 15:01:16:044 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close4
+2026-01-04 15:01:16:044 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close5
+2026-01-04 15:01:16:044 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close6a
+2026-01-04 15:01:16:044 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close7
+2026-01-04 15:01:16:044 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close8
+2026-01-04 15:01:16:085 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2026-01-04 15:01:16:592 (Simulation) Tradovate.Adapter.DisposeTrade0
+2026-01-04 15:01:17:608 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Disconnected priceStatus=Disconnected previousStatus=Disconnecting previousPriceStatus=Disconnecting errorCode=NoError nativeError=''
+2026-01-04 15:01:17:608 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Disconnected previousStatus=Disconnecting message=''
+2026-01-04 15:01:17:608 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Disconnected previousStatus=Disconnecting message=''
+2026-01-04 15:01:17:609 Flushing DB thread
+2026-01-04 15:01:17:610 Shutting down instrument management
+2026-01-04 15:01:17:612 Shutting down instrument threads
+2026-01-04 15:01:17:623 Shutting down recorder
+2026-01-04 15:01:17:628 Shutting down file type watcher
+2026-01-04 15:01:17:628 Shutting down ATI server
+2026-01-04 15:01:17:652 Shutting down auto trade component
+2026-01-04 15:01:17:653 Shutting down SMTP server
+2026-01-04 15:01:17:671 Shutting down adapter server
+2026-01-04 15:01:17:685 Shutting down server(s)
+2026-01-04 15:01:17:689 Shutting down mail thread
+2026-01-04 15:01:17:693 Shutting down sound thread
+2026-01-04 15:01:17:693 Shutting down timer
+2026-01-04 15:01:17:693 Shutting down alerts timer
+2026-01-04 15:01:17:693 Shutting down message timer
+2026-01-04 15:01:17:693 Shutting down db
+2026-01-04 15:01:17:695 Flushing DB thread
+2026-01-04 15:01:17:792 Shutting down bars dictionary
+2026-01-04 15:01:17:809 Shutting down user entitlement threads
+2026-01-04 15:01:17:819 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2026-01-04 15:01:17:820 Shutting down logs
+2026-01-04 15:01:17:842 Shutting down bars types
+2026-01-04 15:01:17:843 Shutting down UI threads
+2026-01-04 15:01:17:863 ************************ Session End ************************

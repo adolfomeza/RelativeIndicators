@@ -1,7 +1,5 @@
 # NinjaTrader 8 Git Ignore
 /db/
-/log/
-/trace/
 /tmp/
 /cache/
 /workspaces/
@@ -10,9 +8,6 @@
 /export/
 /incoming/
 /outgoing/
-/strategyanalyzerlogs/
-/MarketData_Exports/
-/LiveTradeLogs/
 /NewsCache/
 /Refugiados_Gemini_Temp/
 /Recovery/

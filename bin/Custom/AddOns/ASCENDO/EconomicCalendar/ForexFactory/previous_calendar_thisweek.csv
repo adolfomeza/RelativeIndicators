@@ -1,47 +1,94 @@
-2025-12-28 23:50:00,JPY,Low,BOJ Summary of Opinions,,
-2025-12-29 15:00:00,USD,Medium,Pending Home Sales m/m,1.0%,1.9%
-2025-12-29 17:00:00,USD,Low,Natural Gas Storage,-169B,-167B
-2025-12-29 22:00:00,USD,Low,Crude Oil Inventories,-2.0M,-1.3M
-2025-12-30 08:00:00,CHF,Low,KOF Economic Barometer,101.5,101.7
-2025-12-30 08:00:00,EUR,Low,Spanish Flash CPI y/y,2.8%,3.0%
-2025-12-30 14:00:00,USD,Low,HPI m/m,0.1%,0.0%
-2025-12-30 14:00:00,USD,Low,S&P/CS Composite-20 HPI y/y,1.1%,1.4%
-2025-12-30 14:45:00,USD,Low,Chicago PMI,39.8,36.3
-2025-12-30 19:00:00,USD,High,FOMC Meeting Minutes,,
-2025-12-30 21:30:00,USD,Low,API Weekly Statistical Bulletin,,
-2025-12-31 00:00:00,JPY,Holiday,Bank Holiday,,
-2025-12-31 01:30:00,CNY,Low,Non-Manufacturing PMI,49.6,49.5
-2025-12-31 01:30:00,CNY,Medium,Manufacturing PMI,49.2,49.2
-2025-12-31 01:45:00,CNY,Low,RatingDog Manufacturing PMI,49.8,49.9
-2025-12-31 07:02:00,EUR,Holiday,German Bank Holiday,,
-2025-12-31 13:30:00,USD,High,Unemployment Claims,219K,214K
-2025-12-31 15:30:00,USD,Low,Crude Oil Inventories,0.5M,0.4M
-2025-12-31 17:00:00,USD,Low,Natural Gas Storage,-51B,-166B
-2025-12-31 20:00:00,NZD,Holiday,Bank Holiday,,
-2025-12-31 21:00:00,AUD,Holiday,Bank Holiday,,
-2026-01-01 00:00:00,JPY,Holiday,Bank Holiday,,
-2026-01-01 00:01:00,CNY,Holiday,Bank Holiday,,
-2026-01-01 06:00:00,CHF,Holiday,Bank Holiday,,
-2026-01-01 07:01:00,EUR,Holiday,French Bank Holiday,,
-2026-01-01 07:02:00,EUR,Holiday,German Bank Holiday,,
-2026-01-01 07:03:00,EUR,Holiday,Italian Bank Holiday,,
-2026-01-01 08:00:00,GBP,Holiday,Bank Holiday,,
-2026-01-01 13:00:00,CAD,Holiday,Bank Holiday,,
-2026-01-01 13:00:00,USD,Holiday,Bank Holiday,,
-2026-01-01 20:00:00,NZD,Holiday,Bank Holiday,,
-2026-01-02 00:00:00,JPY,Holiday,Bank Holiday,,
-2026-01-02 00:01:00,CNY,Holiday,Bank Holiday,,
-2026-01-02 06:00:00,CHF,Holiday,Bank Holiday,,
-2026-01-02 07:00:00,GBP,Low,Nationwide HPI m/m,0.1%,0.3%
-2026-01-02 08:15:00,EUR,Low,Spanish Manufacturing PMI,51.2,51.5
-2026-01-02 08:45:00,EUR,Low,Italian Manufacturing PMI,50.0,50.6
-2026-01-02 08:50:00,EUR,Low,French Final Manufacturing PMI,50.6,50.6
-2026-01-02 08:55:00,EUR,Low,German Final Manufacturing PMI,47.7,47.7
-2026-01-02 09:00:00,EUR,Low,Final Manufacturing PMI,49.2,49.2
-2026-01-02 09:00:00,EUR,Low,M3 Money Supply y/y,2.7%,2.8%
-2026-01-02 09:00:00,EUR,Low,Private Loans y/y,2.8%,2.8%
-2026-01-02 09:30:00,GBP,Low,Final Manufacturing PMI,51.2,51.2
-2026-01-02 14:30:00,CAD,Low,Manufacturing PMI,,48.4
-2026-01-02 14:45:00,USD,Low,Final Manufacturing PMI,51.8,51.8
-2026-01-03 15:15:00,USD,Low,FOMC Member Paulson Speaks,,
-2026-01-03 19:30:00,USD,Low,FOMC Member Paulson Speaks,,
+2026-01-04 17:30:00,USD,Low,FOMC Member Kashkari Speaks,,
+2026-01-05 00:30:00,JPY,Low,Final Manufacturing PMI,49.8,49.7
+2026-01-05 01:45:00,CNY,Low,RatingDog Services PMI,52.0,52.1
+2026-01-05 07:30:00,CHF,Low,Retail Sales y/y,2.5%,2.7%
+2026-01-05 08:00:00,EUR,Low,Spanish Unemployment Change,5.7K,-18.8K
+2026-01-05 08:30:00,CHF,Low,Manufacturing PMI,49.7,49.7
+2026-01-05 09:30:00,GBP,Low,M4 Money Supply m/m,-0.1%,-0.2%
+2026-01-05 09:30:00,GBP,Low,Mortgage Approvals,64K,65K
+2026-01-05 09:30:00,GBP,Low,Net Lending to Individuals m/m,5.2B,5.4B
+2026-01-05 15:00:00,USD,High,ISM Manufacturing PMI,48.3,48.2
+2026-01-05 15:00:00,USD,Medium,ISM Manufacturing Prices,59.0,58.5
+2026-01-05 15:15:00,USD,Low,Wards Total Vehicle Sales,15.7M,15.6M
+2026-01-05 23:50:00,JPY,Low,Monetary Base y/y,-8.0%,-8.5%
+2026-01-06 00:01:00,GBP,Low,BRC Retail Sales Monitor y/y,0.6%,1.2%
+2026-01-06 03:35:00,JPY,Low,10-y Bond Auction,,1.87|3.6
+2026-01-06 07:03:00,EUR,Holiday,Italian Bank Holiday,,
+2026-01-06 07:29:00,EUR,Medium,German Prelim CPI m/m,0.3%,-0.2%
+2026-01-06 07:45:00,EUR,Low,French Prelim CPI m/m,0.2%,-0.1%
+2026-01-06 08:15:00,EUR,Low,Spanish Services PMI,54.7,55.6
+2026-01-06 08:45:00,EUR,Low,Italian Services PMI,54.1,55.0
+2026-01-06 08:50:00,EUR,Low,French Final Services PMI,50.3,50.2
+2026-01-06 08:55:00,EUR,Low,German Final Services PMI,52.6,52.6
+2026-01-06 09:00:00,EUR,Low,Final Services PMI,52.6,52.6
+2026-01-06 09:30:00,GBP,Low,Final Services PMI,52.1,52.1
+2026-01-06 13:00:00,USD,Low,FOMC Member Barkin Speaks,,
+2026-01-06 14:45:00,USD,Low,Final Services PMI,52.9,52.9
+2026-01-06 15:50:00,NZD,Low,GDT Price Index,,-4.4%
+2026-01-06 21:30:00,USD,Low,API Weekly Statistical Bulletin,,
+2026-01-07 00:30:00,AUD,High,CPI m/m,0.1%,0.0%
+2026-01-07 00:30:00,AUD,High,CPI y/y,3.7%,3.8%
+2026-01-07 00:30:00,AUD,High,Trimmed Mean CPI m/m,0.2%,1.0%
+2026-01-07 00:30:00,AUD,Low,Building Approvals m/m,2.3%,-6.4%
+2026-01-07 07:00:00,EUR,Low,German Retail Sales m/m,0.2%,-0.3%
+2026-01-07 08:00:00,CHF,Low,Foreign Currency Reserves,,727B
+2026-01-07 08:55:00,EUR,Low,German Unemployment Change,3K,1K
+2026-01-07 09:30:00,GBP,Low,Construction PMI,42.7,39.4
+2026-01-07 09:30:00,GBP,Low,Housing Equity Withdrawal q/q,-8.7B,-16.1B
+2026-01-07 10:00:00,EUR,Low,Italian Prelim CPI m/m,0.1%,-0.2%
+2026-01-07 10:00:00,EUR,Medium,Core CPI Flash Estimate y/y,2.4%,2.4%
+2026-01-07 10:00:00,EUR,Medium,CPI Flash Estimate y/y,2.0%,2.2%
+2026-01-07 10:42:00,EUR,Low,German 10-y Bond Auction,,2.67|2.0
+2026-01-07 13:15:00,USD,High,ADP Non-Farm Employment Change,47K,-32K
+2026-01-07 15:00:00,CAD,Medium,Ivey PMI,49.5,48.4
+2026-01-07 15:00:00,USD,High,ISM Services PMI,52.3,52.6
+2026-01-07 15:00:00,USD,High,JOLTS Job Openings,7.65M,7.67M
+2026-01-07 15:00:00,USD,Low,Factory Orders m/m,-1.1%,0.2%
+2026-01-07 15:30:00,USD,Low,Crude Oil Inventories,,-1.9M
+2026-01-07 18:10:00,USD,Low,FOMC Member Bowman Speaks,,
+2026-01-07 23:30:00,JPY,Low,Average Cash Earnings y/y,2.3%,2.6%
+2026-01-08 00:30:00,AUD,Low,Goods Trade Balance,5.55B,4.39B
+2026-01-08 03:35:00,JPY,Low,30-y Bond Auction,,3.43|4.0
+2026-01-08 05:00:00,JPY,Low,Consumer Confidence,37.8,37.5
+2026-01-08 07:00:00,EUR,Low,German Factory Orders m/m,-0.9%,1.5%
+2026-01-08 07:00:00,GBP,Low,Halifax HPI m/m,0.1%,0.0%
+2026-01-08 07:30:00,CHF,High,CPI m/m,0.0%,-0.2%
+2026-01-08 07:45:00,EUR,Low,French Trade Balance,-4.3B,-3.9B
+2026-01-08 08:30:00,CHF,Low,Summary of Monetary Policy Discussions,,
+2026-01-08 09:00:00,EUR,Low,Italian Monthly Unemployment Rate,6.0%,6.0%
+2026-01-08 10:00:00,EUR,Low,PPI m/m,0.4%,0.1%
+2026-01-08 10:00:00,EUR,Low,Unemployment Rate,6.4%,6.4%
+2026-01-08 10:03:00,EUR,Low,Spanish 10-y Bond Auction,,
+2026-01-08 10:18:00,EUR,Low,French 10-y Bond Auction,,
+2026-01-08 12:30:00,USD,Low,Challenger Job Cuts y/y,,23.5%
+2026-01-08 13:30:00,CAD,Low,Trade Balance,-1.5B,0.2B
+2026-01-08 13:30:00,USD,High,Unemployment Claims,216K,199K
+2026-01-08 13:30:00,USD,Low,Prelim Nonfarm Productivity q/q,3.7%,2.4%
+2026-01-08 13:30:00,USD,Low,Prelim Unit Labor Costs q/q,0.5%,1.6%
+2026-01-08 13:30:00,USD,Low,Trade Balance,-58.5B,-52.8B
+2026-01-08 15:00:00,USD,Low,Final Wholesale Inventories m/m,0.2%,0.5%
+2026-01-08 15:30:00,USD,Low,Natural Gas Storage,,-38B
+2026-01-08 20:00:00,USD,Low,Consumer Credit m/m,10.3B,9.2B
+2026-01-08 23:30:00,JPY,Low,Household Spending y/y,-1.0%,-3.0%
+2026-01-09 01:30:00,CNY,Medium,CPI y/y,0.8%,0.7%
+2026-01-09 01:30:00,CNY,Medium,PPI y/y,-1.5%,-2.2%
+2026-01-09 05:00:00,JPY,Low,Leading Indicators,110.4%,110.0%
+2026-01-09 07:00:00,EUR,Low,German Industrial Production m/m,-0.5%,1.8%
+2026-01-09 07:00:00,EUR,Low,German Trade Balance,16.3B,16.9B
+2026-01-09 07:45:00,EUR,Low,French Consumer Spending m/m,-0.1%,0.4%
+2026-01-09 07:45:00,EUR,Low,French Industrial Production m/m,-0.2%,0.2%
+2026-01-09 08:00:00,CHF,Low,Unemployment Rate,3.0%,3.0%
+2026-01-09 09:00:00,EUR,Low,Italian Retail Sales m/m,0.3%,0.5%
+2026-01-09 10:00:00,EUR,Low,Retail Sales m/m,0.1%,0.0%
+2026-01-09 13:29:00,USD,Low,Building Permits,,1.31M
+2026-01-09 13:29:00,USD,Low,Housing Starts,,1.31M
+2026-01-09 13:30:00,CAD,High,Employment Change,-5.4K,53.6K
+2026-01-09 13:30:00,CAD,High,Unemployment Rate,6.7%,6.5%
+2026-01-09 13:30:00,USD,High,Average Hourly Earnings m/m,0.3%,0.1%
+2026-01-09 13:30:00,USD,High,Non-Farm Employment Change,57K,64K
+2026-01-09 13:30:00,USD,High,Unemployment Rate,4.5%,4.6%
+2026-01-09 13:30:00,USD,Low,Building Permits,1.35M,
+2026-01-09 13:30:00,USD,Low,Housing Starts,1.33M,
+2026-01-09 15:00:00,USD,High,Prelim UoM Consumer Sentiment,53.5,53.3
+2026-01-09 15:00:00,USD,High,Prelim UoM Inflation Expectations,,4.1%
+2026-01-09 18:35:00,USD,Low,FOMC Member Barkin Speaks,,

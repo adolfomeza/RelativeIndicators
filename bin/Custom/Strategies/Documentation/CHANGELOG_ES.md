@@ -4,6 +4,15 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.14.27] - 2026-01-04
+### FIX CRÍTICO: Cantidades Incorrectas en Órdenes TP (Backtest)
+- **Problema**: En backtest, las órdenes TP2 se creaban con cantidades incorrectas (ej: 12 contratos en lugar de 1).
+- **Causa**: Las variables `protectedTp1Qty` y `protectedTp2Qty` no se reseteaban al inicio de un nuevo trade. Los valores residuales de trades anteriores se acumulaban.
+- **Evidencia en Log**: `ForTP2=1` (cálculo correcto) pero `TP2 CREATED: Qty=12` (11 contratos residuales).
+- **Solución**: Agregar reset explícito de `protectedTp1Qty = 0` y `protectedTp2Qty = 0` en `OnExecutionUpdate` cuando se detecta el primer fill de una nueva entry (`currentEntryState == workingOrder`).
+- **Contexto**: El reset existente en `Position.MarketPosition == Flat` no era suficiente para backtests rápidos donde los trades se ejecutan en milisegundos.
+- **Resultado**: Cada nuevo trade ahora comienza con contadores de protección limpios, garantizando cantidades correctas en SL/TP1/TP2.
+
 ## [v1.14.26] - 2026-01-04
 ### FIX: Desactivar Filtro de Lag Durante Playback
 - **Problema**: El filtro de lag mostraba alerta "LAG ALERT: ORDERS BLOCKED" durante el playback, bloqueando trades.

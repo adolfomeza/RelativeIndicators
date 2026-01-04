@@ -1,0 +1,277 @@
+******************* Session Start (Version 8.1.6.2) *******************
+2025-12-19 05:17:17:770 Cbi.Globals.MachineId: True/True 280CB754932A645C8D63C782E8605C43
+2025-12-19 05:17:17:771 NinjaTrader.Gui.LoginInternal user='joelbencomo' mode='Simulation'
+2025-12-19 05:17:18:374 Core.Instrumentation.ActivitySource: enabled=True randomPercent=19.01514 enabledSessionsPercent=100 chartMs=250 enabledTypes='ChartPerformance Application NinjaScript Adapter Login '
+2025-12-19 05:17:18:403 Core.Instrumentation.LogActivity: activityType=Login errorCode=NoError errorMessage=''
+2025-12-19 05:17:19:092 (Simulation) NinjaTrader.Core.Authentication.GetAccessToken6
+2025-12-19 05:17:19:095 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4800.6016068' renewSecs='2400.3008034'
+2025-12-19 05:17:19:740 Cbi.UserEntitlement.VerifyAsync.0 apiUrl='https://live.tradovateapi.com'
+2025-12-19 05:17:20:147 Cbi.UserEntitlement.VerifyAsync.98: Evaluation expiration=2026-12-31, Evaluation expiration=2026-12-31
+2025-12-19 05:17:22:866 PrimaryMonitorWPFDPIScale=1.00
+2025-12-19 05:17:23:455 Cbi.UserEntitlement.VerifyAsync.99: subscription=Free licensedProviders='Playback Simulator NinjaTrader Rithmic for NinjaTrader Brokerage Custom0 Custom2 Custom3 Custom4 Custom6 Custom7 Custom8 Custom9 Custom10 Provider13 Custom14 Provider26 Custom15 Custom16 Custom17 Custom18 Custom19 Custom20 Custom21 Custom22 Custom23 Custom24 Custom25 Custom26 Custom27 Custom28 Custom29 Custom30 Custom31 Custom32 Custom33 Custom34 Custom35 Custom36 Custom37 Custom38 Custom39 Custom40'
+2025-12-19 05:17:23:803 InstallDir='C:\Program Files\NinjaTrader 8\'
+2025-12-19 05:17:23:803 UserDataDir='C:\Users\prueba\Documents\NinjaTrader 8\'
+2025-12-19 05:17:23:803 MachineID='280CB754932A645C8D63C782E8605C43'
+2025-12-19 05:17:23:803 OS='Microsoft Windows NT 10.0.26200.0'/'Win32NT'
+2025-12-19 05:17:23:803 OSLanguage='en-US'
+2025-12-19 05:17:23:803 OSEnvironment='64bit'
+2025-12-19 05:17:23:803 Processors=12
+2025-12-19 05:17:23:803 ThreadPool: minWorkerThreads=12 maxWorkerThreads=32767 minCompletionPortThreads=12 maxCompletionPortThreads=1000
+2025-12-19 05:17:24:853 ProcessorSpeed=2.6 GHz
+2025-12-19 05:17:24:853 PhysicalMemory=24576 MB
+2025-12-19 05:17:26:568 DisplayAdapters=2/NVIDIA GeForce GTX 1650|Intel(R) UHD Graphics
+2025-12-19 05:17:26:568 Monitors=2/1920x1080|1920x1080
+2025-12-19 05:17:26:568 .NET/CLR Version='4.8'/64bit
+2025-12-19 05:17:26:569 SQLiteVersion='1.0.116.0'
+2025-12-19 05:17:26:569 ApplicationTimezone=EST +1 hour(s)
+2025-12-19 05:17:26:569 ApplicationTimezone=UTC -4 hour(s)
+2025-12-19 05:17:26:569 LocalTimezone=EST +1 hour(s)
+2025-12-19 05:17:26:569 LocalTimezone=UTC -4 hour(s)
+2025-12-19 05:17:26:722 DirectXRenderingHW
+2025-12-19 05:17:26:722 Copying custom assemblies...
+2025-12-19 05:17:26:739 Loading custom assemblies...
+2025-12-19 05:17:26:739 Loading C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\NinjaTrader.Custom.dll...
+2025-12-19 05:17:26:894 Loading C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\NinjaTrader.Vendor.dll...
+2025-12-19 05:17:26:906 Deleting temporary files...
+2025-12-19 05:17:27:396 Copying db and restoring templates...
+2025-12-19 05:17:27:413 Loading third party assemblies...
+2025-12-19 05:17:27:436 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\ASCENDO_NewsEvents.dll...
+2025-12-19 05:17:28:413 Cbi.VendorLicense.Verify.1: trying 'https://license.ninjatrader.com/vendorlicensenew/ASCENDO/IndicatorNewsEvents/2/R-280CB754932A645C8D63C782E8605C43.xml' ...
+2025-12-19 05:17:28:605 Cbi.VendorLicense.Verify.1: good
+2025-12-19 05:17:28:618 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\WindowsInput.dll...
+2025-12-19 05:17:28:618 Initializing database...
+2025-12-19 05:17:28:618 Loading master instruments...
+2025-12-19 05:17:30:305 (Db) Cbi.DB.get_Current.CreateConnection.Start
+2025-12-19 05:17:30:306 (Db) Cbi.DB: connectionString='Data Source="C:\Users\prueba\Documents\NinjaTrader 8\db\NinjaTrader.sqlite";Version=3;Synchronous=Full;Journal Mode=Off;Pooling=True;Max Pool Size=100;foreign keys=true;'
+2025-12-19 05:17:30:766 (Db) Cbi.DB.get_Current.CreateConnection.End
+2025-12-19 05:17:30:832 Loading instruments...
+2025-12-19 05:17:31:030 Loading accounts...
+2025-12-19 05:17:31:160 Loading users...
+2025-12-19 05:17:31:176 Downloading server info...
+2025-12-19 05:17:31:176 Starting instrument management...
+2025-12-19 05:17:31:189 Starting timer...
+2025-12-19 05:17:31:189 Creating file type watcher...
+2025-12-19 05:17:31:190 Setting ATI...
+2025-12-19 05:17:31:210 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2025-12-19 05:17:31:211 Connecting ATI server...
+2025-12-19 05:17:31:211 Server.AtiServer.Connect0
+2025-12-19 05:17:31:211 Starting adapter server...
+2025-12-19 05:17:31:214 Server.AtiServer.Connect1: Port='36973'
+2025-12-19 05:17:31:214 Server.AtiServer.Connect2
+2025-12-19 05:17:31:226 Starting bars dictionary...
+2025-12-19 05:17:31:227 Starting recorder...
+2025-12-19 05:17:31:230 Starting server(s)...
+2025-12-19 05:17:31:266 Core.Globals.ApplicationStart.Commission: minVersion=1 maxVersion=3138
+2025-12-19 05:17:31:266 Core.Globals.ApplicationStart.InstrumentList: minVersion=1 maxVersion=475
+2025-12-19 05:17:31:266 Core.Globals.ApplicationStart.MasterInstrument: minVersion=1 maxVersion=9897
+2025-12-19 05:17:31:266 Core.Globals.ApplicationStart.Risk: minVersion=1 maxVersion=14062
+2025-12-19 05:17:31:266 Core.Globals.ApplicationStart.TradingHours: minVersion=1 maxVersion=5111
+2025-12-19 05:17:31:372 ChartHotKeys: Alerts='' DisableAllAlerts='' EnableAllAlerts='' DataSeries='Ctrl+F' Indicators='Ctrl+I' Strategies='Ctrl+S' Properties='Ctrl+T' CrosshairPointer='Ctrl+R' CrosshairLocal='Ctrl+Q' CrosshairGlobal='Ctrl+G' CrosshairGlobal2='Ctrl+N' CrosshairLock='Ctrl+L' AutoScaleAndReturn='' CyclePlotExecutions='Ctrl+E' ReloadHistoricalData='Ctrl+Shift+R' ReloadNinjaScript='F5' SaveChartImage='Alt+S' ShowDataBox='Ctrl+D' ShowChartTrader='' ShowChartTraderHidden='' ShowIndicators='' ShowScrollBar='' SnapModeBar='' SnapModeBarTick='' SnapModeBarObject='' SnapModeDisabled='' SnapModeTick='' StayInDrawMode='' ZoomIn='Ctrl+Alt+Z' ZoomOut='Ctrl+Alt+O' BarSpacingPlus='Ctrl+Down' BarSpacingMinus='Ctrl+Up' BarWidthPlus='Alt+Down' BarWidthMinus='Alt+Up' Arc='Ctrl+F7' AndrewsPitchfork='Ctrl+F8' ArrowDown='Alt+F3' ArrowLine='Ctrl+F2' ArrowUp='Alt+F2' Diamond='Alt+F5' Dot='Alt+F6' Ellipse='Ctrl+F11' ExtendedLine='F4' FibonacciCircle='F11' FibonacciExtension='F9' FibonacciRetracement='F8' FibonacciTimeExtension='F10' GannFan='Ctrl+F9' HorizontalLine='F6' Line='F2' Path='Ctrl+4' Polygon='Alt+F10' VolumeProfile='Ctrl+3' VWAP='Ctrl+5' Ray='F3' Rectangle='Ctrl+F12' RegressionChannel='Ctrl+F10' HideDrawingObjects='' RemoveDrawingObjects='' RegionHighlightX='Shift+F1' RegionHighlightY='Shift+F2' RiskReward='Ctrl+F4' Ruler='Ctrl+F3' Square='Alt+F7' Text='F12' TimeCycles='Alt+F11' TrendChannel='Ctrl+2' Triangle='Ctrl+F6' TriangleDown='Alt+F9' TriangleUp='Alt+F8' VerticalLine='F7'
+2025-12-19 05:17:31:373 GlobalHotKeys: CloseWorkspace='' NextWorkspace='Shift+F3' PreviousWorkspace='' SaveWorkspace='' SaveAllWorkspaces='' NewAccountData='' NewTradePerformance='' NewAlertsLog='' NewBasicEntry='' NewChart='' NewFxBoard='' NewFxPro='' NewHotListAnalyzer='' NewLevel2='' NewMarketAnalyzer='' NewMarketWatch='' NewNews='' NewNinjaScriptEditor='' NewNinjaScriptOutput='' NewOrderTicket='' NewStrategyAnalyzer='' NewDynamicDom='' NewStaticDom='' NewTimeAndSales='' CancelAllOrders='' FlattenEverything='' OpenInstrumentManager='' OpenInstrumentList='' OpenDatabase='' OpenHotKeyManager='' OpenHistoricalData='' OpenCommission='' OpenRisk='' OpenTradingHoursManager='' OpenRemoveNinjaScript='' CloseOtherTabs='' CloseTab='' DuplicateInNewTab='' DuplicateInNewWindow='' Export='' Find='Ctrl+F' MoveToNewWindow='' Print='Ctrl+P' Replace='Ctrl+H' Share='Ctrl+Shift+S' LoadTemplate='' SaveTemplate='' SaveTemplateAsDefault=''
+2025-12-19 05:17:31:374 MarketAnalyzerHotKeys: AddBlankRow='' AddLabelRow='' Columns='' Alerts='' EnableAllAlerts='' DisableAllAlerts='' AutoSort='' RowFilter='' ReloadHistorical='Ctrl+Shift+R' ReloadNinjaScript='F5'
+2025-12-19 05:17:31:380 NinjaScriptEditorHotKeys: InsertCodeSnippet='F2' FindNext='F3' Compile='F5' GoToLine='Ctrl+G' CommentSelection='Ctrl+K' InlineSyntaxChecking='Ctrl+Alt+S' CollapseToDefinitions='' ExpandAllOutlining='' StartOutlining='' StopOutlining='' HideSelection='' StopHidingSelection='' ToggleAllOutlining='' ToggleOutlining='' Save='Ctrl+S' Undo='Ctrl+Z' Redo='Ctrl+Y'
+2025-12-19 05:17:31:381 OrderEntryHotKeys: BuyAsk='' BuyBid='' BuyMarket='' SellAsk='' SellBid='' SellMarket='' BreakevenAtmStrategy='' BreakevenPosition='' CancelLastOrder='' CloseAtmStrategy='' ClosePosition='' DecreaseLastOrderPrice='' IncreaseLastOrderPrice='' ModifyLastOrder2Fill='' Reverse='' OcoOrder='' SimulatedOrder=''
+2025-12-19 05:17:31:381 SuperDomHotKeys: Center='' Columns='' Indicators='' ReloadAllHistoricalData='Ctrl+Shift+R' ReloadNinjaScript='F5'
+2025-12-19 05:17:31:381 OrderEntryHotKeys=disabled
+2025-12-19 05:17:31:384 AutoClose=disabled
+2025-12-19 05:17:31:860 Core.Instrumentation.LogActivity: activityType=Application errorCode=NoError errorMessage=''
+2025-12-19 05:17:32:353 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=9 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=263 TradingHours=0
+2025-12-19 05:17:33:401 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.01ms InstrumentLists=0.46ms MasterInstruments=0.05ms Messages=0.31ms Risks=0.11ms RolloverCollection=1046.34ms TradingHours=0.09ms
+2025-12-19 05:17:33:402 Starting server message polling timer with interval 3600 seconds...
+2025-12-19 05:17:36:154 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-19 05:17:36:434 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-19 05:17:38:101 1 Chart Chart1Tab1 1 Ser 0 Ind 0 DrawObj 
+2025-12-19 05:17:39:093 Core.Instrumentation.LogActivity: activityType=NinjaScript errorCode=NoError errorMessage=''
+2025-12-19 05:17:39:553 (Simulation) Cbi.Connection.Connect0: status=Disconnected assembly=8.1.6.2 date=2025-12-19 runAsProcess=False
+2025-12-19 05:17:39:565 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2025-12-19 05:17:39:567 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2025-12-19 05:17:39:584 (Simulation) Cbi.Connection.Connect1
+2025-12-19 05:17:39:593 (Simulation) Cbi.Connection.Connect2
+2025-12-19 05:17:39:593 (Simulation) Cbi.Connection.Connect3
+2025-12-19 05:17:39:598 (Simulation) Cbi.Connection.CreateAccount: account='Sim101' displayName='Sim101' fcm='' denomination=UsDollar forexLotSize=10000
+2025-12-19 05:17:39:603 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connecting previousStatus=Disconnected message=''
+2025-12-19 05:17:39:605 (Simulation) Cbi.Account.OnConnectionStatus.PositionExecutions: account='Sim101'
+2025-12-19 05:17:39:614 (Simulation) Cbi.Connection.Connect4
+2025-12-19 05:17:39:643 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2025-12-19 05:17:39:643 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connecting priceStatus=Connecting
+2025-12-19 05:17:39:867 (Simulation) Cbi.Connection.Connect5
+2025-12-19 05:17:39:871 (Simulation) Tradovate.Adapter.Connect: user='joelbencomo' accountType='Simulation' useLocalOcoSimulation=True
+2025-12-19 05:17:39:895 (Simulation) Cbi.Connection.Connect9 ok
+2025-12-19 05:17:40:022 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=True foundConnected=False
+2025-12-19 05:17:40:022 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connecting
+2025-12-19 05:17:40:022 Core.Instrumentation.LogActivity: activityType=Adapter errorCode=NoError errorMessage=''
+2025-12-19 05:17:40:128 (Simulation) Tradovate.Adapter.StartTradeWebSocket
+2025-12-19 05:17:40:315 (Simulation) Tradovate.Adapter.StartTradeWebSocket1
+2025-12-19 05:17:40:316 (Simulation) Tradovate.Adapter.StartWebSocketTradeSendWorker
+2025-12-19 05:17:40:316 (Simulation) Tradovate.Adapter.StartWebSocketTradeReceiveWorker
+2025-12-19 05:17:40:323 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage
+2025-12-19 05:17:40:692 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2025-12-19 05:17:41:040 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2025-12-19 05:17:41:040 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2025-12-19 05:17:41:041 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2025-12-19 05:17:41:047 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2025-12-19 05:17:41:564 (Simulation) Cbi.Connection.CreateAccount: account='DEMO619219' displayName='DEMO' fcm='' denomination=UsDollar forexLotSize=1
+2025-12-19 05:17:41:564 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connecting previousStatus=Disconnected message=''
+2025-12-19 05:17:41:564 (Simulation) Cbi.Account.OnConnectionStatus.PositionExecutions: account='DEMO619219'
+2025-12-19 05:17:41:573 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=CashValue currency=UsDollar value=*****
+2025-12-19 05:17:41:574 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2025-12-19 05:17:41:588 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc0
+2025-12-19 05:17:41:588 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2025-12-19 05:17:41:589 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connected previousStatus=Connecting message=''
+2025-12-19 05:17:41:589 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connected previousStatus=Connecting message=''
+2025-12-19 05:17:41:594 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2025-12-19 05:17:41:614 (Simulation) Cbi.Account.Restore.Start: account='Sim101' fcm=''
+2025-12-19 05:17:41:615 (Simulation) Cbi.Account.Restore.Start: account='DEMO619219' fcm=''
+2025-12-19 05:17:41:644 (Simulation) Cbi.Account.Restore.End: account='DEMO619219' fcm=''
+2025-12-19 05:17:41:650 (Simulation) Cbi.Account.Restore.End: account='Sim101' fcm=''
+2025-12-19 05:17:41:650 (Simulation) Core.Connection.Statistics: connectAttempts=1/1782.3ms
+2025-12-19 05:17:41:650 (Simulation) Cbi.Connection.ConnectionStatusCallback: autoClosePositionTime='12/17/2025 00:00:00' autoClosePosition=False
+2025-12-19 05:17:41:651 Server.HdsClient.Connect: type=HDS server='hds-us-nt-014.ninjatrader.com' port=31655 system='' useSsl=True
+2025-12-19 05:17:41:874 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2025-12-19 05:17:41:874 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2025-12-19 05:17:41:875 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2025-12-19 05:17:41:918 (Simulation) Tradovate.Adapter.QueryNotificationsAsync0
+2025-12-19 05:17:41:930 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2025-12-19 05:17:41:930 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2025-12-19 05:17:41:944 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='19/12/25 12:00:00 a. m.' to='20/12/25 12:00:00 a. m.' period='Daily'
+2025-12-19 05:17:42:009 (Simulation) QueryNotificationResponse Live
+2025-12-19 05:17:42:194 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 12-25' from='21/11/25 5:00:00 p. m.' to='21/11/25 11:59:59 p. m.' period='1 Tick'
+2025-12-19 05:17:42:206 (Simulation) QueryNotificationResponse Demo
+2025-12-19 05:17:42:424 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='18/12/25 8:00:00 p. m.' to='19/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-19 05:17:42:693 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='Sim101' accountItem=CashValue currency=UsDollar value=*****
+2025-12-19 05:17:42:694 (Simulation) Cbi.Account.OnTimerTick.Simulator.Roll: account='Sim101' fcm='' fcmDate='2025-12-18'
+2025-12-19 05:17:42:736 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='19/12/25 12:00:00 a. m.' to='20/12/25 12:00:00 a. m.' period='Daily'
+2025-12-19 05:17:43:595 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 12-25' from='21/11/25 5:00:00 p. m.' to='21/11/25 11:59:59 p. m.' period='1 Tick'
+2025-12-19 05:17:44:025 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='19/12/25 5:00:00 a. m.' to='19/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-19 05:17:49:480 SQLite error (17): statement aborts at 50: [SELECT Id,Account,BarIndex,Commission,Exchange,ExecutionId,Fee,Instrument,IsEntry,IsEntryStrategy,IsExit,IsExitStrategy,LotSize,MarketPosition,MaxPrice,MinPrice,Name,OrderId,Position,P
+2025-12-19 05:17:49:532 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='19/12/25 12:00:00 a. m.' to='20/12/25 12:00:00 a. m.' period='Daily'
+2025-12-19 05:18:58:314 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='18/11/25 12:00:00 a. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-19 05:19:48:736 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='14/12/25 12:00:00 a. m.' to='18/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-19 05:19:51:816 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 05:19:54:236 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='18/12/25 12:00:00 a. m.' to='18/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 05:19:54:455 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='19/12/25 12:00:00 a. m.' to='19/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 05:20:03:238 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='18/12/25 11:00:00 p. m.' to='19/12/25 11:59:59 p. m.' period='1 Tick'
+2025-12-19 05:20:04:283 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='19/11/25 12:00:00 a. m.' to='18/12/25 12:00:00 a. m.' period='Daily'
+2025-12-19 05:20:04:440 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='15/12/25 12:00:00 a. m.' to='20/12/25 12:00:00 a. m.' period='Daily'
+2025-12-19 05:20:04:611 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='19/12/25 12:00:00 a. m.' to='20/12/25 12:00:00 a. m.' period='Daily'
+2025-12-19 05:23:21:531 Cbi.Instrument.RequestBars (to Provider): instrument='MES 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 05:23:21:832 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='18/12/25 12:00:00 a. m.' to='18/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 05:23:22:128 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='19/12/25 12:00:00 a. m.' to='19/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 05:23:22:347 Cbi.Instrument.RequestBars (to Provider): instrument='MES 12-25' from='19/11/25 12:00:00 a. m.' to='18/12/25 12:00:00 a. m.' period='Daily'
+2025-12-19 05:23:22:489 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='15/12/25 12:00:00 a. m.' to='20/12/25 12:00:00 a. m.' period='Daily'
+2025-12-19 05:23:22:628 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='19/12/25 12:00:00 a. m.' to='20/12/25 12:00:00 a. m.' period='Daily'
+2025-12-19 05:26:19:634 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='19/12/25 12:00:00 a. m.' to='20/12/25 12:00:00 a. m.' period='Daily'
+2025-12-19 05:57:20:179 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2025-12-19 05:57:20:185 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2025-12-19 05:57:20:480 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2025-12-19 05:57:20:480 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9585639' renewSecs='2399.97928195'
+2025-12-19 06:17:34:193 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2025-12-19 06:17:34:615 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2025-12-19 06:17:34:615 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.34ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2025-12-19 06:37:20:476 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2025-12-19 06:37:20:476 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2025-12-19 06:37:20:755 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2025-12-19 06:37:20:755 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9574729' renewSecs='2399.97873645'
+2025-12-19 07:17:20:753 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2025-12-19 07:17:20:753 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2025-12-19 07:17:21:033 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2025-12-19 07:17:21:033 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9573612' renewSecs='2399.9786806'
+2025-12-19 07:17:34:208 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2025-12-19 07:17:34:670 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2025-12-19 07:17:34:670 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.29ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2025-12-19 07:35:07:767 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 07:35:08:570 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='19/12/25 12:00:00 a. m.' to='19/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 07:37:05:071 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 12-25' from='18/11/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 07:37:05:750 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='18/12/25 12:00:00 a. m.' to='18/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 07:37:06:165 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='19/12/25 12:00:00 a. m.' to='19/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 07:37:36:571 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='18/11/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 07:37:37:242 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='18/12/25 12:00:00 a. m.' to='18/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 07:37:37:681 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='19/12/25 12:00:00 a. m.' to='19/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 07:50:39:714 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 07:55:02:294 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 07:55:05:747 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 07:57:21:033 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2025-12-19 07:57:21:033 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2025-12-19 07:57:21:307 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2025-12-19 07:57:21:307 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9586433' renewSecs='2399.97932165'
+2025-12-19 07:59:31:202 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage exception='The remote party closed the WebSocket connection without completing the close handshake. ' webSocketErrorCode='ConnectionClosedPrematurely'
+2025-12-19 07:59:31:213 (Simulation) Tradovate.Adapter.OnDisconnectMarketData errorMsg='The remote party closed the WebSocket connection without completing the close handshake.' tradeStatus='Connected' mdStatus='ConnectionLost'
+2025-12-19 07:59:31:213 (Simulation) Tradovate.Adapter.OnDisconnectMarketData: Milliseconds from last marketDataHeartbeatTime 3,871
+2025-12-19 07:59:31:214 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2025-12-19 07:59:31:214 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2025-12-19 07:59:31:214 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2025-12-19 07:59:31:215 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=ConnectionLost
+2025-12-19 07:59:31:215 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=True foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2025-12-19 07:59:31:215 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=ConnectionLost
+2025-12-19 07:59:31:720 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2025-12-19 07:59:32:021 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2025-12-19 07:59:32:021 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2025-12-19 07:59:32:022 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2025-12-19 07:59:32:022 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2025-12-19 07:59:32:161 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2025-12-19 07:59:32:161 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2025-12-19 07:59:32:162 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2025-12-19 07:59:32:162 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2025-12-19 07:59:32:162 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2025-12-19 07:59:32:162 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2025-12-19 08:03:21:373 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 12-25' from='18/11/25 12:00:00 a. m.' to='21/11/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 08:03:22:874 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='23/11/25 12:00:00 a. m.' to='18/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 08:03:26:467 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='19/12/25 12:00:00 a. m.' to='19/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 08:05:02:671 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 08:05:03:002 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='19/12/25 12:00:00 a. m.' to='19/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 08:05:38:061 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 01-26' from='18/11/25 12:00:00 a. m.' to='15/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 08:05:38:733 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 02-26' from='18/12/25 12:00:00 a. m.' to='18/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 08:05:39:266 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 02-26' from='19/12/25 12:00:00 a. m.' to='19/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 08:05:52:329 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 12-25' from='23/11/25 12:00:00 a. m.' to='18/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 08:05:52:858 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 12-25' from='18/12/25 12:00:00 a. m.' to='19/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 08:06:06:766 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='19/12/25 12:00:00 a. m.' to='19/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 08:07:20:733 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 08:07:21:172 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='19/12/25 12:00:00 a. m.' to='19/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 08:09:38:532 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='19/12/25 12:00:00 a. m.' to='19/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-19 08:17:34:236 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2025-12-19 08:17:34:745 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2025-12-19 08:17:34:747 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.03ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.40ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2025-12-19 08:28:17:708 Finalizing addon 'NinjaTrader.NinjaScript.AddOns.NewsUpdate'
+2025-12-19 08:28:17:900 Shutting down NinjaTrader
+2025-12-19 08:28:17:900 Disconnecting 'Simulation'
+2025-12-19 08:28:17:905 (Simulation) Cbi.Connection.Disconnect
+2025-12-19 08:28:17:909 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Disconnecting priceStatus=Disconnecting previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError=''
+2025-12-19 08:28:17:909 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Disconnecting previousStatus=Connected message=''
+2025-12-19 08:28:17:909 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Disconnecting previousStatus=Connected message=''
+2025-12-19 08:28:17:914 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close1
+2025-12-19 08:28:17:931 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close3
+2025-12-19 08:28:17:932 SQLite error (17): statement aborts at 44: [UPDATE MasterInstruments SET AutoLiquidation=?,Currency=?,Description=?,InstrumentType=?,IsServerSupported=?,MergePolicy=?,Name=?,PointValue=?,PriceLevel=?,TradingHours=?,TickSize=?,Ur
+2025-12-19 08:28:17:934 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close4
+2025-12-19 08:28:17:934 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close5
+2025-12-19 08:28:17:934 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close6a
+2025-12-19 08:28:17:935 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close7
+2025-12-19 08:28:17:935 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close8
+2025-12-19 08:28:17:939 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2025-12-19 08:28:18:459 (Simulation) Tradovate.Adapter.DisposeTrade0
+2025-12-19 08:28:19:369 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2025-12-19 08:28:19:478 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Disconnected priceStatus=Disconnected previousStatus=Disconnecting previousPriceStatus=Disconnecting errorCode=NoError nativeError=''
+2025-12-19 08:28:19:478 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Disconnected previousStatus=Disconnecting message=''
+2025-12-19 08:28:19:478 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Disconnected previousStatus=Disconnecting message=''
+2025-12-19 08:28:19:479 Flushing DB thread
+2025-12-19 08:28:19:482 Shutting down instrument management
+2025-12-19 08:28:19:483 Shutting down instrument threads
+2025-12-19 08:28:19:492 Shutting down recorder
+2025-12-19 08:28:19:498 Shutting down file type watcher
+2025-12-19 08:28:19:498 Shutting down ATI server
+2025-12-19 08:28:19:510 Shutting down auto trade component
+2025-12-19 08:28:19:511 Shutting down SMTP server
+2025-12-19 08:28:19:528 Shutting down adapter server
+2025-12-19 08:28:19:545 Shutting down server(s)
+2025-12-19 08:28:19:550 Shutting down mail thread
+2025-12-19 08:28:19:550 Shutting down sound thread
+2025-12-19 08:28:19:550 Shutting down timer
+2025-12-19 08:28:19:550 Shutting down alerts timer
+2025-12-19 08:28:19:550 Shutting down message timer
+2025-12-19 08:28:19:550 Shutting down db
+2025-12-19 08:28:19:551 Flushing DB thread
+2025-12-19 08:28:19:655 Shutting down bars dictionary
+2025-12-19 08:28:19:677 Shutting down user entitlement threads
+2025-12-19 08:28:19:699 Shutting down logs
+2025-12-19 08:28:19:709 Shutting down bars types
+2025-12-19 08:28:19:711 Shutting down UI threads
+2025-12-19 08:28:19:723 ************************ Session End ************************

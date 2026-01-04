@@ -1,0 +1,44 @@
+2025-12-18 17:47:51:085|2|4|Session Break (Version 8.1.6.2)
+2025-12-18 17:48:18:819|1|4|Global simulation mode disabled
+2025-12-18 17:48:20:626|1|4|Vendor assembly 'ASCENDO_NewsEvents' version='3.0.0.0' loaded.
+2025-12-18 17:48:20:626|1|4|Vendor assembly 'WindowsInput' version='1.0.4.0' loaded.
+2025-12-18 17:48:23:371|1|4|Automated trading disabled
+2025-12-18 17:48:23:371|1|2|Using IS (is-us-nt-005.ninjatrader.com/31658)
+2025-12-18 17:48:23:562|1|32|Order entry hot keys disabled
+2025-12-18 17:48:23:564|1|4|Auto close enabled=False
+2025-12-18 17:48:27:955|1|4|Restoring workspace 'Relative Trading Software'...
+2025-12-18 17:48:44:955|1|2|Simulation: Primary connection=Connecting, Price feed=Connecting
+2025-12-18 17:48:49:530|1|2|Simulation: Primary connection=Connected, Price feed=Connected
+2025-12-18 17:48:49:632|1|2|Time to auto close position='12:00:00 a. m.', Enabled=False
+2025-12-18 17:48:49:634|1|2|Using HDS (hds-us-nt-011.ninjatrader.com/31655)
+2025-12-18 18:07:05:987|1|32|Order='345605594904/DEMO619219' Name='EntryLong' New state='Cancelled' Instrument='MGC 02-26' Action='Buy' Limit price=4349 Stop price=0 Quantity=2 Type='Limit' Time in force=GTC Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-18 18:07:06:016|1|32|Order='345605594874/DEMO619219' Name='TP1_Long' New state='Cancelled' Instrument='MCL 02-26' Action='Sell' Limit price=56.26 Stop price=0 Quantity=1 Type='Limit' Time in force=GTC Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-18 18:07:06:027|1|32|Order='345605595173/DEMO619219' Name='EntryShort' New state='Cancelled' Instrument='MGC 02-26' Action='Sell' Limit price=4367 Stop price=0 Quantity=2 Type='Limit' Time in force=GTC Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-18 18:07:06:044|1|32|Order='345605595041/DEMO619219' Name='SL_Short' New state='Cancelled' Instrument='MGC 02-26' Action='Buy' Limit price=0 Stop price=4374.9 Quantity=1 Type='Stop Market' Time in force=GTC Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-18 18:07:06:062|1|32|Order='345605594872/DEMO619219' Name='TP2_Long' New state='Cancelled' Instrument='MCL 02-26' Action='Sell' Limit price=56.86 Stop price=0 Quantity=1 Type='Limit' Time in force=GTC Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-18 18:07:06:084|1|32|Order='345605594925/DEMO619219' Name='TP2_Long' New state='Cancelled' Instrument='MGC 02-26' Action='Sell' Limit price=4383.1 Stop price=0 Quantity=1 Type='Limit' Time in force=GTC Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-18 18:07:06:104|1|32|Order='345605594794/DEMO619219' Name='SL_Long' New state='Cancelled' Instrument='MES 03-26' Action='Sell' Limit price=0 Stop price=6773 Quantity=2 Type='Stop Market' Time in force=GTC Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-18 18:07:06:127|1|32|Order='345605594986/DEMO619219' Name='SL_Short' New state='Cancelled' Instrument='MGC 02-26' Action='Buy' Limit price=0 Stop price=4348.6 Quantity=2 Type='Stop Market' Time in force=GTC Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-18 18:07:06:148|1|32|Order='345605594869/DEMO619219' Name='SL_Long' New state='Cancelled' Instrument='MCL 02-26' Action='Sell' Limit price=0 Stop price=55.8 Quantity=2 Type='Stop Market' Time in force=GTC Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-18 18:07:06:167|1|32|Order='345605594850/DEMO619219' Name='EntryShort' New state='Cancelled' Instrument='MNQ 03-26' Action='Sell' Limit price=25090.75 Stop price=0 Quantity=2 Type='Limit' Time in force=GTC Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-18 18:07:06:186|1|32|Order='345605594856/DEMO619219' Name='EntryLong' New state='Cancelled' Instrument='MCL 02-26' Action='Buy' Limit price=55.83 Stop price=0 Quantity=2 Type='Limit' Time in force=GTC Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-18 18:07:06:210|1|32|Order='345605594844/DEMO619219' Name='EntryShort' New state='Cancelled' Instrument='MNQ 03-26' Action='Sell' Limit price=25095.75 Stop price=0 Quantity=2 Type='Limit' Time in force=GTC Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-18 18:07:06:230|1|32|Order='345605594796/DEMO619219' Name='TP1_Long' New state='Cancelled' Instrument='MES 03-26' Action='Sell' Limit price=6785.5 Stop price=0 Quantity=1 Type='Limit' Time in force=GTC Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-18 18:07:06:245|1|32|Order='345605594798/DEMO619219' Name='TP2_Long' New state='Cancelled' Instrument='MES 03-26' Action='Sell' Limit price=6871.25 Stop price=0 Quantity=1 Type='Limit' Time in force=GTC Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-18 18:07:06:266|1|32|Order='345605594923/DEMO619219' Name='TP1_Long' New state='Cancelled' Instrument='MGC 02-26' Action='Sell' Limit price=4360.8 Stop price=0 Quantity=1 Type='Limit' Time in force=GTC Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-18 21:01:31:637|2|2|Your connection is experiencing high latency: 22,717 ms. This may negatively impact trading and market data services.
+2025-12-18 21:01:34:272|3|2|Connection lost to the NinjaTrader Historical Data Server: hds-us-nt-011.ninjatrader.com
+2025-12-18 21:01:44:281|1|2|Using HDS (hds-us-nt-007.ninjatrader.com/31655)
+2025-12-18 21:01:50:896|1|2|Simulation: Primary connection=Connection lost, Price feed=Connected
+2025-12-18 21:01:50:920|1|2|Simulation: Primary connection=Connection lost, Price feed=Connection lost
+2025-12-18 21:02:18:587|1|2|Connection restored to the NinjaTrader Historical Data Server: hds-us-nt-014.ninjatrader.com
+2025-12-18 21:02:25:365|1|2|Simulation: Primary connection=Connected, Price feed=Connected
+2025-12-18 21:03:52:713|2|2|Your connection is experiencing high latency: 21,357 ms. This may negatively impact trading and market data services.
+2025-12-18 21:04:44:292|1|2|Connection latency has been restored to acceptable levels.
+2025-12-18 21:15:53:506|2|2|Your connection is experiencing high latency: 18,891 ms. This may negatively impact trading and market data services.
+2025-12-18 21:16:30:076|1|2|Connection latency has been restored to acceptable levels.
+2025-12-18 21:17:11:925|2|2|Your connection is experiencing high latency: 21,362 ms. This may negatively impact trading and market data services.
+2025-12-18 21:17:44:580|1|2|Connection latency has been restored to acceptable levels.
+2025-12-18 22:48:38:946|1|4|Workspace Relative Trading Software saved
+2025-12-18 22:48:39:471|1|2|Simulation: Primary connection=Disconnecting, Price feed=Disconnecting
+2025-12-18 22:48:41:071|1|2|Simulation: Primary connection=Disconnected, Price feed=Disconnected

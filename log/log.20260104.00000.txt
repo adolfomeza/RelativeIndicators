@@ -1,0 +1,12 @@
+2026-01-04 13:08:41:630|3|2|Connection lost to the NinjaTrader Historical Data Server: hds-us-nt-017.ninjatrader.com
+2026-01-04 13:08:51:636|1|2|Using HDS (hds-us-nt-012.ninjatrader.com/31655)
+2026-01-04 13:08:52:076|1|2|Connection restored to the NinjaTrader Historical Data Server: hds-us-nt-012.ninjatrader.com
+2026-01-04 14:03:34:919|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378426593' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=False SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2026-01-04 14:03:43:701|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378426593'
+2026-01-04 14:04:44:443|3|2|Connection lost to the NinjaTrader Historical Data Server: hds-us-nt-012.ninjatrader.com
+2026-01-04 14:04:54:459|1|2|Using HDS (hds-us-nt-015.ninjatrader.com/31655)
+2026-01-04 14:04:54:822|1|2|Connection restored to the NinjaTrader Historical Data Server: hds-us-nt-015.ninjatrader.com
+2026-01-04 15:01:15:035|1|4|Workspace Relative Trading Software not saved
+2026-01-04 15:01:15:292|3|524288|Error on executing DB command: code = Constraint (19), message = System.Data.SQLite.SQLiteException (0x800027AF): constraint failed UNIQUE constraint failed: Strategies.Id    at System.Data.SQLite.SQLite3.Reset(SQLiteStatement stmt)    at System.Data.SQLite.SQLite3.Step(SQLiteStatement stmt)    at System.Data.SQLite.SQLiteDataReader.NextResult()    at System.Data.SQLite.SQLiteDataReader..ctor(SQLiteCommand cmd, CommandBehavior behave)    at System.Data.SQLite.SQLiteCommand.ExecuteReader(CommandBehavior behavior)    at System.Data.SQLite.SQLiteCommand.ExecuteNonQuery(CommandBehavior behavior)    at NinjaTrader.NinjaScript.StrategyBase.DbAdd()    at NinjaTrader.Cbi.DB.DBThread()
+2026-01-04 15:01:16:036|1|2|Simulation: Primary connection=Disconnecting, Price feed=Disconnecting
+2026-01-04 15:01:17:608|1|2|Simulation: Primary connection=Disconnected, Price feed=Disconnected

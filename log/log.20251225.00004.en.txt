@@ -1,0 +1,60 @@
+2025-12-25 11:17:26:131|2|4|Session Break (Version 8.1.6.2)
+2025-12-25 11:17:38:510|1|4|Global simulation mode disabled
+2025-12-25 11:17:39:943|1|4|Vendor assembly 'ASCENDO_NewsEvents' version='3.0.0.0' loaded.
+2025-12-25 11:17:39:944|1|4|Vendor assembly 'WindowsInput' version='1.0.4.0' loaded.
+2025-12-25 11:17:40:837|1|2|Using IS (is-us-nt-006.ninjatrader.com/31658)
+2025-12-25 11:17:40:841|1|4|Automated trading disabled
+2025-12-25 11:17:41:005|1|32|Order entry hot keys disabled
+2025-12-25 11:17:41:006|1|4|Auto close enabled=False
+2025-12-25 11:17:45:686|1|4|Restoring workspace 'Relative Trading Software'...
+2025-12-25 11:18:14:388|1|2|Playback: Primary connection=Connecting, Price feed=Connecting
+2025-12-25 11:18:14:504|1|2|Playback: Primary connection=Connected, Price feed=Connected
+2025-12-25 11:18:14:507|1|2|Time to auto close position='12:00:00 a. m.', Enabled=False
+2025-12-25 11:18:14:508|1|2|Using HDS (hds-us-nt-011.ninjatrader.com/31655)
+2025-12-25 11:18:15:272|1|2|Simulation account 'Playback101' reset
+2025-12-25 11:18:27:845|3|4|Strategy 'SessionLevelsStrategy/378061508': An order has been ignored since the stop price ‘6958.5’ near the bar stamped ‘11/12/2025 07:30:00’ is invalid based on the price range of the bar. This is an invalid order and subsequent orders may also be ignored.
+2025-12-25 11:18:43:601|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378061508' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=True / triggering 60 seconds before close SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2025-12-25 11:18:54:131|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378061508'
+2025-12-25 11:18:54:140|1|2|Simulation account 'Playback101' reset
+2025-12-25 11:18:57:208|3|4|Strategy 'SessionLevelsStrategy/378061508': An order has been ignored since the stop price ‘6733.25’ near the bar stamped ‘11/14/2025 10:54:00’ is invalid based on the price range of the bar. This is an invalid order and subsequent orders may also be ignored.
+2025-12-25 11:19:11:202|3|4|Strategy 'SessionLevelsStrategy': Error on calling 'OnStateChange' method: Strategy '/378061508': 'SubmitOrderUnmanaged' method can't be called while strategy is in state 'Transition'.
+2025-12-25 11:19:29:166|1|2|Simulation account 'Playback101' reset
+2025-12-25 11:19:47:992|3|4|Strategy 'SessionLevelsStrategy/378061508': An order has been ignored since the stop price ‘6733.25’ near the bar stamped ‘11/14/2025 10:54:00’ is invalid based on the price range of the bar. This is an invalid order and subsequent orders may also be ignored.
+2025-12-25 11:20:02:081|3|4|Strategy 'SessionLevelsStrategy': Error on calling 'OnStateChange' method: Strategy '/378061508': 'SubmitOrderUnmanaged' method can't be called while strategy is in state 'Transition'.
+2025-12-25 11:21:55:202|3|4|Strategy 'SessionLevelsStrategy/378061508': An order has been ignored since the stop price ‘6733.25’ near the bar stamped ‘11/14/2025 10:54:00’ is invalid based on the price range of the bar. This is an invalid order and subsequent orders may also be ignored.
+2025-12-25 11:22:09:492|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378061508' : On starting a real-time strategy - StartBehavior=WaitUntilFlat Position=MES 03-26 1L EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=True / triggering 60 seconds before close SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2025-12-25 11:22:09:510|1|4|NinjaScript strategy 'SessionLevelsStrategy/378061508' submitting order
+2025-12-25 11:22:09:559|1|32|Order='8528f91499b1473fbaee22fe298b4534/Playback101' Name='SL_Long_2' New state='Submitted' Instrument='MES 03-26' Action='Sell' Limit price=0 Stop price=6872.75 Quantity=1 Type='Stop Market' Time in force=GTC Oco='OCO_Long_2_639022585291713051' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-25 11:22:09:559|1|32|Order='8528f91499b1473fbaee22fe298b4534/Playback101' Name='SL_Long_2' New state='Rejected' Instrument='MES 03-26' Action='Sell' Limit price=0 Stop price=6872.75 Quantity=1 Type='Stop Market' Time in force=GTC Oco='OCO_Long_2_639022585291713051' Filled=0 Fill price=0 Error='Order rejected' Native error='There is no market data available to drive the simulation engine.'
+2025-12-25 11:22:09:562|0|32|Playback101, There is no market data available to drive the simulation engine. affected Order: Sell 1 StopMarket @ 6872.75
+2025-12-25 11:22:11:969|3|16|There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2025-12-25 11:24:17:821|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378061508'
+2025-12-25 11:24:17:825|1|2|Playback: Primary connection=Disconnecting, Price feed=Disconnecting
+2025-12-25 11:24:17:839|1|2|Playback: Primary connection=Disconnected, Price feed=Disconnected
+2025-12-25 11:24:22:373|1|2|Playback: Primary connection=Connecting, Price feed=Connecting
+2025-12-25 11:24:22:417|1|2|Playback: Primary connection=Connected, Price feed=Connected
+2025-12-25 11:24:22:418|1|2|Time to auto close position='12:00:00 a. m.', Enabled=False
+2025-12-25 11:24:22:420|1|2|Using HDS (hds-us-nt-004.ninjatrader.com/31655)
+2025-12-25 11:24:22:594|1|2|Simulation account 'Playback101' reset
+2025-12-25 11:24:37:963|1|2|Simulation account 'Playback101' reset
+2025-12-25 11:25:44:407|3|4|Strategy 'SessionLevelsStrategy/378061508': An order has been ignored since the stop price ‘6733.25’ near the bar stamped ‘11/14/2025 10:54:00’ is invalid based on the price range of the bar. This is an invalid order and subsequent orders may also be ignored.
+2025-12-25 11:25:58:335|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378061508' : On starting a real-time strategy - StartBehavior=WaitUntilFlat Position=MES 03-26 1L EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=True / triggering 60 seconds before close SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2025-12-25 11:25:58:335|1|4|NinjaScript strategy 'SessionLevelsStrategy/378061508' submitting order
+2025-12-25 11:25:58:347|1|32|Order='786d4a96dac04c4cbee670dfc27127f4/Playback101' Name='SL_Long_2' New state='Submitted' Instrument='MES 03-26' Action='Sell' Limit price=0 Stop price=6872.75 Quantity=1 Type='Stop Market' Time in force=GTC Oco='OCO_Long_2_639022587579882006' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-25 11:25:58:347|1|32|Order='786d4a96dac04c4cbee670dfc27127f4/Playback101' Name='SL_Long_2' New state='Rejected' Instrument='MES 03-26' Action='Sell' Limit price=0 Stop price=6872.75 Quantity=1 Type='Stop Market' Time in force=GTC Oco='OCO_Long_2_639022587579882006' Filled=0 Fill price=0 Error='Order rejected' Native error='There is no market data available to drive the simulation engine.'
+2025-12-25 11:25:58:347|0|32|Playback101, There is no market data available to drive the simulation engine. affected Order: Sell 1 StopMarket @ 6872.75
+2025-12-25 11:26:00:307|3|16|There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2025-12-25 11:29:46:151|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378061508'
+2025-12-25 11:29:46:282|3|4|Strategy 'SessionLevelsStrategy/378061508': An order has been ignored since the stop price ‘6733.25’ near the bar stamped ‘11/14/2025 10:54:00’ is invalid based on the price range of the bar. This is an invalid order and subsequent orders may also be ignored.
+2025-12-25 11:30:00:285|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378061508' : On starting a real-time strategy - StartBehavior=WaitUntilFlat Position=MES 03-26 1L EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=True / triggering 60 seconds before close SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2025-12-25 11:30:00:287|1|4|NinjaScript strategy 'SessionLevelsStrategy/378061508' submitting order
+2025-12-25 11:30:00:304|1|32|Order='58a7577d34f7444da1c827670f98c4cb/Playback101' Name='SL_Long_2' New state='Submitted' Instrument='MES 03-26' Action='Sell' Limit price=0 Stop price=6872.75 Quantity=1 Type='Stop Market' Time in force=GTC Oco='OCO_Long_2_639022589999747705' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-25 11:30:00:304|1|32|Order='58a7577d34f7444da1c827670f98c4cb/Playback101' Name='SL_Long_2' New state='Rejected' Instrument='MES 03-26' Action='Sell' Limit price=0 Stop price=6872.75 Quantity=1 Type='Stop Market' Time in force=GTC Oco='OCO_Long_2_639022589999747705' Filled=0 Fill price=0 Error='Order rejected' Native error='There is no market data available to drive the simulation engine.'
+2025-12-25 11:30:00:304|0|32|Playback101, There is no market data available to drive the simulation engine. affected Order: Sell 1 StopMarket @ 6872.75
+2025-12-25 11:30:02:358|3|16|There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2025-12-25 11:34:56:839|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378061508'
+2025-12-25 11:35:11:302|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378061508' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=True / triggering 60 seconds before close SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2025-12-25 11:35:35:242|1|4|Workspace Relative Trading Software saved
+2025-12-25 11:35:35:444|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378061508'
+2025-12-25 11:35:35:593|1|2|Playback: Primary connection=Disconnecting, Price feed=Disconnecting
+2025-12-25 11:35:35:594|1|2|Playback: Primary connection=Disconnected, Price feed=Disconnected

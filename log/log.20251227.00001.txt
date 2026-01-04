@@ -1,0 +1,18 @@
+2025-12-27 10:54:40:848|2|4|Session Break (Version 8.1.6.2)
+2025-12-27 10:54:58:621|1|4|Global simulation mode disabled
+2025-12-27 10:55:00:319|1|4|Vendor assembly 'ASCENDO_NewsEvents' version='3.0.0.0' loaded.
+2025-12-27 10:55:00:319|1|4|Vendor assembly 'WindowsInput' version='1.0.4.0' loaded.
+2025-12-27 10:55:02:601|1|2|Using IS (is-us-nt-006.ninjatrader.com/31658)
+2025-12-27 10:55:02:606|1|4|Automated trading disabled
+2025-12-27 10:55:02:766|1|32|Order entry hot keys disabled
+2025-12-27 10:55:02:767|1|4|Auto close enabled=False
+2025-12-27 10:55:07:543|1|4|Restoring workspace 'Relative Trading Software'...
+2025-12-27 10:55:57:200|1|2|Playback: Primary connection=Connecting, Price feed=Connecting
+2025-12-27 10:55:57:330|1|2|Playback: Primary connection=Connected, Price feed=Connected
+2025-12-27 10:55:57:333|1|2|Time to auto close position='12:00:00 a. m.', Enabled=False
+2025-12-27 10:55:57:335|1|2|Using HDS (hds-us-nt-020.ninjatrader.com/31655)
+2025-12-27 10:55:57:960|1|2|Simulation account 'Playback101' reset
+2025-12-27 10:56:11:748|1|2|Simulation account 'Playback101' reset
+2025-12-27 10:56:33:638|1|2|Simulation account 'Playback101' reset
+2025-12-27 11:00:31:709|3|1048576|Trace.Assert was invoked with message 'Strategy.Performance.Add'. Detailed: '(null)'
+2025-12-27 11:00:34:082|3|1048576|Trace.Assert was invoked with message 'Strategy.Performance.Add'. Detailed: '(null)'

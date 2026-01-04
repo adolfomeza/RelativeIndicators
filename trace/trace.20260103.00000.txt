@@ -1,0 +1,699 @@
+2026-01-03 00:04:12:571 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-03 00:04:12:996 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-03 00:04:12:997 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.46ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-03 00:19:40:848 (Simulation) Tradovate.Adapter.CheckConnectionLatency: Connection latency is SLOW. Ping reply is 14,671 ms
+2026-01-03 00:19:40:849 WARNING: Your connection is experiencing high latency: 14,671 ms. This may negatively impact trading and market data services.
+2026-01-03 00:24:07:306 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-03 00:24:07:306 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-03 00:24:07:586 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-03 00:24:07:586 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9517343' renewSecs='2399.97586715'
+2026-01-03 00:27:32:987 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage exception='The remote party closed the WebSocket connection without completing the close handshake. ' webSocketErrorCode='ConnectionClosedPrematurely'
+2026-01-03 00:27:32:987 (Simulation) Tradovate.Adapter.OnDisconnectMarketData errorMsg='The remote party closed the WebSocket connection without completing the close handshake.' tradeStatus='Connected' mdStatus='ConnectionLost'
+2026-01-03 00:27:32:987 (Simulation) Tradovate.Adapter.OnDisconnectMarketData: Milliseconds from last marketDataHeartbeatTime 4,307
+2026-01-03 00:27:32:987 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-03 00:27:32:987 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-03 00:27:32:987 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426595' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 00:27:32:987 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426598' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 00:27:32:987 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426594' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 00:27:32:987 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426593' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 00:27:32:987 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426592' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 00:27:32:988 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426587' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 00:27:32:988 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426597' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 00:27:32:988 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426584' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 00:27:32:988 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426586' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 00:27:32:988 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426591' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 00:27:32:989 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-03 00:27:32:989 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=ConnectionLost
+2026-01-03 00:27:32:989 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=True foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-03 00:27:32:989 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=ConnectionLost
+2026-01-03 00:27:33:508 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-03 00:27:33:848 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-03 00:27:33:848 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-03 00:27:33:848 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-03 00:27:33:848 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-03 00:27:33:995 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-03 00:27:33:995 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-03 00:27:33:997 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426595' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:27:33:997 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426598' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:27:33:997 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426594' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:27:33:997 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426593' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:27:33:997 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426592' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:27:33:997 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426587' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:27:33:997 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426597' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:27:33:997 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426584' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:27:33:997 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426586' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:27:33:997 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426591' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:27:33:998 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-03 00:27:33:998 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2026-01-03 00:27:33:998 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-03 00:27:33:998 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2026-01-03 00:29:14:205 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage exception='The remote party closed the WebSocket connection without completing the close handshake. ' webSocketErrorCode='ConnectionClosedPrematurely'
+2026-01-03 00:29:14:206 (Simulation) Tradovate.Adapter.OnDisconnectMarketData errorMsg='The remote party closed the WebSocket connection without completing the close handshake.' tradeStatus='Connected' mdStatus='ConnectionLost'
+2026-01-03 00:29:14:206 (Simulation) Tradovate.Adapter.OnDisconnectMarketData: Milliseconds from last marketDataHeartbeatTime 3,309
+2026-01-03 00:29:14:206 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-03 00:29:14:206 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-03 00:29:14:206 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426595' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 00:29:14:206 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426598' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 00:29:14:206 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426594' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 00:29:14:206 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426593' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 00:29:14:206 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426592' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 00:29:14:206 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426587' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 00:29:14:206 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426597' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 00:29:14:206 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426584' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 00:29:14:206 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426586' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 00:29:14:206 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426591' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 00:29:14:206 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-03 00:29:14:206 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=ConnectionLost
+2026-01-03 00:29:14:206 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=True foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-03 00:29:14:207 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=ConnectionLost
+2026-01-03 00:29:14:718 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-03 00:29:14:905 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-03 00:29:14:905 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-03 00:29:14:906 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-03 00:29:14:906 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-03 00:29:15:081 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-03 00:29:15:081 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-03 00:29:15:082 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426595' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:29:15:082 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426598' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:29:15:082 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426594' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:29:15:082 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426593' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:29:15:082 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426592' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:29:15:082 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426587' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:29:15:082 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426597' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:29:15:082 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426584' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:29:15:082 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426586' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:29:15:082 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426591' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:29:15:082 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-03 00:29:15:082 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2026-01-03 00:29:15:082 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-03 00:29:15:082 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2026-01-03 00:39:14:308 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage exception='The remote party closed the WebSocket connection without completing the close handshake. ' webSocketErrorCode='ConnectionClosedPrematurely'
+2026-01-03 00:39:14:308 (Simulation) Tradovate.Adapter.OnDisconnectTrade errorMsg='The remote party closed the WebSocket connection without completing the close handshake.' tradeStatus='ConnectionLost' mdStatus='Connected'
+2026-01-03 00:39:14:308 (Simulation) Tradovate.Adapter.OnDisconnectTrade: Milliseconds from last tradeHeartbeatTime: 1,647
+2026-01-03 00:39:14:309 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=ConnectionLost priceStatus=Connected previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-03 00:39:14:309 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=ConnectionLost previousStatus=Connected message=''
+2026-01-03 00:39:14:309 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=ConnectionLost previousStatus=Connected message=''
+2026-01-03 00:39:14:331 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=ConnectionLost priceStatus=Connected previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-03 00:39:14:331 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426595' connection='Simulation' orderStatus='ConnectionLost' priceStatus='Connected'
+2026-01-03 00:39:14:331 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=ConnectionLost priceStatus=Connected previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-03 00:39:14:331 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426598' connection='Simulation' orderStatus='ConnectionLost' priceStatus='Connected'
+2026-01-03 00:39:14:331 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=ConnectionLost priceStatus=Connected
+2026-01-03 00:39:14:331 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426594' connection='Simulation' orderStatus='ConnectionLost' priceStatus='Connected'
+2026-01-03 00:39:14:331 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=True foundConnectingStatus=False foundConnected=False
+2026-01-03 00:39:14:331 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426593' connection='Simulation' orderStatus='ConnectionLost' priceStatus='Connected'
+2026-01-03 00:39:14:331 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426592' connection='Simulation' orderStatus='ConnectionLost' priceStatus='Connected'
+2026-01-03 00:39:14:331 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Disconnecting
+2026-01-03 00:39:14:331 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426587' connection='Simulation' orderStatus='ConnectionLost' priceStatus='Connected'
+2026-01-03 00:39:14:331 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426597' connection='Simulation' orderStatus='ConnectionLost' priceStatus='Connected'
+2026-01-03 00:39:14:331 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426584' connection='Simulation' orderStatus='ConnectionLost' priceStatus='Connected'
+2026-01-03 00:39:14:331 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426586' connection='Simulation' orderStatus='ConnectionLost' priceStatus='Connected'
+2026-01-03 00:39:14:331 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426591' connection='Simulation' orderStatus='ConnectionLost' priceStatus='Connected'
+2026-01-03 00:39:14:527 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2026-01-03 00:39:15:087 (Simulation) Tradovate.Adapter.StartTradeWebSocket
+2026-01-03 00:39:19:925 (Simulation) Tradovate.Adapter.StartTradeWebSocket1
+2026-01-03 00:39:19:925 (Simulation) Tradovate.Adapter.StartWebSocketTradeSendWorker
+2026-01-03 00:39:19:926 (Simulation) Tradovate.Adapter.StartWebSocketTradeReceiveWorker
+2026-01-03 00:39:19:926 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage
+2026-01-03 00:39:20:438 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc0
+2026-01-03 00:39:20:438 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2026-01-03 00:39:20:438 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=Connected errorCode=NoError nativeError=''
+2026-01-03 00:39:20:438 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connected previousStatus=ConnectionLost message=''
+2026-01-03 00:39:20:438 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connected previousStatus=ConnectionLost message=''
+2026-01-03 00:39:20:459 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=Connected errorCode=NoError nativeError=''
+2026-01-03 00:39:20:459 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426595' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:39:20:459 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=Connected errorCode=NoError nativeError=''
+2026-01-03 00:39:20:459 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2026-01-03 00:39:20:459 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-03 00:39:20:459 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426598' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:39:20:459 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2026-01-03 00:39:20:459 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426594' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:39:20:459 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426593' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:39:20:459 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426592' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:39:20:459 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426587' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:39:20:459 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426597' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:39:20:459 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426584' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:39:20:459 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426586' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 00:39:20:459 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426591' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 01:04:07:565 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-03 01:04:07:565 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-03 01:04:07:844 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-03 01:04:07:844 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9576432' renewSecs='2399.9788216'
+2026-01-03 01:04:12:589 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-03 01:04:13:068 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-03 01:04:13:069 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.32ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-03 01:14:47:592 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage exception='The remote party closed the WebSocket connection without completing the close handshake. ' webSocketErrorCode='ConnectionClosedPrematurely'
+2026-01-03 01:14:47:592 (Simulation) Tradovate.Adapter.OnDisconnectMarketData errorMsg='The remote party closed the WebSocket connection without completing the close handshake.' tradeStatus='Connected' mdStatus='ConnectionLost'
+2026-01-03 01:14:47:592 (Simulation) Tradovate.Adapter.OnDisconnectMarketData: Milliseconds from last marketDataHeartbeatTime 3,768
+2026-01-03 01:14:47:592 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-03 01:14:47:594 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-03 01:14:47:595 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426595' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 01:14:47:595 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426598' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 01:14:47:595 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426594' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 01:14:47:595 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426593' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 01:14:47:595 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426592' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 01:14:47:595 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426587' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 01:14:47:595 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426597' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 01:14:47:595 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426584' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 01:14:47:595 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426586' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 01:14:47:595 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426591' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 01:14:47:597 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-03 01:14:47:597 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=ConnectionLost
+2026-01-03 01:14:47:597 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=True foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-03 01:14:47:597 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=ConnectionLost
+2026-01-03 01:14:48:106 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-03 01:14:52:886 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-03 01:14:52:886 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-03 01:14:52:894 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-03 01:14:52:894 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-03 01:14:53:028 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-03 01:14:53:029 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-03 01:14:53:030 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426595' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 01:14:53:030 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426598' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 01:14:53:030 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426594' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 01:14:53:030 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426593' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 01:14:53:030 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-03 01:14:53:030 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2026-01-03 01:14:53:030 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426592' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 01:14:53:030 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-03 01:14:53:030 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426587' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 01:14:53:030 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2026-01-03 01:14:53:030 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426597' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 01:14:53:030 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426584' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 01:14:53:030 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426586' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 01:14:53:030 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426591' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 01:16:13:521 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage exception='The remote party closed the WebSocket connection without completing the close handshake. ' webSocketErrorCode='ConnectionClosedPrematurely'
+2026-01-03 01:16:13:521 (Simulation) Tradovate.Adapter.OnDisconnectMarketData errorMsg='The remote party closed the WebSocket connection without completing the close handshake.' tradeStatus='Connected' mdStatus='ConnectionLost'
+2026-01-03 01:16:13:521 (Simulation) Tradovate.Adapter.OnDisconnectMarketData: Milliseconds from last marketDataHeartbeatTime 2,917
+2026-01-03 01:16:13:521 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-03 01:16:13:521 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-03 01:16:13:521 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426595' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 01:16:13:521 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426598' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 01:16:13:521 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426594' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 01:16:13:521 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426593' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 01:16:13:522 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426592' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 01:16:13:522 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426587' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 01:16:13:522 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426597' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 01:16:13:522 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426584' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 01:16:13:522 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426586' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 01:16:13:522 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426591' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 01:16:13:522 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-03 01:16:13:522 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=ConnectionLost
+2026-01-03 01:16:13:522 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=True foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-03 01:16:13:522 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=ConnectionLost
+2026-01-03 01:16:14:029 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-03 01:16:31:732 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2026-01-03 01:16:32:235 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-03 01:16:32:434 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-03 01:16:32:434 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-03 01:16:32:435 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-03 01:16:32:435 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-03 01:16:41:185 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2026-01-03 01:16:41:188 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage1
+2026-01-03 01:16:41:685 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-03 01:16:41:871 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-03 01:16:41:871 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-03 01:16:41:872 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-03 01:16:41:872 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-03 01:16:50:934 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2026-01-03 01:16:50:936 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage1
+2026-01-03 01:16:51:437 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-03 01:16:51:716 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-03 01:16:51:716 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-03 01:16:51:717 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-03 01:16:51:717 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-03 01:17:01:173 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2026-01-03 01:17:01:173 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage1
+2026-01-03 01:17:01:676 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-03 01:17:01:859 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-03 01:17:01:859 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-03 01:17:01:859 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-03 01:17:01:860 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-03 01:17:11:813 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2026-01-03 01:17:11:813 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage1
+2026-01-03 01:17:12:313 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-03 01:17:12:512 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-03 01:17:12:512 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-03 01:17:12:512 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-03 01:17:12:512 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-03 01:17:23:063 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2026-01-03 01:17:23:063 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage1
+2026-01-03 01:17:23:575 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-03 01:17:23:761 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-03 01:17:23:761 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-03 01:17:23:761 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-03 01:17:23:761 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-03 01:17:35:082 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2026-01-03 01:17:35:083 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage1
+2026-01-03 01:17:35:593 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-03 01:17:35:780 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-03 01:17:35:780 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-03 01:17:35:780 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-03 01:17:35:781 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-03 01:17:48:061 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2026-01-03 01:17:48:062 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage1
+2026-01-03 01:17:48:563 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-03 01:17:48:749 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-03 01:17:48:749 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-03 01:17:48:750 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-03 01:17:48:750 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-03 01:18:02:209 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2026-01-03 01:18:02:212 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage1
+2026-01-03 01:18:02:716 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-03 01:18:02:901 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-03 01:18:02:901 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-03 01:18:02:901 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-03 01:18:02:901 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-03 01:18:17:863 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2026-01-03 01:18:17:864 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage1
+2026-01-03 01:18:18:377 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-03 01:18:18:560 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-03 01:18:18:560 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-03 01:18:18:560 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-03 01:18:18:560 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-03 01:18:35:399 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2026-01-03 01:18:35:908 (Simulation) Tradovate.Adapter.DisposeTrade0
+2026-01-03 01:18:36:920 (Simulation) Cbi.Connection.ConnectionStatusCallback: Status=Connected, force .Disconnecting
+2026-01-03 01:18:36:920 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Disconnecting priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=Panic nativeError='Unable to re-establish the connection.'
+2026-01-03 01:18:36:920 (Simulation) Core.Connection.Statistics: connectAttempts=4/2476.9ms
+2026-01-03 01:18:36:920 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Disconnecting previousStatus=Connected message=''
+2026-01-03 01:18:36:920 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Disconnecting previousStatus=Connected message=''
+2026-01-03 01:18:36:921 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Disconnecting priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=Panic nativeError='Unable to re-establish the connection.'
+2026-01-03 01:18:36:921 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426595' connection='Simulation' orderStatus='Disconnecting' priceStatus='ConnectionLost'
+2026-01-03 01:18:36:921 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426598' connection='Simulation' orderStatus='Disconnecting' priceStatus='ConnectionLost'
+2026-01-03 01:18:36:921 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426594' connection='Simulation' orderStatus='Disconnecting' priceStatus='ConnectionLost'
+2026-01-03 01:18:36:921 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426593' connection='Simulation' orderStatus='Disconnecting' priceStatus='ConnectionLost'
+2026-01-03 01:18:36:921 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426592' connection='Simulation' orderStatus='Disconnecting' priceStatus='ConnectionLost'
+2026-01-03 01:18:36:921 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426587' connection='Simulation' orderStatus='Disconnecting' priceStatus='ConnectionLost'
+2026-01-03 01:18:36:921 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426597' connection='Simulation' orderStatus='Disconnecting' priceStatus='ConnectionLost'
+2026-01-03 01:18:36:921 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426584' connection='Simulation' orderStatus='Disconnecting' priceStatus='ConnectionLost'
+2026-01-03 01:18:36:921 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426586' connection='Simulation' orderStatus='Disconnecting' priceStatus='ConnectionLost'
+2026-01-03 01:18:36:921 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426591' connection='Simulation' orderStatus='Disconnecting' priceStatus='ConnectionLost'
+2026-01-03 01:18:36:921 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close1
+2026-01-03 01:18:36:921 (Simulation) Cbi.Connection.ConnectionStatusCallback: PriceStatus=ConnectionLost, force .Disconnecting
+2026-01-03 01:18:36:921 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Disconnecting priceStatus=Disconnecting previousStatus=Disconnecting previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-03 01:18:36:930 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Disconnecting priceStatus=Disconnecting previousStatus=Disconnecting previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-03 01:18:36:930 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426595' connection='Simulation' orderStatus='Disconnecting' priceStatus='Disconnecting'
+2026-01-03 01:18:36:930 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426598' connection='Simulation' orderStatus='Disconnecting' priceStatus='Disconnecting'
+2026-01-03 01:18:36:930 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426594' connection='Simulation' orderStatus='Disconnecting' priceStatus='Disconnecting'
+2026-01-03 01:18:36:930 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426593' connection='Simulation' orderStatus='Disconnecting' priceStatus='Disconnecting'
+2026-01-03 01:18:36:930 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426592' connection='Simulation' orderStatus='Disconnecting' priceStatus='Disconnecting'
+2026-01-03 01:18:36:930 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426587' connection='Simulation' orderStatus='Disconnecting' priceStatus='Disconnecting'
+2026-01-03 01:18:36:930 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426597' connection='Simulation' orderStatus='Disconnecting' priceStatus='Disconnecting'
+2026-01-03 01:18:36:930 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426584' connection='Simulation' orderStatus='Disconnecting' priceStatus='Disconnecting'
+2026-01-03 01:18:36:930 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426586' connection='Simulation' orderStatus='Disconnecting' priceStatus='Disconnecting'
+2026-01-03 01:18:36:930 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426591' connection='Simulation' orderStatus='Disconnecting' priceStatus='Disconnecting'
+2026-01-03 01:18:36:930 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Disconnected priceStatus=Disconnected previousStatus=Disconnecting previousPriceStatus=Disconnecting errorCode=NoError nativeError=''
+2026-01-03 01:18:36:930 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Disconnected previousStatus=Disconnecting message=''
+2026-01-03 01:18:36:930 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Disconnected previousStatus=Disconnecting message=''
+2026-01-03 01:18:36:930 Flushing DB thread
+2026-01-03 01:18:36:930 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Disconnected priceStatus=Disconnected previousStatus=Disconnecting previousPriceStatus=Disconnecting errorCode=NoError nativeError=''
+2026-01-03 01:18:36:930 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426595' connection='Simulation' orderStatus='Disconnected' priceStatus='Disconnected'
+2026-01-03 01:18:36:930 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426598' connection='Simulation' orderStatus='Disconnected' priceStatus='Disconnected'
+2026-01-03 01:18:36:942 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426594' connection='Simulation' orderStatus='Disconnected' priceStatus='Disconnected'
+2026-01-03 01:18:36:942 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426593' connection='Simulation' orderStatus='Disconnected' priceStatus='Disconnected'
+2026-01-03 01:18:36:943 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426592' connection='Simulation' orderStatus='Disconnected' priceStatus='Disconnected'
+2026-01-03 01:18:36:944 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426587' connection='Simulation' orderStatus='Disconnected' priceStatus='Disconnected'
+2026-01-03 01:18:36:944 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426597' connection='Simulation' orderStatus='Disconnected' priceStatus='Disconnected'
+2026-01-03 01:18:36:944 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426584' connection='Simulation' orderStatus='Disconnected' priceStatus='Disconnected'
+2026-01-03 01:18:36:944 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426586' connection='Simulation' orderStatus='Disconnected' priceStatus='Disconnected'
+2026-01-03 01:18:36:944 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426591' connection='Simulation' orderStatus='Disconnected' priceStatus='Disconnected'
+2026-01-03 01:18:36:945 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Disconnecting priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=Panic nativeError='Unable to re-establish the connection.'
+2026-01-03 01:18:36:945 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Using args status=Disconnecting
+2026-01-03 01:18:36:947 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close3
+2026-01-03 01:18:36:949 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close4
+2026-01-03 01:18:36:949 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close5
+2026-01-03 01:18:36:949 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close6b
+2026-01-03 01:18:36:949 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close8
+2026-01-03 01:18:36:956 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Disconnecting priceStatus=Disconnecting previousStatus=Disconnecting previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-03 01:18:36:967 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Using args status=Disconnecting
+2026-01-03 01:18:36:973 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Disconnected priceStatus=Disconnected previousStatus=Disconnecting previousPriceStatus=Disconnecting errorCode=NoError nativeError=''
+2026-01-03 01:18:36:973 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Using args status=Disconnected
+2026-01-03 01:18:37:280 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2026-01-03 01:18:39:102 ERROR: There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2026-01-03 01:44:07:830 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-03 01:44:07:830 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-03 01:44:08:096 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-03 01:44:08:096 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9605214' renewSecs='2399.9802607'
+2026-01-03 02:04:12:602 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-03 02:04:13:083 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-03 02:04:13:083 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.29ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-03 02:24:08:084 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-03 02:24:08:084 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-03 02:24:08:367 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-03 02:24:08:367 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9610056' renewSecs='2399.9805028'
+2026-01-03 03:04:08:366 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-03 03:04:08:366 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-03 03:04:08:651 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-03 03:04:08:651 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9618666' renewSecs='2399.9809333'
+2026-01-03 03:04:12:608 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-03 03:04:13:096 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-03 03:04:13:096 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.29ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-03 03:44:08:643 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-03 03:44:08:643 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-03 03:44:08:927 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-03 03:44:08:927 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9609642' renewSecs='2399.9804821'
+2026-01-03 03:44:27:206 (Simulation) Gui.ControlCenter.OnConnect
+2026-01-03 03:44:27:212 (Simulation) Cbi.Connection.Connect0: status=Disconnected assembly=8.1.6.2 date=2026-01-03 runAsProcess=False
+2026-01-03 03:44:27:212 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2026-01-03 03:44:27:212 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2026-01-03 03:44:27:212 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426595' connection='Simulation' orderStatus='Connecting' priceStatus='Connecting'
+2026-01-03 03:44:27:212 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426598' connection='Simulation' orderStatus='Connecting' priceStatus='Connecting'
+2026-01-03 03:44:27:212 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426594' connection='Simulation' orderStatus='Connecting' priceStatus='Connecting'
+2026-01-03 03:44:27:212 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426593' connection='Simulation' orderStatus='Connecting' priceStatus='Connecting'
+2026-01-03 03:44:27:212 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426592' connection='Simulation' orderStatus='Connecting' priceStatus='Connecting'
+2026-01-03 03:44:27:212 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426587' connection='Simulation' orderStatus='Connecting' priceStatus='Connecting'
+2026-01-03 03:44:27:212 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426597' connection='Simulation' orderStatus='Connecting' priceStatus='Connecting'
+2026-01-03 03:44:27:212 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426584' connection='Simulation' orderStatus='Connecting' priceStatus='Connecting'
+2026-01-03 03:44:27:212 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426586' connection='Simulation' orderStatus='Connecting' priceStatus='Connecting'
+2026-01-03 03:44:27:212 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426591' connection='Simulation' orderStatus='Connecting' priceStatus='Connecting'
+2026-01-03 03:44:27:212 (Simulation) Cbi.Connection.Connect1
+2026-01-03 03:44:27:213 (Simulation) Cbi.Connection.Connect2
+2026-01-03 03:44:27:213 (Simulation) Cbi.Connection.Connect3
+2026-01-03 03:44:27:213 (Simulation) Cbi.Connection.CreateAccount: account='Sim101' displayName='Sim101' fcm='' denomination=UsDollar forexLotSize=10000
+2026-01-03 03:44:27:214 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connecting previousStatus=Disconnected message=''
+2026-01-03 03:44:27:214 (Simulation) Cbi.Account.OnConnectionStatus.PositionExecutions: account='Sim101'
+2026-01-03 03:44:27:216 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2026-01-03 03:44:27:216 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connecting priceStatus=Connecting
+2026-01-03 03:44:27:216 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=True foundConnected=False
+2026-01-03 03:44:27:216 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connecting
+2026-01-03 03:44:27:216 (Simulation) Cbi.Connection.Connect4
+2026-01-03 03:44:27:216 (Simulation) Cbi.Connection.Connect5
+2026-01-03 03:44:27:217 (Simulation) Tradovate.Adapter.Connect: user='joelbencomo' accountType='Simulation' useLocalOcoSimulation=True
+2026-01-03 03:44:27:221 (Simulation) Cbi.Connection.Connect9 ok
+2026-01-03 03:44:27:404 (Simulation) Tradovate.Adapter.StartTradeWebSocket
+2026-01-03 03:44:27:687 (Simulation) Tradovate.Adapter.StartTradeWebSocket1
+2026-01-03 03:44:27:687 (Simulation) Tradovate.Adapter.StartWebSocketTradeSendWorker
+2026-01-03 03:44:27:688 (Simulation) Tradovate.Adapter.StartWebSocketTradeReceiveWorker
+2026-01-03 03:44:27:688 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage
+2026-01-03 03:44:28:052 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-03 03:44:28:249 (Simulation) Cbi.Connection.CreateAccount: account='DEMO619219' displayName='DEMO' fcm='' denomination=UsDollar forexLotSize=1
+2026-01-03 03:44:28:249 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connecting previousStatus=Disconnected message=''
+2026-01-03 03:44:28:249 (Simulation) Cbi.Account.OnConnectionStatus.PositionExecutions: account='DEMO619219'
+2026-01-03 03:44:28:253 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=CashValue currency=UsDollar value=*****
+2026-01-03 03:44:28:253 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc0
+2026-01-03 03:44:28:253 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2026-01-03 03:44:28:349 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-03 03:44:28:349 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-03 03:44:28:350 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-03 03:44:28:350 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-03 03:44:28:486 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2026-01-03 03:44:28:486 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connected previousStatus=Connecting message=''
+2026-01-03 03:44:28:486 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connected previousStatus=Connecting message=''
+2026-01-03 03:44:28:486 (Simulation) Cbi.Account.Restore.Start: account='Sim101' fcm=''
+2026-01-03 03:44:28:486 (Simulation) Cbi.Account.Restore.Start: account='DEMO619219' fcm=''
+2026-01-03 03:44:28:622 (Simulation) Cbi.Account.Restore.End: account='DEMO619219' fcm=''
+2026-01-03 03:44:28:632 (Simulation) Cbi.Account.Restore.End: account='Sim101' fcm=''
+2026-01-03 03:44:28:632 (Simulation) Core.Connection.Statistics: connectAttempts=5/2264.6ms
+2026-01-03 03:44:28:632 (Simulation) Cbi.Connection.ConnectionStatusCallback: autoClosePositionTime='12/17/2025 00:00:00' autoClosePosition=False
+2026-01-03 03:44:28:632 Server.HdsClient.Connect: type=HDS server='hds-us-nt-008.ninjatrader.com' port=31655 system='' useSsl=True
+2026-01-03 03:44:28:649 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2026-01-03 03:44:28:649 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426595' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 03:44:28:650 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426598' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 03:44:28:650 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426594' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 03:44:28:651 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426593' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 03:44:28:651 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426592' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 03:44:28:652 (Simulation) Tradovate.Adapter.QueryNotificationsAsync0
+2026-01-03 03:44:28:652 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426587' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 03:44:28:652 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426597' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 03:44:28:652 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426584' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 03:44:28:652 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426586' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 03:44:28:652 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426591' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 03:44:28:700 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 02-26' from='2/1/26 12:00:00 a. m.' to='3/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:28:714 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 03-26' from='2/1/26 12:00:00 a. m.' to='2/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:28:714 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 01-26' from='19/12/25 12:00:00 a. m.' to='19/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:28:715 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='2/1/26 12:00:00 a. m.' to='2/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:28:715 Cbi.Instrument.RequestBars (to Provider): instrument='6E 12-25' from='11/12/25 12:00:00 a. m.' to='11/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:28:715 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:28:715 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 01-26' from='2/1/26 12:00:00 a. m.' to='2/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:28:715 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-26' from='2/1/26 12:00:00 a. m.' to='2/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:28:715 Cbi.Instrument.RequestBars (to Provider): instrument='6E 03-26' from='2/1/26 12:00:00 a. m.' to='2/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:28:715 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='2/1/26 12:00:00 a. m.' to='2/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:28:715 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='2/1/26 12:00:00 a. m.' to='2/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:28:715 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='2/1/26 12:00:00 a. m.' to='2/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:28:715 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:28:733 Cbi.Instrument.RequestBars (to Provider): instrument='MES 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:28:733 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='2/1/26 12:00:00 a. m.' to='2/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:28:733 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='2/1/26 12:00:00 a. m.' to='2/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:28:733 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:28:746 (Simulation) QueryNotificationResponse Live
+2026-01-03 03:44:28:762 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2026-01-03 03:44:28:762 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2026-01-03 03:44:28:762 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-03 03:44:28:762 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2026-01-03 03:44:28:937 (Simulation) QueryNotificationResponse Demo
+2026-01-03 03:44:34:691 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 01-26' from='19/12/25 12:00:00 a. m.' to='19/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:34:722 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-26' from='2/1/26 12:00:00 a. m.' to='2/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:34:748 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='2/1/26 12:00:00 a. m.' to='2/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:34:793 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 02-26' from='2/1/26 12:00:00 a. m.' to='2/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:34:793 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:35:095 Cbi.Instrument.RequestBars (to Provider): instrument='MES 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:35:450 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 01-26' from='2/1/26 12:00:00 a. m.' to='2/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:35:503 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='2/1/26 12:00:00 a. m.' to='2/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:35:825 Cbi.Instrument.RequestBars (to Provider): instrument='6E 03-26' from='2/1/26 12:00:00 a. m.' to='2/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:36:160 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:37:947 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 03-26' from='2/1/26 12:00:00 a. m.' to='2/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:38:012 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:38:964 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='2/1/26 12:00:00 a. m.' to='2/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:39:473 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='2/1/26 12:00:00 a. m.' to='2/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:39:555 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='2/1/26 12:00:00 a. m.' to='2/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-03 03:44:39:689 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='2/1/26 12:00:00 a. m.' to='2/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-03 04:04:12:629 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-03 04:04:13:151 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-03 04:04:13:151 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.32ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-03 04:24:08:926 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-03 04:24:08:926 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-03 04:24:09:196 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-03 04:24:09:196 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9598223' renewSecs='2399.97991115'
+2026-01-03 04:33:05:740 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage exception='The remote party closed the WebSocket connection without completing the close handshake. ' webSocketErrorCode='ConnectionClosedPrematurely'
+2026-01-03 04:33:05:740 (Simulation) Tradovate.Adapter.OnDisconnectTrade errorMsg='The remote party closed the WebSocket connection without completing the close handshake.' tradeStatus='ConnectionLost' mdStatus='Connected'
+2026-01-03 04:33:05:740 (Simulation) Tradovate.Adapter.OnDisconnectTrade: Milliseconds from last tradeHeartbeatTime: 1,500
+2026-01-03 04:33:05:740 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=ConnectionLost priceStatus=Connected previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-03 04:33:05:740 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=ConnectionLost previousStatus=Connected message=''
+2026-01-03 04:33:05:740 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=ConnectionLost previousStatus=Connected message=''
+2026-01-03 04:33:05:771 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=ConnectionLost priceStatus=Connected previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-03 04:33:05:771 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426595' connection='Simulation' orderStatus='ConnectionLost' priceStatus='Connected'
+2026-01-03 04:33:05:771 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=ConnectionLost priceStatus=Connected previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-03 04:33:05:771 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426598' connection='Simulation' orderStatus='ConnectionLost' priceStatus='Connected'
+2026-01-03 04:33:05:771 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426594' connection='Simulation' orderStatus='ConnectionLost' priceStatus='Connected'
+2026-01-03 04:33:05:771 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426593' connection='Simulation' orderStatus='ConnectionLost' priceStatus='Connected'
+2026-01-03 04:33:05:771 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426592' connection='Simulation' orderStatus='ConnectionLost' priceStatus='Connected'
+2026-01-03 04:33:05:771 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=ConnectionLost priceStatus=Connected
+2026-01-03 04:33:05:771 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=True foundConnectingStatus=False foundConnected=False
+2026-01-03 04:33:05:771 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426587' connection='Simulation' orderStatus='ConnectionLost' priceStatus='Connected'
+2026-01-03 04:33:05:771 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426597' connection='Simulation' orderStatus='ConnectionLost' priceStatus='Connected'
+2026-01-03 04:33:05:771 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Disconnecting
+2026-01-03 04:33:05:771 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426584' connection='Simulation' orderStatus='ConnectionLost' priceStatus='Connected'
+2026-01-03 04:33:05:771 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426586' connection='Simulation' orderStatus='ConnectionLost' priceStatus='Connected'
+2026-01-03 04:33:05:771 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426591' connection='Simulation' orderStatus='ConnectionLost' priceStatus='Connected'
+2026-01-03 04:33:05:954 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2026-01-03 04:33:06:533 (Simulation) Tradovate.Adapter.StartTradeWebSocket
+2026-01-03 04:33:06:816 (Simulation) Tradovate.Adapter.StartTradeWebSocket1
+2026-01-03 04:33:06:816 (Simulation) Tradovate.Adapter.StartWebSocketTradeSendWorker
+2026-01-03 04:33:06:816 (Simulation) Tradovate.Adapter.StartWebSocketTradeReceiveWorker
+2026-01-03 04:33:06:816 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage
+2026-01-03 04:33:07:309 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc0
+2026-01-03 04:33:07:310 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2026-01-03 04:33:07:310 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=Connected errorCode=NoError nativeError=''
+2026-01-03 04:33:07:310 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connected previousStatus=ConnectionLost message=''
+2026-01-03 04:33:07:310 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connected previousStatus=ConnectionLost message=''
+2026-01-03 04:33:07:334 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=Connected errorCode=NoError nativeError=''
+2026-01-03 04:33:07:338 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426595' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 04:33:07:338 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426598' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 04:33:07:338 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426594' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 04:33:07:338 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426593' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 04:33:07:338 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426592' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 04:33:07:338 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=Connected errorCode=NoError nativeError=''
+2026-01-03 04:33:07:338 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2026-01-03 04:33:07:338 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-03 04:33:07:338 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2026-01-03 04:33:07:339 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426587' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 04:33:07:339 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426597' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 04:33:07:339 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426584' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 04:33:07:339 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426586' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 04:33:07:339 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426591' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 05:04:09:194 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-03 05:04:09:194 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-03 05:04:09:471 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-03 05:04:09:471 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9604771' renewSecs='2399.98023855'
+2026-01-03 05:04:12:634 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-03 05:04:13:287 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-03 05:04:13:288 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.32ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-03 05:44:09:464 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-03 05:44:09:464 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-03 05:44:09:741 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-03 05:44:09:741 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9611674' renewSecs='2399.9805837'
+2026-01-03 05:47:10:715 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage2 Empty 
+2026-01-03 05:47:10:715 (Simulation) Tradovate.Adapter.OnDisconnectMarketData errorMsg='' tradeStatus='Connected' mdStatus='ConnectionLost'
+2026-01-03 05:47:10:715 (Simulation) Tradovate.Adapter.OnDisconnectMarketData: Milliseconds from last marketDataHeartbeatTime 1,369
+2026-01-03 05:47:10:715 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError=''
+2026-01-03 05:47:10:715 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError=''
+2026-01-03 05:47:10:715 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426595' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 05:47:10:715 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426598' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 05:47:10:715 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426594' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 05:47:10:715 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426593' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 05:47:10:715 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426592' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 05:47:10:716 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426587' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 05:47:10:716 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426597' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 05:47:10:716 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426584' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 05:47:10:716 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426586' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 05:47:10:716 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426591' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 05:47:10:717 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError=''
+2026-01-03 05:47:10:717 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=ConnectionLost
+2026-01-03 05:47:10:717 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=True foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-03 05:47:10:717 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=ConnectionLost
+2026-01-03 05:47:11:219 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-03 05:47:11:507 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-03 05:47:11:507 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-03 05:47:11:507 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-03 05:47:11:507 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-03 05:47:11:591 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-03 05:47:11:592 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-03 05:47:11:592 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426595' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 05:47:11:592 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426598' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 05:47:11:592 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426594' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 05:47:11:592 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426593' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 05:47:11:592 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426592' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 05:47:11:593 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-03 05:47:11:593 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2026-01-03 05:47:11:593 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-03 05:47:11:593 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426587' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 05:47:11:593 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2026-01-03 05:47:11:593 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426597' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 05:47:11:593 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426584' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 05:47:11:593 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426586' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 05:47:11:593 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426591' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 06:04:12:642 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-03 06:04:13:169 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-03 06:04:13:169 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.27ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-03 06:24:09:733 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-03 06:24:09:733 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-03 06:24:10:023 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-03 06:24:10:023 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9600958' renewSecs='2399.9800479'
+2026-01-03 07:04:10:011 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-03 07:04:10:011 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-03 07:04:10:325 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-03 07:04:10:325 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9585095' renewSecs='2399.97925475'
+2026-01-03 07:04:12:655 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-03 07:04:13:144 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-03 07:04:13:148 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.01ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=4.06ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-03 07:44:10:310 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-03 07:44:10:310 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-03 07:44:10:591 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-03 07:44:10:591 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.959837' renewSecs='2399.9799185'
+2026-01-03 08:04:12:659 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-03 08:04:13:173 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-03 08:04:13:174 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.36ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-03 08:24:10:573 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-03 08:24:10:573 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-03 08:24:10:858 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-03 08:24:10:858 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.953694' renewSecs='2399.976847'
+2026-01-03 09:04:10:847 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-03 09:04:10:847 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-03 09:04:11:125 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-03 09:04:11:125 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9616063' renewSecs='2399.98080315'
+2026-01-03 09:04:12:676 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-03 09:04:13:106 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-03 09:04:13:107 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.24ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-03 09:08:47:668 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage exception='The remote party closed the WebSocket connection without completing the close handshake. ' webSocketErrorCode='ConnectionClosedPrematurely'
+2026-01-03 09:08:47:668 (Simulation) Tradovate.Adapter.OnDisconnectMarketData errorMsg='The remote party closed the WebSocket connection without completing the close handshake.' tradeStatus='Connected' mdStatus='ConnectionLost'
+2026-01-03 09:08:47:668 (Simulation) Tradovate.Adapter.OnDisconnectMarketData: Milliseconds from last marketDataHeartbeatTime 3,996
+2026-01-03 09:08:47:668 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-03 09:08:47:668 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-03 09:08:47:668 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426595' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 09:08:47:668 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426598' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 09:08:47:668 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426594' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 09:08:47:668 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426593' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 09:08:47:668 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426592' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 09:08:47:668 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426587' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 09:08:47:668 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426597' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 09:08:47:668 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426584' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 09:08:47:668 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426586' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 09:08:47:669 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426591' connection='Simulation' orderStatus='Connected' priceStatus='ConnectionLost'
+2026-01-03 09:08:47:669 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-03 09:08:47:669 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=ConnectionLost
+2026-01-03 09:08:47:669 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=True foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-03 09:08:47:669 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=ConnectionLost
+2026-01-03 09:08:48:182 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-03 09:08:48:474 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-03 09:08:48:474 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-03 09:08:48:475 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-03 09:08:48:475 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-03 09:08:48:618 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-03 09:08:48:618 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-03 09:08:48:618 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426595' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 09:08:48:618 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426598' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 09:08:48:618 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426594' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 09:08:48:618 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426593' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 09:08:48:618 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426592' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 09:08:48:618 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426587' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 09:08:48:618 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426597' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 09:08:48:618 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426584' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 09:08:48:618 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426586' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 09:08:48:618 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426591' connection='Simulation' orderStatus='Connected' priceStatus='Connected'
+2026-01-03 09:08:48:618 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-03 09:08:48:618 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2026-01-03 09:08:48:618 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-03 09:08:48:618 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2026-01-03 09:14:30:995 Finalizing addon 'NinjaTrader.NinjaScript.AddOns.NewsUpdate'
+2026-01-03 09:14:31:381 Shutting down NinjaTrader
+2026-01-03 09:14:31:381 Disconnecting 'Simulation'
+2026-01-03 09:14:31:384 (Simulation) Cbi.Connection.Disconnect
+2026-01-03 09:14:31:384 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Disconnecting priceStatus=Disconnecting previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError=''
+2026-01-03 09:14:31:385 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Disconnecting previousStatus=Connected message=''
+2026-01-03 09:14:31:385 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Disconnecting previousStatus=Connected message=''
+2026-01-03 09:14:31:385 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426595' connection='Simulation' orderStatus='Disconnecting' priceStatus='Disconnecting'
+2026-01-03 09:14:31:385 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426598' connection='Simulation' orderStatus='Disconnecting' priceStatus='Disconnecting'
+2026-01-03 09:14:31:385 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426594' connection='Simulation' orderStatus='Disconnecting' priceStatus='Disconnecting'
+2026-01-03 09:14:31:385 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426593' connection='Simulation' orderStatus='Disconnecting' priceStatus='Disconnecting'
+2026-01-03 09:14:31:385 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426592' connection='Simulation' orderStatus='Disconnecting' priceStatus='Disconnecting'
+2026-01-03 09:14:31:385 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426587' connection='Simulation' orderStatus='Disconnecting' priceStatus='Disconnecting'
+2026-01-03 09:14:31:385 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426597' connection='Simulation' orderStatus='Disconnecting' priceStatus='Disconnecting'
+2026-01-03 09:14:31:385 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426584' connection='Simulation' orderStatus='Disconnecting' priceStatus='Disconnecting'
+2026-01-03 09:14:31:385 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426586' connection='Simulation' orderStatus='Disconnecting' priceStatus='Disconnecting'
+2026-01-03 09:14:31:385 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426591' connection='Simulation' orderStatus='Disconnecting' priceStatus='Disconnecting'
+2026-01-03 09:14:31:385 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close1
+2026-01-03 09:14:31:385 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close3
+2026-01-03 09:14:31:385 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close4
+2026-01-03 09:14:31:385 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close5
+2026-01-03 09:14:31:385 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close6a
+2026-01-03 09:14:31:386 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close7
+2026-01-03 09:14:31:386 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close8
+2026-01-03 09:14:31:408 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2026-01-03 09:14:31:910 (Simulation) Tradovate.Adapter.DisposeTrade0
+2026-01-03 09:14:32:926 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Disconnected priceStatus=Disconnected previousStatus=Disconnecting previousPriceStatus=Disconnecting errorCode=NoError nativeError=''
+2026-01-03 09:14:32:926 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Disconnected previousStatus=Disconnecting message=''
+2026-01-03 09:14:32:926 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Disconnected previousStatus=Disconnecting message=''
+2026-01-03 09:14:32:926 Flushing DB thread
+2026-01-03 09:14:32:926 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426595' connection='Simulation' orderStatus='Disconnected' priceStatus='Disconnected'
+2026-01-03 09:14:32:926 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426598' connection='Simulation' orderStatus='Disconnected' priceStatus='Disconnected'
+2026-01-03 09:14:32:927 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426594' connection='Simulation' orderStatus='Disconnected' priceStatus='Disconnected'
+2026-01-03 09:14:32:927 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426593' connection='Simulation' orderStatus='Disconnected' priceStatus='Disconnected'
+2026-01-03 09:14:32:927 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426592' connection='Simulation' orderStatus='Disconnected' priceStatus='Disconnected'
+2026-01-03 09:14:32:927 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426587' connection='Simulation' orderStatus='Disconnected' priceStatus='Disconnected'
+2026-01-03 09:14:32:927 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426597' connection='Simulation' orderStatus='Disconnected' priceStatus='Disconnected'
+2026-01-03 09:14:32:927 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426584' connection='Simulation' orderStatus='Disconnected' priceStatus='Disconnected'
+2026-01-03 09:14:32:927 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426586' connection='Simulation' orderStatus='Disconnected' priceStatus='Disconnected'
+2026-01-03 09:14:32:927 (Simulation) NinjaScript.StrategyBase.OnConnectionStatusAfterDisable: strategy='/378426591' connection='Simulation' orderStatus='Disconnected' priceStatus='Disconnected'
+2026-01-03 09:14:32:927 Shutting down instrument management
+2026-01-03 09:14:32:927 Shutting down instrument threads
+2026-01-03 09:14:32:936 Shutting down recorder
+2026-01-03 09:14:32:939 Shutting down file type watcher
+2026-01-03 09:14:32:941 Shutting down ATI server
+2026-01-03 09:14:32:964 Shutting down auto trade component
+2026-01-03 09:14:32:966 Shutting down SMTP server
+2026-01-03 09:14:32:985 Shutting down adapter server
+2026-01-03 09:14:33:010 Shutting down server(s)
+2026-01-03 09:14:33:013 Shutting down mail thread
+2026-01-03 09:14:33:023 Shutting down sound thread
+2026-01-03 09:14:33:023 Shutting down timer
+2026-01-03 09:14:33:023 Shutting down alerts timer
+2026-01-03 09:14:33:023 Shutting down message timer
+2026-01-03 09:14:33:023 Shutting down db
+2026-01-03 09:14:33:023 Flushing DB thread
+2026-01-03 09:14:33:081 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2026-01-03 09:14:33:106 Shutting down bars dictionary
+2026-01-03 09:14:33:215 Shutting down user entitlement threads
+2026-01-03 09:14:33:227 Shutting down logs
+2026-01-03 09:14:33:238 Shutting down bars types
+2026-01-03 09:14:33:239 Shutting down UI threads
+2026-01-03 09:14:33:262 ************************ Session End ************************

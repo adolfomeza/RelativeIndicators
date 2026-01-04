@@ -1,0 +1,20 @@
+2025-12-22 00:06:24:946|0|4|Unhandled exception: Cuota insuficiente para procesar este comando
+2025-12-22 00:06:27:698|3|16|There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2025-12-22 00:07:43:917|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/377655901'
+2025-12-22 00:07:43:918|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/377655903'
+2025-12-22 00:07:43:918|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/377655899'
+2025-12-22 00:07:48:256|0|4|Unhandled exception: Cuota insuficiente para procesar este comando
+2025-12-22 00:07:48:268|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/377655900'
+2025-12-22 00:07:50:118|3|16|There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2025-12-22 00:07:52:530|0|4|Unhandled exception: Cuota insuficiente para procesar este comando
+2025-12-22 00:07:54:432|3|16|There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2025-12-22 00:08:12:411|0|4|Unhandled exception: Cuota insuficiente para procesar este comando
+2025-12-22 00:08:12:414|0|4|Unhandled exception: Cuota insuficiente para procesar este comando
+2025-12-22 00:08:12:415|0|4|Unhandled exception: Cuota insuficiente para procesar este comando
+2025-12-22 00:08:12:415|0|4|Unhandled exception: Cuota insuficiente para procesar este comando
+2025-12-22 00:08:12:490|0|4|Unhandled exception: Cuota insuficiente para procesar este comando
+2025-12-22 00:08:12:492|0|4|Unhandled exception: Cuota insuficiente para procesar este comando
+2025-12-22 00:08:12:492|0|4|Unhandled exception: Cuota insuficiente para procesar este comando
+2025-12-22 00:08:12:503|0|4|Unhandled exception: Cuota insuficiente para procesar este comando
+2025-12-22 00:08:12:504|0|4|Unhandled exception: Cuota insuficiente para procesar este comando
+2025-12-22 00:08:12:506|0|4|Unhandled exception: Cuota insuficiente para procesar este comando

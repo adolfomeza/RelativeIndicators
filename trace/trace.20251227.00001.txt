@@ -1,0 +1,313 @@
+******************* Session Start (Version 8.1.6.2) *******************
+2025-12-27 10:54:52:067 Cbi.Globals.MachineId: True/True 280CB754932A645C8D63C782E8605C43
+2025-12-27 10:54:52:069 NinjaTrader.Gui.LoginInternal user='joelbencomo' mode='Simulation'
+2025-12-27 10:54:52:465 Core.Instrumentation.ActivitySource: enabled=True randomPercent=29.91365 enabledSessionsPercent=100 chartMs=250 enabledTypes='ChartPerformance Application NinjaScript Adapter Login '
+2025-12-27 10:54:52:495 Core.Instrumentation.LogActivity: activityType=Login errorCode=NoError errorMessage=''
+2025-12-27 10:54:53:161 (Simulation) NinjaTrader.Core.Authentication.GetAccessToken6
+2025-12-27 10:54:53:171 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.849659' renewSecs='2399.9248295'
+2025-12-27 10:54:53:800 Cbi.UserEntitlement.VerifyAsync.0 apiUrl='https://live.tradovateapi.com'
+2025-12-27 10:54:54:198 Cbi.UserEntitlement.VerifyAsync.98: Evaluation expiration=2026-12-31, Evaluation expiration=2026-12-31
+2025-12-27 10:54:54:565 PrimaryMonitorWPFDPIScale=1.00
+2025-12-27 10:54:55:119 Cbi.UserEntitlement.VerifyAsync.99: subscription=Free licensedProviders='Playback Simulator NinjaTrader NinjaTrader Continuum NinjaTrader FXCM IQFeed E-Signal External FOREX.com Interactive Brokers Barchart.com Kinetick FXCM Coinbase cTrader Schwab Rithmic for NinjaTrader Brokerage Custom0 Custom2 Custom3 Custom4 Custom6 Custom7 Custom8 Custom9 Custom10 Provider13 Custom14 Provider26 Custom15 Custom16 Custom17 Custom18 Custom19 Custom20 Custom21 Custom22 Custom23 Custom24 Custom25 Custom26 Custom27 Custom28 Custom29 Custom30 Custom31 Custom32 Custom33 Custom34 Custom35 Custom36 Custom37 Custom38 Custom39 Custom40'
+2025-12-27 10:54:55:367 InstallDir='C:\Program Files\NinjaTrader 8\'
+2025-12-27 10:54:55:367 UserDataDir='C:\Users\prueba\Documents\NinjaTrader 8\'
+2025-12-27 10:54:55:367 MachineID='280CB754932A645C8D63C782E8605C43'
+2025-12-27 10:54:55:367 OS='Microsoft Windows NT 10.0.26200.0'/'Win32NT'
+2025-12-27 10:54:55:367 OSLanguage='en-US'
+2025-12-27 10:54:55:367 OSEnvironment='64bit'
+2025-12-27 10:54:55:367 Processors=12
+2025-12-27 10:54:55:367 ThreadPool: minWorkerThreads=12 maxWorkerThreads=32767 minCompletionPortThreads=12 maxCompletionPortThreads=1000
+2025-12-27 10:54:56:410 ProcessorSpeed=2.6 GHz
+2025-12-27 10:54:56:410 PhysicalMemory=24576 MB
+2025-12-27 10:54:57:977 DisplayAdapters=2/NVIDIA GeForce GTX 1650|Intel(R) UHD Graphics
+2025-12-27 10:54:57:977 Monitors=2/1920x1080|1920x1080
+2025-12-27 10:54:57:977 .NET/CLR Version='4.8'/64bit
+2025-12-27 10:54:57:978 SQLiteVersion='1.0.116.0'
+2025-12-27 10:54:57:978 ApplicationTimezone=EST +1 hour(s)
+2025-12-27 10:54:57:978 ApplicationTimezone=UTC -4 hour(s)
+2025-12-27 10:54:57:978 LocalTimezone=EST +1 hour(s)
+2025-12-27 10:54:57:978 LocalTimezone=UTC -4 hour(s)
+2025-12-27 10:54:58:621 DirectXRenderingHW
+2025-12-27 10:54:58:622 Copying custom assemblies...
+2025-12-27 10:54:58:635 Loading custom assemblies...
+2025-12-27 10:54:58:635 Loading C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\NinjaTrader.Custom.dll...
+2025-12-27 10:54:58:829 Loading C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\NinjaTrader.Vendor.dll...
+2025-12-27 10:54:58:843 Deleting temporary files...
+2025-12-27 10:54:59:215 Copying db and restoring templates...
+2025-12-27 10:54:59:222 Loading third party assemblies...
+2025-12-27 10:54:59:242 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\ASCENDO_NewsEvents.dll...
+2025-12-27 10:55:00:112 Cbi.VendorLicense.Verify.1: trying 'https://license.ninjatrader.com/vendorlicensenew/ASCENDO/IndicatorNewsEvents/2/R-280CB754932A645C8D63C782E8605C43.xml' ...
+2025-12-27 10:55:00:302 Cbi.VendorLicense.Verify.1: good
+2025-12-27 10:55:00:319 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\WindowsInput.dll...
+2025-12-27 10:55:00:319 Initializing database...
+2025-12-27 10:55:00:319 Loading master instruments...
+2025-12-27 10:55:01:764 (Db) Cbi.DB.get_Current.CreateConnection.Start
+2025-12-27 10:55:01:766 (Db) Cbi.DB: connectionString='Data Source="C:\Users\prueba\Documents\NinjaTrader 8\db\NinjaTrader.sqlite";Version=3;Synchronous=Full;Journal Mode=Off;Pooling=True;Max Pool Size=100;foreign keys=true;'
+2025-12-27 10:55:02:165 (Db) Cbi.DB.get_Current.CreateConnection.End
+2025-12-27 10:55:02:224 Loading instruments...
+2025-12-27 10:55:02:424 Loading accounts...
+2025-12-27 10:55:02:550 Loading users...
+2025-12-27 10:55:02:566 Downloading server info...
+2025-12-27 10:55:02:566 Starting instrument management...
+2025-12-27 10:55:02:585 Starting timer...
+2025-12-27 10:55:02:585 Creating file type watcher...
+2025-12-27 10:55:02:585 Setting ATI...
+2025-12-27 10:55:02:601 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2025-12-27 10:55:02:606 Connecting ATI server...
+2025-12-27 10:55:02:606 Server.AtiServer.Connect0
+2025-12-27 10:55:02:608 Starting adapter server...
+2025-12-27 10:55:02:609 Server.AtiServer.Connect1: Port='36973'
+2025-12-27 10:55:02:610 Server.AtiServer.Connect2
+2025-12-27 10:55:02:622 Starting bars dictionary...
+2025-12-27 10:55:02:622 Starting recorder...
+2025-12-27 10:55:02:627 Starting server(s)...
+2025-12-27 10:55:02:651 Core.Globals.ApplicationStart.Commission: minVersion=1 maxVersion=3138
+2025-12-27 10:55:02:651 Core.Globals.ApplicationStart.InstrumentList: minVersion=1 maxVersion=475
+2025-12-27 10:55:02:651 Core.Globals.ApplicationStart.MasterInstrument: minVersion=1 maxVersion=9897
+2025-12-27 10:55:02:651 Core.Globals.ApplicationStart.Risk: minVersion=1 maxVersion=14121
+2025-12-27 10:55:02:651 Core.Globals.ApplicationStart.TradingHours: minVersion=1 maxVersion=5111
+2025-12-27 10:55:02:755 ChartHotKeys: Alerts='' DisableAllAlerts='' EnableAllAlerts='' DataSeries='Ctrl+F' Indicators='Ctrl+I' Strategies='Ctrl+S' Properties='Ctrl+T' CrosshairPointer='Ctrl+R' CrosshairLocal='Ctrl+Q' CrosshairGlobal='Ctrl+G' CrosshairGlobal2='Ctrl+N' CrosshairLock='Ctrl+L' AutoScaleAndReturn='' CyclePlotExecutions='Ctrl+E' ReloadHistoricalData='Ctrl+Shift+R' ReloadNinjaScript='F5' SaveChartImage='Alt+S' ShowDataBox='Ctrl+D' ShowChartTrader='' ShowChartTraderHidden='' ShowIndicators='' ShowScrollBar='' SnapModeBar='' SnapModeBarTick='' SnapModeBarObject='' SnapModeDisabled='' SnapModeTick='' StayInDrawMode='' ZoomIn='Ctrl+Alt+Z' ZoomOut='Ctrl+Alt+O' BarSpacingPlus='Ctrl+Down' BarSpacingMinus='Ctrl+Up' BarWidthPlus='Alt+Down' BarWidthMinus='Alt+Up' Arc='Ctrl+F7' AndrewsPitchfork='Ctrl+F8' ArrowDown='Alt+F3' ArrowLine='Ctrl+F2' ArrowUp='Alt+F2' Diamond='Alt+F5' Dot='Alt+F6' Ellipse='Ctrl+F11' ExtendedLine='F4' FibonacciCircle='F11' FibonacciExtension='F9' FibonacciRetracement='F8' FibonacciTimeExtension='F10' GannFan='Ctrl+F9' HorizontalLine='F6' Line='F2' Path='Ctrl+4' Polygon='Alt+F10' VolumeProfile='Ctrl+3' VWAP='Ctrl+5' Ray='F3' Rectangle='Ctrl+F12' RegressionChannel='Ctrl+F10' HideDrawingObjects='' RemoveDrawingObjects='' RegionHighlightX='Shift+F1' RegionHighlightY='Shift+F2' RiskReward='Ctrl+F4' Ruler='Ctrl+F3' Square='Alt+F7' Text='F12' TimeCycles='Alt+F11' TrendChannel='Ctrl+2' Triangle='Ctrl+F6' TriangleDown='Alt+F9' TriangleUp='Alt+F8' VerticalLine='F7'
+2025-12-27 10:55:02:757 GlobalHotKeys: CloseWorkspace='' NextWorkspace='Shift+F3' PreviousWorkspace='' SaveWorkspace='' SaveAllWorkspaces='' NewAccountData='' NewTradePerformance='' NewAlertsLog='' NewBasicEntry='' NewChart='' NewFxBoard='' NewFxPro='' NewHotListAnalyzer='' NewLevel2='' NewMarketAnalyzer='' NewMarketWatch='' NewNews='' NewNinjaScriptEditor='' NewNinjaScriptOutput='' NewOrderTicket='' NewStrategyAnalyzer='' NewDynamicDom='' NewStaticDom='' NewTimeAndSales='' CancelAllOrders='' FlattenEverything='' OpenInstrumentManager='' OpenInstrumentList='' OpenDatabase='' OpenHotKeyManager='' OpenHistoricalData='' OpenCommission='' OpenRisk='' OpenTradingHoursManager='' OpenRemoveNinjaScript='' CloseOtherTabs='' CloseTab='' DuplicateInNewTab='' DuplicateInNewWindow='' Export='' Find='Ctrl+F' MoveToNewWindow='' Print='Ctrl+P' Replace='Ctrl+H' Share='Ctrl+Shift+S' LoadTemplate='' SaveTemplate='' SaveTemplateAsDefault=''
+2025-12-27 10:55:02:757 MarketAnalyzerHotKeys: AddBlankRow='' AddLabelRow='' Columns='' Alerts='' EnableAllAlerts='' DisableAllAlerts='' AutoSort='' RowFilter='' ReloadHistorical='Ctrl+Shift+R' ReloadNinjaScript='F5'
+2025-12-27 10:55:02:758 NinjaScriptEditorHotKeys: InsertCodeSnippet='F2' FindNext='F3' Compile='F5' GoToLine='Ctrl+G' CommentSelection='Ctrl+K' InlineSyntaxChecking='Ctrl+Alt+S' CollapseToDefinitions='' ExpandAllOutlining='' StartOutlining='' StopOutlining='' HideSelection='' StopHidingSelection='' ToggleAllOutlining='' ToggleOutlining='' Save='Ctrl+S' Undo='Ctrl+Z' Redo='Ctrl+Y'
+2025-12-27 10:55:02:766 OrderEntryHotKeys: BuyAsk='' BuyBid='' BuyMarket='' SellAsk='' SellBid='' SellMarket='' BreakevenAtmStrategy='' BreakevenPosition='' CancelLastOrder='' CloseAtmStrategy='' ClosePosition='' DecreaseLastOrderPrice='' IncreaseLastOrderPrice='' ModifyLastOrder2Fill='' Reverse='' OcoOrder='' SimulatedOrder=''
+2025-12-27 10:55:02:766 SuperDomHotKeys: Center='' Columns='' Indicators='' ReloadAllHistoricalData='Ctrl+Shift+R' ReloadNinjaScript='F5'
+2025-12-27 10:55:02:766 OrderEntryHotKeys=disabled
+2025-12-27 10:55:02:767 AutoClose=disabled
+2025-12-27 10:55:03:228 Core.Instrumentation.LogActivity: activityType=Application errorCode=NoError errorMessage=''
+2025-12-27 10:55:03:691 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=9 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=263 TradingHours=0
+2025-12-27 10:55:05:208 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.03ms InstrumentLists=0.42ms MasterInstruments=0.12ms Messages=0.63ms Risks=0.15ms RolloverCollection=1515.26ms TradingHours=0.12ms
+2025-12-27 10:55:05:209 Starting server message polling timer with interval 3600 seconds...
+2025-12-27 10:55:08:124 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-27 10:55:08:382 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-27 10:55:08:518 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-27 10:55:08:663 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-27 10:55:08:798 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-27 10:55:12:381 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-27 10:55:12:618 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-27 10:55:14:512 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-27 10:55:14:732 Core.Instrumentation.LogActivity: activityType=NinjaScript errorCode=NoError errorMessage=''
+2025-12-27 10:55:15:102 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-27 10:55:15:748 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-27 10:55:16:336 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-27 10:55:17:593 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2025-12-27 10:55:20:674 6 Chart Chart1Tab1 1 Ser 2 Ind 0 DrawObj Chart2Tab1 1 Ser 2 Ind 0 DrawObj Chart3Tab1 1 Ser 2 Ind 0 DrawObj Chart4Tab1 1 Ser 2 Ind 0 DrawObj Chart5Tab1 1 Ser 2 Ind 0 DrawObj Chart6Tab1 1 Ser 2 Ind 0 DrawObj 
+2025-12-27 10:55:43:492 (Playback) Gui.ControlCenter.OnConnect
+2025-12-27 10:55:57:188 (Playback) Cbi.Connection.Connect0: status=Disconnected assembly=8.1.6.2 date=2025-12-27 runAsProcess=False
+2025-12-27 10:55:57:200 (Playback) Cbi.Connection.ConnectionStatusCallback: status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2025-12-27 10:55:57:204 (Playback) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Playback status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2025-12-27 10:55:57:212 (Playback) Cbi.Connection.Connect1
+2025-12-27 10:55:57:230 (Playback) Cbi.Connection.Connect2
+2025-12-27 10:55:57:230 (Playback) Cbi.Connection.Connect3
+2025-12-27 10:55:57:239 (Playback) Cbi.Connection.CreateAccount: account='Playback101' displayName='Playback101' fcm='' denomination=UsDollar forexLotSize=10000
+2025-12-27 10:55:57:246 (Playback) Cbi.Account.OnConnectionStatus: account='Playback101' fcm='' status=Connecting previousStatus=Disconnected message=''
+2025-12-27 10:55:57:249 (Playback) Cbi.Account.OnConnectionStatus.PositionExecutions: account='Playback101'
+2025-12-27 10:55:57:254 (Playback) Cbi.Connection.Connect4
+2025-12-27 10:55:57:255 (Playback) Cbi.Connection.Connect5
+2025-12-27 10:55:57:256 (Playback) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Playback status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2025-12-27 10:55:57:256 (Playback) Adapter.PlaybackAdapter.Connect
+2025-12-27 10:55:57:257 (Playback) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Playback status=Connecting priceStatus=Connecting
+2025-12-27 10:55:57:330 (Playback) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2025-12-27 10:55:57:332 (Playback) Cbi.Account.OnConnectionStatus: account='Playback101' fcm='' status=Connected previousStatus=Connecting message=''
+2025-12-27 10:55:57:333 (Playback) Core.Connection.Statistics: connectAttempts=1/78.2ms
+2025-12-27 10:55:57:333 (Playback) Cbi.Connection.ConnectionStatusCallback: autoClosePositionTime='12/17/2025 00:00:00' autoClosePosition=False
+2025-12-27 10:55:57:335 Server.HdsClient.Connect: type=HDS server='hds-us-nt-020.ninjatrader.com' port=31655 system='' useSsl=True
+2025-12-27 10:55:57:650 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=True foundConnected=False
+2025-12-27 10:55:57:650 (Playback) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Playback status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2025-12-27 10:55:57:650 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connecting
+2025-12-27 10:55:57:663 (Playback) Cbi.Connection.Connect9 ok
+2025-12-27 10:55:57:694 (Playback) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Playback status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2025-12-27 10:55:57:694 (Playback) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Playback status=Connected priceStatus=Connected
+2025-12-27 10:55:57:740 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2025-12-27 10:55:57:740 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2025-12-27 10:55:57:922 (Playback) Cbi.Account.ResetSimulationAccount.Start: account='Playback101'
+2025-12-27 10:55:57:955 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=BuyingPower currency=UsDollar value=*****
+2025-12-27 10:55:57:958 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=CashValue currency=UsDollar value=*****
+2025-12-27 10:55:57:958 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Commission currency=UsDollar value=*****
+2025-12-27 10:55:57:958 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Fee currency=UsDollar value=*****
+2025-12-27 10:55:57:958 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=GrossRealizedProfitLoss currency=UsDollar value=*****
+2025-12-27 10:55:57:958 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2025-12-27 10:55:57:958 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=InitialMargin currency=UsDollar value=*****
+2025-12-27 10:55:57:958 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=IntradayMargin currency=UsDollar value=*****
+2025-12-27 10:55:57:958 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongOptionValue currency=UsDollar value=*****
+2025-12-27 10:55:57:958 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LookAheadMaintenanceMargin currency=UsDollar value=*****
+2025-12-27 10:55:57:958 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongStockValue currency=UsDollar value=*****
+2025-12-27 10:55:57:958 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=MaintenanceMargin currency=UsDollar value=*****
+2025-12-27 10:55:57:958 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=NetLiquidationByCurrency currency=UsDollar value=*****
+2025-12-27 10:55:57:958 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=PositionMargin currency=UsDollar value=*****
+2025-12-27 10:55:57:958 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2025-12-27 10:55:57:958 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortOptionValue currency=UsDollar value=*****
+2025-12-27 10:55:57:958 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortStockValue currency=UsDollar value=*****
+2025-12-27 10:55:57:958 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodCashValue currency=UsDollar value=*****
+2025-12-27 10:55:57:958 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodLiquidatingValue currency=UsDollar value=*****
+2025-12-27 10:55:57:958 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=TotalCashBalance currency=UsDollar value=*****
+2025-12-27 10:55:57:958 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2025-12-27 10:55:57:960 (Playback) Cbi.Account.ResetSimulationAccount.End: account='Playback101'
+2025-12-27 10:56:00:203 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-27 10:56:00:205 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-27 10:56:00:205 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-27 10:56:11:735 (Playback) Cbi.Account.ResetSimulationAccount.Start: account='Playback101'
+2025-12-27 10:56:11:748 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=BuyingPower currency=UsDollar value=*****
+2025-12-27 10:56:11:748 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=CashValue currency=UsDollar value=*****
+2025-12-27 10:56:11:748 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Commission currency=UsDollar value=*****
+2025-12-27 10:56:11:748 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Fee currency=UsDollar value=*****
+2025-12-27 10:56:11:748 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=GrossRealizedProfitLoss currency=UsDollar value=*****
+2025-12-27 10:56:11:748 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2025-12-27 10:56:11:748 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=InitialMargin currency=UsDollar value=*****
+2025-12-27 10:56:11:748 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=IntradayMargin currency=UsDollar value=*****
+2025-12-27 10:56:11:748 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongOptionValue currency=UsDollar value=*****
+2025-12-27 10:56:11:748 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LookAheadMaintenanceMargin currency=UsDollar value=*****
+2025-12-27 10:56:11:748 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongStockValue currency=UsDollar value=*****
+2025-12-27 10:56:11:748 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=MaintenanceMargin currency=UsDollar value=*****
+2025-12-27 10:56:11:748 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=NetLiquidationByCurrency currency=UsDollar value=*****
+2025-12-27 10:56:11:748 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=PositionMargin currency=UsDollar value=*****
+2025-12-27 10:56:11:748 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2025-12-27 10:56:11:748 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortOptionValue currency=UsDollar value=*****
+2025-12-27 10:56:11:748 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortStockValue currency=UsDollar value=*****
+2025-12-27 10:56:11:748 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodCashValue currency=UsDollar value=*****
+2025-12-27 10:56:11:748 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodLiquidatingValue currency=UsDollar value=*****
+2025-12-27 10:56:11:748 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=TotalCashBalance currency=UsDollar value=*****
+2025-12-27 10:56:11:748 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2025-12-27 10:56:11:748 (Playback) Cbi.Account.ResetSimulationAccount.End: account='Playback101'
+2025-12-27 10:56:11:841 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-27 10:56:11:841 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-27 10:56:11:903 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-27 10:56:13:965 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='14/12/25 12:00:00 a. m.' to='14/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-27 10:56:14:091 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='14/12/25 12:00:00 a. m.' to='14/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-27 10:56:14:447 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='14/12/25 12:00:00 a. m.' to='14/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-27 10:56:14:447 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='14/12/25 12:00:00 a. m.' to='14/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-27 10:56:33:633 (Playback) Cbi.Account.ResetSimulationAccount.Start: account='Playback101'
+2025-12-27 10:56:33:638 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=BuyingPower currency=UsDollar value=*****
+2025-12-27 10:56:33:638 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=CashValue currency=UsDollar value=*****
+2025-12-27 10:56:33:638 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Commission currency=UsDollar value=*****
+2025-12-27 10:56:33:638 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Fee currency=UsDollar value=*****
+2025-12-27 10:56:33:638 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=GrossRealizedProfitLoss currency=UsDollar value=*****
+2025-12-27 10:56:33:638 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2025-12-27 10:56:33:638 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=InitialMargin currency=UsDollar value=*****
+2025-12-27 10:56:33:638 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=IntradayMargin currency=UsDollar value=*****
+2025-12-27 10:56:33:638 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongOptionValue currency=UsDollar value=*****
+2025-12-27 10:56:33:638 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LookAheadMaintenanceMargin currency=UsDollar value=*****
+2025-12-27 10:56:33:638 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongStockValue currency=UsDollar value=*****
+2025-12-27 10:56:33:638 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=MaintenanceMargin currency=UsDollar value=*****
+2025-12-27 10:56:33:638 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=NetLiquidationByCurrency currency=UsDollar value=*****
+2025-12-27 10:56:33:638 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=PositionMargin currency=UsDollar value=*****
+2025-12-27 10:56:33:638 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2025-12-27 10:56:33:638 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortOptionValue currency=UsDollar value=*****
+2025-12-27 10:56:33:638 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortStockValue currency=UsDollar value=*****
+2025-12-27 10:56:33:638 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodCashValue currency=UsDollar value=*****
+2025-12-27 10:56:33:638 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodLiquidatingValue currency=UsDollar value=*****
+2025-12-27 10:56:33:638 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=TotalCashBalance currency=UsDollar value=*****
+2025-12-27 10:56:33:638 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2025-12-27 10:56:33:638 (Playback) Cbi.Account.ResetSimulationAccount.End: account='Playback101'
+2025-12-27 10:56:33:737 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-27 10:56:33:747 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-27 10:56:33:762 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-27 10:57:10:027 ---- DEBUG ASSERTION FAILED ----
+---- Assert Short Message ----
+Strategy.Performance.Add
+---- Assert Long Message ----
+
+   at NinjaTrader.Cbi.Log.Assert(Boolean condition, String message, String detailedMessage, Boolean showAssertDialog)
+   at NinjaTrader.Cbi.TradesPerformance.Add(Trade trade)
+   at NinjaTrader.Cbi.TradeCollection.Add(Trade trade)
+   at NinjaTrader.Cbi.TradeCollection.Add(Trade trade)
+   at NinjaTrader.Cbi.SystemPerformance.Add(Trade trade)
+   at NinjaTrader.Cbi.Position.HandleExitExecution(Execution exitExecution, SystemPerformance performance)
+   at NinjaTrader.Cbi.Position.AddExecution(Execution execution, SystemPerformance performance)
+   at NinjaTrader.NinjaScript.StrategyBase.AddExecution(Position position, Execution execution, Order order)
+   at NinjaTrader.NinjaScript.StrategyBase.FillOrder(Order order, Double fillPrice, Double slippage)
+   at NinjaTrader.NinjaScript.DefaultFillType.OnBar()
+   at NinjaTrader.NinjaScript.StrategyBase.ProcessBacktestOrders()
+   at NinjaTrader.NinjaScript.StrategyBase.OnOnBarUpdate(Boolean[] toProcess)
+   at NinjaTrader.NinjaScript.NinjaScriptBase.Update(Int32 idx, Int32 bip)
+   at NinjaTrader.NinjaScript.NinjaScriptBase.TickReplayOrUpdate()
+   at NinjaTrader.NinjaScript.NinjaScriptBase.SetState(State state)
+   at NinjaTrader.Gui.NinjaScript.StrategyRenderBase.SetState(State state)
+   at NinjaTrader.Gui.NinjaScript.StrategiesGrid.<>c__DisplayClass110_1.<StrategyEnable>b__2(Object _)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+
+2025-12-27 11:00:31:709 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 12-25' from='14/11/25 12:00:00 a. m.' to='14/12/25 12:00:00 a. m.' period='1 Minute'
+2025-12-27 11:00:31:709 ---- DEBUG ASSERTION FAILED ----
+---- Assert Short Message ----
+Strategy.Performance.Add
+---- Assert Long Message ----
+
+   at NinjaTrader.Cbi.Log.Assert(Boolean condition, String message, String detailedMessage, Boolean showAssertDialog)
+   at NinjaTrader.Cbi.TradesPerformance.Add(Trade trade)
+   at NinjaTrader.Cbi.TradeCollection.Add(Trade trade)
+   at NinjaTrader.Cbi.SystemPerformance.Add(Trade trade)
+   at NinjaTrader.Cbi.Position.HandleExitExecution(Execution exitExecution, SystemPerformance performance)
+   at NinjaTrader.Cbi.Position.AddExecution(Execution execution, SystemPerformance performance)
+   at NinjaTrader.NinjaScript.StrategyBase.AddExecution(Position position, Execution execution, Order order)
+   at NinjaTrader.NinjaScript.StrategyBase.FillOrder(Order order, Double fillPrice, Double slippage)
+   at NinjaTrader.NinjaScript.DefaultFillType.OnBar()
+   at NinjaTrader.NinjaScript.StrategyBase.ProcessBacktestOrders()
+   at NinjaTrader.NinjaScript.StrategyBase.OnOnBarUpdate(Boolean[] toProcess)
+   at NinjaTrader.NinjaScript.NinjaScriptBase.Update(Int32 idx, Int32 bip)
+   at NinjaTrader.NinjaScript.NinjaScriptBase.TickReplayOrUpdate()
+   at NinjaTrader.NinjaScript.NinjaScriptBase.SetState(State state)
+   at NinjaTrader.Gui.NinjaScript.StrategyRenderBase.SetState(State state)
+   at NinjaTrader.Gui.NinjaScript.StrategiesGrid.<>c__DisplayClass110_1.<StrategyEnable>b__2(Object _)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+
+2025-12-27 11:00:34:082 ERROR: Trace.Assert was invoked with message 'Strategy.Performance.Add'. Detailed: '(null)'
+2025-12-27 11:00:34:082 ---- DEBUG ASSERTION FAILED ----
+---- Assert Short Message ----
+Strategy.Performance.Add
+---- Assert Long Message ----
+
+   at NinjaTrader.Cbi.Log.Assert(Boolean condition, String message, String detailedMessage, Boolean showAssertDialog)
+   at NinjaTrader.Cbi.TradesPerformance.Add(Trade trade)
+   at NinjaTrader.Cbi.TradeCollection.Add(Trade trade)
+   at NinjaTrader.Cbi.TradeCollection.Add(Trade trade)
+   at NinjaTrader.Cbi.SystemPerformance.Add(Trade trade)
+   at NinjaTrader.Cbi.Position.HandleExitExecution(Execution exitExecution, SystemPerformance performance)
+   at NinjaTrader.Cbi.Position.AddExecution(Execution execution, SystemPerformance performance)
+   at NinjaTrader.NinjaScript.StrategyBase.AddExecution(Position position, Execution execution, Order order)
+   at NinjaTrader.NinjaScript.StrategyBase.FillOrder(Order order, Double fillPrice, Double slippage)
+   at NinjaTrader.NinjaScript.DefaultFillType.OnBar()
+   at NinjaTrader.NinjaScript.StrategyBase.ProcessBacktestOrders()
+   at NinjaTrader.NinjaScript.StrategyBase.OnOnBarUpdate(Boolean[] toProcess)
+   at NinjaTrader.NinjaScript.NinjaScriptBase.Update(Int32 idx, Int32 bip)
+   at NinjaTrader.NinjaScript.NinjaScriptBase.TickReplayOrUpdate()
+   at NinjaTrader.NinjaScript.NinjaScriptBase.SetState(State state)
+   at NinjaTrader.Gui.NinjaScript.StrategyRenderBase.SetState(State state)
+   at NinjaTrader.Gui.NinjaScript.StrategiesGrid.<>c__DisplayClass110_1.<StrategyEnable>b__2(Object _)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+
+2025-12-27 11:00:35:524 ERROR: Trace.Assert was invoked with message 'Strategy.Performance.Add'. Detailed: '(null)'
+2025-12-27 11:00:35:524 ---- DEBUG ASSERTION FAILED ----
+---- Assert Short Message ----
+Strategy.Performance.Add
+---- Assert Long Message ----
+
+   at NinjaTrader.Cbi.Log.Assert(Boolean condition, String message, String detailedMessage, Boolean showAssertDialog)
+   at NinjaTrader.Cbi.TradesPerformance.Add(Trade trade)
+   at NinjaTrader.Cbi.TradeCollection.Add(Trade trade)
+   at NinjaTrader.Cbi.SystemPerformance.Add(Trade trade)
+   at NinjaTrader.Cbi.Position.HandleExitExecution(Execution exitExecution, SystemPerformance performance)
+   at NinjaTrader.Cbi.Position.AddExecution(Execution execution, SystemPerformance performance)
+   at NinjaTrader.NinjaScript.StrategyBase.AddExecution(Position position, Execution execution, Order order)
+   at NinjaTrader.NinjaScript.StrategyBase.FillOrder(Order order, Double fillPrice, Double slippage)
+   at NinjaTrader.NinjaScript.DefaultFillType.OnBar()
+   at NinjaTrader.NinjaScript.StrategyBase.ProcessBacktestOrders()
+   at NinjaTrader.NinjaScript.StrategyBase.OnOnBarUpdate(Boolean[] toProcess)
+   at NinjaTrader.NinjaScript.NinjaScriptBase.Update(Int32 idx, Int32 bip)
+   at NinjaTrader.NinjaScript.NinjaScriptBase.TickReplayOrUpdate()
+   at NinjaTrader.NinjaScript.NinjaScriptBase.SetState(State state)
+   at NinjaTrader.Gui.NinjaScript.StrategyRenderBase.SetState(State state)
+   at NinjaTrader.Gui.NinjaScript.StrategiesGrid.<>c__DisplayClass110_1.<StrategyEnable>b__2(Object _)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state, Boolean preserveSyncCtx)
+   at System.Threading.QueueUserWorkItemCallback.System.Threading.IThreadPoolWorkItem.ExecuteWorkItem()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+

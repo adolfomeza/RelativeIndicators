@@ -1,0 +1,24 @@
+2026-01-04 15:45:13:708|2|4|Session Break (Version 8.1.6.2)
+2026-01-04 15:45:27:454|1|4|Global simulation mode disabled
+2026-01-04 15:45:28:696|1|4|Vendor assembly 'AddonSuiteManager.Addon.Standalone' version='1.0.0.1' loaded.
+2026-01-04 15:45:29:681|1|4|Vendor assembly 'ASCENDO_NewsEvents' version='3.0.0.0' loaded.
+2026-01-04 15:45:30:342|1|4|Vendor assembly 'ReplayDataPlusManager.Addon.Standalone' version='1.0.0.1' loaded.
+2026-01-04 15:45:30:342|1|4|Vendor assembly 'WindowsInput' version='1.0.4.0' loaded.
+2026-01-04 15:45:31:323|1|2|Using IS (is-us-nt-005.ninjatrader.com/31658)
+2026-01-04 15:45:31:328|1|4|Automated trading disabled
+2026-01-04 15:45:31:549|1|32|Order entry hot keys disabled
+2026-01-04 15:45:31:550|1|4|Auto close enabled=False
+2026-01-04 15:45:36:957|1|4|Restoring workspace 'Relative Trading Software'...
+2026-01-04 15:47:26:767|1|2|Playback: Primary connection=Connecting, Price feed=Connecting
+2026-01-04 15:47:27:015|1|2|Playback: Primary connection=Connected, Price feed=Connected
+2026-01-04 15:47:27:025|1|2|Time to auto close position='12:00:00 a. m.', Enabled=False
+2026-01-04 15:47:27:026|1|2|Using HDS (hds-us-nt-019.ninjatrader.com/31655)
+2026-01-04 15:47:28:494|1|2|Simulation account 'Playback101' reset
+2026-01-04 15:47:51:769|1|2|Simulation account 'Playback101' reset
+2026-01-04 15:48:16:007|1|2|Simulation account 'Playback101' reset
+2026-01-04 15:54:03:364|1|16|Backtesting with Tick Replay was not designed to provide higher accuracy concerning order fills and execution in historical. For higher granularity you can utilize Order Fill Resolution 'high' outside of Tick Replay.
+2026-01-04 16:08:46:652|1|4|Workspace Relative Trading Software not saved
+2026-01-04 16:08:46:746|3|16|Chart rendering failed. There is likely a problem with a chart object's OnRender method. D2D error = 'HRESULT: [0x88990001], Module: [SharpDX.Direct2D1], ApiCode: [D2DERR_WRONG_STATE/WrongState], Message: El objeto no se encontraba en el estado correcto para procesar el método.
+'
+2026-01-04 16:08:47:194|1|2|Playback: Primary connection=Disconnecting, Price feed=Disconnecting
+2026-01-04 16:08:47:205|1|2|Playback: Primary connection=Disconnected, Price feed=Disconnected

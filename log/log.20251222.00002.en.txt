@@ -1,0 +1,71 @@
+2025-12-22 12:49:43:358|2|4|Session Break (Version 8.1.6.2)
+2025-12-22 12:50:02:530|1|4|Global simulation mode disabled
+2025-12-22 12:50:05:238|1|4|Vendor assembly 'ASCENDO_NewsEvents' version='3.0.0.0' loaded.
+2025-12-22 12:50:05:238|1|4|Vendor assembly 'WindowsInput' version='1.0.4.0' loaded.
+2025-12-22 12:50:08:466|1|2|Using IS (is-us-nt-006.ninjatrader.com/31658)
+2025-12-22 12:50:08:472|1|4|Automated trading disabled
+2025-12-22 12:50:08:666|1|32|Order entry hot keys disabled
+2025-12-22 12:50:08:668|1|4|Auto close enabled=False
+2025-12-22 12:50:14:288|1|4|Restoring workspace 'Relative Trading Software'...
+2025-12-22 12:50:26:160|1|16|Backtesting with Tick Replay was not designed to provide higher accuracy concerning order fills and execution in historical. For higher granularity you can utilize Order Fill Resolution 'high' outside of Tick Replay.
+2025-12-22 12:50:44:790|1|2|Simulation: Primary connection=Connecting, Price feed=Connecting
+2025-12-22 12:50:46:743|1|2|Live: Primary connection=Connecting, Price feed=Connecting
+2025-12-22 12:50:47:902|1|2|Live: Primary connection=Connected, Price feed=Connected
+2025-12-22 12:50:47:944|1|2|Time to auto close position='12:00:00 a. m.', Enabled=False
+2025-12-22 12:50:47:953|1|2|Using HDS (hds-us-nt-007.ninjatrader.com/31655)
+2025-12-22 12:50:51:203|1|2|Simulation: Primary connection=Connected, Price feed=Connected
+2025-12-22 12:50:51:414|1|2|Time to auto close position='12:00:00 a. m.', Enabled=False
+2025-12-22 12:50:51:414|1|2|Using HDS (hds-us-nt-015.ninjatrader.com/31655)
+2025-12-22 12:50:59:609|1|4|Position grid close position
+2025-12-22 12:50:59:691|1|32|Order='d93e2e37a9574f26a158feaa0831bac3/Sim101' Name='Close' New state='Submitted' Instrument='MYM 03-26' Action='Buy to cover' Limit price=0 Stop price=0 Quantity=1 Type='Market' Time in force=DAY Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-22 12:50:59:810|1|32|Order='d93e2e37a9574f26a158feaa0831bac3/Sim101' Name='Close' New state='Accepted' Instrument='MYM 03-26' Action='Buy to cover' Limit price=0 Stop price=0 Quantity=1 Type='Market' Time in force=DAY Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-22 12:50:59:811|1|32|Order='d93e2e37a9574f26a158feaa0831bac3/Sim101' Name='Close' New state='Working' Instrument='MYM 03-26' Action='Buy to cover' Limit price=0 Stop price=0 Quantity=1 Type='Market' Time in force=DAY Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-22 12:50:59:827|1|32|Order='d93e2e37a9574f26a158feaa0831bac3/Sim101' Name='Close' New state='Filled' Instrument='MYM 03-26' Action='Buy to cover' Limit price=0 Stop price=0 Quantity=1 Type='Market' Time in force=DAY Oco='' Filled=1 Fill price=48699 Error='No error' Native error=''
+2025-12-22 12:50:59:831|1|8|Execution='009853b8dfc94c41b466cbc879d69c9d' Instrument='MYM 03-26' Account='Sim101' Exchange=Default Price=48699 Quantity=1 Market position=Long Operation=Operation_Add Order='d93e2e37a9574f26a158feaa0831bac3' Time='12/22/2025 12:50 p. m.'
+2025-12-22 12:50:59:833|1|64|Instrument='MYM 03-26' Account='Sim101' Average price=0 Quantity=0 Market position=Flat Operation=Remove
+2025-12-22 12:51:01:882|1|4|Position grid close position
+2025-12-22 12:51:01:888|1|32|Order='526ddb446b76454dbbadc5db3fbbb7df/Sim101' Name='SL_Short' New state='Cancel submitted' Instrument='MES 03-26' Action='Buy to cover' Limit price=0 Stop price=6932.75 Quantity=1 Type='Stop Market' Time in force=GTC Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-22 12:51:01:889|1|32|Order='6c14277d138f4736b88b8aa7f65b5e24/Sim101' Name='TP_Short' New state='Cancel submitted' Instrument='MES 03-26' Action='Buy to cover' Limit price=6918 Stop price=0 Quantity=1 Type='Limit' Time in force=GTC Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-22 12:51:02:012|1|32|Order='526ddb446b76454dbbadc5db3fbbb7df/Sim101' Name='SL_Short' New state='Cancelled' Instrument='MES 03-26' Action='Buy to cover' Limit price=0 Stop price=6932.75 Quantity=1 Type='Stop Market' Time in force=GTC Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-22 12:51:02:031|1|32|Order='6c14277d138f4736b88b8aa7f65b5e24/Sim101' Name='TP_Short' New state='Cancelled' Instrument='MES 03-26' Action='Buy to cover' Limit price=6918 Stop price=0 Quantity=1 Type='Limit' Time in force=GTC Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-22 12:51:02:038|1|32|Order='7fa0790052f8467eb6825b06c61202ab/Sim101' Name='Close' New state='Submitted' Instrument='MES 03-26' Action='Buy to cover' Limit price=0 Stop price=0 Quantity=1 Type='Market' Time in force=DAY Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-22 12:51:02:139|1|32|Order='7fa0790052f8467eb6825b06c61202ab/Sim101' Name='Close' New state='Accepted' Instrument='MES 03-26' Action='Buy to cover' Limit price=0 Stop price=0 Quantity=1 Type='Market' Time in force=DAY Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-22 12:51:02:139|1|32|Order='7fa0790052f8467eb6825b06c61202ab/Sim101' Name='Close' New state='Working' Instrument='MES 03-26' Action='Buy to cover' Limit price=0 Stop price=0 Quantity=1 Type='Market' Time in force=DAY Oco='' Filled=0 Fill price=0 Error='No error' Native error=''
+2025-12-22 12:51:02:151|1|32|Order='7fa0790052f8467eb6825b06c61202ab/Sim101' Name='Close' New state='Filled' Instrument='MES 03-26' Action='Buy to cover' Limit price=0 Stop price=0 Quantity=1 Type='Market' Time in force=DAY Oco='' Filled=1 Fill price=6929 Error='No error' Native error=''
+2025-12-22 12:51:02:151|1|8|Execution='798d8cb955eb419492ebb57d87f360fe' Instrument='MES 03-26' Account='Sim101' Exchange=Default Price=6929 Quantity=1 Market position=Long Operation=Operation_Add Order='7fa0790052f8467eb6825b06c61202ab' Time='12/22/2025 12:51 p. m.'
+2025-12-22 12:51:02:151|1|64|Instrument='MES 03-26' Account='Sim101' Average price=0 Quantity=0 Market position=Flat Operation=Remove
+2025-12-22 12:51:31:390|1|2|Simulation: Primary connection=Disconnecting, Price feed=Disconnecting
+2025-12-22 12:51:32:949|1|2|Simulation: Primary connection=Disconnected, Price feed=Disconnected
+2025-12-22 12:51:57:309|3|4|Strategy 'SessionLevelsStrategy': Error on calling 'OnBarUpdate' method on bar 20: Index was outside the bounds of the array.
+2025-12-22 12:52:16:418|3|4|Strategy 'SessionLevelsStrategy': Error on calling 'OnBarUpdate' method on bar 20: Index was outside the bounds of the array.
+2025-12-22 12:54:25:106|3|4|Strategy 'SessionLevelsStrategy': Error on calling 'OnBarUpdate' method on bar 20: Index was outside the bounds of the array.
+2025-12-22 12:54:43:283|3|4|Strategy 'SessionLevelsStrategy': Error on calling 'OnBarUpdate' method on bar 20: Index was outside the bounds of the array.
+2025-12-22 12:54:44:303|3|4|Strategy 'SessionLevelsStrategy': Error on calling 'OnBarUpdate' method on bar 20: Index was outside the bounds of the array.
+2025-12-22 12:55:02:536|3|4|Strategy 'SessionLevelsStrategy': Error on calling 'OnBarUpdate' method on bar 20: Index was outside the bounds of the array.
+2025-12-22 12:56:18:514|3|4|Strategy 'SessionLevelsStrategy': Error on calling 'OnBarUpdate' method on bar 20: Index was outside the bounds of the array.
+2025-12-22 13:00:33:098|3|4|Strategy 'SessionLevelsStrategy': Error on calling 'OnBarUpdate' method on bar 20: Index was outside the bounds of the array.
+2025-12-22 13:00:35:048|3|4|Strategy 'SessionLevelsStrategy': Error on calling 'OnBarUpdate' method on bar 20: Index was outside the bounds of the array.
+2025-12-22 13:00:35:502|3|4|Strategy 'SessionLevelsStrategy': Error on calling 'OnBarUpdate' method on bar 20: Index was outside the bounds of the array.
+2025-12-22 13:00:35:749|3|4|Strategy 'SessionLevelsStrategy': Error on calling 'OnBarUpdate' method on bar 20: Index was outside the bounds of the array.
+2025-12-22 13:00:35:997|3|4|Strategy 'SessionLevelsStrategy': Error on calling 'OnBarUpdate' method on bar 20: Index was outside the bounds of the array.
+2025-12-22 13:00:36:220|3|4|Strategy 'SessionLevelsStrategy': Error on calling 'OnBarUpdate' method on bar 20: Index was outside the bounds of the array.
+2025-12-22 13:00:36:419|3|4|Strategy 'SessionLevelsStrategy': Error on calling 'OnBarUpdate' method on bar 20: Index was outside the bounds of the array.
+2025-12-22 13:01:21:790|3|4|Strategy 'SessionLevelsStrategy': Error on calling 'OnBarUpdate' method on bar 20: Index was outside the bounds of the array.
+2025-12-22 13:02:45:643|3|4|Strategy 'SessionLevelsStrategy': Error on calling 'OnBarUpdate' method on bar 21: Index was outside the bounds of the array.
+2025-12-22 13:05:48:358|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/377655912' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=True / triggering 30 seconds before close SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=False MaxRestarts=2880 in 6 minutes
+2025-12-22 13:07:29:200|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/377655905' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=True / triggering 30 seconds before close SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=False MaxRestarts=2880 in 6 minutes
+2025-12-22 13:08:26:666|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/377655913' : On starting a real-time strategy - StartBehavior=WaitUntilFlat Position=MYM 03-26 1S EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=True / triggering 30 seconds before close SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=False MaxRestarts=2880 in 6 minutes
+2025-12-22 13:08:50:050|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/377655913'
+2025-12-22 13:09:24:685|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/377655914' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=True / triggering 30 seconds before close SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=False MaxRestarts=2880 in 6 minutes
+2025-12-22 13:09:49:470|3|2|Connection lost to the NinjaTrader Historical Data Server: hds-us-nt-007.ninjatrader.com
+2025-12-22 13:09:59:473|1|2|Using HDS (hds-us-nt-018.ninjatrader.com/31655)
+2025-12-22 13:09:59:884|1|2|Connection restored to the NinjaTrader Historical Data Server: hds-us-nt-018.ninjatrader.com
+2025-12-22 13:10:06:484|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/377655905'
+2025-12-22 13:10:41:748|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/377655915' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=True / triggering 30 seconds before close SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=False MaxRestarts=2880 in 6 minutes
+2025-12-22 13:11:20:210|3|2|Connection lost to the NinjaTrader Historical Data Server: hds-us-nt-018.ninjatrader.com
+2025-12-22 13:11:30:224|1|2|Using HDS (hds-us-nt-004.ninjatrader.com/31655)
+2025-12-22 13:11:30:694|1|2|Connection restored to the NinjaTrader Historical Data Server: hds-us-nt-004.ninjatrader.com
+2025-12-22 13:11:43:122|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/377655916' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=True / triggering 30 seconds before close SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=False MaxRestarts=2880 in 6 minutes
+2025-12-22 13:12:16:733|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/377655917' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=True / triggering 30 seconds before close SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=False MaxRestarts=2880 in 6 minutes
+2025-12-22 13:13:26:497|0|4|Unhandled exception: Cuota insuficiente para procesar este comando
+2025-12-22 13:13:28:907|3|16|There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."

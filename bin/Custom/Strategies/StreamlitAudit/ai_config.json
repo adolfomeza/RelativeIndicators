@@ -1,0 +1,8 @@
+{
+    "enabled_zones": [
+        "Asia High",
+        "USA Low"
+    ],
+    "max_age": 5,
+    "generated_at": "2026-01-03 22:55:42"
+}

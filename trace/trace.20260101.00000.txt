@@ -1,0 +1,617 @@
+2026-01-01 00:30:30:578 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 00:30:30:585 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 00:30:30:870 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 00:30:30:870 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.952763' renewSecs='2399.9763815'
+2026-01-01 00:31:35:976 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-01 00:50:41:414 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-01 00:50:41:945 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-01 00:50:41:945 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.36ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-01 01:10:30:867 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 01:10:30:867 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 01:10:31:149 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 01:10:31:149 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.95598' renewSecs='2399.97799'
+2026-01-01 01:50:31:142 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 01:50:31:142 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 01:50:31:428 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 01:50:31:428 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9562661' renewSecs='2399.97813305'
+2026-01-01 01:50:41:435 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-01 01:50:41:947 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-01 01:50:41:947 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.41ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-01 02:30:31:420 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 02:30:31:420 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 02:30:31:697 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 02:30:31:697 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9602033' renewSecs='2399.98010165'
+2026-01-01 02:50:41:442 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-01 02:50:41:977 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-01 02:50:41:978 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.33ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-01 03:10:31:697 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 03:10:31:697 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 03:10:31:973 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 03:10:31:973 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9601427' renewSecs='2399.98007135'
+2026-01-01 03:50:31:975 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 03:50:31:977 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 03:50:32:250 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 03:50:32:250 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9600442' renewSecs='2399.9800221'
+2026-01-01 03:50:41:455 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-01 03:50:41:899 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-01 03:50:41:901 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.25ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-01 04:30:32:249 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 04:30:32:249 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 04:30:32:529 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 04:30:32:529 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9600709' renewSecs='2399.98003545'
+2026-01-01 04:50:41:470 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-01 04:50:42:020 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-01 04:50:42:020 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.23ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-01 05:10:32:528 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 05:10:32:528 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 05:10:32:804 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 05:10:32:804 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9586399' renewSecs='2399.97931995'
+2026-01-01 05:50:32:796 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 05:50:32:796 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 05:50:33:076 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 05:50:33:076 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9594044' renewSecs='2399.9797022'
+2026-01-01 05:50:41:476 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-01 05:50:41:977 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-01 05:50:41:977 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.33ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-01 06:30:33:069 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 06:30:33:069 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 06:30:33:354 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 06:30:33:354 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9566642' renewSecs='2399.9783321'
+2026-01-01 06:50:41:495 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-01 06:50:41:964 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-01 06:50:41:965 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.21ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-01 07:10:33:344 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 07:10:33:344 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 07:10:33:621 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 07:10:33:621 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9590685' renewSecs='2399.97953425'
+2026-01-01 07:50:33:616 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 07:50:33:616 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 07:50:33:896 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 07:50:33:896 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9594075' renewSecs='2399.97970375'
+2026-01-01 07:50:41:511 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-01 07:50:41:974 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-01 07:50:41:974 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.26ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-01 08:30:33:895 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 08:30:33:895 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 08:30:34:175 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 08:30:34:175 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9592308' renewSecs='2399.9796154'
+2026-01-01 08:50:41:524 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-01 08:50:41:977 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-01 08:50:41:977 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.32ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-01 09:10:34:165 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 09:10:34:165 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 09:10:34:438 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 09:10:34:438 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9579056' renewSecs='2399.9789528'
+2026-01-01 09:50:34:439 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 09:50:34:439 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 09:50:34:740 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 09:50:34:740 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9591917' renewSecs='2399.97959585'
+2026-01-01 09:50:41:541 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-01 09:50:42:000 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-01 09:50:42:001 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.25ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-01 10:30:34:738 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 10:30:34:738 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 10:30:35:010 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 10:30:35:010 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.96068' renewSecs='2399.98034'
+2026-01-01 10:50:41:549 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-01 10:50:42:009 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-01 10:50:42:010 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.26ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-01 11:10:35:007 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 11:10:35:007 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 11:10:35:284 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 11:10:35:284 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9580724' renewSecs='2399.9790362'
+2026-01-01 11:50:35:275 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 11:50:35:275 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 11:50:35:556 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 11:50:35:556 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9546869' renewSecs='2399.97734345'
+2026-01-01 11:50:41:565 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-01 11:50:42:027 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-01 11:50:42:028 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.32ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-01 12:02:17:005 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-01 12:20:53:189 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-01 12:25:47:155 (Simulation) Gui.ControlCenter.OnConnect
+2026-01-01 12:25:47:283 (Simulation) Cbi.Connection.Connect0: status=Disconnected assembly=8.1.6.2 date=2026-01-01 runAsProcess=False
+2026-01-01 12:25:47:301 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2026-01-01 12:25:47:305 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2026-01-01 12:25:47:320 (Simulation) Cbi.Connection.Connect1
+2026-01-01 12:25:47:338 (Simulation) Cbi.Connection.Connect2
+2026-01-01 12:25:47:338 (Simulation) Cbi.Connection.Connect3
+2026-01-01 12:25:47:348 (Simulation) Cbi.Connection.CreateAccount: account='Sim101' displayName='Sim101' fcm='' denomination=UsDollar forexLotSize=10000
+2026-01-01 12:25:47:358 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2026-01-01 12:25:47:358 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connecting priceStatus=Connecting
+2026-01-01 12:25:47:360 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connecting previousStatus=Disconnected message=''
+2026-01-01 12:25:47:380 (Simulation) Cbi.Account.OnConnectionStatus.PositionExecutions: account='Sim101'
+2026-01-01 12:25:47:388 (Simulation) Cbi.Connection.Connect4
+2026-01-01 12:25:47:779 (Simulation) Cbi.Connection.Connect5
+2026-01-01 12:25:47:783 (Simulation) Tradovate.Adapter.Connect: user='joelbencomo' accountType='Simulation' useLocalOcoSimulation=True
+2026-01-01 12:25:47:826 (Simulation) Cbi.Connection.Connect9 ok
+2026-01-01 12:25:47:988 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=True foundConnected=False
+2026-01-01 12:25:47:988 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connecting
+2026-01-01 12:25:47:989 Core.Instrumentation.LogActivity: activityType=Adapter errorCode=NoError errorMessage=''
+2026-01-01 12:25:48:196 (Simulation) Tradovate.Adapter.StartTradeWebSocket
+2026-01-01 12:25:48:539 (Simulation) Tradovate.Adapter.StartTradeWebSocket1
+2026-01-01 12:25:48:540 (Simulation) Tradovate.Adapter.StartWebSocketTradeSendWorker
+2026-01-01 12:25:48:541 (Simulation) Tradovate.Adapter.StartWebSocketTradeReceiveWorker
+2026-01-01 12:25:48:549 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage
+2026-01-01 12:25:48:913 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-01 12:25:49:251 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-01 12:25:49:251 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-01 12:25:49:253 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-01 12:25:49:261 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-01 12:25:50:457 (Simulation) Cbi.Connection.CreateAccount: account='DEMO619219' displayName='DEMO' fcm='' denomination=UsDollar forexLotSize=1
+2026-01-01 12:25:50:457 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connecting previousStatus=Disconnected message=''
+2026-01-01 12:25:50:458 (Simulation) Cbi.Account.OnConnectionStatus.PositionExecutions: account='DEMO619219'
+2026-01-01 12:25:50:479 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=CashValue currency=UsDollar value=*****
+2026-01-01 12:25:50:480 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-01 12:25:50:503 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc0
+2026-01-01 12:25:50:504 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2026-01-01 12:25:50:504 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connected previousStatus=Connecting message=''
+2026-01-01 12:25:50:504 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connected previousStatus=Connecting message=''
+2026-01-01 12:25:50:523 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2026-01-01 12:25:50:552 (Simulation) Cbi.Account.Restore.Start: account='Sim101' fcm=''
+2026-01-01 12:25:50:553 (Simulation) Cbi.Account.Restore.Start: account='DEMO619219' fcm=''
+2026-01-01 12:25:50:747 (Simulation) Cbi.Account.Restore.End: account='DEMO619219' fcm=''
+2026-01-01 12:25:50:763 (Simulation) Cbi.Account.Restore.End: account='Sim101' fcm=''
+2026-01-01 12:25:50:763 (Simulation) Core.Connection.Statistics: connectAttempts=1/2984.3ms
+2026-01-01 12:25:50:764 (Simulation) Cbi.Connection.ConnectionStatusCallback: autoClosePositionTime='12/17/2025 00:00:00' autoClosePosition=False
+2026-01-01 12:25:50:766 Server.HdsClient.Connect: type=HDS server='hds-us-nt-017.ninjatrader.com' port=31655 system='' useSsl=True
+2026-01-01 12:25:50:810 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2026-01-01 12:25:51:395 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2026-01-01 12:25:51:395 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2026-01-01 12:25:51:431 (Simulation) Tradovate.Adapter.QueryNotificationsAsync0
+2026-01-01 12:25:51:489 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-01 12:25:51:489 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2026-01-01 12:25:51:522 (Simulation) QueryNotificationResponse Live
+2026-01-01 12:25:51:832 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='Sim101' accountItem=CashValue currency=UsDollar value=*****
+2026-01-01 12:25:51:839 (Simulation) Cbi.Account.OnTimerTick.Simulator.Roll: account='Sim101' fcm='' fcmDate='2025-12-31'
+2026-01-01 12:25:51:875 (Simulation) QueryNotificationResponse Demo
+2026-01-01 12:25:52:520 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 04-25' from='14/3/25 12:00:00 a. m.' to='14/3/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:52:536 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 03-25' from='14/2/25 12:00:00 a. m.' to='14/2/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:52:578 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 07-25' from='13/6/25 12:00:00 a. m.' to='13/6/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:52:699 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 12-25' from='14/11/25 12:00:00 a. m.' to='14/11/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:52:749 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-25' from='14/2/25 12:00:00 a. m.' to='14/2/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:52:787 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:52:815 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-25' from='25/2/25 12:00:00 a. m.' to='25/2/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:52:841 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:52:854 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 12-25' from='17/11/25 12:00:00 a. m.' to='17/11/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:52:889 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 09-25' from='18/8/25 12:00:00 a. m.' to='18/8/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:52:913 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 05-25' from='17/4/25 12:00:00 a. m.' to='17/4/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:52:961 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 11-25' from='21/10/25 12:00:00 a. m.' to='21/10/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:52:976 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 01-26' from='19/12/25 12:00:00 a. m.' to='19/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:52:986 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 07-25' from='18/6/25 12:00:00 a. m.' to='18/6/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:52:999 Cbi.Instrument.RequestBars (to Provider): instrument='6E 06-25' from='12/6/25 12:00:00 a. m.' to='12/6/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:014 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-25' from='14/3/25 12:00:00 a. m.' to='14/3/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:036 Cbi.Instrument.RequestBars (to Provider): instrument='6E 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:059 Cbi.Instrument.RequestBars (to Provider): instrument='MES 06-25' from='13/6/25 12:00:00 a. m.' to='13/6/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:085 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:099 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 06-25' from='13/6/25 12:00:00 a. m.' to='13/6/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:132 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:153 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 06-25' from='13/6/25 12:00:00 a. m.' to='13/6/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:160 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 09-25' from='12/9/25 12:00:00 a. m.' to='12/9/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:179 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 06-25' from='13/6/25 12:00:00 a. m.' to='13/6/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:192 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:204 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 02-25' from='20/2/25 12:00:00 a. m.' to='20/2/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:217 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 09-25' from='12/9/25 12:00:00 a. m.' to='12/9/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:241 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:266 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:359 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 02-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:359 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 11-25' from='21/11/25 12:00:00 a. m.' to='21/11/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:359 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 08-25' from='25/7/25 12:00:00 a. m.' to='25/7/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:359 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 12-25' from='21/11/25 12:00:00 a. m.' to='21/11/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:360 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 05-25' from='17/4/25 12:00:00 a. m.' to='17/4/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:360 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 05-25' from='25/4/25 12:00:00 a. m.' to='25/4/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:370 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:371 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:371 Cbi.Instrument.RequestBars (to Provider): instrument='6E 12-25' from='11/12/25 12:00:00 a. m.' to='11/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:372 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-25' from='14/3/25 12:00:00 a. m.' to='14/3/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:372 Cbi.Instrument.RequestBars (to Provider): instrument='MES 09-25' from='12/9/25 12:00:00 a. m.' to='12/9/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:372 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='14/3/25 12:00:00 a. m.' to='14/3/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:372 Cbi.Instrument.RequestBars (to Provider): instrument='MES 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:372 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:372 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:372 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-25' from='14/3/25 12:00:00 a. m.' to='14/3/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:372 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 09-25' from='12/9/25 12:00:00 a. m.' to='12/9/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:25:53:436 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 01-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:06:560 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 03-25' from='1/1/25 12:00:00 a. m.' to='18/2/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:06:592 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-25' from='1/1/25 12:00:00 a. m.' to='14/2/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:06:626 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-25' from='14/3/25 12:00:00 a. m.' to='14/3/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:07:658 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-25' from='14/3/25 12:00:00 a. m.' to='14/3/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:07:750 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 03-25' from='14/2/25 12:00:00 a. m.' to='14/2/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:10:770 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 05-25' from='25/2/25 12:00:00 a. m.' to='25/4/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:10:770 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-25' from='14/3/25 12:00:00 a. m.' to='14/3/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:12:746 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='14/3/25 12:00:00 a. m.' to='14/3/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:14:140 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 05-25' from='17/4/25 12:00:00 a. m.' to='17/4/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:16:203 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 04-25' from='14/3/25 12:00:00 a. m.' to='14/3/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:19:125 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 06-25' from='13/6/25 12:00:00 a. m.' to='13/6/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:19:143 Cbi.Instrument.RequestBars (to Provider): instrument='MES 09-25' from='12/9/25 12:00:00 a. m.' to='12/9/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:22:969 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 07-25' from='18/6/25 12:00:00 a. m.' to='18/6/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:22:986 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 09-25' from='12/9/25 12:00:00 a. m.' to='12/9/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:23:780 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 08-25' from='25/7/25 12:00:00 a. m.' to='25/7/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:26:421 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 09-25' from='12/9/25 12:00:00 a. m.' to='12/9/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:27:562 Cbi.Instrument.RequestBars (to Provider): instrument='MES 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:27:576 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 09-25' from='12/9/25 12:00:00 a. m.' to='12/9/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:30:155 Cbi.Instrument.RequestBars (to Provider): instrument='6E 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:30:189 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:33:221 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 12-25' from='21/11/25 12:00:00 a. m.' to='21/11/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:35:565 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:36:015 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:36:030 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:36:265 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:36:718 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 07-25' from='13/6/25 12:00:00 a. m.' to='13/6/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:37:193 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:39:897 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:39:897 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:41:493 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:45:687 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 12-25' from='14/11/25 12:00:00 a. m.' to='14/11/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:46:598 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 11-25' from='21/11/25 12:00:00 a. m.' to='21/11/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:48:250 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 02-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:26:48:708 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 01-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:30:35:551 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 12:30:35:551 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 12:30:35:828 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 12:30:35:828 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9494422' renewSecs='2399.9747211'
+2026-01-01 12:42:30:157 Cbi.Instrument.RequestBars (to Provider): instrument='CL 02-25' from='1/1/25 12:00:00 a. m.' to='15/1/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:42:30:672 Cbi.Instrument.RequestBars (to Provider): instrument='CL 03-25' from='15/1/25 12:00:00 a. m.' to='14/2/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:42:31:442 Cbi.Instrument.RequestBars (to Provider): instrument='CL 04-25' from='16/2/25 12:00:00 a. m.' to='14/3/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:42:32:063 Cbi.Instrument.RequestBars (to Provider): instrument='CL 05-25' from='16/3/25 12:00:00 a. m.' to='16/4/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:42:32:782 Cbi.Instrument.RequestBars (to Provider): instrument='CL 06-25' from='16/4/25 12:00:00 a. m.' to='14/5/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:42:33:422 Cbi.Instrument.RequestBars (to Provider): instrument='CL 07-25' from='14/5/25 12:00:00 a. m.' to='16/6/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:42:34:109 Cbi.Instrument.RequestBars (to Provider): instrument='CL 08-25' from='16/6/25 12:00:00 a. m.' to='16/7/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:42:34:802 Cbi.Instrument.RequestBars (to Provider): instrument='CL 09-25' from='16/7/25 12:00:00 a. m.' to='14/8/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:42:35:455 Cbi.Instrument.RequestBars (to Provider): instrument='CL 10-25' from='14/8/25 12:00:00 a. m.' to='16/9/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:42:36:095 Cbi.Instrument.RequestBars (to Provider): instrument='CL 11-25' from='16/9/25 12:00:00 a. m.' to='15/10/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:42:36:735 Cbi.Instrument.RequestBars (to Provider): instrument='CL 12-25' from='15/10/25 12:00:00 a. m.' to='14/11/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:42:37:361 Cbi.Instrument.RequestBars (to Provider): instrument='CL 01-26' from='16/11/25 12:00:00 a. m.' to='15/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:42:37:985 Cbi.Instrument.RequestBars (to Provider): instrument='CL 02-26' from='15/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:48:04:844 Cbi.Instrument.RequestBars (to Provider): instrument='CL 03-25' from='14/2/25 12:00:00 a. m.' to='14/2/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:48:05:236 Cbi.Instrument.RequestBars (to Provider): instrument='CL 04-25' from='14/3/25 12:00:00 a. m.' to='14/3/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:48:06:188 Cbi.Instrument.RequestBars (to Provider): instrument='CL 12-25' from='14/11/25 12:00:00 a. m.' to='14/11/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:48:06:672 Cbi.Instrument.RequestBars (to Provider): instrument='CL 02-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:49:24:032 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 03-25' from='14/2/25 12:00:00 a. m.' to='14/2/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:49:24:550 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 04-25' from='14/3/25 12:00:00 a. m.' to='14/3/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:49:25:578 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 07-25' from='13/6/25 12:00:00 a. m.' to='13/6/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:49:27:051 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 12-25' from='14/11/25 12:00:00 a. m.' to='14/11/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:49:27:695 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 02-26' from='31/12/25 12:00:00 a. m.' to='31/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-01 12:50:41:568 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-01 12:50:42:057 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-01 12:50:42:057 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.25ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-01 12:56:29:185 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 01-26' from='30/11/25 7:00:00 p. m.' to='5/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 13:03:35:590 SQLite error (17): statement aborts at 44: [UPDATE MasterInstruments SET AutoLiquidation=?,Currency=?,Description=?,InstrumentType=?,IsServerSupported=?,MergePolicy=?,Name=?,PointValue=?,PriceLevel=?,TradingHours=?,TickSize=?,Ur
+2026-01-01 13:10:35:819 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 13:10:35:819 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 13:10:36:100 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 13:10:36:100 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.953953' renewSecs='2399.9769765'
+2026-01-01 13:13:00:472 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-01 13:13:37:905 Cbi.Instrument.RequestBars (to Provider): instrument='6E 03-26' from='30/12/25 11:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 13:13:37:906 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='30/12/25 11:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 13:13:37:911 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='30/12/25 11:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 13:13:37:911 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 01-26' from='30/12/25 11:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 13:13:37:956 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 02-26' from='30/12/25 11:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 13:13:39:855 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-26' from='30/12/25 11:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 13:13:39:986 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 03-26' from='30/12/25 11:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 13:13:39:986 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='30/12/25 11:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 13:13:40:290 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='30/12/25 11:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 13:13:40:830 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='30/12/25 11:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 13:13:42:173 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='30/12/25 11:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 13:43:28:234 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='31/12/25 5:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 13:43:28:234 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='31/12/25 5:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 13:43:28:234 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-26' from='31/12/25 3:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 13:43:28:234 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='31/12/25 5:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 13:43:28:234 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 01-26' from='31/12/25 5:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 13:43:28:234 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='31/12/25 5:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 13:43:28:234 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 03-26' from='31/12/25 3:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 13:43:28:234 Cbi.Instrument.RequestBars (to Provider): instrument='6E 03-26' from='31/12/25 5:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 13:43:28:234 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 02-26' from='31/12/25 5:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 13:43:28:234 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='31/12/25 5:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 13:43:28:234 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='31/12/25 5:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 13:50:36:088 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 13:50:36:088 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 13:50:36:363 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 13:50:36:363 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9572992' renewSecs='2399.9786496'
+2026-01-01 13:50:41:570 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-01 13:50:42:012 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-01 13:50:42:013 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.29ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-01 14:30:36:356 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 14:30:36:356 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 14:30:36:637 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 14:30:36:637 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9517262' renewSecs='2399.9758631'
+2026-01-01 14:33:01:635 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='31/12/25 5:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 14:33:01:682 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='31/12/25 5:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 14:33:01:745 Cbi.Instrument.RequestBars (to Provider): instrument='6E 03-26' from='31/12/25 5:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 14:33:01:785 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='31/12/25 5:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 14:33:01:813 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 03-26' from='31/12/25 3:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 14:33:01:824 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-26' from='31/12/25 3:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 14:33:02:041 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='31/12/25 5:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 14:33:02:072 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='31/12/25 5:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 14:33:02:105 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 01-26' from='31/12/25 5:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 14:33:02:604 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='31/12/25 5:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 14:33:03:442 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 02-26' from='31/12/25 5:00:00 p. m.' to='31/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 14:50:41:576 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-01 14:50:42:060 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-01 14:50:42:061 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.29ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-01 14:57:05:792 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='26/12/25 5:00:00 p. m.' to='26/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 14:57:06:179 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='26/12/25 5:00:00 p. m.' to='26/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 14:57:06:667 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='26/12/25 5:00:00 p. m.' to='26/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 14:57:07:742 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 02-26' from='26/12/25 5:00:00 p. m.' to='26/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 14:57:08:872 Cbi.Instrument.RequestBars (to Provider): instrument='6E 03-26' from='26/12/25 5:00:00 p. m.' to='26/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 14:57:09:713 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='26/12/25 5:00:00 p. m.' to='26/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 14:57:09:732 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 03-26' from='26/12/25 3:00:00 p. m.' to='26/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 14:57:09:780 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-26' from='26/12/25 3:00:00 p. m.' to='26/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 14:57:14:504 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='26/12/25 5:00:00 p. m.' to='26/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 14:57:14:504 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='26/12/25 5:00:00 p. m.' to='26/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 15:09:41:718 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='19/12/25 5:00:00 p. m.' to='19/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 15:09:42:164 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 12-25' from='19/12/25 5:00:00 p. m.' to='19/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 15:09:42:271 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='19/12/25 5:00:00 p. m.' to='19/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 15:09:42:818 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 01-26' from='19/12/25 3:00:00 p. m.' to='19/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 15:09:43:873 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='19/12/25 5:00:00 p. m.' to='19/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 15:09:46:079 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='19/12/25 5:00:00 p. m.' to='19/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 15:09:46:127 Cbi.Instrument.RequestBars (to Provider): instrument='6E 03-26' from='19/12/25 5:00:00 p. m.' to='19/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 15:09:46:192 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-26' from='19/12/25 3:00:00 p. m.' to='19/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 15:09:46:337 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='19/12/25 5:00:00 p. m.' to='19/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 15:09:46:911 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='19/12/25 5:00:00 p. m.' to='19/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 15:10:36:625 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 15:10:36:625 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 15:10:36:900 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 15:10:36:900 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9548041' renewSecs='2399.97740205'
+2026-01-01 15:47:42:360 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='12/12/25 5:00:00 p. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 15:47:42:374 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 01-26' from='12/12/25 3:00:00 p. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 15:47:42:398 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-26' from='12/12/25 3:00:00 p. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 15:47:42:482 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='12/12/25 5:00:00 p. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 15:47:42:580 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 12-25' from='12/12/25 5:00:00 p. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 15:47:42:925 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='12/12/25 5:00:00 p. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 15:47:42:935 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 01-26' from='12/12/25 5:00:00 p. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 15:47:43:001 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='12/12/25 5:00:00 p. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 15:47:45:092 Cbi.Instrument.RequestBars (to Provider): instrument='MES 12-25' from='12/12/25 5:00:00 p. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 15:47:45:401 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 12-25' from='12/12/25 5:00:00 p. m.' to='12/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 15:50:36:889 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 15:50:36:889 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 15:50:37:172 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 15:50:37:172 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9511337' renewSecs='2399.97556685'
+2026-01-01 15:50:41:603 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-01 15:50:42:039 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-01 15:50:42:040 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.29ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-01 16:30:37:157 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 16:30:37:157 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 16:30:37:440 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 16:30:37:440 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9593859' renewSecs='2399.97969295'
+2026-01-01 16:38:22:024 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='30/11/25 7:00:00 p. m.' to='5/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 16:38:22:041 Cbi.Instrument.RequestBars (to Provider): instrument='6E 12-25' from='30/11/25 7:00:00 p. m.' to='5/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 16:38:22:041 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 01-26' from='30/11/25 9:00:00 p. m.' to='5/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 16:38:22:041 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 12-25' from='30/11/25 7:00:00 p. m.' to='5/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 16:38:22:041 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-26' from='30/11/25 9:00:00 p. m.' to='5/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 16:38:22:044 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 12-25' from='30/11/25 7:00:00 p. m.' to='5/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 16:38:22:044 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='30/11/25 7:00:00 p. m.' to='5/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 16:38:22:170 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 01-26' from='5/12/25 5:00:00 p. m.' to='5/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 16:50:41:620 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-01 16:50:42:111 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-01 16:50:42:111 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.31ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-01 17:10:37:423 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 17:10:37:423 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 17:10:37:708 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 17:10:37:709 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9549428' renewSecs='2399.9774714'
+2026-01-01 17:23:06:995 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 12-25' from='23/11/25 7:00:00 p. m.' to='24/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:23:06:996 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 12-25' from='23/11/25 7:00:00 p. m.' to='28/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:23:06:996 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='23/11/25 7:00:00 p. m.' to='28/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:23:06:996 Cbi.Instrument.RequestBars (to Provider): instrument='6E 12-25' from='23/11/25 7:00:00 p. m.' to='28/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:23:06:996 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 12-25' from='23/11/25 7:00:00 p. m.' to='28/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:23:06:997 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 01-26' from='23/11/25 7:00:00 p. m.' to='28/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:23:07:001 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 01-26' from='23/11/25 9:00:00 p. m.' to='28/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:23:07:001 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-26' from='23/11/25 9:00:00 p. m.' to='28/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:23:07:825 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='24/11/25 12:00:00 a. m.' to='28/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:23:08:046 Cbi.Instrument.RequestBars (to Provider): instrument='MES 12-25' from='23/11/25 7:00:00 p. m.' to='28/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:23:08:078 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='23/11/25 7:00:00 p. m.' to='28/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:23:19:750 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='28/11/25 2:00:00 p. m.' to='28/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:46:30:075 Cbi.Instrument.RequestBars (to Provider): instrument='6E 12-25' from='16/11/25 7:00:00 p. m.' to='21/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:46:30:079 Cbi.Instrument.RequestBars (to Provider): instrument='MES 12-25' from='16/11/25 7:00:00 p. m.' to='21/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:46:30:080 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 12-25' from='16/11/25 7:00:00 p. m.' to='21/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:46:30:094 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 11-25' from='16/11/25 7:00:00 p. m.' to='21/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:46:30:094 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='16/11/25 7:00:00 p. m.' to='21/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:46:30:094 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 12-25' from='16/11/25 9:00:00 p. m.' to='17/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:46:30:094 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 12-25' from='16/11/25 7:00:00 p. m.' to='21/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:46:30:094 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 01-26' from='16/11/25 9:00:00 p. m.' to='21/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:46:30:094 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 01-26' from='16/11/25 7:00:00 p. m.' to='21/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:46:30:094 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 12-25' from='16/11/25 7:00:00 p. m.' to='21/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:46:42:281 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-26' from='17/11/25 12:00:00 a. m.' to='21/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:46:51:860 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='21/11/25 5:00:00 p. m.' to='21/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 17:50:37:687 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 17:50:37:687 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 17:50:37:971 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 17:50:37:971 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9529343' renewSecs='2399.97646715'
+2026-01-01 17:50:41:619 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-01 17:50:42:087 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-01 17:50:42:088 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.02ms Messages=0.54ms Risks=0.00ms RolloverCollection=0.01ms TradingHours=0.02ms
+2026-01-01 18:00:00:535 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='Sim101' accountItem=Commission currency=UsDollar value=*****
+2026-01-01 18:00:00:535 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='Sim101' accountItem=Fee currency=UsDollar value=*****
+2026-01-01 18:00:00:535 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='Sim101' accountItem=GrossRealizedProfitLoss currency=UsDollar value=*****
+2026-01-01 18:00:00:535 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='Sim101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-01 18:00:00:535 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='Sim101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-01 18:00:00:535 (Simulation) Cbi.Account.OnTimerTick.Simulator.Roll: account='Sim101' fcm='' fcmDate='2026-01-01'
+2026-01-01 18:30:37:940 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 18:30:37:940 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 18:30:38:209 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 18:30:38:209 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9567905' renewSecs='2399.97839525'
+2026-01-01 18:50:41:610 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-01 18:50:42:050 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-01 18:50:42:050 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.21ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-01 19:10:38:194 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 19:10:38:194 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 19:10:38:463 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 19:10:38:463 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9590402' renewSecs='2399.9795201'
+2026-01-01 19:48:31:754 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 12-25' from='9/11/25 9:00:00 p. m.' to='14/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 19:48:31:785 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 12-25' from='9/11/25 7:00:00 p. m.' to='14/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 19:48:31:798 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 11-25' from='9/11/25 7:00:00 p. m.' to='14/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 19:48:31:798 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 12-25' from='9/11/25 7:00:00 p. m.' to='14/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 19:48:31:798 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 01-26' from='9/11/25 9:00:00 p. m.' to='14/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 19:48:31:798 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 12-25' from='9/11/25 7:00:00 p. m.' to='14/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 19:48:31:798 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='9/11/25 7:00:00 p. m.' to='14/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 19:48:31:799 Cbi.Instrument.RequestBars (to Provider): instrument='6E 12-25' from='9/11/25 7:00:00 p. m.' to='14/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 19:48:31:799 Cbi.Instrument.RequestBars (to Provider): instrument='MES 12-25' from='9/11/25 7:00:00 p. m.' to='14/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 19:48:31:799 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 12-25' from='9/11/25 7:00:00 p. m.' to='14/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 19:50:39:233 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 19:50:39:233 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 19:50:39:537 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 19:50:39:537 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9562955' renewSecs='2399.97814775'
+2026-01-01 19:50:41:606 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-01 19:50:42:159 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-01 19:50:42:159 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.28ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-01 20:30:39:522 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 20:30:39:522 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 20:30:39:812 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 20:30:39:812 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9556727' renewSecs='2399.97783635'
+2026-01-01 20:50:41:598 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-01 20:50:42:101 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-01 20:50:42:102 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.31ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-01 21:10:39:787 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 21:10:39:787 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 21:10:40:567 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 21:10:40:567 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.8178192' renewSecs='2399.9089096'
+2026-01-01 21:13:50:875 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='2/11/25 7:00:00 p. m.' to='7/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 21:13:51:727 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 11-25' from='2/11/25 7:00:00 p. m.' to='7/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 21:13:51:731 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 01-26' from='2/11/25 9:00:00 p. m.' to='7/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 21:13:51:731 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 12-25' from='2/11/25 9:00:00 p. m.' to='7/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 21:13:51:731 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 12-25' from='2/11/25 7:00:00 p. m.' to='7/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 21:13:51:732 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 12-25' from='2/11/25 7:00:00 p. m.' to='7/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 21:13:51:732 Cbi.Instrument.RequestBars (to Provider): instrument='6E 12-25' from='2/11/25 7:00:00 p. m.' to='7/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 21:13:52:727 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 12-25' from='2/11/25 7:00:00 p. m.' to='7/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 21:13:52:727 Cbi.Instrument.RequestBars (to Provider): instrument='MES 12-25' from='2/11/25 7:00:00 p. m.' to='7/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 21:13:52:728 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 12-25' from='2/11/25 7:00:00 p. m.' to='7/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 21:13:59:498 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='7/11/25 5:00:00 p. m.' to='7/11/25 11:59:59 p. m.' period='1 Tick'
+2026-01-01 21:20:16:023 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage exception='An internal WebSocket error occurred. Please see the innerException, if present, for more details.  Unable to read data from the transport connection: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.' webSocketErrorCode='Success'
+2026-01-01 21:20:16:048 (Simulation) Tradovate.Adapter.OnDisconnectMarketData errorMsg='An internal WebSocket error occurred. Please see the innerException, if present, for more details. ' tradeStatus='Connected' mdStatus='ConnectionLost'
+2026-01-01 21:20:16:048 (Simulation) Tradovate.Adapter.OnDisconnectMarketData: Milliseconds from last marketDataHeartbeatTime 22,925
+2026-01-01 21:20:16:048 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2026-01-01 21:20:16:049 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2026-01-01 21:20:16:049 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2026-01-01 21:20:16:049 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=ConnectionLost
+2026-01-01 21:20:16:049 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=True foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-01 21:20:16:050 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=ConnectionLost
+2026-01-01 21:20:17:404 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-01 21:20:29:657 ERROR: Connection lost to the NinjaTrader Historical Data Server: hds-us-nt-017.ninjatrader.com
+2026-01-01 21:20:37:052 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2026-01-01 21:20:37:564 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-01 21:20:37:699 (Simulation) Tradovate.Adapter.CheckConnectionLatency: Connection latency is SLOW. Ping reply is 44,576 ms
+2026-01-01 21:20:37:700 WARNING: Your connection is experiencing high latency: 44,576 ms. This may negatively impact trading and market data services.
+2026-01-01 21:20:37:795 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage exception='The remote party closed the WebSocket connection without completing the close handshake. ' webSocketErrorCode='ConnectionClosedPrematurely'
+2026-01-01 21:20:37:811 (Simulation) Tradovate.Adapter.OnDisconnectTrade errorMsg='The remote party closed the WebSocket connection without completing the close handshake.' tradeStatus='ConnectionLost' mdStatus='ConnectionLost'
+2026-01-01 21:20:37:811 (Simulation) Tradovate.Adapter.OnDisconnectTrade: Milliseconds from last tradeHeartbeatTime: 112
+2026-01-01 21:20:37:811 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=ConnectionLost priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-01 21:20:37:811 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=ConnectionLost previousStatus=Connected message=''
+2026-01-01 21:20:37:811 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=ConnectionLost previousStatus=Connected message=''
+2026-01-01 21:20:37:876 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=ConnectionLost priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-01 21:20:37:876 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=ConnectionLost priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError='The remote party closed the WebSocket connection without completing the close handshake.'
+2026-01-01 21:20:37:876 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=ConnectionLost priceStatus=ConnectionLost
+2026-01-01 21:20:37:876 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=True foundTradeLoss=True foundConnectingStatus=False foundConnected=False
+2026-01-01 21:20:37:876 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Disconnecting
+2026-01-01 21:20:37:900 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-01 21:20:37:900 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-01 21:20:37:912 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-01 21:20:37:916 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-01 21:20:38:547 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2026-01-01 21:20:38:670 (Simulation) Tradovate.Adapter.StartTradeWebSocket
+2026-01-01 21:20:39:003 (Simulation) Tradovate.Adapter.StartTradeWebSocket1
+2026-01-01 21:20:39:003 (Simulation) Tradovate.Adapter.StartWebSocketTradeSendWorker
+2026-01-01 21:20:39:005 (Simulation) Tradovate.Adapter.StartWebSocketTradeReceiveWorker
+2026-01-01 21:20:39:006 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage
+2026-01-01 21:20:39:591 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc0
+2026-01-01 21:20:39:592 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2026-01-01 21:20:39:593 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-01 21:20:39:593 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connected previousStatus=ConnectionLost message=''
+2026-01-01 21:20:39:593 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connected previousStatus=ConnectionLost message=''
+2026-01-01 21:20:39:637 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-01 21:20:39:639 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-01 21:20:39:639 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2026-01-01 21:20:39:639 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-01 21:20:39:639 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2026-01-01 21:20:39:664 Server.HdsClient.Connect: type=HDS server='hds-us-nt-013.ninjatrader.com' port=31655 system='' useSsl=True
+2026-01-01 21:30:56:155 ERROR: Strategy 'SessionLevelsStrategy/378426599': An order has been ignored since the stop price ‘622.25’ near the bar stamped ‘01/03/2025 07:52:00’ is invalid based on the price range of the bar. This is an invalid order and subsequent orders may also be ignored.
+2026-01-01 21:50:40:481 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 21:50:40:481 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 21:50:40:777 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 21:50:40:777 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9387597' renewSecs='2399.96937985'
+2026-01-01 22:30:45:757 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 22:30:45:757 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 22:30:46:099 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 22:30:47:770 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.959316' renewSecs='2399.979658'
+2026-01-01 22:41:15:834 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage exception='An internal WebSocket error occurred. Please see the innerException, if present, for more details.  Unable to read data from the transport connection: Se ha forzado la interrupción de una conexión existente por el host remoto.' webSocketErrorCode='Success'
+2026-01-01 22:41:15:834 (Simulation) Tradovate.Adapter.OnDisconnectMarketData errorMsg='An internal WebSocket error occurred. Please see the innerException, if present, for more details. ' tradeStatus='Connected' mdStatus='ConnectionLost'
+2026-01-01 22:41:15:834 (Simulation) Tradovate.Adapter.OnDisconnectMarketData: Milliseconds from last marketDataHeartbeatTime 76
+2026-01-01 22:41:15:834 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2026-01-01 22:41:15:836 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2026-01-01 22:41:15:836 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2026-01-01 22:41:15:836 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=ConnectionLost
+2026-01-01 22:41:15:836 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=True foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-01 22:41:15:836 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=ConnectionLost
+2026-01-01 22:41:16:373 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-01 22:41:16:838 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-01 22:41:16:841 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-01 22:41:16:846 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-01 22:41:16:848 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-01 22:41:16:945 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-01 22:41:16:945 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-01 22:41:16:945 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-01 22:41:16:945 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2026-01-01 22:41:16:945 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-01 22:41:16:945 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2026-01-01 23:10:47:761 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 23:10:47:761 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 23:10:48:160 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 23:10:48:160 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9075482' renewSecs='2399.9537741'
+2026-01-01 23:30:30:711 ERROR: Connection lost to the NinjaTrader Historical Data Server: hds-us-nt-013.ninjatrader.com
+2026-01-01 23:30:40:712 Server.HdsClient.Connect: type=HDS server='hds-us-nt-019.ninjatrader.com' port=31655 system='' useSsl=True
+2026-01-01 23:30:40:746 Server.HdsClient.Connect.SocketError: e.SocketError=HostNotFound: 
+2026-01-01 23:30:47:469 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage exception='An internal WebSocket error occurred. Please see the innerException, if present, for more details.  Unable to read data from the transport connection: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.' webSocketErrorCode='Success'
+2026-01-01 23:30:47:469 (Simulation) Tradovate.Adapter.OnDisconnectTrade errorMsg='An internal WebSocket error occurred. Please see the innerException, if present, for more details. ' tradeStatus='ConnectionLost' mdStatus='Connected'
+2026-01-01 23:30:47:469 (Simulation) Tradovate.Adapter.OnDisconnectTrade: Milliseconds from last tradeHeartbeatTime: 51,765
+2026-01-01 23:30:47:469 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=ConnectionLost priceStatus=Connected previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2026-01-01 23:30:47:469 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=ConnectionLost previousStatus=Connected message=''
+2026-01-01 23:30:47:469 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=ConnectionLost previousStatus=Connected message=''
+2026-01-01 23:30:47:603 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=ConnectionLost priceStatus=Connected previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2026-01-01 23:30:47:603 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=ConnectionLost priceStatus=Connected previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2026-01-01 23:30:47:603 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=ConnectionLost priceStatus=Connected
+2026-01-01 23:30:47:603 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=True foundConnectingStatus=False foundConnected=False
+2026-01-01 23:30:47:603 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Disconnecting
+2026-01-01 23:30:48:204 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage exception='An internal WebSocket error occurred. Please see the innerException, if present, for more details.  Unable to read data from the transport connection: Se produjo un error durante el intento de conexión ya que la parte conectada no respondió adecuadamente tras un periodo de tiempo, o bien se produjo un error en la conexión establecida ya que el host conectado no ha podido responder.' webSocketErrorCode='Success'
+2026-01-01 23:30:48:204 (Simulation) Tradovate.Adapter.OnDisconnectMarketData errorMsg='An internal WebSocket error occurred. Please see the innerException, if present, for more details. ' tradeStatus='ConnectionLost' mdStatus='ConnectionLost'
+2026-01-01 23:30:48:204 (Simulation) Tradovate.Adapter.OnDisconnectMarketData: Milliseconds from last marketDataHeartbeatTime 50,191
+2026-01-01 23:30:48:204 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=ConnectionLost priceStatus=ConnectionLost previousStatus=ConnectionLost previousPriceStatus=Connected errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2026-01-01 23:30:48:205 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=ConnectionLost priceStatus=ConnectionLost previousStatus=ConnectionLost previousPriceStatus=Connected errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2026-01-01 23:30:48:205 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=ConnectionLost priceStatus=ConnectionLost previousStatus=ConnectionLost previousPriceStatus=Connected errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2026-01-01 23:30:48:205 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=ConnectionLost priceStatus=ConnectionLost
+2026-01-01 23:30:48:205 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=True foundTradeLoss=True foundConnectingStatus=False foundConnected=False
+2026-01-01 23:30:48:205 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Disconnecting
+2026-01-01 23:30:48:337 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2026-01-01 23:30:48:374 (Simulation) Tradovate.Adapter.StartTradeWebSocket
+2026-01-01 23:30:48:919 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-01 23:30:50:748 Server.HdsClient.Connect: type=HDS server='hds-us-nt-013.ninjatrader.com' port=31655 system='' useSsl=True
+2026-01-01 23:30:50:771 Server.HdsClient.Connect.SocketError: e.SocketError=HostNotFound: 
+2026-01-01 23:30:56:921 (Simulation) Tradovate.Adapter.DisposeTrade0
+2026-01-01 23:30:57:435 (Simulation) Tradovate.Adapter.StartTradeWebSocket
+2026-01-01 23:30:57:728 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2026-01-01 23:30:58:157 (Simulation) Tradovate.Adapter.StartTradeWebSocket1
+2026-01-01 23:30:58:157 (Simulation) Tradovate.Adapter.StartWebSocketTradeSendWorker
+2026-01-01 23:30:58:161 (Simulation) Tradovate.Adapter.StartWebSocketTradeReceiveWorker
+2026-01-01 23:30:58:165 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage
+2026-01-01 23:30:58:261 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-01 23:30:58:700 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc0
+2026-01-01 23:30:58:700 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2026-01-01 23:30:58:941 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-01 23:30:58:941 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-01 23:30:58:943 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-01 23:30:58:943 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-01 23:30:59:179 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-01 23:30:59:179 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connected previousStatus=ConnectionLost message=''
+2026-01-01 23:30:59:179 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connected previousStatus=ConnectionLost message=''
+2026-01-01 23:30:59:249 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-01 23:30:59:250 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-01 23:30:59:250 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2026-01-01 23:30:59:250 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-01 23:30:59:250 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2026-01-01 23:31:00:779 Server.HdsClient.Connect: type=HDS server='hds-us-nt-016.ninjatrader.com' port=31655 system='' useSsl=True
+2026-01-01 23:32:52:722 ERROR: Connection lost to the NinjaTrader Historical Data Server: hds-us-nt-016.ninjatrader.com
+2026-01-01 23:33:02:734 Server.HdsClient.Connect: type=HDS server='hds-us-nt-013.ninjatrader.com' port=31655 system='' useSsl=True
+2026-01-01 23:34:33:156 ERROR: Connection lost to the NinjaTrader Historical Data Server: hds-us-nt-013.ninjatrader.com
+2026-01-01 23:34:43:171 Server.HdsClient.Connect: type=HDS server='hds-us-nt-009.ninjatrader.com' port=31655 system='' useSsl=True
+2026-01-01 23:50:48:168 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-01 23:50:48:168 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-01 23:50:48:469 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-01 23:50:48:471 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.9580241' renewSecs='2399.97901205'

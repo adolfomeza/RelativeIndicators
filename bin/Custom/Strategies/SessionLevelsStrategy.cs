@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.26"; // Skip lag filter during Playback
+		private const string StrategyVersion = "v1.14.27"; // Fix TP quantity bug in backtest
 		
 		// v1.12.1: CONTROL BUTTONS (simplified to 2 buttons)
 		private TradingMode currentTradingMode = TradingMode.Normal;
@@ -4521,6 +4521,8 @@ setupLevelName = "";
 						tradeExportId++;
 						tradeExitFillsCount = 0; // v1.13.4: Reset exit fills counter
 				slOrderCreatedThisEntry = false; // v1.13.5: Reset SL duplication flag
+						protectedTp1Qty = 0; // v1.14.27: Reset protection counters for new trade
+						protectedTp2Qty = 0; // v1.14.27: Prevents residual values from previous trades
 						tradeEntryPrice = execution.Order.AverageFillPrice;
 						tradeEntryTime = time;
 							tradeDirection = Position.MarketPosition == MarketPosition.Long ? "Long" : "Short";

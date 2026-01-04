@@ -1,0 +1,16 @@
+2025-12-31 07:58:40:081|2|4|Session Break (Version 8.1.6.2)
+2025-12-31 08:00:18:625|1|4|Global simulation mode disabled
+2025-12-31 08:00:20:352|1|4|Vendor assembly 'ASCENDO_NewsEvents' version='3.0.0.0' loaded.
+2025-12-31 08:00:20:352|1|4|Vendor assembly 'WindowsInput' version='1.0.4.0' loaded.
+2025-12-31 08:00:22:468|1|2|Using IS (is-us-nt-006.ninjatrader.com/31658)
+2025-12-31 08:00:22:473|1|4|Automated trading disabled
+2025-12-31 08:00:22:647|1|32|Order entry hot keys disabled
+2025-12-31 08:00:22:649|1|4|Auto close enabled=False
+2025-12-31 08:00:26:702|1|4|Restoring workspace 'Relative Vwaps'...
+2025-12-31 08:14:29:608|1|2|Simulation: Primary connection=Connecting, Price feed=Connecting
+2025-12-31 08:14:32:680|1|2|Simulation: Primary connection=Connected, Price feed=Connected
+2025-12-31 08:14:32:811|1|2|Time to auto close position='12:00:00 a. m.', Enabled=False
+2025-12-31 08:14:32:813|1|2|Using HDS (hds-us-nt-007.ninjatrader.com/31655)
+2025-12-31 08:32:21:968|1|4|Workspace Relative Vwaps not saved
+2025-12-31 08:32:28:464|1|2|Simulation: Primary connection=Disconnecting, Price feed=Disconnecting
+2025-12-31 08:32:30:033|1|2|Simulation: Primary connection=Disconnected, Price feed=Disconnected
