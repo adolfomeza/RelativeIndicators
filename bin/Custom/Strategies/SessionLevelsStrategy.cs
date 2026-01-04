@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.11"; // Auto-detection: Use Account.Name as folder
+		private const string StrategyVersion = "v1.14.23"; // AI Filter Parameters (Optional)
 		
 		// v1.12.1: CONTROL BUTTONS (simplified to 2 buttons)
 		private TradingMode currentTradingMode = TradingMode.Normal;
@@ -62,6 +62,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private string csvExportPath = "";
 		private bool isTrackingTrade = false;  // Flag to track MAE/MFE
 		private bool slOrderCreatedThisEntry = false; // v1.13.5: Prevent duplicate SL creation
+
+	// v1.14.23: AI Filters
+	private List<string> enabledZonesList;
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -679,6 +682,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 				}
 				catch (Exception ex) { Print("TimeSpan Parse Error: " + ex.Message); }
 				
+				// v1.14.23: AI Filters - Parse zone configuration
+				ParseEnabledZones();
+				
 				// Clear Lists
 				activeLevels.Clear();
 				virginLevels.Clear();
@@ -741,6 +747,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 		
 		private void WriteSharedRisk(double atrRisk)
 		{
+			// FIX v1.14.13: Disable Shared Risk in Backtest/Optimization to prevent state leak
+			if (State == State.Historical) return;
+
 			// Only write if significantly different or every 5 seconds
 			if (Math.Abs(atrRisk - lastWrittenRisk) < 1 && (DateTime.Now - lastRiskWriteTime).TotalSeconds < 5)
 				return;
@@ -777,6 +786,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 		
 		private double ReadMaxSharedRisk()
 		{
+			// FIX v1.14.13: Disable Shared Risk in Backtest/Optimization
+			if (State == State.Historical) return RiskPerTradeUSD;
+
 			// PERFORMANCE: Only read file every 5 seconds, use cache otherwise
 			if ((DateTime.Now - lastRiskReadTime).TotalSeconds < 5)
 				return Math.Min(cachedGlobalRisk, RiskPerTradeUSD);
@@ -3086,24 +3098,25 @@ currentEntryState = EntryState.Idle;
 							}
 						}
 							
-						// Valid Trigger (New or Switch)
-						
-						if (lvl.IsResistance)
+						// TRIGGER CONFIRMED
+                        // -----------------
+						// TRIGGER CONFIRMED
+                        // -----------------
+						if (!lvl.IsResistance)
 						{
-					Log(Time[0] + " DEBUG: Trigger Short Detected on " + lvl.Name + " Price: " + lvl.Price);
-							// Short Setup
-							triggerTag = "TriggerShort_" + Time[0].Ticks; // Store Tag
+	                        triggerTag = "TriggerLong_" + Time[0].Ticks;
+							// Long Setup
 							triggerBar = CurrentBar;
-							DrawTriggerLabel(triggerTag, true, 0, High[0]);
+							DrawTriggerLabel(triggerTag, false, 0, Low[0]); // Draw label for Long
 							
 							currentEntryState = EntryState.WaitingForConfirmation;
 							visualConfirmationDone = false; // Reset visual flag
-							isShortSetup = true;
-							setupAnchorPrice = High[0]; // ANCHOR START: Current Wick High
+							isShortSetup = false; // Long
+							setupAnchorPrice = Low[0]; // ANCHOR START
 							setupLevelName = lvl.Name;
 							setupLevelTime = lvl.StartTime; // CAPTURE TIME (v1.5.8)
 							validatedTargetPrice = 0; // RESET for new setup
-			cachedOppositeLevel = null; // CLEAR CACHE (v1.7.22)
+							cachedOppositeLevel = null; // CLEAR CACHE (v1.7.22)
 							
 							// v1.10.26: Reset retry state for new level
 							waitingForVwapMitigation = false;
@@ -3117,8 +3130,7 @@ currentEntryState = EntryState.Idle;
 							// v1.10.0: Detect if this is an internal level
 							DetectInternalLevel(lvl, activeLevels);
 							
-							// RESET ADHOC VWAP (Start Fresh from this touch)
-							// ALIGNMENT: To match Global VWAP behavior, we must Include the Trigger Bar's volume completely.
+							// RESET ADHOC VWAP
 							double price = Close[0];
 							if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
 							else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
@@ -3126,30 +3138,29 @@ currentEntryState = EntryState.Idle;
 							adhocVolSum = Volume[0]; 
 							adhocPvSum = Volume[0] * price;
 							adhocLastBar = CurrentBar;
-							adhocLastVol = Volume[0]; // So Delta next tick in same bar is 0, but we already have base volume.
+							adhocLastVol = Volume[0];
 							adhocAnchorBar = CurrentBar; // v1.10.11: Track for retroactive update
-							
+
 							// Reset Visual State
 							visualAdhocPrevBarVal = price;
 							visualAdhocLastVal = price;
 							visualAdhocLastBar = -1;
 						}
-						else
+						else 
 						{
-					Log(Time[0] + " DEBUG: Trigger Long Detected on " + lvl.Name + " Price: " + lvl.Price);
-							// Long Setup
-							triggerTag = "TriggerLong_" + Time[0].Ticks;
+							triggerTag = "TriggerShort_" + Time[0].Ticks;
+							// Short Setup
 							triggerBar = CurrentBar;
-							DrawTriggerLabel(triggerTag, false, 0, Low[0]);
+							DrawTriggerLabel(triggerTag, true, 0, High[0]); // Draw label for Short
 							
 							currentEntryState = EntryState.WaitingForConfirmation;
 							visualConfirmationDone = false; // Reset visual flag
-							isShortSetup = false; // Long
-							setupAnchorPrice = Low[0]; // ANCHOR START: Current Wick Low
+							isShortSetup = true;
+							setupAnchorPrice = High[0]; // ANCHOR START
 							setupLevelName = lvl.Name;
 							setupLevelTime = lvl.StartTime; // CAPTURE TIME (v1.5.8)
 							validatedTargetPrice = 0; // RESET for new setup
-			cachedOppositeLevel = null; // CLEAR CACHE (v1.7.22)
+							cachedOppositeLevel = null; // CLEAR CACHE (v1.7.22)
 							
 							// v1.10.26: Reset retry state for new level
 							waitingForVwapMitigation = false;
@@ -3198,10 +3209,10 @@ currentEntryState = EntryState.Idle;
 					DrawTriggerLabel(triggerTag, false, 0, Low[0]);
 				}
 
-				// WICK GROWTH (Mid-Bar during Trigger)
-				// We allow the anchor to expand while we form the trigger candle.
-				if (isShortSetup && High[0] > setupAnchorPrice) setupAnchorPrice = High[0];
-				if (!isShortSetup && Low[0] < setupAnchorPrice) setupAnchorPrice = Low[0];
+						// DYNAMIC ANCHOR UPDATE (Wait Phase)
+						// Keep anchor at extremum while waiting for confirmation
+						if (isShortSetup && High[0] > setupAnchorPrice) setupAnchorPrice = High[0];
+						if (!isShortSetup && Low[0] < setupAnchorPrice) setupAnchorPrice = Low[0];
 			}
 			
 			// 2. CONFIRMATION LOGIC (Waiting -> Working)
@@ -3733,15 +3744,8 @@ setupLevelName = "";
 			slPrice = setupAnchorPrice + TickSize;
 			if (slPrice <= lastPrice) slPrice = lastPrice + (5 * TickSize); 
 			
-			// v1.11.27: Validate SL is not too far from current price (broker rejection protection)
-			// If SL is more than 100 ticks away, use fallback based on StopLossTicks
-			double slDistanceTicks = Math.Abs(slPrice - lastPrice) / TickSize;
-			if (slDistanceTicks > 100)
-			{
-				double fallbackSL = avgEntry + (StopLossTicks * TickSize);
-				Log(string.Format("SL DISTANCE WARNING: Original SL {0} is {1:F0} ticks away. Using fallback {2}", slPrice, slDistanceTicks, fallbackSL));
-				slPrice = fallbackSL;
-			} 
+			// v1.14.21: REMOVED BROKEN DISTANCE CHECK (Was causing 1-tick SL in MNQ)
+			// Logic removed: if (slDistanceTicks > 100) ... 
 
 			// v1.10.31: Use Trade VWAP if active (continues accumulating even on day change)
 			if (tradeVwapActive)
@@ -3770,15 +3774,8 @@ setupLevelName = "";
 			slPrice = setupAnchorPrice - TickSize;
 			if (slPrice >= lastPrice) slPrice = lastPrice - (5 * TickSize); 
 			
-			// v1.11.27: Validate SL is not too far from current price (broker rejection protection)
-			// If SL is more than 100 ticks away, use fallback based on StopLossTicks
-			double slDistanceTicksLong = Math.Abs(slPrice - lastPrice) / TickSize;
-			if (slDistanceTicksLong > 100)
-			{
-				double fallbackSLLong = avgEntry - (StopLossTicks * TickSize);
-				Log(string.Format("SL DISTANCE WARNING: Original SL {0} is {1:F0} ticks away. Using fallback {2}", slPrice, slDistanceTicksLong, fallbackSLLong));
-				slPrice = fallbackSLLong;
-			} 
+			// v1.14.21: REMOVED BROKEN DISTANCE CHECK (Was causing 1-tick SL in MNQ)
+			// Logic removed: if (slDistanceTicksLong > 100) ... 
 
 			// v1.10.31: Use Trade VWAP if active (continues accumulating even on day change)
 			if (tradeVwapActive)
@@ -4079,7 +4076,7 @@ setupLevelName = "";
 		else return 0; // Can't guess
 		
 		// DEBUG (v1.7.22): Log búsqueda
-		Log(string.Format("{0} | SEARCH_OPPOSITE: Looking for '{1}' from SAME DAY as '{2}' (RefDate: {3:yyyy-MM-dd})", Time[0], oppName, name, refTime.Date));
+		if (EnableDebugLogs) Log(string.Format("{0} | SEARCH_OPPOSITE: Looking for '{1}' from SAME DAY as '{2}' (RefDate: {3:yyyy-MM-dd})", Time[0], oppName, name, refTime.Date));
 		
 		// Perform Scan - SAME DAY (matching Date only, ignore time)
 		SessionLevel foundLvl = null;
@@ -4096,19 +4093,19 @@ setupLevelName = "";
 				bool sameDay = (l.StartTime.Date == refTime.Date);
 				
 				// DEBUG: Log candidato
-				Log(string.Format("   -> Candidate #{0}: {1} @ {2:F2} (Date: {3:yyyy-MM-dd}, SameDay: {4})", candidatesFound, l.Name, l.Price, l.StartTime.Date, sameDay));
+				if (EnableDebugLogs) Log(string.Format("   -> Candidate #{0}: {1} @ {2:F2} (Date: {3:yyyy-MM-dd}, SameDay: {4})", candidatesFound, l.Name, l.Price, l.StartTime.Date, sameDay));
 				
 				// SAME DAY CHECK: High and Low must be from same calendar day
 				if (sameDay)
 				{
 					foundLvl = l;
-					Log(string.Format("   -> ACCEPTED (Same Day): {0} @ {1:F2}", l.Name, l.Price));
+					if (EnableDebugLogs) Log(string.Format("   -> ACCEPTED (Same Day): {0} @ {1:F2}", l.Name, l.Price));
 					break;
 				}
 				else
 				{
 					rejectedByDate++;
-					Log(string.Format("   -> REJECTED (Different Day): {0:yyyy-MM-dd} != {1:yyyy-MM-dd}", l.StartTime.Date, refTime.Date));
+					if (EnableDebugLogs) Log(string.Format("   -> REJECTED (Different Day): {0:yyyy-MM-dd} != {1:yyyy-MM-dd}", l.StartTime.Date, refTime.Date));
 				}
 			}
 		}
@@ -4120,7 +4117,7 @@ setupLevelName = "";
 		}
 		
 		// DEBUG: Summary if not found
-		Log(string.Format("{0} | OPPOSITE NOT FOUND: '{1}' from same day (Found {2} candidates, {3} rejected by date mismatch)", Time[0], oppName, candidatesFound, rejectedByDate));
+		if (EnableDebugLogs && foundLvl == null) Log(string.Format("{0} | OPPOSITE NOT FOUND: '{1}' from same day (Found {2} candidates, {3} rejected by date mismatch)", Time[0], oppName, candidatesFound, rejectedByDate));
 		
 		return 0;
 	}
@@ -4885,6 +4882,26 @@ setupLevelName = "";
 		public string USAEndTime { get; set; }
 		
 
+	// ===== AI FILTERS (v1.14.23) =====
+	// NOTA: Estos parámetros están DESACTIVADOS por defecto (valores vacíos/0)
+	// Solo activar si el Reporte Ejecutivo de Streamlit recomienda filtrar zonas tóxicas
+	
+	[Display(Name="Enabled Zones (CSV)", 
+	         Description="Lista de zonas habilitadas separadas por coma. Vacío = todas habilitadas. Ej: 'Asia High, USA Low'", 
+	         GroupName="2. AI Filters", 
+	         Order=1)]
+	public string EnabledZonesParam { get; set; }
+	
+	[Range(0, 365)]
+	[Display(Name="Max Level Age (Days)", 
+	         Description="Edad máxima de niveles en días. 0 = sin límite de edad.", 
+	         GroupName="2. AI Filters", 
+	         Order=2)]
+	public int MaxLevelAgeDays { get; set; }
+
+
+
+
 
 		// Fix: Missing InitCSV stub.
 		private void InitCSV()
@@ -4912,6 +4929,69 @@ setupLevelName = "";
 			// Cancel any working entry orders to be safe
 			if (entryOrder != null && entryOrder.OrderState == OrderState.Working) CancelOrder(entryOrder);
 		}
+
+	// =========================================================
+	// v1.14.23: AI FILTER HELPERS
+	// =========================================================
+	private void ParseEnabledZones()
+	{
+		enabledZonesList = new List<string>();
+		
+		if (string.IsNullOrWhiteSpace(EnabledZonesParam))
+		{
+			// Vacío = todas las zonas habilitadas (sin filtro)
+			return;
+		}
+		
+		// Parsear CSV
+		string[] zones = EnabledZonesParam.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+		foreach (string zone in zones)
+		{
+			enabledZonesList.Add(zone.Trim());
+		}
+		
+		Log(string.Format("AI FILTER: {0} zonas habilitadas: {1}", enabledZonesList.Count, EnabledZonesParam));
+	}
+
+	private bool IsZoneEnabled(string zoneName, DateTime levelTime)
+	{
+		// 1. Si la lista está vacía = sin filtro de zona (todas habilitadas)
+		if (enabledZonesList == null || enabledZonesList.Count == 0)
+		{
+			// No hay filtro activo, continuar con verificación de edad
+		}
+		else
+		{
+			// Verificar si la zona está en la lista permitida
+			bool zoneAllowed = false;
+			foreach (string allowedZone in enabledZonesList)
+			{
+				if (zoneName.IndexOf(allowedZone, StringComparison.OrdinalIgnoreCase) >= 0)
+				{
+					zoneAllowed = true;
+					break;
+				}
+			}
+			
+			if (!zoneAllowed)
+			{
+				return false; // Zona bloqueada
+			}
+		}
+		
+		// 2. Verificar edad del nivel
+		if (MaxLevelAgeDays > 0)
+		{
+			TimeSpan age = DateTime.Now - levelTime;
+			if (age.TotalDays > MaxLevelAgeDays)
+			{
+				return false; // Nivel demasiado viejo
+			}
+		}
+		
+		// Pasó todos los filtros (o no hay filtros activos)
+		return true;
+	}
 	} // End of SessionLevelsStrategy class
 
 	public class SessionLevelData

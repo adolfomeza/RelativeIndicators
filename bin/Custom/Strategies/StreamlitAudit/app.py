@@ -13,6 +13,27 @@ import streamlit.components.v1 as components
 # AI Engine for Quant Analysis
 from ai_engine import show_ai_analysis, get_analyzer
 
+# --- COMMISSION RATES (2025 NinjaTrader Brokerage) ---
+# All-in rates (Commission + NFA + Exchange + Routing) per side
+COMMISSION_RATES = {
+    'Free (Default)': {
+        'Micro': 0.91,      # MES, MNQ, M2K, MYM
+        'Standard': 2.74,   # ES, NQ, YM, RTY
+        'MicroCrypto': 1.56,# MBT, MET
+        'Nano': 0.35,       # Nano Bitcoin
+        'Commodity': 3.09,  # CL, GC, SI, HG
+        'MicroCom': 0.77    # MCL, MGC, M6E
+    },
+    'Lifetime (Lifetime)': {
+        'Micro': 0.56,
+        'Standard': 2.09,
+        'MicroCrypto': 0.81,
+        'Nano': 0.15,
+        'Commodity': 2.44, # Approx for CL
+        'MicroCom': 0.42
+    }
+}
+
 # --- PAGE CONFIG ---
 
 st.set_page_config(page_title="Laboratorio de Auditoría Quant", layout="wide", page_icon="🕵️‍♂️")
@@ -275,10 +296,572 @@ def apply_premium_style(fig, title=None):
     )
     return fig
 
+
+# =============================================================================
+# HELPER FUNCTIONS FOR EXECUTIVE REPORT
+# =============================================================================
+
+def generate_executive_report(df):
+    """Generates comprehensive executive report compiling all analyses"""
+    report = ""
+    
+    # Header
+    report += "=" * 80 + "\n"
+    report += "🎯 REPORTE EJECUTIVO - TRADING ANALYSIS\n"
+    report += "=" * 80 + "\n\n"
+    report += f"Generado: {datetime.now().strftime('%Y-%m-%d %H:%M')}\n"
+    
+    if 'EntryTime' in df.columns and 'ExitTime' in df.columns:
+        report += f"Período: {df['EntryTime'].min().date()} a {df['ExitTime'].max().date()}\n"
+    report += f"Total Registros: {len(df)}\n\n"
+    
+    # Sections
+    report += compile_exec_summary(df)
+    report += compile_instrument_perf(df)
+    report += compile_levels_perf(df)
+    report += compile_filter_recommendations(df)
+    report += generate_csharp_filters(df)
+    report += compile_action_plan(df)
+    
+    # NEW: R-Ladder Analysis
+    r_ladder_text, r_df = analyze_r_ladder(df, max_r=20)
+    report += r_ladder_text
+    
+    # NEW: Scaling Out Simulation
+    scaling_text, scaling_df = analyze_scaling_out(df, r_df, position_sizes=[3, 5, 10, 20])
+    report += scaling_text
+    
+    return report, r_df, scaling_df
+
+
+def compile_exec_summary(df):
+    """Section 1: Executive Summary"""
+    section = "=" * 80 + "\n"
+    section += "1. RESUMEN EJECUTIVO\n"
+    section += "=" * 80 + "\n\n"
+    
+    total_trades = len(df)
+    net_pnl = df['PnL'].sum()
+    wins = len(df[df['PnL'] > 0])
+    losses = len(df[df['PnL'] <= 0])
+    win_rate = (wins / total_trades * 100) if total_trades > 0 else 0
+    
+    avg_win = df[df['PnL'] > 0]['PnL'].mean() if wins > 0 else 0
+    avg_loss = abs(df[df['PnL'] <= 0]['PnL'].mean()) if losses > 0 else 0
+    profit_factor = (wins * avg_win) / (losses * avg_loss) if losses > 0 and avg_loss > 0 else 0
+    
+    section += "📊 Métricas Clave:\n"
+    section += f"  - Total Trades: {total_trades}\n"
+    section += f"  - PnL Neto: ${net_pnl:,.2f}\n"
+    section += f"  - Win Rate: {win_rate:.1f}%\n"
+    section += f"  - Profit Factor: {profit_factor:.2f}\n"
+    section += f"  - Avg Win: ${avg_win:.2f} | Avg Loss: ${avg_loss:.2f}\n\n"
+    
+    if net_pnl > 1000 and win_rate > 40:
+        verdict = "✅ RENTABLE - Sistema con edge positivo"
+    elif net_pnl > 0:
+        verdict = "⚠️ MARGINAL - Requiere optimización"
+    else:
+        verdict = "❌ PERDEDOR - Requiere revisión profunda"
+    
+    section += f"🎯 Veredicto Global: {verdict}\n\n"
+    return section
+
+
+def compile_instrument_perf(df):
+    """Section 2: Analysis by Instrument"""
+    section = "=" * 80 + "\n"
+    section += "2. PERFORMANCE POR INSTRUMENTO\n"
+    section += "=" * 80 + "\n\n"
+    
+    if 'Instrument' not in df.columns:
+        section += "⚠️ No hay información de instrumento.\n\n"
+        return section
+    
+    inst_stats = df.groupby('Instrument').agg({
+        'PnL': ['sum', 'count'],
+        'Result': lambda x: (x.str.contains('TP', na=False)).sum()
+    })
+    
+    inst_stats.columns = ['PnL', 'Trades', 'Wins']
+    inst_stats['WR'] = (inst_stats['Wins'] / inst_stats['Trades'] * 100).round(1)
+    inst_stats = inst_stats.sort_values('PnL', ascending=False)
+    
+    for inst in inst_stats.index:
+        data = inst_stats.loc[inst]
+        verdict = "✅ MANTENER" if data['PnL'] > 0 else "❌ DESHABILITAR"
+        section += f"{inst}:\n"
+        section += f"  PnL: ${data['PnL']:,.2f} | Trades: {int(data['Trades'])} | WR: {data['WR']:.1f}% → {verdict}\n\n"
+    
+    return section
+
+
+def compile_levels_perf(df):
+    """Section 3: Global Levels Analysis"""
+    section = "=" * 80 + "\n"
+    section += "3. ANÁLISIS DE NIVELES\n"
+    section += "=" * 80 + "\n\n"
+    
+    level_df = df[df['SetupName'].str.contains('Asia|Europe|USA', case=False, na=False)].copy()
+    
+    if level_df.empty:
+        section += "⚠️ No se detectaron trades de niveles.\n\n"
+        return section
+    
+    level_df['Zone'] = level_df['SetupName'].str.extract(r'(Asia|Europe|USA)\s*(Low|High)', expand=False).apply(lambda x: f"{x[0]} {x[1]}", axis=1)
+    zone_stats = level_df.groupby('Zone')['PnL'].agg(['sum', 'count']).sort_values('sum', ascending=False)
+    
+    section += "🏆 TOP 5 MEJORES ZONAS:\n"
+    for i, (zone, data) in enumerate(zone_stats.head(5).iterrows(), 1):
+        section += f"  {i}. {zone}: ${data['sum']:,.0f} ({int(data['count'])} trades)\n"
+    
+    section += "\n❌ ZONAS PROBLEMÁTICAS:\n"
+    bad_zones = zone_stats[zone_stats['sum'] < -100]
+    if not bad_zones.empty:
+        for zone, data in bad_zones.iterrows():
+            section += f"  - {zone}: ${data['sum']:,.0f} → FILTRAR\n"
+    else:
+        section += "  ✅ No hay zonas extremadamente tóxicas\n"
+    
+    section += "\n"
+    return section
+
+
+def compile_filter_recommendations(df):
+    """Section 4: Recommended Filters"""
+    section = "=" * 80 + "\n"
+    section += "4. FILTROS RECOMENDADOS\n"
+    section += "=" * 80 + "\n\n"
+    
+    level_df = df[df['SetupName'].str.contains('Asia|Europe|USA', case=False, na=False)].copy()
+    
+    if level_df.empty:
+        section += "⚠️ Datos insuficientes.\n\n"
+        return section
+    
+    level_df['Zone'] = level_df['SetupName'].str.extract(r'(Asia|Europe|USA)\s*(Low|High)', expand=False).apply(lambda x: f"{x[0]} {x[1]}", axis=1)
+    zone_pnl = level_df.groupby('Zone')['PnL'].sum()
+    toxic_zones = zone_pnl[zone_pnl < -200].sort_values()
+    
+    section += "🔴 ZONAS A DESHABILITAR (PnL < -$200):\n"
+    if not toxic_zones.empty:
+        total_impact = abs(toxic_zones.sum())
+        for zone, pnl in toxic_zones.items():
+            section += f"  - {zone} (Pérdida: ${pnl:,.0f})\n"
+        section += f"\n  💰 Impacto Estimado: +${total_impact:,.0f}\n\n"
+    else:
+        section += "  ✅ No hay zonas que califiquen\n\n"
+    
+    return section
+
+
+def generate_csharp_filters(df):
+    """Section 5: Generated C# Code"""
+    section = "=" * 80 + "\n"
+    section += "5. CÓDIGO C# GENERADO\n"
+    section += "=" * 80 + "\n\n"
+    section += "// Agregar a SessionLevelsStrategy.cs\n\n"
+    
+    level_df = df[df['SetupName'].str.contains('Asia|Europe|USA', case=False, na=False)].copy()
+    
+    if not level_df.empty:
+        level_df['Zone'] = level_df['SetupName'].str.extract(r'(Asia|Europe|USA)\s*(Low|High)', expand=False).apply(lambda x: f"{x[0]} {x[1]}", axis=1)
+        zone_pnl = level_df.groupby('Zone')['PnL'].sum()
+        enabled = zone_pnl[zone_pnl > -200].index.tolist()
+        
+        section += "private List<string> EnabledZones = new List<string> {\n"
+        for zone in enabled:
+            section += f'    "{zone}",  // ${zone_pnl[zone]:,.0f}\n'
+        section += "};\n\n"
+    
+    section += "private int MaxLevelAgeDays = 0;\n\n"
+    return section
+
+
+def compile_action_plan(df):
+    """Section 6: Action Plan"""
+    section = "=" * 80 + "\n"
+    section += "6. PLAN DE ACCIÓN\n"
+    section += "=" * 80 + "\n\n"
+    
+    section += "✅ Pasos Inmediatos:\n"
+    section += "  1. Copiar código C# a SessionLevelsStrategy.cs\n"
+    section += "  2. Recompilar estrategia\n"
+    section += "  3. Ejecutar backtest de validación\n"
+    section += "  4. Comparar PnL antes/después\n\n"
+    
+    section += "📊 Monitoreo:\n"
+    section += "  - Ejecutar análisis semanal\n"
+    section += "  - Ajustar filtros según nuevos datos\n\n"
+    
+    section += "⚠️ Advertencias:\n"
+    section += "  - Validar en forward test\n"
+    section += "  - Sample mínimo: 30 trades\n\n"
+    
+    section += "=" * 80 + "\n"
+    section += "FIN DEL REPORTE\n"
+    section += "=" * 80 + "\n"
+    
+    return section
+
+
+def analyze_r_ladder(df, max_r=20):
+    """
+    Analiza cuántos trades alcanzaron cada nivel R (1R, 2R, ..., max_r R).
+    
+    Args:
+        df: DataFrame con columnas 'MAE', 'MFE', 'PnL', 'Direction'
+        max_r: Nivel máximo de R a analizar (default: 20)
+    
+    Returns:
+        tuple: (section_text: str, r_df: DataFrame or None)
+    """
+    section = "=" * 80 + "\n"
+    section += "7. ANÁLISIS MFE R-LADDER (1R → 20R)\n"
+    section += "=" * 80 + "\n\n"
+    
+    # Validar que tenemos los datos necesarios
+    if 'MAE' not in df.columns or 'MFE' not in df.columns:
+        section += "⚠️ ADVERTENCIA: No se encontraron columnas MAE/MFE en el CSV.\n"
+        section += "   Ejecuta un backtest reciente para generar estos datos.\n\n"
+        return section, None
+    
+    # Filtrar datos válidos
+    df_copy = df.copy()
+    df_copy = df_copy.dropna(subset=['MAE', 'MFE'])
+    
+    # Convertir MAE a valores absolutos (puede ser negativo en el CSV)
+    df_copy['MAE'] = df_copy['MAE'].abs()
+    df_copy = df_copy[df_copy['MAE'] > 0]  # Evitar división por cero
+    
+    if len(df_copy) == 0:
+        section += "⚠️ No hay datos válidos para análisis (MAE = 0 o NaN).\n\n"
+        return section, None
+    
+    # Calcular MFE en términos de R
+    # R = MFE / MAE (cuántas veces el riesgo inicial capturamos como ganancia)
+    df_copy['MFE_R'] = df_copy['MFE'] / df_copy['MAE']
+    
+    # Crear tabla de análisis
+    r_data = []
+    total_trades = len(df_copy)
+    avg_risk = df_copy['MAE'].mean()
+    
+    for r_level in range(1, max_r + 1):
+        # Trades que alcanzaron este nivel R
+        reached = df_copy[df_copy['MFE_R'] >= r_level]
+        count_reached = len(reached)
+        percent_reached = (count_reached / total_trades * 100) if total_trades > 0 else 0
+        
+        # PnL potencial si todos los trades que alcanzaron este nivel
+        # hubieran salido exactamente en r_level
+        potential_pnl = count_reached * r_level * avg_risk
+        
+        r_data.append({
+            'R_Level': f"{r_level}R",
+            'R_Numeric': r_level,
+            'Trades_Reached': count_reached,
+            'Percent_Reached': percent_reached,
+            'Potential_PnL': potential_pnl,
+        })
+    
+    r_df = pd.DataFrame(r_data)
+    r_df['Cumulative_PnL'] = r_df['Potential_PnL'].cumsum()
+    
+    # Generar reporte de texto
+    section += "📊 DISTRIBUCIÓN DE ALCANCE POR NIVEL R\n"
+    section += "-" * 80 + "\n"
+    section += f"{'R Level':<10} {'Alcanzado':<12} {'% Total':<12} {'PnL Potencial':<18} {'PnL Acum.':<15}\n"
+    section += "-" * 80 + "\n"
+    
+    for _, row in r_df.iterrows():
+        section += f"{row['R_Level']:<10} "
+        section += f"{row['Trades_Reached']:<12} "
+        section += f"{row['Percent_Reached']:<12.1f}% "
+        section += f"${row['Potential_PnL']:<17,.0f} "
+        section += f"${row['Cumulative_PnL']:<14,.0f}\n"
+    
+    section += "\n"
+    
+    # Análisis de "punto dulce"
+    # Filtrar solo los primeros 10R para evitar outliers
+    r_df_filtered = r_df[r_df['R_Numeric'] <= 10].copy()
+    
+    # Buscar el nivel R con mejor balance: alto % alcance + alto PnL incremental
+    r_df_filtered['Score'] = r_df_filtered['Percent_Reached'] * r_df_filtered['Potential_PnL'] / 10000
+    
+    if len(r_df_filtered) > 0:
+        best_r_idx = r_df_filtered['Score'].idxmax()
+        best_r = r_df_filtered.loc[best_r_idx]
+        
+        section += "💡 RECOMENDACIONES DE TAKE PROFIT\n"
+        section += "-" * 80 + "\n"
+        
+        # TP1: Buscar nivel con >70% de alcance
+        high_prob = r_df[r_df['Percent_Reached'] >= 70].tail(1)
+        if not high_prob.empty:
+            tp1_r = high_prob.iloc[0]
+            section += f"✅ TP1 Sugerido: {tp1_r['R_Level']} (Probabilidad Alta)\n"
+            section += f"   → {tp1_r['Percent_Reached']:.1f}% de trades alcanzan este nivel\n\n"
+        else:
+            section += f"✅ TP1 Sugerido: 2R (Estándar)\n"
+            tp1_percent = r_df[r_df['R_Level'] == '2R']['Percent_Reached'].values[0] if '2R' in r_df['R_Level'].values else 0
+            section += f"   → {tp1_percent:.1f}% de trades alcanzan este nivel\n\n"
+        
+        section += f"✅ TP2 Sugerido: {best_r['R_Level']} (Punto Dulce)\n"
+        section += f"   → Balance óptimo entre probabilidad ({best_r['Percent_Reached']:.1f}%) y ganancia\n\n"
+    
+    # Identificar nivel donde menos del 10% alcanza
+    low_prob = r_df[r_df['Percent_Reached'] < 10].head(1)
+    if not low_prob.empty:
+        section += f"⚠️ Niveles >{low_prob.iloc[0]['R_Level']}: Menos del 10% alcanza\n"
+        section += f"   → No recomendado usar como TP fijo\n\n"
+    
+    section += "\n"
+    return section, r_df
+
+
+def plot_r_ladder_chart(r_df):
+    """
+    Crea gráfico de cascada mostrando % de alcance y PnL potencial por nivel R.
+    
+    Args:
+        r_df: DataFrame retornado por analyze_r_ladder()
+    
+    Returns:
+        Plotly figure or None
+    """
+    if r_df is None or r_df.empty:
+        return None
+    
+    fig = go.Figure()
+    
+    # Barra: Porcentaje de alcance
+    fig.add_trace(go.Bar(
+        x=r_df['R_Level'],
+        y=r_df['Percent_Reached'],
+        name='% Alcanzado',
+        marker_color='#2EA043',
+        yaxis='y',
+        text=r_df['Percent_Reached'].apply(lambda x: f"{x:.1f}%"),
+        textposition='outside'
+    ))
+    
+    # Línea: PnL Acumulado
+    fig.add_trace(go.Scatter(
+        x=r_df['R_Level'],
+        y=r_df['Cumulative_PnL'],
+        name='PnL Acumulado',
+        mode='lines+markers',
+        marker_color='#00D9FF',
+        line=dict(width=3),
+        yaxis='y2'
+    ))
+    
+    fig.update_layout(
+        title="R-Ladder Analysis: Alcance vs PnL Potencial",
+        xaxis_title="Nivel R",
+        yaxis=dict(
+            title="% de Trades que Alcanzan",
+            titlefont=dict(color="#2EA043"),
+            tickfont=dict(color="#2EA043"),
+            range=[0, 105]
+        ),
+        yaxis2=dict(
+            title="PnL Acumulado ($)",
+            titlefont=dict(color="#00D9FF"),
+            tickfont=dict(color="#00D9FF"),
+            overlaying='y',
+            side='right'
+        ),
+        hovermode='x unified',
+        showlegend=True
+    )
+    
+    apply_premium_style(fig)
+    return fig
+
+
+def analyze_scaling_out(df, r_df, position_sizes=[3, 5, 10, 20]):
+    """
+    Simula diferentes estrategias de scaling out distribuyendo contratos
+    uniformemente entre niveles R.
+    
+    Args:
+        df: DataFrame original con trades
+        r_df: DataFrame de R-Ladder (output de analyze_r_ladder)
+        position_sizes: Lista de tamaños de posición a simular
+    
+    Returns:
+        tuple: (section_text: str, comparison_df: DataFrame)
+    """
+    section = "=" * 80 + "\n"
+    section += "8. SIMULACIÓN SCALING OUT DINÁMICO\n"
+    section += "=" * 80 + "\n\n"
+    
+    # Validar que tenemos datos
+    if r_df is None or r_df.empty:
+        section += "⚠️ No hay datos de R-Ladder para simular scaling out.\n\n"
+        return section, None
+    
+    if 'MAE' not in df.columns or 'MFE' not in df.columns:
+        section += "⚠️ Requiere columnas MAE/MFE para simulación.\n\n"
+        return section, None
+    
+    # Preparar datos
+    df_copy = df.copy()
+    df_copy = df_copy.dropna(subset=['MAE', 'MFE'])
+    
+    # Convertir MAE a valores absolutos (puede ser negativo en el CSV)
+    df_copy['MAE'] = df_copy['MAE'].abs()
+    df_copy = df_copy[df_copy['MAE'] > 0]
+    
+    if len(df_copy) == 0:
+        section += "⚠️ No hay datos válidos.\n\n"
+        return section, None
+    
+    df_copy['MFE_R'] = df_copy['MFE'] / df_copy['MAE']
+    avg_risk = df_copy['MAE'].mean()
+    total_trades = len(df_copy)
+    
+    # Calcular PnL del sistema actual (baseline)
+    current_pnl = df_copy['PnL'].sum()
+    
+    section += "📊 COMPARACIÓN DE ESTRATEGIAS DE SALIDA\n"
+    section += "-" * 80 + "\n\n"
+    
+    # Simular diferentes configuraciones
+    results = []
+    
+    for n_contracts in position_sizes:
+        # Determinar en qué niveles R salir
+        if n_contracts <= 20:
+            # Distribuir uniformemente: 1 contrato cada (20/n_contracts) niveles R
+            step = 20 / n_contracts
+            exit_levels = [int((i + 1) * step) for i in range(n_contracts)]
+        else:
+            # Si hay más de 20 contratos, saturamos en 20R
+            exit_levels = list(range(1, 21))
+            # Distribuir excedente proporcionalmente
+            contracts_per_level = [1] * 20
+            remaining = n_contracts - 20
+            for i in range(remaining):
+                contracts_per_level[i % 20] += 1
+        
+        # Calcular PnL total para esta estrategia
+        total_pnl = 0
+        total_contracts_exited = 0
+        
+        for trade_idx, trade in df_copy.iterrows():
+            trade_mfe_r = trade['MFE_R']
+            trade_risk = trade['MAE']
+            
+            # Para este trade, ver cuántos contratos salen en cada nivel
+            for level_idx, r_level in enumerate(exit_levels):
+                if trade_mfe_r >= r_level:
+                    # Este contrato sale en este nivel R
+                    if n_contracts <= 20:
+                        contracts = 1
+                    else:
+                        contracts = contracts_per_level[level_idx] if level_idx < len(contracts_per_level) else 1
+                    
+                    pnl_per_contract = r_level * trade_risk
+                    total_pnl += pnl_per_contract * contracts
+                    total_contracts_exited += contracts
+                else:
+                    # Si no alcanzó este nivel, los contratos restantes salen en SL
+                    if n_contracts <= 20:
+                        remaining_contracts = n_contracts - level_idx
+                    else:
+                        remaining_contracts = sum(contracts_per_level[level_idx:])
+                    
+                    # SL = -1R por contrato
+                    total_pnl += (-trade_risk) * remaining_contracts
+                    total_contracts_exited += remaining_contracts
+                    break
+            else:
+                # Si el trade alcanzó todos los niveles, todos los contratos salieron
+                pass
+        
+        # Calcular métricas
+        avg_pnl_per_trade = total_pnl / total_trades if total_trades > 0 else 0
+        avg_r_exit = avg_pnl_per_trade / avg_risk if avg_risk > 0 else 0
+        
+        results.append({
+            'Strategy': f"{n_contracts} Contratos",
+            'Exit_Levels': len(exit_levels),
+            'Total_PnL': total_pnl,
+            'Avg_R_Exit': avg_r_exit,
+            'vs_Current': total_pnl - current_pnl
+        })
+    
+    # Agregar sistema actual como referencia
+    avg_current_r = (current_pnl / total_trades) / avg_risk if avg_risk > 0 else 0
+    results.append({
+        'Strategy': 'Sistema Actual (TP1/TP2)',
+        'Exit_Levels': 2,  # Asumiendo TP1 y TP2
+        'Total_PnL': current_pnl,
+        'Avg_R_Exit': avg_current_r,
+        'vs_Current': 0
+    })
+    
+    comparison_df = pd.DataFrame(results)
+    
+    # Mostrar tabla
+    section += f"{'Estrategia':<30} {'Niveles':<10} {'PnL Total':<15} {'Avg R':<10} {'vs Actual':<15}\n"
+    section += "-" * 80 + "\n"
+    
+    for _, row in comparison_df.iterrows():
+        marker = "⭐ " if row['vs_Current'] == max(comparison_df['vs_Current']) and row['vs_Current'] > 0 else "   "
+        section += f"{marker}{row['Strategy']:<28} {row['Exit_Levels']:<10} "
+        section += f"${row['Total_PnL']:<14,.0f} {row['Avg_R_Exit']:<10.2f} "
+        
+        if row['vs_Current'] > 0:
+            section += f"+${row['vs_Current']:,.0f}\n"
+        elif row['vs_Current'] < 0:
+            section += f"-${abs(row['vs_Current']):,.0f}\n"
+        else:
+            section += f"(baseline)\n"
+    
+    section += "\n"
+    
+    # Encontrar mejor estrategia
+    best = comparison_df.loc[comparison_df['Total_PnL'].idxmax()]
+    
+    section += "💡 RECOMENDACIONES\n"
+    section += "-" * 80 + "\n"
+    
+    if best['Strategy'] == 'Sistema Actual (TP1/TP2)':
+        section += "✅ Tu sistema actual (TP1/TP2) YA ES ÓPTIMO\n"
+        section += "   → No se recomienda cambiar a scaling out uniforme\n\n"
+    else:
+        improvement = best['vs_Current']
+        section += f"🎯 Mejor Estrategia: {best['Strategy']} ({best['Exit_Levels']} niveles)\n"
+        section += f"   → Mejora estimada: +${improvement:,.0f} sobre sistema actual\n"
+        section += f"   → Salida promedio: {best['Avg_R_Exit']:.2f}R\n\n"
+        
+        # Detallar niveles de salida
+        n_best = int(best['Strategy'].split()[0])
+        if n_best <= 20:
+            step = 20 / n_best
+            levels = [int((i + 1) * step) for i in range(n_best)]
+            section += f"   📋 Niveles de Salida Sugeridos:\n"
+            for i, level in enumerate(levels, 1):
+                section += f"      TP{i}: {level}R (1 contrato)\n"
+    
+    section += "\n⚠️ NOTA: Esta es una simulación teórica. En práctica real:\n"
+    section += "   - Slippage puede reducir PnL\n"
+    section += "   - Comisiones aumentan con más órdenes\n"
+    section += "   - Gestión de múltiples salidas es más compleja\n\n"
+    
+    section += "\n"
+    return section, comparison_df
+
+
 # --- 1. DATA LOADING & PRE-PROCESSING (CLUSTERING) ---
 # v2.1: Updated to support new CSV format with Commission, NetPnL, Attempt, RiskReward
 @st.cache_data
-def load_and_process_data(target_path):
+def load_and_process_data(target_path, license_tier='Free (Default)'):
     # V_MULTI: Support for Glob Patterns (e.g. backtest_log_*.csv)
     files_to_load = []
     
@@ -359,6 +942,69 @@ def load_and_process_data(target_path):
     # Combine
     df = pd.concat(all_dfs, ignore_index=True)
 
+    # v1.14.14: Deduplicate trades based on unique keys
+    # Fix for inconsistent backtest results (User Re-Runs)
+    if not df.empty:
+        # PnL can vary slightly due to floating point, so don't use it for deduplication key.
+        # ID is usually reset on each backtest run (1, 2, 3...)
+        # Instrument + EntryTime + ID should be unique enough.
+        # First ensure dates are parsed for reliable comparison
+        if 'EntryTime' in df.columns:
+             df['EntryTime'] = pd.to_datetime(df['EntryTime'], format='mixed', errors='coerce')
+        if 'ExitTime' in df.columns:
+             df['ExitTime'] = pd.to_datetime(df['ExitTime'], format='mixed', errors='coerce')
+
+        # Drop exact duplicates first (row-wise)
+        df.drop_duplicates(inplace=True)
+
+        # Then drop logical duplicates (same trade ID at same time)
+        # Keep 'last' assuming latest run is most relevant
+        subset_cols = ['Instrument', 'EntryTime']
+        if 'ID' in df.columns:
+            subset_cols.append('ID')
+        
+        duplicates_count = df.duplicated(subset=subset_cols).sum()
+        if duplicates_count > 0:
+            # st.warning(f"Se eliminaron {duplicates_count} trades duplicados (mismas ejecuciones).")
+            df.drop_duplicates(subset=subset_cols, keep='last', inplace=True)
+        
+        # v1.14.15: Apply Dynamic Commissions
+        # Recalculate NetPnL based on selected License Tier
+        rates = COMMISSION_RATES[license_tier]
+        
+        def calculate_commission(row):
+            inst = str(row['Instrument']).upper()
+            rate = rates['Standard'] # Default
+            
+            # Logic to detect type
+            if inst.startswith('M') and not inst.startswith('MY'): # Micro general
+                if 'MBT' in inst or 'MET' in inst: rate = rates['MicroCrypto']
+                elif 'MCL' in inst or 'MGC' in inst or 'MHG' in inst: rate = rates['MicroCom']
+                else: rate = rates['Micro']
+            elif inst.startswith('MYM') or inst.startswith('M2K'): # Explicit Micros
+                rate = rates['Micro']
+            elif inst in ['CL', 'GC', 'SI', 'HG', '6E', '6B', '6J']: # Commodities/Currencies
+                rate = rates['Commodity']
+            
+            return rate * 2 # Round trip
+            
+        # Apply
+        df['Commission'] = df.apply(calculate_commission, axis=1)
+        
+        # Recalculate Net PnL
+        # Note: 'PnL' in CSV is typically Gross if explicitly exported as such, or Net if strategy did it.
+        # But we want to OVERWRITE the strategy's static commission.
+        # So we reconstruct Gross from PnL + OldCommission (if exists) or just treat PnL as Gross if Commission was 0
+        
+        # Safest way: Assume 'GrossPnL' exists (we checked load logic). If not, derive it.
+        if 'GrossPnL' not in df.columns:
+             # Fallback: Assume current PnL is Gross for safety or try to reverse
+             df['GrossPnL'] = df['PnL'] 
+        
+        df['NetPnL'] = df['GrossPnL'] - df['Commission']
+        # Update main PnL column to be Net for analysis
+        df['PnL'] = df['NetPnL']
+
     # Basic Cleaning
     try:
         # Remove currency symbols if present
@@ -429,7 +1075,18 @@ def load_and_process_data(target_path):
         # --- CLUSTERING LOGIC (The "Quant" Step) ---
         # Group by Entry characteristics to identify the Logical Trade
         # A "Trade" is defined by same Instrument, EntryTime and Direction (Type)
-        df['Trade_Clust_ID'] = df.groupby(['Instrument', 'EntryTime', 'Type']).ngroup()
+        # OLD: df['Trade_Clust_ID'] = df.groupby(['Instrument', 'EntryTime', 'Type']).ngroup()
+        
+        # v1.14.16: Clustering by Strategy ID (Parent)
+        # Format: 105, 105.1, 105.2 -> Parent is 105
+        # This matches NinjaTrader's "Trades" view exactly
+        if 'ID' in df.columns:
+            # Cast to string, split by dot, take first part
+            df['ParentID'] = df['ID'].astype(str).apply(lambda x: x.split('.')[0])
+            df['Trade_Clust_ID'] = df['ParentID']
+        else:
+             # Fallback for legacy CSVs without ID column
+             df['Trade_Clust_ID'] = df.groupby(['Instrument', 'EntryTime', 'Type']).ngroup()
         
         # v2.2: Extract Exit Tier from Result name (TP1, TP2, TP3... or SL)
         # Instead of ranking by exit time, use the actual TP number
@@ -536,6 +1193,16 @@ st.sidebar.title("🎛️ Panel de Control")
 # API Status Indicator
 analyzer = get_analyzer()
 if analyzer is not None:
+    # v1.14.15: Dynamic Commission Selector (Placed at top for visibility)
+    st.sidebar.subheader("💰 Comisiones")
+    license_tier = st.sidebar.selectbox(
+        "Licencia NinjaTrader",
+        options=list(COMMISSION_RATES.keys()),
+        index=0,
+        help="¡Simula tu ahorro! Cambia entre licencia Free y Lifetime para recalcular el PnL Neto."
+    )
+    st.sidebar.markdown("---")
+    
     st.sidebar.success("🤖 IA: Activa")
 else:
     st.sidebar.warning("⚠️ IA: Sin API Key (.env)")
@@ -621,7 +1288,7 @@ with st.sidebar.expander("🔍 Inspector de Datos Crudos"):
         except:
             st.error("No se puede leer el archivo.")
 
-df_raw = load_and_process_data(data_path)
+df_raw = load_and_process_data(data_path, license_tier)
 
 if df_raw is None:
     st.warning("⚠️ Esperando datos. Por favor ejecuta un Backtest en NinjaTrader primero.")
@@ -791,7 +1458,18 @@ max_tier = df[df['Exit_Rank'] == df['Exit_Rank'].max()]['Exit_Tier'].iloc[0] if 
 kpi5.metric("Max Tier Usado", max_tier)
 
 # Tabs
-tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9 = st.tabs(["📊 Tablero", "🧅 Análisis de Escala", "📉 Análisis de Riesgo", "🎯 MAE/MFE", "🎲 Monte Carlo", "📅 Calendario", "⏰ Análisis Temporal", "🧱 Análisis de Niveles", "🆚 Live vs Backtest"])
+tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10 = st.tabs([
+    "📊 Tablero", 
+    "🧅 Análisis de Escala", 
+    "📉 Análisis de Riesgo", 
+    "🎯 MAE/MFE", 
+    "🎲 Monte Carlo", 
+    "📅 Calendario", 
+    "⏰ Análisis Temporal", 
+    "🧱 Análisis de Niveles", 
+    "🆚 Live vs Backtest",
+    "🎯 Reporte Ejecutivo"
+])
 
 with tab1:
     st.markdown("### Curva de Equidad (Por Ejecución)")
@@ -1266,7 +1944,8 @@ with tab6:
         daily_stats['YearMonth'] = daily_stats['ExitDate'].dt.to_period('M')
         available_months = daily_stats['YearMonth'].unique().astype(str)
         available_months = sorted(available_months, reverse=True) # Newest first
-        
+        st.markdown("---")
+    
         selected_month_str = st.selectbox("Seleccionar Mes", available_months)
         
         # Filter for selected month
@@ -1704,21 +2383,382 @@ with tab7:
         if level_df.empty:
             st.warning("⚠️ No se detectaron trades de Niveles (Formato 'Session High/Low' no encontrado).")
         else:
-            col_l1, col_l2 = st.columns(2)
+            # ================================================================
+            # SECTION 1: ENHANCED PERFORMANCE DASHBOARD
+            # ================================================================
+            st.subheader("📊 Dashboard de Rendimiento por Zona")
             
-            with col_l1:
-                st.subheader("Rendimiento por Zona")
-                zone_stats = level_df.groupby('Zone')['PnL'].sum().reset_index().sort_values('PnL', ascending=False)
-                fig_zone = px.bar(zone_stats, x='Zone', y='PnL', color='PnL', text_auto='.2s', color_continuous_scale='RdBu')
-                fig_zone = apply_premium_style(fig_zone, "PnL por Zona")
-                st.plotly_chart(fig_zone, use_container_width=True)
+            # Calculate comprehensive metrics per zone
+            zone_metrics = level_df.groupby('Zone').agg({
+                'PnL': ['sum', 'mean', 'std', 'count'],
+                'Result': lambda x: (x.str.contains('TP', na=False)).sum()  # Wins
+            }).round(2)
+            
+            zone_metrics.columns = ['Total_PnL', 'Avg_PnL', 'Std_PnL', 'Trades', 'Wins']
+            zone_metrics['Win_Rate'] = (zone_metrics['Wins'] / zone_metrics['Trades'] * 100).round(1)
+            zone_metrics['Sharpe_Proxy'] = (zone_metrics['Avg_PnL'] / zone_metrics['Std_PnL']).round(2)
+            zone_metrics['Sharpe_Proxy'] = zone_metrics['Sharpe_Proxy'].replace([np.inf, -np.inf], 0)
+            
+            # Calculate R:R (Winners vs Losers)
+            rr_data = []
+            for zone in level_df['Zone'].unique():
+                zone_trades = level_df[level_df['Zone'] == zone]
+                wins = zone_trades[zone_trades['PnL'] > 0]['PnL'].mean()
+                losses = abs(zone_trades[zone_trades['PnL'] <= 0]['PnL'].mean())
+                rr = wins / losses if losses > 0 else 0
+                rr_data.append({'Zone': zone, 'RR': round(rr, 2)})
+            
+            rr_df = pd.DataFrame(rr_data).set_index('Zone')
+            zone_metrics = zone_metrics.join(rr_df)
+            
+            # Sort by Total PnL descending
+            zone_metrics = zone_metrics.sort_values('Total_PnL', ascending=False)
+            
+            # Display formatted table
+            display_metrics = zone_metrics[['Total_PnL', 'Win_Rate', 'RR', 'Trades', 'Avg_PnL', 'Sharpe_Proxy']].copy()
+            display_metrics.columns = ['PnL Total ($)', 'Win Rate (%)', 'R:R', 'Trades', 'Avg Win ($)', 'Sharpe']
+            
+            st.dataframe(
+                display_metrics.style.format({
+                    'PnL Total ($)': '${:,.0f}',
+                    'Win Rate (%)': '{:.1f}%',
+                    'R:R': '{:.2f}',
+                    'Avg Win ($)': '${:.0f}',
+                    'Sharpe': '{:.2f}'
+                }).background_gradient(cmap='RdYlGn', subset=['PnL Total ($)', 'Win Rate (%)']),
+                use_container_width=True
+            )
+            
+            # Auto-generated Insights (Section 1)
+            best_zone = zone_metrics.index[0]
+            worst_zone = zone_metrics.index[-1]
+            best_wr = zone_metrics.loc[best_zone, 'Win_Rate']
+            worst_wr = zone_metrics.loc[worst_zone, 'Win_Rate']
+            best_pnl = zone_metrics.loc[best_zone, 'Total_PnL']
+            worst_pnl = zone_metrics.loc[worst_zone, 'Total_PnL']
+            
+            insight_s1 = f"""
+🧠 **Insight de Experto Quant: Jerarquía de Niveles**
+
+**🏆 Tu Mejor Edge:** {best_zone}
+- Win Rate: {best_wr:.1f}% | PnL: ${best_pnl:,.0f}
+- **Acción:** Prioriza este setup. Considera aumentar tamaño de posición aquí.
+
+**⚠️ Tu Mayor Lastre:** {worst_zone}
+- Win Rate: {worst_wr:.1f}% | PnL: ${worst_pnl:,.0f}
+- **Acción:** {"Filtra este nivel completamente" if worst_pnl < -200 else "Reduce frecuencia o ajusta lógica"}
+            """
+            
+            # Check for Sharpe outliers
+            high_sharpe = zone_metrics[zone_metrics['Sharpe_Proxy'] > 1.5]
+            if not high_sharpe.empty:
+                insight_s1 += f"\n\n**💎 Zonas Premium (Sharpe > 1.5):** {', '.join(high_sharpe.index.tolist())}"
+                insight_s1 += "\n- Estas zonas tienen retorno/riesgo excepcional. Son tus *verdaderos edges*."
+            
+            st.info(insight_s1)
+            
+            
+            # Prepare clean data for AI (Section 1)
+            ai_perf_summary = "Dashboard de Rendimiento por Zona:\n\n"
+            ai_perf_summary += "REGLA: PnL > 0 = RENTABLE (mantener). Sharpe > 1.5 = PREMIUM. Trades < 10 = Muestra insuficiente.\n\n"
+            
+            for zone in zone_metrics.index:
+                data = zone_metrics.loc[zone]
+                pnl = data['Total_PnL']
+                wr = data['Win_Rate']
+                rr = data['RR']
+                trades = int(data['Trades'])
+                sharpe = data['Sharpe_Proxy']
                 
-            with col_l2:
-                st.subheader("Decaimiento Temporal (Days Ago)")
-                day_stats_l = level_df.groupby('DaysAgo')['PnL'].sum().reset_index()
-                fig_days = px.bar(day_stats_l, x='DaysAgo', y='PnL', color='PnL', color_continuous_scale='RdBu')
-                fig_days = apply_premium_style(fig_days, "PnL vs Antigüedad del Nivel")
-                st.plotly_chart(fig_days, use_container_width=True)
+                verdict = "✅ RENTABLE" if pnl > 0 else "❌ PERDEDOR"
+                if pnl > 500 and sharpe > 1.5:
+                    verdict += " (PREMIUM)"
+                if trades < 10:
+                    verdict += " ⚠️ MUESTRA PEQUEÑA"
+                
+                ai_perf_summary += f"{zone}: PnL ${pnl:,.0f} ({verdict})\n"
+                ai_perf_summary += f"  - Win Rate: {wr:.1f}%, R:R: {rr:.2f}, Trades: {trades}, Sharpe: {sharpe:.2f}\n"
+            
+            # AI Analysis Button (Premium)
+            show_ai_analysis(
+                chart_name="Dashboard de Rendimiento",
+                chart_type="performance_dashboard",
+                data={"zone_metrics": ai_perf_summary},
+                key_suffix="tab8_section1"
+            )
+            
+            st.markdown("---")
+            
+            # ================================================================
+            # SECTION 1B: TEMPORAL DECAY (Full Width)
+            # ================================================================
+            st.subheader("⏳ Decaimiento Temporal por Zona")
+            
+            # Create pivot: Zone (Y) vs DaysAgo (X), values = PnL
+            heatmap_data = level_df.pivot_table(
+                index='Zone', 
+                columns='DaysAgo', 
+                values='PnL', 
+                aggfunc='sum', 
+                fill_value=0
+            )
+            
+            # Sort zones by total PnL (best to worst)
+            zone_totals = heatmap_data.sum(axis=1).sort_values(ascending=False)
+            heatmap_data = heatmap_data.loc[zone_totals.index]
+            
+            # Create heatmap
+            fig_days = go.Figure(data=go.Heatmap(
+                z=heatmap_data.values,
+                x=[f"{int(d)} días" if d > 0 else "Hoy" for d in heatmap_data.columns],
+                y=heatmap_data.index,
+                colorscale='RdBu',
+                zmid=0,  # Center at 0 (red=loss, blue=profit)
+                text=heatmap_data.values.round(0),
+                texttemplate='$%{text}',
+                textfont={"size": 10},
+                hovertemplate='<b>%{y}</b><br>Antigüedad: %{x}<br>PnL: $%{z:.0f}<extra></extra>',
+                colorbar=dict(title="PnL")
+            ))
+            
+            fig_days = apply_premium_style(fig_days, "Rendimiento por Zona y Antigüedad")
+            fig_days.update_layout(
+                xaxis_title="Antigüedad del Nivel",
+                yaxis_title="Zona",
+                height=400
+            )
+            st.plotly_chart(fig_days, use_container_width=True)
+
+            # ================================================================
+            # SECTION 2: DIRECTIONALITY MATRIX
+            # ================================================================
+            st.markdown("---")
+            st.subheader("🎯 Matriz Direccional: ¿Long o Short?")
+            
+            # Create pivot: Zone x Direction
+            dir_matrix = level_df.pivot_table(
+                index='Zone',
+                columns='Type',
+                values='PnL',
+                aggfunc=['sum', lambda x: (level_df.loc[x.index, 'Result'].str.contains('TP', na=False)).sum(), 'count']
+            )
+            
+            # Flatten columns
+            dir_matrix.columns = ['_'.join(col).strip() for col in dir_matrix.columns.values]
+            
+            # Calculate Win Rates
+            for direction in ['Long', 'Short']:
+                if f'sum_{direction}' in dir_matrix.columns:
+                    wins_col = f'<lambda>_{direction}'
+                    total_col = f'count_{direction}'
+                    if wins_col in dir_matrix.columns and total_col in dir_matrix.columns:
+                        dir_matrix[f'WR_{direction}'] = (dir_matrix[wins_col] / dir_matrix[total_col] * 100).round(1)
+            
+            # Display in two columns
+            col_dir1, col_dir2 = st.columns(2)
+            
+            with col_dir1:
+                st.markdown("**PnL por Dirección**")
+                pnl_display = dir_matrix[[col for col in dir_matrix.columns if col.startswith('sum_')]].copy()
+                pnl_display.columns = [col.replace('sum_', '') for col in pnl_display.columns]
+                st.dataframe(
+                    pnl_display.style.format('${:,.0f}').background_gradient(cmap='RdYlGn', axis=None),
+                    use_container_width=True
+                )
+            
+            with col_dir2:
+                st.markdown("**Win Rate (%) por Dirección**")
+                wr_display = dir_matrix[[col for col in dir_matrix.columns if col.startswith('WR_')]].copy()
+                wr_display.columns = [col.replace('WR_', '') for col in wr_display.columns]
+                st.dataframe(
+                    wr_display.style.format('{:.1f}%').background_gradient(cmap='RdYlGn', axis=None, vmin=0, vmax=100),
+                    use_container_width=True
+                )
+
+            # Auto-generated Insights (Section 2)
+            insight_s2 = "🧠 **Insight de Experto Quant: Bias Direccional**\n\n"
+            
+            directional_findings = []
+            for zone in dir_matrix.index:
+                long_wr = dir_matrix.loc[zone, 'WR_Long'] if 'WR_Long' in dir_matrix.columns else None
+                short_wr = dir_matrix.loc[zone, 'WR_Short'] if 'WR_Short' in dir_matrix.columns else None
+                
+                # Case 1: Both directions have data
+                if pd.notna(long_wr) and pd.notna(short_wr):
+                    diff = abs(long_wr - short_wr)
+                    if diff > 20:  # Significant bias
+                        better_dir = "LONG" if long_wr > short_wr else "SHORT"
+                        directional_findings.append(
+                            f"**{zone}**: Sesgo claro hacia {better_dir} ({max(long_wr, short_wr):.1f}% vs {min(long_wr, short_wr):.1f}%)"
+                        )
+                
+                # Case 2: Only LONG has data (100% bias)
+                elif pd.notna(long_wr) and pd.isna(short_wr):
+                    directional_findings.append(
+                        f"**{zone}**: Solo opera LONG (WR: {long_wr:.1f}%) - Sesgo extremo"
+                    )
+                
+                # Case 3: Only SHORT has data (100% bias)
+                elif pd.isna(long_wr) and pd.notna(short_wr):
+                    directional_findings.append(
+                        f"**{zone}**: Solo opera SHORT (WR: {short_wr:.1f}%) - Sesgo extremo"
+                    )
+            
+            if directional_findings:
+                insight_s2 += "**Zonas con Bias Claro:**\n"
+                for finding in directional_findings[:3]:  # Top 3
+                    insight_s2 += f"- {finding}\n"
+                insight_s2 += "\n**Acción:** Considera deshabilitar la dirección débil en estas zonas para mejorar consistencia."
+            else:
+                insight_s2 += "✅ **Balance Direccional:** Tus zonas funcionan de manera similar en ambas direcciones. Mantén flexibilidad."
+            
+            st.info(insight_s2)
+            
+            
+            # Prepare clean data for AI
+            ai_summary = "Rendimiento por Zona y Dirección:\n\n"
+            ai_summary += "IMPORTANTE: Un Win Rate bajo con PnL POSITIVO es válido (R:R alto). No rechaces setups solo por WR bajo.\n\n"
+            
+            for zone in dir_matrix.index:
+                long_pnl = dir_matrix.loc[zone, 'sum_Long'] if 'sum_Long' in dir_matrix.columns else None
+                short_pnl = dir_matrix.loc[zone, 'sum_Short'] if 'sum_Short' in dir_matrix.columns else None
+                long_wr = dir_matrix.loc[zone, 'WR_Long'] if 'WR_Long' in dir_matrix.columns else None
+                short_wr = dir_matrix.loc[zone, 'WR_Short'] if 'WR_Short' in dir_matrix.columns else None
+                
+                ai_summary += f"{zone}:\n"
+                if pd.notna(long_pnl):
+                    verdict = "✅ RENTABLE" if long_pnl > 0 else "❌ PERDEDOR"
+                    ai_summary += f"  - LONG: PnL ${long_pnl:,.0f} ({verdict}), Win Rate {long_wr:.1f}%\n"
+                if pd.notna(short_pnl):
+                    verdict = "✅ RENTABLE" if short_pnl > 0 else "❌ PERDEDOR"
+                    ai_summary += f"  - SHORT: PnL ${short_pnl:,.0f} ({verdict}), Win Rate {short_wr:.1f}%\n"
+                if pd.isna(long_pnl) and pd.notna(short_pnl):
+                    ai_summary += f"  - Solo opera SHORT\n"
+                elif pd.notna(long_pnl) and pd.isna(short_pnl):
+                    ai_summary += f"  - Solo opera LONG\n"
+            
+            # AI Analysis Button (Premium)
+            show_ai_analysis(
+                chart_name="Matriz Direccional",
+                chart_type="directionality_matrix",
+                data={"dir_matrix": ai_summary},
+                key_suffix="tab8_section2"
+            )
+
+            # ================================================================
+            # SECTION 3: TEMPORAL PERFORMANCE (Zone x Hour)
+            # ================================================================
+            st.markdown("---")
+            st.subheader("⏰ Rendimiento Temporal: Zona x Hora del Día")
+            
+            # Extract hour from EntryTime
+            if 'EntryTime' in level_df.columns:
+                level_df['Hour'] = pd.to_datetime(level_df['EntryTime']).dt.hour
+                
+                # Create pivot: Zone (Y) x Hour (X)
+                temporal_pivot = level_df.pivot_table(
+                    index='Zone',
+                    columns='Hour',
+                    values='PnL',
+                    aggfunc='sum',
+                    fill_value=0
+                )
+                
+                # Sort zones by total
+                temporal_pivot = temporal_pivot.loc[temporal_pivot.sum(axis=1).sort_values(ascending=False).index]
+                
+                # Create heatmap
+                fig_temporal = go.Figure(data=go.Heatmap(
+                    z=temporal_pivot.values,
+                    x=[f"{int(h)}:00" for h in temporal_pivot.columns],
+                    y=temporal_pivot.index,
+                    colorscale='RdBu',
+                    zmid=0,
+                    text=temporal_pivot.values.round(0),
+                    texttemplate='$%{text}',
+                    textfont={"size": 9},
+                    hovertemplate='<b>%{y}</b><br>Hora: %{x}<br>PnL: $%{z:.0f}<extra></extra>',
+                    colorbar=dict(title="PnL")
+                ))
+                
+                fig_temporal = apply_premium_style(fig_temporal, "Rendimiento por Zona y Hora")
+                fig_temporal.update_layout(
+                    xaxis_title="Hora del Día (ET)",
+                    yaxis_title="Zona",
+                    height=400
+                )
+                st.plotly_chart(fig_temporal, use_container_width=True)
+                
+                # Automated Toxic Time Detection
+                toxic_combinations = []
+                for zone in temporal_pivot.index:
+                    for hour in temporal_pivot.columns:
+                        pnl = temporal_pivot.loc[zone, hour]
+                        if pnl < -100:  # Threshold for "toxic"
+                            toxic_combinations.append({
+                                'Zone': zone,
+                                'Hour': f"{int(hour)}:00",
+                                'Loss': f"${pnl:.0f}"
+                            })
+                
+                if toxic_combinations:
+                    st.warning(f"⚠️ **{len(toxic_combinations)} Combinaciones Tóxicas Detectadas** (Pérdida > $100):")
+                    toxic_df = pd.DataFrame(toxic_combinations)
+                    st.dataframe(toxic_df, use_container_width=True)
+                    
+                # Auto-generated Insights (Section 3)
+                if toxic_combinations:
+                    worst_combo = toxic_combinations[0]
+                    insight_s3 = f"""
+🧠 **Insight de Experto Quant: Ventanas Tóxicas**
+
+**⚠️ Peor Combinación:** {worst_combo['Zone']} a las {worst_combo['Hour']}
+- Pérdida: {worst_combo['Loss']}
+- **Hipótesis:** Probablemente coincide con bajo volumen, empalme de sesiones, o datos económicos.
+- **Acción:** Agrega en tu código: `if (zone == '{worst_combo['Zone'].split()[0]}' && hour == {worst_combo['Hour'].split(':')[0]}) return;`
+
+**Patrón General:** Las ventanas tóxicas suelen ser:
+- 12-13 PM (Lunch, bajo volumen)
+- 15:30+ (Near close, comportamiento errático)
+                    """
+                    st.info(insight_s3)
+                else:
+                    st.success("✅ **Horario Limpio:** No se detectaron ventanas horarias sistemáticamente tóxicas.")
+                
+                # Prepare clean data for AI (Section 3)
+                ai_temporal_summary = "Rendimiento Temporal (Zona x Hora):\n\n"
+                ai_temporal_summary += "CONTEXTO: Asia 20-03 ET, Europe 03-12 ET, USA 09-16 ET. Lunch 12-13 ET (bajo volumen).\n"
+                ai_temporal_summary += "REGLA: Ventana con PnL < -$100 = TÓXICA (filtrar). < 5 trades = ruido.\n\n"
+                
+                # Format top toxic combinations
+                if toxic_combinations:
+                    ai_temporal_summary += "VENTANAS TÓXICAS:\n"
+                    for combo in toxic_combinations[:5]:  # Top 5
+                        ai_temporal_summary += f"- {combo['Zone']} a las {combo['Hour']}: {combo['Loss']}\n"
+                    ai_temporal_summary += f"\nTotal detectadas: {len(toxic_combinations)}\n"
+                else:
+                    ai_temporal_summary += "✅ No se detectaron ventanas tóxicas significativas.\n"
+                
+                # Add full matrix summary
+                ai_temporal_summary += "\nMATRIZ COMPLETA (Zona x Hora con PnL):\n"
+                for zone in temporal_pivot.index:
+                    ai_temporal_summary += f"\n{zone}:\n"
+                    for hour in temporal_pivot.columns:
+                        pnl = temporal_pivot.loc[zone, hour]
+                        if pnl != 0:
+                            verdict = "TÓXICA" if pnl < -100 else ("RENTABLE" if pnl > 100 else "neutral")
+                            ai_temporal_summary += f"  {int(hour)}:00-{int(hour)+1}:00 = ${pnl:.0f} ({verdict})\n"
+                
+                # AI Analysis Button (Premium)
+                show_ai_analysis(
+                    chart_name="Rendimiento Temporal",
+                    chart_type="temporal_performance",
+                    data={"temporal_data": ai_temporal_summary},
+                    key_suffix="tab8_section3"
+                )
+                
+            else:
+                st.info("No hay información de hora en los datos para análisis temporal.")
 
             # --- DEEP INSIGHT: PENETRATION ANALYSIS ---
             st.markdown("---")
@@ -2009,6 +3049,173 @@ with tab7:
             else:
                 st.info("No hay suficientes datos de zonas para generar la matriz.")
 
+            # ================================================================
+            # SECTION 5: TOXIC COMBINATION FILTERS
+            # ================================================================
+            st.markdown("---")
+            st.subheader("🔥 Filtro de Combinaciones Tóxicas")
+            st.caption("Identifica patrones multi-variables que generan pérdidas sistemáticas")
+            
+            # Create comprehensive combination table
+            filter_df = level_df.copy()
+            filter_df['Hour_Bracket'] = pd.to_datetime(filter_df['EntryTime']).dt.hour.apply(
+                lambda x: f"{x}:00-{x+1}:00"
+            )
+            
+            # Group by Zone + Direction + Hour
+            combo_analysis = filter_df.groupby(['Zone', 'Type', 'Hour_Bracket']).agg({
+                'PnL': ['sum', 'count', 'mean'],
+                'Result': lambda x: (x.str.contains('TP', na=False)).sum()
+            }).round(2)
+            
+            combo_analysis.columns = ['Total_PnL', 'Trades', 'Avg_PnL', 'Wins']
+            combo_analysis['Win_Rate'] = (combo_analysis['Wins'] / combo_analysis['Trades'] * 100).round(1)
+            combo_analysis = combo_analysis.reset_index()
+            
+            # Sort by worst performers
+            combo_analysis = combo_analysis.sort_values('Total_PnL')
+            
+            # Show top toxic combinations
+            toxic_combos = combo_analysis[combo_analysis['Total_PnL'] < 0].head(10)
+            
+            if not toxic_combos.empty:
+                st.dataframe(
+                    toxic_combos.style.format({
+                        'Total_PnL': '${:,.0f}',
+                        'Avg_PnL': '${:.0f}',
+                        'Win_Rate': '{:.1f}%'
+                    }).background_gradient(cmap='Reds', subset=['Total_PnL', 'Win_Rate']),
+                    use_container_width=True
+                )
+                
+                # Auto-generated Insights (Section 5)
+                if not toxic_combos.empty:
+                    worst_combo = toxic_combos.iloc[0]
+                    insight_s5 = f"""
+🧠 **Insight de Experto Quant: Filtros Multi-Variable**
+
+**🔴 Peor Patron:** {worst_combo['Zone']} {worst_combo['Type']} durante {worst_combo['Hour_Bracket']}
+- Pérdida Total: ${worst_combo['Total_PnL']:,.0f} en {int(worst_combo['Trades'])} trades
+- Win Rate: {worst_combo['Win_Rate']:.1f}%
+
+**Código Sugerido (C#):**
+```csharp
+// En tu método de validación de entrada:
+if (setupZone == "{worst_combo['Zone'].split()[0]}" && 
+    entryDirection == Position.{worst_combo['Type']} && 
+    Time[0].Hour >= {worst_combo['Hour_Bracket'].split(':')[0]} && 
+    Time[0].Hour < {int(worst_combo['Hour_Bracket'].split(':')[0]) + 1})
+{{
+    Print("Filtro Tóxico activado - Trade cancelado");
+    return;
+}}
+```
+
+**Impacto Estimado:** Eliminar estos {int(toxic_combos.head(3)['Trades'].sum())} trades tóxicos mejoraría tu PnL en ${abs(toxic_combos.head(3)['Total_PnL'].sum()):,.0f}
+                    """
+                    st.info(insight_s5)
+                else:
+                    st.success("✅ **Limpio:** No se encontraron patrones multi-variable tóxicos.")
+                
+                # Prepare clean data for AI (Section 5)
+                ai_toxic_summary = "Análisis de Combinaciones Tóxicas (Zona+Dirección+Hora):\n\n"
+                ai_toxic_summary += "REGLA: Combos con <5 trades = ruido. Combos con >10 trades y PnL muy negativo = SISTEMÁTICO (filtrar).\n\n"
+                
+                if not toxic_combos.empty:
+                    ai_toxic_summary += f"TOP {min(len(toxic_combos), 10)} PEORES COMBINACIONES:\n\n"
+                    for idx, row in toxic_combos.head(10).iterrows():
+                        zone = row['Zone']
+                        direction = row['Type']
+                        hour = row['Hour_Bracket']
+                        pnl = row['Total_PnL']
+                        trades = int(row['Trades'])
+                        wr = row['Win_Rate']
+                        
+                        verdict = "⚠️ RUIDO" if trades < 5 else ("🔴 TÓXICO SISTEMÁTICO" if trades >= 10 else "⚠️ MONITOREAR")
+                        
+                        ai_toxic_summary += f"{idx+1}. {zone} {direction} {hour}\n"
+                        ai_toxic_summary += f"   PnL: ${pnl:,.0f}, Trades: {trades}, WR: {wr:.1f}% ({verdict})\n\n"
+                    
+                    # Pattern analysis
+                    ai_toxic_summary += "\nPATRONES DETECTADOS:\n"
+                    zone_counts = toxic_combos['Zone'].value_counts()
+                    hour_counts = toxic_combos['Hour_Bracket'].value_counts()
+                    
+                    if not zone_counts.empty:
+                        ai_toxic_summary += f"- Zona más problemática: {zone_counts.index[0]} ({zone_counts.iloc[0]} combos tóxicos)\n"
+                    if not hour_counts.empty:
+                        ai_toxic_summary += f"- Hora más problemática: {hour_counts.index[0]} ({hour_counts.iloc[0]} combos tóxicos)\n"
+                    
+                    total_impact = abs(toxic_combos.head(5)['Total_PnL'].sum())
+                    ai_toxic_summary += f"\nIMPACTO: Filtrar top 5 combos mejoraría PnL en ${total_impact:,.0f}\n"
+                else:
+                    ai_toxic_summary += "✅ No se detectaron combinaciones multi-variable tóxicas.\n"
+                
+                # AI Analysis Button (Premium)
+                show_ai_analysis(
+                    chart_name="Combinaciones Tóxicas",
+                    chart_type="toxic_combinations",
+                    data={"toxic_combos": ai_toxic_summary},
+                    key_suffix="tab8_section5"
+                )
+                
+            else:
+                st.success("✅ No se detectaron combinaciones tóxicas significativas")
+
+            # ================================================================
+            # SECTION 6: ACTIONABLE RECOMMENDATIONS
+            # ================================================================
+            st.markdown("---")
+            st.subheader("✅ Recomendaciones Accionables para Código")
+            
+            avoid_list = []
+            prioritize_list = []
+            
+            # Analyze zone performance
+            for zone in zone_metrics.index:
+                zone_data = zone_metrics.loc[zone]
+                
+                # Toxic zones (WR < 40% and negative PnL)
+                if zone_data['Win_Rate'] < 40 and zone_data['Total_PnL'] < 0:
+                    avoid_list.append(f"🚫 **{zone}**: WR {zone_data['Win_Rate']:.1f}%, PnL ${zone_data['Total_PnL']:.0f}")
+                
+                # Premium zones (WR > 60% and positive PnL)
+                elif zone_data['Win_Rate'] > 60 and zone_data['Total_PnL'] > 500:
+                    prioritize_list.append(f"✅ **{zone}**: WR {zone_data['Win_Rate']:.1f}%, PnL ${zone_data['Total_PnL']:.0f}, R:R {zone_data['RR']:.2f}")
+            
+            # Add directional insights
+            if 'dir_matrix' in locals():
+                for direction in ['Long', 'Short']:
+                    wr_col = f'WR_{direction}'
+                    pnl_col = f'sum_{direction}'
+                    
+                    if wr_col in dir_matrix.columns and pnl_col in dir_matrix.columns:
+                        for zone in dir_matrix.index:
+                            wr = dir_matrix.loc[zone, wr_col]
+                            pnl = dir_matrix.loc[zone, pnl_col]
+                            
+                            if pd.notna(wr) and pd.notna(pnl):
+                                if wr < 30 and pnl < -200:
+                                    avoid_list.append(f"🚫 **{zone} {direction}**: WR {wr:.1f}%, Pérdida ${pnl:.0f}")
+            
+            col_rec1, col_rec2 = st.columns(2)
+            
+            with col_rec1:
+                st.markdown("### 🚫 EVITAR (Filtros Sugeridos)")
+                if avoid_list:
+                    for item in avoid_list[:5]:  # Top 5
+                        st.markdown(item)
+                else:
+                    st.success("✅ No hay patrones tóxicos claros para filtrar")
+            
+            with col_rec2:
+                st.markdown("### ✅ PRIORIZAR (Edges Confirmados)")
+                if prioritize_list:
+                    for item in prioritize_list[:5]:  # Top 5
+                        st.markdown(item)
+                else:
+                    st.info("ℹ️ Ejecuta más trades para identificar edges claros")
+
     # -------------------------------------------------------------------------
     # TAB 9: LIVE vs BACKTEST (Reality Check)
     # -------------------------------------------------------------------------
@@ -2032,7 +3239,7 @@ with tab7:
                 # Use the most recent or largest? Let's use the first one found or specific one if user matches setup
                 # Ideally we want a 'Benchmark' file. Let's pick the largest one assuming it has the most history
                 bt_file = max(bt_files, key=os.path.getsize)
-                df_bt = load_data(bt_file)
+                df_bt = load_and_process_data(bt_file, license_tier)
             
             if df_bt is None or df_bt.empty:
                 st.warning("⚠️ No se encontró un archivo de Backtest (`backtest_log*.csv`) para comparar. Ejecuta una simulación primero.")
@@ -2144,3 +3351,93 @@ with tab7:
 
         except Exception as e:
             st.error(f"Error en comparación Reality Check: {e}")
+    
+    # =========================================================================
+    # TAB 10: EXECUTIVE REPORT IA
+    # =========================================================================
+    with tab10:
+        st.title("🎯 Reporte Ejecutivo IA")
+        st.caption("Compilación estratégica de todos los análisis con recomendaciones accionables")
+        
+        # Auto-generate report on first load or if data changed
+        if 'executive_report' not in st.session_state or st.button("🔄 Regenerar Reporte", key="regen_exec_report"):
+            with st.spinner("📊 Compilando análisis global..."):
+                try:
+                    # Generate the report (returns tuple: report_text, r_df, scaling_df)
+                    report_text, r_df, scaling_df = generate_executive_report(df)
+                    st.session_state['executive_report'] = report_text
+                    st.session_state['r_ladder_df'] = r_df  # Store R-Ladder DataFrame
+                    st.session_state['scaling_df'] = scaling_df  # Store Scaling Comparison DataFrame
+                    st.session_state['report_timestamp'] = datetime.now().strftime('%Y-%m-%d %H:%M')
+                except Exception as e:
+                    st.error(f"Error generando reporte: {e}")
+                    st.session_state['executive_report'] = None
+                    st.session_state['r_ladder_df'] = None
+                    st.session_state['scaling_df'] = None
+        
+        # Show report if exists
+        if 'executive_report' in st.session_state and st.session_state['executive_report']:
+            # Header with export button
+            col_header1, col_header2 = st.columns([4, 1])
+            
+            with col_header1:
+                st.success(f"✅ Reporte generado: {st.session_state.get('report_timestamp', 'N/A')}")
+            
+            with col_header2:
+                # Export button
+                st.download_button(
+                    label="📥 Exportar",
+                    data=st.session_state['executive_report'],
+                    file_name=f"executive_report_{datetime.now().strftime('%Y%m%d_%H%M')}.txt",
+                    mime="text/plain",
+                    key="download_exec_report"
+                )
+            
+            st.markdown("---")
+            
+            # Display report in monospace font for better formatting
+            st.markdown(f"```\n{st.session_state['executive_report']}\n```")
+            
+            # NEW: R-Ladder Visualization
+            if 'r_ladder_df' in st.session_state and st.session_state['r_ladder_df'] is not None:
+                st.markdown("---")
+                st.subheader("📊 Visualización R-Ladder")
+                st.caption("Análisis interactivo de niveles R alcanzados")
+                
+                fig_r_ladder = plot_r_ladder_chart(st.session_state['r_ladder_df'])
+                if fig_r_ladder:
+                    st.plotly_chart(fig_r_ladder, use_container_width=True)
+                
+                # Show detailed table in expander
+                with st.expander("📋 Ver Tabla Detallada R-Ladder"):
+                    st.dataframe(
+                        st.session_state['r_ladder_df'][['R_Level', 'Trades_Reached', 'Percent_Reached', 'Potential_PnL', 'Cumulative_PnL']],
+                        use_container_width=True,
+                        hide_index=True
+                    )
+            
+            # Optional: AI analysis of the full report
+            analyzer = get_analyzer()
+            if analyzer:
+                st.markdown("---")
+                if st.button("🤖  Análisis IA Profundo del Reporte", key="ai_full_report"):
+                    with st.spinner("Analizando reporte completo con IA..."):
+                        try:
+                            # For full report, we'll use a specific prompt
+                            prompt = f"""Eres un experto trader cuantitativo. Analiza este reporte ejecutivo completo y provee:
+1. Validación de las conclusiones
+2. Insights adicionales no mencionados
+3. Sugerencias de optimización avanzadas
+4. Advertencias sobre posibles sesgos en los datos
+
+REPORTE:
+{st.session_state['executive_report']}
+"""
+                            ai_analysis = analyzer.model_full.generate_content(prompt)
+                            st.markdown("### 🤖 Análisis IA Profundo:")
+                            st.markdown(ai_analysis.text)
+                        except Exception as e:
+                            st.warning(f"Error en análisis IA: {e}")
+        else:
+            st.info("⏳ Generando reporte automáticamente...")
+

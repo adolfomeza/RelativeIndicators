@@ -349,6 +349,91 @@ Incluye:
 5. Recomendación táctica por sesión de trading actual"""
             },
             
+            # New Level Analysis Module Types
+            "performance_dashboard": {
+                "brief": f"""{base_context}
+                
+Analiza este Dashboard de Niveles en 2-3 líneas:
+{{zone_metrics}}
+
+Identifica: mejor/peor zona y si hay zonas que deben desactivarse.""",
+                
+                "full": f"""{base_context}
+
+Análisis DETALLADO del Dashboard de Rendimiento por Zona:
+{{zone_metrics}}
+
+Incluye:
+1. Ranking de zonas por Sharpe (riesgo-ajustado)
+2. ¿Hay zonas premium (Sharpe > 1.5) que merecen más capital?
+3. ¿Hay zonas tóxicas que deben filtrarse completamente?
+4. Análisis de Win Rate vs R:R - ¿equilibrio correcto?
+5. Recomendación de asignación de capital por zona"""
+            },
+            
+            "directionality_matrix": {
+                "brief": f"""{base_context}
+
+Analiza Matriz Direccional en 2-3 líneas:
+{{dir_matrix}}
+
+Identifica: bias direccional por zona (Long/Short).""",
+                
+                "full": f"""{base_context}
+
+Análisis DETALLADO de Direccionalidad:
+{{dir_matrix}}
+
+Incluye:
+1. ¿Qué zonas tienen sesgo claro (>20% diferencia Long vs Short)?
+2. ¿Deberías deshabilitar alguna dirección en zonas específicas?
+3. ¿El mercado actual favorece longs o shorts en estas zonas?
+4. Recomendación de filtros direccionales para código C#
+5. Análisis de consistencia - ¿el bias es estable o ruido?"""
+            },
+            
+            "temporal_performance": {
+                "brief": f"""{base_context}
+
+Analiza rendimiento temporal en 2-3 líneas:
+{{temporal_data}}
+
+Identifica: ventanas horarias tóxicas.""",
+                
+                "full": f"""{base_context}
+
+Análisis DETALLADO Temporal (Zona x Hora):
+{{temporal_data}}
+
+Incluye:
+1. ¿Qué combinaciones Zona+Hora son sistemáticamente perdedoras?
+2. Correlación con sesiones de mercado (Asia/Europe/USA overlap)
+3. ¿Bajo volumen o alta volatilidad causan pérdidas?
+4. Código C# sugerido para filtrar horarios tóxicos
+5. Ventanas óptimas de trading por zona"""
+            },
+            
+            "toxic_combinations": {
+                "brief": f"""{base_context}
+
+Analiza combinaciones tóxicas en 2-3 líneas:
+{{toxic_combos}}
+
+Identifica: peor patrón multi-variable.""",
+                
+                "full": f"""{base_context}
+
+Análisis DETALLADO de Filtros Multi-Variable:
+{{toxic_combos}}
+
+Incluye:
+1. Peores combinaciones Zona+Dirección+Hora - ¿cuánto te cuestan?
+2. ¿Estos patrones son ruido o sistemáticos?
+3. Código C# completo para filtrar las 3 peores combinaciones
+4. Impacto en PnL si eliminas estos trades (estimación)
+5. ¿Hay patrón común entre todas las combinaciones tóxicas?"""
+            },
+            
             "chat": {
                 "system": f"""{base_context}
 

@@ -4,8 +4,53 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.14.23] - 2026-01-03
+### Added: Parámetros Opcionales de Filtrado AI
+- **Nuevos parámetros** en grupo "2. AI Filters" (DESACTIVADOS por defecto):
+  - `Enabled Zones (CSV)`: Lista de zonas habilitadas separadas por coma (ej: "Asia High, USA Low")
+    - **Default**: Vacío = todas las zonas habilitadas (sin filtro)
+  - `Max Level Age (Days)`: Edad máxima de niveles en días
+    - **Default**: 0 = sin límite de edad (sin filtro)
+- **Nuevo método**: `ParseEnabledZones()` - Parsea string CSV a lista de zonas
+- **Nuevo método**: `IsZoneEnabled(zoneName, levelTime)` - Verifica si zona/nivel pasa filtros:
+  - Filtro de zona: Rechaza si no está en lista (si lista no vacía)
+  - Filtro de edad: Rechaza si nivel > MaxLevelAgeDays días de antigüedad
+- **Integración**: Verificación en `ManageEntryA_Plus` antes de procesar cada nivel
+- **Logs**: `"AI FILTER: Zona bloqueada - [nombre]"` cuando filtro activo rechaza zona
+- **Comportamiento sin filtros** (defaults):
+  - `Enabled Zones` vacío → Opera TODAS las zonas (comportamiento actual)
+  - `Max Level Age` = 0 → Sin límite de edad (comportamiento actual)
+- **Uso previsto**:
+  1. Ejecutar backtest baseline (sin filtros)
+  2. Analizar en Streamlit (Tab 10: Reporte Ejecutivo IA)
+  3. Si IA recomienda deshabilitar zonas tóxicas → Activar filtros manualmente
+  4. Ejecutar forward test con filtros para validar mejora
 
-## [1.14.11] - 2026-01-02 ✅ VERSIÓN ACTUAL (RECOMPILE REQUIRED)
+## [1.14.22] - 2026-01-03
+### Fixed
+- **Log Spam**: Silenciados los logs informativos ("OPPOSITE NOT FOUND", "SEARCH_OPPOSITE") que llenaban el output window. Ahora solo aparecen si `EnableDebugLogs` está activado.
+
+## [1.14.21] - 2026-01-03 ✅ VERSIÓN ACTUAL (RECOMPILE REQUIRED)
+### FIX CRÍTICO: "Ghost Stop Loss" (MNQ Volatility Fix)
+- **Problema**: Trades en instrumentos volátiles (MNQ) se cerraban inmediatamente con pérdidas de 1 tick.
+- **Causa (Diagnosticada)**: Una lógica de "Protección de Distancia Máxima" activaba un fallback erróneo cuando el SL técnico superaba los 100 ticks (25 pts). Al activarse, usaba el parámetro `StopLossTicks` (configurado en 1) como si fuera la distancia total desde la entrada.
+- **Solución**: **ELIMINADA** la lógica de protección/fallback. Ahora la estrategia respeta SIEMPRE el Stop Loss técnico basado en el Anchor (VWAP Low), sin importar cuán lejos esté (asumiendo el riesgo necesario de la volatilidad).
+- **Limpieza**: Removidos logs de diagnóstico.
+
+## [1.14.13] - 2026-01-02
+### FIX: Backtest Determinism
+- **Problema**: Resultados de backtest eran inconsistentes (Backtest #1 diferente a #2 y #3)
+- **Causa**: La función "Cross-Instrument Risk Sync" escribía en el disco (`trace/SharedRisk.txt`) durante el backtest, contaminando las ejecuciones posteriores con datos "viejos".
+- **Solución**: Desactivar totalmente `WriteSharedRisk` y `ReadMaxSharedRisk` cuando la estrategia está en modo `State.Historical` o `State.Optimization`.
+- **Beneficio**: Cada backtest ahora corre en un entorno limpio y aislado, garantizando repetibilidad del 100%.
+
+## [1.14.16] - 2026-01-02
+### FEATURE: Streamlit Intelligence Suite (v2.2)
+- **Sincronización de Trades (v1.14.16)**: La App ahora agrupa ejecuciones usando el `ID` exacto de la estrategia en lugar de adivinar por horario. Resultado: Conteo de trades idéntico a NinjaTrader.
+- **Calculadora de Comisiones (v1.14.15)**: Nuevo selector "Licencia" (Free/Lifetime) en la App que recalcula el PnL Neto usando tasas oficiales 2025.
+- **Deduplicación Automática (v1.14.14)**: Filtro inteligente que elimina duplicados si el usuario corre múltiples backtests sobre los mismos datos.
+
+## [1.14.11] - 2026-01-02
 ### FEATURE: Auto-Detection System for Accounts
 - **Cambio**: La estrategia ahora usa el nombre exacto de la cuenta (`Account.Name`) como nombre de carpeta
 - **Beneficio**: Sistema escalable - cada nueva cuenta crea automáticamente su propia carpeta en `TradeExports/`
