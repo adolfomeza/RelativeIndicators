@@ -11,7 +11,7 @@ from datetime import datetime
 import streamlit.components.v1 as components
 
 # AI Engine for Quant Analysis
-from ai_engine import show_ai_analysis, get_analyzer
+from ai_engine import show_ai_analysis, get_analyzer, get_usage_history, update_usage_history
 
 # --- COMMISSION RATES (2025 NinjaTrader Brokerage) ---
 # All-in rates (Commission + NFA + Exchange + Routing) per side
@@ -662,14 +662,18 @@ def plot_r_ladder_chart(r_df):
         title="R-Ladder Analysis: Alcance vs PnL Potencial",
         xaxis_title="Nivel R",
         yaxis=dict(
-            title="% de Trades que Alcanzan",
-            titlefont=dict(color="#2EA043"),
+            title=dict(
+                text="% de Trades que Alcanzan",
+                font=dict(color="#2EA043")
+            ),
             tickfont=dict(color="#2EA043"),
             range=[0, 105]
         ),
         yaxis2=dict(
-            title="PnL Acumulado ($)",
-            titlefont=dict(color="#00D9FF"),
+            title=dict(
+                text="PnL Acumulado ($)",
+                font=dict(color="#00D9FF")
+            ),
             tickfont=dict(color="#00D9FF"),
             overlaying='y',
             side='right'
@@ -1204,6 +1208,38 @@ if analyzer is not None:
     st.sidebar.markdown("---")
     
     st.sidebar.success("🤖 IA: Activa")
+    
+    # AI Cost Metrics (Persistent + Session)
+    if 'ai_usage_stats' in st.session_state:
+        st.sidebar.markdown("---")
+        
+        # Datos Sesión
+        s_cost = st.session_state.ai_usage_stats.get('cost', 0.0)
+        s_tokens = st.session_state.ai_usage_stats.get('tokens', 0)
+        
+        # Datos Históricos (Archivo)
+        history = get_usage_history()
+        t_cost = history.get('total_cost', 0.0)
+        t_tokens = history.get('total_tokens', 0)
+        
+        # Si la sesión tiene datos frescos no guardados aún (por delay de cache), sumarlos visualmente?
+        # Nota: update_usage_history ya guarda al disco. Así que history debería tener todo.
+        # Pero ai_engine guarda SOLO lo de charts. Chat y Reporte manual guardan abajo. 
+        # Asumiremos que history es la fuente de verdad total.
+        
+        st.sidebar.markdown("### 📊 Consumo IA")
+        
+        # Métricas Sesión Actual
+        st.sidebar.caption("🟢 Sesión Actual")
+        c1, c2 = st.sidebar.columns(2)
+        c1.metric("Costo", f"${s_cost:.4f}")
+        c2.metric("Tokens", f"{s_tokens}")
+        
+        # Métricas Históricas
+        st.sidebar.caption("📚 Total Histórico")
+        c3, c4 = st.sidebar.columns(2)
+        c3.metric("Total $", f"${t_cost:.4f}")
+        c4.metric("Total Tokens", f"{t_tokens:,}")
 else:
     st.sidebar.warning("⚠️ IA: Sin API Key (.env)")
 
@@ -3407,6 +3443,29 @@ if (setupZone == "{worst_combo['Zone'].split()[0]}" &&
                 fig_r_ladder = plot_r_ladder_chart(st.session_state['r_ladder_df'])
                 if fig_r_ladder:
                     st.plotly_chart(fig_r_ladder, use_container_width=True)
+                    
+                    # AI Analysis for R-Ladder
+                    r_df = st.session_state['r_ladder_df']
+                    
+                    # Helper to safe get value
+                    def get_r_val(r_str, col):
+                        row = r_df[r_df['R_Level'] == r_str]
+                        return row[col].values[0] if not row.empty else 0
+                    
+                    show_ai_analysis(
+                        chart_name="Potencial de Runners (R-Ladder)",
+                        chart_type="r_ladder",
+                        data={
+                            "reached_1r": get_r_val('1R', 'Percent_Reached'),
+                            "reached_5r": get_r_val('5R', 'Percent_Reached'),
+                            "reached_10r": get_r_val('10R', 'Percent_Reached'),
+                            "reached_20r": get_r_val('20R', 'Percent_Reached'),
+                            "pnl_5r": get_r_val('5R', 'Cumulative_PnL'),
+                            "pnl_10r": get_r_val('10R', 'Cumulative_PnL'),
+                            "pnl_20r": get_r_val('20R', 'Cumulative_PnL')
+                        },
+                        key_suffix="tab10_rladder"
+                    )
                 
                 # Show detailed table in expander
                 with st.expander("📋 Ver Tabla Detallada R-Ladder"):
@@ -3433,9 +3492,30 @@ if (setupZone == "{worst_combo['Zone'].split()[0]}" &&
 REPORTE:
 {st.session_state['executive_report']}
 """
-                            ai_analysis = analyzer.model_full.generate_content(prompt)
+                            response = analyzer.model_full.generate_content(prompt)
+                            
+                            # TRACK COST & USAGE
+                            usage = response.usage_metadata
+                            if usage:
+                                # Gemini 1.5 Pro Pricing: $1.25/1M input, $5.00/1M output
+                                input_cost = (usage.prompt_token_count / 1_000_000) * 1.25
+                                output_cost = (usage.candidates_token_count / 1_000_000) * 5.00
+                                total_cost = input_cost + output_cost
+                                
+                                # Update Session State & Persistence
+                                if 'ai_usage_stats' not in st.session_state:
+                                    st.session_state.ai_usage_stats = {'cost': 0.0, 'tokens': 0}
+                                
+                                st.session_state.ai_usage_stats['cost'] += total_cost
+                                st.session_state.ai_usage_stats['tokens'] += usage.total_token_count
+                                
+                                update_usage_history(total_cost, usage.total_token_count)
+                                
+                                # Display Cost Widget
+                                st.caption(f"💰 Costo: ${total_cost:.4f} | Tokens: {usage.total_token_count} (Modelo: Gemini Pro)")
+
                             st.markdown("### 🤖 Análisis IA Profundo:")
-                            st.markdown(ai_analysis.text)
+                            st.markdown(response.text)
                         except Exception as e:
                             st.warning(f"Error en análisis IA: {e}")
         else:

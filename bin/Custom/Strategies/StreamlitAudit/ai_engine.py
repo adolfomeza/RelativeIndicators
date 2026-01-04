@@ -7,7 +7,35 @@ v1.0 - 2026-01-02
 import google.generativeai as genai
 import streamlit as st
 import os
+import json
 from dotenv import load_dotenv
+
+# Configuración de Persistencia
+USAGE_FILE = "ai_billing.json"
+
+def get_usage_history():
+    """Carga el historial acumulado de uso"""
+    if os.path.exists(USAGE_FILE):
+        try:
+            with open(USAGE_FILE, 'r') as f:
+                return json.load(f)
+        except:
+            return {'total_cost': 0.0, 'total_tokens': 0}
+    return {'total_cost': 0.0, 'total_tokens': 0}
+
+def update_usage_history(new_cost, new_tokens):
+    """Actualiza y guarda el historial acumulado"""
+    history = get_usage_history()
+    history['total_cost'] = history.get('total_cost', 0.0) + new_cost
+    history['total_tokens'] = history.get('total_tokens', 0) + new_tokens
+    
+    try:
+        with open(USAGE_FILE, 'w') as f:
+            json.dump(history, f)
+    except Exception as e:
+        print(f"Error saving usage history: {e}")
+    
+    return history
 
 # Cargar API key desde .env
 load_dotenv()
@@ -433,6 +461,38 @@ Incluye:
 4. Impacto en PnL si eliminas estos trades (estimación)
 5. ¿Hay patrón común entre todas las combinaciones tóxicas?"""
             },
+
+            "r_ladder": {
+                "brief": f"""{base_context}
+
+Analiza este gráfico R-Ladder (Alcance vs PnL) en 2-3 líneas:
+Alcance 1R: {{reached_1r}}%
+Alcance 5R: {{reached_5r}}%
+Alcance 10R: {{reached_10r}}%
+PnL Max (20R): ${{pnl_20r}}
+PnL Medio (5R): ${{pnl_5r}}
+
+Dime si la estrategia busca "Home Runs" o scalps cortos.""",
+
+                "full": f"""{base_context}
+
+Análisis DETALLADO de R-Ladder (Capacidad de Runner):
+Alcance 1R: {{reached_1r}}%
+Alcance 5R: {{reached_5r}}%
+Alcance 10R: {{reached_10r}}%
+Alcance 20R: {{reached_20r}}%
+
+PnL Acumulado en 5R: ${{pnl_5r}}
+PnL Acumulado en 10R: ${{pnl_10r}}
+PnL Acumulado en 20R: ${{pnl_20r}}
+
+Incluye:
+1. **Curva de Energía:** ¿El PnL sigue subiendo fuerte hasta 20R o se aplana?
+2. **Diagnóstico de Salida:** ¿Estamos saliendo muy temprano (dejando dinero en la mesa)?
+3. **Estrategia de Scaling:** Basado en la caída de probabilidad, ¿dónde sugieres sacar parciales?
+4. **Viabilidad de Home Run:** ¿Es realista buscar 20R con este % de alcance ({{reached_20r}}%)?
+5. **Recomendación Final:** ¿Trailing Stop agresivo o TP fijo lejano?"""
+            },
             
             "chat": {
                 "system": f"""{base_context}
@@ -446,7 +506,7 @@ análisis cuantitativo cuando se solicite. Sé conversacional pero preciso."""
         }
     
     @st.cache_data(ttl=1800)  # Cache por 30 minutos (optimizado para sesiones largas)
-    def analyze_chart(_self, chart_type: str, data: dict, brief: bool = True) -> str:
+    def analyze_chart(_self, chart_type: str, data: dict, brief: bool = True):
         """
         Genera análisis para un gráfico específico
         
@@ -456,19 +516,23 @@ análisis cuantitativo cuando se solicite. Sé conversacional pero preciso."""
             brief: True para análisis corto, False para completo
             
         Returns:
-            Texto con el análisis
+            Tuple (texto_análisis, metadatos_uso)
+            donde metadatos_uso = {
+                'input_tokens': int,
+                'output_tokens': int,
+                'total_tokens': int,
+                'cost_usd': float
+            }
         """
         try:
             if chart_type not in _self.prompts:
-                return "⚠️ Tipo de gráfico no soportado"
+                return "⚠️ Tipo de gráfico no soportado", None
             
             prompt_template = _self.prompts[chart_type]["brief" if brief else "full"]
             
             # Reemplazar placeholders con datos reales
-            # F-strings ya convierten {{ a {, así que buscamos llaves simples
             prompt = prompt_template
             for key, value in data.items():
-                # Buscar {key} (llave simple, no doble)
                 placeholder = "{" + key + "}"
                 if isinstance(value, float):
                     prompt = prompt.replace(placeholder, f"{value:,.2f}")
@@ -479,10 +543,35 @@ análisis cuantitativo cuando se solicite. Sé conversacional pero preciso."""
             model = _self.model_fast if brief else _self.model_full
             
             response = model.generate_content(prompt)
-            return response.text
+            
+            # Capturar metadatos de uso REALES de la API
+            usage = {
+                'input_tokens': response.usage_metadata.prompt_token_count,
+                'output_tokens': response.usage_metadata.candidates_token_count,
+                'total_tokens': response.usage_metadata.total_token_count,
+                'cost_usd': 0.0  # Calcularemos después
+            }
+            
+            # Calcular costo real según tarifas de Gemini
+            # Gemini 2.0 Flash: $0.075/1M input, $0.30/1M output
+            # Gemini 2.5 Pro: más caro, pero usamos flash para brief
+            if brief:  # gemini-2.0-flash
+                cost_input = (usage['input_tokens'] / 1_000_000) * 0.075
+                cost_output = (usage['output_tokens'] / 1_000_000) * 0.30
+            else:  # gemini-2.5-pro (más caro)
+                cost_input = (usage['input_tokens'] / 1_000_000) * 1.25
+                cost_output = (usage['output_tokens'] / 1_000_000) * 5.00
+            
+            usage['cost_usd'] = cost_input + cost_output
+            
+            # Persistir uso automáticamente (solo si no es cache hit, el código corre)
+            update_usage_history(usage['cost_usd'], usage['total_tokens'])
+            
+            return response.text, usage
             
         except Exception as e:
-            return f"⚠️ Error en análisis: {str(e)}"
+            return f"⚠️ Error en análisis: {str(e)}", None
+
 
     
     def chat(self, user_message: str, context_data: dict) -> str:
@@ -506,6 +595,18 @@ análisis cuantitativo cuando se solicite. Sé conversacional pero preciso."""
             full_prompt = f"{system_prompt}\n\nUsuario: {user_message}"
             
             response = self.model_full.generate_content(full_prompt)
+            
+            # Track Usage (Pro Model)
+            usage = response.usage_metadata
+            input_tokens = usage.prompt_token_count
+            output_tokens = usage.candidates_token_count
+            total_tokens = usage.total_token_count
+            
+            # Gemini 1.5 Pro Cost
+            cost = (input_tokens / 1e6 * 1.25) + (output_tokens / 1e6 * 5.00)
+            
+            update_usage_history(cost, total_tokens)
+            
             return response.text
             
         except Exception as e:
@@ -542,6 +643,9 @@ def show_ai_analysis(chart_name: str, chart_type: str, data: dict, key_suffix: s
     
     unique_key = f"ai_{chart_type}_{key_suffix}"
     
+    if 'ai_usage_stats' not in st.session_state:
+        st.session_state.ai_usage_stats = {'cost': 0.0, 'tokens': 0}
+
     with st.container():
         st.markdown("---")
         
@@ -549,8 +653,17 @@ def show_ai_analysis(chart_name: str, chart_type: str, data: dict, key_suffix: s
         st.subheader(f"🧠 Análisis IA: {chart_name}")
         
         with st.spinner("🧠 Analizando..."):
-            brief_analysis = analyzer.analyze_chart(chart_type, data, brief=True)
+            brief_analysis, usage = analyzer.analyze_chart(chart_type, data, brief=True)
+            
+            # Actualizar estadísticas globales si hay uso nuevo
+            if usage:
+                st.session_state.ai_usage_stats['cost'] += usage['cost_usd']
+                st.session_state.ai_usage_stats['tokens'] += usage['total_tokens']
         
+        # Mostrar widget de costo
+        if usage:
+            st.caption(f"💰 **Costo Análisis**: ${usage['cost_usd']:.5f} USD | 🎫 **Tokens**: {usage['total_tokens']} | 📉 **Total Sesión**: ${st.session_state.ai_usage_stats['cost']:.4f}")
+
         st.markdown(brief_analysis)
         
         # Botones de acción
@@ -559,10 +672,16 @@ def show_ai_analysis(chart_name: str, chart_type: str, data: dict, key_suffix: s
         with col1:
             if st.button(f"📝 Ver Análisis Completo", key=f"{unique_key}_full"):
                 with st.spinner("Generando análisis detallado..."):
-                    full_analysis = analyzer.analyze_chart(chart_type, data, brief=False)
+                    full_analysis, full_usage = analyzer.analyze_chart(chart_type, data, brief=False)
+                    
+                    if full_usage:
+                        st.session_state.ai_usage_stats['cost'] += full_usage['cost_usd']
+                        st.session_state.ai_usage_stats['tokens'] += full_usage['total_tokens']
                 
                 # Mostrar en sub-expander
                 with st.expander("📋 Análisis Detallado", expanded=True):
+                    if full_usage:
+                        st.caption(f"💰 Costo Detallado: ${full_usage['cost_usd']:.5f}")
                     st.markdown(full_analysis)
         
         with col2:

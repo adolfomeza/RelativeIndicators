@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.23"; // AI Filter Parameters (Optional)
+		private const string StrategyVersion = "v1.14.24"; // AI Filter Logic Integration
 		
 		// v1.12.1: CONTROL BUTTONS (simplified to 2 buttons)
 		private TradingMode currentTradingMode = TradingMode.Normal;
@@ -683,6 +683,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 				catch (Exception ex) { Print("TimeSpan Parse Error: " + ex.Message); }
 				
 				// v1.14.23: AI Filters - Parse zone configuration
+				// v1.14.24: Auto Load Config has priority
+				if (AutoLoadAIConfig) LoadAIConfig();
 				ParseEnabledZones();
 				
 				// Clear Lists
@@ -3063,6 +3065,14 @@ currentEntryState = EntryState.Idle;
 
 				foreach (var lvl in activeLevels)
 				{
+					// FILTER: Ignorar niveles AI bloqueados (v1.14.24)
+					if (!IsZoneEnabled(lvl.Name, lvl.StartTime))
+					{
+						// Opcional: Log solo si es necesario debuggear, evitar spam en OnBarUpdate
+						// Log("AI FILTER: Skipping " + lvl.Name);
+						continue;
+					}
+
 					// BACKTEST SAFETY: Ignore Future Levels (Cheat Prevention)
 					if (lvl.StartTime > Time[0]) continue;
 
@@ -4898,6 +4908,14 @@ setupLevelName = "";
 	         GroupName="2. AI Filters", 
 	         Order=2)]
 	public int MaxLevelAgeDays { get; set; }
+	
+	[NinjaScriptProperty]
+	[Display(Name="Auto Load AI Config", Description="Cargar configuración automáticamente desde archivo JSON", GroupName="2. AI Filters", Order=3)]
+	public bool AutoLoadAIConfig { get; set; }
+
+	[NinjaScriptProperty]
+	[Display(Name="AI Config Path", Description="Ruta al archivo de configuración generado por IA", GroupName="2. AI Filters", Order=4)]
+	public string AIConfigPath { get; set; }
 
 
 
@@ -4991,6 +5009,72 @@ setupLevelName = "";
 		
 		// Pasó todos los filtros (o no hay filtros activos)
 		return true;
+	}
+
+	private void LoadAIConfig()
+	{
+		if (!AutoLoadAIConfig) return;
+		
+		// Default path if empty
+		string path = AIConfigPath;
+		if (string.IsNullOrEmpty(path))
+		{
+			// Try to auto-detect based on Streamlit default
+			string docs = NinjaTrader.Core.Globals.UserDataDir.TrimEnd(System.IO.Path.DirectorySeparatorChar);
+			path = System.IO.Path.Combine(docs, "bin", "Custom", "Strategies", "StreamlitAudit", "ai_config.json");
+		}
+
+		if (!File.Exists(path))
+		{
+			Log("AI CONFIG: Archivo no encontrado en " + path);
+			return;
+		}
+
+		try 
+		{
+			string json = File.ReadAllText(path);
+			Log("AI CONFIG: Leyendo configuración...");
+			
+			// Simple Manual Parsing (Lightweight)
+			// Enabled Zones
+			if (json.Contains("enabled_zones"))
+			{
+				int start = json.IndexOf("[", json.IndexOf("enabled_zones"));
+				int end = json.IndexOf("]", start);
+				if (start > 0 && end > start)
+				{
+					string arrayContent = json.Substring(start + 1, end - start - 1);
+					var zones = arrayContent.Split(new[] { ',', '"', ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+					
+					// Reconstruct CSV for parameter
+					List<string> cleanZones = new List<string>();
+					foreach(var z in zones) cleanZones.Add(z.Trim());
+					
+					EnabledZonesParam = string.Join(", ", cleanZones);
+					Log("AI CONFIG: Zonas actualizadas -> " + EnabledZonesParam);
+				}
+			}
+			
+			// Max Age
+			if (json.Contains("max_age"))
+			{
+				// Extract number after "max_age":
+				string part = json.Substring(json.IndexOf("max_age") + 7);
+				string numStr = new string(part.Where(c => char.IsDigit(c)).ToArray()); // Extract digits
+				if (int.TryParse(numStr, out int age))
+				{
+					MaxLevelAgeDays = age;
+					Log("AI CONFIG: Max Age actualizado -> " + age);
+				}
+			}
+			
+			// Re-parse internal list
+			ParseEnabledZones();
+		}
+		catch (Exception ex)
+		{
+			Log($"AI CONFIG ERROR: {ex.Message}");
+		}
 	}
 	} // End of SessionLevelsStrategy class
 

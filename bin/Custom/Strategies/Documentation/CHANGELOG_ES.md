@@ -20,11 +20,17 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 - **Comportamiento sin filtros** (defaults):
   - `Enabled Zones` vacío → Opera TODAS las zonas (comportamiento actual)
   - `Max Level Age` = 0 → Sin límite de edad (comportamiento actual)
-- **Uso previsto**:
-  1. Ejecutar backtest baseline (sin filtros)
-  2. Analizar en Streamlit (Tab 10: Reporte Ejecutivo IA)
-  3. Si IA recomienda deshabilitar zonas tóxicas → Activar filtros manualmente
-  4. Ejecutar forward test con filtros para validar mejora
+## [v1.14.24] - 2026-01-03
+### Agregado
+- **Integración Lógica Filtros AI**: Implementada la verificación `IsZoneEnabled()` dentro del motor de entradas (`ManageEntryA_Plus`). Ahora los trades se bloquean si la zona no está permitida o es muy vieja.
+- **Auto-Load AI Config**: Nueva funcionalidad para leer automáticamente el archivo `ai_config.json` generado por Streamlit.
+  - Parámetro `Auto Load AI Config` (bool): Activa/Desactiva la carga automática.
+  - Parámetro `AI Config Path`: Ruta al archivo JSON (auto-detectable).
+- **Prioridad de Configuración**: Si `Auto Load` está activo, sobreescribe los parámetros manuales `EnabledZonesParam` y `MaxLevelAgeDays`.
+
+## [v1.14.23] - 2026-01-03
+### Agregado
+- **Parámetros Filtros AI (Setup)**: Preparación de propiedades `EnabledZonesParam` y `MaxLevelAgeDays` para futuro filtrado. (Desactivados por defecto).
 
 ## [1.14.22] - 2026-01-03
 ### Fixed
