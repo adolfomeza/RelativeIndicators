@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.24"; // AI Filter Logic Integration
+		private const string StrategyVersion = "v1.14.25"; // Only export trades in Realtime mode
 		
 		// v1.12.1: CONTROL BUTTONS (simplified to 2 buttons)
 		private TradingMode currentTradingMode = TradingMode.Normal;
@@ -181,6 +181,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 		[NinjaScriptProperty]
 		[Display(Name="Allow Backtest", Description="Enable order execution in Strategy Analyzer. Keep OFF for live/demo accounts.", Order=63, GroupName="General")]
 		public bool AllowBacktest { get; set; } = false;
+
+
 
 		private bool showVisuals = true;
 		
@@ -1421,6 +1423,8 @@ currentEntryState = EntryState.Idle;
 				if (unrealizedPnL > tradeMFE)
 					tradeMFE = unrealizedPnL;
 			}
+
+
 			}
 			catch (Exception ex)
 			{
@@ -1428,6 +1432,8 @@ currentEntryState = EntryState.Idle;
 					Log($"CRITICAL ERROR in OnBarUpdate at Bar {CurrentBar}: {ex.ToString()}");
 			}
 		}
+
+
 		
 		// v1.13.6: Diagnostic OnRender
 		protected override void OnRender(ChartControl chartControl, ChartScale chartScale)
@@ -4605,8 +4611,9 @@ setupLevelName = "";
 			
 			if (execution.Order.OrderState == OrderState.Filled && isExitOrder)
 			{
-				// v1.13.3: Export CSV on EACH exit fill (not only when flat)
-				if (isTrackingTrade && !string.IsNullOrEmpty(csvExportPath))
+			// v1.13.3: Export CSV on EACH exit fill (not only when flat)
+				// v1.14.24: Only export in Realtime mode to avoid historical data pollution
+				if (isTrackingTrade && !string.IsNullOrEmpty(csvExportPath) && State == State.Realtime)
 				{
 					try
 					{
@@ -4915,7 +4922,7 @@ setupLevelName = "";
 
 	[NinjaScriptProperty]
 	[Display(Name="AI Config Path", Description="Ruta al archivo de configuración generado por IA", GroupName="2. AI Filters", Order=4)]
-	public string AIConfigPath { get; set; }
+	public string AIConfigPath { get; set; } = string.Empty;
 
 
 

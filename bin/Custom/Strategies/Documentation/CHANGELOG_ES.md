@@ -4,6 +4,24 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.14.25] - 2026-01-04
+### FEATURE: Solo Exportar Trades Reales (Realtime Mode)
+- **Problema**: Al cargar la estrategia en un chart de Playback o Live, los trades generados durante el procesamiento de datos históricos se exportaban al CSV, contaminando los datos reales.
+- **Causa**: La lógica de exportación CSV en `OnExecutionUpdate` no distinguía entre ejecuciones históricas y ejecuciones en tiempo real.
+- **Solución**: Agregada verificación `State == State.Realtime` antes de exportar trades al CSV.
+- **Resultado**: 
+  - Playback: Solo se exportan trades cuando el playback está corriendo (no durante carga inicial)
+  - Live/Demo: Solo se exportan trades en tiempo real
+  - Backtest (Strategy Analyzer): Sigue funcionando normalmente con `AllowBacktest = true`
+- **Beneficio**: Datos más limpios y confiables para análisis en Streamlit.
+
+## [1.14.25] - 2026-01-04
+### Fixed: Streamlit App Improvements (v2.8.1)
+- **Fix AI Cost Display**: Corregido bug visual donde el costo de la sesión de IA aumentaba erróneamente al recargar pestañas (datos en caché).
+- **Fix Calendar Tab**: Corregida la navegación en el calendario; ahora hacer clic en un día mantiene la pestaña activa correctamente sin recargar la app al dashboard inicial.
+- **Fix Month Selector**: Corregido problema donde la selección de mes se reseteaba inesperadamente.
+- **Transparencia**: El contador de dinero en la barra lateral ahora refleja solo el gasto real de nuevas llamadas a la API.
+
 ## [1.14.23] - 2026-01-03
 ### Added: Parámetros Opcionales de Filtrado AI
 - **Nuevos parámetros** en grupo "2. AI Filters" (DESACTIVADOS por defecto):
