@@ -1,0 +1,28 @@
+=== MCL Strategy Log - Started 2026-01-04 19:00:00 ===
+
+19:00:00.486 DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
+19:00:00.486 DEBUG_RECONNECT: Total Account.Positions count = 0
+19:00:00.486 4/1/26 7:01:00 p. m. v1.14.28 RESTART EVAL: Checking for pending orders or valid setup to continue...
+19:00:00.487 4/1/26 7:01:00 p. m. v1.14.28 RESTART: No valid setup found. Starting fresh.
+19:00:00.487 4/1/26 7:01:00 p. m. STARTUP: Level 'USA High' is already being touched - will be skipped.
+19:00:00.487 4/1/26 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 2/1/26 6:00:00 p. m. NY)
+19:00:00.488 LEVEL SUMMARY (Price=57.47):
+19:00:00.494   USA High @ 60.36 | Currently BELOW by 289 ticks
+19:00:00.494   Asia High @ 60.17 | Currently BELOW by 270 ticks
+19:00:00.495   Europe High @ 60.17 | Currently BELOW by 270 ticks
+19:00:00.495   USA High @ 59.36 | Currently BELOW by 189 ticks
+19:00:00.495   Europe High @ 59.05 | Currently BELOW by 158 ticks
+19:00:00.496   USA High @ 58.91 | Currently BELOW by 144 ticks
+19:00:00.496   USA Low @ 54.9 | Currently ABOVE by 257 ticks
+19:00:00.496   Asia Low @ 55.08 | Currently ABOVE by 239 ticks
+19:00:00.497   USA Low @ 55.59 | Currently ABOVE by 188 ticks
+19:00:00.497   Europe Low @ 55.61 | Currently ABOVE by 186 ticks
+19:00:00.498   USA Low @ 56.09 | Currently ABOVE by 138 ticks
+19:00:00.498   Asia Low @ 56.52 | Currently ABOVE by 95 ticks
+19:00:00.498   Europe High @ 58.87 | Currently BELOW by 140 ticks
+19:00:00.499   Europe High @ 58.55 | Currently BELOW by 108 ticks
+19:00:00.499   USA High @ 58.39 | Currently BELOW by 92 ticks
+19:00:00.499   Asia High @ 57.94 | Currently BELOW by 47 ticks
+19:00:00.500   Europe High @ 57.92 | Currently BELOW by 45 ticks
+19:00:00.507   USA High @ 57.44 | Currently ABOVE by 3 ticks
+19:00:00.507   USA Low @ 56.61 | Currently ABOVE by 86 ticks

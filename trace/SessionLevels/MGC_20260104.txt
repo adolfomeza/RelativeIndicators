@@ -1,0 +1,23 @@
+=== MGC Strategy Log - Started 2026-01-04 19:00:00 ===
+
+19:00:00.654 DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
+19:00:00.654 DEBUG_RECONNECT: Total Account.Positions count = 0
+19:00:00.655 4/1/26 7:01:00 p. m. v1.14.28 RESTART EVAL: Checking for pending orders or valid setup to continue...
+19:00:00.655 4/1/26 7:01:00 p. m. v1.14.28 RESTART: No valid setup found. Starting fresh.
+19:00:00.655 4/1/26 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 2/1/26 6:00:00 p. m. NY)
+19:00:00.655 LEVEL SUMMARY (Price=4367.1):
+19:00:00.655   Asia Low @ 4197.4 | Currently ABOVE by 1697 ticks
+19:00:00.656   USA Low @ 4208 | Currently ABOVE by 1591 ticks
+19:00:00.656   Asia Low @ 4231.4 | Currently ABOVE by 1357 ticks
+19:00:00.656   Europe Low @ 4232 | Currently ABOVE by 1351 ticks
+19:00:00.656   USA Low @ 4254 | Currently ABOVE by 1131 ticks
+19:00:00.658   USA High @ 4584 | Currently BELOW by 2169 ticks
+19:00:00.658   Asia High @ 4581.2 | Currently BELOW by 2141 ticks
+19:00:00.658   Europe High @ 4510.4 | Currently BELOW by 1433 ticks
+19:00:00.658   Europe High @ 4420.5 | Currently BELOW by 534 ticks
+19:00:00.659   Asia Low @ 4284.5 | Currently ABOVE by 826 ticks
+19:00:00.659   Europe Low @ 4314.6 | Currently ABOVE by 525 ticks
+19:00:00.660   USA Low @ 4316.8 | Currently ABOVE by 503 ticks
+19:00:00.660   Europe High @ 4415 | Currently BELOW by 479 ticks
+19:00:00.660   USA High @ 4382.1 | Currently BELOW by 150 ticks
+19:00:00.661   USA Low @ 4319.5 | Currently ABOVE by 476 ticks

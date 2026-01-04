@@ -1,0 +1,26 @@
+=== M2K Strategy Log - Started 2026-01-04 19:00:00 ===
+
+19:00:00.332 DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
+19:00:00.332 DEBUG_RECONNECT: Total Account.Positions count = 0
+19:00:00.332 4/1/26 7:01:00 p. m. v1.14.28 RESTART EVAL: Checking for pending orders or valid setup to continue...
+19:00:00.332 4/1/26 7:01:00 p. m. v1.14.28 RESTART: No valid setup found. Starting fresh.
+19:00:00.332 4/1/26 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 2/1/26 6:00:00 p. m. NY)
+19:00:00.333 LEVEL SUMMARY (Price=2524):
+19:00:00.334   Asia High @ 2625.1 | Currently BELOW by 1011 ticks
+19:00:00.334   Europe High @ 2624.1 | Currently BELOW by 1001 ticks
+19:00:00.334   USA High @ 2617.2 | Currently BELOW by 932 ticks
+19:00:00.336   Europe High @ 2597.8 | Currently BELOW by 738 ticks
+19:00:00.337   USA High @ 2593.4 | Currently BELOW by 694 ticks
+19:00:00.337   USA High @ 2590.3 | Currently BELOW by 663 ticks
+19:00:00.337   Asia High @ 2577.5 | Currently BELOW by 535 ticks
+19:00:00.349   Europe High @ 2576.2 | Currently BELOW by 522 ticks
+19:00:00.349   USA High @ 2570.9 | Currently BELOW by 469 ticks
+19:00:00.349   Asia High @ 2567.9 | Currently BELOW by 439 ticks
+19:00:00.349   USA High @ 2564.6 | Currently BELOW by 406 ticks
+19:00:00.350   Asia High @ 2558 | Currently BELOW by 340 ticks
+19:00:00.350   Europe High @ 2553 | Currently BELOW by 290 ticks
+19:00:00.350   USA High @ 2552.4 | Currently BELOW by 284 ticks
+19:00:00.351   Europe High @ 2542.3 | Currently BELOW by 183 ticks
+19:00:00.351   USA High @ 2539.2 | Currently BELOW by 152 ticks
+19:00:00.351   USA High @ 2525.9 | Currently BELOW by 19 ticks
+19:00:00.352   USA Low @ 2493.5 | Currently ABOVE by 305 ticks

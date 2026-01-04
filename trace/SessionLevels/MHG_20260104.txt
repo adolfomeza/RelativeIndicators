@@ -1,0 +1,33 @@
+=== MHG Strategy Log - Started 2026-01-04 19:00:00 ===
+
+19:00:00.687 DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
+19:00:00.693 DEBUG_RECONNECT: Total Account.Positions count = 0
+19:00:00.694 4/1/26 7:01:00 p. m. v1.14.28 RESTART EVAL: Checking for pending orders or valid setup to continue...
+19:00:00.694 4/1/26 7:01:00 p. m. v1.14.28 RESTART: No valid setup found. Starting fresh.
+19:00:00.694 4/1/26 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 2/1/26 6:00:00 p. m. NY)
+19:00:00.695 LEVEL SUMMARY (Price=5.707):
+19:00:00.695   USA Low @ 5.279 | Currently ABOVE by 856 ticks
+19:00:00.695   Asia Low @ 5.3185 | Currently ABOVE by 777 ticks
+19:00:00.695   USA Low @ 5.3365 | Currently ABOVE by 741 ticks
+19:00:00.696   Asia Low @ 5.358 | Currently ABOVE by 698 ticks
+19:00:00.697   Asia Low @ 5.3805 | Currently ABOVE by 653 ticks
+19:00:00.697   Europe Low @ 5.3845 | Currently ABOVE by 645 ticks
+19:00:00.697   USA Low @ 5.386 | Currently ABOVE by 642 ticks
+19:00:00.698   Asia Low @ 5.405 | Currently ABOVE by 604 ticks
+19:00:00.698   Europe Low @ 5.4705 | Currently ABOVE by 473 ticks
+19:00:00.698   USA Low @ 5.473 | Currently ABOVE by 468 ticks
+19:00:00.698   Asia Low @ 5.478 | Currently ABOVE by 458 ticks
+19:00:00.699   USA Low @ 5.48 | Currently ABOVE by 454 ticks
+19:00:00.699   Asia Low @ 5.484 | Currently ABOVE by 446 ticks
+19:00:00.699   Europe Low @ 5.513 | Currently ABOVE by 388 ticks
+19:00:00.700   USA Low @ 5.5165 | Currently ABOVE by 381 ticks
+19:00:00.705   Asia High @ 5.927 | Currently BELOW by 440 ticks
+19:00:00.705   Asia Low @ 5.5285 | Currently ABOVE by 357 ticks
+19:00:00.705   USA High @ 5.7955 | Currently BELOW by 177 ticks
+19:00:00.706   Asia High @ 5.7785 | Currently BELOW by 143 ticks
+19:00:00.706   Europe Low @ 5.6375 | Currently ABOVE by 139 ticks
+19:00:00.706   USA Low @ 5.648 | Currently ABOVE by 118 ticks
+19:00:00.708   Asia High @ 5.759 | Currently BELOW by 104 ticks
+19:00:00.708   Europe High @ 5.7475 | Currently BELOW by 81 ticks
+19:00:00.708   USA High @ 5.725 | Currently BELOW by 36 ticks
+19:00:00.708   USA Low @ 5.668 | Currently ABOVE by 78 ticks

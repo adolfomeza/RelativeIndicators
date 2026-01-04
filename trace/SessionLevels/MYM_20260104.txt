@@ -1,0 +1,28 @@
+=== MYM Strategy Log - Started 2026-01-04 19:00:00 ===
+
+19:00:00.298 DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
+19:00:00.298 DEBUG_RECONNECT: Total Account.Positions count = 0
+19:00:00.307 4/1/26 7:01:00 p. m. v1.14.28 RESTART EVAL: Checking for pending orders or valid setup to continue...
+19:00:00.321 4/1/26 7:01:00 p. m. v1.14.28 RESTART: Found valid level: USA High. Setting to WaitingForConfirmation.
+19:00:00.321 4/1/26 7:01:00 p. m. STARTUP: Level 'USA High' is already being touched - will be skipped.
+19:00:00.336 4/1/26 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 2/1/26 6:00:00 p. m. NY)
+19:00:00.339 LEVEL SUMMARY (Price=48651):
+19:00:00.340   USA Low @ 47890 | Currently ABOVE by 761 ticks
+19:00:00.340   Europe High @ 49300 | Currently BELOW by 649 ticks
+19:00:00.340   USA High @ 49300 | Currently BELOW by 649 ticks
+19:00:00.340   Europe High @ 49134 | Currently BELOW by 483 ticks
+19:00:00.341   USA High @ 49124 | Currently BELOW by 473 ticks
+19:00:00.341   USA High @ 49085 | Currently BELOW by 434 ticks
+19:00:00.341   Asia High @ 49083 | Currently BELOW by 432 ticks
+19:00:00.341   USA High @ 49071 | Currently BELOW by 420 ticks
+19:00:00.341   Asia High @ 49053 | Currently BELOW by 402 ticks
+19:00:00.342   Europe High @ 49024 | Currently BELOW by 373 ticks
+19:00:00.342   USA High @ 48988 | Currently BELOW by 337 ticks
+19:00:00.342   Asia High @ 48779 | Currently BELOW by 128 ticks
+19:00:00.344   Europe High @ 48768 | Currently BELOW by 117 ticks
+19:00:00.344   USA High @ 48765 | Currently BELOW by 114 ticks
+19:00:00.344   Asia High @ 48695 | Currently BELOW by 44 ticks
+19:00:00.344   Europe High @ 48678 | Currently BELOW by 27 ticks
+19:00:00.344   USA High @ 48676 | Currently BELOW by 25 ticks
+19:00:00.345   USA High @ 48652 | Currently BELOW by 1 ticks
+19:00:00.346   USA Low @ 48089 | Currently ABOVE by 562 ticks

@@ -1,0 +1,24 @@
+=== MBT Strategy Log - Started 2026-01-04 19:00:00 ===
+
+19:00:00.298 DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
+19:00:00.299 DEBUG_RECONNECT: Total Account.Positions count = 0
+19:00:00.303 4/1/26 7:01:00 p. m. v1.14.28 RESTART EVAL: Checking for pending orders or valid setup to continue...
+19:00:00.304 4/1/26 7:01:00 p. m. v1.14.28 RESTART: No valid setup found. Starting fresh.
+19:00:00.304 4/1/26 7:01:00 p. m. STARTUP: Level 'USA High' is already being touched - will be skipped.
+19:00:00.304 4/1/26 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 2/1/26 6:00:00 p. m. NY)
+19:00:00.305 LEVEL SUMMARY (Price=91605):
+19:00:00.305   USA High @ 95485 | Currently BELOW by 776 ticks
+19:00:00.313   USA High @ 95345 | Currently BELOW by 748 ticks
+19:00:00.313   USA High @ 94355 | Currently BELOW by 550 ticks
+19:00:00.313   Asia High @ 93640 | Currently BELOW by 407 ticks
+19:00:00.314   USA High @ 93500 | Currently BELOW by 379 ticks
+19:00:00.314   USA Low @ 85005 | Currently ABOVE by 1320 ticks
+19:00:00.314   Asia Low @ 85645 | Currently ABOVE by 1192 ticks
+19:00:00.314   USA Low @ 86720 | Currently ABOVE by 977 ticks
+19:00:00.315   USA Low @ 86930 | Currently ABOVE by 935 ticks
+19:00:00.315   Europe Low @ 87085 | Currently ABOVE by 904 ticks
+19:00:00.315   Asia Low @ 87105 | Currently ABOVE by 900 ticks
+19:00:00.315   USA Low @ 87450 | Currently ABOVE by 831 ticks
+19:00:00.315   Asia Low @ 88700 | Currently ABOVE by 581 ticks
+19:00:00.316   USA High @ 91580 | Currently ABOVE by 5 ticks
+19:00:00.316   USA Low @ 88830 | Currently ABOVE by 555 ticks

@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.28"; // Fix SL quantity update on partial fills
+		private const string StrategyVersion = "v1.14.29"; // Visual Filter Feedback
 		
 		// v1.12.1: CONTROL BUTTONS (simplified to 2 buttons)
 		private TradingMode currentTradingMode = TradingMode.Normal;
@@ -45,6 +45,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private bool buttonsInitialized = false;
 		private bool isProtectionProcessing = false; // v1.13.1: Concurrency lock
 		private bool failsafeTriggered = false; // v1.14.2: Prevent infinite loop in CheckHardStop
+		
+		// v1.14.29: Visual Filter Feedback
+		private string lastFilterReason = "";
+		private DateTime lastFilterTime = DateTime.MinValue;
 		
 		// =========================================================
 		// v1.13.0: TRADE ANALYZER EXPORT
@@ -2508,9 +2512,17 @@ currentEntryState = EntryState.Idle;
 				}
 			}
 
+			string stateDisplay = currentEntryState.ToString();
+	
+			// v1.14.29: Visual Filter Feedback (Show reason for 2 minutes)
+			if (!string.IsNullOrEmpty(lastFilterReason) && (DateTime.Now - lastFilterTime).TotalSeconds < 120) 
+			{
+				stateDisplay += "\n(" + lastFilterReason + ")";
+			}
+
 			string text = string.Format("Ver: {0}\nState: {1}\nLevel: {2}\nPosition: {3}\nPnL: {4} | Risk: {5:C0} (Min: {6:C0}){7}",
 				StrategyVersion,
-				currentEntryState,
+				stateDisplay,
 				levelInfo,
 				Position.MarketPosition,
 				sessionPnL.ToString("C"),
@@ -2788,13 +2800,23 @@ currentEntryState = EntryState.Idle;
 			{
 				// If paused, don't look for new setups
 				if (currentTradingMode == TradingMode.Paused)
+				{
+					// Only update if it's a new reason to avoid spamming variables
+					// if (lastFilterReason != "Skipped: Trading Paused") { lastFilterReason = "Skipped: Trading Paused"; lastFilterTime = DateTime.Now; }
 					return;
+				}
 				
 				// Check direction filter for new entries
 				if (currentTradingMode == TradingMode.LongOnly && isShortSetup)
+				{
+					if (lastFilterReason != "Skipped: Long Only Mode") { lastFilterReason = "Skipped: Long Only Mode"; lastFilterTime = DateTime.Now; }
 					return; // Skip short setups
+				}
 				if (currentTradingMode == TradingMode.ShortOnly && !isShortSetup)
+				{
+					if (lastFilterReason != "Skipped: Short Only Mode") { lastFilterReason = "Skipped: Short Only Mode"; lastFilterTime = DateTime.Now; }
 					return; // Skip long setups
+				}
 			}
 			
 			// v1.10.26: VWAP MITIGATION RETRY DETECTION
@@ -3310,7 +3332,9 @@ currentEntryState = EntryState.Idle;
 								// v1.11.17: Lag Filter - Block order if chart has lag
 								if (!CheckChartLag())
 								{
-									Log(Time[0] + " Short order BLOCKED due to chart lag");
+									string msg = "Skipped: Network Lag Detected";
+									Log(Time[0] + " Short order BLOCKED: " + msg);
+									lastFilterReason = msg; lastFilterTime = DateTime.Now;
 									return;
 								}
 								
@@ -3326,7 +3350,11 @@ currentEntryState = EntryState.Idle;
 						}
 						else
 						{
+						else
+						{
+							string msg = string.Format("Skipped: R/R {0:F2} < 1.0", (risk > 0 ? (reward/risk) : 0));
 							Log(Time[0] + string.Format(" Trade Skipped (Short). Risk: {0:F2} Reward: {1:F2} Ratio: {2:F2}", risk, reward, (risk > 0 ? (reward/risk) : 0)));
+							lastFilterReason = msg; lastFilterTime = DateTime.Now;
 						}
 					}
 					else
@@ -3414,7 +3442,9 @@ currentEntryState = EntryState.Idle;
 				// v1.11.17: Lag Filter - Block order if chart has lag
 				if (!CheckChartLag())
 				{
-					Log(Time[0] + " Long order BLOCKED due to chart lag");
+					string msg = "Skipped: Network Lag Detected";
+					Log(Time[0] + " Long order BLOCKED: " + msg);
+					lastFilterReason = msg; lastFilterTime = DateTime.Now;
 					return;
 				}
 				
@@ -3429,7 +3459,11 @@ currentEntryState = EntryState.Idle;
 						}
 						else
 						{
+						else
+						{
+							string msg = string.Format("Skipped: R/R {0:F2} < 1.0", (risk > 0 ? (reward/risk) : 0));
 							Log(Time[0] + string.Format(" Trade Skipped (Long). Risk: {0:F2} Reward: {1:F2} Ratio: {2:F2}", risk, reward, (risk > 0 ? (reward/risk) : 0)));
+							lastFilterReason = msg; lastFilterTime = DateTime.Now;
 						}
 					}
 					else
@@ -3556,7 +3590,9 @@ setupLevelName = "";
 					// 1. Check Trailing Valid (VWAP still valid?)
 					if (!isValidVWAP(currentVWAP))
 					{
-						Log(Time[0] + " CANCEL: Setup VWAP Invalidated.");
+						string msg = "Skipped: Setup VWAP Invalidated";
+						Log(Time[0] + " CANCEL: " + msg);
+						lastFilterReason = msg; lastFilterTime = DateTime.Now;
 						if (entryOrder != null) CancelOrder(entryOrder);
 						// if (entryOrder2 != null) CancelOrder(entryOrder2); // Removed
 						return;
@@ -3570,7 +3606,11 @@ setupLevelName = "";
 					
 					if (targetTouched)
 					{
-						Log(string.Format("{0} CANCEL: Target Touched ({1}) before Entry. Setup invalidated.", Time[0], targetPrice));
+					if (targetTouched)
+					{
+						string msg = string.Format("Skipped: Target Touched ({0})", targetPrice);
+						Log(string.Format("{0} CANCEL: {1} before Entry. Setup invalidated.", Time[0], msg));
+						lastFilterReason = msg; lastFilterTime = DateTime.Now;
 						if (entryOrder != null) CancelOrder(entryOrder);
 						currentEntryState = EntryState.Idle; // Reset
 						setupLevelName = "";

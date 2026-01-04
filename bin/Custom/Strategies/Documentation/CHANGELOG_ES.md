@@ -4,6 +4,17 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.14.29] - 2026-01-04
+### FEATURE: Feedback Visual de Rechazo de Trades
+- **Problema**: El panel mostraba "Waiting Confirmation" incluso cuando un trade era rechazado (ej: por bajo R/R), causando confusión.
+- **Solución**: Se instrumentó la lógica de filtros en `ManageEntryA_Plus` para capturar el motivo exacto del rechazo:
+  - Riesgo/Recompensa (`Skipped: R/R 0.18 < 1.0`)
+  - Lag de Red (`Skipped: Network Lag Detected`)
+  - Dirección/Modo (`Skipped: Long/Short Only Mode`)
+  - Target Tocado (`Skipped: Target already touched`)
+  - VWAP Inválido (`Skipped: Setup VWAP Invalidated`)
+- **Visualización**: El panel ahora muestra este motivo debajo del estado durante 2 minutos tras el rechazo.
+
 ## [v1.14.28] - 2026-01-04
 ### FIX: Actualización de Cantidad de SL en Partial Fills
 - **Problema**: Cuando una entrada se llenaba parcialmente (ej: 1 de 2 contratos), el SL se creaba para 1 contrato pero NO se actualizaba cuando se llenaba el segundo.
