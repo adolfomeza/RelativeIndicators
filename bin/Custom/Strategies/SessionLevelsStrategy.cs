@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.27"; // Fix TP quantity bug in backtest
+		private const string StrategyVersion = "v1.14.28"; // Fix SL quantity update on partial fills
 		
 		// v1.12.1: CONTROL BUTTONS (simplified to 2 buttons)
 		private TradingMode currentTradingMode = TradingMode.Normal;
@@ -3891,6 +3891,14 @@ setupLevelName = "";
 				tradeRiskUSD = Math.Abs(avgEntry - slPrice) * totalPositionQty * Instrument.MasterInstrument.PointValue;
 				
 				Log(string.Format("SL CREATED: {0} @ {1} Qty={2} Risk=${3:F2}", slTag, slPrice, totalPositionQty, tradeRiskUSD));
+			}
+			else if (slOrderCreatedThisEntry && stopOrder != null && 
+				(stopOrder.OrderState == OrderState.Working || stopOrder.OrderState == OrderState.Accepted) &&
+				stopOrder.Quantity != totalPositionQty)
+			{
+				// v1.14.28: SL exists but quantity changed due to partial fill - UPDATE IT
+				Log(string.Format("SL UPDATE (Partial Fill): Old Qty={0} New Qty={1}", stopOrder.Quantity, totalPositionQty));
+				ChangeOrder(stopOrder, totalPositionQty, 0, slPrice);
 			}
 			else if (slOrderCreatedThisEntry)
 			{

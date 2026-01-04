@@ -4,6 +4,13 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.14.28] - 2026-01-04
+### FIX: Actualización de Cantidad de SL en Partial Fills
+- **Problema**: Cuando una entrada se llenaba parcialmente (ej: 1 de 2 contratos), el SL se creaba para 1 contrato pero NO se actualizaba cuando se llenaba el segundo.
+- **Causa**: El flag `slOrderCreatedThisEntry` (introducido en v1.13.5 para evitar duplicados) bloqueaba la lógica de actualización en `SubmitProtectionOrders`. La condición `else if (slOrderCreatedThisEntry)` tenía prioridad sobre la verificación de cambio de cantidad.
+- **Solución**: Se modificó la estructura `else if` para permitir la actualización del SL si `slOrderCreatedThisEntry` es true PERO la cantidad del SL existente no coincide con la cantidad total de la posición.
+- **Resultado**: El SL ahora se actualiza correctamente (cancela y reemplaza) cuando la posición aumenta debido a partial fills.
+
 ## [v1.14.27] - 2026-01-04
 ### FIX CRÍTICO: Cantidades Incorrectas en Órdenes TP (Backtest)
 - **Problema**: En backtest, las órdenes TP2 se creaban con cantidades incorrectas (ej: 12 contratos en lugar de 1).
