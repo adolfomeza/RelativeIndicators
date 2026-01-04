@@ -21,3 +21,5 @@
 19:00:00.660   Europe High @ 4415 | Currently BELOW by 479 ticks
 19:00:00.660   USA High @ 4382.1 | Currently BELOW by 150 ticks
 19:00:00.661   USA Low @ 4319.5 | Currently ABOVE by 476 ticks
+19:15:38.426 4/1/26 7:16:00 p. m. ENTRY ATTEMPT #1/20 on USA High
+19:15:38.427 INTERNAL LEVEL: USA High @ 4382.1 (External above: Asia High @ 4581.2)

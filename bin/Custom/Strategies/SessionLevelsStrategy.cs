@@ -3350,8 +3350,6 @@ currentEntryState = EntryState.Idle;
 						}
 						else
 						{
-						else
-						{
 							string msg = string.Format("Skipped: R/R {0:F2} < 1.0", (risk > 0 ? (reward/risk) : 0));
 							Log(Time[0] + string.Format(" Trade Skipped (Short). Risk: {0:F2} Reward: {1:F2} Ratio: {2:F2}", risk, reward, (risk > 0 ? (reward/risk) : 0)));
 							lastFilterReason = msg; lastFilterTime = DateTime.Now;
@@ -3457,8 +3455,6 @@ currentEntryState = EntryState.Idle;
 								// Skip Historical Execution
 							}
 						}
-						else
-						{
 						else
 						{
 							string msg = string.Format("Skipped: R/R {0:F2} < 1.0", (risk > 0 ? (reward/risk) : 0));

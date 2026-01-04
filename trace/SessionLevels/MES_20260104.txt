@@ -1,24 +1,6 @@
-=== MES Strategy Log - Started 2026-01-04 19:00:00 ===
+=== MES Strategy Log - Started 2026-01-04 19:16:11 ===
 
-19:00:00.300 DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
-19:00:00.300 DEBUG_RECONNECT: Total Account.Positions count = 0
-19:00:00.300 4/1/26 7:01:00 p. m. v1.14.28 RESTART EVAL: Checking for pending orders or valid setup to continue...
-19:00:00.301 4/1/26 7:01:00 p. m. v1.14.28 RESTART: No valid setup found. Starting fresh.
-19:00:00.302 4/1/26 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 2/1/26 6:00:00 p. m. NY)
-19:00:00.307 LEVEL SUMMARY (Price=6911.25):
-19:00:00.316   Asia Low @ 6771.25 | Currently ABOVE by 560 ticks
-19:00:00.317   Europe Low @ 6789 | Currently ABOVE by 489 ticks
-19:00:00.317   USA Low @ 6811.75 | Currently ABOVE by 398 ticks
-19:00:00.317   Asia Low @ 6819.5 | Currently ABOVE by 367 ticks
-19:00:00.317   Europe Low @ 6828.75 | Currently ABOVE by 330 ticks
-19:00:00.318   USA Low @ 6842 | Currently ABOVE by 277 ticks
-19:00:00.318   Asia High @ 6995 | Currently BELOW by 335 ticks
-19:00:00.319   USA High @ 6994 | Currently BELOW by 331 ticks
-19:00:00.319   Asia High @ 6985 | Currently BELOW by 295 ticks
-19:00:00.320   Europe High @ 6970 | Currently BELOW by 235 ticks
-19:00:00.320   USA High @ 6967.75 | Currently BELOW by 226 ticks
-19:00:00.320   USA High @ 6961.5 | Currently BELOW by 201 ticks
-19:00:00.333   Europe High @ 6951.5 | Currently BELOW by 161 ticks
-19:00:00.333   USA High @ 6947.5 | Currently BELOW by 145 ticks
-19:00:00.334   USA High @ 6939.75 | Currently BELOW by 114 ticks
-19:00:00.334   USA Low @ 6866.5 | Currently ABOVE by 179 ticks
+19:16:11.061 DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
+19:16:11.061 DEBUG_RECONNECT: Total Account.Positions count = 0
+19:16:11.062 4/1/26 7:16:00 p. m. v1.14.28 RESTART EVAL: Checking for pending orders or valid setup to continue...
+19:16:11.062 4/1/26 7:16:00 p. m. v1.14.28 RESTART: No valid setup found. Starting fresh.
