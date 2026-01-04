@@ -3602,8 +3602,6 @@ setupLevelName = "";
 					
 					if (targetTouched)
 					{
-					if (targetTouched)
-					{
 						string msg = string.Format("Skipped: Target Touched ({0})", targetPrice);
 						Log(string.Format("{0} CANCEL: {1} before Entry. Setup invalidated.", Time[0], msg));
 						lastFilterReason = msg; lastFilterTime = DateTime.Now;
