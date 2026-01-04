@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.25"; // Only export trades in Realtime mode
+		private const string StrategyVersion = "v1.14.26"; // Skip lag filter during Playback
 		
 		// v1.12.1: CONTROL BUTTONS (simplified to 2 buttons)
 		private TradingMode currentTradingMode = TradingMode.Normal;
@@ -366,11 +366,19 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 		// =========================================================
 		// v1.11.17: LAG FILTER - Check chart data freshness
+		// v1.14.26: Skip lag check during Playback
 		// =========================================================
 		private bool CheckChartLag()
 		{
 			// Only check in Realtime (not Playback/Historical)
 			if (State != State.Realtime) return true;
+			
+			// v1.14.26: Skip lag check during Playback (chart time != system time)
+			if (Connection.PlaybackConnection != null) 
+			{
+				isLagAlertActive = false;
+				return true;
+			}
 			
 			// Calculate lag: System time vs last bar time
 			TimeSpan chartLag = Core.Globals.Now - Time[0];

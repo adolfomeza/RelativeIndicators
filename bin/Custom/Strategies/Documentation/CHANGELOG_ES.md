@@ -4,6 +4,13 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.14.26] - 2026-01-04
+### FIX: Desactivar Filtro de Lag Durante Playback
+- **Problema**: El filtro de lag mostraba alerta "LAG ALERT: ORDERS BLOCKED" durante el playback, bloqueando trades.
+- **Causa**: Durante el playback, `State == State.Realtime` pero el tiempo del chart es diferente al tiempo del sistema, causando que el cálculo de lag siempre detecte exceso.
+- **Solución**: Agregada verificación `Connection.PlaybackConnection != null` para detectar si estamos en modo playback y saltar el filtro de lag.
+- **Resultado**: El playback ahora funciona sin alertas de lag falsas. El filtro sigue activo para trading real.
+
 ## [v1.14.25] - 2026-01-04
 ### FEATURE: Solo Exportar Trades Reales (Realtime Mode)
 - **Problema**: Al cargar la estrategia en un chart de Playback o Live, los trades generados durante el procesamiento de datos históricos se exportaban al CSV, contaminando los datos reales.
