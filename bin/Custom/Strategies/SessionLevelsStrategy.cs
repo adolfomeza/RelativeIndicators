@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.37"; // Fix opposite level for overnight sessions
+		private const string StrategyVersion = "v1.14.38"; // Diagnostic logs for SL creation
 		
 		// v1.12.1: CONTROL BUTTONS (simplified to 2 buttons)
 		private TradingMode currentTradingMode = TradingMode.Normal;
@@ -4025,6 +4025,10 @@ setupLevelName = "";
 				// Create new SL
 				string slTag = string.Format("{0}_{1:D2}", direction == "Short" ? "SL_Short" : "SL_Long", currentVwapNumber);
 				OrderAction slAction = direction == "Short" ? OrderAction.BuyToCover : OrderAction.Sell;
+				
+				// v1.14.38: DIAGNOSTIC - Log every SL creation with full context
+				Log(string.Format("SL_CREATE_DEBUG: Instrument={0} Direction={1} Tag={2} Action={3} Price={4} Qty={5} State={6} EntryState={7}",
+					Instrument.FullName, direction, slTag, slAction, slPrice, totalPositionQty, State, currentEntryState));
 				
 				stopOrder = SubmitOrderUnmanaged(0, slAction, OrderType.StopMarket, totalPositionQty, 0,slPrice, "", slTag);
 				slOrderCreatedThisEntry = true; // v1.13.5: Mark SL as created
