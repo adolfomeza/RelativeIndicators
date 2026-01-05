@@ -4,6 +4,16 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.14.35] - 2026-01-05
+### DIAGNÓSTICO: Logs para Estado de Órdenes TP
+- **Propósito**: Investigar por qué se crean múltiples órdenes TP en partial fills rápidos (<50ms).
+- **Cambio**: Agregado log `DEBUG_TP_STATE` antes del check `tpAlreadyActive` que muestra:
+  - Nombre del TP (TP1 o TP2)
+  - `OrderState` exacto de la orden existente
+  - Cantidad protegida actual (`protectedQty`)
+  - Nueva cantidad a agregar (`newQty`)
+- **Uso**: Revisar logs cuando ocurra el problema para identificar qué estado falta en el check.
+
 ## [v1.14.34] - 2026-01-05
 ### FIX CRÍTICO: Cantidad Incorrecta de TP al Hacer Refresh
 - **Problema**: Al refrescar la estrategia con posición activa, `protectedTp1Qty`/`protectedTp2Qty` mantenían valores anteriores, causando que nuevos TPs se crearan con cantidades acumuladas incorrectas (ej: Qty=10 en lugar de 3).

@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.34"; // Fix TP qty on restart
+		private const string StrategyVersion = "v1.14.35"; // Diagnostic logs for TP state
 		
 		// v1.12.1: CONTROL BUTTONS (simplified to 2 buttons)
 		private TradingMode currentTradingMode = TradingMode.Normal;
@@ -4054,6 +4054,16 @@ setupLevelName = "";
 			// v1.11.12 FIX: Solo crear TP si NO existe uno activo
 			// Antes: siempre creaba TP causando 4 TP1 en lugar de 1
 			Order currentTP = isTp1 ? tp1Order : tp2Order;
+			
+			// v1.14.35: DIAGNOSTIC LOG - Capture exact OrderState before check
+			string tpStateDebug = currentTP != null ? currentTP.OrderState.ToString() : "NULL";
+			Log(string.Format("DEBUG_TP_STATE: {0} currentTP={1} State={2} | protectedQty={3} newQty={4}",
+				isTp1 ? "TP1" : "TP2",
+				currentTP != null ? currentTP.Name : "null",
+				tpStateDebug,
+				isTp1 ? protectedTp1Qty : protectedTp2Qty,
+				qty));
+			
 			// v1.14.30: Added PartFilled to prevent duplicate TPs during rapid partial fills
 			bool tpAlreadyActive = (currentTP != null && 
 				(currentTP.OrderState == OrderState.Working || 
