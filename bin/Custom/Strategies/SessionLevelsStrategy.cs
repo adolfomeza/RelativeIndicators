@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.29"; // Visual Filter Feedback
+		private const string StrategyVersion = "v1.14.34"; // Fix TP qty on restart
 		
 		// v1.12.1: CONTROL BUTTONS (simplified to 2 buttons)
 		private TradingMode currentTradingMode = TradingMode.Normal;
@@ -66,6 +66,13 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private string csvExportPath = "";
 		private bool isTrackingTrade = false;  // Flag to track MAE/MFE
 		private bool slOrderCreatedThisEntry = false; // v1.13.5: Prevent duplicate SL creation
+
+	// v1.14.31: Delta Integration for quantitative analysis
+	private NinjaTrader.NinjaScript.Indicators.RelativeIndicators.RelativeDelta relativeDelta;
+	private double tradeDeltaAtEntry = 0;      // Delta when entry filled
+	private int tradeDeltaDirection = 0;       // 1=aligned, -1=opposed, 0=neutral
+	private double tradeSessionDelta = 0;      // Session cumulative delta at entry
+	private double tradeDeltaAtTP1 = 0;        // Delta when TP1 filled
 
 	// v1.14.23: AI Filters
 	private List<string> enabledZonesList;
@@ -150,6 +157,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		
 		// OPTIMIZATION (v1.7.3): Cache Opposite Level to avoid loops
 		private SessionLevel cachedOppositeLevel = null;
+		private bool oppositeSearchDone = false; // v1.14.32: Prevent repeated searches when not found
 		
 		// v1.10.0: Internal Levels Management
 		private bool isInternalLevel = false;
@@ -607,11 +615,36 @@ namespace NinjaTrader.NinjaScript.Strategies
 				// FINAL FORCE: Unmanaged Mode
 				IsUnmanaged = true; // Enabled for v1.7.0 Unmanaged Refactor
 			}
+			else if (State == State.Configure)
+			{
+				// v1.14.31: Add tick data series for RelativeDelta indicator
+				// This must be done in Configure state, not by the indicator itself
+				AddDataSeries(BarsPeriodType.Tick, 1);
+			}
 			else if (State == State.DataLoaded)
 			{
 				Log("DEBUG: OnStateChange(DataLoaded) IsUnmanaged = " + IsUnmanaged);
 				// Initialize Helper Indicators
 				atr = ATR(14); // For Dynamic Spacing
+				
+				// v1.14.31: Initialize RelativeDelta indicator for Delta analysis
+				try
+				{
+					// Use default parameters - RelativeDelta calculates on tick data
+					relativeDelta = RelativeDelta(
+						Brushes.RoyalBlue, Brushes.White, Brushes.Silver, 1, 1, // Colors
+						0, 3, false, // MinSize, DaysToLoad, ShowDivs
+						Brushes.RoyalBlue, 10, 0, 50, // HorizontalLine params
+						true, true, Brushes.Gray, 100, true, Brushes.Gray, 1, 100, // Line2500 params
+						true, Brushes.Gray, 1, 100, true, Brushes.Gray, 1, 100, // Line5000 params
+						true, Brushes.Gray, 1, 100, true, Brushes.Gray, 1, 100, // Line10000 params
+						Brushes.Gray, Brushes.Black); // Label colors
+				}
+				catch (Exception ex)
+				{
+					Log("DELTA INIT WARNING: " + ex.Message);
+					relativeDelta = null;
+				}
 				
 				// v1.12.0: Initialize control buttons
 				InitializeControlButtons();
@@ -666,8 +699,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 					// Create file with header if doesn't exist
 					if (!System.IO.File.Exists(csvExportPath))
 					{
-						// v1.13.16: Added Commission and NetPnL columns
-						string header = "ID,Instrument,EntryTime,Type,EntryPrice,ExitTime,ExitPrice,Result,PnL,Commission,NetPnL,MAE,MFE,Setup,Attempt,RiskReward";
+						// v1.14.31: Added Delta columns for quantitative analysis
+						string header = "ID,Instrument,EntryTime,Type,EntryPrice,ExitTime,ExitPrice,Result,PnL,Commission,NetPnL,MAE,MFE,Setup,Attempt,RiskReward,DeltaAtEntry,DeltaDirection,SessionDelta,DeltaAtTP1";
 						System.IO.File.WriteAllText(csvExportPath, header + Environment.NewLine);
 						Log("CSV EXPORT: Created " + csvExportPath);
 					}
@@ -1122,6 +1155,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				setupAnchorPrice = 0;
 				validatedTargetPrice = 0;
 				cachedOppositeLevel = null;
+				oppositeSearchDone = false; // v1.14.32: Reset search flag
 				isInternalLevel = false;
 				waitingForVwapMitigation = false;
 				currentVwapNumber = 1;
@@ -1138,6 +1172,11 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 		protected override void OnBarUpdate()
 		{
+			// v1.14.32: Skip processing for tick data series (BarsInProgress == 1)
+			// Only process main price series to avoid index errors with PlotBrushes
+			if (BarsInProgress != 0)
+				return;
+				
 			try
 			{
 			// v1.13.7: Heartbeat REMOVED - was spamming output
@@ -1186,6 +1225,11 @@ namespace NinjaTrader.NinjaScript.Strategies
 					// v1.10.38: If we have a position, ADOPT orders instead of cancelling
 					if (hasExistingPosition)
 					{
+						// v1.14.34: CRITICAL FIX - Reset protection counters before adopting
+						// This prevents accumulation of qty from previous strategy instances
+						protectedTp1Qty = 0;
+						protectedTp2Qty = 0;
+						
 						foreach(Order o in Account.Orders)
 						{
 							if (o.Instrument.FullName == Instrument.FullName && 
@@ -1199,18 +1243,21 @@ namespace NinjaTrader.NinjaScript.Strategies
 								else if (o.Name.StartsWith("TP1_") || o.Name.Contains("_TP1"))
 								{
 									tp1Order = o;
+									protectedTp1Qty = o.Quantity; // v1.14.34: Adopt actual qty
 									Log(Time[0] + " STARTUP ADOPT: Recovered TP1 order: " + o.Name + " Qty=" + o.Quantity);
 								}
 								else if (o.Name.StartsWith("TP2_") || o.Name.Contains("_TP2"))
 								{
 									tp2Order = o;
+									protectedTp2Qty = o.Quantity; // v1.14.34: Adopt actual qty
 									Log(Time[0] + " STARTUP ADOPT: Recovered TP2 order: " + o.Name + " Qty=" + o.Quantity);
 								}
 							}
 						}
 						
 						Log(Time[0] + " STARTUP ADOPT COMPLETE: SL=" + (stopOrder != null) + 
-							" TP1=" + (tp1Order != null) + " TP2=" + (tp2Order != null));
+							" TP1=" + (tp1Order != null) + " TP2=" + (tp2Order != null) +
+							" | protectedTp1Qty=" + protectedTp1Qty + " protectedTp2Qty=" + protectedTp2Qty);
 						
 						// v1.10.41: EMERGENCY PROTECTION - If no SL found, create protection or close
 						if (stopOrder == null)
@@ -2795,6 +2842,39 @@ currentEntryState = EntryState.Idle;
 		// -------------------------------------------------------------------------
 		private void ManageEntryA_Plus()
 		{
+			// v1.14.32 FIX: Global Paused check - blocks ALL entry actions, not just new setups
+			if (currentTradingMode == TradingMode.Paused)
+			{
+				// If we have working orders, cancel them
+				if (currentEntryState == EntryState.workingOrder && entryOrder != null && 
+					(entryOrder.OrderState == OrderState.Working || entryOrder.OrderState == OrderState.Accepted))
+				{
+					Log(Time[0] + " PAUSED: Cancelling working entry order");
+					CancelOrder(entryOrder);
+				}
+				return; // Block all entry logic when paused
+			}
+			
+			// v1.14.32 FIX: Cancel orders that go against direction mode
+			if (currentEntryState == EntryState.workingOrder && entryOrder != null &&
+				(entryOrder.OrderState == OrderState.Working || entryOrder.OrderState == OrderState.Accepted))
+			{
+				// LongOnly but we have a Short order pending
+				if (currentTradingMode == TradingMode.LongOnly && isShortSetup)
+				{
+					Log(Time[0] + " LONGONLY: Cancelling Short entry order");
+					CancelOrder(entryOrder);
+					return;
+				}
+				// ShortOnly but we have a Long order pending
+				if (currentTradingMode == TradingMode.ShortOnly && !isShortSetup)
+				{
+					Log(Time[0] + " SHORTONLY: Cancelling Long entry order");
+					CancelOrder(entryOrder);
+					return;
+				}
+			}
+			
 			// v1.12.0: Check trading mode before processing new entries
 			if (currentEntryState == EntryState.Idle)
 			{
@@ -2991,6 +3071,7 @@ currentEntryState = EntryState.Idle;
 							setupLevelTime = Time[0]; // Use current time as reference
 							validatedTargetPrice = 0;
 							cachedOppositeLevel = null;
+							oppositeSearchDone = false; // v1.14.32
 							
 							// NO call DetectInternalLevel again (external is not internal)
 							isInternalLevel = false;
@@ -3973,10 +4054,12 @@ setupLevelName = "";
 			// v1.11.12 FIX: Solo crear TP si NO existe uno activo
 			// Antes: siempre creaba TP causando 4 TP1 en lugar de 1
 			Order currentTP = isTp1 ? tp1Order : tp2Order;
+			// v1.14.30: Added PartFilled to prevent duplicate TPs during rapid partial fills
 			bool tpAlreadyActive = (currentTP != null && 
 				(currentTP.OrderState == OrderState.Working || 
 				 currentTP.OrderState == OrderState.Accepted ||
-				 currentTP.OrderState == OrderState.Submitted));
+				 currentTP.OrderState == OrderState.Submitted ||
+				 currentTP.OrderState == OrderState.PartFilled));
 			
 			if (!tpAlreadyActive)
 			{
@@ -4130,8 +4213,11 @@ setupLevelName = "";
 	// CORRECTED (v1.7.22): Search for opposite level from SAME DAY (not same hour)
 	private double GetOppositeLevelPrice(string name, DateTime refTime, double refPrice = 0, bool expectLower = false)
 	{
-		// OPTIMIZATION (v1.7.3): Return Cached Price if available
+	// OPTIMIZATION (v1.7.3): Return Cached Price if available
 		if (cachedOppositeLevel != null) return cachedOppositeLevel.Price;
+		
+		// v1.14.32: If we already searched and didn't find, don't search again
+		if (oppositeSearchDone) return 0;
 
 		// Try to find the opposite.
 		if (string.IsNullOrEmpty(name)) return 0;
@@ -4185,6 +4271,8 @@ setupLevelName = "";
 		// DEBUG: Summary if not found
 		if (EnableDebugLogs && foundLvl == null) Log(string.Format("{0} | OPPOSITE NOT FOUND: '{1}' from same day (Found {2} candidates, {3} rejected by date mismatch)", Time[0], oppName, candidatesFound, rejectedByDate));
 		
+		// v1.14.32: Mark search as done to prevent repeated searches
+		oppositeSearchDone = true;
 		return 0;
 	}
 
@@ -4573,6 +4661,29 @@ setupLevelName = "";
 						tradeMAE = 0;
 						tradeMFE = 0;
 						isTrackingTrade = true; // Flag to track MAE/MFE
+						
+						// v1.14.31: Capture Delta values at entry for quantitative analysis
+						if (relativeDelta != null && CurrentBar > 0)
+						{
+							try
+							{
+								tradeDeltaAtEntry = relativeDelta.DeltaClose[0];
+								tradeSessionDelta = relativeDelta.DeltaClose[0]; // Session cumulative
+								// Direction: 1=aligned (Long+positiveDelta or Short+negativeDelta), -1=opposed
+								if (tradeDirection == "Long")
+									tradeDeltaDirection = tradeDeltaAtEntry >= 0 ? 1 : -1;
+								else
+									tradeDeltaDirection = tradeDeltaAtEntry <= 0 ? 1 : -1;
+								Log(Time + " DELTA CAPTURE: Entry Delta=" + tradeDeltaAtEntry + " Direction=" + tradeDeltaDirection);
+							}
+							catch { tradeDeltaAtEntry = 0; tradeDeltaDirection = 0; }
+						}
+						else
+						{
+							tradeDeltaAtEntry = 0; tradeDeltaDirection = 0; tradeSessionDelta = 0;
+						}
+						tradeDeltaAtTP1 = 0; // Reset, will be set when TP1 fills
+						
 						Log(Time + " CSV EXPORT: Trade #" + tradeExportId + " started - " + tradeDirection + " @ " + tradeEntryPrice);
 					}
 					
@@ -4604,6 +4715,17 @@ setupLevelName = "";
 				if (isTP1)
 				{
 					Log(Time[0] + " BE LOGIC: TP1 Filled. Moving SL to BE.");
+					
+					// v1.14.31: Capture Delta at TP1 for VWAP absorption analysis
+					if (relativeDelta != null && CurrentBar > 0)
+					{
+						try
+						{
+							tradeDeltaAtTP1 = relativeDelta.DeltaClose[0];
+							Log(Time[0] + " DELTA CAPTURE: TP1 Delta=" + tradeDeltaAtTP1);
+						}
+						catch { tradeDeltaAtTP1 = 0; }
+					}
 					
 					// v1.10.13: Use stopOrder (Single-SL architecture v1.9.0+)
 					// After TP1 fills, move the single SL to breakeven
@@ -4652,6 +4774,7 @@ setupLevelName = "";
 				
 				// Clear Cache
 				cachedOppositeLevel = null;
+				oppositeSearchDone = false; // v1.14.32
 				
 				failsafeTriggered = false; // v1.14.2: Reset failsafe lock
 			}
@@ -4665,7 +4788,10 @@ setupLevelName = "";
 			{
 			// v1.13.3: Export CSV on EACH exit fill (not only when flat)
 				// v1.14.24: Only export in Realtime mode to avoid historical data pollution
-				if (isTrackingTrade && !string.IsNullOrEmpty(csvExportPath) && State == State.Realtime)
+				// v1.14.30: Allow CSV export in backtest mode when AllowBacktest is enabled
+				// v1.14.32: Auto-detect backtest (ChartControl == null means Strategy Analyzer)
+				bool isBacktest = (ChartControl == null);
+				if (isTrackingTrade && !string.IsNullOrEmpty(csvExportPath) && (State == State.Realtime || AllowBacktest || isBacktest))
 				{
 					try
 					{
@@ -4728,7 +4854,7 @@ setupLevelName = "";
 						double commission = execution.Quantity * 2 * commissionPerSide; // 2 sides (entry + exit)
 						double netPnl = pnl - commission;
 						
-						string line = string.Format("{0},{1},{2:yyyy-MM-dd HH:mm:ss},{3},{4},{5:yyyy-MM-dd HH:mm:ss},{6},{7},{8:F2},{9:F2},{10:F2},{11:F2},{12:F2},{13},{14},{15:F2}",
+						string line = string.Format("{0},{1},{2:yyyy-MM-dd HH:mm:ss},{3},{4},{5:yyyy-MM-dd HH:mm:ss},{6},{7},{8:F2},{9:F2},{10:F2},{11:F2},{12:F2},{13},{14},{15:F2},{16:F0},{17},{18:F0},{19:F0}",
 							tradeId,
 							Instrument.FullName,
 							tradeEntryTime,
@@ -4744,7 +4870,11 @@ setupLevelName = "";
 							tradeMFE,
 							safeSetupName,
 							tradeAttemptNumber,
-							riskReward
+							riskReward,
+							tradeDeltaAtEntry,      // v1.14.31
+							tradeDeltaDirection,    // v1.14.31
+							tradeSessionDelta,      // v1.14.31
+							tradeDeltaAtTP1         // v1.14.31
 						);
 						
 						System.IO.File.AppendAllText(csvExportPath, line + Environment.NewLine);
@@ -4829,6 +4959,28 @@ setupLevelName = "";
 				{
 					try { CancelOrder(tp2Order); Log("CLEANUP: Cancelled orphan tp2Order"); } catch {}
 				}
+				
+				// v1.14.33: AGGRESSIVE CLEANUP - Cancel ALL TP/SL orders for this instrument in Account.Orders
+				// This catches any orders that lost their reference (e.g., due to restart)
+				if (Account != null)
+				{
+					foreach(Order o in Account.Orders)
+					{
+						if (o.Instrument.FullName == Instrument.FullName && 
+							(o.OrderState == OrderState.Working || o.OrderState == OrderState.Accepted))
+						{
+							if (o.Name.StartsWith("TP1_") || o.Name.StartsWith("TP2_") || o.Name.StartsWith("SL_"))
+							{
+								try 
+								{ 
+									CancelOrder(o); 
+									Log("CLEANUP (Aggressive): Cancelled " + o.Name + " Qty=" + o.Quantity); 
+								} 
+								catch {}
+							}
+						}
+					}
+				}
 
 				// RESET PROTECTION COUNTERS (v1.7.24) - Fix bucket allocation
 				protectedTp1Qty = 0;
@@ -4851,6 +5003,7 @@ setupLevelName = "";
 					
 					// FIXED (v1.7.3): Clear Cache on Successful Exit too!
 					cachedOppositeLevel = null;
+					oppositeSearchDone = false; // v1.14.32
 					validatedTargetPrice = 0; // v1.7.17 FIX: Ensure stale target cleared
 				}
 				else

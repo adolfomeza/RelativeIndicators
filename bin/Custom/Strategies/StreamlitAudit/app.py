@@ -1303,7 +1303,8 @@ if data_source == "📊 Backtest (Strategy Analyzer)":
 elif data_source == "⏪ Playback (Market Replay)":
     default_path = os.path.join(trade_exports_dir, "playback", "*.csv")
 elif data_source == "📁 DEMO":
-    default_path = os.path.join(trade_exports_dir, "DEMO", "*.csv")
+    # v2.2.3: Support dynamic account folders (e.g. DEMO123456)
+    default_path = os.path.join(trade_exports_dir, "DEMO*", "*.csv")
 
 
 
@@ -1510,6 +1511,14 @@ tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10 = st.tabs([
 with tab1:
     st.markdown("### Curva de Equidad (Por Ejecución)")
     
+    # v1.14.32: Chart Type Selector
+    chart_type = st.radio(
+        "Tipo de Gráfico",
+        options=["📈 Curva de Equidad", "📊 Barras por Trade"],
+        horizontal=True,
+        key="equity_chart_type"
+    )
+    
     # Standard Equity Curve
     df = df.sort_values('ExitTime')
     df['Cumulative_PnL'] = df['PnL'].cumsum()
@@ -1519,9 +1528,23 @@ with tab1:
     high_water_mark = np.maximum.accumulate(equity_curve)
     drawdown = equity_curve - high_water_mark
     
-    fig_eq = px.line(df, x='ExitTime', y='Cumulative_PnL')
-    fig_eq.update_traces(line_color='#00FF99', line_width=2)
-    fig_eq = apply_premium_style(fig_eq, title='Equidad del Portafolio')
+    if chart_type == "📈 Curva de Equidad":
+        # Convert ExitTime to string for categorical axis (no gaps)
+        df['ExitLabel'] = df['ExitTime'].dt.strftime('%m/%d %H:%M')
+        fig_eq = px.line(df, x='ExitLabel', y='Cumulative_PnL')
+        fig_eq.update_traces(line_color='#00FF99', line_width=2)
+        fig_eq.update_xaxes(type='category')
+        fig_eq = apply_premium_style(fig_eq, title='Equidad del Portafolio')
+    else:
+        # Bar chart showing PnL per trade with colors (no gaps)
+        colors = ['#00FF99' if pnl >= 0 else '#FF4444' for pnl in df['PnL']]
+        # Convert ExitTime to string to make it categorical (no gaps)
+        df['ExitLabel'] = df['ExitTime'].dt.strftime('%m/%d %H:%M')
+        fig_eq = px.bar(df, x='ExitLabel', y='PnL', color_discrete_sequence=['#00FF99'])
+        fig_eq.update_traces(marker_color=colors)
+        fig_eq.update_xaxes(type='category')  # Force categorical axis
+        fig_eq = apply_premium_style(fig_eq, title='PnL por Trade')
+    
     st.plotly_chart(fig_eq, use_container_width=True)
     
     # AI Analysis for Equity Curve

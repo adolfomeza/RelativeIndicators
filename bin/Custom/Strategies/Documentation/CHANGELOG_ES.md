@@ -4,6 +4,57 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.14.34] - 2026-01-05
+### FIX CRÍTICO: Cantidad Incorrecta de TP al Hacer Refresh
+- **Problema**: Al refrescar la estrategia con posición activa, `protectedTp1Qty`/`protectedTp2Qty` mantenían valores anteriores, causando que nuevos TPs se crearan con cantidades acumuladas incorrectas (ej: Qty=10 en lugar de 3).
+- **Causa**: Las variables no se reseteaban al adoptar posición existente en RESTART.
+- **Solución**: Resetear `protectedTp1Qty = 0` y `protectedTp2Qty = 0` antes de iterar órdenes en STARTUP ADOPT, luego leer la cantidad real de cada TP adoptado.
+
+## [v1.14.33] - 2026-01-05
+### FIX CRÍTICO: Limpieza Agresiva de Órdenes TP Huérfanas
+- **Problema**: Al cerrar por SL, algunas órdenes TP1/TP2 quedaban activas porque perdieron su referencia (ej: tras restart).
+- **Solución**: Después de la limpieza normal, ahora itera `Account.Orders` y cancela **TODAS** las órdenes con nombre `TP1_*`, `TP2_*`, `SL_*` del instrumento.
+
+## [v1.14.32] - 2026-01-05
+### FIX: Modo Paused/LongOnly/ShortOnly No Cancelaba Órdenes Pendientes
+- **Problema**: Cambiar a "NINGUNO" o "Solo Long/Short" no cancelaba órdenes limit ya activas.
+- **Solución**: Guard global al inicio de `ManageEntryA_Plus` que cancela órdenes pendientes contra el modo.
+
+### FIX: BarsInProgress Guard
+- **Problema**: Error `ArgumentOutOfRangeException` en `PlotBrushes` cuando se agregó serie de datos tick.
+- **Solución**: Guard `if (BarsInProgress != 0) return;` al inicio de `OnBarUpdate`.
+
+### FIX: Spam de Logs en Búsqueda de Nivel Opuesto
+- **Problema**: `GetOppositeLevelPrice` se llamaba en cada tick cuando no encontraba nivel, generando spam.
+- **Solución**: Flag `oppositeSearchDone` para cachear resultado negativo.
+
+### FIX: CSV Export Automático en Backtest
+- **Problema**: Exportación CSV no funcionaba en Strategy Analyzer aunque `AllowBacktest=true`.
+- **Solución**: Detección automática de backtest con `ChartControl == null`.
+
+## [v1.14.31] - 2026-01-04
+### FEATURE: Delta Integration para Análisis Cuantitativo
+- **Objetivo**: Capturar datos de Delta (flujo de órdenes) para estudios estadísticos antes de implementar filtros activos.
+- **Cambios**:
+  - Agregada referencia al indicador `RelativeDelta` en `State.DataLoaded`.
+  - Nuevas variables: `tradeDeltaAtEntry`, `tradeDeltaDirection`, `tradeSessionDelta`, `tradeDeltaAtTP1`.
+  - Captura de Delta al fill de entrada (con dirección: aligned=1, opposed=-1).
+  - Captura de Delta al fill de TP1 (para análisis de absorción VWAP).
+  - Header CSV extendido con 4 columnas nuevas.
+- **Uso**: Los datos se exportan al CSV para análisis en Streamlit App.
+- **Nota**: Requiere Tick Replay activo en Backtests para datos Delta precisos.
+
+## [v1.14.30] - 2026-01-04
+### FIX CRÍTICO: TPs Duplicados en Partial Fills Rápidos
+- **Problema**: Durante fills parciales rápidos (ej: 2→4→5 contratos en 0.6 seg), se creaban múltiples órdenes TP1 y TP2 porque la verificación `tpAlreadyActive` no incluía estados transitorios.
+- **Causa**: Los estados `PendingSubmit` y `PartFilled` no estaban en la lista de "orden activa", causando que se crearan duplicados.
+- **Solución**: Agregar `OrderState.PendingSubmit` y `OrderState.PartFilled` a la verificación de `tpAlreadyActive`.
+
+### FIX: CSV Export en Backtest
+- **Problema**: Al correr Strategy Analyzer con `AllowBacktest=true`, no se generaban datos CSV.
+- **Causa**: La condición de exportación solo permitía `State.Realtime`.
+- **Solución**: Permitir exportación si `State == State.Realtime || AllowBacktest`.
+
 ## [v1.14.29] - 2026-01-04
 ### FEATURE: Feedback Visual de Rechazo de Trades
 - **Problema**: El panel mostraba "Waiting Confirmation" incluso cuando un trade era rechazado (ej: por bajo R/R), causando confusión.
