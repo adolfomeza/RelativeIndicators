@@ -4,6 +4,13 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.14.38] - 2026-01-05
+### DIAGNÓSTICO: Logs para Creación de SL
+- **Propósito**: Investigar origen de órdenes SL inesperadas (como la SL_Long_01 de MNQ que apareció sin registro).
+- **Cambio**: Agregado log `SL_CREATE_DEBUG` antes de cada creación de SL que muestra:
+  - Instrument, Direction, Tag, Action, Price, Qty, State, EntryState
+- **Uso**: Si aparece una orden SL inesperada, revisar logs para ver el contexto de creación.
+
 ## [v1.14.37] - 2026-01-05
 ### FIX CRÍTICO: Nivel Opuesto en Sesiones Nocturnas (Asia)
 - **Problema**: `GetOppositeLevelPrice` no encontraba el Asia Low cuando el setup era Asia High porque comparaba `StartTime.Date`. Como Asia cruza medianoche, High podía tener fecha 5-ene y Low fecha 4-ene.
