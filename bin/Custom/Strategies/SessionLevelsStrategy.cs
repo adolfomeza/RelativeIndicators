@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.35"; // Diagnostic logs for TP state
+		private const string StrategyVersion = "v1.14.36"; // Auto-pause on lag
 		
 		// v1.12.1: CONTROL BUTTONS (simplified to 2 buttons)
 		private TradingMode currentTradingMode = TradingMode.Normal;
@@ -174,6 +174,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private int vwapTouchBar = -1;                  // Bar where VWAP was touched
 
 		private bool enableDebugLogs = false; // Default false for performance
+		private bool isLagPaused = false; // v1.14.36: Auto-pause when lag > 60s
 
 		[NinjaScriptProperty]
 		[Display(Name="Enable Debug Logs", Description="Print detailed execution steps to Output. Disable for faster backtests.", Order=60, GroupName="General")]
@@ -1176,6 +1177,32 @@ namespace NinjaTrader.NinjaScript.Strategies
 			// Only process main price series to avoid index errors with PlotBrushes
 			if (BarsInProgress != 0)
 				return;
+			
+			// v1.14.36: AUTO-PAUSE ON LAG - Pause strategy when lag > 60s without position
+			// This prevents erratic behavior during market open or connection issues
+			if (State == State.Realtime)
+			{
+				double lagSeconds = (DateTime.Now - Time[0]).TotalSeconds;
+				
+				if (lagSeconds > 60 && Position.MarketPosition == MarketPosition.Flat)
+				{
+					if (!isLagPaused)
+					{
+						isLagPaused = true;
+						Log("LAG_PAUSE: Lag > 60s detected (" + lagSeconds.ToString("F0") + "s). Pausing until connection normalizes.");
+					}
+					return; // Skip all calculations until lag normalizes
+				}
+				else if (isLagPaused && lagSeconds < 10)
+				{
+					isLagPaused = false;
+					Log("LAG_RESUME: Connection normalized (lag=" + lagSeconds.ToString("F1") + "s). Resuming calculations.");
+				}
+				else if (isLagPaused)
+				{
+					return; // Still paused, skip calculations
+				}
+			}
 				
 			try
 			{

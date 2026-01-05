@@ -4,6 +4,15 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.14.36] - 2026-01-05
+### FEATURE: Auto-Pause en Lag de Red
+- **Problema**: Durante la apertura del mercado o problemas de conexión, el lag puede subir indefinidamente hasta que la estrategia se congela.
+- **Solución**: Cuando el lag supera 60 segundos **sin posición activa**, la estrategia pausa automáticamente todos los cálculos.
+- **Comportamiento**:
+  - Lag > 60s + Sin posición → **PAUSA** (log: "LAG_PAUSE")
+  - Lag < 10s (normalizado) → **REANUDA** (log: "LAG_RESUME")
+- **Nota**: Si hay posición activa, la estrategia no pausa (SL/TP ya están en el broker protegiéndola).
+
 ## [v1.14.35] - 2026-01-05
 ### DIAGNÓSTICO: Logs para Estado de Órdenes TP
 - **Propósito**: Investigar por qué se crean múltiples órdenes TP en partial fills rápidos (<50ms).
