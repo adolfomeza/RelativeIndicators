@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.36"; // Auto-pause on lag
+		private const string StrategyVersion = "v1.14.37"; // Fix opposite level for overnight sessions
 		
 		// v1.12.1: CONTROL BUTTONS (simplified to 2 buttons)
 		private TradingMode currentTradingMode = TradingMode.Normal;
@@ -4272,29 +4272,47 @@ setupLevelName = "";
 		int candidatesFound = 0;
 		int rejectedByDate = 0;
 		
+		// v1.14.37: Find the setup level to get its Tag for session matching
+		SessionLevel setupLevel = activeLevels.FirstOrDefault(l => l.Name == name);
+		string setupSessionTicks = "";
+		if (setupLevel != null && !string.IsNullOrEmpty(setupLevel.Tag))
+		{
+			string[] tagParts = setupLevel.Tag.Split('_');
+			if (tagParts.Length >= 3) setupSessionTicks = tagParts[tagParts.Length - 1];
+		}
+		
 		foreach(var l in activeLevels)
 		{
 			bool nameMatch = l.Name.Trim().Equals(oppName.Trim(), StringComparison.OrdinalIgnoreCase);
 			if (nameMatch) {
 				candidatesFound++;
 				
-				// Compare DATES only (ignore time of day)
-				bool sameDay = (l.StartTime.Date == refTime.Date);
+				// v1.14.37: Compare SESSION TICKS instead of date (fixes overnight sessions like Asia)
+				bool sameSession = false;
+				if (!string.IsNullOrEmpty(setupSessionTicks) && !string.IsNullOrEmpty(l.Tag))
+				{
+					string[] candidateTagParts = l.Tag.Split('_');
+					if (candidateTagParts.Length >= 3)
+					{
+						string candidateSessionTicks = candidateTagParts[candidateTagParts.Length - 1];
+						sameSession = (candidateSessionTicks == setupSessionTicks);
+					}
+				}
 				
 				// DEBUG: Log candidato
-				if (EnableDebugLogs) Log(string.Format("   -> Candidate #{0}: {1} @ {2:F2} (Date: {3:yyyy-MM-dd}, SameDay: {4})", candidatesFound, l.Name, l.Price, l.StartTime.Date, sameDay));
+				Log(string.Format("   -> Candidate #{0}: {1} @ {2:F2} (Date: {3:yyyy-MM-dd}, SameSession: {4})", candidatesFound, l.Name, l.Price, l.StartTime.Date, sameSession));
 				
-				// SAME DAY CHECK: High and Low must be from same calendar day
-				if (sameDay)
+				// SAME SESSION CHECK: High and Low must be from same session (by Tag Ticks)
+				if (sameSession)
 				{
 					foundLvl = l;
-					if (EnableDebugLogs) Log(string.Format("   -> ACCEPTED (Same Day): {0} @ {1:F2}", l.Name, l.Price));
+					Log(string.Format("   -> ACCEPTED (Same Session): {0} @ {1:F2}", l.Name, l.Price));
 					break;
 				}
 				else
 				{
 					rejectedByDate++;
-					if (EnableDebugLogs) Log(string.Format("   -> REJECTED (Different Day): {0:yyyy-MM-dd} != {1:yyyy-MM-dd}", l.StartTime.Date, refTime.Date));
+					Log(string.Format("   -> REJECTED (Different Session): Tags don't match"));
 				}
 			}
 		}

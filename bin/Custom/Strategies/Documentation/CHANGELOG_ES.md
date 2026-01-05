@@ -4,6 +4,12 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.14.37] - 2026-01-05
+### FIX CRÍTICO: Nivel Opuesto en Sesiones Nocturnas (Asia)
+- **Problema**: `GetOppositeLevelPrice` no encontraba el Asia Low cuando el setup era Asia High porque comparaba `StartTime.Date`. Como Asia cruza medianoche, High podía tener fecha 5-ene y Low fecha 4-ene.
+- **Causa**: Las sesiones que cruzan medianoche (Asia 8PM-1AM) asignan fechas diferentes al High y Low.
+- **Solución**: Comparar por **Session Ticks** extraídos del Tag del nivel en lugar de la fecha. El Tag incluye el timestamp del inicio de sesión que es igual para High y Low.
+
 ## [v1.14.36] - 2026-01-05
 ### FEATURE: Auto-Pause en Lag de Red
 - **Problema**: Durante la apertura del mercado o problemas de conexión, el lag puede subir indefinidamente hasta que la estrategia se congela.
