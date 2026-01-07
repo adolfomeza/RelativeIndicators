@@ -4,6 +4,15 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.14.59] - 2026-01-07
+### FIX CRÍTICO: Lógica de Niveles Internos/Externos Invertida 🔧
+- **Problema**: La estrategia clasificaba incorrectamente los niveles. Si había un nivel externo protegiendo (ej. USA High arriba de Asia High), lo marcaba como **INTERNO** y usaba el VWAP Adhoc incorrecto para la confirmación.
+- **Fix**: 
+  - Lógica invertida en `OrderProtectionManager`: Si existe protección externa → Es **EXTERNO** (Usa VWAP Global).
+  - Si NO hay protección externa (es el extremo) → Es **INTERNO** (Usa VWAP Adhoc).
+  - Añadido filtro para considerar solo niveles del **día actual**.
+- **Resultado**: La confirmación ahora usa el VWAP Global correcto (High/Low) cuando hay niveles externos, permitiendo reentradas válidas.
+
 ## [v1.14.58] - 2026-01-07
 ### FIX CRÍTICO: TP1 Se Movía Hacia la Entrada 🔧
 - **Problema**: El TP1 se movía de la línea VWAP Low visible (~25497) hacia el precio de entrada (~25542), causando fills incorrectos.

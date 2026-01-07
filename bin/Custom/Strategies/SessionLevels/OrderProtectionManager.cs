@@ -353,27 +353,47 @@ namespace NinjaTrader.NinjaScript.Strategies
             
             if (setupLevel == null || allLevels == null) return;
             
+            // v1.14.59: Filter only TODAY's levels for internal/external classification
+            DateTime today = strategy.Time[0].Date;
+            var todayLevels = allLevels.Where(l => l.StartTime.Date == today).ToList();
+            
+            // v1.14.59: INVERTED LOGIC - If external level found → IsInternalLevel = FALSE (use Global VWAP)
+            // Internal = No external protection (level is the extreme) → Use Adhoc VWAP
+            // External = Has external protection → Use Global VWAP
+            
             if (setupLevel.IsResistance)
             {
-                externalLevelAbove = FindExternalLevelAbove(setupLevel, allLevels);
+                externalLevelAbove = FindExternalLevelAbove(setupLevel, todayLevels);
                 if (externalLevelAbove > 0)
                 {
-                    IsInternalLevel = true;
-                    strategy.Log(string.Format("INTERNAL LEVEL: {0} @ {1} (External above: {2} @ {3})",
+                    IsInternalLevel = false; // v1.14.59: INVERTED - Has external protection → use Global VWAP
+                    strategy.Log(string.Format("EXTERNAL LEVEL: {0} @ {1} (Protected by: {2} @ {3})",
                         setupLevel.Name, setupLevel.Price, ExternalLevelAboveName, externalLevelAbove));
                 }
-                externalLevelBelow = FindExternalLevelBelow(setupLevel, allLevels);
+                else
+                {
+                    IsInternalLevel = true; // No external protection → is the extreme → use Adhoc
+                    strategy.Log(string.Format("INTERNAL LEVEL (EXTREME): {0} @ {1} (No external protection above)",
+                        setupLevel.Name, setupLevel.Price));
+                }
+                externalLevelBelow = FindExternalLevelBelow(setupLevel, todayLevels);
             }
             else
             {
-                externalLevelBelow = FindExternalLevelBelow(setupLevel, allLevels);
+                externalLevelBelow = FindExternalLevelBelow(setupLevel, todayLevels);
                 if (externalLevelBelow > 0)
                 {
-                    IsInternalLevel = true;
-                    strategy.Log(string.Format("INTERNAL LEVEL: {0} @ {1} (External below: {2} @ {3})",
+                    IsInternalLevel = false; // v1.14.59: INVERTED - Has external protection → use Global VWAP
+                    strategy.Log(string.Format("EXTERNAL LEVEL: {0} @ {1} (Protected by: {2} @ {3})",
                         setupLevel.Name, setupLevel.Price, ExternalLevelBelowName, externalLevelBelow));
                 }
-                externalLevelAbove = FindExternalLevelAbove(setupLevel, allLevels); // For TP2
+                else
+                {
+                    IsInternalLevel = true; // No external protection → is the extreme → use Adhoc
+                    strategy.Log(string.Format("INTERNAL LEVEL (EXTREME): {0} @ {1} (No external protection below)",
+                        setupLevel.Name, setupLevel.Price));
+                }
+                externalLevelAbove = FindExternalLevelAbove(setupLevel, todayLevels); // For TP2
             }
         }
 

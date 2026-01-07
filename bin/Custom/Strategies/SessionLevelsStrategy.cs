@@ -36,7 +36,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.58"; // v1.14.58: Fix TradeVWAP to follow Global VWAP correctly
+		private const string StrategyVersion = "v1.14.59"; // v1.14.59: Fix isInternalLevel logic inversion
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;
