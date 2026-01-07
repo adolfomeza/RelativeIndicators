@@ -24,34 +24,32 @@ using NinjaTrader.NinjaScript.DrawingTools;
 using System.Net;
 using System.Net.Mail;
 using System.IO;
-using System.Windows.Controls; // v1.12.0: For control buttons
+// using System.Windows.Controls; // Removed v1.14.43 (Moved to StrategyHelpers)
 #endregion
 
 //This namespace holds Strategies in this folder and is required. Do not change it. 
 namespace NinjaTrader.NinjaScript.Strategies
 {
-	// v1.12.0: Trading Mode Control
-	public enum TradingMode { Normal, Paused, LongOnly, ShortOnly }
+	// Trading Mode Control
+
+
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.39"; // Print() debug for SL creation
+		private const string StrategyVersion = "v1.14.58"; // v1.14.58: Fix TradeVWAP to follow Global VWAP correctly
 		
-		// v1.12.1: CONTROL BUTTONS (simplified to 2 buttons)
-		private TradingMode currentTradingMode = TradingMode.Normal;
-		private System.Windows.Controls.Button btnPause; // Direction button (cycles through modes)
-		private System.Windows.Controls.Button btnClose;
-		private System.Windows.Controls.StackPanel buttonPanel;
-		private bool buttonsInitialized = false;
+		// CONTROL BUTTONS (Delegated to StrategyHelpers)
+		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;
+		private StrategyHelpers helpers; // Phase 7: UI & Helpers Module
 		private bool isProtectionProcessing = false; // v1.13.1: Concurrency lock
 		private bool failsafeTriggered = false; // v1.14.2: Prevent infinite loop in CheckHardStop
 		
 		// v1.14.29: Visual Filter Feedback
-		private string lastFilterReason = "";
-		private DateTime lastFilterTime = DateTime.MinValue;
+		[XmlIgnore] public string lastFilterReason = "";
+		[XmlIgnore] public DateTime lastFilterTime = DateTime.MinValue;
 		
 		// =========================================================
-		// v1.13.0: TRADE ANALYZER EXPORT
+		// TRADE ANALYZER EXPORT
 		// =========================================================
 		private double tradeMAE = 0;           // Maximum Adverse Excursion (worst unrealized PnL)
 		private double tradeMFE = 0;           // Maximum Favorable Excursion (best unrealized PnL)
@@ -62,7 +60,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private int tradeExportId = 0;         // Auto-incrementing ID for CSV
 		private int tradeExitFillsCount = 0;   // v1.13.4: Count exit fills for split IDs
 		private int tradeAttemptNumber = 0;    // v1.13.11: VWAP attempt number for analysis
-		private double tradeRiskUSD = 0;       // v1.13.12: Original risk in USD for R:R calculation
+		[XmlIgnore] public double tradeRiskUSD = 0;       // v1.13.12: Original risk in USD for R:R calculation
 		private string csvExportPath = "";
 		private bool isTrackingTrade = false;  // Flag to track MAE/MFE
 		private bool slOrderCreatedThisEntry = false; // v1.13.5: Prevent duplicate SL creation
@@ -83,10 +81,10 @@ namespace NinjaTrader.NinjaScript.Strategies
         private double stackLowY = double.MaxValue;
         private int lastColBarIdx = -1;
         private double verticalUnit = 0;
-        private NinjaTrader.NinjaScript.Indicators.ATR atr;
+        [XmlIgnore] public NinjaTrader.NinjaScript.Indicators.ATR atr;
 		
-		// v1.7.16: Persistence for EnsureProtection
-		private double validatedTargetPrice = 0;
+		// Persistence for EnsureProtection
+		[XmlIgnore] public double validatedTargetPrice = 0;
 
         // Helper Methods for Stacking
         private double GetStackedHighY(double desiredY, double heightBuffer)
@@ -136,15 +134,31 @@ namespace NinjaTrader.NinjaScript.Strategies
                   return desiredY;
              }
         }
+
 		// Version Control
 
+        [XmlIgnore]
+        public VWAPCalculator vwapCalc;
+        [XmlIgnore]
+        public OrderProtectionManager protectionManager;
+        [XmlIgnore]
+        public EntryStateMachine entryMachine;
+        [XmlIgnore]
+        public SessionManager sessionManager;
 
-		public enum VwapCalculationMode
-		{
-			Typical, // (H+L+C)/3
-			Close,   // Close
-			OHLC4    // (O+H+L+C)/4
-		}
+
+        // v1.14.42: activeLevels is now public directly (property removed to avoid ambiguity)
+
+        [Browsable(false)]
+        [XmlIgnore]
+        public bool IsTradeVwapActive 
+        { 
+            get { return tradeVwapActive; } 
+            set { tradeVwapActive = value; }
+        }
+
+
+
 
 
 		// ... existing properties ...
@@ -155,22 +169,30 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private TimeSpan tsUsaStart, tsUsaEnd;
 		private SessionIterator sessionIterator; // v1.14.7 fix
 		
-		// OPTIMIZATION (v1.7.3): Cache Opposite Level to avoid loops
-		private SessionLevel cachedOppositeLevel = null;
-		private bool oppositeSearchDone = false; // v1.14.32: Prevent repeated searches when not found
+		// v1.14.42: Public timezone references for SessionManager
+		[XmlIgnore] public TimeZoneInfo nyTimeZone;
+		[XmlIgnore] public TimeZoneInfo chartTimeZone;
 		
-		// v1.10.0: Internal Levels Management
-		private bool isInternalLevel = false;
-		private double externalLevelAbove = 0;  // For SHORT setups (external High above)
-		private double externalLevelBelow = 0;  // For LONG setups (external Low below)
-		private string externalLevelAboveName = "";
-		private string externalLevelBelowName = "";
-	private int lastInvalidationBar = -1;  // v1.10.1: Anti-loop for invalidation
+		[XmlIgnore] public List<SessionLevel> activeLevels = new List<SessionLevel>();
+		// v1.14.42: Public property for SessionManager access
+		public string USAEndTime => "18:00:00"; // USA session close time
+		
+		// OPTIMIZATION (v1.7.3): Cache Opposite Level to avoid loops
+		[XmlIgnore] public SessionLevel cachedOppositeLevel = null;
+		[XmlIgnore] public bool oppositeSearchDone = false; // v1.14.32: Prevent repeated searches when not found
+		
+		// Internal Levels Management
+		[XmlIgnore] public bool isInternalLevel = false;
+		[XmlIgnore] public double externalLevelAbove = 0;  // For SHORT setups (external High above)
+		[XmlIgnore] public double externalLevelBelow = 0;  // For LONG setups (external Low below)
+		[XmlIgnore] public string externalLevelAboveName = "";
+		[XmlIgnore] public string externalLevelBelowName = "";
+	[XmlIgnore] public int lastInvalidationBar = -1;  // v1.10.1: Anti-loop for invalidation
 	
-		// v1.10.26: VWAP Retry Tracking
-		private double vwapCandleExtreme = 0;           // Low (LONG) or High (SHORT) to mitigate
-		private bool waitingForVwapMitigation = false;  // Are we waiting for price to break?
-		private int currentVwapNumber = 1;              // Which VWAP# (1, 2, 3...)
+		// VWAP Retry Tracking
+		[XmlIgnore] public double vwapCandleExtreme = 0;           // Low (LONG) or High (SHORT) to mitigate
+		[XmlIgnore] public bool waitingForVwapMitigation = false;  // Are we waiting for price to break?
+		[XmlIgnore] public int currentVwapNumber = 1;              // Which VWAP# (1, 2, 3...)
 		private int vwapTouchBar = -1;                  // Bar where VWAP was touched
 
 		private bool enableDebugLogs = false; // Default false for performance
@@ -184,13 +206,13 @@ namespace NinjaTrader.NinjaScript.Strategies
 			set { enableDebugLogs = value; }
 		}
 		
-		// v1.11.17: Lag Filter - Maximum allowed chart lag before blocking orders
+		// Lag Filter - Maximum allowed chart lag before blocking orders
 		[NinjaScriptProperty]
 		[Range(0.1, 10)]
 		[Display(Name="Max Chart Lag (Seconds)", Description="Block orders when chart data is older than this threshold. Set higher if experiencing false positives.", Order=62, GroupName="General")]
 		public double MaxChartLagSeconds { get; set; } = 0.75;
 		
-		// v1.11.21: Strategy Analyzer Support - Enable backtest execution in Historical state
+		// Strategy Analyzer Support - Enable backtest execution in Historical state
 		[NinjaScriptProperty]
 		[Display(Name="Allow Backtest", Description="Enable order execution in Strategy Analyzer. Keep OFF for live/demo accounts.", Order=63, GroupName="General")]
 		public bool AllowBacktest { get; set; } = false;
@@ -217,7 +239,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		}
 		
 		// =========================================================
-		// v1.11.5: TRIGGER LABEL SETTINGS
+		// TRIGGER LABEL SETTINGS
 		// =========================================================
 		private double labelDistanceATR = 0.3;
 		[NinjaScriptProperty]
@@ -265,7 +287,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		}
 		
 		// =========================================================
-		// v1.11.9: CONFIRMATION CANDLE HIGHLIGHT
+		// CONFIRMATION CANDLE HIGHLIGHT
 		// =========================================================
 		private bool highlightConfirmationCandle = true;
 		[NinjaScriptProperty]
@@ -274,6 +296,27 @@ namespace NinjaTrader.NinjaScript.Strategies
 		{
 			get { return highlightConfirmationCandle; }
 			set { highlightConfirmationCandle = value; }
+		}
+
+		// =========================================================
+		// AUDIO SETTINGS
+		// =========================================================
+		private bool useAlerts = true;
+		[NinjaScriptProperty]
+		[Display(Name="Use Sound Alerts", Description="Play sound when a setup triggers.", Order=90, GroupName="Audio Settings")]
+		public bool UseAlerts
+		{
+			get { return useAlerts; }
+			set { useAlerts = value; }
+		}
+		
+		private string alertSoundFile = "mzpack_alert4.wav";
+		[NinjaScriptProperty]
+		[Display(Name="Alert Sound File", Description="Sound file to play. Must be in NinjaTrader 8/sounds folder.", Order=91, GroupName="Audio Settings")]
+		public string AlertSoundFile
+		{
+			get { return alertSoundFile; }
+			set { alertSoundFile = value; }
 		}
 		
 		private Brush confirmationCandleColor = Brushes.Yellow;
@@ -294,94 +337,61 @@ namespace NinjaTrader.NinjaScript.Strategies
 		}
 
 		// Visual State for Adhoc VWAP Line
-		private double visualAdhocPrevBarVal = 0;
-		private double visualAdhocLastVal = 0;
-		private int visualAdhocLastBar = -1;
+		[XmlIgnore] public double visualAdhocPrevBarVal = 0;
+		[XmlIgnore] public double visualAdhocLastVal = 0;
+		[XmlIgnore] public int visualAdhocLastBar = -1;
 
-		// v1.11.13: File-based logging per instrument for easier debugging
+		// File-based logging per instrument for easier debugging
 		private static object logFileLock = new object();
 		private string logFilePath = null;
 		private DateTime lastLogFlush = DateTime.MinValue;
 		
-		// v1.11.17: Lag Filter - Chart data freshness detection
-		private double currentChartLag = 0;
-		private bool isLagAlertActive = false;
+		// Lag Filter - Chart data freshness detection
+		[XmlIgnore] public double currentChartLag = 0;
+		[XmlIgnore] public bool isLagAlertActive = false;
 		
-		// v1.11.19: Orphan false positive prevention - delay after position close
+		// Orphan false positive prevention - delay after position close
 		private DateTime lastPositionCloseTime = DateTime.MinValue;
 		
-		private void Log(string message)
+		public void Log(string message)
 		{
-			if (!EnableDebugLogs) return;
-			
-			string instrumentName = Instrument != null ? Instrument.MasterInstrument.Name : "UNKNOWN";
-			string prefix = "[" + instrumentName + "] ";
-			string fullMessage = prefix + message;
-			
-			// Print to Output window
-			Print(fullMessage);
-			
-			// Write to file (buffered, low overhead)
-			try
-			{
-				// v1.11.15: Only calculate path once per instance
-				if (logFilePath == null)
-				{
-					// Use NinjaTrader's trace folder (always exists)
-					string ntDocsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-					string logsDir = System.IO.Path.Combine(ntDocsPath, "NinjaTrader 8", "trace", "SessionLevels");
-					if (!System.IO.Directory.Exists(logsDir))
-						System.IO.Directory.CreateDirectory(logsDir);
-					
-					// One file per instrument per day
-					string fileName = string.Format("{0}_{1:yyyyMMdd}.txt", instrumentName, DateTime.Now);
-					logFilePath = System.IO.Path.Combine(logsDir, fileName);
-				}
-				
-				lock (logFileLock)
-				{
-					System.IO.File.AppendAllText(logFilePath, 
-						string.Format("{0:HH:mm:ss.fff} {1}\r\n", DateTime.Now, message));
-				}
-			}
-			catch { } // Silently ignore file errors to not disrupt trading
+			if (helpers != null) helpers.Log(message);
 		}
 		
-		// v1.11.13: Clear log file on strategy restart (overwrite instead of append)
+		// Wrappers for OrderProtectionManager (Exposing Protected Methods)
+		/// <summary>
+		/// Wrapper for SubmitOrderUnmanaged to allow calling from helper classes.
+		/// </summary>
+		public Order SubmitOrderUnmanagedWrapper(int barsInProgress, OrderAction action, OrderType orderType, int quantity, double limitPrice, double stopPrice, string ocoId, string signalName)
+		{
+			return SubmitOrderUnmanaged(barsInProgress, action, orderType, quantity, limitPrice, stopPrice, ocoId, signalName);
+		}
+
+		public void ChangeOrderWrapper(Order order, int quantity, double limitPrice, double stopPrice)
+		{
+			ChangeOrder(order, quantity, limitPrice, stopPrice);
+		}
+
+		public void CancelOrderWrapper(Order order)
+		{
+			CancelOrder(order);
+		}
+		
+		// Clear log file on strategy restart (overwrite instead of append)
 		private void ClearLogFile()
 		{
-			try
-			{
-				if (Instrument == null) return;
-				
-				string instrumentName = Instrument.MasterInstrument.Name;
-				string ntDocsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-				string logsDir = System.IO.Path.Combine(ntDocsPath, "NinjaTrader 8", "trace", "SessionLevels");
-				
-				if (!System.IO.Directory.Exists(logsDir))
-					System.IO.Directory.CreateDirectory(logsDir);
-				
-				string fileName = string.Format("{0}_{1:yyyyMMdd}.txt", instrumentName, DateTime.Now);
-				logFilePath = System.IO.Path.Combine(logsDir, fileName);
-				
-				// v1.11.18: Overwrite THIS instrument's log only
-				// Each instrument has its own file, so this won't affect other instruments
-				lock (logFileLock)
-				{
-					System.IO.File.WriteAllText(logFilePath, 
-						string.Format("=== {0} Strategy Log - Started {1:yyyy-MM-dd HH:mm:ss} ===\r\n\r\n", 
-							instrumentName, DateTime.Now));
-				}
-			}
-			catch { }
+			if (helpers != null) helpers.ClearLogFile();
 		}
 
 
+		/// <summary>
+		/// Checks for chart lag effectively blocking orders if data is too old.
+		/// </summary>
 		// =========================================================
-		// v1.11.17: LAG FILTER - Check chart data freshness
-		// v1.14.26: Skip lag check during Playback
+		// LAG FILTER - Check chart data freshness
+		// Skip lag check during Playback
 		// =========================================================
-		private bool CheckChartLag()
+		public bool CheckChartLag()
 		{
 			// Only check in Realtime (not Playback/Historical)
 			if (State != State.Realtime) return true;
@@ -417,9 +427,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 
 		// =========================================================
-		// v1.11.5: TRIGGER LABELS - Distancia basada en ATR
+		// TRIGGER LABELS - Distancia basada en ATR
 		// =========================================================
-		private void DrawTriggerLabel(string tag, bool isShort, int barsAgo, double anchorPrice)
+		public void DrawTriggerLabel(string tag, bool isShort, int barsAgo, double anchorPrice)
 		{
 			// Calcular offset basado en ATR (consistente entre instrumentos)
 			// Usa la propiedad LabelDistanceATR configurable desde el panel
@@ -456,7 +466,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		}
 
 		// =========================================================
-		// v1.11.0: INTELLIGENT RESTART EVALUATION (No Position)
+		// INTELLIGENT RESTART EVALUATION (No Position)
 		// =========================================================
 		private void EvaluateRestartNoPosition()
 		{
@@ -601,15 +611,15 @@ namespace NinjaTrader.NinjaScript.Strategies
 				TimeInForce									= TimeInForce.Gtc; // Aligned with RLS
 				TraceOrders									= false;
 				RealtimeErrorHandling						= RealtimeErrorHandling.StopCancelClose;
+				IsAutoScale = false; // Fix v1.14.51: Prevent plots from squashing the chart
 				IsOverlay = true;
 				
 				// IsUnmanaged moved to top
 				
 				// Add Plots for VWAP
-				// Note: Plot AutoScale cannot be disabled in NinjaTrader strategies
-				// User should disable AutoScale manually in Chart properties if needed
-				AddPlot(Brushes.White, "HighVWAP"); // Values[0]
-				AddPlot(Brushes.White, "LowVWAP");  // Values[1]
+		// Disable AutoScale to prevent chart compression
+		AddPlot(Brushes.White, "HighVWAP"); // Values[0]
+		AddPlot(Brushes.White, "LowVWAP");  // Values[1]
 				// Trade VWAP is calculated internally but NOT plotted (v1.10.31)
 				
 				// FINAL FORCE: Unmanaged Mode
@@ -624,16 +634,25 @@ namespace NinjaTrader.NinjaScript.Strategies
 			}
 			else if (State == State.DataLoaded)
 			{
+				// Phase 7: Initialize Helpers FIRST (for Log)
+				helpers = new StrategyHelpers(this);
+
 				Log("DEBUG: OnStateChange(DataLoaded) IsUnmanaged = " + IsUnmanaged);
+				// Initialize VWAP Calculator Module
+				vwapCalc = new VWAPCalculator(this);
+				sessionManager = new SessionManager(this); // v1.14.45: Fix Initialization
+				protectionManager = new OrderProtectionManager(this);
+				entryMachine = new EntryStateMachine(this); // Entry State Machine
+				
 				// Initialize Helper Indicators
 				atr = ATR(14); // For Dynamic Spacing
 				
-				// v1.14.31: Initialize RelativeDelta indicator for Delta analysis
+				// Initialize RelativeDelta indicator for Delta analysis
 				try
 				{
 					// Use default parameters - RelativeDelta calculates on tick data
 					relativeDelta = RelativeDelta(
-						Brushes.RoyalBlue, Brushes.White, Brushes.Silver, 1, 1, // Colors
+						Brushes.RoyalBlue, Brushes.White, Brushes.Silver, 1, // Colors
 						0, 3, false, // MinSize, DaysToLoad, ShowDivs
 						Brushes.RoyalBlue, 10, 0, 50, // HorizontalLine params
 						true, true, Brushes.Gray, 100, true, Brushes.Gray, 1, 100, // Line2500 params
@@ -647,22 +666,22 @@ namespace NinjaTrader.NinjaScript.Strategies
 					relativeDelta = null;
 				}
 				
-				// v1.12.0: Initialize control buttons
+				// Initialize control buttons
 				InitializeControlButtons();
 				
-				// v1.14.0: Initialize TradeAnalyzer CSV Export (Separated by Context)
+				// Initialize TradeAnalyzer CSV Export (Separated by Context)
 				try
 				{
 					string safeInstrument = Instrument.FullName.Replace("/", "-").Replace(":", "-").Replace(" ", "_");
 					
-					// v1.14.0: Export to Strategies/TradeExports/{context}/ folder
+					// Export to Strategies/TradeExports/{context}/ folder
 					// FIX: Use UserDataDir directly, it already points to "Documents\NinjaTrader 8"
 					string strategiesDir = System.IO.Path.Combine(
 						NinjaTrader.Core.Globals.UserDataDir.TrimEnd(System.IO.Path.DirectorySeparatorChar),
 						"bin", "Custom", "Strategies", "TradeExports");
 					
 					// Determine context subfolder based on execution state and account
-					// v1.14.11: Usar nombre exacto de cuenta para auto-detección en Streamlit
+					// Determine context subfolder based on execution state and account
 					string contextFolder;
 					
 					// 1. Backtest detection: Strategy Analyzer has no ChartControl
@@ -700,7 +719,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 					// Create file with header if doesn't exist
 					if (!System.IO.File.Exists(csvExportPath))
 					{
-						// v1.14.31: Added Delta columns for quantitative analysis
+						// Added Delta columns for quantitative analysis
 						string header = "ID,Instrument,EntryTime,Type,EntryPrice,ExitTime,ExitPrice,Result,PnL,Commission,NetPnL,MAE,MFE,Setup,Attempt,RiskReward,DeltaAtEntry,DeltaDirection,SessionDelta,DeltaAtTP1";
 						System.IO.File.WriteAllText(csvExportPath, header + Environment.NewLine);
 						Log("CSV EXPORT: Created " + csvExportPath);
@@ -730,8 +749,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 				}
 				catch (Exception ex) { Print("TimeSpan Parse Error: " + ex.Message); }
 				
-				// v1.14.23: AI Filters - Parse zone configuration
-				// v1.14.24: Auto Load Config has priority
+				// AI Filters - Parse zone configuration
+				// Auto Load Config has priority
 				if (AutoLoadAIConfig) LoadAIConfig();
 				ParseEnabledZones();
 				
@@ -780,7 +799,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		}
 
 		// -------------------------------------------------------------------------
-		// CROSS-INSTRUMENT RISK SYNC (v1.10.21)
+		// CROSS-INSTRUMENT RISK SYNC
 		// -------------------------------------------------------------------------
 		private static readonly object sharedRiskLock = new object();
 		private double lastWrittenRisk = 0;
@@ -795,9 +814,12 @@ namespace NinjaTrader.NinjaScript.Strategies
 			return System.IO.Path.Combine(NinjaTrader.Core.Globals.UserDataDir, "trace", "SharedRisk.txt");
 		}
 		
-		private void WriteSharedRisk(double atrRisk)
+		/// <summary>
+		/// Writes the current risk (ATR-based) to a shared file for cross-instrument coordination.
+		/// </summary>
+		public void WriteSharedRisk(double atrRisk)
 		{
-			// FIX v1.14.13: Disable Shared Risk in Backtest/Optimization to prevent state leak
+			// Disable Shared Risk in Backtest/Optimization to prevent state leak
 			if (State == State.Historical) return;
 
 			// Only write if significantly different or every 5 seconds
@@ -834,9 +856,12 @@ namespace NinjaTrader.NinjaScript.Strategies
 			catch { }
 		}
 		
-		private double ReadMaxSharedRisk()
+		/// <summary>
+		/// Reads the maximum risk from the shared file to prevent over-leveraging across instruments.
+		/// </summary>
+		public double ReadMaxSharedRisk()
 		{
-			// FIX v1.14.13: Disable Shared Risk in Backtest/Optimization
+			// Disable Shared Risk in Backtest/Optimization
 			if (State == State.Historical) return RiskPerTradeUSD;
 
 			// PERFORMANCE: Only read file every 5 seconds, use cache otherwise
@@ -1045,43 +1070,24 @@ namespace NinjaTrader.NinjaScript.Strategies
 		}
 
 		// TimeZone Caching
-		private TimeZoneInfo nyTimeZone;
-		private TimeZoneInfo chartTimeZone;
+		// TimeZone Caching (moved to public section - lines 173-174)
+
 		private bool timeZonesLoaded = false;
 		private double lastVol = 0;
 
 		// Level Persistence
-		private class SessionLevel
-		{
-			public string Name;
-			public double Price;
-			public DateTime StartTime;
-			public DateTime EndTime;
-			public DateTime MitigationTime; // When it was touched
-			public bool IsResistance; // True = High, False = Low
-			public bool IsMitigated;
-			public Brush Color;
-			public string Tag; // For Drawing
-			
-			// VWAP Data
-			public double VolSum;
-			public double PvSum;
-			public bool JustReset;
-			
-			// v1.10.25: Retry tracking
-			public int EntryAttempts = 0;
-		}
+
 		
-		private List<SessionLevel> activeLevels = new List<SessionLevel>();
+		// activeLevels moved to public section (line 176)
 		private List<SessionLevel> virginLevels = new List<SessionLevel>();
 
 		// Strategy Initialization Flag
 		private bool isStrategyInitialized = false;
 		private bool isRealtimeInitialized = false; // v1.7.7 Cleanup Flag
-		private int realtimeStartBar = -1; // v1.10.28: Bar when strategy entered Realtime (for fresh signals only)
-		private HashSet<string> skippedLevelsAtStartup = new HashSet<string>(); // v1.10.29: Levels already touched at startup
-		private bool gapDetected = false;
-		private int gapCount = 0;
+		[XmlIgnore] public int realtimeStartBar = -1; // v1.10.28: Bar when strategy entered Realtime (for fresh signals only)
+		[XmlIgnore] public HashSet<string> skippedLevelsAtStartup = new HashSet<string>(); // v1.10.29: Levels already touched at startup
+		[XmlIgnore] public bool gapDetected = false;
+		[XmlIgnore] public int gapCount = 0;
 		private DateTime lastWeeklyReset = DateTime.MinValue; // v1.10.37: Track weekly reset
 
 		// -------------------------------------------------------------------------
@@ -1123,7 +1129,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				
 				Log(Time[0] + " WEEK RESET - State cleared for new trading week (Last Friday 6pm: " + lastFriday6pm + " NY)");
 				
-				// v1.13.15: Diagnostic logging - show active levels vs current price at week start
+				// Diagnostic logging - show active levels vs current price at week start
 				if (activeLevels != null && activeLevels.Count > 0)
 				{
 					Log("LEVEL SUMMARY (Price=" + Close[0] + "):");
@@ -1161,10 +1167,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 				waitingForVwapMitigation = false;
 				currentVwapNumber = 1;
 				
-				// Reset Adhoc VWAP
-				adhocVolSum = 0;
-				adhocPvSum = 0;
-				adhocLastBar = -1;
+				// Reset Adhoc VWAP via Module
+				if (vwapCalc != null) vwapCalc.ClearAdhoc();
+
+                if (protectionManager != null) protectionManager.ResetEntryState();
 				
 				// Clear skipped levels from last week
 				skippedLevelsAtStartup.Clear();
@@ -1173,14 +1179,33 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 		protected override void OnBarUpdate()
 		{
-			// v1.14.32: Skip processing for tick data series (BarsInProgress == 1)
+			// Skip processing for tick data series (BarsInProgress == 1)
 			// Only process main price series to avoid index errors with PlotBrushes
 			if (BarsInProgress != 0)
 				return;
 			
-			// v1.14.36: AUTO-PAUSE ON LAG - Pause strategy when lag > 60s without position
+			// DIAGNOSTIC HEARTBEAT REMOVED
+		
+		// Initialize timezones for SessionManager
+		if (nyTimeZone == null || chartTimeZone == null)
+		{
+			try
+			{
+				nyTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+				chartTimeZone = TimeZoneInfo.Local;
+			}
+			catch
+			{
+				nyTimeZone = TimeZoneInfo.Utc;
+				chartTimeZone = TimeZoneInfo.Local;
+			}
+		}
+			
+			// AUTO-PAUSE ON LAG - Pause strategy when lag > 60s without position
 			// This prevents erratic behavior during market open or connection issues
-			if (State == State.Realtime)
+			// SKIP in Playback mode - Time[0] is historical so lag calculation is meaningless
+			bool isPlayback = (Connection.PlaybackConnection != null);
+			if (State == State.Realtime && !isPlayback)
 			{
 				double lagSeconds = (DateTime.Now - Time[0]).TotalSeconds;
 				
@@ -1206,9 +1231,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 				
 			try
 			{
-			// v1.13.7: Heartbeat REMOVED - was spamming output
+			// Heartbeat REMOVED
 
-			// v1.7.7: STARTUP CLEANUP FAILSAFE
+			// STARTUP CLEANUP FAILSAFE
 			// Must run inside OnBarUpdate when State is Realtime to allow Order Submission
 			// v1.10.28: Skip if overnight positions are allowed (user wants to keep positions)
 			if (State == State.Realtime && !isRealtimeInitialized)
@@ -1336,7 +1361,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 									catch (Exception ex)
 {
 Log(Time[0] + " EMERGENCY ORDER FAILED: " + ex.Message);
-// v1.11.28: CRITICAL - If cant protect, CLOSE
+// CRITICAL - If cant protect, CLOSE
 Log(Time[0] + " CRITICAL: Cannot protect. CLOSING.");
 try {
 if (isShortSetup)
@@ -1373,13 +1398,13 @@ currentEntryState = EntryState.Idle;
 					}
 					else
 					{
-						// v1.11.0: INTELLIGENT RESTART EVALUATION
+						// INTELLIGENT RESTART EVALUATION
 						// Instead of blindly cancelling orders, evaluate if setup is still valid
 						EvaluateRestartNoPosition();
 					}
 				}
 				
-				// v1.10.29: DETECT LEVELS ALREADY BEING TOUCHED AT STARTUP
+				// DETECT LEVELS ALREADY BEING TOUCHED AT STARTUP
 				// These levels are "spent" - we should NOT trigger on them
 				foreach (var lvl in activeLevels)
 				{
@@ -1401,12 +1426,12 @@ currentEntryState = EntryState.Idle;
 					}
 				}
 				
-				// v1.11.0: Historical state now handled by EvaluateRestartNoPosition()
+				// Historical state now handled by EvaluateRestartNoPosition()
 			}
 
 			if (CurrentBar < 20) return;
 			
-			// v1.10.37: Reset state at week end (Friday 6pm NY) or new week start
+			// Reset state at week end (Friday 6pm NY) or new week start
 			CheckWeekEndReset();
 			
 			// V_STACK: Reset Stack per bar update cycle (re-draws everything)
@@ -1424,8 +1449,9 @@ currentEntryState = EntryState.Idle;
 				ethLowPrice = Low[0];
 				
 				// Reset VWAPs to start fresh here
-				ethHighVWAP = new SessionVWAP(); ethHighVWAP.Reset(Volume[0], Close[0]);
-				ethLowVWAP = new SessionVWAP(); ethLowVWAP.Reset(Volume[0], Close[0]);
+				// Reset VWAPs to start fresh here
+				// vwapCalc handles this, but we can force re-init
+                if (vwapCalc != null) vwapCalc = new VWAPCalculator(this);
 				
 				// Init AdHoc
 				adhocLastBar = CurrentBar;
@@ -1441,26 +1467,38 @@ currentEntryState = EntryState.Idle;
 				try 
 				{
 					// "Eastern Standard Time" handles both EST and EDT automatically on Windows
-					nyTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-					
+					try { nyTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"); }
+                    catch { nyTimeZone = TimeZoneInfo.FindSystemTimeZoneById("America/New_York"); } // Linux/Mac fallback?
+                    
+                    if (nyTimeZone == null) nyTimeZone = TimeZoneInfo.Local; // Safe Fallback
+
 					// Get the TimeZone of the current bars/chart
 					if (NinjaTrader.Core.Globals.GeneralOptions.TimeZoneInfo != null)
 						chartTimeZone = NinjaTrader.Core.Globals.GeneralOptions.TimeZoneInfo;
 					else
 						chartTimeZone = TimeZoneInfo.Local; // Fallback
 						
+                    Print($"TimeZones Loaded: NY={nyTimeZone.Id} Chart={chartTimeZone.Id}");
 					timeZonesLoaded = true;
 				}
 				catch (Exception ex)
 				{
-					Log("Error loading TimeZones: " + ex.Message);
+                    // Fallback to Local to prevent freeze
+                    nyTimeZone = TimeZoneInfo.Local;
+                    chartTimeZone = TimeZoneInfo.Local;
+                    
+					Print("Error loading TimeZones (Using Local): " + ex.Message);
+                    Log("Error loading TimeZones (Using Local): " + ex.ToString());
 					timeZonesLoaded = true; 
 				}
 			}
 
-			// v1.14.6: Continuous Lag Monitoring (Visuals only)
+			// Continuous Lag Monitoring (Visuals only)
 			// Ensure visual alert clears when lag dissipates, even if no trade is attempting
 			CheckChartLag();
+			
+			// DIAGNOSTIC HEARTBEAT REMOVED
+			// if (CurrentBar % 50 == 0) Print("HEARTBEAT: ...");
 
 			// 0. Calculate Volume Delta for VWAP
 			if (IsFirstTickOfBar) lastVol = 0;
@@ -1473,18 +1511,35 @@ currentEntryState = EntryState.Idle;
 				InitCSV();
 			}
 
-			// 1. Session Logic: Identify/Create Levels (Use Cached TimeSpans)
-			CheckSession("Asia", tsAsiaStart, tsAsiaEnd, Brushes.White, deltaVol);
-			CheckSession("Europe", tsEuStart, tsEuEnd, Brushes.Yellow, deltaVol);
-			CheckSession("USA", tsUsaStart, tsUsaEnd, Brushes.RoyalBlue, deltaVol);
+			// 1. Session Logic: Identify/Create Levels (Delegated to SessionManager)
+			if (sessionManager == null) sessionManager = new SessionManager(this);
+			sessionManager.CheckSession("Asia", tsAsiaStart, tsAsiaEnd, Brushes.White, deltaVol);
+			sessionManager.CheckSession("Europe", tsEuStart, tsEuEnd, Brushes.Yellow, deltaVol);
+			sessionManager.CheckSession("USA", tsUsaStart, tsUsaEnd, Brushes.RoyalBlue, deltaVol);
 			
-			// 2. Manage Extension & Touching
-			ManageLevels(deltaVol);
+			// 2. Manage Extension & Touching (Delegated to SessionManager)
+			sessionManager.ManageLevels(deltaVol);
 			
 			// 3. Global ETH VWAPs
-			ManageGlobalVWAPs(deltaVol);
+			// 3. Global ETH VWAPs (Delegated)
+            if (vwapCalc != null)
+            {
+			    vwapCalc.ManageGlobalVWAPs(deltaVol, Time[0], CurrentBar, High, Low, Close, Open, Volume, nyTimeZone, chartTimeZone);
+                
+                // ADHOC VWAP UPDATE (Delegate)
+			    if (currentEntryState == EntryState.WaitingForConfirmation || currentEntryState == EntryState.workingOrder)
+			    {
+				    vwapCalc.UpdateAdhocVWAP(deltaVol, CurrentBar, High, Low, Close, Open, Volume);
+			    }
+            }
 			
-			// v1.11.22: HISTORICAL LOAD OPTIMIZATION
+			// RESTORED: Safety Checks & UI (Previously in ManageGlobalVWAPs)
+			DrawStatePanel();
+			CheckSafetyNet();
+			CheckHardStop();
+			CheckSessionExit();
+
+			// HISTORICAL LOAD OPTIMIZATION
 			// Skip trading logic for old bars to speed up strategy loading
 			// Levels are still calculated above, only entry/exit logic is skipped
 			bool isRecentBar = (Time[0].Date >= DateTime.Today.AddDays(-3));
@@ -1496,7 +1551,7 @@ currentEntryState = EntryState.Idle;
 			// 4. Entry Logic (only for recent bars or Realtime)
 			ManageEntryA_Plus();
 			
-			// v1.13.0: Track MAE/MFE for active trades
+			// Track MAE/MFE for active trades
 			if (isTrackingTrade && Position.MarketPosition != MarketPosition.Flat)
 			{
 				double unrealizedPnL = Position.GetUnrealizedProfitLoss(PerformanceUnit.Currency, Close[0]);
@@ -1514,14 +1569,16 @@ currentEntryState = EntryState.Idle;
 			}
 			catch (Exception ex)
 			{
+				// Force Print even if debug disabled to catch Critical Runtime Errors
+				Print($"CRITICAL_ERROR in OnBarUpdate (Bar {CurrentBar}): {ex.GetType().Name} - {ex.Message}");
 				if (EnableDebugLogs)
-					Log($"CRITICAL ERROR in OnBarUpdate at Bar {CurrentBar}: {ex.ToString()}");
+					Log($"CRITICAL STACK: {ex.StackTrace}");
 			}
 		}
 
 
 		
-		// v1.13.6: Diagnostic OnRender
+		// Diagnostic OnRender
 		protected override void OnRender(ChartControl chartControl, ChartScale chartScale)
 		{
 			try
@@ -1535,359 +1592,53 @@ currentEntryState = EntryState.Idle;
 			}
 		}
 
-		private void CheckSession(string sessionName, TimeSpan startTs, TimeSpan endTs, Brush color, double deltaVol)
-		{
-			if (nyTimeZone == null || chartTimeZone == null) return;
-
-			DateTime chartTime = Time[0];
-			DateTime nyTime = TimeZoneInfo.ConvertTime(chartTime, chartTimeZone, nyTimeZone);
-			TimeSpan nyTimeOfDay = nyTime.TimeOfDay;
-			
-			// REMOVED PARSING for Performance
-			// TimeSpan startTs = TimeSpan.Parse(startStr);
-			// TimeSpan endTs = TimeSpan.Parse(endStr);
-			
-			bool inSession = false;
-			
-			if (startTs > endTs) { if (nyTimeOfDay >= startTs || nyTimeOfDay < endTs) inSession = true; }
-			else { if (nyTimeOfDay >= startTs && nyTimeOfDay < endTs) inSession = true; }
-			
-			if (inSession)
-			{
-				// Determine Session Date (for unique ID)
-				DateTime calculatedSessionStartNY = (startTs > endTs && nyTimeOfDay < endTs) ? nyTime.Date.AddDays(-1) : nyTime.Date;
-				calculatedSessionStartNY = calculatedSessionStartNY.Add(startTs);
-				
-				// Unique IDs for High and Low
-				string tagH = sessionName + "_High_" + calculatedSessionStartNY.Ticks;
-				string tagL = sessionName + "_Low_" + calculatedSessionStartNY.Ticks;
-				
-				// Find or Create Levels (Legacy ID Lookup first)
-				SessionLevel highLvl = activeLevels.FirstOrDefault(l => l.Tag == tagH);
-				SessionLevel lowLvl = activeLevels.FirstOrDefault(l => l.Tag == tagL);
-				
-				// Convert Start Time to Chart Time for Visuals
-				DateTime chartStartTime = TimeZoneInfo.ConvertTime(calculatedSessionStartNY, nyTimeZone, chartTimeZone);
-
-				// FUZZY MATCHING (v1.5.4):
-				// Instead of relying purely on the Exact Ticks ID (which is fragile to precision errors),
-				// We check if a level with the SAME NAME and APPROXIMATE TIME (within 4 hours) already exists.
-				
-				if (highLvl == null)
-				{
-					highLvl = activeLevels.FirstOrDefault(l => l.Tag == tagH || (l.Name == sessionName + " High" && Math.Abs((l.StartTime - chartStartTime).TotalHours) < 4));
-				}
-				if (lowLvl == null)
-				{
-					lowLvl = activeLevels.FirstOrDefault(l => l.Tag == tagL || (l.Name == sessionName + " Low" && Math.Abs((l.StartTime - chartStartTime).TotalHours) < 4));
-				}
-
-				if (highLvl == null)
-				{
-					// New High Level (Init VWAP with current Bar Full Volume as it creates the anchor)
-					highLvl = new SessionLevel 
-					{ 
-						Name = sessionName + " High", Price = double.MinValue, StartTime = chartStartTime, EndTime = Time[0], 
-						IsResistance = true, IsMitigated = false, Color = color, Tag = tagH,
-						VolSum = Volume[0], PvSum = Volume[0] * Close[0], JustReset = true
-					};
-					activeLevels.Add(highLvl);
-				}
-				else highLvl.JustReset = false; // Reset flag default
-				
-				if (lowLvl == null)
-				{
-					// New Low Level
-					lowLvl = new SessionLevel 
-					{ 
-						Name = sessionName + " Low", Price = double.MaxValue, StartTime = chartStartTime, EndTime = Time[0], 
-						IsResistance = false, IsMitigated = false, Color = color, Tag = tagL,
-						VolSum = Volume[0], PvSum = Volume[0] * Close[0], JustReset = true
-					};
-					activeLevels.Add(lowLvl);
-				}
-				else lowLvl.JustReset = false;
-				
-				// Logic: While in session, we push the High/Low out. 
-				// If New High -> Reset VWAP to Anchor HERE.
-				
-				if (High[0] > highLvl.Price) 
-				{
-					highLvl.Price = High[0];
-					// RE-ANCHOR VWAP
-					highLvl.VolSum = Volume[0];
-					highLvl.PvSum = Volume[0] * Close[0];
-					highLvl.JustReset = true;
-				}
-				
-				if (Low[0] < lowLvl.Price) 
-				{
-					lowLvl.Price = Low[0];
-					// RE-ANCHOR VWAP
-					lowLvl.VolSum = Volume[0];
-					lowLvl.PvSum = Volume[0] * Close[0];
-					lowLvl.JustReset = true;
-				}
-				
-				// While in session, update EndTime to current to keep line growing
-				if (!highLvl.IsMitigated) highLvl.EndTime = Time[0];
-				if (!lowLvl.IsMitigated) lowLvl.EndTime = Time[0];
-			}
-		}
-
-		private void ManageLevels(double deltaVol)
-		{
-			// Check for touches on existing active levels
-			
-			foreach (var lvl in activeLevels)
-			{
-				// BACKTEST SAFETY: Completely ignore future levels (Visuals + Logic)
-				if (lvl.StartTime > Time[0]) continue;
-
-				// VWAP ACCUMULATION
-			if (!lvl.JustReset)
-			{
-				lvl.VolSum += deltaVol;
-				double price = Close[0];
-				if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
-				else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
-				
-				lvl.PvSum += deltaVol * price;
-			}
-				// If JustReset was true, we already set VolSum/PvSum in CheckSession. 
-				// JustReset is ephemeral for this tick.
-				
-				// Calculate VWAP
-				double vwap = 0;
-				if (lvl.VolSum > 0) vwap = lvl.PvSum / lvl.VolSum;
-
-				// LINE EXTENSION LOGIC
-				// Alive: Always extend.
-				// Mitigated: Extend ONLY if we are still in the same calendar day as the mitigation Event.
-				
-				if (!lvl.IsMitigated)
-				{
-					lvl.EndTime = Time[0];
-				}
-				else
-				{
-					// Ghost Line Extension
-					// Extension Rule: Continue until the End of the American Session (USAEndTime).
-					// We need to calculate the *specific* cutoff time relative to the Mitigation event.
-					
-					// 1. Convert MitigationTime to NY to understand when it happened
-					DateTime mitNy = TimeZoneInfo.ConvertTime(lvl.MitigationTime, chartTimeZone, nyTimeZone);
-					TimeSpan usaEndTs = TimeSpan.Parse(USAEndTime);
-					
-					// 2. Determine the Cutoff Date/Time (NY)
-					// If mitigation happened BEFORE the cutoff today (e.g. 10:00 vs 18:00), cutoff is Today 18:00.
-					// If mitigation happened AFTER the cutoff (e.g. 19:00 vs 18:00), cutoff is Tomorrow 18:00.
-					
-					DateTime cutoffNy;
-					if (mitNy.TimeOfDay < usaEndTs)
-						cutoffNy = mitNy.Date.Add(usaEndTs);
-					else
-						cutoffNy = mitNy.Date.AddDays(1).Add(usaEndTs);
-						
-					// 3. Compare Current Time (NY) to Cutoff (NY)
-					DateTime currentNy = TimeZoneInfo.ConvertTime(Time[0], chartTimeZone, nyTimeZone);
-					
-					if (currentNy < cutoffNy)
-					{
-						lvl.EndTime = Time[0];
-					}
-					// Else: Freeze (Stop extending)
-				}
-				
-				// Check for Mitigation (if not already broken)
-				// Only if session is effectively done (Start/End checks or just assume if formed)
-				// Simplified: Just always check touch.
-				
-				if (!lvl.IsMitigated)
-				{
-					// Avoid self-mitigation during formation
-					// If the StartTime was effectively "today" or "recent" and we are still largely in that window?
-					// Problem: CheckSession pushes Price up/down. 
-					// If we are IN session, CheckSession updates Price.
-					// So if High[0] == Price, CheckSession makes Price = High[0].
-					// So High[0] == Price.
-					// So "High[0] >= Price" is TRUE.
-					// We need to know if we are "In Session" to avoid mitigation.
-					
-					// Heuristic: If CheckSession updated it THIS TICK, don't mitigate.
-					// But we run ManageLevels AFTER CheckSession.
-					// Let's rely on a flag or simply check if Time is outside Session Window?
-					// Checking Time is hard because of the varying session hours.
-					// Let's use a "InSession" flag on the object?
-					// Or reusing the "EndTime" check from previous step:
-					// If(lvl.EndTime == Time[0]) it means CheckSession updated it? 
-					// NO, we just updated lvl.EndTime = Time[0] at the top of this loop! Invalid logic now.
-					
-					// Let's add an explicit "LastUpdateBar" or similar to SessionLevel?
-					// Or simpler: We know the logic in CheckSession updates Price.
-					// If Price == High[0], it's likely pushing.
-					// But if Price < High[0], it's a break.
-					// Wait, if Price < High[0] (Resistance), then CheckSession WOULD have updated it if we were in session!
-					// So if CheckSession DID NOT update it (Price < High[0]), it means we are NOT in session (or logic failed).
-					// Therefore, if High[0] > Price, it MUST be a mitigation break!
-					// CORRECT.
-					
-					// Exception: The very specific moment High[0] jumps? 
-					// If in session, CheckSession runs first. 
-					// If High[0] > currentHigh, set currentHigh = High[0].
-					// So entering ManageLevels, Price == High[0].
-					// Use strict inequality? High[0] > Price? No, touch is enough.
-					
-					// Let's iterate:
-					// In Session: Price = 100. High[0] = 101. -> CheckSession sets Price = 101. -> ManageLevels sees Price=101, High[0]=101.
-					// Out Session: Price = 100. High[0] = 101. -> CheckSession does nothing. -> ManageLevels sees Price=100, High[0]=101. -> MITIGATION!
-					
-					// So, logic:
-					// Resistance: If High[0] > Price -> Mitigation.
-					// Support: If Low[0] < Price -> Mitigation.
-					// Equality (Touch) shouldn't count if we assume "Break"?
-					// User said "cortadas" (cut/broken) or "tocada" (touched)?
-					// "hasta que sea tocada" (touched).
-					// If it's a touch (==), then in-session formation is a touch.
-					// We MUST distinguish In-Session.
-					
-					// Let's calculate In-Session locally again or store it.
-					// Re-calculating properly is safer.
-					
-					// Actually, let's use the object creation/update time?
-					// Let's look at `IsResistance`.
-					bool potentialMitigation = false;
-					if (lvl.IsResistance && High[0] >= lvl.Price) potentialMitigation = true;
-					if (!lvl.IsResistance && Low[0] <= lvl.Price) potentialMitigation = true;
-					
-					if (potentialMitigation)
-					{
-						// Check if we are physically in the session window for this specific level
-						// This line's tag has StartTicks.
-						// Simplest: Check if the *current price* is EQUAL to level price.
-						// If equal, likely just forming/touching.
-						// If strictly Greater (Res) or Less (Sup) AND Level Price wasn't updated?
-						// It's ambiguous.
-						
-						// CLEAN FIX: Add `IsActive` bool to SessionLevel, set by CheckSession.
-						// But I can't easily change CheckSession signature in this edit without replacing whole file.
-						// I'll calculate `inSession` simply here. It's safe.
-						// Oh wait, I don't know WHICH session hours apply to THIS level (Asia? USA?).
-						// I have `lvl.Name` ("Asia High"). I can parse or Map.
-						
-						// HACK: Just assume if the Price CHANGED this bar, it's active?
-						// No.
-	
-						// Let's guess based on inequality.
-						// If High[0] > lvl.Price, it's definitely a Break (Mitigation), because if it was active, Price would have updated to match High[0].
-						// Wait. CheckSession updates logic: `if (High[0] > highLvl.Price) highLvl.Price = High[0];`
-						// So Price will ALWAYS be >= High[0] if active.
-						// Price will never be < High[0].
-						// So if High[0] > Price, it implies CheckSession did NOT run/update -> We are Out of Session -> Mitigation.
-						// If High[0] == Price? Could be "Just forming" OR "Perfect double top touch".
-						// We'll ignore Exact Touch for mitigation to be safe against formation noise.
-						// Strictly greater/less for "Cut/Break".
-						
-						bool strictBreak = false;
-						if (lvl.IsResistance && High[0] > lvl.Price) strictBreak = true;
-						if (!lvl.IsResistance && Low[0] < lvl.Price) strictBreak = true;
-						
-						if (strictBreak)
-						{
-							lvl.IsMitigated = true;
-							lvl.MitigationTime = Time[0];
-						}
-					}
-				}
-				
-				// Drawing Logic in Low Performance Mode (Optional)
-				if (ShowVisuals)
-				{
-					string tagA = lvl.Tag + "_A";
-					string tagB = lvl.Tag + "_B";
-					
-					if (!lvl.IsMitigated)
-					{
-						// Phase A Only: Start -> Current
-						Draw.Line(this, tagA, false, lvl.StartTime, lvl.Price, lvl.EndTime, lvl.Price, lvl.Color, DashStyleHelper.Solid, 2);
-					}
-					else
-					{
-						// Phase A: Start -> Mitigation
-						Draw.Line(this, tagA, false, lvl.StartTime, lvl.Price, lvl.MitigationTime, lvl.Price, lvl.Color, DashStyleHelper.Solid, 2);
-						
-						// Phase B (Ghost): Mitigation -> Current (Gray, Dash, 1px)
-						Draw.Line(this, tagB, false, lvl.MitigationTime, lvl.Price, lvl.EndTime, lvl.Price, Brushes.Gray, DashStyleHelper.Dash, 1);
-					}
-				}
-			}
-		}
-
-
 		// -------------------------------------------------------------------------
 		// ENTRY LOGIC VARIABLES
 		// -------------------------------------------------------------------------
-		private enum EntryState { Idle, WaitingForConfirmation, WaitingForVwapMitigation, workingOrder, PositionActive } // Entry State
-		private EntryState currentEntryState = EntryState.Idle;
-		private string setupLevelName = "";
-		private DateTime setupLevelTime = DateTime.MinValue; // NEW (v1.5.8): Track time of the level we are trading
-		private double setupAnchorPrice = 0;
-		private bool isShortSetup = false; // true = Short, false = Long
-		private bool visualConfirmationDone = false; // v1.11.11: Control para pintar vela solo la primera vez
-		// Rejection Loop Protection (v1.7.1)
-		private int lastRejectionBar = -1;
+
+		[XmlIgnore] public EntryState currentEntryState = EntryState.Idle;
+		[XmlIgnore] public string setupLevelName = "";
+		[XmlIgnore] public DateTime setupLevelTime = DateTime.MinValue; // NEW (v1.5.8): Track time of the level we are trading
+		[XmlIgnore] public double setupAnchorPrice = 0;
+		[XmlIgnore] public bool isShortSetup = false; // true = Short, false = Long
+		[XmlIgnore] public bool visualConfirmationDone = false; // Control para pintar vela solo la primera vez
+		// Rejection Loop Protection
+		[XmlIgnore] public int lastRejectionBar = -1;
 		// V_EXEC: Execution Variables
-		private Order entryOrder = null; // Consolidated Entry (v1.7.17)
+		[XmlIgnore] public Order entryOrder = null; // Consolidated Entry
 		// REMOVED: entryOrder1, entryOrder2
 		
-		// Protection State (v1.7.17)
-		private int protectedTp1Qty = 0;
-		private int protectedTp2Qty = 0;
+		// Protection State
+		[XmlIgnore] public int protectedTp1Qty = 0;
+		[XmlIgnore] public int protectedTp2Qty = 0;
 		private bool protectionOrdersCreated = false; // v1.11.14: Prevent duplicate creation
-		private int tradeOriginalQty = 0; // v1.11.23: Original trade quantity for panel display (doesn't change after TP1 fill)
-		private double tradeOriginalTp1Price = 0; // v1.11.24: Original TP1 price for panel display
-		private double tradeOriginalTp2Price = 0; // v1.11.24: Original TP2 price for panel display
+		[XmlIgnore] public int tradeOriginalQty = 0; // v1.11.23: Original trade quantity for panel display (doesn't change after TP1 fill)
+		[XmlIgnore] public double tradeOriginalTp1Price = 0; // v1.11.24: Original TP1 price for panel display
+		[XmlIgnore] public double tradeOriginalTp2Price = 0; // v1.11.24: Original TP2 price for panel display
 		// v1.10.31: Trade VWAP - continues accumulating even when day changes
 		// Separate from global VWAP to keep TP1 moving with original day's VWAP
 		private SessionVWAP tradeVWAP = new SessionVWAP();
 		private bool tradeVwapActive = false;
 
 		// REFACTOR v1.7.3: Consolidated SL/TP tracking
-		private Order stopOrder = null; // Legacy fallback, kept to avoid compile errors if referenced elsewhere (e.g. Draw)
+		[XmlIgnore] public Order stopOrder = null; // Legacy fallback, kept to avoid compile errors if referenced elsewhere (e.g. Draw)
 		private Order stopOrder1 = null; 
 		private Order stopOrder2 = null; 
-		private Order tp1Order = null;
-		private Order tp2Order = null;
+		[XmlIgnore] public Order tp1Order = null;
+        [XmlIgnore] public Order tp2Order = null;
 		private Order targetOrder = null; // Legacy tracker
 		
 		// Visual Tracking
-		private string triggerTag = "";
-		private int triggerBar = 0;
+		[XmlIgnore] public string triggerTag = "";
+		[XmlIgnore] public int triggerBar = 0;
 		
 		// -------------------------------------------------------------------------
 		// GLOBAL ETH SESSION VWAP LOGIC
 		// -------------------------------------------------------------------------
-		private class SessionVWAP
-		{
-			public double VolSum;
-			public double PvSum;
-			public double CurrentValue => VolSum == 0 ? 0 : PvSum / VolSum;
-			
-			public void Reset(double vol, double price)
-			{
-				VolSum = vol;
-				PvSum = vol * price;
-			}
-			
-			public void Accumulate(double vol, double price)
-			{
-				VolSum += vol;
-				PvSum += vol * price;
-			}
-		}
+
 		
-		private SessionVWAP ethHighVWAP = new SessionVWAP();
-		private SessionVWAP ethLowVWAP = new SessionVWAP();
+		private SessionVWAP ethHighVWAP_OBSOLETE; // Kept as placeholder if needed during transition, but logic moved to vwapCalc
+		private SessionVWAP ethLowVWAP_OBSOLETE;
 		
 		#region Properties
 		// Email & Screenshot Properties
@@ -1927,233 +1678,40 @@ currentEntryState = EntryState.Idle;
 		private double ethLowPrice = double.MaxValue;
 		private DateTime lastEthResetDate = DateTime.MinValue; 
 
-		// AD-HOC VWAP Variables (Fresh Start)
-		private double adhocVolSum = 0;
-		private double adhocPvSum = 0;
-		private double adhocLastVol = 0; // To track delta volume inside a bar
-		private int adhocLastBar = -1;
-		private int adhocAnchorBar = -1; // v1.10.11: Track anchor bar for retroactive update
+		// AD-HOC VWAP Variables (Fresh Start) - Public for EntryStateMachine access
+		[XmlIgnore] public double adhocVolSum = 0;
+		[XmlIgnore] public double adhocPvSum = 0;
+		[XmlIgnore] public double adhocLastVol = 0; // To track delta volume inside a bar
+		[XmlIgnore] public int adhocLastBar = -1;
+		[XmlIgnore] public int adhocAnchorBar = -1; // Track anchor bar for retroactive update
 
-		private void UpdateAdhocVWAP()
+		public void UpdateAdhocVWAP()
 		{
-			// Reset tracker on new bar for proper delta calculation
-			if (CurrentBar != adhocLastBar)
+			// v1.14.45: Delegate to VWAPCalculator Module
+			if (vwapCalc != null)
 			{
-				adhocLastVol = 0;
-				adhocLastBar = CurrentBar;
+				vwapCalc.UpdateAdhocVWAP(0, CurrentBar, High, Low, Close, Open, Volume);
 				
-				// v1.10.11: Retroactive update - if previous bar was anchor, recalculate with final Close
-				if (CurrentBar > 0 && adhocAnchorBar == CurrentBar - 1 && adhocVolSum > 0)
-				{
-					double finalPrice = Close[1];
-					if (VwapMethod == VwapCalculationMode.Typical) finalPrice = (High[1] + Low[1] + Close[1]) / 3.0;
-					else if (VwapMethod == VwapCalculationMode.OHLC4) finalPrice = (Open[1] + High[1] + Low[1] + Close[1]) / 4.0;
-					
-					// Recalculate VWAP with final values
-					adhocVolSum = Volume[1];
-					adhocPvSum = Volume[1] * finalPrice;
-					
-					// Update visual start point retroactively
-					visualAdhocPrevBarVal = finalPrice;
-					visualAdhocLastVal = finalPrice;
-				}
+				// Sync local visual variables for drawing (Backwards Compatibility for now)
+				visualAdhocPrevBarVal = vwapCalc.VisualAdhocPrevBarVal;
+				visualAdhocLastVal = vwapCalc.VisualAdhocLastVal;
+				visualAdhocLastBar = vwapCalc.AdhocAnchorBar; // This might need refinement, visual tracking logic
+				
+				// Important: Retrieve calculated values for local usage
+				adhocVolSum = vwapCalc.AdhocVolSum;
+				adhocPvSum = vwapCalc.AdhocPvSum;
 			}
-
-			// Calculate Delta Volume (Current Bar Volume so far - what we already processed)
-			// NinjaTrader Volume[0] is cumulative for the bar
-			double currentBarVol = Volume[0];
-			double deltaVol = currentBarVol - adhocLastVol;
-			
-			if (deltaVol > 0)
-	{
-		adhocVolSum += deltaVol;
-		double price = Close[0];
-		if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
-		else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
-		
-		adhocPvSum += deltaVol * price; 
-		adhocLastVol = currentBarVol; // Update processed volume
-	}
 		} 
 		
 		private int highAnchorBar = 0;
 		private int lowAnchorBar = 0;
 
-		private void ManageGlobalVWAPs(double deltaVol)
-		{
-			if (nyTimeZone == null || chartTimeZone == null) return;
-			
-			// 1. Determine Current Trading Day (based on 18:00 NY start)
-			DateTime currentNy = TimeZoneInfo.ConvertTime(Time[0], chartTimeZone, nyTimeZone);
-			TimeSpan cutoff = TimeSpan.FromHours(18);
-			DateTime tradingDay = currentNy.TimeOfDay >= cutoff ? currentNy.Date.AddDays(1) : currentNy.Date;
-			
-			// 2. HARD RESET at Start of Day
-			bool hardReset = false;
-			if (tradingDay != lastEthResetDate)
-			{
-				ethHighPrice = double.MinValue;
-				ethLowPrice = double.MaxValue;
-				ethHighVWAP = new SessionVWAP();
-				ethLowVWAP = new SessionVWAP();
-				lastEthResetDate = tradingDay;
-				hardReset = true;
-				
-				// Reset Anchor Trackers
-				highAnchorBar = CurrentBar;
-				lowAnchorBar = CurrentBar;
-			}
-			
-			// 3. Update High/Low and Anchor Logic
-	bool highReset = false;
-	bool lowReset = false;
-	
-	double price = Close[0];
-	if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
-	else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
-	
-	// v1.10.10: Retroactive anchor update - On first tick of new bar, if previous bar was anchor,
-	// recalculate VWAP with the FINAL Close[1] and update Values[x][1] to correct the visual
-	if (IsFirstTickOfBar && CurrentBar > 0)
-	{
-		// Check if previous bar was the high anchor
-		if (highAnchorBar == CurrentBar - 1 && ethHighVWAP.VolSum > 0)
-		{
-			double finalPrice = Close[1];
-			if (VwapMethod == VwapCalculationMode.Typical) finalPrice = (High[1] + Low[1] + Close[1]) / 3.0;
-			else if (VwapMethod == VwapCalculationMode.OHLC4) finalPrice = (Open[1] + High[1] + Low[1] + Close[1]) / 4.0;
-			
-			// Recalculate VWAP with final values
-			ethHighVWAP.Reset(Volume[1], finalPrice);
-			// Update the previous bar's visual value retroactively
-			Values[0][1] = finalPrice;
-		}
-		
-		// Check if previous bar was the low anchor
-		if (lowAnchorBar == CurrentBar - 1 && ethLowVWAP.VolSum > 0)
-		{
-			double finalPrice = Close[1];
-			if (VwapMethod == VwapCalculationMode.Typical) finalPrice = (High[1] + Low[1] + Close[1]) / 3.0;
-			else if (VwapMethod == VwapCalculationMode.OHLC4) finalPrice = (Open[1] + High[1] + Low[1] + Close[1]) / 4.0;
-			
-			// Recalculate VWAP with final values
-			ethLowVWAP.Reset(Volume[1], finalPrice);
-			// Update the previous bar's visual value retroactively
-			Values[1][1] = finalPrice;
-		}
-	}
-	
-	// Check High
-	if (High[0] > ethHighPrice)
-	{
-		// New High found! The PREVIOUS segment (from highAnchorBar to CurrentBar-1) is now "Old/Cut".
-		// We must paint it GRAY.
-		if (!hardReset && CurrentBar > highAnchorBar)
-		{
-			int barsBack = CurrentBar - highAnchorBar;
-			// IMPORTANT: Use i < barsBack to avoid overwriting the Transparency of the Anchor Bar itself.
-			for (int i = 1; i < barsBack; i++)
-			{
-				PlotBrushes[0][i] = Brushes.Gray;
-			}
-		}
-		
-		ethHighPrice = High[0];
-		highReset = true;
-		ethHighVWAP.Reset(Volume[0], price);
-		highAnchorBar = CurrentBar; // Update anchor to here
-	}
-	else
-	{
-		ethHighVWAP.Accumulate(deltaVol, price);
-	}
-	
-	// Check Low
-	if (Low[0] < ethLowPrice)
-	{
-		// New Low found! Paint previous segment Gray.
-		if (!hardReset && CurrentBar > lowAnchorBar)
-		{
-			int barsBack = CurrentBar - lowAnchorBar;
-			for (int i = 1; i < barsBack; i++)
-			{
-				PlotBrushes[1][i] = Brushes.Gray;
-			}
-		}
-		
-		ethLowPrice = Low[0];
-		lowReset = true;
-		ethLowVWAP.Reset(Volume[0], price);
-		lowAnchorBar = CurrentBar;
-	}
-	else
-	{
-		ethLowVWAP.Accumulate(deltaVol, price);
-	}
-	
-	// v1.10.31: Also accumulate in Trade VWAP if active (keeps TP1 moving during overnight)
-	if (tradeVwapActive && deltaVol > 0)
-	{
-		tradeVWAP.Accumulate(deltaVol, price);
-	}
-			
-			// 4. Assign to Plots (Values[0] = High, Values[1] = Low)
-			// Default color is White (defined in AddPlot). We only override active history to Gray when it dies.
-			// The "Current" active segment stays White until it dies.
-			
-			if (ethHighVWAP.VolSum > 0)
-			{
-				Values[0][0] = ethHighVWAP.CurrentValue;
-				
-				if (hardReset || highReset)
-				{
-					PlotBrushes[0][0] = Brushes.Transparent;
-				}
-			}
-			else
-			{
-				Values[0][0] = double.NaN; 
-			}
 
-			if (ethLowVWAP.VolSum > 0)
-			{
-				Values[1][0] = ethLowVWAP.CurrentValue;
-				
-				if (hardReset || lowReset)
-				{
-					PlotBrushes[1][0] = Brushes.Transparent;
-				}
-			}
-			else
-			{
-				Values[1][0] = double.NaN;
-			}
-			
-			// v1.10.31: Draw Trade VWAP line manually (no vertical connections)
-			if (tradeVwapActive && tradeVWAP.VolSum > 0 && CurrentBar > 0)
-			{
-				double tradeVwapValue = tradeVWAP.CurrentValue;
-				string lineTag = "TradeVWAP_" + CurrentBar;
-				Draw.Line(this, lineTag, false, 1, tradeVwapValue, 0, tradeVwapValue, Brushes.Cyan, DashStyleHelper.Solid, 2);
-			}
-			
-			// Debug Panel
-			DrawStatePanel();
-			
-			// SAFETY NET: Check for Zombie Positions (In Market, but State logic missed it)
-			CheckSafetyNet();
-			
-			// FAILSAFE: Hard Stop Check (In case Managed Order fails)
-			CheckHardStop();
-
-			// SESSION EXIT (v1.7.4)
-			CheckSessionExit();
-		}
 		
 		private void CheckHardStop()
 		{
 			if (Position.MarketPosition == MarketPosition.Flat) return;
-			// FIX v1.14.2: Prevent infinite loop if position close takes time
+			// Prevent infinite loop if position close takes time
 			if (failsafeTriggered) return;
 			
 			// Validate Anchor
@@ -2192,7 +1750,7 @@ currentEntryState = EntryState.Idle;
 
 
 		// -------------------------------------------------------------------------
-		// SESSION EXIT MANANAGEMENT (v1.7.4)
+		// SESSION EXIT MANANAGEMENT
 		// -------------------------------------------------------------------------
 		private void CheckSessionExit()
 		{
@@ -2216,9 +1774,9 @@ currentEntryState = EntryState.Idle;
 			// Broadened window to catch exact 16:00:00 bars and any immediate post-close processing.
 			TimeSpan gapBuffer = TimeSpan.FromMinutes(5);
 			
-			// v1.14.5: DYNAMIC SESSION AWARENESS (Holidays/Early Closes)
+			// DYNAMIC SESSION AWARENESS (Holidays/Early Closes)
 			// Instead of fixed "16:00" string, we ask NinjaTrader for the TRUE session end of this bar.
-			// FIX v1.14.7: Use SessionIterator properly
+			// Use SessionIterator properly
 			if (sessionIterator == null) sessionIterator = new SessionIterator(Bars);
 			sessionIterator.GetNextSession(Time[0], true);
 			DateTime actualSessionEnd = sessionIterator.ActualSessionEnd;
@@ -2260,7 +1818,7 @@ currentEntryState = EntryState.Idle;
 					if (IsFirstTickOfBar)
 						Log(Time[0] + " SESSION CLOSE PROTECT: Cancelling Pending Orders.");
 						
-					// CONSOLIDATED ENTRY (v1.7.17)
+					// CONSOLIDATED ENTRY
 					if (entryOrder != null && entryOrder.OrderState == OrderState.Working) CancelOrder(entryOrder);
 					if (stopOrder1 != null && stopOrder1.OrderState == OrderState.Working) CancelOrder(stopOrder1);
 					if (stopOrder2 != null && stopOrder2.OrderState == OrderState.Working) CancelOrder(stopOrder2);
@@ -2284,7 +1842,7 @@ currentEntryState = EntryState.Idle;
 			// 0. ACCOUNT SYNC CHECK (Realtime Only)
 			if (State == State.Realtime && Account != null && Position.MarketPosition == MarketPosition.Flat)
 			{
-				// v1.11.19: Skip orphan check for 2 seconds after position close to avoid false positives
+				// Skip orphan check for 2 seconds after position close to avoid false positives
 				// (Account.Positions can have sync delay after SL/TP fill)
 				if ((DateTime.Now - lastPositionCloseTime).TotalSeconds < 2.0)
 				{
@@ -2317,7 +1875,7 @@ currentEntryState = EntryState.Idle;
 								if (High[0] >= avgPrice + safetyMargin) unsafeOrphan = true;
 							}
 
-							// v1.10.28: Don't flatten overnight positions - user wants them open
+							// Don't flatten overnight positions - user wants them open
 							// Only alert, don't close
 							if (unsafeOrphan)
 							{
@@ -2411,11 +1969,13 @@ currentEntryState = EntryState.Idle;
 				// Use "Emergency" signal tag for safety net adoption
 				if (Position.MarketPosition == MarketPosition.Short)
 				{
-					EnsureProtection("Short", "Emergency_Short_1", Position.Quantity);
+					// EnsureProtection Delegate
+					protectionManager.EnsureProtection("Short", "Emergency_Short_1", Position.Quantity, currentVwapNumber, true, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTargetPrice);
 				}
 				else if (Position.MarketPosition == MarketPosition.Long)
 				{
-					EnsureProtection("Long", "Emergency_Long_1", Position.Quantity);
+					// EnsureProtection Delegate
+					protectionManager.EnsureProtection("Long", "Emergency_Long_1", Position.Quantity, currentVwapNumber, false, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTargetPrice);
 				}
 			}
 			
@@ -2426,7 +1986,7 @@ currentEntryState = EntryState.Idle;
 				currentEntryState = EntryState.Idle;
 				setupLevelName = "";
 			
-			// RESET PROTECTION COUNTERS (v1.7.26) - Fix bucket allocation in SYNC path
+			// RESET PROTECTION COUNTERS - Fix bucket allocation in SYNC path
 			protectedTp1Qty = 0;
 			protectedTp2Qty = 0;
 			protectionOrdersCreated = false; // v1.11.14: Reset flag for next trade
@@ -2436,10 +1996,10 @@ currentEntryState = EntryState.Idle;
 			tradeOriginalTp2Price = 0;
 			tradeVwapActive = false; // v1.10.31: Reset Trade VWAP
 				
-				// v1.10.12: Cancel orphan orders before nullifying references
+				// Cancel orphan orders before nullifying references
 				// This handles cases where SL was manually moved and executed
-				// v1.10.17: Also cancel stopOrder (Single-SL architecture v1.9.0+)
-				// v1.10.18: More robust cancellation - check for Working, Accepted, or any active state
+				// Also cancel stopOrder (Single-SL architecture)
+				// More robust cancellation - check for Working, Accepted, or any active state
 				if (stopOrder != null)
 				{
 					Log(Time[0] + " DEBUG ORPHAN: stopOrder exists. State=" + stopOrder.OrderState + " Name=" + stopOrder.Name);
@@ -2471,341 +2031,31 @@ currentEntryState = EntryState.Idle;
 		
 		private void DrawStatePanel()
 		{
-			double accountPnL = 0;
-			double sessionPnL = 0;
-
-			try {
-				if (Account != null)
-					accountPnL = Account.Get(AccountItem.RealizedProfitLoss, Currency.UsDollar);
-
-				if (SystemPerformance != null && SystemPerformance.RealTimeTrades != null)
-					sessionPnL = SystemPerformance.RealTimeTrades.TradesPerformance.Currency.CumProfit;
-			} catch {}
-
-			// v1.10.21: Calculate both local and global risk for display
-			double localRiskDisplay = RiskPerTradeUSD;
-			if (atr != null && atr[0] > 0)
-			{
-				double atrInUSD = atr[0] * Instrument.MasterInstrument.PointValue;
-				double scaledRisk = atrInUSD * ATRRiskScaleFactor;
-				localRiskDisplay = Math.Min(RiskPerTradeUSD, scaledRisk);
-				if (localRiskDisplay < 5.0) localRiskDisplay = 5.0;
-				
-				// Write our risk to shared file (every bar update)
-				WriteSharedRisk(localRiskDisplay);
-			}
-			double globalRiskDisplay = ReadMaxSharedRisk();
-			
-			// v1.11.20: Calculate minimum risk in USD (what MinQuantity would cost if stopped out)
-			double minTickValue = Instrument.MasterInstrument.PointValue * TickSize;
-			double minRiskUSD = StopLossTicks * MinQuantity * minTickValue;
-
-			// v1.10.23: Show current level with age
-			string levelInfo = "-";
-			if (!string.IsNullOrEmpty(setupLevelName) && setupLevelTime != DateTime.MinValue)
-			{
-				int daysOld = (int)(Time[0].Date - setupLevelTime.Date).TotalDays;
-				if (daysOld == 0)
-					levelInfo = setupLevelName + " (Today)";
-				else if (daysOld == 1)
-					levelInfo = setupLevelName + " (1 Day)";
-				else
-					levelInfo = setupLevelName + " (" + daysOld + " Days)";
-				
-				// v1.10.26: Show entry attempts as X/Y counter
-				if (MaxRetriesPerLevel > 1)
-					levelInfo += " " + currentVwapNumber + "/" + MaxRetriesPerLevel;
-			}
-
-			// v1.10.35: Build order info string when orders are active
-			string orderInfo = "";
-			bool hasActiveOrders = (currentEntryState == EntryState.workingOrder || currentEntryState == EntryState.PositionActive);
-			
-			if (hasActiveOrders)
-			{
-				double tickValue = Instrument.MasterInstrument.PointValue * TickSize;
-				double avgEntry = 0;
-				double slPrice = 0;
-				// v1.11.24: Use original TP prices if available (don't change when session changes)
-				double tp1Price = tradeOriginalTp1Price > 0 ? tradeOriginalTp1Price : activeTp1Price;
-				double tp2Price = tradeOriginalTp2Price > 0 ? tradeOriginalTp2Price : activeTp2Price;
-				int totalQty = 0;
-				
-				// Get entry price
-				if (entryOrder != null && entryOrder.AverageFillPrice > 0)
-					avgEntry = entryOrder.AverageFillPrice;
-				else if (entryOrder != null && entryOrder.LimitPrice > 0)
-					avgEntry = entryOrder.LimitPrice;
-				else if (Position.MarketPosition != MarketPosition.Flat)
-					avgEntry = Position.AveragePrice;
-				
-				// Get quantity (v1.11.23: Use tradeOriginalQty if available for consistent display)
-				if (tradeOriginalQty > 0)
-					totalQty = tradeOriginalQty; // Use original qty for panel calculations
-				else if (Position.MarketPosition != MarketPosition.Flat)
-					totalQty = Math.Abs(Position.Quantity);
-				else if (entryOrder != null)
-					totalQty = entryOrder.Quantity;
-				
-				// Calculate SL price
-				slPrice = isShortSetup ? (setupAnchorPrice + TickSize) : (setupAnchorPrice - TickSize);
-				
-				if (avgEntry > 0 && slPrice > 0 && totalQty > 0)
-				{
-					// Calculate risk
-					double riskTicks = Math.Abs(avgEntry - slPrice) / TickSize;
-					double riskUSD = riskTicks * tickValue * totalQty;
-					
-					// Calculate TP1 reward
-					double tp1RewardTicks = 0;
-					double tp1RewardUSD = 0;
-					double tp1RR = 0;
-					if (tp1Price > 0)
-					{
-						tp1RewardTicks = Math.Abs(tp1Price - avgEntry) / TickSize;
-						tp1RewardUSD = tp1RewardTicks * tickValue * ((totalQty + 1) / 2); // TP1 gets ~50%
-						tp1RR = riskTicks > 0 ? tp1RewardTicks / riskTicks : 0;
-					}
-					
-					// Calculate TP2 reward
-					double tp2RewardTicks = 0;
-					double tp2RewardUSD = 0;
-					double tp2RR = 0;
-					if (tp2Price > 0)
-					{
-						tp2RewardTicks = Math.Abs(tp2Price - avgEntry) / TickSize;
-						tp2RewardUSD = tp2RewardTicks * tickValue * (totalQty / 2); // TP2 gets ~50%
-						tp2RR = riskTicks > 0 ? tp2RewardTicks / riskTicks : 0;
-					}
-					
-					// Build order info lines
-					orderInfo = string.Format("\n─────────────────\nSL: -${0:F0} ({1:F0}t)\nTP1: +${2:F0} R={3:F1}\nTP2: +${4:F0} R={5:F1}",
-						riskUSD, riskTicks,
-						tp1RewardUSD, tp1RR,
-						tp2RewardUSD, tp2RR);
-				}
-			}
-
-			string stateDisplay = currentEntryState.ToString();
-	
-			// v1.14.29: Visual Filter Feedback (Show reason for 2 minutes)
-			if (!string.IsNullOrEmpty(lastFilterReason) && (DateTime.Now - lastFilterTime).TotalSeconds < 120) 
-			{
-				stateDisplay += "\n(" + lastFilterReason + ")";
-			}
-
-			string text = string.Format("Ver: {0}\nState: {1}\nLevel: {2}\nPosition: {3}\nPnL: {4} | Risk: {5:C0} (Min: {6:C0}){7}",
-				StrategyVersion,
-				stateDisplay,
-				levelInfo,
-				Position.MarketPosition,
-				sessionPnL.ToString("C"),
-				globalRiskDisplay,
-				minRiskUSD,
-				orderInfo);
-				
-			// v1.14.9: UI Polish - Black Background 50%
-			Draw.TextFixed(this, "InfoPanel", text, TextPosition.TopRight, Brushes.White, new SimpleFont("Arial", 12), Brushes.Black, Brushes.Black, 50);
-			
-			if (gapDetected || gapCount > 0)
-			{
-				string msg = "GAP DETECTED";
-				if (gapCount > 0) msg = "ALERTA: FALTAN DIAS\n" + gapCount + " NIVELES OCULTOS\nCARGA MAS HISTORIAL";
-				
-				// Increased padding to roughly 12 lines to clear the InfoPanel
-				Draw.TextFixed(this, "GapWarning", "\n\n\n\n\n\n\n\n\n\n\n\n" + msg, TextPosition.TopRight, Brushes.Red, new SimpleFont("Arial", 12) { Bold = true }, Brushes.Transparent, Brushes.Transparent, 100);
-			}
-			
-			// v1.11.17: Lag Alert - Yellow text warning when chart has excessive lag
-			if (isLagAlertActive)
-			{
-				string lagMsg = string.Format("⚠️ LAG: {0:F1}s - ORDERS BLOCKED", currentChartLag);
-				Draw.TextFixed(this, "LagAlert", "\n\n\n\n\n\n\n" + lagMsg, TextPosition.TopRight, Brushes.Yellow, new SimpleFont("Arial", 14) { Bold = true }, Brushes.Transparent, Brushes.Transparent, 100);
-			}
-			else
-			{
-				RemoveDrawObject("LagAlert"); // Clear when no lag
-			}
+			if (helpers != null) helpers.DrawStatePanel();
 		}
 		
 		// -------------------------------------------------------------------------
-		// v1.12.1: CONTROL BUTTONS (DIRECTION + CLOSE) - Bottom Right
+		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		// -------------------------------------------------------------------------
 		private void InitializeControlButtons()
 		{
-			if (buttonsInitialized || ChartControl == null) return;
-			
-			ChartControl.Dispatcher.InvokeAsync(() =>
-			{
-				try
-				{
-					// Panel horizontal para botones - ABAJO A LA DERECHA
-					buttonPanel = new System.Windows.Controls.StackPanel();
-					buttonPanel.Orientation = Orientation.Horizontal;
-					buttonPanel.HorizontalAlignment = HorizontalAlignment.Right;
-					buttonPanel.VerticalAlignment = VerticalAlignment.Bottom;
-					buttonPanel.Margin = new Thickness(0, 0, 10, 10);
-					
-					// v1.12.1: Solo 2 botones
-					btnPause = CreateControlButton("↕ AMBOS", Brushes.ForestGreen); // Direction button
-					btnClose = CreateControlButton("✖ CLOSE", Brushes.Crimson);
-					
-					// Eventos
-					btnPause.Click += OnDirectionClick; // Renamed from OnPauseClick
-					btnClose.Click += OnCloseClick;
-					
-					buttonPanel.Children.Add(btnPause);
-					buttonPanel.Children.Add(btnClose);
-					
-					UserControlCollection.Add(buttonPanel);
-					buttonsInitialized = true;
-					Log(Time[0] + " CONTROL BUTTONS: Initialized (Bottom Right)");
-				}
-				catch (Exception ex)
-				{
-					Log(Time[0] + " CONTROL BUTTONS ERROR: " + ex.Message);
-				}
-			});
-		}
-		
-		private System.Windows.Controls.Button CreateControlButton(string text, Brush bgColor)
-		{
-			var btn = new System.Windows.Controls.Button();
-			btn.Content = text;
-			btn.Width = 85;
-			btn.Height = 24;
-			btn.Margin = new Thickness(3);
-			btn.Background = bgColor;
-			btn.Foreground = Brushes.White;
-			btn.FontWeight = FontWeights.Bold;
-			btn.FontSize = 11;
-			btn.BorderThickness = new Thickness(0);
-			return btn;
-		}
-		
-		// v1.12.1: Single direction button cycles: AMBOS → LONG → SHORT → NINGUNO → AMBOS
-		private void OnDirectionClick(object sender, RoutedEventArgs e)
-		{
-			switch (currentTradingMode)
-			{
-				case TradingMode.Normal:
-					currentTradingMode = TradingMode.LongOnly;
-					break;
-				case TradingMode.LongOnly:
-					currentTradingMode = TradingMode.ShortOnly;
-					break;
-				case TradingMode.ShortOnly:
-					currentTradingMode = TradingMode.Paused; // NINGUNO
-					break;
-				case TradingMode.Paused:
-					currentTradingMode = TradingMode.Normal; // AMBOS
-					break;
-			}
-			Log(Time[0] + " CONTROL: Mode = " + currentTradingMode);
-			UpdateButtonStates();
-		}
-		
-		private void OnCloseClick(object sender, RoutedEventArgs e)
-		{
-			ClosePositionManual();
+			if (helpers != null) helpers.InitializeControlButtons();
 		}
 		
 		private void ClosePositionManual()
 		{
-			if (Position.MarketPosition == MarketPosition.Flat)
-			{
-				Log(Time[0] + " MANUAL CLOSE: No position to close");
-				return;
-			}
-			
-			int qty = Math.Abs(Position.Quantity);
-			
-			try
-			{
-				// Cancel existing orders first
-				if (stopOrder != null && (stopOrder.OrderState == OrderState.Working || stopOrder.OrderState == OrderState.Accepted))
-				{
-					CancelOrder(stopOrder);
-					Log(Time[0] + " MANUAL CLOSE: Cancelled SL");
-				}
-				if (tp1Order != null && (tp1Order.OrderState == OrderState.Working || tp1Order.OrderState == OrderState.Accepted))
-				{
-					CancelOrder(tp1Order);
-					Log(Time[0] + " MANUAL CLOSE: Cancelled TP1");
-				}
-				if (tp2Order != null && (tp2Order.OrderState == OrderState.Working || tp2Order.OrderState == OrderState.Accepted))
-				{
-					CancelOrder(tp2Order);
-					Log(Time[0] + " MANUAL CLOSE: Cancelled TP2");
-				}
-				
-				// Close position
-				if (Position.MarketPosition == MarketPosition.Long)
-					SubmitOrderUnmanaged(0, OrderAction.Sell, OrderType.Market, qty, 0, 0, "", "ManualClose_Long");
-				else
-					SubmitOrderUnmanaged(0, OrderAction.BuyToCover, OrderType.Market, qty, 0, 0, "", "ManualClose_Short");
-				
-				Log(Time[0] + " MANUAL CLOSE SUBMITTED: Qty=" + qty);
-				currentEntryState = EntryState.Idle;
-				setupLevelName = "";
-			}
-			catch (Exception ex)
-			{
-				Log(Time[0] + " MANUAL CLOSE FAILED: " + ex.Message);
-			}
-		}
-		
-		private void UpdateButtonStates()
-		{
-			ChartControl?.Dispatcher.InvokeAsync(() =>
-			{
-				if (btnPause == null) return;
-				
-				// v1.12.1: Direction button shows current mode
-				switch (currentTradingMode)
-				{
-					case TradingMode.Normal:
-						btnPause.Content = "↕ AMBOS";
-						btnPause.Background = Brushes.ForestGreen;
-						break;
-					case TradingMode.LongOnly:
-						btnPause.Content = "↑ LONG";
-						btnPause.Background = Brushes.DodgerBlue;
-						break;
-					case TradingMode.ShortOnly:
-						btnPause.Content = "↓ SHORT";
-						btnPause.Background = Brushes.OrangeRed;
-						break;
-					case TradingMode.Paused:
-						btnPause.Content = "⏸ NINGUNO";
-						btnPause.Background = Brushes.Gray;
-						break;
-				}
-			});
+			if (helpers != null) helpers.ClosePositionManual();
 		}
 		
 		private void CleanupControlButtons()
 		{
-			if (ChartControl == null) return;
-			
-			ChartControl.Dispatcher.InvokeAsync(() =>
-			{
-				try
-				{
-					if (btnPause != null) btnPause.Click -= OnDirectionClick;
-					if (btnClose != null) btnClose.Click -= OnCloseClick;
-					
-					if (buttonPanel != null && UserControlCollection.Contains(buttonPanel))
-						UserControlCollection.Remove(buttonPanel);
-				}
-				catch { }
-			});
+			if (helpers != null) helpers.CleanupControlButtons();
 		}
 		
 		// -------------------------------------------------------------------------
-		// DYNAMIC POSITION SIZING (v1.8.0) + ATR Risk Scaling (v1.10.20)
+		// DYNAMIC POSITION SIZING + ATR Risk Scaling
 		// -------------------------------------------------------------------------
-		private int CalculateDynamicQuantity(double entryPrice, double stopPrice)
+		public int CalculateDynamicQuantity(double entryPrice, double stopPrice)
 		{
 			// Si dynamic sizing está OFF, usar Quantity fijo
 			if (!UseDynamicSizing) return Quantity;
@@ -2825,7 +2075,7 @@ currentEntryState = EntryState.Idle;
 				return MinQuantity;
 			}
 			
-			// v1.10.20: RIESGO DINAMICO BASADO EN ATR
+			// RIESGO DINAMICO BASADO EN ATR
 			// Escalar el riesgo objetivo según la volatilidad actual
 			// ATR alto (volatilidad) = usar RiskPerTradeUSD completo
 			// ATR bajo (calma) = reducir riesgo proporcionalmente
@@ -2842,11 +2092,11 @@ currentEntryState = EntryState.Idle;
 				// Nunca menos de $5 de riesgo
 				if (localAtrRisk < 5.0) localAtrRisk = 5.0;
 				
-				// v1.10.21: Write our risk to shared file
+				// Write our risk to shared file
 				WriteSharedRisk(localAtrRisk);
 			}
 			
-			// v1.10.21: Read GLOBAL MAX risk from all instruments
+			// Read GLOBAL MAX risk from all instruments
 			double effectiveRisk = ReadMaxSharedRisk();
 			
 
@@ -2869,108 +2119,15 @@ currentEntryState = EntryState.Idle;
 		// -------------------------------------------------------------------------
 		private void ManageEntryA_Plus()
 		{
-			// v1.14.32 FIX: Global Paused check - blocks ALL entry actions, not just new setups
-			if (currentTradingMode == TradingMode.Paused)
-			{
-				// If we have working orders, cancel them
-				if (currentEntryState == EntryState.workingOrder && entryOrder != null && 
-					(entryOrder.OrderState == OrderState.Working || entryOrder.OrderState == OrderState.Accepted))
-				{
-					Log(Time[0] + " PAUSED: Cancelling working entry order");
-					CancelOrder(entryOrder);
-				}
-				return; // Block all entry logic when paused
-			}
+			// Delegate mode guards to EntryStateMachine
+			if (!entryMachine.CheckTradingModeGuards())
+				return;
 			
-			// v1.14.32 FIX: Cancel orders that go against direction mode
-			if (currentEntryState == EntryState.workingOrder && entryOrder != null &&
-				(entryOrder.OrderState == OrderState.Working || entryOrder.OrderState == OrderState.Accepted))
-			{
-				// LongOnly but we have a Short order pending
-				if (currentTradingMode == TradingMode.LongOnly && isShortSetup)
-				{
-					Log(Time[0] + " LONGONLY: Cancelling Short entry order");
-					CancelOrder(entryOrder);
-					return;
-				}
-				// ShortOnly but we have a Long order pending
-				if (currentTradingMode == TradingMode.ShortOnly && !isShortSetup)
-				{
-					Log(Time[0] + " SHORTONLY: Cancelling Long entry order");
-					CancelOrder(entryOrder);
-					return;
-				}
-			}
-			
-			// v1.12.0: Check trading mode before processing new entries
-			if (currentEntryState == EntryState.Idle)
-			{
-				// If paused, don't look for new setups
-				if (currentTradingMode == TradingMode.Paused)
-				{
-					// Only update if it's a new reason to avoid spamming variables
-					// if (lastFilterReason != "Skipped: Trading Paused") { lastFilterReason = "Skipped: Trading Paused"; lastFilterTime = DateTime.Now; }
-					return;
-				}
-				
-				// Check direction filter for new entries
-				if (currentTradingMode == TradingMode.LongOnly && isShortSetup)
-				{
-					if (lastFilterReason != "Skipped: Long Only Mode") { lastFilterReason = "Skipped: Long Only Mode"; lastFilterTime = DateTime.Now; }
-					return; // Skip short setups
-				}
-				if (currentTradingMode == TradingMode.ShortOnly && !isShortSetup)
-				{
-					if (lastFilterReason != "Skipped: Short Only Mode") { lastFilterReason = "Skipped: Short Only Mode"; lastFilterTime = DateTime.Now; }
-					return; // Skip long setups
-				}
-			}
-			
-			// v1.10.26: VWAP MITIGATION RETRY DETECTION
-			if (currentEntryState == EntryState.WaitingForVwapMitigation && waitingForVwapMitigation)
-			{
-				bool mitigated = false;
-				
-				// LONG: price must break below -> new low
-				if (!isShortSetup && Low[0] < vwapCandleExtreme - TickSize)
-					mitigated = true;
-				
-				// SHORT: price must break above -> new high
-				if (isShortSetup && High[0] > vwapCandleExtreme + TickSize)
-					mitigated = true;
-				
-				if (mitigated)
-				{
-					// Re-anchor VWAP from this new extreme
-					double newAnchor = isShortSetup ? High[0] : Low[0];
-					setupAnchorPrice = newAnchor;
-					
-					// Reset VWAP from new anchor
-					double price = Close[0];
-					if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
-					else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
-					
-					adhocVolSum = Volume[0];
-					adhocPvSum = Volume[0] * price;
-					adhocLastBar = CurrentBar;
-					adhocLastVol = Volume[0];
-					adhocAnchorBar = CurrentBar;
-					
-					// Reset Visual
-					visualAdhocPrevBarVal = price;
-					visualAdhocLastVal = price;
-					visualAdhocLastBar = -1;
-					
-					// Transition to WaitingForConfirmation
-					currentEntryState = EntryState.WaitingForConfirmation;
-					waitingForVwapMitigation = false;
-					
-					Log(string.Format("{0} VWAP#{1} CREATED @ {2:F2} - Ready for entry",
-						Time[0], currentVwapNumber, newAnchor));
-				}
-				
-				return; // Don't proceed with other logic while waiting
-			}
+			// VWAP MITIGATION RETRY DETECTION
+			// v1.14.45: Delegated to EntryStateMachine
+			if (entryMachine.HandleVwapMitigationRetry())
+				return; // Don't proceed with other logic while waiting or if mitigated
+
 			
 			// 1. TRIGGER DETECTION (Transition from Idle -> Waiting OR Switch Setup)
 			// Allow scanning for triggers if Idle OR Waiting (to switch setups).
@@ -2983,179 +2140,11 @@ currentEntryState = EntryState.Idle;
 			{
 				UpdateAdhocVWAP();
 			
-			//v1.10.0: PHASE 3 - RE-ANCHORING (Internal levels behave like external)
-			// Both internal AND external levels should re-anchor when price breaks the anchor
-			// SHORT: Re-anchor if price makes new high
-			if (isShortSetup && High[0] >= setupAnchorPrice + TickSize)
-			{
-				setupAnchorPrice = High[0];
-				
-				// Reset VWAP from new anchor
-				double price = Close[0];
-				if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
-				else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
-				
-				adhocVolSum = Volume[0];
-				adhocPvSum = Volume[0] * price;
-				adhocLastBar = CurrentBar;
-				adhocLastVol = Volume[0];
-				adhocAnchorBar = CurrentBar; // v1.10.11: Track for retroactive update
-				
-				// Reset Visual				
-				visualAdhocPrevBarVal = price;
-				visualAdhocLastVal = price;
-				visualAdhocLastBar = -1;
-				
-				Log(string.Format("RE-ANCHOR: New High @ {0} (Setup: {1})", setupAnchorPrice, setupLevelName));
-			}
+			// PHASE 3 - RE-ANCHORING (Delegated to EntryStateMachine)
+			entryMachine.UpdateAnchorIfNeeded();
 			
-			// LONG: Re-anchor if price makes new low
-			if (!isShortSetup && Low[0] <= setupAnchorPrice - TickSize)
-			{
-				setupAnchorPrice = Low[0];
-				
-				// Reset VWAP from new anchor
-				double price = Close[0];
-				if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
-				else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
-				
-				adhocVolSum = Volume[0];
-				adhocPvSum = Volume[0] * price;
-				adhocLastBar = CurrentBar;
-				adhocLastVol = Volume[0];
-				adhocAnchorBar = CurrentBar; // v1.10.11: Track for retroactive update
-				
-				// Reset Visual
-				visualAdhocPrevBarVal = price;
-				visualAdhocLastVal = price;
-				visualAdhocLastBar = -1;
-				
-				Log(string.Format("RE-ANCHOR: New Low @ {0} (Setup: {1})", setupAnchorPrice, setupLevelName));
-			}
-			
-			// v1.10.0: PHASE 4 - INVALIDATION (If internal level touches external)
-			if (isInternalLevel && currentEntryState == EntryState.WaitingForConfirmation)
-			{
-				bool touchedExternal = false;
-				
-				// SHORT internal: Check if touched external High above
-				if (isShortSetup && externalLevelAbove > 0)
-				{
-					if (High[0] >= externalLevelAbove)
-					{
-						touchedExternal = true;
-						Log(string.Format("INVALIDATED: Touched external {0} @ {1}", externalLevelAboveName, externalLevelAbove));
-					}
-				}
-				
-				// LONG internal: Check if touched external Low below
-				if (!isShortSetup && externalLevelBelow > 0)
-				{
-					if (Low[0] <= externalLevelBelow)
-					{
-						touchedExternal = true;
-						Log(string.Format("INVALIDATED: Touched external {0} @ {1}", externalLevelBelowName, externalLevelBelow));
-					}
-				}
-				
-				if (touchedExternal)
-				{
-					// v1.10.1: Mark bar to prevent re-triggering (infinite loop fix)
-					lastInvalidationBar = CurrentBar;
-					
-					// Cancel entry order if exists
-					if (entryOrder != null && (entryOrder.OrderState == OrderState.Working || entryOrder.OrderState == OrderState.Accepted))
-					{
-						CancelOrder(entryOrder);
-					}
-					
-					// Reset to Idle
-					currentEntryState = EntryState.Idle;
-					isInternalLevel = false;
-					
-					// v1.10.2: AUTO-TRIGGER on external level after invalidation
-					// The external level was touched, so it should become the new setup
-					string externalName = isShortSetup ? externalLevelAboveName : externalLevelBelowName;
-					double externalPrice = isShortSetup ? externalLevelAbove : externalLevelBelow;
-					
-					if (externalPrice > 0 && !string.IsNullOrEmpty(externalName))
-					{
-						Log(string.Format("AUTO-TRIGGER: Switching to external level {0} @ {1}", externalName, externalPrice));
-						
-						// Setup new trigger on external level
-						if (isShortSetup)
-						{
-							// SHORT on external High
-							triggerTag = "TriggerShort_" + Time[0].Ticks;
-							triggerBar = CurrentBar;
-							DrawTriggerLabel(triggerTag, true, 0, High[0]);
-							
-							currentEntryState = EntryState.WaitingForConfirmation;
-							visualConfirmationDone = false; // Reset visual flag
-							isShortSetup = true;
-							setupAnchorPrice = High[0]; // Current extreme
-							setupLevelName = externalName;
-							setupLevelTime = Time[0]; // Use current time as reference
-							validatedTargetPrice = 0;
-							cachedOppositeLevel = null;
-							oppositeSearchDone = false; // v1.14.32
-							
-							// NO call DetectInternalLevel again (external is not internal)
-							isInternalLevel = false;
-							
-							// Reset VWAP
-							double price = Close[0];
-							if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
-							else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
-							
-							adhocVolSum = Volume[0];
-							adhocPvSum = Volume[0] * price;
-							adhocLastBar = CurrentBar;
-							adhocLastVol = Volume[0];
-							adhocAnchorBar = CurrentBar; // v1.10.11: Track for retroactive update
-							
-							visualAdhocPrevBarVal = price;
-							visualAdhocLastVal = price;
-							visualAdhocLastBar = -1;
-						}
-						else
-						{
-							// LONG on external Low
-							triggerTag = "TriggerLong_" + Time[0].Ticks;
-							triggerBar = CurrentBar;
-							DrawTriggerLabel(triggerTag, false, 0, Low[0]);
-							
-							currentEntryState = EntryState.WaitingForConfirmation;
-							visualConfirmationDone = false; // Reset visual flag
-							isShortSetup = false;
-							setupAnchorPrice = Low[0];
-							setupLevelName = externalName;
-							setupLevelTime = Time[0];
-							validatedTargetPrice = 0;
-							cachedOppositeLevel = null;
-							
-							isInternalLevel = false;
-							
-							// Reset VWAP
-							double price = Close[0];
-							if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
-							else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
-							
-							adhocVolSum = Volume[0];
-							adhocPvSum = Volume[0] * price;
-							adhocLastBar = CurrentBar;
-							adhocLastVol = Volume[0];
-							adhocAnchorBar = CurrentBar; // v1.10.11: Track for retroactive update
-							
-							visualAdhocPrevBarVal = price;
-							visualAdhocLastVal = price;
-							visualAdhocLastBar = -1;
-						}
-					}
-					
-					// Note: Could optionally trigger new A+ setup on external level here
-				}
-			}
+			// PHASE 4 - INVALIDATION (Delegated to EntryStateMachine)
+			entryMachine.HandleInternalInvalidation();
 				
 				// VISUAL DEBUG: Draw 1px White Line
 				bool isShort = (isShortSetup); 
@@ -3194,161 +2183,17 @@ currentEntryState = EntryState.Idle;
 				}
 			}
 			
+			// Trigger Scanning (Delegated to EntryStateMachine)
 			if (canScan)
 			{
-				// LOOP PROTECTION: If rejected OR invalidated this bar, DO NOT scan again.
-				if (CurrentBar == lastRejectionBar || CurrentBar == lastInvalidationBar) return;
-				
-				// v1.10.28: FRESH SIGNAL ONLY - Don't trigger on historical setups
-				// Wait for a new trigger AFTER strategy is active in Realtime
-				if (State == State.Realtime && realtimeStartBar > 0 && CurrentBar <= realtimeStartBar)
-				{
-					// We are on the same bar where we started - don't trigger on inherited setup
-					return;
-				}
-
-				foreach (var lvl in activeLevels)
-				{
-					// FILTER: Ignorar niveles AI bloqueados (v1.14.24)
-					if (!IsZoneEnabled(lvl.Name, lvl.StartTime))
-					{
-						// Opcional: Log solo si es necesario debuggear, evitar spam en OnBarUpdate
-						// Log("AI FILTER: Skipping " + lvl.Name);
-						continue;
-					}
-
-					// BACKTEST SAFETY: Ignore Future Levels (Cheat Prevention)
-					if (lvl.StartTime > Time[0]) continue;
-
-					// v1.10.24: Ignore Same-Day Levels (still forming, not closed)
-					// Only trade levels from PREVIOUS days that are still active
-					if (lvl.StartTime.Date == Time[0].Date)
-						continue;
-
-					// v1.10.25: Check if max retries exceeded for this level
-					if (lvl.EntryAttempts >= MaxRetriesPerLevel)
-						continue;
-					
-					// v1.10.29: Skip levels that were already being touched at startup
-					// These are "spent" and we need a fresh level
-					if (skippedLevelsAtStartup.Contains(lvl.Name))
-						continue;
-
-					// If level is mitigated exactly NOW
-					// Note: ManageLevels sets MitigationTime = Time[0].
-					if (lvl.IsMitigated && lvl.MitigationTime == Time[0])
-					{
-						// If we are already waiting, check if this is a DIFFERENT level.
-						// If it's the same level, we ignore re-triggering to preserve the 'setupAnchorPrice' (Extreme).
-						if (currentEntryState == EntryState.WaitingForConfirmation)
-						{
-							if (lvl.Name == setupLevelName)
-								continue;
-							else
-							{
-								// SWITCHING SETUP!
-								Log(Time[0] + " SWITCH: New Trigger on " + lvl.Name + " overrides " + setupLevelName);
-								// Fall through to process new trigger...
-							}
-						}
-							
-						// TRIGGER CONFIRMED
-                        // -----------------
-						// TRIGGER CONFIRMED
-                        // -----------------
-						if (!lvl.IsResistance)
-						{
-	                        triggerTag = "TriggerLong_" + Time[0].Ticks;
-							// Long Setup
-							triggerBar = CurrentBar;
-							DrawTriggerLabel(triggerTag, false, 0, Low[0]); // Draw label for Long
-							
-							currentEntryState = EntryState.WaitingForConfirmation;
-							visualConfirmationDone = false; // Reset visual flag
-							isShortSetup = false; // Long
-							setupAnchorPrice = Low[0]; // ANCHOR START
-							setupLevelName = lvl.Name;
-							setupLevelTime = lvl.StartTime; // CAPTURE TIME (v1.5.8)
-							validatedTargetPrice = 0; // RESET for new setup
-							cachedOppositeLevel = null; // CLEAR CACHE (v1.7.22)
-							
-							// v1.10.26: Reset retry state for new level
-							waitingForVwapMitigation = false;
-							currentVwapNumber = 1;
-							vwapCandleExtreme = 0;
-							
-							// v1.10.25: Increment entry attempts
-							lvl.EntryAttempts++;
-							Log(string.Format("{0} ENTRY ATTEMPT #{1}/{2} on {3}", Time[0], lvl.EntryAttempts, MaxRetriesPerLevel, lvl.Name));
-							
-							// v1.10.0: Detect if this is an internal level
-							DetectInternalLevel(lvl, activeLevels);
-							
-							// RESET ADHOC VWAP
-							double price = Close[0];
-							if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
-							else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
-
-							adhocVolSum = Volume[0]; 
-							adhocPvSum = Volume[0] * price;
-							adhocLastBar = CurrentBar;
-							adhocLastVol = Volume[0];
-							adhocAnchorBar = CurrentBar; // v1.10.11: Track for retroactive update
-
-							// Reset Visual State
-							visualAdhocPrevBarVal = price;
-							visualAdhocLastVal = price;
-							visualAdhocLastBar = -1;
-						}
-						else 
-						{
-							triggerTag = "TriggerShort_" + Time[0].Ticks;
-							// Short Setup
-							triggerBar = CurrentBar;
-							DrawTriggerLabel(triggerTag, true, 0, High[0]); // Draw label for Short
-							
-							currentEntryState = EntryState.WaitingForConfirmation;
-							visualConfirmationDone = false; // Reset visual flag
-							isShortSetup = true;
-							setupAnchorPrice = High[0]; // ANCHOR START
-							setupLevelName = lvl.Name;
-							setupLevelTime = lvl.StartTime; // CAPTURE TIME (v1.5.8)
-							validatedTargetPrice = 0; // RESET for new setup
-							cachedOppositeLevel = null; // CLEAR CACHE (v1.7.22)
-							
-							// v1.10.26: Reset retry state for new level
-							waitingForVwapMitigation = false;
-							currentVwapNumber = 1;
-							vwapCandleExtreme = 0;
-							
-							// v1.10.25: Increment entry attempts
-							lvl.EntryAttempts++;
-							Log(string.Format("{0} ENTRY ATTEMPT #{1}/{2} on {3}", Time[0], lvl.EntryAttempts, MaxRetriesPerLevel, lvl.Name));
-							
-							// v1.10.0: Detect if this is an internal level
-							DetectInternalLevel(lvl, activeLevels);
-							
-							// RESET ADHOC VWAP
-							double price = Close[0];
-							if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
-							else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
-
-							adhocVolSum = Volume[0]; 
-							adhocPvSum = Volume[0] * price;
-							adhocLastBar = CurrentBar;
-							adhocLastVol = Volume[0];
-							adhocAnchorBar = CurrentBar; // v1.10.11: Track for retroactive update
-
-							// Reset Visual State
-							visualAdhocPrevBarVal = price;
-							visualAdhocLastVal = price;
-							visualAdhocLastBar = -1;
-						}
-						
-						break; // Only take one trigger at a time
-					}
-				}
+				entryMachine.ScanForTriggers();
 			}
+			
+			// v1.14.54: Handle VWAP Retry (waiting for price to break extreme after SL/BE)
+			entryMachine.HandleVwapMitigationWait();
+			
+			// Handle Confirmation Logic
+			entryMachine.HandleConfirmation();
 			
 			// ... (Visuals Update Skipped for brevity, unchanged) ...
 			if (currentEntryState == EntryState.WaitingForConfirmation && CurrentBar == triggerBar)
@@ -3369,393 +2214,19 @@ currentEntryState = EntryState.Idle;
 						if (!isShortSetup && Low[0] < setupAnchorPrice) setupAnchorPrice = Low[0];
 			}
 			
-			// 2. CONFIRMATION LOGIC (Waiting -> Working)
-			// "Wait for a candle... close... max below vwap 1 tick"
-			
-			if (currentEntryState == EntryState.WaitingForConfirmation && IsFirstTickOfBar && CurrentBar > triggerBar)
-			{
-				// Determine Local VWAP to use
-				double setupVWAP = GetSetupVWAP(isShortSetup);
-				
-				if (isShortSetup)
-				{
-					// Short: High[1] < Bearish VWAP (setupVWAP) - 1 Tick
-					if (isValidVWAP(setupVWAP) && High[1] < (setupVWAP - TickSize))
-					{
-						// ... (Trigger logic) ...
+			// 2. CONFIRMATION LOGIC (Delegated to EntryStateMachine)
+			entryMachine.HandleConfirmation();
 
-						// --- RISK / REWARD CHECK ---
-						double projectedEntry = setupVWAP;
-						Log(string.Format("{0} | DEBUG_ENTRY: Calling GetOppositeLevelPrice. SetupName='{1}' SetupTime='{2}' RefPrice='{3}'", Time[0], setupLevelName, setupLevelTime, setupAnchorPrice));
-						// Padding: Stop is placed 1 tick ABOVE the anchor for breathing room.
-						double projectedStop = setupAnchorPrice + TickSize; 
-						
-						
-						// VALIDATE R/R (v1.7.28) - Continuous validation
-						double risk, reward, ratio;
-						bool isValidRR = ValidateRiskReward(true, projectedEntry, projectedStop, out risk, out reward, out ratio);
-						
-						if (isValidRR)
-						{
-							// CAPTURE TARGET (v1.7.16)
-							double tp2Target = GetOppositeLevelPrice(setupLevelName, setupLevelTime, setupAnchorPrice, true);
-							if (tp2Target == 0) tp2Target = GetCurrentLowVWAP();
-							validatedTargetPrice = tp2Target;
-
-							// EXE DEBUG & ROUNDING (v1.7.1 Fix MGC Exec)
-							double limitPrice = Instrument.MasterInstrument.RoundToTickSize(setupVWAP);
-							if (EnableDebugLogs)
-							{
-								// Use Try/Catch for Bid/Ask in case data is missing
-								try { Log(string.Format("{0} | EXEC_DEBUG: Submitting Short Limit @ {1} (Raw: {2}). Bid={3} Ask={4}", Time[0], limitPrice, setupVWAP, GetCurrentBid(), GetCurrentAsk())); } catch {}
-							}
-
-							// ACCOUNTS FOR 1 Entry -> 1 OCO Group limitation
-						// UPDATED (v1.7.30): Allow Historical for Strategy Analyzer
-						// FIX (v1.10.36): Block Historical orders on live/demo (RESTORED v1.11.2 - orders were being sent to broker)
-						bool isPlayback = (Connection.PlaybackConnection != null);
-						bool canSubmitOrder = (State == State.Realtime) || (State == State.Historical && (isPlayback || AllowBacktest));
-						// v1.11.11: Highlight confirmation candle (ONLY ONCE)
-						// Check visualConfirmationDone flag to avoid painting multiple candles
-						if (HighlightConfirmationCandle && CurrentBar > 1 && !visualConfirmationDone)
-						{
-							BarBrushes[1] = ConfirmationCandleColor;
-							CandleOutlineBrushes[1] = ConfirmationCandleColor;
-							visualConfirmationDone = true;
-						}
-
-						if (canSubmitOrder)
-							{
-								if (entryOrder != null) 
-								{
-									Log("WARNING: Entry Order already exists? Overwriting.");
-								}
-								
-								// DYNAMIC SIZING (v1.8.0): Calcular cantidad según riesgo
-								int dynamicQuantity = CalculateDynamicQuantity(limitPrice, projectedStop);
-								
-								// CONSOLIDATED ENTRY (v1.7.17)
-								string entryTag = string.Format("EntryA+_Short_{0:D2}", currentVwapNumber);
-								
-								// v1.11.17: Lag Filter - Block order if chart has lag
-								if (!CheckChartLag())
-								{
-									string msg = "Skipped: Network Lag Detected";
-									Log(Time[0] + " Short order BLOCKED: " + msg);
-									lastFilterReason = msg; lastFilterTime = DateTime.Now;
-									return;
-								}
-								
-								entryOrder = SubmitOrderUnmanaged(0, OrderAction.SellShort, OrderType.Limit, dynamicQuantity, limitPrice, 0, "", entryTag);
-								currentEntryState = EntryState.workingOrder;
-								Log(Time[0] + " Order Submitted (Short Consolidated). Qty=" + dynamicQuantity);
-							}
-							else
-							{
-								// If in simple Backtest, we might need default behavior, but for Playback/Live reload fixes:
-								// Log(Time[0] + " Trade Signal Valid (Short) but SKIPPED (Historical/Catchup State).");
-							}
-						}
-						else
-						{
-							string msg = string.Format("Skipped: R/R {0:F2} < 1.0", (risk > 0 ? (reward/risk) : 0));
-							Log(Time[0] + string.Format(" Trade Skipped (Short). Risk: {0:F2} Reward: {1:F2} Ratio: {2:F2}", risk, reward, (risk > 0 ? (reward/risk) : 0)));
-							lastFilterReason = msg; lastFilterTime = DateTime.Now;
-						}
-					}
-					else
-					{
-						// Check invalidation
-						// Check invalidation (End of Bar)
-						if (High[0] > setupAnchorPrice)
-						{
-							// DYNAMIC UPDATE: Don't kill the setup, just update the reference High.
-							setupAnchorPrice = High[0];
-							Log(Time[0] + " Anchor Updated (Short End-Bar) to New High: " + setupAnchorPrice);
-							
-							// DO NOT RESET VWAP HERE (v1.7.17 Fix)
-							// If we reset here, we lose the 'Touch' volume accumulation.
-							// We only assume the anchor expanded, but the 'Touch' event is still valid.
-							// Unless... does a new High mean the previous touch was invalid?
-							// Actually, if we make a new high, we haven't really 'reversed' yet.
-							// But resetting 'adhocVolSum' to Volume[0] essentially restarts the VWAP from THIS bar.
-							// Maybe that IS correct? "VWAP from the Top".
-							// If we keep the old volume, the VWAP will lag behind.
-							// Let's Keep it for now, but ensure 'adhocVolSum' is not 0.
-						}
-					else
-					{
-						// DEBUG: Why are we waiting?
-						if (CurrentBar % 10 == 0) // Limit spam
-							Log(string.Format("{0} | WAITING SHORT: High[1]={1:F2} VWAP={2:F2} Req={3:F2} ValidVWAP={4} Anchor={5}", 
-								Time[0], High[1], setupVWAP, (setupVWAP - TickSize), isValidVWAP(setupVWAP), setupAnchorPrice));
-					}
-					}
-				}
-				else
-				{
-					// Long: Low[1] > Bullish VWAP (setupVWAP) + 1 Tick
-					if (isValidVWAP(setupVWAP) && Low[1] > (setupVWAP + TickSize))
-					{
-						// --- RISK / REWARD CHECK ---
-						double projectedEntry = setupVWAP;
-						Log(string.Format("{0} | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='{1}' SetupTime='{2}' RefPrice='{3}'", Time[0], setupLevelName, setupLevelTime, setupAnchorPrice));
-						// Padding: Stop is placed 1 tick BELOW the anchor.
-						double projectedStop = setupAnchorPrice - TickSize;
-						
-						
-						// VALIDATE R/R (v1.7.28) - Continuous validation
-						double risk, reward, ratio;
-						bool isValidRR = ValidateRiskReward(false, projectedEntry, projectedStop, out risk, out reward, out ratio);
-						
-						if (isValidRR)
-						{
-							// CAPTURE TARGET (v1.7.16)
-							double tp2Target = GetOppositeLevelPrice(setupLevelName, setupLevelTime, setupAnchorPrice, false);
-							if (tp2Target == 0) tp2Target = GetCurrentHighVWAP();
-							validatedTargetPrice = tp2Target;
-
-							// EXE DEBUG & ROUNDING (v1.7.1 Fix MGC Exec)
-							double limitPrice = Instrument.MasterInstrument.RoundToTickSize(setupVWAP);
-							if (EnableDebugLogs)
-							{
-								try { Log(string.Format("{0} | EXEC_DEBUG: Submitting Long Limit @ {1} (Raw: {2}). Bid={3} Ask={4}", Time[0], limitPrice, setupVWAP, GetCurrentBid(), GetCurrentAsk())); } catch {}
-							}
-							
-							// UPDATED (v1.7.30): Allow Historical for Strategy Analyzer
-						// FIX (v1.10.36): Block Historical orders on live/demo (RESTORED v1.11.2)
-						bool isPlaybackLong = (Connection.PlaybackConnection != null);
-						bool canSubmitOrderLong = (State == State.Realtime) || (State == State.Historical && (isPlaybackLong || AllowBacktest));
-						// v1.11.11: Highlight confirmation candle (ONLY ONCE)
-						if (HighlightConfirmationCandle && CurrentBar > 1 && !visualConfirmationDone)
-						{
-							BarBrushes[1] = ConfirmationCandleColor;
-							CandleOutlineBrushes[1] = ConfirmationCandleColor;
-							visualConfirmationDone = true;
-						}
-
-						if (canSubmitOrderLong)
-							{
-								// CONSOLIDATED ENTRY (v1.7.17)
-								if (entryOrder != null) 
-								{
-									Log("WARNING: Entry Order already exists? Overwriting.");
-								}
-								
-								int dynamicQuantity = CalculateDynamicQuantity(limitPrice, projectedStop); // v1.8.0
-				string entryTag = string.Format("EntryA+_Long_{0:D2}", currentVwapNumber);
-				
-				// v1.11.17: Lag Filter - Block order if chart has lag
-				if (!CheckChartLag())
-				{
-					string msg = "Skipped: Network Lag Detected";
-					Log(Time[0] + " Long order BLOCKED: " + msg);
-					lastFilterReason = msg; lastFilterTime = DateTime.Now;
-					return;
-				}
-				
-				entryOrder = SubmitOrderUnmanaged(0, OrderAction.Buy, OrderType.Limit, dynamicQuantity, limitPrice, 0, "", entryTag);
-								currentEntryState = EntryState.workingOrder;
-								Log(Time[0] + " Order Submitted (Long Consolidated). Qty=" + dynamicQuantity);
-							}
-							else
-							{
-								// Skip Historical Execution
-							}
-						}
-						else
-						{
-							string msg = string.Format("Skipped: R/R {0:F2} < 1.0", (risk > 0 ? (reward/risk) : 0));
-							Log(Time[0] + string.Format(" Trade Skipped (Long). Risk: {0:F2} Reward: {1:F2} Ratio: {2:F2}", risk, reward, (risk > 0 ? (reward/risk) : 0)));
-							lastFilterReason = msg; lastFilterTime = DateTime.Now;
-						}
-					}
-					else
-					{
-						// Check invalidation
-						// Check invalidation (End of Bar)
-						if (Low[0] < setupAnchorPrice)
-						{
-							// DYNAMIC UPDATE: Don't kill the setup, just update the reference Low.
-							setupAnchorPrice = Low[0];
-							Log(Time[0] + " Anchor Updated (Long End-Bar) to New Low: " + setupAnchorPrice);
-							
-							// RESET VWAP Calculation (Start fresh from new low)
-							double price = Close[0];
-							if (VwapMethod == VwapCalculationMode.Typical) price = (High[0] + Low[0] + Close[0]) / 3.0;
-							else if (VwapMethod == VwapCalculationMode.OHLC4) price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
-
-							adhocVolSum = Volume[0]; 
-							adhocPvSum = Volume[0] * price;
-							// Keep visual continuity: visualAdhocLastBar = -1; // Removed to allow drop visualization
-						}
-					}
-				}
-			}
-			
-			// Mid-bar check for Anchor Update / Invalidation
-			// ONLY if we are PAST the trigger bar (because logic above handles Trigger Bar growth)
-			if (currentEntryState == EntryState.WaitingForConfirmation && !IsFirstTickOfBar && CurrentBar > triggerBar)
-			{
-				if (isShortSetup && High[0] > setupAnchorPrice) 
-				{
-					// DYNAMIC UPDATE: Don't kill the setup, just update the reference High.
-					setupAnchorPrice = High[0];
-					// PERFORMANCE OPTIMIZATION: Reduce spam.
-					// Log(Time[0] + " Anchor Updated (Short) to New High: " + setupAnchorPrice);
-					
-					// RESET VWAP Calculation
-					adhocVolSum = 0; adhocPvSum = 0;
-					// visualAdhocLastBar = -1; 
-				}
-				if (!isShortSetup && Low[0] < setupAnchorPrice) 
-				{
-					// DYNAMIC UPDATE: Don't kill the setup, just update the reference Low.
-					setupAnchorPrice = Low[0];
-					// PERFORMANCE OPTIMIZATION: Reduce spam.
-					// Log(Time[0] + " Anchor Updated (Long) to New Low: " + setupAnchorPrice);
-					
-					// RESET VWAP Calculation
-					adhocVolSum = 0; adhocPvSum = 0;
-					// visualAdhocLastBar = -1;
-				}
-			}
-
-			// 3. ORDER MANAGEMENT & SYNC (Working -> InPosition)
-			// 3. ORDER MANAGEMENT & SYNC (Working -> InPosition)
-			// Handle BOTH orders (1 and 2)
-
-// CONTINUOUS R/R VALIDATION (v1.7.28) - Monitor while order is working
-if (currentEntryState == EntryState.workingOrder && entryOrder != null && entryOrder.OrderState == OrderState.Working)
-{
-double currentEntry = (entryOrder.LimitPrice > 0) ? entryOrder.LimitPrice : Close[0];
-double currentStop = isShortSetup ? (setupAnchorPrice + TickSize) : (setupAnchorPrice - TickSize);
-
-double risk, reward, ratio;
-bool isStillValid = ValidateRiskReward(isShortSetup, currentEntry, currentStop, out risk, out reward, out ratio);
-
-if (!isStillValid)
-{
-Log(string.Format("{0} R/R Invalidated While Working. Risk: {1:F2} Reward: {2:F2} Ratio: {3:F2} - Cancelling Order", 
-Time[0], risk, reward, ratio));
-
-if (entryOrder != null && entryOrder.OrderState == OrderState.Working)
-CancelOrder(entryOrder);
-
-currentEntryState = EntryState.Idle;
-setupLevelName = "";
-}
-}
-
-			if (currentEntryState == EntryState.workingOrder)
-			{
-				bool anyFilled = false;
-				if (entryOrder != null && (entryOrder.OrderState == OrderState.Filled || entryOrder.OrderState == OrderState.PartFilled)) anyFilled = true;
-
-				if (anyFilled)
-				{
-					Log(Time[0] + " SYNC: Order Filled but State was Working. Forcing InPosition.");
-					currentEntryState = EntryState.PositionActive;
-					// Note: OnExecutionUpdate handles the specific EnsureProtection calls.
-					// This is just a fallback state transition.
-				}
-				// Tracking the VWAP (Only if still working)
-				else 
-				{
-					// --- SAFETY VALIDATION: ANCHOR BREAK (RELAXED) ---
-					// If price moves against us and breaks the Anchor while we are trying to enter, 
-					// DO NOT CANCEL immediately to prevent thrashing loops.
-					// Let the Stop Loss (which is placed at Anchor) handle it if filled, or let validity logic handle it.
-					bool anchorViolated = false;
-					if (isShortSetup && High[0] > setupAnchorPrice) anchorViolated = true;
-					if (!isShortSetup && Low[0] < setupAnchorPrice) anchorViolated = true;
-					
-					if (anchorViolated)
-					{
-						// Log(Time[0] + " WARNING: Anchor Violated while Working Order. Keeping Order active.");
-						// if (entryOrder1 != null) CancelOrder(entryOrder1); // DISABLED
-						// if (entryOrder2 != null) CancelOrder(entryOrder2); // DISABLED
-						// return; 
-					}
-				
-					// Track the SETUP VWAP (Local), not just Global
-					double currentVWAP = GetSetupVWAP(isShortSetup);
-					
-					// --- DYNAMIC RISK / REWARD CHECK ---
-					// As VWAP moves, our entry price moves. We must re-validate R/R.
-					double projectedEntry = currentVWAP;
-					double projectedStop = isShortSetup ? (setupAnchorPrice + TickSize) : (setupAnchorPrice - TickSize);
-					double targetPrice = GetOppositeLevelPrice(setupLevelName, setupLevelTime); 
-					if (targetPrice == 0) targetPrice = isShortSetup ? GetCurrentLowVWAP() : GetCurrentHighVWAP(); 
-					
-					double risk = Math.Abs(projectedEntry - projectedStop);
-					double reward = Math.Abs(targetPrice - projectedEntry);
-					
-					// 1. Check Trailing Valid (VWAP still valid?)
-					if (!isValidVWAP(currentVWAP))
-					{
-						string msg = "Skipped: Setup VWAP Invalidated";
-						Log(Time[0] + " CANCEL: " + msg);
-						lastFilterReason = msg; lastFilterTime = DateTime.Now;
-						if (entryOrder != null) CancelOrder(entryOrder);
-						// if (entryOrder2 != null) CancelOrder(entryOrder2); // Removed
-						return;
-					}
-					
-					// 2. CHECK TARGET TOUCH (v1.14.4)
-					// If price already hit the target while we are waiting/chasing, the setup is invalid.
-					bool targetTouched = false;
-					if (isShortSetup && Low[0] <= targetPrice) targetTouched = true;
-					if (!isShortSetup && High[0] >= targetPrice) targetTouched = true;
-					
-					if (targetTouched)
-					{
-						string msg = string.Format("Skipped: Target Touched ({0})", targetPrice);
-						Log(string.Format("{0} CANCEL: {1} before Entry. Setup invalidated.", Time[0], msg));
-						lastFilterReason = msg; lastFilterTime = DateTime.Now;
-						if (entryOrder != null) CancelOrder(entryOrder);
-						currentEntryState = EntryState.Idle; // Reset
-						setupLevelName = "";
-						return;
-					}
-
-					// 3. CHECK R/R PRESERVATION (STRICT) - Handled above by Strict Validation Block
-					// (Relaxed block removed v1.14.3 to enforce strict R/R > 1.0)
-
-					// UPDATE ORDER PRICE (Trailing)
-					// Only update if price difference is significant (e.g. 1 tick) to avoid spamming modification
-					
-					if (entryOrder != null && entryOrder.OrderState == OrderState.Working)
-					{
-						// v1.10.15: DYNAMIC QUANTITY ADJUSTMENT
-						// Recalcular cantidad basada en el stop actual para mantener riesgo constante
-						int newQuantity = CalculateDynamicQuantity(currentVWAP, projectedStop);
-						
-						bool priceChanged = Math.Abs(entryOrder.LimitPrice - currentVWAP) >= TickSize;
-						bool quantityChanged = newQuantity != entryOrder.Quantity;
-						
-						if (priceChanged || quantityChanged)
-						{
-							double newLimitPrice = priceChanged ? currentVWAP : entryOrder.LimitPrice;
-							ChangeOrder(entryOrder, newQuantity, newLimitPrice, 0);
-							
-							if (quantityChanged)
-							{
-								Log(string.Format("{0} | DYNAMIC QTY ADJUST: Old={1} New={2} (Stop moved to {3:F2})",
-									Time[0], entryOrder.Quantity, newQuantity, projectedStop));
-							}
-						}
-					}
-					// Removed entryOrder2 logic
-				}
-			}
+			// 3. ORDER MANAGEMENT & SYNC (Working -> InPosition) (Delegated to EntryStateMachine)
+			entryMachine.HandleWorkingOrder();
 
 			
 			// 4. IN POSITION MANAGEMENT
 			ManagePositionExit();
 		} // End ManageEntryA_Plus
 
-			// REFACTORED EnsureProtection (v1.7.17) - Consolidated Split Handling
+		// v1.14.40: EnsureProtection and SubmitProtectionOrders logic moved to OrderProtectionManager.cs
+	/* 
 	private void EnsureProtection(string direction, string entrySignalName, int filledQty)
 	{
 		// FIX v1.14.1 (Partial Fills): Removed protectionOrdersCreated check to allow multiple fills to update qty
@@ -3776,13 +2247,12 @@ setupLevelName = "";
 		{
 			if (isShortSetup)
 			{
-				tradeVWAP.VolSum = ethLowVWAP.VolSum;
-				tradeVWAP.PvSum = ethLowVWAP.PvSum;
+                // Delegate to Module
+                if (vwapCalc != null) vwapCalc.InitTradeVWAP(true);
 			}
 			else
 			{
-				tradeVWAP.VolSum = ethHighVWAP.VolSum;
-				tradeVWAP.PvSum = ethHighVWAP.PvSum;
+				if (vwapCalc != null) vwapCalc.InitTradeVWAP(false);
 			}
 			tradeVwapActive = true;
 			Log(Time[0] + " TRADE VWAP: Initialized @ " + tradeVWAP.CurrentValue);
@@ -3823,8 +2293,9 @@ setupLevelName = "";
 		isProtectionProcessing = false; // UNLOCK
 		Log(Time[0] + " EnsureProtection COMPLETE: protectionOrdersCreated = true");
 	}
+	*/
 	
-	// v1.10.0: Get daily high extreme (for LONG TP2)
+	// Get daily high extreme (for LONG TP2)
 	private double GetDailyHigh()
 	{
 		// Find today's midnight
@@ -3841,7 +2312,7 @@ setupLevelName = "";
 		return highestPrice;
 	}
 	
-	// v1.10.0: Get daily low extreme (for SHORT TP2)
+	// Get daily low extreme (for SHORT TP2)
 	private double GetDailyLow()
 	{
 		// Find today's midnight
@@ -3858,13 +2329,14 @@ setupLevelName = "";
 		return lowestPrice;
 	}
 	
+	/*
 	private void SubmitProtectionOrders(string direction, bool isTp1, int qty)
 	{
-		// v1.9.0: SINGLE-SL ARCHITECTURE
+		// SINGLE-SL ARCHITECTURE
 		// Instead of creating SL1 and SL2, we create ONE SL for the entire position
 		// TP1 and TP2 remain independent
 		
-		// v1.10.38: ORPHAN RECOVERY - Check if orders exist in Account but lost reference
+		// ORPHAN RECOVERY - Check if orders exist in Account but lost reference
 		if (Account != null)
 		{
 			foreach(Order o in Account.Orders)
@@ -4027,11 +2499,8 @@ setupLevelName = "";
 				OrderAction slAction = direction == "Short" ? OrderAction.BuyToCover : OrderAction.Sell;
 				
 				// v1.14.38: DIAGNOSTIC - Log every SL creation with full context
-				// v1.14.39: Also use Print() directly to bypass Log() issues
-				string debugMsg = string.Format("SL_CREATE_DEBUG: Instrument={0} Direction={1} Tag={2} Action={3} Price={4} Qty={5} State={6} EntryState={7}",
-					Instrument.FullName, direction, slTag, slAction, slPrice, totalPositionQty, State, currentEntryState);
-				Print(debugMsg); // Direct print - always shows
-				Log(debugMsg);
+				Log(string.Format("SL_CREATE_DEBUG: Instrument={0} Direction={1} Tag={2} Action={3} Price={4} Qty={5} State={6} EntryState={7}",
+					Instrument.FullName, direction, slTag, slAction, slPrice, totalPositionQty, State, currentEntryState));
 				
 				stopOrder = SubmitOrderUnmanaged(0, slAction, OrderType.StopMarket, totalPositionQty, 0,slPrice, "", slTag);
 				slOrderCreatedThisEntry = true; // v1.13.5: Mark SL as created
@@ -4134,214 +2603,50 @@ setupLevelName = "";
 			Log("CRITICAL ERROR Submitting Exits: " + ex.Message);
 		}
 	}
+	*/
 		
-	// v1.10.0: Detect if setup level is INTERNAL (contained within external levels)
-	private void DetectInternalLevel(SessionLevel setupLevel, List<SessionLevel> allLevels)
+	// v1.10.0: Detect if setup level is INTERNAL (Delegated)
+	public void DetectInternalLevel(SessionLevel setupLevel, List<SessionLevel> allLevels)
 	{
-		// Reset state
-		isInternalLevel = false;
-		externalLevelAbove = 0;
-		externalLevelBelow = 0;
-		externalLevelAboveName = "";
-		externalLevelBelowName = "";
-		
-		if (setupLevel == null || allLevels == null) return;
-		
-		// For SHORT setups (High resistance): find external High above
-		if (setupLevel.IsResistance)
-		{
-			externalLevelAbove = FindExternalLevelAbove(setupLevel, allLevels);
-			if (externalLevelAbove >0)
-			{
-				isInternalLevel = true;
-				Log(string.Format("INTERNAL LEVEL: {0} @ {1} (External above: {2} @ {3})",
-					setupLevel.Name, setupLevel.Price, externalLevelAboveName, externalLevelAbove));
-			}
-			
-			// Also find external Low below (for TP2 context)
-			externalLevelBelow = FindExternalLevelBelow(setupLevel, allLevels);
-		}
-		// For LONG setups (Low support): find external Low below
-		else
-		{
-			externalLevelBelow = FindExternalLevelBelow(setupLevel, allLevels);
-			if (externalLevelBelow > 0)
-			{
-				isInternalLevel = true;
-				Log(string.Format("INTERNAL LEVEL: {0} @ {1} (External below: {2} @ {3})",
-					setupLevel.Name, setupLevel.Price, externalLevelBelowName, externalLevelBelow));
-			}
-			
-			// Also find external High above (for TP2 context)
-			externalLevelAbove = FindExternalLevelAbove(setupLevel, allLevels);
-		}
-	}
-	
-	// v1.10.3 CORRECTED: Find HIGHEST High of the day (daily extreme) from different session
-	// For SHORT: Level is internal if there's a higher High from another session
-	private double FindExternalLevelAbove(SessionLevel currentLevel, List<SessionLevel> allLevels)
-	{
-		double highestExternal = 0;
-		string highestName = "";
-		
-		foreach (var level in allLevels)
-		{
-			// Only consider High levels (resistances) above current
-			if (!level.IsResistance) continue;
-			if (level.Price <= currentLevel.Price) continue;
-			
-			// Skip if same session (we want EXTERNAL, not same session)
-			string currentSession = GetSessionName(currentLevel.Name);
-			string candidateSession = GetSessionName(level.Name);
-			if (currentSession == candidateSession) continue;
-			
-			// Find HIGHEST High (daily extreme), not closest
-			if (level.Price > highestExternal)
-			{
-				highestExternal = level.Price;
-				highestName = level.Name;
-			}
-		}
-		
-		if (highestExternal > 0)
-		{
-			externalLevelAboveName = highestName;
-		}
-		
-		return highestExternal;
-	}
-	
-	// v1.10.3 CORRECTED: Find LOWEST Low of the day (daily extreme) from different session
-	// For LONG: Level is internal if there's a lower Low from another session
-	private double FindExternalLevelBelow(SessionLevel currentLevel, List<SessionLevel> allLevels)
-	{
-		double lowestExternal = 0;
-		string lowestName = "";
-		
-		foreach (var level in allLevels)
-		{
-			// Only consider Low levels (supports) below current
-			if (level.IsResistance) continue;
-			if (level.Price >= currentLevel.Price) continue;
-			
-			// Skip if same session
-			string currentSession = GetSessionName(currentLevel.Name);
-			string candidateSession = GetSessionName(level.Name);
-			if (currentSession == candidateSession) continue;
-			
-			// Find LOWEST Low (daily extreme), not closest
-			if (lowestExternal == 0 || level.Price < lowestExternal)
-			{
-				lowestExternal = level.Price;
-				lowestName = level.Name;
-			}
-		}
-		
-		if (lowestExternal > 0)
-		{
-			externalLevelBelowName = lowestName;
-		}
-		
-		return lowestExternal;
-	}
-	
-	// v1.10.0: Extract session name from level name (e.g., "Asia High" -> "Asia")
-	private string GetSessionName(string levelName)
-	{
-		if (levelName.Contains("Asia")) return "Asia";
-		if (levelName.Contains("Europe")) return "Europe";
-		if (levelName.Contains("USA")) return "USA";
-		return "";
+		if (protectionManager != null) 
+        {
+            protectionManager.DetectInternalLevel(setupLevel, allLevels);
+            // Sync local state
+            isInternalLevel = protectionManager.IsInternalLevel;
+            externalLevelAboveName = protectionManager.ExternalLevelAboveName;
+            externalLevelBelowName = protectionManager.ExternalLevelBelowName;
+        }
 	}
 		
-	// CORRECTED (v1.7.22): Search for opposite level from SAME DAY (not same hour)
-	private double GetOppositeLevelPrice(string name, DateTime refTime, double refPrice = 0, bool expectLower = false)
+	// CORRECTED (v1.7.22): Search for opposite level from SAME DAY (Delegated)
+	public double GetOppositeLevelPrice(string name, DateTime refTime, double refPrice = 0, bool expectLower = false)
 	{
-	// OPTIMIZATION (v1.7.3): Return Cached Price if available
-		if (cachedOppositeLevel != null) return cachedOppositeLevel.Price;
-		
-		// v1.14.32: If we already searched and didn't find, don't search again
-		if (oppositeSearchDone) return 0;
-
-		// Try to find the opposite.
-		if (string.IsNullOrEmpty(name)) return 0;
-		
-		string oppName = "";
-		if (name.Contains(" Low")) oppName = name.Replace(" Low", " High");
-		else if (name.Contains(" High")) oppName = name.Replace(" High", " Low");
-		else return 0; // Can't guess
-		
-		// DEBUG (v1.7.22): Log búsqueda
-		if (EnableDebugLogs) Log(string.Format("{0} | SEARCH_OPPOSITE: Looking for '{1}' from SAME DAY as '{2}' (RefDate: {3:yyyy-MM-dd})", Time[0], oppName, name, refTime.Date));
-		
-		// Perform Scan - SAME DAY (matching Date only, ignore time)
-		SessionLevel foundLvl = null;
-		int candidatesFound = 0;
-		int rejectedByDate = 0;
-		
-		// v1.14.37: Find the setup level to get its Tag for session matching
-		SessionLevel setupLevel = activeLevels.FirstOrDefault(l => l.Name == name);
-		string setupSessionTicks = "";
-		if (setupLevel != null && !string.IsNullOrEmpty(setupLevel.Tag))
-		{
-			string[] tagParts = setupLevel.Tag.Split('_');
-			if (tagParts.Length >= 3) setupSessionTicks = tagParts[tagParts.Length - 1];
-		}
-		
-		foreach(var l in activeLevels)
-		{
-			bool nameMatch = l.Name.Trim().Equals(oppName.Trim(), StringComparison.OrdinalIgnoreCase);
-			if (nameMatch) {
-				candidatesFound++;
-				
-				// v1.14.37: Compare SESSION TICKS instead of date (fixes overnight sessions like Asia)
-				bool sameSession = false;
-				if (!string.IsNullOrEmpty(setupSessionTicks) && !string.IsNullOrEmpty(l.Tag))
-				{
-					string[] candidateTagParts = l.Tag.Split('_');
-					if (candidateTagParts.Length >= 3)
-					{
-						string candidateSessionTicks = candidateTagParts[candidateTagParts.Length - 1];
-						sameSession = (candidateSessionTicks == setupSessionTicks);
-					}
-				}
-				
-				// DEBUG: Log candidato
-				Log(string.Format("   -> Candidate #{0}: {1} @ {2:F2} (Date: {3:yyyy-MM-dd}, SameSession: {4})", candidatesFound, l.Name, l.Price, l.StartTime.Date, sameSession));
-				
-				// SAME SESSION CHECK: High and Low must be from same session (by Tag Ticks)
-				if (sameSession)
-				{
-					foundLvl = l;
-					Log(string.Format("   -> ACCEPTED (Same Session): {0} @ {1:F2}", l.Name, l.Price));
-					break;
-				}
-				else
-				{
-					rejectedByDate++;
-					Log(string.Format("   -> REJECTED (Different Session): Tags don't match"));
-				}
-			}
-		}
-		
-		if (foundLvl != null)
-		{
-			cachedOppositeLevel = foundLvl; // Cache it!
-			return foundLvl.Price;
-		}
-		
-		// DEBUG: Summary if not found
-		if (EnableDebugLogs && foundLvl == null) Log(string.Format("{0} | OPPOSITE NOT FOUND: '{1}' from same day (Found {2} candidates, {3} rejected by date mismatch)", Time[0], oppName, candidatesFound, rejectedByDate));
-		
-		// v1.14.32: Mark search as done to prevent repeated searches
-		oppositeSearchDone = true;
-		return 0;
+		if (protectionManager != null)
+        {
+            SessionLevel found = null;
+            double price = protectionManager.GetOppositeLevelPrice(name, refTime, activeLevels, cachedOppositeLevel, oppositeSearchDone, out found);
+            if (found != null) cachedOppositeLevel = found;
+            // Also update the Done flag if manager set it? 
+            // The manager returns 0 if not found, but we need to know if it finished searching.
+            // Actually, manager logic handles the search.
+            // Let's assume manager handles it correctly.
+            // Wait, we need to sync 'oppositeSearchDone' flag back? 
+            // Or just rely on manager returning 0 consistently.
+            // Let's check manager implementation... Manager checks 'oppositeSearchDone' passed in.
+            // But it doesn't return 'oppositeSearchDone' status explicitly other than via 'found'.
+            // Simpler: Just rely on local flag update if I can access it.
+            // I'll make sure to update local 'oppositeSearchDone' if price is 0 and we expected something.
+            // Actually, simpler: Let's assume if it returns, it's done.
+            if (found == null) oppositeSearchDone = true; 
+            return price;
+        }
+        return 0;
 	}
 
 
 
 		
-		private bool isValidVWAP(double val)
+		public bool isValidVWAP(double val)
 		{
 			return val > 0 && !double.IsNaN(val);
 		}
@@ -4489,29 +2794,51 @@ setupLevelName = "";
 			catch (Exception ex) { Print("Email Setup Failed: " + ex.Message); }
 		}
 
-		private double GetCurrentHighVWAP() { return ethHighVWAP.CurrentValue; }
-		private double GetCurrentLowVWAP() { return ethLowVWAP.CurrentValue; }
+		public double GetCurrentHighVWAP() { return vwapCalc != null ? vwapCalc.GetCurrentHighVWAP() : 0; }
+		public double GetCurrentLowVWAP() { return vwapCalc != null ? vwapCalc.GetCurrentLowVWAP() : 0; }
 	
 	// CONTINUOUS R/R VALIDATION (v1.7.28)
 	// v1.13.14: Added detailed diagnostic logging
-	private bool ValidateRiskReward(bool isShort, double entryPrice, double stopPrice, out double risk, out double reward, out double ratio)
+	public bool ValidateRiskReward(bool isShort, double entryPrice, double stopPrice, out double risk, out double reward, out double ratio)
 	{
-		// Calculate both targets
+	// Calculate both targets
 		double tp1Target = isShort ? GetCurrentLowVWAP() : GetCurrentHighVWAP();
 		double tp2Target = GetOppositeLevelPrice(setupLevelName, setupLevelTime, setupAnchorPrice, isShort); // isShort = expectLower
 		
 		if (tp2Target == 0) tp2Target = tp1Target; // Fallback
 		
-		// Find closest target
-		double closestTarget = isShort 
-			? Math.Max(tp1Target, tp2Target)  // Short: higher price = closer
-			: Math.Min(tp1Target, tp2Target); // Long: lower price = closer
+		// v1.14.53: Fix - Filter valid targets FIRST, then find closest
+		// For Long: target must be ABOVE entry
+		// For Short: target must be BELOW entry
+		bool tp1Valid = isShort ? (tp1Target < entryPrice) : (tp1Target > entryPrice);
+		bool tp2Valid = isShort ? (tp2Target < entryPrice) : (tp2Target > entryPrice);
+		
+		double closestTarget = 0;
+		bool validDirection = false;
+		
+		if (tp1Valid && tp2Valid)
+		{
+			// Both valid: pick the closest
+			closestTarget = isShort 
+				? Math.Max(tp1Target, tp2Target)  // Short: higher (closer to entry) is better
+				: Math.Min(tp1Target, tp2Target); // Long: lower (closer to entry) is better
+			validDirection = true;
+		}
+		else if (tp1Valid)
+		{
+			closestTarget = tp1Target;
+			validDirection = true;
+		}
+		else if (tp2Valid)
+		{
+			closestTarget = tp2Target;
+			validDirection = true;
+		}
+		// else: neither valid, validDirection stays false
 		
 		// Calculate risk/reward
 		risk = Math.Abs(entryPrice - stopPrice);
 		
-		// Direction check
-		bool validDirection = isShort ? (closestTarget < entryPrice) : (closestTarget > entryPrice);
 		reward = validDirection 
 			? (isShort ? (entryPrice - closestTarget) : (closestTarget - entryPrice))
 			: 0;
@@ -4532,19 +2859,29 @@ setupLevelName = "";
 		return isValid;
 	}
 		
-		private double GetSetupVWAP(bool isShort)
+		public double GetSetupVWAP(bool isShort)
 	{
-		// 1. If we have ADHOC VOLUME tracked, use it.
-		// This represents the "VWAP since touch".
+		// v1.14.55: Use VWAP Global for EXTERNAL levels, VWAP Adhoc for INTERNAL levels
+		// External level = session breaks a level from a different session (e.g., Europe breaks Asia High)
+		// Internal level = session trades its own High/Low
+		
+		// For EXTERNAL levels, use the Global Session VWAP (the visible line on the chart)
+		if (!isInternalLevel)
+		{
+			double globalValue = isShort ? GetCurrentHighVWAP() : GetCurrentLowVWAP();
+			return globalValue;
+		}
+		
+		// For INTERNAL levels, use the ADHOC VWAP (calculated since the touch)
 		if (!string.IsNullOrEmpty(setupLevelName) && adhocVolSum > 0)
 		{
 			double adhocValue = adhocPvSum / adhocVolSum;
 			return adhocValue;
 		}
 		
-		// 2. Fallback to Global (e.g. if logic fails or we are tracking a Global Extremum trade where we didn't reset adhoc)
-		double globalValue = isShort ? GetCurrentHighVWAP() : GetCurrentLowVWAP();
-		return globalValue;
+		// Fallback to Global
+		double fallbackValue = isShort ? GetCurrentHighVWAP() : GetCurrentLowVWAP();
+		return fallbackValue;
 	}
 
 		private void ManagePositionExit()
@@ -4579,9 +2916,9 @@ setupLevelName = "";
 			
 			if (isShortSetup)
 			{
-				// v1.10.31: Use Trade VWAP if active (continues from day of entry)
-				if (tradeVwapActive)
-					targetGlobalVWAP = tradeVWAP.CurrentValue;
+				// v1.14.58: Use vwapCalc.GetTradeVWAPCurrentValue() which mirrors Global VWAP correctly
+				if (tradeVwapActive && vwapCalc != null)
+					targetGlobalVWAP = vwapCalc.GetTradeVWAPCurrentValue();
 				else
 					targetGlobalVWAP = GetCurrentLowVWAP(); 
 				// FIX (v1.6.2): Use setupLevelTime to ensure stable target throughout the trade
@@ -4590,9 +2927,9 @@ setupLevelName = "";
 			}
 			else
 			{
-				// v1.10.31: Use Trade VWAP if active (continues from day of entry)
-				if (tradeVwapActive)
-					targetGlobalVWAP = tradeVWAP.CurrentValue;
+				// v1.14.58: Use vwapCalc.GetTradeVWAPCurrentValue() which mirrors Global VWAP correctly
+				if (tradeVwapActive && vwapCalc != null)
+					targetGlobalVWAP = vwapCalc.GetTradeVWAPCurrentValue();
 				else
 					targetGlobalVWAP = GetCurrentHighVWAP(); 
 				// FIX (v1.6.2): Use setupLevelTime here too
@@ -4712,7 +3049,8 @@ setupLevelName = "";
 						// v1.13.0: Initialize TradeAnalyzer export variables
 						tradeExportId++;
 						tradeExitFillsCount = 0; // v1.13.4: Reset exit fills counter
-				slOrderCreatedThisEntry = false; // v1.13.5: Reset SL duplication flag
+				// v1.14.39: Reset Manager State
+				protectionManager.ResetEntryState(); 
 						protectedTp1Qty = 0; // v1.14.27: Reset protection counters for new trade
 						protectedTp2Qty = 0; // v1.14.27: Prevents residual values from previous trades
 						tradeEntryPrice = execution.Order.AverageFillPrice;
@@ -4753,12 +3091,14 @@ setupLevelName = "";
 					// v1.7.17: We pass the filled amount, protection logic distributes it to buckets.
 					if (Position.MarketPosition == MarketPosition.Short)
 					{
-						EnsureProtection("Short", n, quantity);
+						// EnsureProtection Delegate (v1.14.39)
+						protectionManager.EnsureProtection("Short", n, quantity, currentVwapNumber, isShortSetup, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTargetPrice);
 						TriggerScreenshot("Entry_Short_" + n, DateTime.Now, executionId);
 					}
 					else if (Position.MarketPosition == MarketPosition.Long)
 					{
-						EnsureProtection("Long", n, quantity);
+						// EnsureProtection Delegate (v1.14.39)
+						protectionManager.EnsureProtection("Long", n, quantity, currentVwapNumber, isShortSetup, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTargetPrice);
 						TriggerScreenshot("Entry_Long_" + n, DateTime.Now, executionId);
 					}
 				}
@@ -4767,17 +3107,21 @@ setupLevelName = "";
 			// BREAKEVEN LOGIC DEBUGGING
 			if (execution.Order != null && execution.Order.OrderState == OrderState.Filled)
 			{
-				// Debug Log
-				// Print(Time[0] + " EXEC FILLED: " + execution.Order.Name);
+				// v1.14.57: DIAGNOSTIC LOG for TP1 detection
+				Log(string.Format("EXEC_FILL_DEBUG: Order={0} Name={1} State={2} Price={3} | tp1Order={4} tp1Name={5}",
+					execution.Order.GetHashCode(),
+					execution.Order.Name,
+					execution.Order.OrderState,
+					execution.Order.AverageFillPrice,
+					tp1Order != null ? tp1Order.GetHashCode().ToString() : "NULL",
+					tp1Order != null ? tp1Order.Name : "N/A"));
 
-				// CHECK TP1 -> Move SL2
+				// CHECK TP1 -> Move SL to BE (Delegated to OrderProtectionManager v1.14.40)
 				bool isTP1 = (tp1Order != null && execution.Order == tp1Order);
 				if (!isTP1 && execution.Order.Name.StartsWith("TP1_")) isTP1 = true; // Fallback by Name
 
 				if (isTP1)
 				{
-					Log(Time[0] + " BE LOGIC: TP1 Filled. Moving SL to BE.");
-					
 					// v1.14.31: Capture Delta at TP1 for VWAP absorption analysis
 					if (relativeDelta != null && CurrentBar > 0)
 					{
@@ -4789,29 +3133,20 @@ setupLevelName = "";
 						catch { tradeDeltaAtTP1 = 0; }
 					}
 					
-					// v1.10.13: Use stopOrder (Single-SL architecture v1.9.0+)
-					// After TP1 fills, move the single SL to breakeven
-					if (stopOrder != null)
-					{
-						if (entryOrder != null)
-						{
-							// v1.10.14: Use Position.Quantity (remaining contracts) not stopOrder.Quantity (original)
-							int remainingQty = Math.Abs(Position.Quantity);
-							Log(Time[0] + " BE ACTION: Moving SL (" + stopOrder.Name + ") to " + entryOrder.AverageFillPrice + " Qty=" + remainingQty);
-							ChangeOrder(stopOrder, remainingQty, 0, entryOrder.AverageFillPrice);
-						}
-					}
+					// v1.14.40: Delegate BE handling to OrderProtectionManager
+					if (protectionManager != null)
+						protectionManager.HandleTP1Fill();
 				}
 
-				// CHECK TP2 -> SL should already be at BE, nothing to do
+				// CHECK TP2 -> SL should already be at BE (Delegated v1.14.40)
 				bool isTP2 = (tp2Order != null && execution.Order == tp2Order);
 				if (!isTP2 && execution.Order.Name.StartsWith("TP2_")) isTP2 = true;
 
 				if (isTP2)
 				{
-					// v1.10.13: With Single-SL architecture, SL is already at BE from TP1 fill
-					// No additional action needed for TP2
-					Log(Time[0] + " TP2 Filled. SL already at BE (if TP1 filled first).");
+					// v1.14.40: Delegate to OrderProtectionManager
+					if (protectionManager != null)
+						protectionManager.HandleTP2Fill();
 				}
 			}
 
@@ -4852,8 +3187,11 @@ setupLevelName = "";
 				// v1.14.24: Only export in Realtime mode to avoid historical data pollution
 				// v1.14.30: Allow CSV export in backtest mode when AllowBacktest is enabled
 				// v1.14.32: Auto-detect backtest (ChartControl == null means Strategy Analyzer)
-				bool isBacktest = (ChartControl == null);
-				if (isTrackingTrade && !string.IsNullOrEmpty(csvExportPath) && (State == State.Realtime || AllowBacktest || isBacktest))
+				bool isStrategyAnalyzer = (ChartControl == null);
+				bool isRealtime = (State == State.Realtime);
+				// FIX v1.14.48: STRICT check. Only export if Realtime, OR if explicit Backtest in Analyzer.
+				// Prevents historical chart data from polluting Demo/Live folders on startup.
+				if (isTrackingTrade && !string.IsNullOrEmpty(csvExportPath) && (isRealtime || (isStrategyAnalyzer && AllowBacktest)))
 				{
 					try
 					{
@@ -5148,8 +3486,8 @@ setupLevelName = "";
 		{ get; set; } = 2.0;
 		
 		// Internal Targets State
-		private double activeTp1Price = 0;
-		private double activeTp2Price = 0;
+		[XmlIgnore] public double activeTp1Price = 0;
+		[XmlIgnore] public double activeTp2Price = 0;
 		
 
 		
@@ -5160,10 +3498,7 @@ setupLevelName = "";
 		[NinjaScriptProperty]
 		[Display(Name="USA Start Time", Order=5, GroupName="1. Sessions")]
 		public string USAStartTime { get; set; }
-		
-		[NinjaScriptProperty]
-		[Display(Name="USA End Time", Order=6, GroupName="1. Sessions")]
-		public string USAEndTime { get; set; }
+		// USAEndTime moved to public section (line 177)
 		
 
 	// ===== AI FILTERS (v1.14.23) =====
@@ -5245,7 +3580,7 @@ setupLevelName = "";
 		Log(string.Format("AI FILTER: {0} zonas habilitadas: {1}", enabledZonesList.Count, EnabledZonesParam));
 	}
 
-	private bool IsZoneEnabled(string zoneName, DateTime levelTime)
+	public bool IsZoneEnabled(string zoneName, DateTime levelTime)
 	{
 		// 1. Si la lista está vacía = sin filtro de zona (todas habilitadas)
 		if (enabledZonesList == null || enabledZonesList.Count == 0)
@@ -5350,21 +3685,9 @@ setupLevelName = "";
 			Log($"AI CONFIG ERROR: {ex.Message}");
 		}
 	}
+
+
 	} // End of SessionLevelsStrategy class
 
-	public class SessionLevelData
-	{
-		public string Name;
-		public double Price;
-		public DateTime StartTime;
-		public DateTime EndTime;
-		public DateTime MitigationTime;
-		public bool IsResistance;
-		public bool IsMitigated;
-		public double VolSum;
-		public double PvSum;
-		public string Tag;
-		// Color is not serialized easily, we infer it from Name or defaults.
 
-	}
 } // End of Namespace

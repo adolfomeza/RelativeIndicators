@@ -4,6 +4,155 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.14.58] - 2026-01-07
+### FIX CRÍTICO: TP1 Se Movía Hacia la Entrada 🔧
+- **Problema**: El TP1 se movía de la línea VWAP Low visible (~25497) hacia el precio de entrada (~25542), causando fills incorrectos.
+- **Causa**: `ManageTargets()` usaba `tradeVWAP.CurrentValue` (variable local que acumulaba incorrectamente) en lugar de `vwapCalc.GetTradeVWAPCurrentValue()` (que retorna el VWAP Global).
+- **Fix**: 
+  - `ManageTargets()` ahora usa `vwapCalc.GetTradeVWAPCurrentValue()`.
+  - `GetTradeVWAPCurrentValue()` retorna directamente el VWAP Global Low (Short) o High (Long).
+- **Resultado**: El TP1 ahora sigue la línea VWAP visible en el gráfico.
+
+## [v1.14.56] - 2026-01-07
+### Mejora: Deshabilitar VWAP Adhoc en Niveles Externos 🎯
+- Para niveles **externos** (extremos del día), el VWAP Adhoc ya no se calcula ni resetea.
+- Solo se usa el VWAP Global, que es la línea visible en el gráfico.
+- Para niveles **internos**, el VWAP Adhoc sigue funcionando normalmente.
+
+## [v1.14.55] - 2026-01-07
+### FIX: VWAP Correcto para Niveles Externos vs Internos 📍
+- **Problema**: Para niveles externos (ej. Europa rompe Asia High), la orden de entrada no se adhería al VWAP visible (~25545) sino al VWAP Adhoc (~25543), causando una discrepancia de ~2 puntos.
+- **Causa**: `GetSetupVWAP()` siempre devolvía VWAP Adhoc primero, sin distinguir si el nivel era interno o externo.
+- **Fix**: Modificada la función para retornar:
+  - **Nivel Externo** (`isInternalLevel=false`): VWAP Global de sesión (la línea visible).
+  - **Nivel Interno** (`isInternalLevel=true`): VWAP Adhoc (desde el toque).
+
+## [v1.14.54] - 2026-01-06
+### Mejora: Lógica Retry VWAP Completa 🔄
+- **Problema**: Después de un trade cerrado por SL/BE, la estrategia entraba en estado `WaitingForVwapMitigation` pero nunca detectaba cuándo el precio rompía el extremo para re-disparar.
+- **Fix**: Añadido método `HandleVwapMitigationWait()` en `EntryStateMachine.cs` que detecta la ruptura del anchor y re-dispara un nuevo trigger.
+- **UI**: El panel ahora muestra el contador de reintentos (ej. `Intento 2/20`) cuando está activo.
+- **Variables**: Añadidas `waitingForVwapMitigation`, `vwapCandleExtreme`, `currentVwapNumber` en `SessionLevelsStrategy.cs`.
+
+## [v1.14.53] - 2026-01-06
+### FIX CRÍTICO: Lógica de Selección de Target R/R 🎯
+- **Bug**: Para trades Long, la función `ValidateRiskReward` seleccionaba el target más bajo (incluso si estaba DEBAJO de la entrada), causando `Invalid Direction` y ratio 0.00.
+- **Ejemplo MGC**: TP1(VWAP)=4489 (válido), TP2(Level)=4240 (inválido). Seleccionaba 4240 → Rechazo.
+- **Fix**: Ahora filtra targets válidos primero (por encima para Long, por debajo para Short) y luego elige el más cercano de los válidos.
+- **Resultado**: Trades que antes se rechazaban incorrectamente ahora se evaluarán correctamente.
+
+## [v1.14.52] - 2026-01-06
+### Mejora: Pintado Visual Sin Dependencia de R/R 🎨
+- **Solicitud**: El usuario pidió que la vela de confirmación (amarilla) se pinte aunque el trade sea rechazado por R/R inválido, para confirmar visualmente que la estrategia está activa.
+- **Cambio**: Movida la lógica de `BarBrushes[1] = ConfirmationCandleColor` antes del bloque `if (isValidRR)` en `EntryStateMachine.cs` (tanto para Long como Short).
+- **Resultado**: Ahora cualquier trigger de confirmación se visualiza con la vela amarilla, independientemente de si la orden se ejecuta o no.
+
+## [v1.14.51] - 2026-01-06
+### FIX: UI - Desactivado `IsAutoScale` por defecto
+- **Problema**: Los plots de High/Low VWAP tenían `IsAutoScale` activado por defecto, lo que podía causar compresión del gráfico y dificultar la visualización de otros elementos.
+- **Solución**: Se desactivó `IsAutoScale` para los plots de High/Low VWAP para mejorar la experiencia de usuario y evitar la compresión automática del rango de precios.
+
+## [v1.14.50] - 2026-01-06
+### Nuevo: Alertas Sonoras 🔊
+- **Funcionalidad**: Se agregó la capacidad de reproducir un sonido cuando la estrategia detecta un Trigger Long o Short.
+- **Configuración**: Nuevo grupo "Audio Settings" con opción para activar/desactivar (`Use Sound Alerts`) y seleccionar el archivo de audio (`Alert Sound File`). Default: `mzpack_alert4.wav`.
+
+## [v1.14.49] - 2026-01-06
+### FIX: Lógica "Same-Day" en Globex
+- **Problema**: La estrategia bloqueaba operaciones en niveles creados el mismo día (ej. USA Low) durante la sesión nocturna (Globex), aunque la sesión original ya hubiera terminado.
+- **Solución**: Se modificó la regla `EntryStateMachine` para permitir trades del mismo día **SI** la hora actual es posterior al cierre oficial de la sesión del nivel (`ActualSessionEnd`).
+
+## [v1.14.48] - 2026-01-06
+### FIX CRÍTICO: Exportación de Datos "Fantasmas"
+- **Problema**: Al cargar la estrategia en un gráfico, se exportaban trades históricos simulados como si fueran trades en vivo, ensuciando las carpetas de DEMO con datos antiguos.
+- **Solución**: Se endureció la condición de exportación en `OnExecutionUpdate`. Ahora solo exporta si el estado es estrictamente `State.Realtime` (o Backtest explícito), ignorando la carga inicial histórica del gráfico.
+
+
+## [v1.14.47] - 2026-01-06
+### UI: Ocultar Parámetro Interno
+- **Cambio**: Se ocultó la propiedad `IsTradeVwapActive` de la configuración de la estrategia, ya que es una variable de control interno y no debe ser modificada por el usuario.
+
+
+## [v1.14.46] - 2026-01-06
+### FIX CRÍTICO: Lógica de Actualización de Take Profit (TP)
+- **Problema**: Al actualizar un TP (ej. por aumento de posición), se cancelaba la orden vieja pero no se creaba la nueva debido a un error de sincronización (la orden cancelada parecía seguir activa).
+- **Solución**: Se reemplazó la lógica de "Cancelar y Crear" por `ChangeOrder`. Ahora la estrategia modifica directamente la orden existente sin eliminarla, lo cual es más rápido y seguro.
+
+
+## [v1.14.45] - 2026-01-06
+### FIX CRÍTICO: Estabilización de Estrategia
+- **Corrección de Inicio**: Se solucionó un problema que impedía que la estrategia iniciara correctamente (faltaba activar el administrador de sesiones).
+- **Limpieza de Cálculos**: Se unificaron los cálculos del precio promedio (VWAP) para evitar errores por duplicidad.
+- **Mejora de Lógica**: Se movió la regla de "Reintento de Mitigación" a su lugar correcto para asegurar que funcione como se espera.
+
+
+## [v1.14.44] - 2026-01-06
+### REFACTORING: Final Code Cleanup - Fase 8 Completa
+- **Limpieza de Código**:
+  - Eliminados comentarios de versiones legacy (v1.5 - v1.13) para mejorar legibilidad.
+  - Eliminados `using` namespaces innecesarios y limpieza de imports.
+  - Eliminado código muerto residual de la refactorización.
+- **Documentación**:
+  - Agregada documentación XML a métodos públicos críticos (`Wrapper`, `CheckChartLag`, `SharedRisk`).
+- **Estado Final**:
+  - Estrategia totalmente modular (7 módulos externos).
+  - Archivo principal reducido de >5,400 a ~3,600 líneas.
+
+## [v1.14.43] - 2026-01-06
+### REFACTORING: UI & Helper Extraction - Fase 7 Completa
+- **Extracción de UI/Helpers**:
+  - Se movió lógica de UI (Botones, Panel de Estado) a `StrategyLevels/StrategyHelpers.cs`.
+  - Se movió lógica de Logging (`Log`, `ClearLogFile`) a `StrategyHelpers`.
+  - `SessionLevelsStrategy.cs` reducido en ~400 líneas adicionales (ahora ~4,000 líneas).
+- **Acceso a Miembros**:
+  - Se expusieron variables privadas críticas (`atr`, `gapDetected`, `gapCount`) para acceso desde módulos.
+- **Estabilidad**:
+  - Compilación exitosa tras refactorización modular.
+
+## [v1.14.42] - 2026-01-06
+### REFACTORING: SessionManager - Fase 6 Completa
+- **Nuevo archivo**: `SessionLevels/SessionManager.cs` (~230 líneas)
+- **Métodos extraídos**:
+  - `CheckSession()`: Detección de sesiones, creación/actualización de niveles High/Low (~100 líneas)
+  - `ManageLevels()`: Acumulación VWAP, detección de mitigación, dibujo de niveles (~130 líneas)
+- **Reducción total (Fase 6)**: ~230 líneas removidas de `SessionLevelsStrategy.cs`
+- **SessionLevelsStrategy ahora**: ~4,100 líneas (desde ~5,368 originales)
+- **Correcciones de Compilación**:
+  - Eliminados duplicados críticos: `ManageLevels`, `nyTimeZone`, `activeLevels`, `USAEndTime`.
+  - Expuesto `USAEndTime` (línea 178) y corregido uso de `activeLevels` (minúscula) en `OrderProtectionManager`.
+  - Agregadas referencias `NinjaTrader.Gui.Tools` y `NinjaTrader.Gui.Chart` en `SessionManager.cs`.
+
+## [v1.14.41] - 2026-01-06
+### REFACTORING: EntryStateMachine - Fase 5 Completa
+- **Métodos adicionales extraídos**:
+  - `ScanForTriggers()`: Detección de triggers al tocar niveles (~120 líneas)
+  - `HandleConfirmation()`: Lógica de confirmación y envío de órden (~200 líneas)
+  - `HandleWorkingOrder()`: Gestión de orden activa, trailing VWAP, cancelación por R/R (~130 líneas)
+- **Reducción total (Fase 5)**: ~670 líneas removidas de `ManageEntryA_Plus`
+- **ManageEntryA_Plus ahora**: Solo ~50 líneas de código orquestador con llamadas delegadas
+- **Propiedades expuestas adicionales**: `isValidVWAP()`, `GetSetupVWAP()`, `CalculateDynamicQuantity()`, etc.
+
+## [v1.14.40] - 2026-01-06
+### FIX CRÍTICO: Estrategia Congelada en Playback
+- **Problema**: Los niveles de sesión y VWAPs no se movían durante el Playback. El output mostraba "LAG_PAUSE: Lag > 60s detected (30200969s)".
+- **Causa**: La lógica de `LAG_PAUSE` calculaba el "lag" como `DateTime.Now - Time[0]`. En Playback, `Time[0]` es la hora histórica (del pasado), resultando en millones de segundos de "lag" y pausando permanentemente la estrategia.
+- **Solución**: Añadida verificación `Connection.PlaybackConnection != null` para detectar modo Playback y saltar la lógica de pausa por lag en ese modo.
+
+### REFACTORING: OrderProtectionManager (Fase 4)
+- **Migración completa**: La lógica de `EnsureProtection` y `SubmitProtectionOrders` movida a `OrderProtectionManager.cs`.
+- **Wrappers públicos**: Añadidos `SubmitOrderUnmanagedWrapper`, `ChangeOrderWrapper`, `CancelOrderWrapper` para permitir que el manager envíe órdenes.
+- **Propiedades públicas**: Expuestas `ActiveLevels`, `activeTp1Price`, `activeTp2Price`, etc. para acceso del manager.
+- **Resultado**: Código principal más limpio y legible, lógica de protección encapsulada.
+
+### REFACTORING: EntryStateMachine (Fase 5)
+- **Nuevo archivo**: `SessionLevels/EntryStateMachine.cs` (~320 líneas)
+- **Métodos extraídos de ManageEntryA_Plus**:
+  - `CheckTradingModeGuards()`: Lógica de modo Paused/LongOnly/ShortOnly (-53 líneas)
+  - `UpdateAnchorIfNeeded()`: Re-anclaje cuando precio hace nuevo High/Low (-47 líneas)
+  - `HandleInternalInvalidation()`: Invalidación de niveles internos al tocar externos (-121 líneas)
+- **Reducción total**: ~221 líneas removidas de `SessionLevelsStrategy.cs`
+- **Propiedades expuestas (17)**: `visualAdhoc*`, `externalLevel*`, `isInternalLevel`, `cachedOppositeLevel`, `oppositeSearchDone`, `lastInvalidationBar`, `DrawTriggerLabel()`, etc.
+
 ## [v1.14.38] - 2026-01-05
 ### DIAGNÓSTICO: Logs para Creación de SL
 - **Propósito**: Investigar origen de órdenes SL inesperadas (como la SL_Long_01 de MNQ que apareció sin registro).
