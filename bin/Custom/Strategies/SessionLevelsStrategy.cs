@@ -36,7 +36,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.59"; // v1.14.59: Fix isInternalLevel logic inversion
+		private const string StrategyVersion = "v1.14.61"; // v1.14.61: Maint Pack (Race Condition + Session Reset)
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;
@@ -352,6 +352,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 		
 		// Orphan false positive prevention - delay after position close
 		private DateTime lastPositionCloseTime = DateTime.MinValue;
+		
+		// v1.14.61: Daily Reset Tracking
+		private DateTime lastTradingDate = DateTime.MinValue;
 		
 		public void Log(string message)
 		{
@@ -1175,6 +1178,30 @@ namespace NinjaTrader.NinjaScript.Strategies
 				// Clear skipped levels from last week
 				skippedLevelsAtStartup.Clear();
 			}
+			
+			// v1.14.61: DAILY RESET Logic (Fix "Stuck in WaitingForVwapMitigation")
+			// If Trading Day changes, we should reset entry attempts for the new session
+			// Only if NOT currently in a trade
+			if (Time[0].Date > lastTradingDate && lastTradingDate != DateTime.MinValue)
+			{
+				if (currentEntryState != EntryState.PositionActive)
+				{
+					Log(Time[0] + " DAILY RESET: New Trading Day detected. Clearing session state.");
+					
+					currentEntryState = EntryState.Idle;
+					currentVwapNumber = 1; // Reset attempts to 1/20
+					waitingForVwapMitigation = false;
+					setupLevelName = "";
+					
+					// Also reset protection state
+					if (protectionManager != null) protectionManager.ResetEntryState();
+				}
+				else
+				{
+					Log(Time[0] + " DAILY RESET POSTPONED: Position Active. Will continue tracking current trade.");
+				}
+			}
+			lastTradingDate = Time[0].Date;
 		}
 
 		protected override void OnBarUpdate()

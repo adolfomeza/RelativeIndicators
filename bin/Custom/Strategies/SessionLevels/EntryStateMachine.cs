@@ -624,8 +624,17 @@ namespace NinjaTrader.NinjaScript.Strategies
 								return;
 							}
 
-							strategy.entryOrder = strategy.SubmitOrderUnmanaged(0, OrderAction.SellShort, OrderType.Limit, dynamicQuantity, limitPrice, 0, "", entryTag);
+							// v1.14.61: Fix Race Condition - Set State BEFORE Order Submission
 							strategy.currentEntryState = EntryState.workingOrder;
+							strategy.entryOrder = strategy.SubmitOrderUnmanaged(0, OrderAction.SellShort, OrderType.Limit, dynamicQuantity, limitPrice, 0, "", entryTag);
+
+							if (strategy.entryOrder == null)
+							{
+								strategy.currentEntryState = EntryState.Idle; // Revert if submit failed
+								strategy.Log("CRITICAL: Order Submit Failed. Reverting State to Idle.");
+								return;
+							}
+							
 							strategy.Log(strategy.Time[0] + " Order Submitted (Short Consolidated). Qty=" + dynamicQuantity);
 						}
 						else
@@ -719,8 +728,17 @@ namespace NinjaTrader.NinjaScript.Strategies
 								return;
 							}
 
-							strategy.entryOrder = strategy.SubmitOrderUnmanaged(0, OrderAction.Buy, OrderType.Limit, dynamicQuantity, limitPrice, 0, "", entryTag);
+							// v1.14.61: Fix Race Condition - Set State BEFORE Order Submission
 							strategy.currentEntryState = EntryState.workingOrder;
+							strategy.entryOrder = strategy.SubmitOrderUnmanaged(0, OrderAction.Buy, OrderType.Limit, dynamicQuantity, limitPrice, 0, "", entryTag);
+							
+							if (strategy.entryOrder == null)
+							{
+								strategy.currentEntryState = EntryState.Idle; // Revert if submit failed
+								strategy.Log("CRITICAL: Order Submit Failed. Reverting State to Idle.");
+								return;
+							}
+
 							strategy.Log(strategy.Time[0] + " Order Submitted (Long Consolidated). Qty=" + dynamicQuantity);
 						}
 						else

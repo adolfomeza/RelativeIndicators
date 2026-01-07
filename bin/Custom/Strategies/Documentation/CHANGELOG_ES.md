@@ -4,6 +4,15 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.14.61] - 2026-01-07
+### MANTENIMIENTO: Fix Race Condition + Reset Diario 🔧
+- **Race Condition (SL Faltante)**: Se implementó una solución de arquitectura robusta. Ahora el estado `workingOrder` se establece **ANTES** de enviar la orden `SubmitOrderUnmanaged`. Esto elimina la posibilidad de que un fill rápido llegue antes de que la estrategia esté lista para procesarlo.
+- **Session Reset (Estado Atascado)**: Se añadió lógica en `OnBarUpdate` para detectar el cambio de "Trading Day" (`Time[0].Date > lastTradingDate`). Al cambiar el día, se limpia el estado de la sesión (`Idle`, intentos a 1, protección limpia), evitando que la estrategia quede atascada en `WaitingForVwapMitigation` con contadores viejos.
+
+## [v1.14.60] - 2026-01-07
+### REVERTIDO (Descartado por v1.14.61) ↩️
+- Se intentó relajar la validación de estado en `OnExecutionUpdate`, pero se descartó en favor de la solución más robusta de inversión de operaciones en v1.14.61.
+
 ## [v1.14.59] - 2026-01-07
 ### FIX CRÍTICO: Lógica de Niveles Internos/Externos Invertida 🔧
 - **Problema**: La estrategia clasificaba incorrectamente los niveles. Si había un nivel externo protegiendo (ej. USA High arriba de Asia High), lo marcaba como **INTERNO** y usaba el VWAP Adhoc incorrecto para la confirmación.
