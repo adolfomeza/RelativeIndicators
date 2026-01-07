@@ -1,650 +1,234 @@
-18:52:51.759 DEBUG: OnStateChange(DataLoaded) IsUnmanaged = True
-18:52:51.762 DEBUG_CONTEXT: Account = 'DEMO619219', Context = 'DEMO619219'
-18:52:51.763 CSV EXPORT: Created C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\TradeExports\DEMO619219\ZS_03-26.csv
-18:52:51.797 4/12/25 9:23:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 28/11/25 6:00:00 p. m. NY)
-18:52:51.799 LEVEL SUMMARY (Price=1129):
-18:52:51.799   Asia High @ 1129.25 | Currently BELOW by 1 ticks
-18:52:51.800   Asia Low @ 1128.75 | Currently ABOVE by 1 ticks
-18:52:51.815 4/12/25 11:12:00 p. m. CONTROL BUTTONS: Initialized (Bottom Right)
-18:52:51.969 7/12/25 9:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 5/12/25 6:00:00 p. m. NY)
-18:52:51.969 LEVEL SUMMARY (Price=1113.75):
-18:52:51.970   USA High @ 1131 | Currently BELOW by 69 ticks
-18:52:51.970   USA Low @ 1115 | Currently BELOW by 5 ticks
-18:52:58.262 14/12/25 9:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 12/12/25 6:00:00 p. m. NY)
-18:52:58.262 LEVEL SUMMARY (Price=1084.75):
-18:52:58.263   USA High @ 1131 | Currently BELOW by 185 ticks
-18:52:58.263   Europe High @ 1118 | Currently BELOW by 133 ticks
-18:52:58.267   USA High @ 1117 | Currently BELOW by 129 ticks
-18:52:58.267   Asia High @ 1106.5 | Currently BELOW by 87 ticks
-18:52:58.267   Europe High @ 1105.5 | Currently BELOW by 83 ticks
-18:52:58.269   USA High @ 1105.5 | Currently BELOW by 83 ticks
-18:52:58.269   Asia High @ 1105 | Currently BELOW by 81 ticks
-18:52:58.269   Europe High @ 1103.25 | Currently BELOW by 74 ticks
-18:52:58.269   USA High @ 1095.75 | Currently BELOW by 44 ticks
-18:52:58.269   USA Low @ 1086.25 | Currently BELOW by 6 ticks
-18:53:14.638 21/12/25 9:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 19/12/25 6:00:00 p. m. NY)
-18:53:14.638 LEVEL SUMMARY (Price=1060.25):
-18:53:14.639   USA High @ 1131 | Currently BELOW by 283 ticks
-18:53:14.639   Europe High @ 1118 | Currently BELOW by 231 ticks
-18:53:14.639   USA High @ 1117 | Currently BELOW by 227 ticks
-18:53:14.639   Asia High @ 1106.5 | Currently BELOW by 185 ticks
-18:53:14.641   Europe High @ 1105.5 | Currently BELOW by 181 ticks
-18:53:14.641   USA High @ 1105.5 | Currently BELOW by 181 ticks
-18:53:14.642   Asia High @ 1105 | Currently BELOW by 179 ticks
-18:53:14.642   Europe High @ 1103.25 | Currently BELOW by 172 ticks
-18:53:14.642   USA High @ 1095.75 | Currently BELOW by 142 ticks
-18:53:14.643   Europe High @ 1090.5 | Currently BELOW by 121 ticks
-18:53:14.643   USA High @ 1088 | Currently BELOW by 111 ticks
-18:53:14.644   Asia High @ 1086.75 | Currently BELOW by 106 ticks
-18:53:14.644   Europe High @ 1086 | Currently BELOW by 103 ticks
-18:53:14.644   USA High @ 1084.25 | Currently BELOW by 96 ticks
-18:53:14.651   Asia High @ 1078 | Currently BELOW by 71 ticks
-18:53:14.652   Europe High @ 1076.25 | Currently BELOW by 64 ticks
-18:53:14.652   USA High @ 1073.5 | Currently BELOW by 53 ticks
-18:53:14.653   Asia High @ 1071.75 | Currently BELOW by 46 ticks
-18:53:14.653   Europe High @ 1069.75 | Currently BELOW by 38 ticks
-18:53:14.654   USA High @ 1069.25 | Currently BELOW by 36 ticks
-18:53:14.654   USA High @ 1064.5 | Currently BELOW by 17 ticks
-18:53:14.654   USA Low @ 1057.5 | Currently ABOVE by 11 ticks
-18:53:33.960 28/12/25 9:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 26/12/25 6:00:00 p. m. NY)
-18:53:33.961 LEVEL SUMMARY (Price=1073.25):
-18:53:33.961   USA High @ 1131 | Currently BELOW by 231 ticks
-18:53:33.961   Europe High @ 1118 | Currently BELOW by 179 ticks
-18:53:33.961   USA High @ 1117 | Currently BELOW by 175 ticks
-18:53:33.961   Asia High @ 1106.5 | Currently BELOW by 133 ticks
-18:53:33.961   Europe High @ 1105.5 | Currently BELOW by 129 ticks
-18:53:33.961   USA High @ 1105.5 | Currently BELOW by 129 ticks
-18:53:33.963   Asia High @ 1105 | Currently BELOW by 127 ticks
-18:53:33.963   Europe High @ 1103.25 | Currently BELOW by 120 ticks
-18:53:33.964   USA High @ 1095.75 | Currently BELOW by 90 ticks
-18:53:33.964   Europe High @ 1090.5 | Currently BELOW by 69 ticks
-18:53:33.964   USA High @ 1088 | Currently BELOW by 59 ticks
-18:53:33.964   Asia High @ 1086.75 | Currently BELOW by 54 ticks
-18:53:33.964   Europe High @ 1086 | Currently BELOW by 51 ticks
-18:53:33.964   USA High @ 1084.25 | Currently BELOW by 44 ticks
-18:53:33.965   USA Low @ 1057.5 | Currently ABOVE by 63 ticks
-18:53:33.965   Asia Low @ 1059 | Currently ABOVE by 57 ticks
-18:53:33.965   USA Low @ 1060.75 | Currently ABOVE by 50 ticks
-18:53:33.966   USA Low @ 1062.5 | Currently ABOVE by 43 ticks
-18:53:33.966   Asia Low @ 1063 | Currently ABOVE by 41 ticks
-18:53:33.966   Europe Low @ 1068 | Currently ABOVE by 21 ticks
-18:53:33.973   USA Low @ 1068.75 | Currently ABOVE by 18 ticks
-18:53:33.973   USA High @ 1082.5 | Currently BELOW by 37 ticks
-18:53:33.973   USA Low @ 1070.75 | Currently ABOVE by 10 ticks
-18:54:01.767 2/1/26 10:31:00 a. m. ENTRY ATTEMPT #1/20 on USA Low
-18:54:01.772 RE-ANCHOR: New Low @ 1041.5 (Setup: USA Low)
-18:54:01.890 RE-ANCHOR: New Low @ 1041 (Setup: USA Low)
-18:54:01.890 2/1/26 10:46:00 a. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1041'
-18:54:01.891 2/1/26 10:46:00 a. m. | SEARCH_OPPOSITE: Looking for 'USA High' from SAME DAY as 'USA Low' (RefDate: 2025-12-31)
-18:54:01.892    -> Candidate #1: USA High @ 1131.00 (Date: 2025-12-05, SameDay: False)
-18:54:01.892    -> REJECTED (Different Day): 2025-12-05 != 2025-12-31
-18:54:01.892    -> Candidate #2: USA High @ 1117.00 (Date: 2025-12-08, SameDay: False)
-18:54:01.897    -> REJECTED (Different Day): 2025-12-08 != 2025-12-31
-18:54:01.897    -> Candidate #3: USA High @ 1104.25 (Date: 2025-12-09, SameDay: False)
-18:54:01.906    -> REJECTED (Different Day): 2025-12-09 != 2025-12-31
-18:54:01.906    -> Candidate #4: USA High @ 1103.75 (Date: 2025-12-10, SameDay: False)
-18:54:01.906    -> REJECTED (Different Day): 2025-12-10 != 2025-12-31
-18:54:01.907    -> Candidate #5: USA High @ 1105.50 (Date: 2025-12-11, SameDay: False)
-18:54:01.907    -> REJECTED (Different Day): 2025-12-11 != 2025-12-31
-18:54:01.907    -> Candidate #6: USA High @ 1095.75 (Date: 2025-12-12, SameDay: False)
-18:54:01.907    -> REJECTED (Different Day): 2025-12-12 != 2025-12-31
-18:54:01.908    -> Candidate #7: USA High @ 1088.00 (Date: 2025-12-15, SameDay: False)
-18:54:01.908    -> REJECTED (Different Day): 2025-12-15 != 2025-12-31
-18:54:01.909    -> Candidate #8: USA High @ 1084.25 (Date: 2025-12-16, SameDay: False)
-18:54:01.909    -> REJECTED (Different Day): 2025-12-16 != 2025-12-31
-18:54:01.909    -> Candidate #9: USA High @ 1073.50 (Date: 2025-12-17, SameDay: False)
-18:54:01.910    -> REJECTED (Different Day): 2025-12-17 != 2025-12-31
-18:54:01.910    -> Candidate #10: USA High @ 1069.25 (Date: 2025-12-18, SameDay: False)
-18:54:01.910    -> REJECTED (Different Day): 2025-12-18 != 2025-12-31
-18:54:01.919    -> Candidate #11: USA High @ 1064.50 (Date: 2025-12-19, SameDay: False)
-18:54:01.919    -> REJECTED (Different Day): 2025-12-19 != 2025-12-31
-18:54:01.921    -> Candidate #12: USA High @ 1066.75 (Date: 2025-12-22, SameDay: False)
-18:54:01.922    -> REJECTED (Different Day): 2025-12-22 != 2025-12-31
-18:54:01.922    -> Candidate #13: USA High @ 1069.75 (Date: 2025-12-23, SameDay: False)
-18:54:01.923    -> REJECTED (Different Day): 2025-12-23 != 2025-12-31
-18:54:01.923    -> Candidate #14: USA High @ 1077.75 (Date: 2025-12-24, SameDay: False)
-18:54:01.923    -> REJECTED (Different Day): 2025-12-24 != 2025-12-31
-18:54:01.924    -> Candidate #15: USA High @ 1082.50 (Date: 2025-12-26, SameDay: False)
-18:54:01.924    -> REJECTED (Different Day): 2025-12-26 != 2025-12-31
-18:54:01.924    -> Candidate #16: USA High @ 1069.00 (Date: 2025-12-29, SameDay: False)
-18:54:01.925    -> REJECTED (Different Day): 2025-12-29 != 2025-12-31
-18:54:01.925    -> Candidate #17: USA High @ 1067.00 (Date: 2025-12-30, SameDay: False)
-18:54:01.926    -> REJECTED (Different Day): 2025-12-30 != 2025-12-31
-18:54:01.926    -> Candidate #18: USA High @ 1060.00 (Date: 2025-12-31, SameDay: True)
-18:54:01.926    -> ACCEPTED (Same Day): USA High @ 1060.00
-18:54:01.926 2/1/26 10:46:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 1041 (Raw: 1041). Bid=1041 Ask=1041
-18:54:01.981 RE-ANCHOR: New Low @ 1040.5 (Setup: USA Low)
-18:54:02.049 RE-ANCHOR: New Low @ 1040.25 (Setup: USA Low)
-18:54:02.061 RE-ANCHOR: New Low @ 1040 (Setup: USA Low)
-18:54:02.219 RE-ANCHOR: New Low @ 1039.5 (Setup: USA Low)
-18:54:02.219 2/1/26 11:17:00 a. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1039.5'
-18:54:02.220 2/1/26 11:17:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 1039.75 (Raw: 1039.75). Bid=1039.75 Ask=1039.75
-18:54:02.222 RE-ANCHOR: New Low @ 1038.5 (Setup: USA Low)
-18:54:02.252 RE-ANCHOR: New Low @ 1038 (Setup: USA Low)
-18:54:02.387 2/1/26 11:30:00 a. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:02.388 2/1/26 11:30:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 1038.75 (Raw: 1038.74430379747). Bid=1039.5 Ask=1039.5
-18:54:02.404 2/1/26 11:32:00 a. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:02.405 2/1/26 11:32:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 1039.25 (Raw: 1039.12954621288). Bid=1040.75 Ask=1040.75
-18:54:02.423 2/1/26 11:33:00 a. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:02.423 R/R REJECTED (Long): Entry=1039.91844989562 SL=1037.75 | TP1(VWAP)=1041.44577903132 TP2(Level)=1060 | Selected=1041.44577903132 | Risk=2.1684 Reward=1.5273 Ratio=0.70 | Reason: R:R 0.70 < Min 1
-18:54:02.425 2/1/26 11:33:00 a. m. Trade Skipped (Long). Risk: 2.17 Reward: 1.53 Ratio: 0.70
-18:54:02.439 2/1/26 11:34:00 a. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:02.439 R/R REJECTED (Long): Entry=1040.01283009467 SL=1037.75 | TP1(VWAP)=1041.44902990847 TP2(Level)=1060 | Selected=1041.44902990847 | Risk=2.2628 Reward=1.4362 Ratio=0.63 | Reason: R:R 0.63 < Min 1
-18:54:02.439 2/1/26 11:34:00 a. m. Trade Skipped (Long). Risk: 2.26 Reward: 1.44 Ratio: 0.63
-18:54:02.455 2/1/26 11:35:00 a. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:02.455 R/R REJECTED (Long): Entry=1040.18593932322 SL=1037.75 | TP1(VWAP)=1041.4602942586 TP2(Level)=1060 | Selected=1041.4602942586 | Risk=2.4359 Reward=1.2744 Ratio=0.52 | Reason: R:R 0.52 < Min 1
-18:54:02.456 2/1/26 11:35:00 a. m. Trade Skipped (Long). Risk: 2.44 Reward: 1.27 Ratio: 0.52
-18:54:02.471 2/1/26 11:36:00 a. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:02.472 R/R REJECTED (Long): Entry=1040.30333407178 SL=1037.75 | TP1(VWAP)=1041.46784604161 TP2(Level)=1060 | Selected=1041.46784604161 | Risk=2.5533 Reward=1.1645 Ratio=0.46 | Reason: R:R 0.46 < Min 1
-18:54:02.472 2/1/26 11:36:00 a. m. Trade Skipped (Long). Risk: 2.55 Reward: 1.16 Ratio: 0.46
-18:54:02.473 2/1/26 11:37:00 a. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:02.473 R/R REJECTED (Long): Entry=1040.32592511496 SL=1037.75 | TP1(VWAP)=1041.46915867135 TP2(Level)=1060 | Selected=1041.46915867135 | Risk=2.5759 Reward=1.1432 Ratio=0.44 | Reason: R:R 0.44 < Min 1
-18:54:02.474 2/1/26 11:37:00 a. m. Trade Skipped (Long). Risk: 2.58 Reward: 1.14 Ratio: 0.44
-18:54:02.488 2/1/26 11:38:00 a. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:02.488 R/R REJECTED (Long): Entry=1040.39193205945 SL=1037.75 | TP1(VWAP)=1041.47380532089 TP2(Level)=1060 | Selected=1041.47380532089 | Risk=2.6419 Reward=1.0819 Ratio=0.41 | Reason: R:R 0.41 < Min 1
-18:54:02.489 2/1/26 11:38:00 a. m. Trade Skipped (Long). Risk: 2.64 Reward: 1.08 Ratio: 0.41
-18:54:02.502 2/1/26 11:39:00 a. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:02.502 R/R REJECTED (Long): Entry=1040.43090946758 SL=1037.75 | TP1(VWAP)=1041.4757388273 TP2(Level)=1060 | Selected=1041.4757388273 | Risk=2.6809 Reward=1.0448 Ratio=0.39 | Reason: R:R 0.39 < Min 1
-18:54:02.502 2/1/26 11:39:00 a. m. Trade Skipped (Long). Risk: 2.68 Reward: 1.04 Ratio: 0.39
-18:54:02.517 2/1/26 11:40:00 a. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:02.517 R/R REJECTED (Long): Entry=1040.53415908651 SL=1037.75 | TP1(VWAP)=1041.4812777726 TP2(Level)=1060 | Selected=1041.4812777726 | Risk=2.7842 Reward=0.9471 Ratio=0.34 | Reason: R:R 0.34 < Min 1
-18:54:02.518 2/1/26 11:40:00 a. m. Trade Skipped (Long). Risk: 2.78 Reward: 0.95 Ratio: 0.34
-18:54:02.530 2/1/26 11:41:00 a. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:02.531 R/R REJECTED (Long): Entry=1040.5477501424 SL=1037.75 | TP1(VWAP)=1041.4805613209 TP2(Level)=1060 | Selected=1041.4805613209 | Risk=2.7978 Reward=0.9328 Ratio=0.33 | Reason: R:R 0.33 < Min 1
-18:54:02.531 2/1/26 11:41:00 a. m. Trade Skipped (Long). Risk: 2.80 Reward: 0.93 Ratio: 0.33
-18:54:02.542 2/1/26 11:42:00 a. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:02.543 R/R REJECTED (Long): Entry=1040.64720480669 SL=1037.75 | TP1(VWAP)=1041.48446849432 TP2(Level)=1060 | Selected=1041.48446849432 | Risk=2.8972 Reward=0.8373 Ratio=0.29 | Reason: R:R 0.29 < Min 1
-18:54:02.543 2/1/26 11:42:00 a. m. Trade Skipped (Long). Risk: 2.90 Reward: 0.84 Ratio: 0.29
-18:54:02.547 2/1/26 11:43:00 a. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:02.548 R/R REJECTED (Long): Entry=1040.66414184157 SL=1037.75 | TP1(VWAP)=1041.48328625235 TP2(Level)=1060 | Selected=1041.48328625235 | Risk=2.9141 Reward=0.8191 Ratio=0.28 | Reason: R:R 0.28 < Min 1
-18:54:02.548 2/1/26 11:43:00 a. m. Trade Skipped (Long). Risk: 2.91 Reward: 0.82 Ratio: 0.28
-18:54:02.564 2/1/26 11:44:00 a. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:02.564 R/R REJECTED (Long): Entry=1040.67494600432 SL=1037.75 | TP1(VWAP)=1041.48250234614 TP2(Level)=1060 | Selected=1041.48250234614 | Risk=2.9249 Reward=0.8076 Ratio=0.28 | Reason: R:R 0.28 < Min 1
-18:54:02.565 2/1/26 11:44:00 a. m. Trade Skipped (Long). Risk: 2.92 Reward: 0.81 Ratio: 0.28
-18:54:03.095 2/1/26 12:33:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.096 R/R REJECTED (Long): Entry=1040.47749453138 SL=1037.75 | TP1(VWAP)=1041.30037275064 TP2(Level)=1060 | Selected=1041.30037275064 | Risk=2.7275 Reward=0.8229 Ratio=0.30 | Reason: R:R 0.30 < Min 1
-18:54:03.097 2/1/26 12:33:00 p. m. Trade Skipped (Long). Risk: 2.73 Reward: 0.82 Ratio: 0.30
-18:54:03.113 2/1/26 12:34:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.114 R/R REJECTED (Long): Entry=1040.49182911655 SL=1037.75 | TP1(VWAP)=1041.30123627428 TP2(Level)=1060 | Selected=1041.30123627428 | Risk=2.7418 Reward=0.8094 Ratio=0.30 | Reason: R:R 0.30 < Min 1
-18:54:03.114 2/1/26 12:34:00 p. m. Trade Skipped (Long). Risk: 2.74 Reward: 0.81 Ratio: 0.30
-18:54:03.116 2/1/26 12:35:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.117 R/R REJECTED (Long): Entry=1040.53438157682 SL=1037.75 | TP1(VWAP)=1041.30844213574 TP2(Level)=1060 | Selected=1041.30844213574 | Risk=2.7844 Reward=0.7741 Ratio=0.28 | Reason: R:R 0.28 < Min 1
-18:54:03.118 2/1/26 12:35:00 p. m. Trade Skipped (Long). Risk: 2.78 Reward: 0.77 Ratio: 0.28
-18:54:03.130 2/1/26 12:36:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.131 R/R REJECTED (Long): Entry=1040.55450963222 SL=1037.75 | TP1(VWAP)=1041.31076283606 TP2(Level)=1060 | Selected=1041.31076283606 | Risk=2.8045 Reward=0.7563 Ratio=0.27 | Reason: R:R 0.27 < Min 1
-18:54:03.132 2/1/26 12:36:00 p. m. Trade Skipped (Long). Risk: 2.80 Reward: 0.76 Ratio: 0.27
-18:54:03.146 2/1/26 12:37:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.147 R/R REJECTED (Long): Entry=1040.56367757194 SL=1037.75 | TP1(VWAP)=1041.31134915237 TP2(Level)=1060 | Selected=1041.31134915237 | Risk=2.8137 Reward=0.7477 Ratio=0.27 | Reason: R:R 0.27 < Min 1
-18:54:03.147 2/1/26 12:37:00 p. m. Trade Skipped (Long). Risk: 2.81 Reward: 0.75 Ratio: 0.27
-18:54:03.150 2/1/26 12:38:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.151 R/R REJECTED (Long): Entry=1040.5809144819 SL=1037.75 | TP1(VWAP)=1041.31443635451 TP2(Level)=1060 | Selected=1041.31443635451 | Risk=2.8309 Reward=0.7335 Ratio=0.26 | Reason: R:R 0.26 < Min 1
-18:54:03.151 2/1/26 12:38:00 p. m. Trade Skipped (Long). Risk: 2.83 Reward: 0.73 Ratio: 0.26
-18:54:03.165 2/1/26 12:39:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.165 R/R REJECTED (Long): Entry=1040.58499961099 SL=1037.75 | TP1(VWAP)=1041.31507261645 TP2(Level)=1060 | Selected=1041.31507261645 | Risk=2.8350 Reward=0.7301 Ratio=0.26 | Reason: R:R 0.26 < Min 1
-18:54:03.166 2/1/26 12:39:00 p. m. Trade Skipped (Long). Risk: 2.83 Reward: 0.73 Ratio: 0.26
-18:54:03.176 2/1/26 12:40:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.177 R/R REJECTED (Long): Entry=1040.5914893617 SL=1037.75 | TP1(VWAP)=1041.31585668144 TP2(Level)=1060 | Selected=1041.31585668144 | Risk=2.8415 Reward=0.7244 Ratio=0.25 | Reason: R:R 0.25 < Min 1
-18:54:03.178 2/1/26 12:40:00 p. m. Trade Skipped (Long). Risk: 2.84 Reward: 0.72 Ratio: 0.25
-18:54:03.199 2/1/26 12:41:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.199 R/R REJECTED (Long): Entry=1040.62343096234 SL=1037.75 | TP1(VWAP)=1041.32234368386 TP2(Level)=1060 | Selected=1041.32234368386 | Risk=2.8734 Reward=0.6989 Ratio=0.24 | Reason: R:R 0.24 < Min 1
-18:54:03.199 2/1/26 12:41:00 p. m. Trade Skipped (Long). Risk: 2.87 Reward: 0.70 Ratio: 0.24
-18:54:03.264 2/1/26 12:42:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.265 R/R REJECTED (Long): Entry=1040.63057638416 SL=1037.75 | TP1(VWAP)=1041.32368152771 TP2(Level)=1060 | Selected=1041.32368152771 | Risk=2.8806 Reward=0.6931 Ratio=0.24 | Reason: R:R 0.24 < Min 1
-18:54:03.265 2/1/26 12:42:00 p. m. Trade Skipped (Long). Risk: 2.88 Reward: 0.69 Ratio: 0.24
-18:54:03.270 2/1/26 12:43:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.281 R/R REJECTED (Long): Entry=1040.63243856333 SL=1037.75 | TP1(VWAP)=1041.3239146102 TP2(Level)=1060 | Selected=1041.3239146102 | Risk=2.8824 Reward=0.6915 Ratio=0.24 | Reason: R:R 0.24 < Min 1
-18:54:03.281 2/1/26 12:43:00 p. m. Trade Skipped (Long). Risk: 2.88 Reward: 0.69 Ratio: 0.24
-18:54:03.289 2/1/26 12:44:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.290 R/R REJECTED (Long): Entry=1040.63756962216 SL=1037.75 | TP1(VWAP)=1041.32455955335 TP2(Level)=1060 | Selected=1041.32455955335 | Risk=2.8876 Reward=0.6870 Ratio=0.24 | Reason: R:R 0.24 < Min 1
-18:54:03.299 2/1/26 12:44:00 p. m. Trade Skipped (Long). Risk: 2.89 Reward: 0.69 Ratio: 0.24
-18:54:03.305 2/1/26 12:45:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.306 R/R REJECTED (Long): Entry=1040.63893063801 SL=1037.75 | TP1(VWAP)=1041.32465092632 TP2(Level)=1060 | Selected=1041.32465092632 | Risk=2.8889 Reward=0.6857 Ratio=0.24 | Reason: R:R 0.24 < Min 1
-18:54:03.306 2/1/26 12:45:00 p. m. Trade Skipped (Long). Risk: 2.89 Reward: 0.69 Ratio: 0.24
-18:54:03.320 2/1/26 12:46:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.347 R/R REJECTED (Long): Entry=1040.66980541019 SL=1037.75 | TP1(VWAP)=1041.33057958158 TP2(Level)=1060 | Selected=1041.33057958158 | Risk=2.9198 Reward=0.6608 Ratio=0.23 | Reason: R:R 0.23 < Min 1
-18:54:03.347 2/1/26 12:46:00 p. m. Trade Skipped (Long). Risk: 2.92 Reward: 0.66 Ratio: 0.23
-18:54:03.381 2/1/26 12:47:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.411 R/R REJECTED (Long): Entry=1040.70318040379 SL=1037.75 | TP1(VWAP)=1041.33779663507 TP2(Level)=1060 | Selected=1041.33779663507 | Risk=2.9532 Reward=0.6346 Ratio=0.21 | Reason: R:R 0.21 < Min 1
-18:54:03.413 2/1/26 12:47:00 p. m. Trade Skipped (Long). Risk: 2.95 Reward: 0.63 Ratio: 0.21
-18:54:03.417 2/1/26 12:48:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.417 R/R REJECTED (Long): Entry=1040.7051286685 SL=1037.75 | TP1(VWAP)=1041.33822341363 TP2(Level)=1060 | Selected=1041.33822341363 | Risk=2.9551 Reward=0.6331 Ratio=0.21 | Reason: R:R 0.21 < Min 1
-18:54:03.418 2/1/26 12:48:00 p. m. Trade Skipped (Long). Risk: 2.96 Reward: 0.63 Ratio: 0.21
-18:54:03.432 2/1/26 12:49:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.433 R/R REJECTED (Long): Entry=1040.71024855908 SL=1037.75 | TP1(VWAP)=1041.33924903409 TP2(Level)=1060 | Selected=1041.33924903409 | Risk=2.9602 Reward=0.6290 Ratio=0.21 | Reason: R:R 0.21 < Min 1
-18:54:03.434 2/1/26 12:49:00 p. m. Trade Skipped (Long). Risk: 2.96 Reward: 0.63 Ratio: 0.21
-18:54:03.451 2/1/26 12:50:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.452 R/R REJECTED (Long): Entry=1040.71308736887 SL=1037.75 | TP1(VWAP)=1041.33963036255 TP2(Level)=1060 | Selected=1041.33963036255 | Risk=2.9631 Reward=0.6265 Ratio=0.21 | Reason: R:R 0.21 < Min 1
-18:54:03.453 2/1/26 12:50:00 p. m. Trade Skipped (Long). Risk: 2.96 Reward: 0.63 Ratio: 0.21
-18:54:03.457 2/1/26 12:51:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.457 R/R REJECTED (Long): Entry=1040.71981407608 SL=1037.75 | TP1(VWAP)=1041.34009914255 TP2(Level)=1060 | Selected=1041.34009914255 | Risk=2.9698 Reward=0.6203 Ratio=0.21 | Reason: R:R 0.21 < Min 1
-18:54:03.457 2/1/26 12:51:00 p. m. Trade Skipped (Long). Risk: 2.97 Reward: 0.62 Ratio: 0.21
-18:54:03.469 2/1/26 12:52:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.469 R/R REJECTED (Long): Entry=1040.72155953561 SL=1037.75 | TP1(VWAP)=1041.33937165775 TP2(Level)=1060 | Selected=1041.33937165775 | Risk=2.9716 Reward=0.6178 Ratio=0.21 | Reason: R:R 0.21 < Min 1
-18:54:03.470 2/1/26 12:52:00 p. m. Trade Skipped (Long). Risk: 2.97 Reward: 0.62 Ratio: 0.21
-18:54:03.472 2/1/26 12:53:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.472 R/R REJECTED (Long): Entry=1040.72248289 SL=1037.75 | TP1(VWAP)=1041.33898438828 TP2(Level)=1060 | Selected=1041.33898438828 | Risk=2.9725 Reward=0.6165 Ratio=0.21 | Reason: R:R 0.21 < Min 1
-18:54:03.472 2/1/26 12:53:00 p. m. Trade Skipped (Long). Risk: 2.97 Reward: 0.62 Ratio: 0.21
-18:54:03.484 2/1/26 12:54:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.484 R/R REJECTED (Long): Entry=1040.72995193958 SL=1037.75 | TP1(VWAP)=1041.335788499 TP2(Level)=1060 | Selected=1041.335788499 | Risk=2.9800 Reward=0.6058 Ratio=0.20 | Reason: R:R 0.20 < Min 1
-18:54:03.486 2/1/26 12:54:00 p. m. Trade Skipped (Long). Risk: 2.98 Reward: 0.61 Ratio: 0.20
-18:54:03.503 2/1/26 12:55:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.503 R/R REJECTED (Long): Entry=1040.73300457307 SL=1037.75 | TP1(VWAP)=1041.33561142446 TP2(Level)=1060 | Selected=1041.33561142446 | Risk=2.9830 Reward=0.6026 Ratio=0.20 | Reason: R:R 0.20 < Min 1
-18:54:03.504 2/1/26 12:55:00 p. m. Trade Skipped (Long). Risk: 2.98 Reward: 0.60 Ratio: 0.20
-18:54:03.527 2/1/26 12:57:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.538 R/R REJECTED (Long): Entry=1040.75197884794 SL=1037.75 | TP1(VWAP)=1041.33690663052 TP2(Level)=1060 | Selected=1041.33690663052 | Risk=3.0020 Reward=0.5849 Ratio=0.19 | Reason: R:R 0.19 < Min 1
-18:54:03.538 2/1/26 12:57:00 p. m. Trade Skipped (Long). Risk: 3.00 Reward: 0.58 Ratio: 0.19
-18:54:03.546 2/1/26 12:58:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.546 R/R REJECTED (Long): Entry=1040.75244218501 SL=1037.75 | TP1(VWAP)=1041.33687770434 TP2(Level)=1060 | Selected=1041.33687770434 | Risk=3.0024 Reward=0.5844 Ratio=0.19 | Reason: R:R 0.19 < Min 1
-18:54:03.549 2/1/26 12:58:00 p. m. Trade Skipped (Long). Risk: 3.00 Reward: 0.58 Ratio: 0.19
-18:54:03.664 2/1/26 1:03:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.665 R/R REJECTED (Long): Entry=1040.79523099378 SL=1037.75 | TP1(VWAP)=1041.34294047508 TP2(Level)=1060 | Selected=1041.34294047508 | Risk=3.0452 Reward=0.5477 Ratio=0.18 | Reason: R:R 0.18 < Min 1
-18:54:03.665 2/1/26 1:03:00 p. m. Trade Skipped (Long). Risk: 3.05 Reward: 0.55 Ratio: 0.18
-18:54:03.688 2/1/26 1:04:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.689 R/R REJECTED (Long): Entry=1040.80264572007 SL=1037.75 | TP1(VWAP)=1041.34491151476 TP2(Level)=1060 | Selected=1041.34491151476 | Risk=3.0526 Reward=0.5423 Ratio=0.18 | Reason: R:R 0.18 < Min 1
-18:54:03.699 2/1/26 1:04:00 p. m. Trade Skipped (Long). Risk: 3.05 Reward: 0.54 Ratio: 0.18
-18:54:03.703 2/1/26 1:05:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.704 R/R REJECTED (Long): Entry=1040.8143481817 SL=1037.75 | TP1(VWAP)=1041.34828586744 TP2(Level)=1060 | Selected=1041.34828586744 | Risk=3.0643 Reward=0.5339 Ratio=0.17 | Reason: R:R 0.17 < Min 1
-18:54:03.704 2/1/26 1:05:00 p. m. Trade Skipped (Long). Risk: 3.06 Reward: 0.53 Ratio: 0.17
-18:54:03.737 2/1/26 1:06:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.738 R/R REJECTED (Long): Entry=1040.83796382912 SL=1037.75 | TP1(VWAP)=1041.35533345722 TP2(Level)=1060 | Selected=1041.35533345722 | Risk=3.0880 Reward=0.5174 Ratio=0.17 | Reason: R:R 0.17 < Min 1
-18:54:03.739 2/1/26 1:06:00 p. m. Trade Skipped (Long). Risk: 3.09 Reward: 0.52 Ratio: 0.17
-18:54:03.753 2/1/26 1:07:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.753 R/R REJECTED (Long): Entry=1040.86442640158 SL=1037.75 | TP1(VWAP)=1041.36332446193 TP2(Level)=1060 | Selected=1041.36332446193 | Risk=3.1144 Reward=0.4989 Ratio=0.16 | Reason: R:R 0.16 < Min 1
-18:54:03.754 2/1/26 1:07:00 p. m. Trade Skipped (Long). Risk: 3.11 Reward: 0.50 Ratio: 0.16
-18:54:03.771 2/1/26 1:08:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.772 R/R REJECTED (Long): Entry=1040.8867019973 SL=1037.75 | TP1(VWAP)=1041.370263753 TP2(Level)=1060 | Selected=1041.370263753 | Risk=3.1367 Reward=0.4836 Ratio=0.15 | Reason: R:R 0.15 < Min 1
-18:54:03.773 2/1/26 1:08:00 p. m. Trade Skipped (Long). Risk: 3.14 Reward: 0.48 Ratio: 0.15
-18:54:03.778 2/1/26 1:09:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.779 R/R REJECTED (Long): Entry=1040.90638880438 SL=1037.75 | TP1(VWAP)=1041.37645285277 TP2(Level)=1060 | Selected=1041.37645285277 | Risk=3.1564 Reward=0.4701 Ratio=0.15 | Reason: R:R 0.15 < Min 1
-18:54:03.779 2/1/26 1:09:00 p. m. Trade Skipped (Long). Risk: 3.16 Reward: 0.47 Ratio: 0.15
-18:54:03.807 2/1/26 1:10:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.807 R/R REJECTED (Long): Entry=1040.93962349398 SL=1037.75 | TP1(VWAP)=1041.3873240244 TP2(Level)=1060 | Selected=1041.3873240244 | Risk=3.1896 Reward=0.4477 Ratio=0.14 | Reason: R:R 0.14 < Min 1
-18:54:03.808 2/1/26 1:10:00 p. m. Trade Skipped (Long). Risk: 3.19 Reward: 0.45 Ratio: 0.14
-18:54:03.814 2/1/26 1:11:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.814 R/R REJECTED (Long): Entry=1040.95352429514 SL=1037.75 | TP1(VWAP)=1041.39191122608 TP2(Level)=1060 | Selected=1041.39191122608 | Risk=3.2035 Reward=0.4384 Ratio=0.14 | Reason: R:R 0.14 < Min 1
-18:54:03.815 2/1/26 1:11:00 p. m. Trade Skipped (Long). Risk: 3.20 Reward: 0.44 Ratio: 0.14
-18:54:03.860 2/1/26 1:12:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.861 R/R REJECTED (Long): Entry=1040.97367558548 SL=1037.75 | TP1(VWAP)=1041.39852152072 TP2(Level)=1060 | Selected=1041.39852152072 | Risk=3.2237 Reward=0.4248 Ratio=0.13 | Reason: R:R 0.13 < Min 1
-18:54:03.862 2/1/26 1:12:00 p. m. Trade Skipped (Long). Risk: 3.22 Reward: 0.42 Ratio: 0.13
-18:54:03.865 2/1/26 1:13:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.866 R/R REJECTED (Long): Entry=1040.98159427179 SL=1037.75 | TP1(VWAP)=1041.40109595602 TP2(Level)=1060 | Selected=1041.40109595602 | Risk=3.2316 Reward=0.4195 Ratio=0.13 | Reason: R:R 0.13 < Min 1
-18:54:03.866 2/1/26 1:13:00 p. m. Trade Skipped (Long). Risk: 3.23 Reward: 0.42 Ratio: 0.13
-18:54:03.881 2/1/26 1:14:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.881 R/R REJECTED (Long): Entry=1041.03325266779 SL=1037.75 | TP1(VWAP)=1041.41811584358 TP2(Level)=1060 | Selected=1041.41811584358 | Risk=3.2833 Reward=0.3849 Ratio=0.12 | Reason: R:R 0.12 < Min 1
-18:54:03.882 2/1/26 1:14:00 p. m. Trade Skipped (Long). Risk: 3.28 Reward: 0.38 Ratio: 0.12
-18:54:03.887 2/1/26 1:15:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.896 R/R REJECTED (Long): Entry=1041.04115064829 SL=1037.75 | TP1(VWAP)=1041.42075294597 TP2(Level)=1060 | Selected=1041.42075294597 | Risk=3.2912 Reward=0.3796 Ratio=0.12 | Reason: R:R 0.12 < Min 1
-18:54:03.899 2/1/26 1:15:00 p. m. Trade Skipped (Long). Risk: 3.29 Reward: 0.38 Ratio: 0.12
-18:54:03.904 2/1/26 1:16:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.904 R/R REJECTED (Long): Entry=1041.07122961176 SL=1037.75 | TP1(VWAP)=1041.43072187458 TP2(Level)=1060 | Selected=1041.43072187458 | Risk=3.3212 Reward=0.3595 Ratio=0.11 | Reason: R:R 0.11 < Min 1
-18:54:03.905 2/1/26 1:16:00 p. m. Trade Skipped (Long). Risk: 3.32 Reward: 0.36 Ratio: 0.11
-18:54:03.919 2/1/26 1:17:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.919 R/R REJECTED (Long): Entry=1041.08971584762 SL=1037.75 | TP1(VWAP)=1041.43680314077 TP2(Level)=1060 | Selected=1041.43680314077 | Risk=3.3397 Reward=0.3471 Ratio=0.10 | Reason: R:R 0.10 < Min 1
-18:54:03.920 2/1/26 1:17:00 p. m. Trade Skipped (Long). Risk: 3.34 Reward: 0.35 Ratio: 0.10
-18:54:03.933 2/1/26 1:18:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.934 R/R REJECTED (Long): Entry=1041.10999435347 SL=1037.75 | TP1(VWAP)=1041.4436767731 TP2(Level)=1060 | Selected=1041.4436767731 | Risk=3.3600 Reward=0.3337 Ratio=0.10 | Reason: R:R 0.10 < Min 1
-18:54:03.934 2/1/26 1:18:00 p. m. Trade Skipped (Long). Risk: 3.36 Reward: 0.33 Ratio: 0.10
-18:54:03.970 2/1/26 1:19:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.970 R/R REJECTED (Long): Entry=1041.11964838256 SL=1037.75 | TP1(VWAP)=1041.44702382281 TP2(Level)=1060 | Selected=1041.44702382281 | Risk=3.3696 Reward=0.3274 Ratio=0.10 | Reason: R:R 0.10 < Min 1
-18:54:03.971 2/1/26 1:19:00 p. m. Trade Skipped (Long). Risk: 3.37 Reward: 0.33 Ratio: 0.10
-18:54:03.993 2/1/26 1:20:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:03.994 R/R REJECTED (Long): Entry=1041.14471191352 SL=1037.75 | TP1(VWAP)=1041.45578291815 TP2(Level)=1060 | Selected=1041.45578291815 | Risk=3.3947 Reward=0.3111 Ratio=0.09 | Reason: R:R 0.09 < Min 1
-18:54:03.994 2/1/26 1:20:00 p. m. Trade Skipped (Long). Risk: 3.39 Reward: 0.31 Ratio: 0.09
-18:54:04.013 2/1/26 1:21:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.013 R/R REJECTED (Long): Entry=1041.18703968341 SL=1037.75 | TP1(VWAP)=1041.47111130773 TP2(Level)=1060 | Selected=1041.47111130773 | Risk=3.4370 Reward=0.2841 Ratio=0.08 | Reason: R:R 0.08 < Min 1
-18:54:04.014 2/1/26 1:21:00 p. m. Trade Skipped (Long). Risk: 3.44 Reward: 0.28 Ratio: 0.08
-18:54:04.028 2/1/26 1:22:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.029 R/R REJECTED (Long): Entry=1041.24124186551 SL=1037.75 | TP1(VWAP)=1041.49156289875 TP2(Level)=1060 | Selected=1041.49156289875 | Risk=3.4912 Reward=0.2503 Ratio=0.07 | Reason: R:R 0.07 < Min 1
-18:54:04.029 2/1/26 1:22:00 p. m. Trade Skipped (Long). Risk: 3.49 Reward: 0.25 Ratio: 0.07
-18:54:04.044 2/1/26 1:23:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.045 R/R REJECTED (Long): Entry=1041.28173175055 SL=1037.75 | TP1(VWAP)=1041.50711139357 TP2(Level)=1060 | Selected=1041.50711139357 | Risk=3.5317 Reward=0.2254 Ratio=0.06 | Reason: R:R 0.06 < Min 1
-18:54:04.045 2/1/26 1:23:00 p. m. Trade Skipped (Long). Risk: 3.53 Reward: 0.23 Ratio: 0.06
-18:54:04.055 2/1/26 1:24:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.056 R/R REJECTED (Long): Entry=1041.32349189476 SL=1037.75 | TP1(VWAP)=1041.52328220123 TP2(Level)=1060 | Selected=1041.52328220123 | Risk=3.5735 Reward=0.1998 Ratio=0.06 | Reason: R:R 0.06 < Min 1
-18:54:04.056 2/1/26 1:24:00 p. m. Trade Skipped (Long). Risk: 3.57 Reward: 0.20 Ratio: 0.06
-18:54:04.111 2/1/26 1:25:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.122 R/R REJECTED (Long): Entry=1041.36216145149 SL=1037.75 | TP1(VWAP)=1041.53838884182 TP2(Level)=1060 | Selected=1041.53838884182 | Risk=3.6122 Reward=0.1762 Ratio=0.05 | Reason: R:R 0.05 < Min 1
-18:54:04.124 2/1/26 1:25:00 p. m. Trade Skipped (Long). Risk: 3.61 Reward: 0.18 Ratio: 0.05
-18:54:04.139 2/1/26 1:26:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.140 R/R REJECTED (Long): Entry=1041.36891828059 SL=1037.75 | TP1(VWAP)=1041.54103805327 TP2(Level)=1060 | Selected=1041.54103805327 | Risk=3.6189 Reward=0.1721 Ratio=0.05 | Reason: R:R 0.05 < Min 1
-18:54:04.141 2/1/26 1:26:00 p. m. Trade Skipped (Long). Risk: 3.62 Reward: 0.17 Ratio: 0.05
-18:54:04.152 2/1/26 1:27:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.154 R/R REJECTED (Long): Entry=1041.39112546222 SL=1037.75 | TP1(VWAP)=1041.54971329655 TP2(Level)=1060 | Selected=1041.54971329655 | Risk=3.6411 Reward=0.1586 Ratio=0.04 | Reason: R:R 0.04 < Min 1
-18:54:04.154 2/1/26 1:27:00 p. m. Trade Skipped (Long). Risk: 3.64 Reward: 0.16 Ratio: 0.04
-18:54:04.157 2/1/26 1:28:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.158 R/R REJECTED (Long): Entry=1041.44144051711 SL=1037.75 | TP1(VWAP)=1041.56980669577 TP2(Level)=1060 | Selected=1041.56980669577 | Risk=3.6914 Reward=0.1284 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-18:54:04.158 2/1/26 1:28:00 p. m. Trade Skipped (Long). Risk: 3.69 Reward: 0.13 Ratio: 0.03
-18:54:04.170 2/1/26 1:29:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.170 R/R REJECTED (Long): Entry=1041.45142440671 SL=1037.75 | TP1(VWAP)=1041.57383606065 TP2(Level)=1060 | Selected=1041.57383606065 | Risk=3.7014 Reward=0.1224 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-18:54:04.170 2/1/26 1:29:00 p. m. Trade Skipped (Long). Risk: 3.70 Reward: 0.12 Ratio: 0.03
-18:54:04.173 2/1/26 1:30:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.173 R/R REJECTED (Long): Entry=1041.46168059945 SL=1037.75 | TP1(VWAP)=1041.57797756905 TP2(Level)=1060 | Selected=1041.57797756905 | Risk=3.7117 Reward=0.1163 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-18:54:04.175 2/1/26 1:30:00 p. m. Trade Skipped (Long). Risk: 3.71 Reward: 0.12 Ratio: 0.03
-18:54:04.188 2/1/26 1:31:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.188 R/R REJECTED (Long): Entry=1041.46586570279 SL=1037.75 | TP1(VWAP)=1041.57967721885 TP2(Level)=1060 | Selected=1041.57967721885 | Risk=3.7159 Reward=0.1138 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-18:54:04.189 2/1/26 1:31:00 p. m. Trade Skipped (Long). Risk: 3.72 Reward: 0.11 Ratio: 0.03
-18:54:04.220 2/1/26 1:32:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.222 R/R REJECTED (Long): Entry=1041.49664039608 SL=1037.75 | TP1(VWAP)=1041.59232396172 TP2(Level)=1060 | Selected=1041.59232396172 | Risk=3.7466 Reward=0.0957 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-18:54:04.222 2/1/26 1:32:00 p. m. Trade Skipped (Long). Risk: 3.75 Reward: 0.10 Ratio: 0.03
-18:54:04.249 2/1/26 1:33:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.249 R/R REJECTED (Long): Entry=1041.5350995697 SL=1037.75 | TP1(VWAP)=1041.60828723404 TP2(Level)=1060 | Selected=1041.60828723404 | Risk=3.7851 Reward=0.0732 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-18:54:04.250 2/1/26 1:33:00 p. m. Trade Skipped (Long). Risk: 3.79 Reward: 0.07 Ratio: 0.02
-18:54:04.256 2/1/26 1:34:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.256 R/R REJECTED (Long): Entry=1041.57809099901 SL=1037.75 | TP1(VWAP)=1041.62632849219 TP2(Level)=1060 | Selected=1041.62632849219 | Risk=3.8281 Reward=0.0482 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-18:54:04.257 2/1/26 1:34:00 p. m. Trade Skipped (Long). Risk: 3.83 Reward: 0.05 Ratio: 0.01
-18:54:04.285 2/1/26 1:35:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.285 R/R REJECTED (Long): Entry=1041.58795816684 SL=1037.75 | TP1(VWAP)=1041.63050650312 TP2(Level)=1060 | Selected=1041.63050650312 | Risk=3.8380 Reward=0.0425 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-18:54:04.286 2/1/26 1:35:00 p. m. Trade Skipped (Long). Risk: 3.84 Reward: 0.04 Ratio: 0.01
-18:54:04.291 2/1/26 1:36:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.291 R/R REJECTED (Long): Entry=1041.60420758052 SL=1037.75 | TP1(VWAP)=1041.6374044996 TP2(Level)=1060 | Selected=1041.6374044996 | Risk=3.8542 Reward=0.0332 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-18:54:04.291 2/1/26 1:36:00 p. m. Trade Skipped (Long). Risk: 3.85 Reward: 0.03 Ratio: 0.01
-18:54:04.302 2/1/26 1:37:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.310 R/R REJECTED (Long): Entry=1041.61765137077 SL=1037.75 | TP1(VWAP)=1041.64313246414 TP2(Level)=1060 | Selected=1041.64313246414 | Risk=3.8677 Reward=0.0255 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-18:54:04.320 2/1/26 1:37:00 p. m. Trade Skipped (Long). Risk: 3.87 Reward: 0.03 Ratio: 0.01
-18:54:04.325 2/1/26 1:38:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.325 R/R REJECTED (Long): Entry=1041.62786845311 SL=1037.75 | TP1(VWAP)=1041.64751046509 TP2(Level)=1060 | Selected=1041.64751046509 | Risk=3.8779 Reward=0.0196 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-18:54:04.326 2/1/26 1:38:00 p. m. Trade Skipped (Long). Risk: 3.88 Reward: 0.02 Ratio: 0.01
-18:54:04.379 2/1/26 1:39:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.380 R/R REJECTED (Long): Entry=1041.64892225721 SL=1037.75 | TP1(VWAP)=1041.65658112843 TP2(Level)=1060 | Selected=1041.65658112843 | Risk=3.8989 Reward=0.0077 Ratio=0.00 | Reason: R:R 0.00 < Min 1
-18:54:04.381 2/1/26 1:39:00 p. m. Trade Skipped (Long). Risk: 3.90 Reward: 0.01 Ratio: 0.00
-18:54:04.385 2/1/26 1:40:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.385 R/R REJECTED (Long): Entry=1041.6583103898 SL=1037.75 | TP1(VWAP)=1041.66064505313 TP2(Level)=1060 | Selected=1041.66064505313 | Risk=3.9083 Reward=0.0023 Ratio=0.00 | Reason: R:R 0.00 < Min 1
-18:54:04.386 2/1/26 1:40:00 p. m. Trade Skipped (Long). Risk: 3.91 Reward: 0.00 Ratio: 0.00
-18:54:04.442 2/1/26 1:41:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.443 R/R REJECTED (Long): Entry=1041.6670039023 SL=1037.75 | TP1(VWAP)=1041.6644198363 TP2(Level)=1060 | Selected=1041.6644198363 | Risk=3.9170 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.453 2/1/26 1:41:00 p. m. Trade Skipped (Long). Risk: 3.92 Reward: 0.00 Ratio: 0.00
-18:54:04.461 2/1/26 1:42:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.469 R/R REJECTED (Long): Entry=1041.68016645879 SL=1037.75 | TP1(VWAP)=1041.67015775178 TP2(Level)=1060 | Selected=1041.67015775178 | Risk=3.9302 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.469 2/1/26 1:42:00 p. m. Trade Skipped (Long). Risk: 3.93 Reward: 0.00 Ratio: 0.00
-18:54:04.473 2/1/26 1:43:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.473 R/R REJECTED (Long): Entry=1041.70166579535 SL=1037.75 | TP1(VWAP)=1041.67961190303 TP2(Level)=1060 | Selected=1041.67961190303 | Risk=3.9517 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.474 2/1/26 1:43:00 p. m. Trade Skipped (Long). Risk: 3.95 Reward: 0.00 Ratio: 0.00
-18:54:04.493 2/1/26 1:44:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.493 R/R REJECTED (Long): Entry=1041.70809241706 SL=1037.75 | TP1(VWAP)=1041.68245728894 TP2(Level)=1060 | Selected=1041.68245728894 | Risk=3.9581 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.494 2/1/26 1:44:00 p. m. Trade Skipped (Long). Risk: 3.96 Reward: 0.00 Ratio: 0.00
-18:54:04.510 2/1/26 1:45:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.511 R/R REJECTED (Long): Entry=1041.72460919107 SL=1037.75 | TP1(VWAP)=1041.68980042278 TP2(Level)=1060 | Selected=1041.68980042278 | Risk=3.9746 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.511 2/1/26 1:45:00 p. m. Trade Skipped (Long). Risk: 3.97 Reward: 0.00 Ratio: 0.00
-18:54:04.543 2/1/26 1:46:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.549 R/R REJECTED (Long): Entry=1041.73030395565 SL=1037.75 | TP1(VWAP)=1041.6923447205 TP2(Level)=1060 | Selected=1041.6923447205 | Risk=3.9803 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.549 2/1/26 1:46:00 p. m. Trade Skipped (Long). Risk: 3.98 Reward: 0.00 Ratio: 0.00
-18:54:04.559 2/1/26 1:47:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.559 R/R REJECTED (Long): Entry=1041.74518714079 SL=1037.75 | TP1(VWAP)=1041.69901373541 TP2(Level)=1060 | Selected=1041.69901373541 | Risk=3.9952 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.560 2/1/26 1:47:00 p. m. Trade Skipped (Long). Risk: 4.00 Reward: 0.00 Ratio: 0.00
-18:54:04.571 2/1/26 1:48:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.572 R/R REJECTED (Long): Entry=1041.7457019388 SL=1037.75 | TP1(VWAP)=1041.69924513104 TP2(Level)=1060 | Selected=1041.69924513104 | Risk=3.9957 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.572 2/1/26 1:48:00 p. m. Trade Skipped (Long). Risk: 4.00 Reward: 0.00 Ratio: 0.00
-18:54:04.586 2/1/26 1:49:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.586 R/R REJECTED (Long): Entry=1041.76016590761 SL=1037.75 | TP1(VWAP)=1041.70576629852 TP2(Level)=1060 | Selected=1041.70576629852 | Risk=4.0102 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.586 2/1/26 1:49:00 p. m. Trade Skipped (Long). Risk: 4.01 Reward: 0.00 Ratio: 0.00
-18:54:04.605 2/1/26 1:50:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.606 R/R REJECTED (Long): Entry=1041.77056712963 SL=1037.75 | TP1(VWAP)=1041.7104794915 TP2(Level)=1060 | Selected=1041.7104794915 | Risk=4.0206 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.606 2/1/26 1:50:00 p. m. Trade Skipped (Long). Risk: 4.02 Reward: 0.00 Ratio: 0.00
-18:54:04.618 2/1/26 1:51:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.618 R/R REJECTED (Long): Entry=1041.78752012882 SL=1037.75 | TP1(VWAP)=1041.71820447599 TP2(Level)=1060 | Selected=1041.71820447599 | Risk=4.0375 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.618 2/1/26 1:51:00 p. m. Trade Skipped (Long). Risk: 4.04 Reward: 0.00 Ratio: 0.00
-18:54:04.622 2/1/26 1:52:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.622 R/R REJECTED (Long): Entry=1041.80315401857 SL=1037.75 | TP1(VWAP)=1041.72537595908 TP2(Level)=1060 | Selected=1041.72537595908 | Risk=4.0532 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.623 2/1/26 1:52:00 p. m. Trade Skipped (Long). Risk: 4.05 Reward: 0.00 Ratio: 0.00
-18:54:04.635 2/1/26 1:53:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.635 R/R REJECTED (Long): Entry=1041.81905562625 SL=1037.75 | TP1(VWAP)=1041.73274103391 TP2(Level)=1060 | Selected=1041.73274103391 | Risk=4.0691 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.636 2/1/26 1:53:00 p. m. Trade Skipped (Long). Risk: 4.07 Reward: 0.00 Ratio: 0.00
-18:54:04.639 2/1/26 1:54:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.645 R/R REJECTED (Long): Entry=1041.82401696222 SL=1037.75 | TP1(VWAP)=1041.73504983389 TP2(Level)=1060 | Selected=1041.73504983389 | Risk=4.0740 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.647 2/1/26 1:54:00 p. m. Trade Skipped (Long). Risk: 4.07 Reward: 0.00 Ratio: 0.00
-18:54:04.651 2/1/26 1:55:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.651 R/R REJECTED (Long): Entry=1041.84884634376 SL=1037.75 | TP1(VWAP)=1041.74668296444 TP2(Level)=1060 | Selected=1041.74668296444 | Risk=4.0988 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.652 2/1/26 1:55:00 p. m. Trade Skipped (Long). Risk: 4.10 Reward: 0.00 Ratio: 0.00
-18:54:04.665 2/1/26 1:56:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.665 R/R REJECTED (Long): Entry=1041.85368694561 SL=1037.75 | TP1(VWAP)=1041.74896627209 TP2(Level)=1060 | Selected=1041.74896627209 | Risk=4.1037 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.665 2/1/26 1:56:00 p. m. Trade Skipped (Long). Risk: 4.10 Reward: 0.00 Ratio: 0.00
-18:54:04.668 2/1/26 1:57:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.669 R/R REJECTED (Long): Entry=1041.85979042853 SL=1037.75 | TP1(VWAP)=1041.75185248922 TP2(Level)=1060 | Selected=1041.75185248922 | Risk=4.1098 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.669 2/1/26 1:57:00 p. m. Trade Skipped (Long). Risk: 4.11 Reward: 0.00 Ratio: 0.00
-18:54:04.681 2/1/26 1:58:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.681 R/R REJECTED (Long): Entry=1041.86458704959 SL=1037.75 | TP1(VWAP)=1041.75412638052 TP2(Level)=1060 | Selected=1041.75412638052 | Risk=4.1146 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.682 2/1/26 1:58:00 p. m. Trade Skipped (Long). Risk: 4.11 Reward: 0.00 Ratio: 0.00
-18:54:04.695 2/1/26 1:59:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.695 R/R REJECTED (Long): Entry=1041.87896719858 SL=1037.75 | TP1(VWAP)=1041.76097349417 TP2(Level)=1060 | Selected=1041.76097349417 | Risk=4.1290 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.696 2/1/26 1:59:00 p. m. Trade Skipped (Long). Risk: 4.13 Reward: 0.00 Ratio: 0.00
-18:54:04.699 2/1/26 2:00:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.699 R/R REJECTED (Long): Entry=1041.8874210224 SL=1037.75 | TP1(VWAP)=1041.7650009064 TP2(Level)=1060 | Selected=1041.7650009064 | Risk=4.1374 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.700 2/1/26 2:00:00 p. m. Trade Skipped (Long). Risk: 4.14 Reward: 0.00 Ratio: 0.00
-18:54:04.711 2/1/26 2:01:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.712 R/R REJECTED (Long): Entry=1041.93241889832 SL=1037.75 | TP1(VWAP)=1041.78649032594 TP2(Level)=1060 | Selected=1041.78649032594 | Risk=4.1824 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.713 2/1/26 2:01:00 p. m. Trade Skipped (Long). Risk: 4.18 Reward: 0.00 Ratio: 0.00
-18:54:04.726 2/1/26 2:02:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.727 R/R REJECTED (Long): Entry=1041.94061523098 SL=1037.75 | TP1(VWAP)=1041.79045777884 TP2(Level)=1060 | Selected=1041.79045777884 | Risk=4.1906 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.727 2/1/26 2:02:00 p. m. Trade Skipped (Long). Risk: 4.19 Reward: 0.00 Ratio: 0.00
-18:54:04.739 2/1/26 2:03:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.739 R/R REJECTED (Long): Entry=1041.95534903825 SL=1037.75 | TP1(VWAP)=1041.79756326148 TP2(Level)=1060 | Selected=1041.79756326148 | Risk=4.2053 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.740 2/1/26 2:03:00 p. m. Trade Skipped (Long). Risk: 4.21 Reward: 0.00 Ratio: 0.00
-18:54:04.756 2/1/26 2:04:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.757 R/R REJECTED (Long): Entry=1041.98060169091 SL=1037.75 | TP1(VWAP)=1041.8097783961 TP2(Level)=1060 | Selected=1041.8097783961 | Risk=4.2306 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.757 2/1/26 2:04:00 p. m. Trade Skipped (Long). Risk: 4.23 Reward: 0.00 Ratio: 0.00
-18:54:04.770 2/1/26 2:05:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.771 R/R REJECTED (Long): Entry=1041.99818515672 SL=1037.75 | TP1(VWAP)=1041.81833954632 TP2(Level)=1060 | Selected=1041.81833954632 | Risk=4.2482 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.771 2/1/26 2:05:00 p. m. Trade Skipped (Long). Risk: 4.25 Reward: 0.00 Ratio: 0.00
-18:54:04.791 2/1/26 2:06:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.792 R/R REJECTED (Long): Entry=1042.01283795273 SL=1037.75 | TP1(VWAP)=1041.82553721952 TP2(Level)=1060 | Selected=1041.82553721952 | Risk=4.2628 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.793 2/1/26 2:06:00 p. m. Trade Skipped (Long). Risk: 4.26 Reward: 0.00 Ratio: 0.00
-18:54:04.844 2/1/26 2:07:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.844 R/R REJECTED (Long): Entry=1042.01311315141 SL=1037.75 | TP1(VWAP)=1041.82567273447 TP2(Level)=1060 | Selected=1041.82567273447 | Risk=4.2631 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.853 2/1/26 2:07:00 p. m. Trade Skipped (Long). Risk: 4.26 Reward: 0.00 Ratio: 0.00
-18:54:04.872 2/1/26 2:08:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.872 R/R REJECTED (Long): Entry=1042.01385406485 SL=1037.75 | TP1(VWAP)=1041.82603620536 TP2(Level)=1060 | Selected=1041.82603620536 | Risk=4.2639 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.873 2/1/26 2:08:00 p. m. Trade Skipped (Long). Risk: 4.26 Reward: 0.00 Ratio: 0.00
-18:54:04.877 2/1/26 2:09:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.877 R/R REJECTED (Long): Entry=1042.02632080264 SL=1037.75 | TP1(VWAP)=1041.83218954894 TP2(Level)=1060 | Selected=1041.83218954894 | Risk=4.2763 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.877 2/1/26 2:09:00 p. m. Trade Skipped (Long). Risk: 4.28 Reward: 0.00 Ratio: 0.00
-18:54:04.890 2/1/26 2:10:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.890 R/R REJECTED (Long): Entry=1042.04031612223 SL=1037.75 | TP1(VWAP)=1041.8391276927 TP2(Level)=1060 | Selected=1041.8391276927 | Risk=4.2903 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.890 2/1/26 2:10:00 p. m. Trade Skipped (Long). Risk: 4.29 Reward: 0.00 Ratio: 0.00
-18:54:04.906 2/1/26 2:11:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.906 R/R REJECTED (Long): Entry=1042.0523675594 SL=1037.75 | TP1(VWAP)=1041.84515894248 TP2(Level)=1060 | Selected=1041.84515894248 | Risk=4.3024 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.906 2/1/26 2:11:00 p. m. Trade Skipped (Long). Risk: 4.30 Reward: 0.00 Ratio: 0.00
-18:54:04.910 2/1/26 2:12:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.911 R/R REJECTED (Long): Entry=1042.05323345503 SL=1037.75 | TP1(VWAP)=1041.84559329701 TP2(Level)=1060 | Selected=1041.84559329701 | Risk=4.3032 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.911 2/1/26 2:12:00 p. m. Trade Skipped (Long). Risk: 4.30 Reward: 0.00 Ratio: 0.00
-18:54:04.922 2/1/26 2:13:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.922 R/R REJECTED (Long): Entry=1042.06099552058 SL=1037.75 | TP1(VWAP)=1041.84947250545 TP2(Level)=1060 | Selected=1041.84947250545 | Risk=4.3110 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.922 2/1/26 2:13:00 p. m. Trade Skipped (Long). Risk: 4.31 Reward: 0.00 Ratio: 0.00
-18:54:04.925 2/1/26 2:14:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.933 R/R REJECTED (Long): Entry=1042.07146727803 SL=1037.75 | TP1(VWAP)=1041.85482511176 TP2(Level)=1060 | Selected=1041.85482511176 | Risk=4.3215 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.933 2/1/26 2:14:00 p. m. Trade Skipped (Long). Risk: 4.32 Reward: 0.00 Ratio: 0.00
-18:54:04.936 2/1/26 2:15:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.936 R/R REJECTED (Long): Entry=1042.07603720195 SL=1037.75 | TP1(VWAP)=1041.85715055343 TP2(Level)=1060 | Selected=1041.85715055343 | Risk=4.3260 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.938 2/1/26 2:15:00 p. m. Trade Skipped (Long). Risk: 4.33 Reward: 0.00 Ratio: 0.00
-18:54:04.950 2/1/26 2:16:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.951 R/R REJECTED (Long): Entry=1042.08936042417 SL=1037.75 | TP1(VWAP)=1041.86390870883 TP2(Level)=1060 | Selected=1041.86390870883 | Risk=4.3394 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.951 2/1/26 2:16:00 p. m. Trade Skipped (Long). Risk: 4.34 Reward: 0.00 Ratio: 0.00
-18:54:04.955 2/1/26 2:17:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.956 R/R REJECTED (Long): Entry=1042.10609027205 SL=1037.75 | TP1(VWAP)=1041.87234758357 TP2(Level)=1060 | Selected=1041.87234758357 | Risk=4.3561 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.965 2/1/26 2:17:00 p. m. Trade Skipped (Long). Risk: 4.36 Reward: 0.00 Ratio: 0.00
-18:54:04.972 2/1/26 2:18:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:04.972 R/R REJECTED (Long): Entry=1042.11747000329 SL=1037.75 | TP1(VWAP)=1041.87808666018 TP2(Level)=1060 | Selected=1041.87808666018 | Risk=4.3675 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:04.972 2/1/26 2:18:00 p. m. Trade Skipped (Long). Risk: 4.37 Reward: 0.00 Ratio: 0.00
-18:54:05.003 2/1/26 2:19:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.003 R/R REJECTED (Long): Entry=1042.1374110575 SL=1037.75 | TP1(VWAP)=1041.88811008782 TP2(Level)=1060 | Selected=1041.88811008782 | Risk=4.3874 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.004 2/1/26 2:19:00 p. m. Trade Skipped (Long). Risk: 4.39 Reward: 0.00 Ratio: 0.00
-18:54:05.011 2/1/26 2:20:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.011 R/R REJECTED (Long): Entry=1042.19619372277 SL=1037.75 | TP1(VWAP)=1041.91784583607 TP2(Level)=1060 | Selected=1041.91784583607 | Risk=4.4462 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.012 2/1/26 2:20:00 p. m. Trade Skipped (Long). Risk: 4.45 Reward: 0.00 Ratio: 0.00
-18:54:05.028 2/1/26 2:21:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.029 R/R REJECTED (Long): Entry=1042.21634229535 SL=1037.75 | TP1(VWAP)=1041.92822139639 TP2(Level)=1060 | Selected=1041.92822139639 | Risk=4.4663 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.029 2/1/26 2:21:00 p. m. Trade Skipped (Long). Risk: 4.47 Reward: 0.00 Ratio: 0.00
-18:54:05.045 2/1/26 2:22:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.046 R/R REJECTED (Long): Entry=1042.22074031023 SL=1037.75 | TP1(VWAP)=1041.93049381291 TP2(Level)=1060 | Selected=1041.93049381291 | Risk=4.4707 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.046 2/1/26 2:22:00 p. m. Trade Skipped (Long). Risk: 4.47 Reward: 0.00 Ratio: 0.00
-18:54:05.049 2/1/26 2:23:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.049 R/R REJECTED (Long): Entry=1042.23597804391 SL=1037.75 | TP1(VWAP)=1041.93838832975 TP2(Level)=1060 | Selected=1041.93838832975 | Risk=4.4860 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.059 2/1/26 2:23:00 p. m. Trade Skipped (Long). Risk: 4.49 Reward: 0.00 Ratio: 0.00
-18:54:05.078 2/1/26 2:24:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.078 R/R REJECTED (Long): Entry=1042.237179743 SL=1037.75 | TP1(VWAP)=1041.93901232908 TP2(Level)=1060 | Selected=1041.93901232908 | Risk=4.4872 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.079 2/1/26 2:24:00 p. m. Trade Skipped (Long). Risk: 4.49 Reward: 0.00 Ratio: 0.00
-18:54:05.085 2/1/26 2:25:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.085 R/R REJECTED (Long): Entry=1042.24054102544 SL=1037.75 | TP1(VWAP)=1041.94076800522 TP2(Level)=1060 | Selected=1041.94076800522 | Risk=4.4905 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.085 2/1/26 2:25:00 p. m. Trade Skipped (Long). Risk: 4.49 Reward: 0.00 Ratio: 0.00
-18:54:05.104 2/1/26 2:26:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.105 R/R REJECTED (Long): Entry=1042.24548078837 SL=1037.75 | TP1(VWAP)=1041.94333768152 TP2(Level)=1060 | Selected=1041.94333768152 | Risk=4.4955 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.105 2/1/26 2:26:00 p. m. Trade Skipped (Long). Risk: 4.50 Reward: 0.00 Ratio: 0.00
-18:54:05.115 2/1/26 2:27:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.115 R/R REJECTED (Long): Entry=1042.28424360642 SL=1037.75 | TP1(VWAP)=1041.96362447749 TP2(Level)=1060 | Selected=1041.96362447749 | Risk=4.5342 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.116 2/1/26 2:27:00 p. m. Trade Skipped (Long). Risk: 4.53 Reward: 0.00 Ratio: 0.00
-18:54:05.127 2/1/26 2:28:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.127 R/R REJECTED (Long): Entry=1042.28814660263 SL=1037.75 | TP1(VWAP)=1041.96566887973 TP2(Level)=1060 | Selected=1041.96566887973 | Risk=4.5381 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.128 2/1/26 2:28:00 p. m. Trade Skipped (Long). Risk: 4.54 Reward: 0.00 Ratio: 0.00
-18:54:05.146 2/1/26 2:29:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.147 R/R REJECTED (Long): Entry=1042.30052575823 SL=1037.75 | TP1(VWAP)=1041.97220052951 TP2(Level)=1060 | Selected=1041.97220052951 | Risk=4.5505 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.147 2/1/26 2:29:00 p. m. Trade Skipped (Long). Risk: 4.55 Reward: 0.00 Ratio: 0.00
-18:54:05.161 2/1/26 2:30:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.161 R/R REJECTED (Long): Entry=1042.30270174888 SL=1037.75 | TP1(VWAP)=1041.97335097875 TP2(Level)=1060 | Selected=1041.97335097875 | Risk=4.5527 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.162 2/1/26 2:30:00 p. m. Trade Skipped (Long). Risk: 4.55 Reward: 0.00 Ratio: 0.00
-18:54:05.164 2/1/26 2:31:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.165 R/R REJECTED (Long): Entry=1042.32761845387 SL=1037.75 | TP1(VWAP)=1041.98650290444 TP2(Level)=1060 | Selected=1041.98650290444 | Risk=4.5776 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.165 2/1/26 2:31:00 p. m. Trade Skipped (Long). Risk: 4.58 Reward: 0.00 Ratio: 0.00
-18:54:05.176 2/1/26 2:32:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.176 R/R REJECTED (Long): Entry=1042.34905057159 SL=1037.75 | TP1(VWAP)=1041.99788428406 TP2(Level)=1060 | Selected=1041.99788428406 | Risk=4.5991 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.177 2/1/26 2:32:00 p. m. Trade Skipped (Long). Risk: 4.60 Reward: 0.00 Ratio: 0.00
-18:54:05.190 2/1/26 2:33:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.190 R/R REJECTED (Long): Entry=1042.35751981442 SL=1037.75 | TP1(VWAP)=1042.00242534844 TP2(Level)=1060 | Selected=1042.00242534844 | Risk=4.6075 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.190 2/1/26 2:33:00 p. m. Trade Skipped (Long). Risk: 4.61 Reward: 0.00 Ratio: 0.00
-18:54:05.195 2/1/26 2:34:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.195 R/R REJECTED (Long): Entry=1042.36550181285 SL=1037.75 | TP1(VWAP)=1042.00674348319 TP2(Level)=1060 | Selected=1042.00674348319 | Risk=4.6155 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.204 2/1/26 2:34:00 p. m. Trade Skipped (Long). Risk: 4.62 Reward: 0.00 Ratio: 0.00
-18:54:05.230 2/1/26 2:35:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.231 R/R REJECTED (Long): Entry=1042.3747451629 SL=1037.75 | TP1(VWAP)=1042.01175699383 TP2(Level)=1060 | Selected=1042.01175699383 | Risk=4.6247 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.231 2/1/26 2:35:00 p. m. Trade Skipped (Long). Risk: 4.62 Reward: 0.00 Ratio: 0.00
-18:54:05.276 2/1/26 2:36:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.276 R/R REJECTED (Long): Entry=1042.37695087261 SL=1037.75 | TP1(VWAP)=1042.01295541978 TP2(Level)=1060 | Selected=1042.01295541978 | Risk=4.6270 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.277 2/1/26 2:36:00 p. m. Trade Skipped (Long). Risk: 4.63 Reward: 0.00 Ratio: 0.00
-18:54:05.317 2/1/26 2:37:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.317 R/R REJECTED (Long): Entry=1042.39500649996 SL=1037.75 | TP1(VWAP)=1042.02279566657 TP2(Level)=1060 | Selected=1042.02279566657 | Risk=4.6450 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.317 2/1/26 2:37:00 p. m. Trade Skipped (Long). Risk: 4.65 Reward: 0.00 Ratio: 0.00
-18:54:05.321 2/1/26 2:38:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.330 R/R REJECTED (Long): Entry=1042.39692957316 SL=1037.75 | TP1(VWAP)=1042.02384690597 TP2(Level)=1060 | Selected=1042.02384690597 | Risk=4.6469 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.332 2/1/26 2:38:00 p. m. Trade Skipped (Long). Risk: 4.65 Reward: 0.00 Ratio: 0.00
-18:54:05.336 2/1/26 2:39:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.336 R/R REJECTED (Long): Entry=1042.40408960915 SL=1037.75 | TP1(VWAP)=1042.02776629914 TP2(Level)=1060 | Selected=1042.02776629914 | Risk=4.6541 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.337 2/1/26 2:39:00 p. m. Trade Skipped (Long). Risk: 4.65 Reward: 0.00 Ratio: 0.00
-18:54:05.359 2/1/26 2:40:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.367 R/R REJECTED (Long): Entry=1042.41526405775 SL=1037.75 | TP1(VWAP)=1042.03395113811 TP2(Level)=1060 | Selected=1042.03395113811 | Risk=4.6653 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.368 2/1/26 2:40:00 p. m. Trade Skipped (Long). Risk: 4.67 Reward: 0.00 Ratio: 0.00
-18:54:05.387 2/1/26 2:41:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.388 R/R REJECTED (Long): Entry=1042.42410951118 SL=1037.75 | TP1(VWAP)=1042.03882199835 TP2(Level)=1060 | Selected=1042.03882199835 | Risk=4.6741 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.388 2/1/26 2:41:00 p. m. Trade Skipped (Long). Risk: 4.67 Reward: 0.00 Ratio: 0.00
-18:54:05.397 2/1/26 2:42:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.397 R/R REJECTED (Long): Entry=1042.43514253351 SL=1037.75 | TP1(VWAP)=1042.04496813025 TP2(Level)=1060 | Selected=1042.04496813025 | Risk=4.6851 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.408 2/1/26 2:42:00 p. m. Trade Skipped (Long). Risk: 4.69 Reward: 0.00 Ratio: 0.00
-18:54:05.414 2/1/26 2:43:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.415 R/R REJECTED (Long): Entry=1042.44045644717 SL=1037.75 | TP1(VWAP)=1042.04793631525 TP2(Level)=1060 | Selected=1042.04793631525 | Risk=4.6905 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.425 2/1/26 2:43:00 p. m. Trade Skipped (Long). Risk: 4.69 Reward: 0.00 Ratio: 0.00
-18:54:05.433 2/1/26 2:44:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.433 R/R REJECTED (Long): Entry=1042.46118785565 SL=1037.75 | TP1(VWAP)=1042.05956613185 TP2(Level)=1060 | Selected=1042.05956613185 | Risk=4.7112 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.433 2/1/26 2:44:00 p. m. Trade Skipped (Long). Risk: 4.71 Reward: 0.00 Ratio: 0.00
-18:54:05.436 2/1/26 2:45:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.436 R/R REJECTED (Long): Entry=1042.46856443963 SL=1037.75 | TP1(VWAP)=1042.06372348534 TP2(Level)=1060 | Selected=1042.06372348534 | Risk=4.7186 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.437 2/1/26 2:45:00 p. m. Trade Skipped (Long). Risk: 4.72 Reward: 0.00 Ratio: 0.00
-18:54:05.454 2/1/26 2:46:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.454 R/R REJECTED (Long): Entry=1042.47509314456 SL=1037.75 | TP1(VWAP)=1042.06745088573 TP2(Level)=1060 | Selected=1042.06745088573 | Risk=4.7251 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.455 2/1/26 2:46:00 p. m. Trade Skipped (Long). Risk: 4.73 Reward: 0.00 Ratio: 0.00
-18:54:05.476 2/1/26 2:47:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.476 R/R REJECTED (Long): Entry=1042.48807142328 SL=1037.75 | TP1(VWAP)=1042.07509998519 TP2(Level)=1060 | Selected=1042.07509998519 | Risk=4.7381 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.476 2/1/26 2:47:00 p. m. Trade Skipped (Long). Risk: 4.74 Reward: 0.00 Ratio: 0.00
-18:54:05.491 2/1/26 2:48:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.491 R/R REJECTED (Long): Entry=1042.50627457465 SL=1037.75 | TP1(VWAP)=1042.08590277906 TP2(Level)=1060 | Selected=1042.08590277906 | Risk=4.7563 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.492 2/1/26 2:48:00 p. m. Trade Skipped (Long). Risk: 4.76 Reward: 0.00 Ratio: 0.00
-18:54:05.494 2/1/26 2:49:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.494 R/R REJECTED (Long): Entry=1042.5067691686 SL=1037.75 | TP1(VWAP)=1042.08619751812 TP2(Level)=1060 | Selected=1042.08619751812 | Risk=4.7568 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.494 2/1/26 2:49:00 p. m. Trade Skipped (Long). Risk: 4.76 Reward: 0.00 Ratio: 0.00
-18:54:05.507 2/1/26 2:50:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.508 R/R REJECTED (Long): Entry=1042.51375256373 SL=1037.75 | TP1(VWAP)=1042.09036599286 TP2(Level)=1060 | Selected=1042.09036599286 | Risk=4.7638 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.508 2/1/26 2:50:00 p. m. Trade Skipped (Long). Risk: 4.76 Reward: 0.00 Ratio: 0.00
-18:54:05.535 2/1/26 2:51:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.536 R/R REJECTED (Long): Entry=1042.52390939597 SL=1037.75 | TP1(VWAP)=1042.09635311409 TP2(Level)=1060 | Selected=1042.09635311409 | Risk=4.7739 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.536 2/1/26 2:51:00 p. m. Trade Skipped (Long). Risk: 4.77 Reward: 0.00 Ratio: 0.00
-18:54:05.551 2/1/26 2:52:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.552 R/R REJECTED (Long): Entry=1042.52805695142 SL=1037.75 | TP1(VWAP)=1042.09880497834 TP2(Level)=1060 | Selected=1042.09880497834 | Risk=4.7781 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.552 2/1/26 2:52:00 p. m. Trade Skipped (Long). Risk: 4.78 Reward: 0.00 Ratio: 0.00
-18:54:05.571 2/1/26 2:53:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.571 R/R REJECTED (Long): Entry=1042.53541606157 SL=1037.75 | TP1(VWAP)=1042.10316543862 TP2(Level)=1060 | Selected=1042.10316543862 | Risk=4.7854 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.572 2/1/26 2:53:00 p. m. Trade Skipped (Long). Risk: 4.79 Reward: 0.00 Ratio: 0.00
-18:54:05.587 2/1/26 2:54:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.588 R/R REJECTED (Long): Entry=1042.5386274652 SL=1037.75 | TP1(VWAP)=1042.10510458259 TP2(Level)=1060 | Selected=1042.10510458259 | Risk=4.7886 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.588 2/1/26 2:54:00 p. m. Trade Skipped (Long). Risk: 4.79 Reward: 0.00 Ratio: 0.00
-18:54:05.635 2/1/26 2:55:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.636 R/R REJECTED (Long): Entry=1042.54366658227 SL=1037.75 | TP1(VWAP)=1042.10815297927 TP2(Level)=1060 | Selected=1042.10815297927 | Risk=4.7937 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.636 2/1/26 2:55:00 p. m. Trade Skipped (Long). Risk: 4.79 Reward: 0.00 Ratio: 0.00
-18:54:05.644 2/1/26 2:56:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.644 R/R REJECTED (Long): Entry=1042.55128366927 SL=1037.75 | TP1(VWAP)=1042.11269567282 TP2(Level)=1060 | Selected=1042.11269567282 | Risk=4.8013 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.654 2/1/26 2:56:00 p. m. Trade Skipped (Long). Risk: 4.80 Reward: 0.00 Ratio: 0.00
-18:54:05.657 2/1/26 2:57:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.657 R/R REJECTED (Long): Entry=1042.55348908423 SL=1037.75 | TP1(VWAP)=1042.11401354707 TP2(Level)=1060 | Selected=1042.11401354707 | Risk=4.8035 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.657 2/1/26 2:57:00 p. m. Trade Skipped (Long). Risk: 4.80 Reward: 0.00 Ratio: 0.00
-18:54:05.676 2/1/26 2:58:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.676 R/R REJECTED (Long): Entry=1042.55683371708 SL=1037.75 | TP1(VWAP)=1042.11601441343 TP2(Level)=1060 | Selected=1042.11601441343 | Risk=4.8068 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.677 2/1/26 2:58:00 p. m. Trade Skipped (Long). Risk: 4.81 Reward: 0.00 Ratio: 0.00
-18:54:05.688 2/1/26 2:59:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.688 R/R REJECTED (Long): Entry=1042.569754744 SL=1037.75 | TP1(VWAP)=1042.12365772423 TP2(Level)=1060 | Selected=1042.12365772423 | Risk=4.8198 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.688 2/1/26 2:59:00 p. m. Trade Skipped (Long). Risk: 4.82 Reward: 0.00 Ratio: 0.00
-18:54:05.691 2/1/26 3:00:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.691 R/R REJECTED (Long): Entry=1042.57540462324 SL=1037.75 | TP1(VWAP)=1042.12701125393 TP2(Level)=1060 | Selected=1042.12701125393 | Risk=4.8254 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.692 2/1/26 3:00:00 p. m. Trade Skipped (Long). Risk: 4.83 Reward: 0.00 Ratio: 0.00
-18:54:05.711 2/1/26 3:01:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.721 R/R REJECTED (Long): Entry=1042.59288835986 SL=1037.75 | TP1(VWAP)=1042.13719224772 TP2(Level)=1060 | Selected=1042.13719224772 | Risk=4.8429 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.721 2/1/26 3:01:00 p. m. Trade Skipped (Long). Risk: 4.84 Reward: 0.00 Ratio: 0.00
-18:54:05.726 2/1/26 3:02:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.727 R/R REJECTED (Long): Entry=1042.59854098709 SL=1037.75 | TP1(VWAP)=1042.14057463146 TP2(Level)=1060 | Selected=1042.14057463146 | Risk=4.8485 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.727 2/1/26 3:02:00 p. m. Trade Skipped (Long). Risk: 4.85 Reward: 0.00 Ratio: 0.00
-18:54:05.741 2/1/26 3:03:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.743 R/R REJECTED (Long): Entry=1042.60295210789 SL=1037.75 | TP1(VWAP)=1042.14321903556 TP2(Level)=1060 | Selected=1042.14321903556 | Risk=4.8530 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.744 2/1/26 3:03:00 p. m. Trade Skipped (Long). Risk: 4.85 Reward: 0.00 Ratio: 0.00
-18:54:05.759 2/1/26 3:04:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.760 R/R REJECTED (Long): Entry=1042.62422698524 SL=1037.75 | TP1(VWAP)=1042.15586581101 TP2(Level)=1060 | Selected=1042.15586581101 | Risk=4.8742 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.760 2/1/26 3:04:00 p. m. Trade Skipped (Long). Risk: 4.87 Reward: 0.00 Ratio: 0.00
-18:54:05.776 2/1/26 3:05:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.776 R/R REJECTED (Long): Entry=1042.65373898506 SL=1037.75 | TP1(VWAP)=1042.17318079856 TP2(Level)=1060 | Selected=1042.17318079856 | Risk=4.9037 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.777 2/1/26 3:05:00 p. m. Trade Skipped (Long). Risk: 4.90 Reward: 0.00 Ratio: 0.00
-18:54:05.789 2/1/26 3:06:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.789 R/R REJECTED (Long): Entry=1042.66748153542 SL=1037.75 | TP1(VWAP)=1042.18137790271 TP2(Level)=1060 | Selected=1042.18137790271 | Risk=4.9175 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.790 2/1/26 3:06:00 p. m. Trade Skipped (Long). Risk: 4.92 Reward: 0.00 Ratio: 0.00
-18:54:05.794 2/1/26 3:07:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.794 R/R REJECTED (Long): Entry=1042.69670273055 SL=1037.75 | TP1(VWAP)=1042.19892568904 TP2(Level)=1060 | Selected=1042.19892568904 | Risk=4.9467 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.795 2/1/26 3:07:00 p. m. Trade Skipped (Long). Risk: 4.95 Reward: 0.00 Ratio: 0.00
-18:54:05.806 2/1/26 3:08:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.807 R/R REJECTED (Long): Entry=1042.70727014639 SL=1037.75 | TP1(VWAP)=1042.20548888889 TP2(Level)=1060 | Selected=1042.20548888889 | Risk=4.9573 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.807 2/1/26 3:08:00 p. m. Trade Skipped (Long). Risk: 4.96 Reward: 0.00 Ratio: 0.00
-18:54:05.810 2/1/26 3:09:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.811 R/R REJECTED (Long): Entry=1042.71920616557 SL=1037.75 | TP1(VWAP)=1042.21306934028 TP2(Level)=1060 | Selected=1042.21306934028 | Risk=4.9692 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.819 2/1/26 3:09:00 p. m. Trade Skipped (Long). Risk: 4.97 Reward: 0.00 Ratio: 0.00
-18:54:05.839 2/1/26 3:10:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.840 R/R REJECTED (Long): Entry=1042.73379535608 SL=1037.75 | TP1(VWAP)=1042.22207733654 TP2(Level)=1060 | Selected=1042.22207733654 | Risk=4.9838 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.841 2/1/26 3:10:00 p. m. Trade Skipped (Long). Risk: 4.98 Reward: 0.00 Ratio: 0.00
-18:54:05.875 2/1/26 3:11:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.876 R/R REJECTED (Long): Entry=1042.73991254727 SL=1037.75 | TP1(VWAP)=1042.22592707046 TP2(Level)=1060 | Selected=1042.22592707046 | Risk=4.9899 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.876 2/1/26 3:11:00 p. m. Trade Skipped (Long). Risk: 4.99 Reward: 0.00 Ratio: 0.00
-18:54:05.890 2/1/26 3:12:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.890 R/R REJECTED (Long): Entry=1042.77669409648 SL=1037.75 | TP1(VWAP)=1042.2488909346 TP2(Level)=1060 | Selected=1042.2488909346 | Risk=5.0267 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.891 2/1/26 3:12:00 p. m. Trade Skipped (Long). Risk: 5.03 Reward: 0.00 Ratio: 0.00
-18:54:05.908 2/1/26 3:13:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.909 R/R REJECTED (Long): Entry=1042.7905051543 SL=1037.75 | TP1(VWAP)=1042.25758966826 TP2(Level)=1060 | Selected=1042.25758966826 | Risk=5.0405 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.909 2/1/26 3:13:00 p. m. Trade Skipped (Long). Risk: 5.04 Reward: 0.00 Ratio: 0.00
-18:54:05.912 2/1/26 3:14:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.913 R/R REJECTED (Long): Entry=1042.83865918873 SL=1037.75 | TP1(VWAP)=1042.28780208731 TP2(Level)=1060 | Selected=1042.28780208731 | Risk=5.0887 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.913 2/1/26 3:14:00 p. m. Trade Skipped (Long). Risk: 5.09 Reward: 0.00 Ratio: 0.00
-18:54:05.925 2/1/26 3:15:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.926 R/R REJECTED (Long): Entry=1043.03002083078 SL=1037.75 | TP1(VWAP)=1042.41075798719 TP2(Level)=1060 | Selected=1042.41075798719 | Risk=5.2800 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.926 2/1/26 3:15:00 p. m. Trade Skipped (Long). Risk: 5.28 Reward: 0.00 Ratio: 0.00
-18:54:05.929 2/1/26 3:16:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.929 R/R REJECTED (Long): Entry=1043.08625353129 SL=1037.75 | TP1(VWAP)=1042.44826499469 TP2(Level)=1060 | Selected=1042.44826499469 | Risk=5.3363 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.930 2/1/26 3:16:00 p. m. Trade Skipped (Long). Risk: 5.34 Reward: 0.00 Ratio: 0.00
-18:54:05.944 2/1/26 3:17:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.944 R/R REJECTED (Long): Entry=1043.10279703562 SL=1037.75 | TP1(VWAP)=1042.45942326135 TP2(Level)=1060 | Selected=1042.45942326135 | Risk=5.3528 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.944 2/1/26 3:17:00 p. m. Trade Skipped (Long). Risk: 5.35 Reward: 0.00 Ratio: 0.00
-18:54:05.960 2/1/26 3:18:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.965 R/R REJECTED (Long): Entry=1043.12188121162 SL=1037.75 | TP1(VWAP)=1042.47259185455 TP2(Level)=1060 | Selected=1042.47259185455 | Risk=5.3719 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.966 2/1/26 3:18:00 p. m. Trade Skipped (Long). Risk: 5.37 Reward: 0.00 Ratio: 0.00
-18:54:05.977 2/1/26 3:19:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='USA Low' SetupTime='31/12/25 10:30:00 a. m.' RefPrice='1038'
-18:54:05.983 R/R REJECTED (Long): Entry=1043.15905031041 SL=1037.75 | TP1(VWAP)=1042.49802573493 TP2(Level)=1060 | Selected=1042.49802573493 | Risk=5.4091 Reward=0.0000 Ratio=0.00 | Reason: Invalid Direction
-18:54:05.983 2/1/26 3:19:00 p. m. Trade Skipped (Long). Risk: 5.41 Reward: 0.00 Ratio: 0.00
-18:54:05.997 2/1/26 3:20:00 p. m. SESSION CLOSE PROTECT: Cancelling Pending Orders.
+=== ZS Strategy Log - Started 2026-01-04 21:00:00 ===
+
+21:00:00.157 DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
+21:00:00.157 DEBUG_RECONNECT: Total Account.Positions count = 0
+21:00:00.158 4/1/26 9:01:00 p. m. v1.14.29 RESTART EVAL: Checking for pending orders or valid setup to continue...
+21:00:00.158 4/1/26 9:01:00 p. m. v1.14.29 RESTART: No valid setup found. Starting fresh.
+21:00:00.158 4/1/26 9:01:00 p. m. STARTUP: Level 'USA High' is already being touched - will be skipped.
+21:00:00.159 4/1/26 9:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 2/1/26 6:00:00 p. m. NY)
+21:00:00.165 LEVEL SUMMARY (Price=1045.75):
+21:00:00.165   USA High @ 1131 | Currently BELOW by 341 ticks
+21:00:00.165   Europe High @ 1118 | Currently BELOW by 289 ticks
+21:00:00.166   USA High @ 1117 | Currently BELOW by 285 ticks
+21:00:00.166   Asia High @ 1106.5 | Currently BELOW by 243 ticks
+21:00:00.166   Europe High @ 1105.5 | Currently BELOW by 239 ticks
+21:00:00.167   USA High @ 1105.5 | Currently BELOW by 239 ticks
+21:00:00.167   Asia High @ 1105 | Currently BELOW by 237 ticks
+21:00:00.167   Europe High @ 1103.25 | Currently BELOW by 230 ticks
+21:00:00.174   USA High @ 1095.75 | Currently BELOW by 200 ticks
+21:00:00.175   Europe High @ 1090.5 | Currently BELOW by 179 ticks
+21:00:00.175   USA High @ 1088 | Currently BELOW by 169 ticks
+21:00:00.175   Asia High @ 1086.75 | Currently BELOW by 164 ticks
+21:00:00.175   Europe High @ 1086 | Currently BELOW by 161 ticks
+21:00:00.176   USA High @ 1084.25 | Currently BELOW by 154 ticks
+21:00:00.176   USA High @ 1082.5 | Currently BELOW by 147 ticks
+21:00:00.176   Asia High @ 1077.5 | Currently BELOW by 127 ticks
+21:00:00.176   Europe High @ 1073 | Currently BELOW by 109 ticks
+21:00:00.177   USA High @ 1069 | Currently BELOW by 93 ticks
+21:00:00.177   Asia High @ 1067.75 | Currently BELOW by 88 ticks
+21:00:00.177   Europe High @ 1067.75 | Currently BELOW by 88 ticks
+21:00:00.177   USA High @ 1067 | Currently BELOW by 85 ticks
+21:00:00.178   Asia High @ 1064 | Currently BELOW by 73 ticks
+21:00:00.178   Europe High @ 1060.25 | Currently BELOW by 58 ticks
+21:00:00.179   USA High @ 1060 | Currently BELOW by 57 ticks
+21:00:00.179   USA High @ 1047 | Currently BELOW by 5 ticks
+21:00:00.179   USA Low @ 1038 | Currently ABOVE by 31 ticks
+21:01:19.093 4/1/26 9:02:00 p. m. ENTRY ATTEMPT #1/20 on USA High
+21:01:19.094 INTERNAL LEVEL: USA High @ 1047 (External above: Europe High @ 1130.5)
+21:01:23.193 RE-ANCHOR: New High @ 1047.5 (Setup: USA High)
+21:01:23.210 RE-ANCHOR: New High @ 1047.75 (Setup: USA High)
+21:02:24.598 RE-ANCHOR: New High @ 1048 (Setup: USA High)
+21:02:24.817 RE-ANCHOR: New High @ 1048.25 (Setup: USA High)
+21:02:24.895 RE-ANCHOR: New High @ 1048.5 (Setup: USA High)
+21:04:29.016 RE-ANCHOR: New High @ 1048.75 (Setup: USA High)
+21:06:21.103 RE-ANCHOR: New High @ 1049 (Setup: USA High)
+21:07:13.577 4/1/26 9:08:00 p. m. | WAITING SHORT: High[1]=1049.00 VWAP=1048.75 Req=1048.50 ValidVWAP=True Anchor=1049
+21:10:01.249 RE-ANCHOR: New High @ 1049.25 (Setup: USA High)
+21:10:45.532 RE-ANCHOR: New High @ 1049.5 (Setup: USA High)
+21:10:53.601 RE-ANCHOR: New High @ 1049.75 (Setup: USA High)
+21:11:02.755 RE-ANCHOR: New High @ 1050 (Setup: USA High)
+21:11:45.785 RE-ANCHOR: New High @ 1050.25 (Setup: USA High)
+21:14:00.098 4/1/26 9:15:00 p. m. | DEBUG_ENTRY: Calling GetOppositeLevelPrice. SetupName='USA High' SetupTime='2/1/26 10:30:00 a. m.' RefPrice='1050.25'
+21:14:00.098 4/1/26 9:15:00 p. m. | SEARCH_OPPOSITE: Looking for 'USA Low' from SAME DAY as 'USA High' (RefDate: 2026-01-02)
+21:14:00.099    -> Candidate #1: USA Low @ 1115.00 (Date: 2025-12-05, SameDay: False)
+21:14:00.099    -> REJECTED (Different Day): 2025-12-05 != 2026-01-02
+21:14:00.099    -> Candidate #2: USA Low @ 1102.75 (Date: 2025-12-08, SameDay: False)
+21:14:00.099    -> REJECTED (Different Day): 2025-12-08 != 2026-01-02
+21:14:00.100    -> Candidate #3: USA Low @ 1095.00 (Date: 2025-12-09, SameDay: False)
+21:14:00.100    -> REJECTED (Different Day): 2025-12-09 != 2026-01-02
+21:14:00.100    -> Candidate #4: USA Low @ 1092.75 (Date: 2025-12-10, SameDay: False)
+21:14:00.101    -> REJECTED (Different Day): 2025-12-10 != 2026-01-02
+21:14:00.101    -> Candidate #5: USA Low @ 1096.75 (Date: 2025-12-11, SameDay: False)
+21:14:00.101    -> REJECTED (Different Day): 2025-12-11 != 2026-01-02
+21:14:00.101    -> Candidate #6: USA Low @ 1086.25 (Date: 2025-12-12, SameDay: False)
+21:14:00.101    -> REJECTED (Different Day): 2025-12-12 != 2026-01-02
+21:14:00.101    -> Candidate #7: USA Low @ 1077.50 (Date: 2025-12-15, SameDay: False)
+21:14:00.101    -> REJECTED (Different Day): 2025-12-15 != 2026-01-02
+21:14:00.103    -> Candidate #8: USA Low @ 1070.00 (Date: 2025-12-16, SameDay: False)
+21:14:00.103    -> REJECTED (Different Day): 2025-12-16 != 2026-01-02
+21:14:00.103    -> Candidate #9: USA Low @ 1064.00 (Date: 2025-12-17, SameDay: False)
+21:14:00.103    -> REJECTED (Different Day): 2025-12-17 != 2026-01-02
+21:14:00.104    -> Candidate #10: USA Low @ 1061.50 (Date: 2025-12-18, SameDay: False)
+21:14:00.104    -> REJECTED (Different Day): 2025-12-18 != 2026-01-02
+21:14:00.104    -> Candidate #11: USA Low @ 1057.50 (Date: 2025-12-19, SameDay: False)
+21:14:00.105    -> REJECTED (Different Day): 2025-12-19 != 2026-01-02
+21:14:00.105    -> Candidate #12: USA Low @ 1060.75 (Date: 2025-12-22, SameDay: False)
+21:14:00.105    -> REJECTED (Different Day): 2025-12-22 != 2026-01-02
+21:14:00.105    -> Candidate #13: USA Low @ 1062.50 (Date: 2025-12-23, SameDay: False)
+21:14:00.105    -> REJECTED (Different Day): 2025-12-23 != 2026-01-02
+21:14:00.106    -> Candidate #14: USA Low @ 1068.75 (Date: 2025-12-24, SameDay: False)
+21:14:00.107    -> REJECTED (Different Day): 2025-12-24 != 2026-01-02
+21:14:00.107    -> Candidate #15: USA Low @ 1070.75 (Date: 2025-12-26, SameDay: False)
+21:14:00.107    -> REJECTED (Different Day): 2025-12-26 != 2026-01-02
+21:14:00.107    -> Candidate #16: USA Low @ 1063.00 (Date: 2025-12-29, SameDay: False)
+21:14:00.108    -> REJECTED (Different Day): 2025-12-29 != 2026-01-02
+21:14:00.108    -> Candidate #17: USA Low @ 1060.75 (Date: 2025-12-30, SameDay: False)
+21:14:00.108    -> REJECTED (Different Day): 2025-12-30 != 2026-01-02
+21:14:00.108    -> Candidate #18: USA Low @ 1047.00 (Date: 2025-12-31, SameDay: False)
+21:14:00.109    -> REJECTED (Different Day): 2025-12-31 != 2026-01-02
+21:14:00.109    -> Candidate #19: USA Low @ 1038.00 (Date: 2026-01-02, SameDay: True)
+21:14:00.109    -> ACCEPTED (Same Day): USA Low @ 1038.00
+21:14:00.111 4/1/26 9:15:00 p. m. | EXEC_DEBUG: Submitting Short Limit @ 1050 (Raw: 1050.02112676056). Bid=1049.25 Ask=1049.5
+21:14:00.112 4/1/26 9:15:00 p. m. Order Submitted (Short Consolidated). Qty=4
+21:15:28.819 4/1/26 9:16:00 p. m. | DYNAMIC QTY ADJUST: Old=4 New=3 (Stop moved to 1050.50)
+21:15:52.704 NinjaTrader.NinjaScript.TimeSeries Entry Filled (EntryA+_Short_01) Qty=3. State -> PositionActive. TradeOriginalQty=3
+21:15:52.705 NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Short @ 1050
+21:15:52.705 DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Short FilledQty=3 Position.Qty=3 Position.MarketPosition=Short SecsSinceClose=63903158152.7
+21:15:52.705 4/1/26 9:16:00 p. m. TRADE VWAP: Initialized @ 1047.78225165563
+21:15:52.705    -> Protection Alloc: Filled=3 | ForTP1=2 (Need:2) | ForTP2=1
+21:15:52.705 FORCE TARGET: Using Validated Price: 1038
+21:15:52.707 TP CALC (Short): Entry=1050 | GlobalVWAP=1047.78225165563 | ZoneOpp=1038 (Val=1038) | TP1=1047.78225165563 TP2=1038 | Selected=1047.75
+21:15:52.707 SL CREATED: SL_Short_01 @ 1050.5 Qty=3 Risk=$75.00
+21:15:52.708 TP1 CREATED: TP1_Short_01 @ 1047.75 Qty=2
+21:15:52.714 FORCE TARGET: Using Validated Price: 1038
+21:15:52.714 TP CALC (Short): Entry=1050 | GlobalVWAP=1047.78225165563 | ZoneOpp=1038 (Val=1038) | TP1=1047.78225165563 TP2=1038 | Selected=1038
+21:15:52.715 SL CLEANUP: Clearing stale reference (State=Initialized)
+21:15:52.715 SL SKIPPED: Already created in current entry (duplicate prevention)
+21:15:52.717 TP2 CREATED: TP2_Short_01 @ 1038 Qty=1
+21:15:52.717 4/1/26 9:16:00 p. m. EnsureProtection COMPLETE: protectionOrdersCreated = true
+21:18:26.624 NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 closed - SL_Short_01 PnL=-75.00
+21:18:26.624 NinjaTrader.NinjaScript.TimeSeries Position Closed (SL_Short_01). Resetting to Idle.
+21:18:26.626 NinjaTrader.NinjaScript.TimeSeries VWAP RETRY: Waiting for price to break 1050.25 for VWAP#2
+21:18:26.626 CLEANUP: Cancelled orphan tp1Order
+21:18:26.627 CLEANUP: Cancelled orphan tp2Order
+21:18:26.630 4/1/26 9:18:26 p. m. TRADE CLOSED: TR_SHORT at 1050, Exit at 1050.5, Profit: $-75,00
+21:18:28.909 4/1/26 9:19:00 p. m. VWAP#2 CREATED @ 1050.75 - Ready for entry
+21:18:32.282 RE-ANCHOR: New High @ 1051 (Setup: USA High)
+21:18:32.619 RE-ANCHOR: New High @ 1051.25 (Setup: USA High)
+21:18:33.026 RE-ANCHOR: New High @ 1051.5 (Setup: USA High)
+21:19:05.219 RE-ANCHOR: New High @ 1051.75 (Setup: USA High)
+21:23:07.802 4/1/26 9:24:00 p. m. | DEBUG_ENTRY: Calling GetOppositeLevelPrice. SetupName='USA High' SetupTime='2/1/26 10:30:00 a. m.' RefPrice='1051.75'
+21:23:07.804 4/1/26 9:24:00 p. m. | SEARCH_OPPOSITE: Looking for 'USA Low' from SAME DAY as 'USA High' (RefDate: 2026-01-02)
+21:23:07.804    -> Candidate #1: USA Low @ 1115.00 (Date: 2025-12-05, SameDay: False)
+21:23:07.804    -> REJECTED (Different Day): 2025-12-05 != 2026-01-02
+21:23:07.805    -> Candidate #2: USA Low @ 1102.75 (Date: 2025-12-08, SameDay: False)
+21:23:07.805    -> REJECTED (Different Day): 2025-12-08 != 2026-01-02
+21:23:07.805    -> Candidate #3: USA Low @ 1095.00 (Date: 2025-12-09, SameDay: False)
+21:23:07.805    -> REJECTED (Different Day): 2025-12-09 != 2026-01-02
+21:23:07.805    -> Candidate #4: USA Low @ 1092.75 (Date: 2025-12-10, SameDay: False)
+21:23:07.806    -> REJECTED (Different Day): 2025-12-10 != 2026-01-02
+21:23:07.806    -> Candidate #5: USA Low @ 1096.75 (Date: 2025-12-11, SameDay: False)
+21:23:07.806    -> REJECTED (Different Day): 2025-12-11 != 2026-01-02
+21:23:07.806    -> Candidate #6: USA Low @ 1086.25 (Date: 2025-12-12, SameDay: False)
+21:23:07.807    -> REJECTED (Different Day): 2025-12-12 != 2026-01-02
+21:23:07.807    -> Candidate #7: USA Low @ 1077.50 (Date: 2025-12-15, SameDay: False)
+21:23:07.808    -> REJECTED (Different Day): 2025-12-15 != 2026-01-02
+21:23:07.808    -> Candidate #8: USA Low @ 1070.00 (Date: 2025-12-16, SameDay: False)
+21:23:07.808    -> REJECTED (Different Day): 2025-12-16 != 2026-01-02
+21:23:07.809    -> Candidate #9: USA Low @ 1064.00 (Date: 2025-12-17, SameDay: False)
+21:23:07.809    -> REJECTED (Different Day): 2025-12-17 != 2026-01-02
+21:23:07.809    -> Candidate #10: USA Low @ 1061.50 (Date: 2025-12-18, SameDay: False)
+21:23:07.809    -> REJECTED (Different Day): 2025-12-18 != 2026-01-02
+21:23:07.810    -> Candidate #11: USA Low @ 1057.50 (Date: 2025-12-19, SameDay: False)
+21:23:07.810    -> REJECTED (Different Day): 2025-12-19 != 2026-01-02
+21:23:07.810    -> Candidate #12: USA Low @ 1060.75 (Date: 2025-12-22, SameDay: False)
+21:23:07.811    -> REJECTED (Different Day): 2025-12-22 != 2026-01-02
+21:23:07.811    -> Candidate #13: USA Low @ 1062.50 (Date: 2025-12-23, SameDay: False)
+21:23:07.812    -> REJECTED (Different Day): 2025-12-23 != 2026-01-02
+21:23:07.812    -> Candidate #14: USA Low @ 1068.75 (Date: 2025-12-24, SameDay: False)
+21:23:07.812    -> REJECTED (Different Day): 2025-12-24 != 2026-01-02
+21:23:07.815    -> Candidate #15: USA Low @ 1070.75 (Date: 2025-12-26, SameDay: False)
+21:23:07.816    -> REJECTED (Different Day): 2025-12-26 != 2026-01-02
+21:23:07.816    -> Candidate #16: USA Low @ 1063.00 (Date: 2025-12-29, SameDay: False)
+21:23:07.816    -> REJECTED (Different Day): 2025-12-29 != 2026-01-02
+21:23:07.816    -> Candidate #17: USA Low @ 1060.75 (Date: 2025-12-30, SameDay: False)
+21:23:07.816    -> REJECTED (Different Day): 2025-12-30 != 2026-01-02
+21:23:07.818    -> Candidate #18: USA Low @ 1047.00 (Date: 2025-12-31, SameDay: False)
+21:23:07.818    -> REJECTED (Different Day): 2025-12-31 != 2026-01-02
+21:23:07.819    -> Candidate #19: USA Low @ 1038.00 (Date: 2026-01-02, SameDay: True)
+21:23:07.819    -> ACCEPTED (Same Day): USA Low @ 1038.00
+21:23:07.819 4/1/26 9:24:00 p. m. | EXEC_DEBUG: Submitting Short Limit @ 1051.5 (Raw: 1051.55772357724). Bid=1051.25 Ask=1051.5
+21:23:07.823 4/1/26 9:24:00 p. m. Order Submitted (Short Consolidated). Qty=4
+21:23:13.618 NinjaTrader.NinjaScript.TimeSeries Entry Filled (EntryA+_Short_02) Qty=4. State -> PositionActive. TradeOriginalQty=4
+21:23:13.618 NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #2 started - Short @ 1051.5
+21:23:13.618 DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Short FilledQty=4 Position.Qty=4 Position.MarketPosition=Short SecsSinceClose=287.0
+21:23:13.618 4/1/26 9:24:00 p. m. TRADE VWAP: Initialized @ 1048.57290620607
+21:23:13.618    -> Protection Alloc: Filled=4 | ForTP1=2 (Need:2) | ForTP2=2
+21:23:13.622 FORCE TARGET: Using Validated Price: 1038
+21:23:13.623 TP CALC (Short): Entry=1051.5 | GlobalVWAP=1048.57290620607 | ZoneOpp=1038 (Val=1038) | TP1=1048.57290620607 TP2=1038 | Selected=1048.5
+21:23:13.627 SL CREATED: SL_Short_02 @ 1052 Qty=4 Risk=$100.00
+21:23:13.629 TP1 CREATED: TP1_Short_02 @ 1048.5 Qty=2
+21:23:13.629 FORCE TARGET: Using Validated Price: 1038
+21:23:13.629 TP CALC (Short): Entry=1051.5 | GlobalVWAP=1048.5734939759 | ZoneOpp=1038 (Val=1038) | TP1=1048.5734939759 TP2=1038 | Selected=1038
+21:23:13.630 SL CLEANUP: Clearing stale reference (State=Initialized)
+21:23:13.630 SL SKIPPED: Already created in current entry (duplicate prevention)
+21:23:13.631 TP2 CREATED: TP2_Short_02 @ 1038 Qty=2
+21:23:13.632 4/1/26 9:24:00 p. m. EnsureProtection COMPLETE: protectionOrdersCreated = true
+22:47:26.280 DEBUG: OnStateChange(DataLoaded) IsUnmanaged = True
+22:47:26.294 DEBUG_CONTEXT: Account = 'DEMO619219', Context = 'DEMO619219'
+22:47:26.295 CSV EXPORT: Using existing C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\TradeExports\DEMO619219\ZS_03-26.csv
+22:47:26.310 4/12/25 9:01:00 p. m. CONTROL BUTTONS: Initialized (Bottom Right)
+22:47:26.439 CRITICAL ERROR in OnBarUpdate at Bar 20: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+   at System.ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument argument, ExceptionResource resource)
+   at NinjaTrader.NinjaScript.Series`1.get_Item(Int32 barsAgo)
+   at NinjaTrader.NinjaScript.NinjaScriptBase.get_Item(Int32 barsAgo)
+   at NinjaTrader.NinjaScript.Strategies.SessionLevelsStrategy.OnBarUpdate() in C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\SessionLevelsStrategy.cs:line 1371
+22:47:26.440 CRITICAL ERROR in OnBarUpdate at Bar 21: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+   at System.ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument argument, ExceptionResource resource)
+   at NinjaTrader.NinjaScript.Series`1.get_Item(Int32 barsAgo)
+   at NinjaTrader.NinjaScript.NinjaScriptBase.get_Item(Int32 barsAgo)
+   at NinjaTrader.NinjaScript.Strategies.SessionLevelsStrategy.OnBarUpdate() in C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\SessionLevelsStrategy.cs:line 1371
+22:47:26.441 CRITICAL ERROR in OnBarUpdate at Bar 22: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+   at System.ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument argument, ExceptionResource resource)
+   at NinjaTrader.NinjaScript.Series`1.get_Item(Int32 barsAgo)
+   at NinjaTrader.NinjaScript.NinjaScriptBase.get_Item(Int32 barsAgo)
+   at NinjaTrader.NinjaScript.Strategies.SessionLevelsStrategy.OnBarUpdate() in C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\SessionLevelsStrategy.cs:line 1371
+22:47:26.442 CRITICAL ERROR in OnBarUpdate at Bar 23: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+   at System.ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument argument, ExceptionResource resource)
+   at NinjaTrader.NinjaScript.Series`1.get_Item(Int32 barsAgo)
+   at NinjaTrader.NinjaScript.NinjaScriptBase.get_Item(Int32 barsAgo)
+   at NinjaTrader.NinjaScript.Strategies.SessionLevelsStrategy.OnBarUpdate() in C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\SessionLevelsStrategy.cs:line 1371
+22:47:26.442 CRITICAL ERROR in OnBarUpdate at Bar 24: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+   at System.ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument argument, ExceptionResource resource)
+   at NinjaTrader.NinjaScript.Series`1.get_Item(Int32 barsAgo)
+   at NinjaTrader.NinjaScript.NinjaScriptBase.get_Item(Int32 barsAgo)
+   at NinjaTrader.NinjaScript.Strategies.SessionLevelsStrategy.OnBarUpdate() in C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\SessionLevelsStrategy.cs:line 1371
+22:47:26.443 CRITICAL ERROR in OnBarUpdate at Bar 25: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+   at System.ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument argument, ExceptionResource resource)
+   at NinjaTrader.NinjaScript.Series`1.get_Item(Int32 barsAgo)
+   at NinjaTrader.NinjaScript.NinjaScriptBase.get_Item(Int32 barsAgo)
+   at NinjaTrader.NinjaScript.Strategies.SessionLevelsStrategy.OnBarUpdate() in C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\SessionLevelsStrategy.cs:line 1371
+22:47:26.443 CRITICAL ERROR in OnBarUpdate at Bar 26: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+   at System.ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument argument, ExceptionResource resource)
+   at NinjaTrader.NinjaScript.Series`1.get_Item(Int32 barsAgo)
+   at NinjaTrader.NinjaScript.NinjaScriptBase.get_Item(Int32 barsAgo)
+   at NinjaTrader.NinjaScript.Strategies.SessionLevelsStrategy.OnBarUpdate() in C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\SessionLevelsStrategy.cs:line 1371
+22:47:26.444 CRITICAL ERROR in OnBarUpdate at Bar 27: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+   at System.ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument argument, ExceptionResource resource)
+   at NinjaTrader.NinjaScript.Series`1.get_Item(Int32 barsAgo)
+   at NinjaTrader.NinjaScript.NinjaScriptBase.get_Item(Int32 barsAgo)
+   at NinjaTrader.NinjaScript.Strategies.SessionLevelsStrategy.OnBarUpdate() in C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\SessionLevelsStrategy.cs:line 1371
+22:47:26.445 CRITICAL ERROR in OnBarUpdate at Bar 28: System.ArgumentOutOfRangeException: Index was out of range. Must be non-negative and less than the size of the collection.
+Parameter name: index
+   at System.ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument argument, ExceptionResource resource)
+   at NinjaTrader.NinjaScript.Series`1.get_Item(Int32 barsAgo)
+   at NinjaTrader.NinjaScript.NinjaScriptBase.get_Item(Int32 barsAgo)
+   at NinjaTrader.NinjaScript.Strategies.SessionLevelsStrategy.OnBarUpdate() in C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\SessionLevelsStrategy.cs:line 1371

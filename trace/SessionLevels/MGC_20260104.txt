@@ -1,67 +1,9 @@
-=== MGC Strategy Log - Started 2026-01-04 19:00:00 ===
+=== MGC Strategy Log - Started 2026-01-04 23:00:20 ===
 
-19:00:00.654 DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
-19:00:00.654 DEBUG_RECONNECT: Total Account.Positions count = 0
-19:00:00.655 4/1/26 7:01:00 p. m. v1.14.28 RESTART EVAL: Checking for pending orders or valid setup to continue...
-19:00:00.655 4/1/26 7:01:00 p. m. v1.14.28 RESTART: No valid setup found. Starting fresh.
-19:00:00.655 4/1/26 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 2/1/26 6:00:00 p. m. NY)
-19:00:00.655 LEVEL SUMMARY (Price=4367.1):
-19:00:00.655   Asia Low @ 4197.4 | Currently ABOVE by 1697 ticks
-19:00:00.656   USA Low @ 4208 | Currently ABOVE by 1591 ticks
-19:00:00.656   Asia Low @ 4231.4 | Currently ABOVE by 1357 ticks
-19:00:00.656   Europe Low @ 4232 | Currently ABOVE by 1351 ticks
-19:00:00.656   USA Low @ 4254 | Currently ABOVE by 1131 ticks
-19:00:00.658   USA High @ 4584 | Currently BELOW by 2169 ticks
-19:00:00.658   Asia High @ 4581.2 | Currently BELOW by 2141 ticks
-19:00:00.658   Europe High @ 4510.4 | Currently BELOW by 1433 ticks
-19:00:00.658   Europe High @ 4420.5 | Currently BELOW by 534 ticks
-19:00:00.659   Asia Low @ 4284.5 | Currently ABOVE by 826 ticks
-19:00:00.659   Europe Low @ 4314.6 | Currently ABOVE by 525 ticks
-19:00:00.660   USA Low @ 4316.8 | Currently ABOVE by 503 ticks
-19:00:00.660   Europe High @ 4415 | Currently BELOW by 479 ticks
-19:00:00.660   USA High @ 4382.1 | Currently BELOW by 150 ticks
-19:00:00.661   USA Low @ 4319.5 | Currently ABOVE by 476 ticks
-19:15:38.426 4/1/26 7:16:00 p. m. ENTRY ATTEMPT #1/20 on USA High
-19:15:38.427 INTERNAL LEVEL: USA High @ 4382.1 (External above: Asia High @ 4581.2)
-19:19:00.153 4/1/26 7:20:00 p. m. | DEBUG_ENTRY: Calling GetOppositeLevelPrice. SetupName='USA High' SetupTime='2/1/26 10:30:00 a. m.' RefPrice='4382.2'
-19:19:00.154 4/1/26 7:20:00 p. m. | SEARCH_OPPOSITE: Looking for 'USA Low' from SAME DAY as 'USA High' (RefDate: 2026-01-02)
-19:19:00.154    -> Candidate #1: USA Low @ 4221.40 (Date: 2025-12-05, SameDay: False)
-19:19:00.154    -> REJECTED (Different Day): 2025-12-05 != 2026-01-02
-19:19:00.154    -> Candidate #2: USA Low @ 4204.00 (Date: 2025-12-08, SameDay: False)
-19:19:00.154    -> REJECTED (Different Day): 2025-12-08 != 2026-01-02
-19:19:00.155    -> Candidate #3: USA Low @ 4218.60 (Date: 2025-12-09, SameDay: False)
-19:19:00.156    -> REJECTED (Different Day): 2025-12-09 != 2026-01-02
-19:19:00.156    -> Candidate #4: USA Low @ 4208.00 (Date: 2025-12-10, SameDay: False)
-19:19:00.156    -> REJECTED (Different Day): 2025-12-10 != 2026-01-02
-19:19:00.156    -> Candidate #5: USA Low @ 4254.00 (Date: 2025-12-11, SameDay: False)
-19:19:00.156    -> REJECTED (Different Day): 2025-12-11 != 2026-01-02
-19:19:00.156    -> Candidate #6: USA Low @ 4286.30 (Date: 2025-12-12, SameDay: False)
-19:19:00.158    -> REJECTED (Different Day): 2025-12-12 != 2026-01-02
-19:19:00.158    -> Candidate #7: USA Low @ 4315.60 (Date: 2025-12-15, SameDay: False)
-19:19:00.158    -> REJECTED (Different Day): 2025-12-15 != 2026-01-02
-19:19:00.158    -> Candidate #8: USA Low @ 4322.90 (Date: 2025-12-16, SameDay: False)
-19:19:00.158    -> REJECTED (Different Day): 2025-12-16 != 2026-01-02
-19:19:00.159    -> Candidate #9: USA Low @ 4350.80 (Date: 2025-12-17, SameDay: False)
-19:19:00.159    -> REJECTED (Different Day): 2025-12-17 != 2026-01-02
-19:19:00.159    -> Candidate #10: USA Low @ 4338.00 (Date: 2025-12-18, SameDay: False)
-19:19:00.159    -> REJECTED (Different Day): 2025-12-18 != 2026-01-02
-19:19:00.160    -> Candidate #11: USA Low @ 4350.60 (Date: 2025-12-19, SameDay: False)
-19:19:00.160    -> REJECTED (Different Day): 2025-12-19 != 2026-01-02
-19:19:00.160    -> Candidate #12: USA Low @ 4447.50 (Date: 2025-12-22, SameDay: False)
-19:19:00.160    -> REJECTED (Different Day): 2025-12-22 != 2026-01-02
-19:19:00.160    -> Candidate #13: USA Low @ 4458.70 (Date: 2025-12-23, SameDay: False)
-19:19:00.160    -> REJECTED (Different Day): 2025-12-23 != 2026-01-02
-19:19:00.160    -> Candidate #14: USA Low @ 4474.00 (Date: 2025-12-24, SameDay: False)
-19:19:00.161    -> REJECTED (Different Day): 2025-12-24 != 2026-01-02
-19:19:00.161    -> Candidate #15: USA Low @ 4543.40 (Date: 2025-12-26, SameDay: False)
-19:19:00.161    -> REJECTED (Different Day): 2025-12-26 != 2026-01-02
-19:19:00.161    -> Candidate #16: USA Low @ 4319.40 (Date: 2025-12-29, SameDay: False)
-19:19:00.162    -> REJECTED (Different Day): 2025-12-29 != 2026-01-02
-19:19:00.162    -> Candidate #17: USA Low @ 4349.40 (Date: 2025-12-30, SameDay: False)
-19:19:00.162    -> REJECTED (Different Day): 2025-12-30 != 2026-01-02
-19:19:00.162    -> Candidate #18: USA Low @ 4316.80 (Date: 2025-12-31, SameDay: False)
-19:19:00.162    -> REJECTED (Different Day): 2025-12-31 != 2026-01-02
-19:19:00.163    -> Candidate #19: USA Low @ 4319.50 (Date: 2026-01-02, SameDay: True)
-19:19:00.163    -> ACCEPTED (Same Day): USA Low @ 4319.50
-19:19:00.163 4/1/26 7:20:00 p. m. | EXEC_DEBUG: Submitting Short Limit @ 4376.8 (Raw: 4376.83485221675). Bid=4373.4 Ask=4373.6
-19:19:00.164 4/1/26 7:20:00 p. m. Order Submitted (Short Consolidated). Qty=2
+23:00:20.579 DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
+23:00:20.580 DEBUG_RECONNECT: Total Account.Positions count = 0
+23:00:20.585 4/1/26 11:01:00 p. m. v1.14.32 RESTART EVAL: Checking for pending orders or valid setup to continue...
+23:00:20.585 4/1/26 11:01:00 p. m. v1.14.32 RESTART: No valid setup found. Starting fresh.
+23:22:06.623 DEBUG: OnStateChange(DataLoaded) IsUnmanaged = True
+23:22:06.644 DEBUG_CONTEXT: Account = 'Backtest', Context = 'backtest'
+23:22:06.646 CSV EXPORT: Created C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\TradeExports\backtest\MGC_02-26.csv

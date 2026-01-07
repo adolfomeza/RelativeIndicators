@@ -2,7 +2,7 @@ Title,Country,Date,Time,Impact,Forecast,Previous,URL
 FOMC Member Kashkari Speaks,USD,01-04-2026,5:30pm,Low,,,https://www.metalsmine.com/calendar/651-us-fomc-member-kashkari-speaks
 RatingDog Services PMI,CNY,01-05-2026,1:45am,Low,52.0,52.1,https://www.metalsmine.com/calendar/591-ch-ratingdog-services-pmi
 Manufacturing PMI,CHF,01-05-2026,8:30am,Low,49.7,49.7,https://www.metalsmine.com/calendar/273-sz-manufacturing-pmi
-LME Copper Inventories,GBP,01-05-2026,9:00am,Medium,,,https://www.metalsmine.com/calendar/693-uk-lme-copper-inventories
+LME Copper Inventories,GBP,01-05-2026,9:00am,Medium,,-2100,https://www.metalsmine.com/calendar/693-uk-lme-copper-inventories
 M4 Money Supply m/m,GBP,01-05-2026,9:30am,Low,-0.1%,-0.2%,https://www.metalsmine.com/calendar/348-uk-m4-money-supply-mm
 ISM Manufacturing PMI,USD,01-05-2026,3:00pm,Medium,48.3,48.2,https://www.metalsmine.com/calendar/252-us-ism-manufacturing-pmi
 ISM Manufacturing Prices,USD,01-05-2026,3:00pm,Low,59.0,58.5,https://www.metalsmine.com/calendar/255-us-ism-manufacturing-prices
@@ -11,52 +11,54 @@ Monetary Base y/y,JPY,01-05-2026,11:50pm,Low,-8.0%,-8.5%,https://www.metalsmine.
 Prelim CPI m/m,EUR,01-06-2026,7:29am,Low,0.3%,-0.2%,https://www.metalsmine.com/calendar/169-ge-prelim-cpi-mm
 Prelim CPI m/m,EUR,01-06-2026,7:45am,Low,0.2%,-0.1%,https://www.metalsmine.com/calendar/556-fr-prelim-cpi-mm
 Final Services PMI,EUR,01-06-2026,8:55am,Low,52.6,52.6,https://www.metalsmine.com/calendar/620-ge-final-services-pmi
-LME Copper Inventories,GBP,01-06-2026,9:00am,Medium,,,https://www.metalsmine.com/calendar/693-uk-lme-copper-inventories
+LME Copper Inventories,GBP,01-06-2026,9:00am,Medium,,-2775,https://www.metalsmine.com/calendar/693-uk-lme-copper-inventories
 Final Services PMI,GBP,01-06-2026,9:30am,Low,52.1,52.1,https://www.metalsmine.com/calendar/250-uk-final-services-pmi
 FOMC Member Barkin Speaks,USD,01-06-2026,1:00pm,Low,,,https://www.metalsmine.com/calendar/728-us-fomc-member-barkin-speaks
 Final Services PMI,USD,01-06-2026,2:45pm,Low,52.9,52.9,https://www.metalsmine.com/calendar/584-us-final-services-pmi
+President Trump Speaks,USD,01-06-2026,7:00pm,Medium,,,https://www.metalsmine.com/calendar/645-us-president-trump-speaks
 CPI m/m,AUD,01-07-2026,12:30am,Low,0.1%,0.0%,https://www.metalsmine.com/calendar/98-au-cpi-mm
-CPI y/y,AUD,01-07-2026,12:30am,Low,3.7%,3.8%,https://www.metalsmine.com/calendar/888-au-cpi-yy
-Trimmed Mean CPI m/m,AUD,01-07-2026,12:30am,Low,0.2%,1.0%,https://www.metalsmine.com/calendar/99-au-trimmed-mean-cpi-mm
-Foreign Currency Reserves,CHF,01-07-2026,8:00am,Low,,727B,https://www.metalsmine.com/calendar/517-sz-foreign-currency-reserves
-LME Copper Inventories,GBP,01-07-2026,9:00am,Medium,,,https://www.metalsmine.com/calendar/693-uk-lme-copper-inventories
-Construction PMI,GBP,01-07-2026,9:30am,Low,42.7,39.4,https://www.metalsmine.com/calendar/251-uk-construction-pmi
+CPI y/y,AUD,01-07-2026,12:30am,Low,3.6%,3.8%,https://www.metalsmine.com/calendar/888-au-cpi-yy
+Trimmed Mean CPI m/m,AUD,01-07-2026,12:30am,Low,0.2%,0.3%,https://www.metalsmine.com/calendar/99-au-trimmed-mean-cpi-mm
+LME Copper Inventories,GBP,01-07-2026,9:00am,Medium,,3525,https://www.metalsmine.com/calendar/693-uk-lme-copper-inventories
+Construction PMI,GBP,01-07-2026,9:30am,Low,42.4,39.4,https://www.metalsmine.com/calendar/251-uk-construction-pmi
 Core CPI Flash Estimate y/y,EUR,01-07-2026,10:00am,Low,2.4%,2.4%,https://www.metalsmine.com/calendar/593-ez-core-cpi-flash-estimate-yy
 CPI Flash Estimate y/y,EUR,01-07-2026,10:00am,Low,2.0%,2.2%,https://www.metalsmine.com/calendar/168-ez-cpi-flash-estimate-yy
-Prelim CPI m/m,EUR,01-07-2026,10:00am,Low,0.1%,-0.2%,https://www.metalsmine.com/calendar/172-it-prelim-cpi-mm
-ADP Non-Farm Employment Change,USD,01-07-2026,1:15pm,Medium,47K,-32K,https://www.metalsmine.com/calendar/75-us-adp-non-farm-employment-change
+Prelim CPI m/m,EUR,01-07-2026,10:00am,Low,0.2%,-0.2%,https://www.metalsmine.com/calendar/172-it-prelim-cpi-mm
+ADP Non-Farm Employment Change,USD,01-07-2026,1:15pm,Medium,49K,-32K,https://www.metalsmine.com/calendar/75-us-adp-non-farm-employment-change
 Ivey PMI,CAD,01-07-2026,3:00pm,Low,49.5,48.4,https://www.metalsmine.com/calendar/254-ca-ivey-pmi
-ISM Services PMI,USD,01-07-2026,3:00pm,High,52.3,52.6,https://www.metalsmine.com/calendar/253-us-ism-services-pmi
-JOLTS Job Openings,USD,01-07-2026,3:00pm,Medium,7.65M,7.67M,https://www.metalsmine.com/calendar/578-us-jolts-job-openings
+ISM Services PMI,USD,01-07-2026,3:00pm,High,52.2,52.6,https://www.metalsmine.com/calendar/253-us-ism-services-pmi
+JOLTS Job Openings,USD,01-07-2026,3:00pm,Medium,7.61M,7.67M,https://www.metalsmine.com/calendar/578-us-jolts-job-openings
 Factory Orders m/m,USD,01-07-2026,3:00pm,Low,-1.1%,0.2%,https://www.metalsmine.com/calendar/351-us-factory-orders-mm
 FOMC Member Bowman Speaks,USD,01-07-2026,6:10pm,Low,,,https://www.metalsmine.com/calendar/812-us-fomc-member-bowman-speaks
-Goods Trade Balance,AUD,01-08-2026,12:30am,Low,5.55B,4.39B,https://www.metalsmine.com/calendar/122-au-goods-trade-balance
+Goods Trade Balance,AUD,01-08-2026,12:30am,Low,5.14B,4.39B,https://www.metalsmine.com/calendar/122-au-goods-trade-balance
 Factory Orders m/m,EUR,01-08-2026,7:00am,Low,-0.9%,1.5%,https://www.metalsmine.com/calendar/352-ge-factory-orders-mm
 CPI m/m,CHF,01-08-2026,7:30am,Low,0.0%,-0.2%,https://www.metalsmine.com/calendar/100-sz-cpi-mm
 Trade Balance,EUR,01-08-2026,7:45am,Low,-4.3B,-3.9B,https://www.metalsmine.com/calendar/126-fr-trade-balance
 Summary of Monetary Policy Discussions,CHF,01-08-2026,8:30am,Low,,,https://www.metalsmine.com/calendar/928-sz-summary-of-monetary-policy-discussions
-LME Copper Inventories,GBP,01-08-2026,9:00am,Medium,,,https://www.metalsmine.com/calendar/693-uk-lme-copper-inventories
+LME Copper Inventories,GBP,01-08-2026,9:00am,Medium,,-2850,https://www.metalsmine.com/calendar/693-uk-lme-copper-inventories
 Manufacturing Production m/m,ZAR,01-08-2026,11:00am,Low,0.5%,1.0%,https://www.metalsmine.com/calendar/790-sa-manufacturing-production-mm
-Industrial Production m/m,BRL,01-08-2026,12:00pm,Low,0.4%,0.1%,https://www.metalsmine.com/calendar/782-bz-industrial-production-mm
-Trade Balance,CAD,01-08-2026,1:30pm,Low,-1.5B,0.2B,https://www.metalsmine.com/calendar/118-ca-trade-balance
-Unemployment Claims,USD,01-08-2026,1:30pm,Medium,216K,199K,https://www.metalsmine.com/calendar/11-us-unemployment-claims
-Trade Balance,USD,01-08-2026,1:30pm,Low,-58.5B,-52.8B,https://www.metalsmine.com/calendar/117-us-trade-balance
+Industrial Production m/m,BRL,01-08-2026,12:00pm,Low,0.2%,0.1%,https://www.metalsmine.com/calendar/782-bz-industrial-production-mm
+Trade Balance,CAD,01-08-2026,1:30pm,Low,-1.4B,0.2B,https://www.metalsmine.com/calendar/118-ca-trade-balance
+Unemployment Claims,USD,01-08-2026,1:30pm,Medium,213K,199K,https://www.metalsmine.com/calendar/11-us-unemployment-claims
+Trade Balance,USD,01-08-2026,1:30pm,Low,-58.1B,-52.8B,https://www.metalsmine.com/calendar/117-us-trade-balance
 Final Wholesale Inventories m/m,USD,01-08-2026,3:00pm,Low,0.2%,0.5%,https://www.metalsmine.com/calendar/154-us-final-wholesale-inventories-mm
 CPI y/y,CNY,01-09-2026,1:30am,Low,0.8%,0.7%,https://www.metalsmine.com/calendar/454-ch-cpi-yy
-PPI y/y,CNY,01-09-2026,1:30am,Low,-1.5%,-2.2%,https://www.metalsmine.com/calendar/455-ch-ppi-yy
-Industrial Production m/m,EUR,01-09-2026,7:00am,Low,-0.5%,1.8%,https://www.metalsmine.com/calendar/221-ge-industrial-production-mm
+PPI y/y,CNY,01-09-2026,1:30am,Low,-2.0%,-2.2%,https://www.metalsmine.com/calendar/455-ch-ppi-yy
+Industrial Production m/m,EUR,01-09-2026,7:00am,Low,-0.6%,1.8%,https://www.metalsmine.com/calendar/221-ge-industrial-production-mm
 Trade Balance,EUR,01-09-2026,7:00am,Low,16.3B,16.9B,https://www.metalsmine.com/calendar/125-ge-trade-balance
 Industrial Production m/m,EUR,01-09-2026,7:45am,Low,-0.2%,0.2%,https://www.metalsmine.com/calendar/222-fr-industrial-production-mm
-Industrial Production m/m,MXN,01-09-2026,12:00pm,Low,0.4%,0.7%,https://www.metalsmine.com/calendar/765-mx-industrial-production-mm
+Foreign Currency Reserves,CHF,01-09-2026,8:00am,Low,,727B,https://www.metalsmine.com/calendar/517-sz-foreign-currency-reserves
+Industrial Production m/m,MXN,01-09-2026,12:00pm,Low,0.1%,0.7%,https://www.metalsmine.com/calendar/765-mx-industrial-production-mm
 Building Permits,USD,01-09-2026,1:29pm,Low,,1.31M,https://www.metalsmine.com/calendar/198-us-building-permits
 Housing Starts,USD,01-09-2026,1:29pm,Low,,1.31M,https://www.metalsmine.com/calendar/199-us-housing-starts
-Employment Change,CAD,01-09-2026,1:30pm,Medium,-5.4K,53.6K,https://www.metalsmine.com/calendar/67-ca-employment-change
+Employment Change,CAD,01-09-2026,1:30pm,Medium,-1.8K,53.6K,https://www.metalsmine.com/calendar/67-ca-employment-change
 Unemployment Rate,CAD,01-09-2026,1:30pm,Medium,6.7%,6.5%,https://www.metalsmine.com/calendar/57-ca-unemployment-rate
 Average Hourly Earnings m/m,USD,01-09-2026,1:30pm,High,0.3%,0.1%,https://www.metalsmine.com/calendar/159-us-average-hourly-earnings-mm
-Non-Farm Employment Change,USD,01-09-2026,1:30pm,High,57K,64K,https://www.metalsmine.com/calendar/66-us-non-farm-employment-change
+Non-Farm Employment Change,USD,01-09-2026,1:30pm,High,66K,64K,https://www.metalsmine.com/calendar/66-us-non-farm-employment-change
 Unemployment Rate,USD,01-09-2026,1:30pm,High,4.5%,4.6%,https://www.metalsmine.com/calendar/56-us-unemployment-rate
 Building Permits,USD,01-09-2026,1:30pm,Low,1.35M,,https://www.metalsmine.com/calendar/198-us-building-permits
 Housing Starts,USD,01-09-2026,1:30pm,Low,1.33M,,https://www.metalsmine.com/calendar/199-us-housing-starts
 Prelim UoM Consumer Sentiment,USD,01-09-2026,3:00pm,Medium,53.5,53.3,https://www.metalsmine.com/calendar/53-us-prelim-uom-consumer-sentiment
+FOMC Member Kashkari Speaks,USD,01-09-2026,3:00pm,Low,,,https://www.metalsmine.com/calendar/651-us-fomc-member-kashkari-speaks
 Prelim UoM Inflation Expectations,USD,01-09-2026,3:00pm,Low,,4.1%,https://www.metalsmine.com/calendar/236-us-prelim-uom-inflation-expectations
 FOMC Member Barkin Speaks,USD,01-09-2026,6:35pm,Low,,,https://www.metalsmine.com/calendar/728-us-fomc-member-barkin-speaks

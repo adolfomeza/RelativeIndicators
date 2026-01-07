@@ -6,7 +6,12 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 
 ---
 
-## [2.5.23] - 2025-12-31
+## [2.5.23] - 2025-01-05
+### ⚠️ Rollback de Visualización Confluencia
+- **Desactivado**: La visualización de "Confluencia de Doble Sesión" (Direct2D Render) ha sido desactivada por defecto debido a problemas severos de rendimiento y estabilidad (bloqueo de UI).
+- **Estado**: Las bandas secundarias se muestran (líneas punteadas) pero el relleno de confluencia está apagado.
+
+## [2.5.23-Legacy] - 2025-12-31
 ### 🌊 Visualización de Confluencia (Dual Session)
 - **Mejora Gráfica**: Implementado método `OnRender` (Direct2D) para visualizar de manera eficiente las zonas de confluencia entre las sesiones Primaria y Secundaria.
 - **Intersecciones Rellenas**: Ahora se dibuja un área rellena (`Filled Geometry`) exactamente donde las bandas de ambas sesiones se superponen, facilitando la identificación visual de la "Zona de Confluencia".

@@ -396,8 +396,16 @@
     <Compile Include="Strategies\AxionValueProtocol.cs" />
     <Compile Include="Strategies\RelativeLevelsData.cs" />
     <Compile Include="Strategies\RelativeLevelsStrategy.cs" />
-    <Compile Include="Strategies\SessionLevelsStrategy.cs" />
     <Compile Include="Indicators\RelativeIndicators\amaCurrentMonthVWAP.cs" />
+    <Compile Include="Strategies\SessionLevelsStrategy.cs" />
+    <Compile Include="Strategies\SessionLevels\SessionLevelCore.cs" />
+    <Compile Include="Strategies\SessionLevels\VWAPCalculator.cs" />
+    <Compile Include="Strategies\SessionLevels\OrderProtectionManager.cs" />
+    <Compile Include="Strategies\SessionLevels\EntryStateMachine.cs" />
+    <Compile Include="Indicators\amaCurrentDayVWAP.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeDualConfluence.cs" />
+    <Compile Include="Strategies\SessionLevels\SessionManager.cs" />
+    <Compile Include="Strategies\SessionLevels\StrategyHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Resource.resx">

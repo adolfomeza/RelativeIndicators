@@ -1,82 +1,37 @@
-=== 6E Strategy Log - Started 2026-01-04 19:00:00 ===
+=== 6E Strategy Log - Started 2026-01-04 21:46:47 ===
 
-19:00:00.298 DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
-19:00:00.307 DEBUG_RECONNECT: Total Account.Positions count = 0
-19:00:00.321 4/1/26 7:01:00 p. m. v1.14.28 RESTART EVAL: Checking for pending orders or valid setup to continue...
-19:00:00.337 4/1/26 7:01:00 p. m. v1.14.28 RESTART: No valid setup found. Starting fresh.
-19:00:00.339 4/1/26 7:01:00 p. m. STARTUP: Level 'Europe Low' is already being touched - will be skipped.
-19:00:00.346 4/1/26 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 2/1/26 6:00:00 p. m. NY)
-19:00:00.346 LEVEL SUMMARY (Price=1.17425):
-19:00:00.347   USA Low @ 1.1672 | Currently ABOVE by 141 ticks
-19:00:00.347   Asia Low @ 1.16785 | Currently ABOVE by 128 ticks
-19:00:00.348   Europe Low @ 1.16845 | Currently ABOVE by 116 ticks
-19:00:00.348   USA Low @ 1.1691 | Currently ABOVE by 103 ticks
-19:00:00.348   Asia Low @ 1.17375 | Currently ABOVE by 10 ticks
-19:00:00.353   Europe Low @ 1.17425 | Currently BELOW by 0 ticks
-19:00:00.353   USA High @ 1.18565 | Currently BELOW by 228 ticks
-19:00:00.360   Europe Low @ 1.1751 | Currently BELOW by 17 ticks
-19:00:00.362   Asia High @ 1.1853 | Currently BELOW by 221 ticks
-19:00:00.362   Europe High @ 1.1846 | Currently BELOW by 207 ticks
-19:00:00.362   Europe High @ 1.18415 | Currently BELOW by 198 ticks
-19:00:00.363   USA High @ 1.18375 | Currently BELOW by 190 ticks
-19:00:00.363   Europe High @ 1.18335 | Currently BELOW by 182 ticks
-19:00:00.364   USA High @ 1.18325 | Currently BELOW by 180 ticks
-19:00:00.364   Asia High @ 1.1822 | Currently BELOW by 159 ticks
-19:00:00.364   Europe High @ 1.182 | Currently BELOW by 155 ticks
-19:00:00.365   USA High @ 1.18085 | Currently BELOW by 132 ticks
-19:00:00.365   Asia High @ 1.18045 | Currently BELOW by 124 ticks
-19:00:00.365   Europe Low @ 1.1752 | Currently BELOW by 19 ticks
-19:00:00.366   USA High @ 1.17935 | Currently BELOW by 102 ticks
-19:00:00.366   USA Low @ 1.17535 | Currently BELOW by 22 ticks
-19:02:06.484 4/1/26 7:03:00 p. m. ENTRY ATTEMPT #1/20 on Europe Low
-19:02:06.484 INTERNAL LEVEL: Europe Low @ 1.17425 (External below: USA Low @ 1.1672)
-19:02:07.876 RE-ANCHOR: New Low @ 1.1741 (Setup: Europe Low)
-19:02:10.295 RE-ANCHOR: New Low @ 1.174 (Setup: Europe Low)
-19:02:40.287 RE-ANCHOR: New Low @ 1.1739 (Setup: Europe Low)
-19:07:01.592 4/1/26 7:08:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='Europe Low' SetupTime='11/12/25 4:00:00 a. m.' RefPrice='1.17385'
-19:07:01.592 4/1/26 7:08:00 p. m. | SEARCH_OPPOSITE: Looking for 'Europe High' from SAME DAY as 'Europe Low' (RefDate: 2025-12-11)
-19:07:01.593    -> Candidate #1: Europe High @ 1.17 (Date: 2025-12-05, SameDay: False)
-19:07:01.593    -> REJECTED (Different Day): 2025-12-05 != 2025-12-11
-19:07:01.593    -> Candidate #2: Europe High @ 1.17 (Date: 2025-12-08, SameDay: False)
-19:07:01.593    -> REJECTED (Different Day): 2025-12-08 != 2025-12-11
-19:07:01.594    -> Candidate #3: Europe High @ 1.17 (Date: 2025-12-09, SameDay: False)
-19:07:01.594    -> REJECTED (Different Day): 2025-12-09 != 2025-12-11
-19:07:01.594    -> Candidate #4: Europe High @ 1.17 (Date: 2025-12-10, SameDay: False)
-19:07:01.594    -> REJECTED (Different Day): 2025-12-10 != 2025-12-11
-19:07:01.595    -> Candidate #5: Europe High @ 1.18 (Date: 2025-12-11, SameDay: True)
-19:07:01.595    -> ACCEPTED (Same Day): Europe High @ 1.18
-19:07:01.595 R/R REJECTED (Long): Entry=1.17434831804281 SL=1.1738 | TP1(VWAP)=1.17444726760563 TP2(Level)=1.18025 | Selected=1.17444726760563 | Risk=0.0005 Reward=0.0001 Ratio=0.18 | Reason: R:R 0.18 < Min 1
-19:07:01.595 4/1/26 7:08:00 p. m. Trade Skipped (Long). Risk: 0.00 Reward: 0.00 Ratio: 0.18
-19:08:10.229 4/1/26 7:09:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='Europe Low' SetupTime='11/12/25 4:00:00 a. m.' RefPrice='1.17385'
-19:08:10.231 R/R REJECTED (Long): Entry=1.17436955882353 SL=1.1738 | TP1(VWAP)=1.17445385896724 TP2(Level)=1.18025 | Selected=1.17445385896724 | Risk=0.0006 Reward=0.0001 Ratio=0.15 | Reason: R:R 0.15 < Min 1
-19:08:10.231 4/1/26 7:09:00 p. m. Trade Skipped (Long). Risk: 0.00 Reward: 0.00 Ratio: 0.15
-19:09:15.360 4/1/26 7:10:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='Europe Low' SetupTime='11/12/25 4:00:00 a. m.' RefPrice='1.17385'
-19:09:15.360 R/R REJECTED (Long): Entry=1.17443561917443 SL=1.1738 | TP1(VWAP)=1.17505138888889 TP2(Level)=1.18025 | Selected=1.17505138888889 | Risk=0.0006 Reward=0.0006 Ratio=0.97 | Reason: R:R 0.97 < Min 1
-19:09:15.360 4/1/26 7:10:00 p. m. Trade Skipped (Long). Risk: 0.00 Reward: 0.00 Ratio: 0.97
-19:10:05.648 4/1/26 7:11:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='Europe Low' SetupTime='11/12/25 4:00:00 a. m.' RefPrice='1.17385'
-19:10:05.649 R/R REJECTED (Long): Entry=1.17445188311688 SL=1.1738 | TP1(VWAP)=1.17506043956044 TP2(Level)=1.18025 | Selected=1.17506043956044 | Risk=0.0007 Reward=0.0006 Ratio=0.93 | Reason: R:R 0.93 < Min 1
-19:10:05.649 4/1/26 7:11:00 p. m. Trade Skipped (Long). Risk: 0.00 Reward: 0.00 Ratio: 0.93
-19:11:02.264 4/1/26 7:12:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='Europe Low' SetupTime='11/12/25 4:00:00 a. m.' RefPrice='1.17385'
-19:11:02.266 R/R REJECTED (Long): Entry=1.17449553039332 SL=1.1738 | TP1(VWAP)=1.175026875 TP2(Level)=1.18025 | Selected=1.175026875 | Risk=0.0007 Reward=0.0005 Ratio=0.76 | Reason: R:R 0.76 < Min 1
-19:11:02.266 4/1/26 7:12:00 p. m. Trade Skipped (Long). Risk: 0.00 Reward: 0.00 Ratio: 0.76
-19:12:09.901 4/1/26 7:13:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='Europe Low' SetupTime='11/12/25 4:00:00 a. m.' RefPrice='1.17385'
-19:12:09.903 R/R REJECTED (Long): Entry=1.17450830429733 SL=1.1738 | TP1(VWAP)=1.17502307692308 TP2(Level)=1.18025 | Selected=1.17502307692308 | Risk=0.0007 Reward=0.0005 Ratio=0.73 | Reason: R:R 0.73 < Min 1
-19:12:09.903 4/1/26 7:13:00 p. m. Trade Skipped (Long). Risk: 0.00 Reward: 0.00 Ratio: 0.73
-19:13:24.273 4/1/26 7:14:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='Europe Low' SetupTime='11/12/25 4:00:00 a. m.' RefPrice='1.17385'
-19:13:24.274 R/R REJECTED (Long): Entry=1.17450893271462 SL=1.1738 | TP1(VWAP)=1.17502322404372 TP2(Level)=1.18025 | Selected=1.17502322404372 | Risk=0.0007 Reward=0.0005 Ratio=0.73 | Reason: R:R 0.73 < Min 1
-19:13:24.274 4/1/26 7:14:00 p. m. Trade Skipped (Long). Risk: 0.00 Reward: 0.00 Ratio: 0.73
-19:14:00.798 4/1/26 7:15:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='Europe Low' SetupTime='11/12/25 4:00:00 a. m.' RefPrice='1.17385'
-19:14:00.798 R/R REJECTED (Long): Entry=1.17451069364162 SL=1.1738 | TP1(VWAP)=1.17502311827957 TP2(Level)=1.18025 | Selected=1.17502311827957 | Risk=0.0007 Reward=0.0005 Ratio=0.72 | Reason: R:R 0.72 < Min 1
-19:14:00.798 4/1/26 7:15:00 p. m. Trade Skipped (Long). Risk: 0.00 Reward: 0.00 Ratio: 0.72
-19:15:01.307 4/1/26 7:16:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='Europe Low' SetupTime='11/12/25 4:00:00 a. m.' RefPrice='1.17385'
-19:15:01.308 R/R REJECTED (Long): Entry=1.17451517754868 SL=1.1738 | TP1(VWAP)=1.17502216494845 TP2(Level)=1.18025 | Selected=1.17502216494845 | Risk=0.0007 Reward=0.0005 Ratio=0.71 | Reason: R:R 0.71 < Min 1
-19:15:01.308 4/1/26 7:16:00 p. m. Trade Skipped (Long). Risk: 0.00 Reward: 0.00 Ratio: 0.71
-19:16:01.213 4/1/26 7:17:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='Europe Low' SetupTime='11/12/25 4:00:00 a. m.' RefPrice='1.17385'
-19:16:01.213 R/R REJECTED (Long): Entry=1.17454295774648 SL=1.1738 | TP1(VWAP)=1.17502336065574 TP2(Level)=1.18025 | Selected=1.17502336065574 | Risk=0.0007 Reward=0.0005 Ratio=0.65 | Reason: R:R 0.65 < Min 1
-19:16:01.213 4/1/26 7:17:00 p. m. Trade Skipped (Long). Risk: 0.00 Reward: 0.00 Ratio: 0.65
-19:17:10.544 4/1/26 7:18:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='Europe Low' SetupTime='11/12/25 4:00:00 a. m.' RefPrice='1.17385'
-19:17:10.544 R/R REJECTED (Long): Entry=1.17454498381877 SL=1.1738 | TP1(VWAP)=1.17502318548387 TP2(Level)=1.18025 | Selected=1.17502318548387 | Risk=0.0007 Reward=0.0005 Ratio=0.64 | Reason: R:R 0.64 < Min 1
-19:17:10.544 4/1/26 7:18:00 p. m. Trade Skipped (Long). Risk: 0.00 Reward: 0.00 Ratio: 0.64
-19:18:08.668 4/1/26 7:19:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='Europe Low' SetupTime='11/12/25 4:00:00 a. m.' RefPrice='1.17385'
-19:18:08.668 R/R REJECTED (Long): Entry=1.17455663856691 SL=1.1738 | TP1(VWAP)=1.17502518518519 TP2(Level)=1.18025 | Selected=1.17502518518519 | Risk=0.0008 Reward=0.0005 Ratio=0.62 | Reason: R:R 0.62 < Min 1
-19:18:08.668 4/1/26 7:19:00 p. m. Trade Skipped (Long). Risk: 0.00 Reward: 0.00 Ratio: 0.62
+21:46:47.453 DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
+21:46:47.462 DEBUG_RECONNECT: Account.Position[1] Instrument=MGC 02-26 Qty=2 Dir=Short
+21:46:47.462 DEBUG_RECONNECT: Account.Position[2] Instrument=ZS 03-26 Qty=4 Dir=Short
+21:46:47.463 DEBUG_RECONNECT: Account.Position[3] Instrument=MBT 01-26 Qty=5 Dir=Short
+21:46:47.463 DEBUG_RECONNECT: Total Account.Positions count = 3
+21:46:47.464 4/1/26 9:46:00 p. m. v1.14.30 RESTART EVAL: Checking for pending orders or valid setup to continue...
+21:46:47.464 4/1/26 9:46:00 p. m. v1.14.30 RESTART: No valid setup found. Starting fresh.
+22:02:30.715 4/1/26 10:03:00 p. m. ENTRY ATTEMPT #1/20 on Asia Low
+22:02:30.716 INTERNAL LEVEL: Asia Low @ 1.17375 (External below: USA Low @ 1.1672)
+22:03:07.287 4/12/25 7:01:00 p. m. CONTROL: Mode = LongOnly
+22:03:07.494 4/12/25 7:01:00 p. m. CONTROL: Mode = ShortOnly
+22:03:07.726 4/12/25 7:01:00 p. m. CONTROL: Mode = Paused
+22:06:11.785 RE-ANCHOR: New Low @ 1.1736 (Setup: Asia Low)
+22:06:27.095 RE-ANCHOR: New Low @ 1.1735 (Setup: Asia Low)
+22:06:42.090 RE-ANCHOR: New Low @ 1.1734 (Setup: Asia Low)
+22:06:49.749 RE-ANCHOR: New Low @ 1.17335 (Setup: Asia Low)
+22:07:53.699 RE-ANCHOR: New Low @ 1.17325 (Setup: Asia Low)
+22:10:11.718 4/1/26 10:11:00 p. m. | DEBUG_ENTRY (Long): Calling GetOppositeLevelPrice. SetupName='Asia Low' SetupTime='10/12/25 7:00:00 p. m.' RefPrice='1.17325'
+22:10:11.718 4/1/26 10:11:00 p. m. | SEARCH_OPPOSITE: Looking for 'Asia High' from SAME DAY as 'Asia Low' (RefDate: 2025-12-10)
+22:10:11.718    -> Candidate #1: Asia High @ 1.17 (Date: 2025-12-04, SameDay: False)
+22:10:11.718    -> REJECTED (Different Day): 2025-12-04 != 2025-12-10
+22:10:11.718    -> Candidate #2: Asia High @ 1.17 (Date: 2025-12-07, SameDay: False)
+22:10:11.718    -> REJECTED (Different Day): 2025-12-07 != 2025-12-10
+22:10:11.720    -> Candidate #3: Asia High @ 1.17 (Date: 2025-12-08, SameDay: False)
+22:10:11.720    -> REJECTED (Different Day): 2025-12-08 != 2025-12-10
+22:10:11.720    -> Candidate #4: Asia High @ 1.17 (Date: 2025-12-09, SameDay: False)
+22:10:11.720    -> REJECTED (Different Day): 2025-12-09 != 2025-12-10
+22:10:11.720    -> Candidate #5: Asia High @ 1.18 (Date: 2025-12-10, SameDay: True)
+22:10:11.720    -> ACCEPTED (Same Day): Asia High @ 1.18
+22:10:11.720 4/1/26 10:11:00 p. m. | EXEC_DEBUG: Submitting Long Limit @ 1.17335 (Raw: 1.17332879464286). Bid=1.17345 Ask=1.1735
+22:10:11.721 4/1/26 10:11:00 p. m. Order Submitted (Long Consolidated). Qty=4
+22:10:31.270 4/1/26 10:11:00 p. m. ENTRY TERMINATED: EntryA+_Long_01 State: Cancelled Err: NoError
+22:10:31.270 4/1/26 10:11:00 p. m. ENTRY RESET: All entry orders cancelled/rejected. Resetting to IDLE.
+22:10:31.270 4/1/26 10:11:00 p. m. ENTRY RESET: All entry orders cancelled/rejected and Flat. Resetting to IDLE.
+22:10:31.282 4/1/26 10:11:00 p. m. ENTRY TERMINATED: EntryA+_Long_01 State: Cancelled Err: NoError

@@ -1,3 +1,0 @@
-2025-12-20 20:20:08:873|2|4|Session Break (Version 8.1.6.2)
-2025-12-20 20:20:29:097|0|4|Unable to load server side config file: Se excedió el tiempo de espera de la operación
-2025-12-20 20:20:29:169|3|4|There are no email share services defined. You need to define one and set "Default" to true for email to work.

@@ -5795,6 +5795,13 @@
             The ZLEMA (Zero-Lag Exponential Moving Average) is an EMA variant that attempts to adjust for lag.
             </summary>
         </member>
+        <member name="T:NinjaTrader.NinjaScript.Indicators.LizardIndicators.amaCurrentDayVWAP">
+            <summary>
+            The Current Day VWAP is the volume weighted average price of today's trading session. 
+            The indicator further displays three upper and lower volatility bands.
+            </summary>
+            
+        </member>
         <member name="T:NinjaTrader.NinjaScript.Indicators.LizardIndicators.amaCurrentMonthVWAP">
             <summary>
             The Current Month VWAP is the volume weighted average price of the current month. 
@@ -5827,6 +5834,86 @@
         <member name="M:NinjaTrader.NinjaScript.Strategies.VirginLevelsManager.AuditLevels(System.Collections.Generic.List{NinjaTrader.NinjaScript.Strategies.VirginLevel},System.DateTime)">
             <summary>
             Elimina niveles más antiguos que 'cutoffDate' y niveles duplicados cercanos.
+            </summary>
+        </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.SessionLevelsStrategy.SubmitOrderUnmanagedWrapper(System.Int32,NinjaTrader.Cbi.OrderAction,NinjaTrader.Cbi.OrderType,System.Int32,System.Double,System.Double,System.String,System.String)">
+            <summary>
+            Wrapper for SubmitOrderUnmanaged to allow calling from helper classes.
+            </summary>
+        </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.SessionLevelsStrategy.CheckChartLag">
+            <summary>
+            Checks for chart lag effectively blocking orders if data is too old.
+            </summary>
+        </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.SessionLevelsStrategy.WriteSharedRisk(System.Double)">
+            <summary>
+            Writes the current risk (ATR-based) to a shared file for cross-instrument coordination.
+            </summary>
+        </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.SessionLevelsStrategy.ReadMaxSharedRisk">
+            <summary>
+            Reads the maximum risk from the shared file to prevent over-leveraging across instruments.
+            </summary>
+        </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.EntryStateMachine.CheckTradingModeGuards">
+            <summary>
+            Checks trading mode guards (Paused, LongOnly, ShortOnly)
+            </summary>
+            <returns>true if trading is allowed, false if should skip</returns>
+        </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.EntryStateMachine.HandleVwapMitigationRetry">
+            <summary>
+            Handles VWAP mitigation retry logic
+            </summary>
+            <returns>true if retry was handled and should return early</returns>
+        </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.EntryStateMachine.UpdateAnchorIfNeeded">
+            <summary>
+            Updates anchor if price makes new High (Short) or new Low (Long)
+            </summary>
+        </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.EntryStateMachine.HandleInternalInvalidation">
+            <summary>
+            Handles internal level invalidation when touching external levels
+            </summary>
+            <returns>true if invalidated and should return early</returns>
+        </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.EntryStateMachine.ScanForTriggers">
+            <summary>
+            Scans active levels for Short/Long triggers
+            </summary>
+        </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.EntryStateMachine.HandleVwapMitigationWait">
+            <summary>
+            v1.14.54: Handles VWAP Retry logic when waiting for price to break the extreme
+            after a trade closes with SL/BE
+            </summary>
+        </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.EntryStateMachine.HandleConfirmation">
+            <summary>
+            Handles confirmation logic after trigger detected
+            </summary>
+        </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.EntryStateMachine.HandleWorkingOrder">
+            <summary>
+            Handles active working order (trailing, R/R validation, qty adjustment)
+            </summary>
+        </member>
+        <member name="T:NinjaTrader.NinjaScript.Strategies.SessionManager">
+            <summary>
+            v1.14.42: SessionManager - Manages session level detection, creation, and mitigation
+            Extracted from SessionLevelsStrategy.CheckSession and ManageLevels
+            </summary>
+        </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.SessionManager.CheckSession(System.String,System.TimeSpan,System.TimeSpan,System.Windows.Media.Brush,System.Double)">
+            <summary>
+            Check if we're in a specific session and create/update levels accordingly
+            </summary>
+        </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.SessionManager.ManageLevels(System.Double)">
+            <summary>
+            Manage level VWAP accumulation, mitigation detection, and drawing
             </summary>
         </member>
         <member name="M:NinjaTrader.NinjaScript.Optimizers.DefaultOptimizer.Iterate(System.Int32)">

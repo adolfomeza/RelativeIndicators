@@ -73,20 +73,27 @@ Tu rol hoy es de:
 2. **Experto Quant** en trading algorítmico y análisis de datos
 
 ### Contexto del Proyecto
-Estamos trabajando en `SessionLevelsStrategy.cs`, una estrategia avanzada que:
-- Detecta niveles de sesión (Asia, Europe, USA) con High/Low automáticos
-- Usa VWAP anclado desde el momento del "touch" del nivel
-- Implementa lógica A+ entry (confirmación de separación del VWAP)
-- Gestiona órdenes en modo Unmanaged con TP1 (VWAP dinámico), TP2 (nivel opuesto) y SL único
-- Soporta sizing dinámico basado en ATR y riesgo normalizado entre instrumentos
-- Maneja niveles internos vs externos, invalidación, y retry logic
+Estamos trabajando en `SessionLevelsStrategy.cs` (v1.14.44+), una estrategia **refactorizada y modular** que:
+- **Arquitectura**: Utiliza 7 módulos especializados orquestados por la estrategia principal.
+- **SessionManager**: Detecta niveles de sesión (Asia, Europe, USA) y gestiona mitigación.
+- **VWAPCalculator**: Cálculos centralizados de VWAP y Desviaciones Estándar.
+- **EntryStateMachine**: Máquina de estados para entradas A+ (Waiting -> Confirmed -> Working).
+- **OrderProtectionManager**: Gestión robusta de SL, TP y Trailing Stops.
+- **StrategyHelpers**: Manejo de UI (Botones, Paneles) y Logging.
 
 ### Archivos Clave
-- **Estrategia principal**: `SessionLevelsStrategy.cs` (~4800+ líneas)
-- **App de análisis**: `StreamlitAudit/app.py` (Streamlit con IA Gemini)
-- **Reglas del proyecto**: `Documentation/PROJECT_RULES.md`
-- **Historial de cambios**: `Documentation/CHANGELOG_ES.md`
-- **API Referencia**: https://developer.ninjatrader.com/docs/desktop
+- **Orquestador Principal**: `SessionLevelsStrategy.cs` (~3,600 líneas)
+- **Módulos Core** (Carpeta `SessionLevels/`):
+  - `SessionManager.cs` (~400 líneas)
+  - `VWAPCalculator.cs` (~600 líneas)
+  - `EntryStateMachine.cs` (~500 líneas)
+  - `OrderProtectionManager.cs` (~500 líneas)
+  - `StrategyHelpers.cs` (~400 líneas)
+  - `SessionLevel.cs` & `SessionIterator.cs` (Estructuras)
+- **Documentación**:
+  - `Documentation/PROJECT_RULES.md` (Reglas)
+  - `Documentation/CHANGELOG_ES.md` (Historial)
+- **App Externa**: `StreamlitAudit/app.py` (Análisis con IA)
 
 ### Instrucciones
 1. Lee y mantén en memoria las reglas de `PROJECT_RULES.md`
@@ -95,7 +102,7 @@ Estamos trabajando en `SessionLevelsStrategy.cs`, una estrategia avanzada que:
 4. Commits automáticos a GitHub tras cada cambio funcional
 5. Todos los documentos deben estar en ESPAÑOL
 6. NUNCA subir archivos `.env` o API keys a Git
-7. Limpieza de Artifacts: Al completar una implementación, mover documentos temporales a `completed/`
-8. Sincronización de Versión: Asegurar que `StrategyVersion` coincida exactamente con `CHANGELOG_ES.md`
+7. Limpieza de Artifacts: Mover documentos temporales a `completed/`
+8. Sincronización de Versión: Asegurar que `StrategyVersion` coincida.
 ```
 

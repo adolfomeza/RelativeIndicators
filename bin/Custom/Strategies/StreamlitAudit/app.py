@@ -1119,7 +1119,8 @@ def load_and_process_data(target_path, license_tier='Free (Default)'):
                 return 'TP1'  # Treat generic wins as TP1
             
             # Fallback: show actual result name instead of 'Other'
-            return result_name[:15] if len(result_name) > 15 else result_name
+            result_str = str(result_name)
+            return result_str[:15] if len(result_str) > 15 else result_str
         
         df['Exit_Tier'] = df['Result'].apply(extract_tier)
         
@@ -1578,7 +1579,10 @@ with tab1:
         wr_long = (long_data.groupby('Trade_Clust_ID')['PnL'].sum() > 0).mean() * 100 if trades_long > 0 else 0
         wr_short = (short_data.groupby('Trade_Clust_ID')['PnL'].sum() > 0).mean() * 100 if trades_short > 0 else 0
         
-        fig_type = px.bar(type_perf, x='Type', y='PnL', color='PnL', color_continuous_scale='RdBu')
+        # Apply matching colors (Green/Red) from PnL chart
+        type_colors = ['#00FF99' if pnl >= 0 else '#FF4444' for pnl in type_perf['PnL']]
+        fig_type = px.bar(type_perf, x='Type', y='PnL')
+        fig_type.update_traces(marker_color=type_colors)
         fig_type = apply_premium_style(fig_type, title='Rendimiento Long vs Short')
         st.plotly_chart(fig_type, use_container_width=True)
         

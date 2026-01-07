@@ -1179,14 +1179,18 @@ namespace NinjaTrader.NinjaScript.Strategies
 				skippedLevelsAtStartup.Clear();
 			}
 			
-			// v1.14.61: DAILY RESET Logic (Fix "Stuck in WaitingForVwapMitigation")
-			// If Trading Day changes, we should reset entry attempts for the new session
-			// Only if NOT currently in a trade
-			if (Time[0].Date > lastTradingDate && lastTradingDate != DateTime.MinValue)
+			// v1.14.61: DAILY RESET Logic (Refined)
+			// User requires reset at 18:00 (Asia Open), not just date change.
+			// Logic: If we are past 18:00 AND we haven't reset for this calendar date yet.
+			DateTime currentDate = Time[0].Date;
+			TimeSpan sessionStartTime = new TimeSpan(18, 0, 0); // 18:00 PM EST/Server Time
+			
+			if (Time[0].TimeOfDay >= sessionStartTime && lastTradingDate < currentDate)
 			{
+				// Only reset if flat (safety)
 				if (currentEntryState != EntryState.PositionActive)
 				{
-					Log(Time[0] + " DAILY RESET: New Trading Day detected. Clearing session state.");
+					Log(Time[0] + " SESSION RESET: Asia Open (18:00). Clearing previous session state.");
 					
 					currentEntryState = EntryState.Idle;
 					currentVwapNumber = 1; // Reset attempts to 1/20
@@ -1195,13 +1199,23 @@ namespace NinjaTrader.NinjaScript.Strategies
 					
 					// Also reset protection state
 					if (protectionManager != null) protectionManager.ResetEntryState();
+					
+					// Mark this date as reset
+					lastTradingDate = currentDate;
 				}
 				else
 				{
-					Log(Time[0] + " DAILY RESET POSTPONED: Position Active. Will continue tracking current trade.");
+					// Should we mark it as reset even if we skipped? 
+					// If we don't, it will try every bar. 
+					// Better to log once per date?
+					// Or just let it try until position closes? 
+					// If we mark it, we miss the reset.
+					// Let's log postponed and NOT mark date, so it resets as soon as position closes (next bar check).
+					// But we need to avoid spamming logs.
+					if (Convert.ToInt32(Time[0].TimeOfDay.TotalSeconds) % 60 == 0) // Log once per minute
+						Log(Time[0] + " SESSION RESET POSTPONED: Position Active. Will retry when Flat.");
 				}
 			}
-			lastTradingDate = Time[0].Date;
 		}
 
 		protected override void OnBarUpdate()

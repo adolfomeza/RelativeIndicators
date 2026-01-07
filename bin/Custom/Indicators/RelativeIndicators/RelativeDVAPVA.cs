@@ -513,9 +513,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		private bool isAnchorActive = false;
 		private int anchorStartBar = -1;
 		
+
 		// Dual Session (Hidden/Secondary) Variables
-		private bool enableDualSession = true; // Always on for this feature?
+		private bool enableDualSession = true; // RE-ENABLED (Ribbon Logic)
 		private bool showSecondaryBands = true; // Default True as requested
+		private SharpDX.Direct2D1.Brush confluenceBrushDX; // Cached Resource
 		private double secVolSum = 0;
 		private double secPvSum = 0;
 		private double secSumSquaredDiffs = 0;
@@ -1557,7 +1559,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 			if (showSessionZones)
 			{
                 // PVA Zones Logic Disabled
-				/*DateTime limitDate = Time[0].Date.AddDays(-maxDaysToDraw);
+				DateTime limitDate = Time[0].Date.AddDays(-maxDaysToDraw);
 				
 				for (int i = activeZones.Count - 1; i >= 0; i--)
 				{
@@ -1567,9 +1569,12 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 					// Performance Optimization: Skip drawing if older than MaxDaysToDraw
 					if (zone.StartTime < limitDate) continue;
 
+					// Draw Logic Commented Out for Cleanup
+					/*
 					Draw.Rectangle(this, zone.Tag, false, zone.StartTime, zone.UpperY, Time[0], zone.LowerY, Brushes.Transparent, sessionZoneBrush, sessionZoneOpacity);
 					Draw.Line(this, zone.Tag + "_LineUp", false, zone.StartTime, zone.UpperY, Time[0], zone.UpperY, zoneLineBrush, DashStyleHelper.Solid, zoneLineWidth);
 					Draw.Line(this, zone.Tag + "_LineLow", false, zone.StartTime, zone.LowerY, Time[0], zone.LowerY, zoneLineBrush, DashStyleHelper.Solid, zoneLineWidth);
+					*/
 					
 					// Determine if this is the most recent zone (yesterday's zone relative to current bar)
 					bool isMostRecent = (i == activeZones.Count - 1);
@@ -1594,8 +1599,6 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 					if (isMostRecent)
 					{
 						// Active Current Zone: Draw at CurrentBar + Offset (Future)
-						// Debug: Print offset to verify
-						// if (IsFirstTickOfBar) Print("Drawing Current Zone Label with Offset: " + ZoneLabelOffsetBars);
 						
 						Draw.Text(this, zone.Tag + "_TextUp", false, labelUp, -ZoneLabelOffsetBars, zone.UpperY, 0, zoneTextBrush, new SimpleFont("Arial", zoneTextSize), TextAlignment.Left, Brushes.Transparent, zoneTextBackgroundBrush, zoneTextBackgroundOpacity);
 						Draw.Text(this, zone.Tag + "_TextLow", false, labelLow, -ZoneLabelOffsetBars, zone.LowerY, 0, zoneTextBrush, new SimpleFont("Arial", zoneTextSize), TextAlignment.Left, Brushes.Transparent, zoneTextBackgroundBrush, zoneTextBackgroundOpacity);
@@ -1603,7 +1606,6 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 					else
 					{
 						// Historical Zone (Active or Inactive): Draw at StartTime (Fixed)
-						// This prevents "floating" labels for unmitigated zones
 						Draw.Text(this, zone.Tag + "_TextUp", false, labelUp, zone.StartTime, zone.UpperY, 0, zoneTextBrush, new SimpleFont("Arial", zoneTextSize), TextAlignment.Left, Brushes.Transparent, zoneTextBackgroundBrush, zoneTextBackgroundOpacity);
 						Draw.Text(this, zone.Tag + "_TextLow", false, labelLow, zone.StartTime, zone.LowerY, 0, zoneTextBrush, new SimpleFont("Arial", zoneTextSize), TextAlignment.Left, Brushes.Transparent, zoneTextBackgroundBrush, zoneTextBackgroundOpacity);
 					}
@@ -1658,7 +1660,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 							Print(string.Format("[v2.5.13] MITIGATED FROM BELOW ({6}): Tag={0} High={1:F2} Close={7:F2} MitLvl={2:F2} CutOff={5}%", zone.Tag, High[0], mitigationFromBelow, zone.TouchedFromAbove, zone.TouchedFromBelow, zoneCutoffPercentage, triggerType, Close[0]));
 						}
 					}
-				}*/
+				}
 			}
 
 			// NEW: Adaptive Filter Logic - Track Session Range
@@ -4399,6 +4401,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				middleAreaBrushDX.Dispose();
 			if (outerAreaBrushDX != null)
 				outerAreaBrushDX.Dispose();
+				
+			if (confluenceBrushDX != null)
+				confluenceBrushDX.Dispose();
 
 			if (RenderTarget != null)
 			{
@@ -4407,152 +4412,44 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 					innerAreaBrushDX 	= innerAreaBrush.ToDxBrush(RenderTarget);
 					middleAreaBrushDX 	= middleAreaBrush.ToDxBrush(RenderTarget);
 					outerAreaBrushDX 	= outerAreaBrush.ToDxBrush(RenderTarget);
+					
+					if (confluenceColor != null)
+						confluenceBrushDX = confluenceColor.ToDxBrush(RenderTarget);
+					else
+						confluenceBrushDX = new SharpDX.Direct2D1.SolidColorBrush(RenderTarget, new SharpDX.Color4(0.25f, 0.41f, 0.88f, confluenceOpacity / 100f));
 				}
 				catch (Exception e) { }
 			}
 		}
 		
+
+		private bool IsValidValue(double val)
+		{
+			return !double.IsNaN(val) && !double.IsInfinity(val);
+		}
+
+        private bool IsInvalidCoordinate(float x, float y1, float y2)
+        {
+            return float.IsNaN(x) || float.IsInfinity(x) || 
+                   float.IsNaN(y1) || float.IsInfinity(y1) ||
+                   float.IsNaN(y2) || float.IsInfinity(y2);
+        }
+
+		private void EndConfluenceFigure(SharpDX.Direct2D1.GeometrySink sink, List<Vector2> top, List<Vector2> bottom)
+		{
+			if (top.Count == 0) return;
+			
+			sink.BeginFigure(top[0], FigureBegin.Filled);
+			for (int k = 1; k < top.Count; k++) sink.AddLine(top[k]);
+			for (int k = bottom.Count - 1; k >= 0; k--) sink.AddLine(bottom[k]);
+			sink.EndFigure(FigureEnd.Closed);
+		}
+
 		protected override void OnRender(ChartControl chartControl, ChartScale chartScale)
 		{
 			if (Bars == null || ChartBars == null) return;
-			// Log("OnRender Start"); // Spammy, careful
-
-			// -------------------------------------------------------------------------
-			// DUAL SESSION CONFLUENCE (Draw BEFORE Base to stay behind lines)
-			// -------------------------------------------------------------------------
-			if (IsVisible && enableDualSession && showSecondaryBands && Values.Count() > 15 && Values[12] != null && Values[15] != null && confluenceOpacity > 0)
-			{
-				SharpDX.Direct2D1.Brush confluenceBrushDX = null;
-				try
-				{
-					// Log("Attempting to draw confluence...");
-					// Create Brush Locally to ensure validity with current RenderTarget
-					if (confluenceColor is System.Windows.Media.SolidColorBrush scb)
-						confluenceBrushDX = new SharpDX.Direct2D1.SolidColorBrush(RenderTarget, new SharpDX.Color4(scb.Color.ScR, scb.Color.ScG, scb.Color.ScB, confluenceOpacity / 100f));
-					else
-						confluenceBrushDX = new SharpDX.Direct2D1.SolidColorBrush(RenderTarget, new SharpDX.Color4(0.25f, 0.41f, 0.88f, confluenceOpacity / 100f));
-
-					int start = ChartBars.FromIndex;
-					int end = ChartBars.ToIndex;
-					
-					// Calculate Global Safe Limit
-					int minCount = Values[1].Count;
-					if (Values[6].Count < minCount) minCount = Values[6].Count;
-					if (Values[12].Count < minCount) minCount = Values[12].Count;
-					if (Values[15].Count < minCount) minCount = Values[15].Count;
-					
-					// Log($"OnRender Loop: Start={start} End={end} MinCount={minCount}");
-
-					// Safety Check for Index Range
-					// Clamp 'end' to the smallest series count to prevent IOORE
-					if (end >= minCount) end = minCount - 1;
-					
-					if (start < 0) start = 0;
-					// If clamped end is less than start, nothing to draw
-					if (end < start) return;
-
-					SharpDX.Direct2D1.PathGeometry geometry = new SharpDX.Direct2D1.PathGeometry(Core.Globals.D2DFactory);
-					SharpDX.Direct2D1.GeometrySink sink = geometry.Open();
-					
-					List<Vector2> topPoly = new List<Vector2>();
-					List<Vector2> bottomPoly = new List<Vector2>();
-					bool drawingFigure = false;
-					
-					int loops = 0;
-					for (int i = start; i <= end; i++)
-					{
-						loops++;
-						// Index is now guaranteed safe by 'end' clamp
-                        // EXTRA SAFETY: Check bounds inside loop to prevent race conditions
-                        if (i >= Values[1].Count || i >= Values[6].Count || i >= Values[12].Count || i >= Values[15].Count) {
-							Log("Loop Break: Race condition detected in OnRender");
-							break;
-						}
-						
-						// Use GetValueAt for safe async access in OnRender
-						double pUpper = Values[1].GetValueAt(i); 
-						double pLower = Values[6].GetValueAt(i); 
-						double sUpper = Values[12].GetValueAt(i);
-						double sLower = Values[15].GetValueAt(i);
-						
-						if (double.IsNaN(pUpper) || double.IsNaN(sUpper) || double.IsNaN(pLower) || double.IsNaN(sLower) || double.IsInfinity(pUpper) || double.IsInfinity(sUpper)) 
-						{
-							if (drawingFigure)
-							{
-								if (topPoly.Count > 0)
-								{
-									sink.BeginFigure(topPoly[0], FigureBegin.Filled);
-									for (int k = 1; k < topPoly.Count; k++) sink.AddLine(topPoly[k]);
-									for (int k = bottomPoly.Count - 1; k >= 0; k--) sink.AddLine(bottomPoly[k]);
-									sink.EndFigure(FigureEnd.Closed);
-								}
-								topPoly.Clear();
-								bottomPoly.Clear();
-								drawingFigure = false;
-							}
-							continue;
-						}
-
-						double interTop = Math.Min(pUpper, sUpper);
-						double interBottom = Math.Max(pLower, sLower);
-						
-						if (interTop > interBottom)
-						{
-							float confluenceX = chartControl.GetXByBarIndex(ChartBars, i);
-							float yTop = chartScale.GetYByValue(interTop);
-							float yBottom = chartScale.GetYByValue(interBottom);
-
-                            // Protection against bad coordinates
-                            if (float.IsNaN(confluenceX) || float.IsNaN(yTop) || float.IsNaN(yBottom) || float.IsInfinity(confluenceX) || float.IsInfinity(yTop))
-                                continue;
-							
-							topPoly.Add(new Vector2(confluenceX, yTop));
-							bottomPoly.Add(new Vector2(confluenceX, yBottom));
-							drawingFigure = true;
-						}
-						else
-						{
-							if (drawingFigure)
-							{
-								if (topPoly.Count > 0)
-								{
-									sink.BeginFigure(topPoly[0], FigureBegin.Filled);
-									for (int k = 1; k < topPoly.Count; k++) sink.AddLine(topPoly[k]);
-									for (int k = bottomPoly.Count - 1; k >= 0; k--) sink.AddLine(bottomPoly[k]);
-									sink.EndFigure(FigureEnd.Closed);
-								}
-								topPoly.Clear();
-								bottomPoly.Clear();
-								drawingFigure = false;
-							}
-						}
-					}
-					
-					// Log($"Loop finished. Iterations: {loops}. Drawing final figure...");
-
-					if (drawingFigure && topPoly.Count > 0)
-					{
-						sink.BeginFigure(topPoly[0], FigureBegin.Filled);
-						for (int k = 1; k < topPoly.Count; k++) sink.AddLine(topPoly[k]);
-						for (int k = bottomPoly.Count - 1; k >= 0; k--) sink.AddLine(bottomPoly[k]);
-						sink.EndFigure(FigureEnd.Closed);
-					}
-
-					sink.Close();
-					RenderTarget.FillGeometry(geometry, confluenceBrushDX);
-					geometry.Dispose();
-					// Log("Confluence drawn successfully.");
-				}
-				catch (Exception ex) 
-                {
-                    Log("CRITICAL ERROR in OnRender: " + ex.ToString());
-                }
-				finally
-				{
-					if (confluenceBrushDX != null) confluenceBrushDX.Dispose();
-				}
-			}
-
+			// Log("OnRender Start"); 
+			
 			if (ChartBars == null || errorMessage || !IsVisible) return;
 			
 			// -------------------------------------------------------------------------
@@ -4906,7 +4803,171 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 							}
 							pathOL.Dispose();
 							sinkOL.Dispose();						
-						}					
+						}
+
+						// -------------------------------------------------------------------------
+						// DUAL SESSION CONFLUENCE (Ribbon Fill)
+						// -------------------------------------------------------------------------
+						if(enableDualSession && confluenceOpacity > 0 && Values[12] != null && Values[15] != null && confluenceBrushDX != null) 
+						{
+							SharpDX.Direct2D1.PathGeometry 	pathConf;
+							SharpDX.Direct2D1.GeometrySink 	sinkConf;
+							
+							pathConf = new SharpDX.Direct2D1.PathGeometry(Core.Globals.D2DFactory);
+							using (pathConf)
+							{
+								sinkConf = pathConf.Open();
+								// Removed Winding mode (default usually safer for simple ribbons)
+
+								// --- UPPER CONFLUENCE INTERSECTION (+2 to +3) ---
+								count = -1;
+								// Pass 1: Upper Edge of Intersection (Min of +3s)
+								for (int idx = lastPlotIndex; idx >= firstPlotIndex; idx --)	
+								{
+									x = ChartControl.GetXByBarIndex(ChartBars, idx);
+									int iVal = idx - displacement;
+
+									// Retrieve Values
+									double p3 = Values[1].IsValidDataPointAt(iVal) ? Values[1].GetValueAt(iVal) : 0;
+									double s3 = Values[12].IsValidDataPointAt(iVal) ? Values[12].GetValueAt(iVal) : 0;
+									double p2 = Values[2].IsValidDataPointAt(iVal) ? Values[2].GetValueAt(iVal) : 0;
+									double s2 = Values[13].IsValidDataPointAt(iVal) ? Values[13].GetValueAt(iVal) : 0;
+
+									// Sanity Check
+									bool valid = (p3 > 0.0001 && s3 > 0.0001 && p2 > 0.0001 && s2 > 0.0001 &&
+												  p3 < 2000000 && s3 < 2000000 && p2 < 2000000 && s2 < 2000000);
+
+									if (valid)
+									{
+										double intersectTop = Math.Min(p3, s3);
+										double intersectBot = Math.Max(p2, s2);
+										
+										// If Intersection exists (Top > Bot), use Top. Else collapse to Bot.
+										double val = (intersectTop > intersectBot) ? intersectTop : intersectBot;
+										y = (int)chartScale.GetYByValue(val);
+										y = Math.Max(-5000, Math.Min(y, (int)ChartControl.ActualHeight + 5000));
+									}
+									else 
+									{ 
+										returnBar = idx + 1; break; 
+									}
+
+									returnBar = idx;
+									count++;
+									cloudArray[count] = new Vector2(x, y);
+								}
+
+								// Pass 2: Lower Edge of Intersection (Max of +2s)
+								if (count >= 0)
+								{
+									int startBack = returnBar; 
+									for (int idx = startBack; idx <= lastPlotIndex; idx++)
+									{
+										x = ChartControl.GetXByBarIndex(ChartBars, idx);
+										int iVal = idx - displacement;
+										
+										// Recalculate component values
+										double p3 = Values[1].GetValueAt(iVal);
+										double s3 = Values[12].GetValueAt(iVal);
+										double p2 = Values[2].GetValueAt(iVal);
+										double s2 = Values[13].GetValueAt(iVal);
+										
+										double intersectTop = Math.Min(p3, s3);
+										double intersectBot = Math.Max(p2, s2);
+										
+										// Bottom Edge uses intersectBot
+										double val = intersectBot; 
+										
+										y = (int)chartScale.GetYByValue(val);
+										y = Math.Max(-5000, Math.Min(y, (int)ChartControl.ActualHeight + 5000));
+										
+										count++;
+										cloudArray[count] = new Vector2(x, y);
+									}
+									
+									// Draw Figure
+									sinkConf.BeginFigure(cloudArray[0], FigureBegin.Filled);
+									for (int i = 1; i <= count; i++) sinkConf.AddLine(cloudArray[i]);
+									sinkConf.EndFigure(FigureEnd.Closed);
+								}
+
+								// --- LOWER CONFLUENCE INTERSECTION (-3 to -2) ---
+								count = -1;
+								// Pass 1: Upper Edge of Intersection (Min of -2s, visually higher)
+								for (int idx = lastPlotIndex; idx >= firstPlotIndex; idx --)	
+								{
+									x = ChartControl.GetXByBarIndex(ChartBars, idx);
+									int iVal = idx - displacement;
+
+									// Values[5]=Low2, Values[6]=Low3, Values[14]=SecLow2, Values[15]=SecLow3
+									double p2 = Values[5].IsValidDataPointAt(iVal) ? Values[5].GetValueAt(iVal) : 0;
+									double s2 = Values[14].IsValidDataPointAt(iVal) ? Values[14].GetValueAt(iVal) : 0;
+									double p3 = Values[6].IsValidDataPointAt(iVal) ? Values[6].GetValueAt(iVal) : 0;
+									double s3 = Values[15].IsValidDataPointAt(iVal) ? Values[15].GetValueAt(iVal) : 0;
+
+									bool valid = (p2 > 0.0001 && s2 > 0.0001 && p3 > 0.0001 && s3 > 0.0001 &&
+												  p2 < 2000000 && s2 < 2000000 && p3 < 2000000 && s3 < 2000000);
+
+									if (valid)
+									{
+										// Intersection Range is [Max(-3s), Min(-2s)]
+										double intersectTop = Math.Min(p2, s2); // Higher Value (e.g. 98)
+										double intersectBot = Math.Max(p3, s3); // Lower Value (e.g. 92)
+										
+										double val = (intersectTop > intersectBot) ? intersectTop : intersectBot;
+										y = (int)chartScale.GetYByValue(val);
+										y = Math.Max(-5000, Math.Min(y, (int)ChartControl.ActualHeight + 5000));
+									}
+									else { returnBar = idx + 1; break; }
+
+									returnBar = idx;
+									count++;
+									cloudArray[count] = new Vector2(x, y);
+								}
+
+								// Pass 2: Lower Edge of Intersection (Max of -3s)
+								if (count >= 0)
+								{
+									int startBack = returnBar;
+									for (int idx = startBack; idx <= lastPlotIndex; idx++)
+									{
+										x = ChartControl.GetXByBarIndex(ChartBars, idx);
+										int iVal = idx - displacement;
+										
+										double p2 = Values[5].GetValueAt(iVal);
+										double s2 = Values[14].GetValueAt(iVal);
+										double p3 = Values[6].GetValueAt(iVal);
+										double s3 = Values[15].GetValueAt(iVal);
+
+										double intersectTop = Math.Min(p2, s2);
+										double intersectBot = Math.Max(p3, s3);
+
+										double val = intersectBot;
+										
+										y = (int)chartScale.GetYByValue(val);
+										y = Math.Max(-5000, Math.Min(y, (int)ChartControl.ActualHeight + 5000));
+
+										count++;
+										cloudArray[count] = new Vector2(x, y);
+									}
+
+									// Draw Figure
+									sinkConf.BeginFigure(cloudArray[0], FigureBegin.Filled);
+									for (int i = 1; i <= count; i++) sinkConf.AddLine(cloudArray[i]);
+									sinkConf.EndFigure(FigureEnd.Closed);
+								}
+
+				        		sinkConf.Close();
+								
+								RenderTarget.AntialiasMode = SharpDX.Direct2D1.AntialiasMode.PerPrimitive;
+			 					RenderTarget.FillGeometry(pathConf, confluenceBrushDX);
+								RenderTarget.AntialiasMode = oldAntialiasMode;
+								
+								sinkConf.Dispose();
+							}
+							pathConf.Dispose();
+						}
+
 						if(lastPlotIndex < firstPlotIndex)
 							lastPlotIndex = 0;
 						else
