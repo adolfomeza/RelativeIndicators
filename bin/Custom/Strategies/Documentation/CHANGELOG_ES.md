@@ -20,6 +20,13 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
   - Se corrigió la lógica de Reinicio (`Restart`) para inicializar correctamente `setupLevelTime`.
 - **Resultado**: TP2 ahora identifica correctamente el nivel opuesto de la sesión *actual*.
 
+### NEW: Trade VWAP Persistente (Post-Sesión) 🌙
+- **Requerimiento**: Mantener el cálculo del VWAP del trade activo incluso después del cierre de sesión (18:00), visualizándolo de forma distinta.
+- **Implementación**:
+  - Se añadió lógica para detectar cuando un trade activo cruza el límite de las 18:00.
+  - En este caso ("Extensión Post-Sesión"), el `TradeVWAP` sigue acumulando datos sin reiniciarse, desacoplándose del VWAP Global del nuevo día.
+  - **Visualización**: La línea cambia a **Gris (1px)** durante la extensión (antes Cyan/Magenta 2px).
+
 ## [v1.14.63] - 2026-01-07
 ### FIX: Sincronización de versión del panel de información
 - **Problema**: La versión mostrada en el panel de información estaba desactualizada después del último release.

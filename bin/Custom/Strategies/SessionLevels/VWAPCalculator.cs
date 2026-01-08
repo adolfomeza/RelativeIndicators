@@ -41,6 +41,9 @@ namespace NinjaTrader.NinjaScript.Strategies
         public double VisualAdhocPrevBarVal { get; set; } = 0;
         public double VisualAdhocLastVal { get; set; } = 0;
         
+        // v1.14.65: Flag for Trade VWAP persistence beyond session close
+        private bool isPostSessionExtension = false;
+        
         public VWAPCalculator(SessionLevelsStrategy strategy)
         {
             this.strategy = strategy;
@@ -157,6 +160,16 @@ namespace NinjaTrader.NinjaScript.Strategies
             
             // v1.14.58: TradeVWAP should follow the same accumulation as Global VWAP Low/High
             // This allows it to persist overnight while staying aligned with the Global VWAP
+            
+            // v1.14.65: Trade VWAP Persistence Logic
+            // If Hard Reset (18:00) happens AND Trade is active, we enter "Post Session Extension" mode.
+            if (hardReset)
+            {
+                if (strategy.IsTradeVwapActive) isPostSessionExtension = true;
+                else isPostSessionExtension = false;
+            }
+            if (!strategy.IsTradeVwapActive) isPostSessionExtension = false; // Safety reset if trade closes
+            
             if (strategy.IsTradeVwapActive && deltaVol > 0)
             {
                 // For Short: follow EthLowVWAP accumulation
@@ -164,14 +177,18 @@ namespace NinjaTrader.NinjaScript.Strategies
                 // This ensures TradeVWAP stays aligned with the visible VWAP line
                 TradeVWAP.Accumulate(deltaVol, price);
                 
-                // BUT: We need to reset TradeVWAP when the Global VWAP resets
-                if (strategy.isShortSetup && lowReset)
+                // BUT: We need to reset TradeVWAP when the Global VWAP resets...
+                // UNLESS we are in Post-Session Extension mode (active trade crossing 18:00)
+                if (!isPostSessionExtension)
                 {
-                    TradeVWAP.Reset(volume[0], price);
-                }
-                else if (!strategy.isShortSetup && highReset)
-                {
-                    TradeVWAP.Reset(volume[0], price);
+                    if (strategy.isShortSetup && lowReset)
+                    {
+                        TradeVWAP.Reset(volume[0], price);
+                    }
+                    else if (!strategy.isShortSetup && highReset)
+                    {
+                        TradeVWAP.Reset(volume[0], price);
+                    }
                 }
             }
             
@@ -195,7 +212,12 @@ namespace NinjaTrader.NinjaScript.Strategies
             {
                 double tradeVwapValue = TradeVWAP.CurrentValue;
                 string lineTag = "TradeVWAP_" + currentBar;
-                Draw.Line(strategy, lineTag, false, 1, tradeVwapValue, 0, tradeVwapValue, Brushes.Cyan, DashStyleHelper.Solid, 2);
+                
+                // v1.14.65: Gray styling for extended session
+                Brush drawBrush = isPostSessionExtension ? Brushes.Gray : Brushes.Cyan;
+                int drawWidth = isPostSessionExtension ? 1 : 2;
+                
+                Draw.Line(strategy, lineTag, false, 1, tradeVwapValue, 0, tradeVwapValue, drawBrush, DashStyleHelper.Solid, drawWidth);
             }
         }
         
