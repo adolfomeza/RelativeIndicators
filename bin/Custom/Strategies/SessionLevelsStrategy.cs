@@ -36,7 +36,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.71"; // v1.14.71: Phantom Position Protection in EnsureProtection
+		private const string StrategyVersion = "v1.14.72"; // v1.14.72: Stale Execution Protection in OnExecutionUpdate
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;
@@ -3120,6 +3120,42 @@ currentEntryState = EntryState.Idle;
 
 		protected override void OnExecutionUpdate(Execution execution, string executionId, double price, int quantity, MarketPosition marketPosition, string orderId, DateTime time)
 		{
+			// v1.14.72: STALE EXECUTION CHECK - Skip historical fills during chart load
+			// But ONLY if there's no real position (to handle reconnection scenarios)
+			if (State == State.Realtime)
+			{
+				TimeSpan executionAge = NinjaTrader.Core.Globals.Now - time;
+				if (executionAge.TotalMinutes > 5)
+				{
+					// Check if there's a REAL position - if yes, this might be a reconnection fill
+					bool hasRealPosition = false;
+					try
+					{
+						foreach (var pos in Account.Positions)
+						{
+							if (pos.Instrument.FullName == Instrument.FullName && pos.MarketPosition != MarketPosition.Flat)
+							{
+								hasRealPosition = true;
+								break;
+							}
+						}
+					}
+					catch { }
+					
+					if (!hasRealPosition)
+					{
+						// No real position = pure historical replay = safe to skip
+						Log(time + " STALE EXECUTION BLOCKED: " + execution.Order.Name + " is " + executionAge.TotalMinutes.ToString("F1") + " min old. No real position. Skipping.");
+						return;
+					}
+					else
+					{
+						// Real position exists - this might be a reconnection, process it
+						Log(time + " STALE EXECUTION ALLOWED (Reconnect?): " + execution.Order.Name + " is old but real position exists. Processing.");
+					}
+				}
+			}
+			
 			if (execution.Order.OrderState == OrderState.Filled || execution.Order.OrderState == OrderState.PartFilled)
 			{
 				string n = execution.Order.Name;
