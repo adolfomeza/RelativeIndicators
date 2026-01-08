@@ -4,30 +4,30 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v1.14.69] - 2026-01-08
-### FIX CRÍTICO: Protección Contra Barras Históricas (Stale Bar Protection) 🛡️
-- **Problema**: Al activar la estrategia, se ejecutaban órdenes basadas en datos históricos (meses atrás) durante la carga del chart. Las órdenes se enviaban a la cuenta demo/live aunque los datos fueran de diciembre 2025.
-- **Causa Raíz**: 
-  - Durante la carga del chart, `State == State.Realtime` pero los datos procesados eran históricos.
-  - La verificación `Connection.PlaybackConnection != null` retornaba `true` incluso sin estar en modo Playback activo.
-  - La estrategia interpretaba barras de hace meses como barras válidas para operar.
-- **Solución**: Nueva verificación "Stale Bar Protection" en `EntryStateMachine.cs`:
-  - En `ScanForTriggers()`: Bloquea escaneo de triggers si `barAge > 5 minutos` en Realtime.
-  - En `HandleConfirmation()`: Bloquea confirmación y resetea estado si `barAge > 5 minutos`.
-  - Usa `NinjaTrader.Core.Globals.Now - Time[0]` para calcular antigüedad real de la barra.
-- **Resultado**: La estrategia ahora ignora completamente barras históricas durante la carga del chart, previniendo órdenes fantasma.
+## [v1.14.69 → v1.14.71] - 2026-01-08
+### FIX CRÍTICO: Protección Contra Datos Históricos y Posiciones Fantasma 🛡️👻
 
-## [v1.14.70] - 2026-01-08
-### FIX CRÍTICO: Protección Contra Posiciones Fantasma (Phantom Position) 👻
-- **Problema**: Al activar la estrategia, el Safety Net detectaba "posiciones zombi" de datos históricos y enviaba órdenes de cierre, aunque la cuenta real no tenía ninguna posición.
-- **Causa Raíz**: 
-  - `Position.MarketPosition` muestra el estado interno de NinjaTrader para la estrategia, que puede incluir posiciones de sesiones pasadas procesadas durante la carga del chart.
-  - El Safety Net confiaba ciegamente en este valor sin verificar contra `Account.Positions`.
-- **Solución**: Nueva verificación "Phantom Position Check" en `CheckSafetyNet()`:
-  - Antes de actuar, itera `Account.Positions` para confirmar que existe una posición REAL.
-  - Si `Account.Positions` está vacío pero `Position.MarketPosition` muestra algo, es una posición FANTASMA.
-  - En ese caso, resetea `currentEntryState = Idle` y sale sin enviar órdenes.
-- **Resultado**: El Safety Net ahora solo actúa sobre posiciones reales confirmadas en la cuenta.
+**Problema Reportado**: Al activar la estrategia, se ejecutaban órdenes y se creaban SL/TP basados en datos históricos (meses atrás) durante la carga del chart.
+
+**Causa Raíz Identificada (3 puntos de fallo)**:
+1. **Stale Bar Processing**: Durante la carga del chart, `State == State.Realtime` pero los datos procesados eran de meses atrás.
+2. **Phantom Positions (Safety Net)**: `Position.MarketPosition` mostraba posiciones de sesiones pasadas que no existían en `Account.Positions`.
+3. **EnsureProtection**: Creaba órdenes SL/TP para posiciones fantasma sin validar contra la cuenta real.
+
+**Soluciones Implementadas**:
+
+#### v1.14.69: Stale Bar Protection
+- En `EntryStateMachine.cs` → `ScanForTriggers()` y `HandleConfirmation()`: Bloquea si `barAge > 5 minutos` en Realtime.
+
+#### v1.14.70: Phantom Position Protection (Safety Net + Panel)
+- En `SessionLevelsStrategy.cs` → `CheckSafetyNet()`: Valida contra `Account.Positions` antes de actuar.
+- En `StrategyHelpers.cs` → `DrawStatePanel()`: Muestra "Flat (phantom)" si posición es fantasma.
+- Limpieza completa de estado cuando se detecta phantom (tradeOriginalQty, setupLevelName, etc.).
+
+#### v1.14.71: Phantom Protection in EnsureProtection
+- En `OrderProtectionManager.cs` → `EnsureProtection()`: Bloquea creación de SL/TP si `Account.Positions` está vacío.
+
+**Resultado**: La estrategia ahora rechaza completamente cualquier acción basada en datos históricos o posiciones fantasma durante la carga del chart.
 
 ## [v1.14.65] - 2026-01-07
 ### NEW: Trade VWAP Persistente (Post-Sesión) 🌙
