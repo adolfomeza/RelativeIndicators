@@ -36,7 +36,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.67"; // v1.14.67: Fix Info Panel TP Persistence
+		private const string StrategyVersion = "v1.14.68"; // v1.14.68: TP1 Dynamic / TP2 Fixed Info Panel
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;

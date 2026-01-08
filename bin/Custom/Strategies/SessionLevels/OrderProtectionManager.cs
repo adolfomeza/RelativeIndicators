@@ -229,13 +229,13 @@ namespace NinjaTrader.NinjaScript.Strategies
 		    if (isTp1) 
             { 
                 strategy.activeTp1Price = myTpPrice; 
-                // Only set Original if not set yet, so it persists even if we move TP1 later
-                if (strategy.tradeOriginalTp1Price == 0) strategy.tradeOriginalTp1Price = myTpPrice; 
+                // TP1 is Dynamic (VWAP), so we WANT it to update in the panel to show current potential
+                strategy.tradeOriginalTp1Price = myTpPrice; 
             } 
 		    else 
             { 
                 strategy.activeTp2Price = myTpPrice; 
-                // Only set Original if not set yet, so it persists even if we move TP2 to BE
+                // TP2 is Static (Zone), but moves to BE. We LOCK it to show the initial Target/Risk in panel.
                 if (strategy.tradeOriginalTp2Price == 0) strategy.tradeOriginalTp2Price = myTpPrice; 
             } 
 

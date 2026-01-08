@@ -24,6 +24,12 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 - **Problema**: Al moverse el TP2 (ej. a BreakEven), la información del panel de control ("Original TP2", Ratios) se reseteaba o actualizaba al nuevo valor (BE), perdiendo la referencia del objetivo original.
 - **Solución**: Se modificó `OrderProtectionManager` para capturar el precio original de TP1/TP2 **una sola vez** y no sobrescribirlo aunque la orden activa se mueva. Esto mantiene los ratios y objetivos visibles hasta que termina el trade.
 
+## [v1.14.68] - 2026-01-07
+### UX: Refinamiento Panel TP (TP1 Dinámico / TP2 Fijo) 📉
+- **Ajuste**: A petición del usuario, se diferenció el comportamiento de la información del panel:
+  - **TP1 (Dinámico)**: Sigue actualizándose en tiempo real, ya que el VWAP se mueve y expande el potencial de ganancia.
+  - **TP2 (Estático)**: Se mantiene FIJO con el valor original (Locked), para no perder la referencia del Ratio/Target inicial cuando la orden se mueve a BreakEven.
+
 ## [v1.14.64] - 2026-01-07
 ### FEATURE: Escaneo Retroactivo de Niveles de Sesión 🔍
 - **Problema**: Si la estrategia iniciaba después del cierre de una sesión (ej. Europa termina a 10:30 AM), los niveles High/Low de esa sesión nunca se creaban porque `CheckSession` solo procesaba barras en tiempo real.
