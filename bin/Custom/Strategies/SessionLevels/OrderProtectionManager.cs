@@ -68,6 +68,27 @@ namespace NinjaTrader.NinjaScript.Strategies
                                      int currentVwapNumber, bool isShortSetup, string setupLevelName, 
                                      DateTime setupLevelTime, double setupAnchorPrice, double validatedTargetPrice)
 	    {
+		    // v1.14.70: PHANTOM POSITION CHECK - Don't create protection for phantom positions
+		    bool hasRealPosition = false;
+		    try
+		    {
+			    foreach (var pos in strategy.Account.Positions)
+			    {
+				    if (pos.Instrument.FullName == strategy.Instrument.FullName && pos.MarketPosition != MarketPosition.Flat)
+				    {
+					    hasRealPosition = true;
+					    break;
+				    }
+			    }
+		    }
+		    catch (Exception ex) { strategy.Log("PHANTOM CHECK ERROR (EnsureProtection): " + ex.Message); }
+		    
+		    if (!hasRealPosition)
+		    {
+			    strategy.Log(strategy.Time[0] + " PHANTOM PROTECTION BLOCKED: Strategy shows position but Account has 0. Skipping EnsureProtection.");
+			    return; // Don't create SL/TP for phantom positions
+		    }
+		    
 		    // v1.13.10: DIAGNOSTIC LOGS
 		    strategy.Log($"DEBUG_PROTECTION: EnsureProtection CALLED - Direction={direction} FilledQty={filledQty} Position.Qty={strategy.Position.Quantity} Position.MarketPosition={strategy.Position.MarketPosition}");
 		    
