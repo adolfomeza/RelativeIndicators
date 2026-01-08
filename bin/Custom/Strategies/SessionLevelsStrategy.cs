@@ -1988,7 +1988,16 @@ currentEntryState = EntryState.Idle;
 				{
 					// This is a PHANTOM position from historical data - DO NOT act on it
 					Log(Time[0] + " PHANTOM POSITION DETECTED: Strategy shows " + Position.Quantity + " " + Position.MarketPosition + " but Account has 0. Resetting state.");
+					
+					// Full state cleanup to clear panel
 					currentEntryState = EntryState.Idle;
+					tradeOriginalQty = 0;
+					setupLevelName = "";
+					setupAnchorPrice = 0;
+					validatedTargetPrice = 0;
+					isShortSetup = false;
+					protectionManager?.ResetEntryState();
+					
 					return; // Skip Safety Net - no real position to protect
 				}
 				
