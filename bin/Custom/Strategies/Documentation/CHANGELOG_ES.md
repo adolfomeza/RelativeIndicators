@@ -4,6 +4,19 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.14.69] - 2026-01-08
+### FIX CRÍTICO: Protección Contra Barras Históricas (Stale Bar Protection) 🛡️
+- **Problema**: Al activar la estrategia, se ejecutaban órdenes basadas en datos históricos (meses atrás) durante la carga del chart. Las órdenes se enviaban a la cuenta demo/live aunque los datos fueran de diciembre 2025.
+- **Causa Raíz**: 
+  - Durante la carga del chart, `State == State.Realtime` pero los datos procesados eran históricos.
+  - La verificación `Connection.PlaybackConnection != null` retornaba `true` incluso sin estar en modo Playback activo.
+  - La estrategia interpretaba barras de hace meses como barras válidas para operar.
+- **Solución**: Nueva verificación "Stale Bar Protection" en `EntryStateMachine.cs`:
+  - En `ScanForTriggers()`: Bloquea escaneo de triggers si `barAge > 5 minutos` en Realtime.
+  - En `HandleConfirmation()`: Bloquea confirmación y resetea estado si `barAge > 5 minutos`.
+  - Usa `NinjaTrader.Core.Globals.Now - Time[0]` para calcular antigüedad real de la barra.
+- **Resultado**: La estrategia ahora ignora completamente barras históricas durante la carga del chart, previniendo órdenes fantasma.
+
 ## [v1.14.65] - 2026-01-07
 ### NEW: Trade VWAP Persistente (Post-Sesión) 🌙
 - **Requerimiento**: Mantener el cálculo del VWAP del trade activo incluso después del cierre de sesión (18:00), visualizándolo de forma distinta.

@@ -315,6 +315,18 @@ namespace NinjaTrader.NinjaScript.Strategies
             // v1.10.28: FRESH SIGNAL ONLY - Don't trigger on historical setups
             if (strategy.State == State.Realtime && strategy.realtimeStartBar > 0 && strategy.CurrentBar <= strategy.realtimeStartBar)
                 return;
+            
+            // v1.14.69: STALE BAR PROTECTION - Block triggers on old bars during chart load
+            // This prevents orders from being submitted based on historical data
+            if (strategy.State == State.Realtime)
+            {
+                TimeSpan barAge = NinjaTrader.Core.Globals.Now - strategy.Time[0];
+                if (barAge.TotalMinutes > 5)
+                {
+                    // Bar is too old - we're still processing historical data
+                    return;
+                }
+            }
 
             foreach (var lvl in strategy.activeLevels)
             {
@@ -538,6 +550,18 @@ namespace NinjaTrader.NinjaScript.Strategies
 		{
 			// Verify state
 			if (strategy.currentEntryState != EntryState.WaitingForConfirmation) return;
+
+			// v1.14.69: STALE BAR PROTECTION - Block confirmation on old bars during chart load
+			if (strategy.State == State.Realtime)
+			{
+				TimeSpan barAge = NinjaTrader.Core.Globals.Now - strategy.Time[0];
+				if (barAge.TotalMinutes > 5)
+				{
+					// Bar is too old - we're still processing historical data, reset state
+					strategy.currentEntryState = EntryState.Idle;
+					return;
+				}
+			}
 
 			// "Wait for a candle... close... max below vwap 1 tick"
 			// Logic runs on FIRST TICK of the bar (confirmed closed bar)

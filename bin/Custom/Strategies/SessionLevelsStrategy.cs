@@ -36,7 +36,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.68"; // v1.14.68: TP1 Dynamic / TP2 Fixed Info Panel
+		private const string StrategyVersion = "v1.14.69"; // v1.14.69: Stale Bar Protection - Block orders during chart load
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;
