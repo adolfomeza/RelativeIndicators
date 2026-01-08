@@ -19,6 +19,11 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 - **Problema 2 (TP2)**: El TP2 se movía a BreakEven al cambio de sesión.
   - **Diagnóstico**: Se sospecha que la referencia al nivel opuesto se pierde. Se añadieron logs de depuración en `ResetEntryState` para confirmar si el estado se está limpiando inesperadamente.
 
+## [v1.14.67] - 2026-01-07
+### UX: Persistencia de Info TP en Panel 📊
+- **Problema**: Al moverse el TP2 (ej. a BreakEven), la información del panel de control ("Original TP2", Ratios) se reseteaba o actualizaba al nuevo valor (BE), perdiendo la referencia del objetivo original.
+- **Solución**: Se modificó `OrderProtectionManager` para capturar el precio original de TP1/TP2 **una sola vez** y no sobrescribirlo aunque la orden activa se mueva. Esto mantiene los ratios y objetivos visibles hasta que termina el trade.
+
 ## [v1.14.64] - 2026-01-07
 ### FEATURE: Escaneo Retroactivo de Niveles de Sesión 🔍
 - **Problema**: Si la estrategia iniciaba después del cierre de una sesión (ej. Europa termina a 10:30 AM), los niveles High/Low de esa sesión nunca se creaban porque `CheckSession` solo procesaba barras en tiempo real.

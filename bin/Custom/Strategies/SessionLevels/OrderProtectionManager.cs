@@ -226,8 +226,18 @@ namespace NinjaTrader.NinjaScript.Strategies
 		    myTpPrice = strategy.Instrument.MasterInstrument.RoundToTickSize(myTpPrice);
 		    slPrice = strategy.Instrument.MasterInstrument.RoundToTickSize(slPrice);
 
-		    if (isTp1) { strategy.activeTp1Price = myTpPrice; strategy.tradeOriginalTp1Price = myTpPrice; } 
-		    else { strategy.activeTp2Price = myTpPrice; strategy.tradeOriginalTp2Price = myTpPrice; } 
+		    if (isTp1) 
+            { 
+                strategy.activeTp1Price = myTpPrice; 
+                // Only set Original if not set yet, so it persists even if we move TP1 later
+                if (strategy.tradeOriginalTp1Price == 0) strategy.tradeOriginalTp1Price = myTpPrice; 
+            } 
+		    else 
+            { 
+                strategy.activeTp2Price = myTpPrice; 
+                // Only set Original if not set yet, so it persists even if we move TP2 to BE
+                if (strategy.tradeOriginalTp2Price == 0) strategy.tradeOriginalTp2Price = myTpPrice; 
+            } 
 
 		    // DEBUG TARGETS
 		    strategy.Log(string.Format("TP CALC ({0}): Entry={1} | GlobalVWAP={2} | ZoneOpp={3} (Val={4}) | TP1={5} TP2={6} | Selected={7}",
