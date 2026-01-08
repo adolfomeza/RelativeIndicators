@@ -141,10 +141,6 @@ namespace NinjaTrader.NinjaScript.Strategies
                 if (daysOld == 0) levelInfo = strategy.setupLevelName + " (Today)";
                 else if (daysOld == 1) levelInfo = strategy.setupLevelName + " (1 Day)";
                 else levelInfo = strategy.setupLevelName + " (" + daysOld + " Days)";
-                
-                // Retries Counter
-                if (strategy.MaxRetriesPerLevel > 1)
-                    levelInfo += " " + strategy.currentVwapNumber + "/" + strategy.MaxRetriesPerLevel;
             }
 
             // Order Info
@@ -222,7 +218,7 @@ namespace NinjaTrader.NinjaScript.Strategies
             }
 
             string text = string.Format("Ver: {0}\nState: {1}\nLevel: {2}{3}\nPosition: {4}\nPnL: {5} | Risk: {6:C0} (Min: {7:C0}){8}",
-                "v1.14.65", // Hardcoded version updated
+                "v1.14.66", // Hardcoded version updated
                 stateDisplay,
                 levelInfo,
                 retryInfo,

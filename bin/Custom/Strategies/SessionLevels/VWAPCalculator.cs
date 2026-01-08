@@ -272,7 +272,10 @@ namespace NinjaTrader.NinjaScript.Strategies
         // v1.14.58: TradeVWAP now simply mirrors Global VWAP Low/High
         public double GetTradeVWAPCurrentValue() 
         { 
-            return strategy.isShortSetup ? EthLowVWAP.CurrentValue : EthHighVWAP.CurrentValue; 
+            // v1.14.66 FIX: Return the ACTUAL persistent TradeVWAP object value, 
+            // instead of redirecting to the Global VWAP (which resets daily).
+            // Since TradeVWAP now mirrors Global but survives reset if active, this provides the correct value.
+            return TradeVWAP.CurrentValue; 
         }
 
         public void ResetAdhoc(double vol, double price, int bar)

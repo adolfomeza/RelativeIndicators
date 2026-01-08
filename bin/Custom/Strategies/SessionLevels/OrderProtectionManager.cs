@@ -39,9 +39,10 @@ namespace NinjaTrader.NinjaScript.Strategies
         public void ResetEntryState()
         {
             SlOrderCreatedThisEntry = false;
-            IsInternalLevel = false;
+            strategy.Log(strategy.Time[0] + " [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)");
             cachedOppositeLevel = null;
             oppositeSearchDone = false;
+            IsInternalLevel = false;
             
             // v1.14.40: Clear stale order references from strategy to prevent Ghost SL bug
             // This ensures new trades don't inherit old SL/TP references

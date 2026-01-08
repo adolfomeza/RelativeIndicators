@@ -4,6 +4,21 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.14.65] - 2026-01-07
+### NEW: Trade VWAP Persistente (Post-Sesión) 🌙
+- **Requerimiento**: Mantener el cálculo del VWAP del trade activo incluso después del cierre de sesión (18:00), visualizándolo de forma distinta.
+- **Implementación**:
+  - Se añadió lógica para detectar cuando un trade activo cruza el límite de las 18:00.
+  - En este caso ("Extensión Post-Sesión"), el `TradeVWAP` sigue acumulando datos sin reiniciarse, desacoplándose del VWAP Global del nuevo día.
+  - **Visualización**: La línea cambia a **Gris (1px)** durante la extensión (antes Cyan/Magenta 2px).
+
+## [v1.14.66] - 2026-01-07
+### FIX CRÍTICO: TP1 Saltando y TP2 a BE (Persistencia) 🎯
+- **Problema 1 (TP1)**: Aunque el `TradeVWAP` persistía internamente, la lógica de cálculo de targets (`GetTradeVWAPCurrentValue`) seguía redireccionando al VWAP Global (`EthLow/High`), el cual se reiniciaba al cambio de sesión. Esto hacía que el TP1 "saltara" al nuevo valor del día.
+  - **Fix**: Se modificó `GetTradeVWAPCurrentValue` para que devuelva el valor del objeto `TradeVWAP` persistente.
+- **Problema 2 (TP2)**: El TP2 se movía a BreakEven al cambio de sesión.
+  - **Diagnóstico**: Se sospecha que la referencia al nivel opuesto se pierde. Se añadieron logs de depuración en `ResetEntryState` para confirmar si el estado se está limpiando inesperadamente.
+
 ## [v1.14.64] - 2026-01-07
 ### FEATURE: Escaneo Retroactivo de Niveles de Sesión 🔍
 - **Problema**: Si la estrategia iniciaba después del cierre de una sesión (ej. Europa termina a 10:30 AM), los niveles High/Low de esa sesión nunca se creaban porque `CheckSession` solo procesaba barras en tiempo real.
@@ -19,13 +34,6 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
   - Se actualizó la búsqueda para filtrar por **Nombre + Hora de Inicio** (`StartTime`), asegurando que se use el objeto de nivel de la sesión actual.
   - Se corrigió la lógica de Reinicio (`Restart`) para inicializar correctamente `setupLevelTime`.
 - **Resultado**: TP2 ahora identifica correctamente el nivel opuesto de la sesión *actual*.
-
-### NEW: Trade VWAP Persistente (Post-Sesión) 🌙
-- **Requerimiento**: Mantener el cálculo del VWAP del trade activo incluso después del cierre de sesión (18:00), visualizándolo de forma distinta.
-- **Implementación**:
-  - Se añadió lógica para detectar cuando un trade activo cruza el límite de las 18:00.
-  - En este caso ("Extensión Post-Sesión"), el `TradeVWAP` sigue acumulando datos sin reiniciarse, desacoplándose del VWAP Global del nuevo día.
-  - **Visualización**: La línea cambia a **Gris (1px)** durante la extensión (antes Cyan/Magenta 2px).
 
 ## [v1.14.63] - 2026-01-07
 ### FIX: Sincronización de versión del panel de información
