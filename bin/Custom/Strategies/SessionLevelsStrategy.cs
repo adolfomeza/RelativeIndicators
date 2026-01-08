@@ -36,7 +36,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.69"; // v1.14.69: Stale Bar Protection - Block orders during chart load
+		private const string StrategyVersion = "v1.14.70"; // v1.14.70: Phantom Position Protection
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;
@@ -1968,6 +1968,30 @@ currentEntryState = EntryState.Idle;
 			// 1. Zombie Position: We have a position, but State thinks we are Idle/Working.
 			if (Position.MarketPosition != MarketPosition.Flat && currentEntryState != EntryState.PositionActive)
 			{
+				// v1.14.70: PHANTOM POSITION CHECK - Validate against real Account.Positions
+				// During chart load, Position.MarketPosition may show historical positions that don't exist
+				bool hasRealPosition = false;
+				try
+				{
+					foreach (var pos in Account.Positions)
+					{
+						if (pos.Instrument.FullName == Instrument.FullName && pos.MarketPosition != MarketPosition.Flat)
+						{
+							hasRealPosition = true;
+							break;
+						}
+					}
+				}
+				catch (Exception ex) { Log("PHANTOM CHECK ERROR: " + ex.Message); }
+				
+				if (!hasRealPosition)
+				{
+					// This is a PHANTOM position from historical data - DO NOT act on it
+					Log(Time[0] + " PHANTOM POSITION DETECTED: Strategy shows " + Position.Quantity + " " + Position.MarketPosition + " but Account has 0. Resetting state.");
+					currentEntryState = EntryState.Idle;
+					return; // Skip Safety Net - no real position to protect
+				}
+				
 				Log(Time[0] + " CRITICAL: Safety Net Triggered! Position exists but State was " + currentEntryState);
 				Log($"DEBUG_SAFETYNET: Position.Qty={Position.Quantity} Position.MarketPosition={Position.MarketPosition} tradeOriginalQty={tradeOriginalQty}");
 				
