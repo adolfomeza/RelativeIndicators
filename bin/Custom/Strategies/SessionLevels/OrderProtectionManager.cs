@@ -452,7 +452,17 @@ namespace NinjaTrader.NinjaScript.Strategies
             
             SessionLevel foundLvl = null;
             string setupSessionTicks = "";
-            SessionLevel setupLevel = activeLevels.FirstOrDefault(l => l.Name == name);
+            // v1.14.64 FIX: Use refTime (StartTime) to find the EXACT setup level object, 
+            // preventing the selection of old duplicate levels from history with the same Name but old Tags.
+            SessionLevel setupLevel = activeLevels.FirstOrDefault(l => l.Name == name && l.StartTime == refTime);
+            
+            // Fallback: If not found by exact time (shouldn't happen if logic is correct), try just by name
+            if (setupLevel == null)
+            {
+                strategy.Print("[OPP_SEARCH] WARNING: Setup level not found by Name+Time (" + name + " @ " + refTime + "). Falling back to Name only.");
+                setupLevel = activeLevels.FirstOrDefault(l => l.Name == name);
+            }
+            
             if (setupLevel != null && !string.IsNullOrEmpty(setupLevel.Tag))
             {
                 string[] tagParts = setupLevel.Tag.Split('_');
@@ -466,7 +476,8 @@ namespace NinjaTrader.NinjaScript.Strategies
                     if (!string.IsNullOrEmpty(setupSessionTicks) && !string.IsNullOrEmpty(l.Tag))
                     {
                         string[] candidateTagParts = l.Tag.Split('_');
-                        if (candidateTagParts.Length >= 3) sameSession = (candidateTagParts[candidateTagParts.Length - 1] == setupSessionTicks);
+                        string candidateTicks = candidateTagParts.Length >= 3 ? candidateTagParts[candidateTagParts.Length - 1] : "";
+                        sameSession = (candidateTicks == setupSessionTicks);
                     }
                     if (sameSession) { foundLvl = l; break; }
                 }

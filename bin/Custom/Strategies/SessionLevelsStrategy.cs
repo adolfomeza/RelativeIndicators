@@ -36,7 +36,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.61"; // v1.14.61: Maint Pack (Race Condition + Session Reset)
+		private const string StrategyVersion = "v1.14.64"; // v1.14.64: Retroactive Level Scan
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;
@@ -569,6 +569,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 			{
 				Log(Time[0] + " " + StrategyVersion + " RESTART: Found valid level: " + validLevel.Name + ". Setting to WaitingForConfirmation.");
 				setupLevelName = validLevel.Name;
+				setupLevelTime = validLevel.StartTime; // v1.14.64 FIX: Initialize time for correct lookup
 				setupAnchorPrice = validLevel.Price;
 				isShortSetup = validLevel.IsResistance;
 				currentEntryState = EntryState.WaitingForConfirmation;
@@ -1470,7 +1471,9 @@ currentEntryState = EntryState.Idle;
 				// Historical state now handled by EvaluateRestartNoPosition()
 			}
 
-			if (CurrentBar < 20) return;
+			// v1.14.62: Removed 'CurrentBar < 20' check here to allow Session/Levels calculation from Bar 0.
+			// The check is moved down to protect only the Entry Logic.
+
 			
 			// Reset state at week end (Friday 6pm NY) or new week start
 			CheckWeekEndReset();
@@ -1554,6 +1557,13 @@ currentEntryState = EntryState.Idle;
 
 			// 1. Session Logic: Identify/Create Levels (Delegated to SessionManager)
 			if (sessionManager == null) sessionManager = new SessionManager(this);
+			
+			// v1.14.64: Scan for historical levels from sessions that already ended (once at startup)
+			if (CurrentBar == BarsRequiredToTrade)
+			{
+				sessionManager.ScanHistoricalLevels();
+			}
+			
 			sessionManager.CheckSession("Asia", tsAsiaStart, tsAsiaEnd, Brushes.White, deltaVol);
 			sessionManager.CheckSession("Europe", tsEuStart, tsEuEnd, Brushes.Yellow, deltaVol);
 			sessionManager.CheckSession("USA", tsUsaStart, tsUsaEnd, Brushes.RoyalBlue, deltaVol);
@@ -1590,6 +1600,9 @@ currentEntryState = EntryState.Idle;
 			}
 			
 			// 4. Entry Logic (only for recent bars or Realtime)
+			// v1.14.62: Protect ENTRY logic with 20-bar delay (moved from top)
+			if (CurrentBar < 20) return;
+
 			ManageEntryA_Plus();
 			
 			// Track MAE/MFE for active trades

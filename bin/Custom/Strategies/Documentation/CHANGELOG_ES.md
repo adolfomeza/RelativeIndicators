@@ -4,6 +4,37 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v1.14.64] - 2026-01-07
+### FEATURE: Escaneo Retroactivo de Niveles de Sesión 🔍
+- **Problema**: Si la estrategia iniciaba después del cierre de una sesión (ej. Europa termina a 10:30 AM), los niveles High/Low de esa sesión nunca se creaban porque `CheckSession` solo procesaba barras en tiempo real.
+- **Solución**: Nuevo método `SessionManager.ScanHistoricalLevels()` que:
+  - Se ejecuta una vez al inicio (`CurrentBar == BarsRequiredToTrade`)
+  - Para cada sesión que ya terminó, escanea barras históricas
+  - Crea niveles High/Low retroactivos con Tags correctos
+- **Resultado**: Ahora la estrategia encuentra niveles de sesiones pasadas (ej. Europe Low) incluso si inicia tarde, permitiendo TP2 correcto.
+
+### FIX: Selección Incorrecta de Target TP2 (Tag Antiguo) 🎯
+- **Problema**: `GetOppositeLevelPrice` seleccionaba niveles antiguos (de días anteriores) porque buscaba solo por nombre ("Europe High") en un historial acumulado, obteniendo un Tag de ticks incorrecto y fallando al buscar el nivel opuesto actual.
+- **Solución**:
+  - Se actualizó la búsqueda para filtrar por **Nombre + Hora de Inicio** (`StartTime`), asegurando que se use el objeto de nivel de la sesión actual.
+  - Se corrigió la lógica de Reinicio (`Restart`) para inicializar correctamente `setupLevelTime`.
+- **Resultado**: TP2 ahora identifica correctamente el nivel opuesto de la sesión *actual*.
+
+## [v1.14.63] - 2026-01-07
+### FIX: Sincronización de versión del panel de información
+- **Problema**: La versión mostrada en el panel de información estaba desactualizada después del último release.
+- **Solución**: Se actualizó la constante de versión en `StrategyHelpers.cs` a `v1.14.63` y se añadió este registro en el changelog.
+- **Resultado**: El panel ahora muestra la versión correcta (v1.14.63) en tiempo real.
+
+## [v1.14.62] - 2026-01-07
+### FIX: Arranque Temprano (Niveles Invisibles) 🚀
+- **Problema**: Si la simulación iniciaba justo a la hora de apertura (ej. 3:00 AM para Europa), la estrategia fallaba en detectar el nivel inicial porque estaba "ciega" durante las primeras 20 barras (`BarsRequiredToTrade`).
+- **Solución**:
+  - Se movió la lógica de **Cálculo de Sesiones y Niveles** al inicio de `OnBarUpdate`, antes del bloqueo de las 20 barras.
+  - Se movió la inicialización de **TimeZones**.
+  - El bloqueo de 20 barras ahora **SOLO protege la lógica de Trading** (entradas/salidas).
+- **Resultado**: La estrategia ahora detecta y dibuja los niveles desde la **Vela 1**, incluso si inicias el playback exactamente a la hora del evento, sin comprometer la seguridad operativa.
+
 ## [v1.14.61] - 2026-01-07
 ### MANTENIMIENTO: Fix Race Condition + Reset Diario 🔧
 - **Race Condition (SL Faltante)**: Se implementó una solución de arquitectura robusta. Ahora el estado `workingOrder` se establece **ANTES** de enviar la orden `SubmitOrderUnmanaged`. Esto elimina la posibilidad de que un fill rápido llegue antes de que la estrategia esté lista para procesarlo.

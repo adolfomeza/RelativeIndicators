@@ -3,8 +3,8 @@
 Este documento sirve como punto central de verdad para enlaces importantes, reglas de desarrollo y referencias para cualquier agente o desarrollador que trabaje en este proyecto.
 
 ## Referencias Oficiales
-- **Documentación de NinjaTrader 8 API**: [https://developer.ninjatrader.com/docs/desktop](https://developer.ninjatrader.com/docs/desktop)
-    *Consultar esta guía para dudas sobre clases, métodos y eventos de NinjaScript.
+- **Documentación de NinjaTrader 8 API**: https://developer.ninjatrader.com/docs/desktop
+    *Consultar esta guía para dudas sobre clases, métodos y eventos de NinjaScript.*
 
 ## Reglas de Desarrollo
 1.  **Versionado**: Seguir SemVer (Major.Minor.Patch) y registrar cambios en `CHANGELOG.md` y `CHANGELOG_ES.md`.
@@ -19,15 +19,14 @@ Este documento sirve como punto central de verdad para enlaces importantes, regl
     - **Prefijo de instrumento**: `[MNQ]`, `[MGC]`, `[MCL]`, etc. al inicio de cada mensaje
     - **Timestamp**: Incluir `Time[0]` con fecha y hora para facilitar búsqueda
     - **Usar método `Log()`**: NUNCA usar `Print()` directamente. El método `Log()` ya incluye el prefijo automáticamente
-    - Ejemplo: `[MNQ] 28/12/25 9:30:00 a.m. EXEC_DEBUG: Submitting Long Limit @ 25000`
+    - **Ejemplo**: `[MNQ] 28/12/25 9:30:00 a.m. EXEC_DEBUG: Submitting Long Limit @ 25000`
 10. **Acceso a Logs**: El agente AI tiene permiso para leer/escribir la carpeta de logs de la estrategia sin pedir confirmación:
-    - **Ubicación**: `Documents\NinjaTrader 8\trace\SessionLevels\`
+    - **Ubicación**: `Documents\\NinjaTrader 8\\trace\\SessionLevels\\`
     - **Archivos**: `[INSTRUMENTO]_[YYYYMMDD].txt` (ej. `MGC_20251229.txt`)
     - **Propósito**: Debugging y análisis de ejecución
 11. **Documento para Clientes (`analisis_session_levels.md`)**: Este documento DEBE mantenerse actualizado con cada cambio significativo de la estrategia. Usar **lenguaje accesible** para clientes e inversores (no técnico). Incluir: cómo funciona, características, instrumentos compatibles, parámetros, y preguntas frecuentes. Sincronizar versión con `StrategyVersion`.
 
 ## ⚠️ REGLA CRÍTICA: NO ADIVINAR
-
 12. **Identificación Perfecta del Problema ANTES de Cambios**:
     - **PROHIBIDO** hacer cambios de código basados en "creo que", "puede ser", "probablemente"
     - El problema DEBE estar **perfectamente identificado** con evidencia en logs antes de modificar código
@@ -39,14 +38,7 @@ Este documento sirve como punto central de verdad para enlaces importantes, regl
       4. Solo entonces implementar fix
     - Esta regla evita introducir nuevos bugs al "adivinar" soluciones
 
-3. **Protocolo de Resolución de Problemas (MANDATORIO)**:
-    - **Fase 1: Análisis**: Investigar logs y código para entender QUÉ pasó y POR QUÉ.
-    - **Fase 2: Explicación**: Explicar al usuario detalladamente el hallazgo en lenguaje claro.
-    - **Fase 3: Propuesta**: Proponer una solución específica y esperar aprobación.
-    - **Fase 4: Ejecución**: Solo tras recibir un "SÍ" explícito, aplicar el código.
-
 ## 🔐 REGLA CRÍTICA: SEGURIDAD DE API KEYS
-
 13. **Protección de Credenciales y API Keys**:
     - **NUNCA** subir archivos `.env`, credentials, o API keys a Git
     - Verificar que `.gitignore` incluya: `.env`, `*.key`, `credentials.json`, etc.
@@ -63,46 +55,13 @@ Este documento sirve como punto central de verdad para enlaces importantes, regl
 
 ---
 
-## Prompt de Contexto para AI Assistant
+### Protocolo de Resolución de Problemas (MANDATORIO)
+- **Fase 1: Análisis** – Investigar logs y código para entender QUÉ pasó y POR QUÉ.
+- **Fase 2: Explicación** – Explicar al usuario detalladamente el hallazgo en lenguaje claro.
+- **Fase 3: Propuesta** – Proponer una solución específica y esperar aprobación.
+- **Fase 4: Ejecución** – Solo tras recibir un "SÍ" explícito, aplicar el código.
 
-> **Copiar y pegar este bloque al inicio de cada nueva conversación para establecer el contexto:**
+---
 
-```
-Tu rol hoy es de:
-1. **Experto Programador en NinjaScript** para NinjaTrader 8
-2. **Experto Quant** en trading algorítmico y análisis de datos
-
-### Contexto del Proyecto
-Estamos trabajando en `SessionLevelsStrategy.cs` (v1.14.44+), una estrategia **refactorizada y modular** que:
-- **Arquitectura**: Utiliza 7 módulos especializados orquestados por la estrategia principal.
-- **SessionManager**: Detecta niveles de sesión (Asia, Europe, USA) y gestiona mitigación.
-- **VWAPCalculator**: Cálculos centralizados de VWAP y Desviaciones Estándar.
-- **EntryStateMachine**: Máquina de estados para entradas A+ (Waiting -> Confirmed -> Working).
-- **OrderProtectionManager**: Gestión robusta de SL, TP y Trailing Stops.
-- **StrategyHelpers**: Manejo de UI (Botones, Paneles) y Logging.
-
-### Archivos Clave
-- **Orquestador Principal**: `SessionLevelsStrategy.cs` (~3,600 líneas)
-- **Módulos Core** (Carpeta `SessionLevels/`):
-  - `SessionManager.cs` (~400 líneas)
-  - `VWAPCalculator.cs` (~600 líneas)
-  - `EntryStateMachine.cs` (~500 líneas)
-  - `OrderProtectionManager.cs` (~500 líneas)
-  - `StrategyHelpers.cs` (~400 líneas)
-  - `SessionLevel.cs` & `SessionIterator.cs` (Estructuras)
-- **Documentación**:
-  - `Documentation/PROJECT_RULES.md` (Reglas)
-  - `Documentation/CHANGELOG_ES.md` (Historial)
-- **App Externa**: `StreamlitAudit/app.py` (Análisis con IA)
-
-### Instrucciones
-1. Lee y mantén en memoria las reglas de `PROJECT_RULES.md`
-2. Actualiza `CHANGELOG_ES.md` con cada cambio de código
-3. Sigue versionado SemVer y sincroniza `StrategyVersion` con el changelog
-4. Commits automáticos a GitHub tras cada cambio funcional
-5. Todos los documentos deben estar en ESPAÑOL
-6. NUNCA subir archivos `.env` o API keys a Git
-7. Limpieza de Artifacts: Mover documentos temporales a `completed/`
-8. Sincronización de Versión: Asegurar que `StrategyVersion` coincida.
-```
-
+#### Nota
+Todas las reglas anteriores deben ser respetadas en cada paso del desarrollo y mantenimiento del proyecto. Si necesitas que aclare alguna regla o que aplique alguna de ellas a un cambio concreto, avísame.
