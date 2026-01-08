@@ -217,12 +217,35 @@ namespace NinjaTrader.NinjaScript.Strategies
                 retryInfo = string.Format(" (Intento {0}/{1})", strategy.currentVwapNumber, strategy.MaxRetriesPerLevel);
             }
 
+            // v1.14.70: Detect phantom positions - NinjaTrader shows position but Account has none
+            string positionDisplay = strategy.Position.MarketPosition.ToString();
+            if (strategy.Position.MarketPosition != MarketPosition.Flat && strategy.currentEntryState == EntryState.Idle)
+            {
+                // Potential phantom - check Account.Positions
+                bool hasRealPosition = false;
+                try
+                {
+                    foreach (var pos in strategy.Account.Positions)
+                    {
+                        if (pos.Instrument.FullName == strategy.Instrument.FullName && pos.MarketPosition != MarketPosition.Flat)
+                        {
+                            hasRealPosition = true;
+                            break;
+                        }
+                    }
+                }
+                catch { }
+                
+                if (!hasRealPosition)
+                    positionDisplay = "Flat (NinjaTrader shows phantom)";
+            }
+
             string text = string.Format("Ver: {0}\nState: {1}\nLevel: {2}{3}\nPosition: {4}\nPnL: {5} | Risk: {6:C0} (Min: {7:C0}){8}",
-                "v1.14.68", // Hardcoded version updated
+                "v1.14.70", // Hardcoded version updated
                 stateDisplay,
                 levelInfo,
                 retryInfo,
-                strategy.Position.MarketPosition,
+                positionDisplay,
                 sessionPnL.ToString("C"),
                 globalRiskDisplay,
                 minRiskUSD,
