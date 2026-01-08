@@ -36,7 +36,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.70"; // v1.14.70: Phantom Position Protection
+		private const string StrategyVersion = "v1.14.71"; // v1.14.71: Phantom Position Protection in EnsureProtection
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;
