@@ -17,6 +17,10 @@ namespace NinjaTrader.NinjaScript.Strategies
             this.strategy = strategy;
         }
 
+        // v1.14.80: Performance Optimization - Throttling
+        private DateTime lastOrderUpdateTime = DateTime.MinValue;
+        private const int UpdateIntervalMs = 250;
+
 
 
         /// <summary>
@@ -315,18 +319,6 @@ namespace NinjaTrader.NinjaScript.Strategies
             // v1.10.28: FRESH SIGNAL ONLY - Don't trigger on historical setups
             if (strategy.State == State.Realtime && strategy.realtimeStartBar > 0 && strategy.CurrentBar <= strategy.realtimeStartBar)
                 return;
-            
-            // v1.14.69: STALE BAR PROTECTION - Block triggers on old bars during chart load
-            // This prevents orders from being submitted based on historical data
-            if (strategy.State == State.Realtime)
-            {
-                TimeSpan barAge = NinjaTrader.Core.Globals.Now - strategy.Time[0];
-                if (barAge.TotalMinutes > 5)
-                {
-                    // Bar is too old - we're still processing historical data
-                    return;
-                }
-            }
 
             foreach (var lvl in strategy.activeLevels)
             {
@@ -351,7 +343,12 @@ namespace NinjaTrader.NinjaScript.Strategies
 
                 // v1.10.25: Check if max retries exceeded
                 if (lvl.EntryAttempts >= strategy.MaxRetriesPerLevel)
+                {
+                    // v1.14.80: Debug Log to explain why opportunities are "ignored"
+                    if (strategy.EnableDebugLogs && strategy.IsFirstTickOfBar)
+                         strategy.Log(string.Format("SCAN IGNORE: Level {0} Max Retries Reached ({1}/{2})", lvl.Name, lvl.EntryAttempts, strategy.MaxRetriesPerLevel));
                     continue;
+                }
                 
                 // v1.10.29: Skip levels touched at startup
                 if (strategy.skippedLevelsAtStartup.Contains(lvl.Name))
@@ -366,14 +363,28 @@ namespace NinjaTrader.NinjaScript.Strategies
                         if (lvl.Name == strategy.setupLevelName)
                             continue;
                         else
+                        {
+                            // v1.14.69: DIAGNOSTIC LOG - Capture price delta to detect infinite SWITCH loops
+                            double currentLevelPrice = 0;
+                            var currentLevel = strategy.activeLevels.FirstOrDefault(l => l.Name == strategy.setupLevelName);
+                            if (currentLevel != null) currentLevelPrice = currentLevel.Price;
+                            double delta = Math.Abs(currentLevelPrice - lvl.Price);
+                            strategy.Log($"SWITCH_EVAL: Current={strategy.setupLevelName}@{currentLevelPrice} " +
+                                $"New={lvl.Name}@{lvl.Price} Delta={delta:F5} TickSize={strategy.TickSize}");
+                            
                             strategy.Log(strategy.Time[0] + " SWITCH: New Trigger on " + lvl.Name + " overrides " + strategy.setupLevelName);
+                        }
                     }
                         
                     // TRIGGER CONFIRMED
                     if (!lvl.IsResistance)
                     {
                         // Long Setup
-                        strategy.triggerTag = "TriggerLong_" + strategy.Time[0].Ticks;
+                        // v1.14.80: Recycle Tags to prevent Drawing Object Accumulation Leak
+                        // Use a rotating index (0-49) instead of Ticks
+                        strategy.triggerTag = "TriggerLong_" + (strategy.triggerLabelIndex % 50);
+                        strategy.triggerLabelIndex++;
+                        
                         strategy.triggerBar = strategy.CurrentBar;
                         strategy.DrawTriggerLabel(strategy.triggerTag, false, 0, strategy.Low[0]);
                         
@@ -416,7 +427,10 @@ namespace NinjaTrader.NinjaScript.Strategies
                     else 
                     {
                         // Short Setup
-                        strategy.triggerTag = "TriggerShort_" + strategy.Time[0].Ticks;
+                        // v1.14.80: Recycle Tags to prevent Drawing Object Accumulation Leak
+                        strategy.triggerTag = "TriggerShort_" + (strategy.triggerLabelIndex % 50);
+                        strategy.triggerLabelIndex++;
+
                         strategy.triggerBar = strategy.CurrentBar;
                         strategy.DrawTriggerLabel(strategy.triggerTag, true, 0, strategy.High[0]);
                         
@@ -512,17 +526,22 @@ namespace NinjaTrader.NinjaScript.Strategies
                 strategy.visualConfirmationDone = false;
                 
                 // Update anchor to current extreme
+                // Update anchor to current extreme
                 if (strategy.isShortSetup)
                 {
                     strategy.setupAnchorPrice = strategy.High[0];
-                    strategy.triggerTag = "RetryShort_" + strategy.Time[0].Ticks;
+                    // Recycle Logic for Retries too
+                    strategy.triggerTag = "RetryShort_" + (strategy.triggerLabelIndex % 50);
+                    strategy.triggerLabelIndex++;
                     strategy.triggerBar = strategy.CurrentBar;
                     strategy.DrawTriggerLabel(strategy.triggerTag, true, 0, strategy.High[0]);
                 }
                 else
                 {
                     strategy.setupAnchorPrice = strategy.Low[0];
-                    strategy.triggerTag = "RetryLong_" + strategy.Time[0].Ticks;
+                    // Recycle Logic for Retries too
+                    strategy.triggerTag = "RetryLong_" + (strategy.triggerLabelIndex % 50);
+                    strategy.triggerLabelIndex++;
                     strategy.triggerBar = strategy.CurrentBar;
                     strategy.DrawTriggerLabel(strategy.triggerTag, false, 0, strategy.Low[0]);
                 }
@@ -550,18 +569,6 @@ namespace NinjaTrader.NinjaScript.Strategies
 		{
 			// Verify state
 			if (strategy.currentEntryState != EntryState.WaitingForConfirmation) return;
-
-			// v1.14.69: STALE BAR PROTECTION - Block confirmation on old bars during chart load
-			if (strategy.State == State.Realtime)
-			{
-				TimeSpan barAge = NinjaTrader.Core.Globals.Now - strategy.Time[0];
-				if (barAge.TotalMinutes > 5)
-				{
-					// Bar is too old - we're still processing historical data, reset state
-					strategy.currentEntryState = EntryState.Idle;
-					return;
-				}
-			}
 
 			// "Wait for a candle... close... max below vwap 1 tick"
 			// Logic runs on FIRST TICK of the bar (confirmed closed bar)
@@ -628,39 +635,62 @@ namespace NinjaTrader.NinjaScript.Strategies
 						bool canSubmitOrder = (strategy.State == State.Realtime) || (strategy.State == State.Historical && (isPlayback || strategy.AllowBacktest));
 
 						if (canSubmitOrder)
+					{
+						if (strategy.entryOrder != null) 
 						{
-							if (strategy.entryOrder != null) 
-							{
-								strategy.Log("WARNING: Entry Order already exists? Overwriting.");
-							}
-
-							// DYNAMIC SIZING (v1.8.0)
-							int dynamicQuantity = strategy.CalculateDynamicQuantity(limitPrice, projectedStop);
-
-							string entryTag = string.Format("EntryA+_Short_{0:D2}", strategy.currentVwapNumber);
-
-							// v1.11.17: Lag Filter - Block order if chart has lag
-							if (!strategy.CheckChartLag())
-							{
-								string msg = "Skipped: Network Lag Detected";
-								strategy.Log(strategy.Time[0] + " Short order BLOCKED: " + msg);
-								strategy.lastFilterReason = msg; strategy.lastFilterTime = DateTime.Now;
-								return;
-							}
-
-							// v1.14.61: Fix Race Condition - Set State BEFORE Order Submission
-							strategy.currentEntryState = EntryState.workingOrder;
-							strategy.entryOrder = strategy.SubmitOrderUnmanaged(0, OrderAction.SellShort, OrderType.Limit, dynamicQuantity, limitPrice, 0, "", entryTag);
-
-							if (strategy.entryOrder == null)
-							{
-								strategy.currentEntryState = EntryState.Idle; // Revert if submit failed
-								strategy.Log("CRITICAL: Order Submit Failed. Reverting State to Idle.");
-								return;
-							}
-							
-							strategy.Log(strategy.Time[0] + " Order Submitted (Short Consolidated). Qty=" + dynamicQuantity);
+							strategy.Log("WARNING: Entry Order already exists? Overwriting.");
 						}
+
+						// v1.14.73: Entry Mode Selection
+						double entryPrice;
+						string entryTag;
+						OrderType orderType;
+						
+						if (strategy.SelectedEntryMode == EntryMode.Anticipado)
+						{
+							// ANTICIPATED MODE: Enter on confirmation candle close
+							entryPrice = strategy.Close[0];
+							entryTag = string.Format("EntryAnticipado_Short_{0:D2}", strategy.currentVwapNumber);
+							orderType = strategy.AnticipatedType == AnticipatedOrderType.Market ? OrderType.Market : OrderType.Limit;
+							strategy.Log(string.Format("{0} | ANTICIPATED ENTRY: {1} @ {2}", strategy.Time[0], orderType, entryPrice));
+						}
+						else
+						{
+							// A+ RETRACE MODE: Wait for VWAP pullback (original behavior)
+							entryPrice = limitPrice;
+							entryTag = string.Format("EntryA+_Short_{0:D2}", strategy.currentVwapNumber);
+							orderType = OrderType.Limit;
+						}
+
+						// DYNAMIC SIZING (v1.8.0)
+						int dynamicQuantity = strategy.CalculateDynamicQuantity(entryPrice, projectedStop);
+
+						// v1.11.17: Lag Filter - Block order if chart has lag
+						if (!strategy.CheckChartLag())
+						{
+							string msg = "Skipped: Network Lag Detected";
+							strategy.Log(strategy.Time[0] + " Short order BLOCKED: " + msg);
+							strategy.lastFilterReason = msg; strategy.lastFilterTime = DateTime.Now;
+							return;
+						}
+
+						// v1.14.61: Fix Race Condition - Set State BEFORE Order Submission
+						strategy.currentEntryState = EntryState.workingOrder;
+						
+						if (orderType == OrderType.Market)
+							strategy.entryOrder = strategy.SubmitOrderUnmanaged(0, OrderAction.SellShort, OrderType.Market, dynamicQuantity, 0, 0, "", entryTag);
+						else
+							strategy.entryOrder = strategy.SubmitOrderUnmanaged(0, OrderAction.SellShort, OrderType.Limit, dynamicQuantity, entryPrice, 0, "", entryTag);
+
+						if (strategy.entryOrder == null)
+						{
+							strategy.currentEntryState = EntryState.Idle; // Revert if submit failed
+							strategy.Log("CRITICAL: Order Submit Failed. Reverting State to Idle.");
+							return;
+						}
+						
+						strategy.Log(strategy.Time[0] + " Order Submitted (Short). Mode=" + strategy.SelectedEntryMode + " Type=" + orderType + " Qty=" + dynamicQuantity);
+					}
 						else
 						{
 							// Historical Skip
@@ -681,12 +711,13 @@ namespace NinjaTrader.NinjaScript.Strategies
 						// HANDLED BY HandleInternalInvalidation/UpdateAnchorIfNeeded ALREADY
 						// We don't do anything here.
 					}
-					else
+						else
 					{
-						// DEBUG waiting
-						if (strategy.CurrentBar % 10 == 0) // Limit spam
-							strategy.Log(string.Format("{0} | WAITING SHORT: High[1]={1:F2} VWAP={2:F2} Req={3:F2} ValidVWAP={4} Anchor={5}", 
-								strategy.Time[0], strategy.High[1], setupVWAP, (setupVWAP - TickSize), strategy.isValidVWAP(setupVWAP), setupAnchorPrice));
+						// DEBUG waiting - v1.14.74: More frequent logging for diagnosis
+						// if (strategy.CurrentBar % 2 == 0) // Every 2 bars for diagnosis
+						// 	strategy.Log(string.Format("{0} | WAITING SHORT: High[1]={1:F2} VWAP={2:F2} Req={3:F2} | GlobalHigh={4:F2} GlobalLow={5:F2} | Anchor={6}", 
+						// 		strategy.Time[0], strategy.High[1], setupVWAP, (setupVWAP - TickSize), 
+						// 		strategy.GetCurrentHighVWAP(), strategy.GetCurrentLowVWAP(), setupAnchorPrice));
 					}
 				}
 			}
@@ -734,37 +765,60 @@ namespace NinjaTrader.NinjaScript.Strategies
 						bool canSubmitOrder = (strategy.State == State.Realtime) || (strategy.State == State.Historical && (isPlayback || strategy.AllowBacktest));
 
 						if (canSubmitOrder)
+					{
+						if (strategy.entryOrder != null) 
 						{
-							if (strategy.entryOrder != null) 
-							{
-								strategy.Log("WARNING: Entry Order already exists? Overwriting.");
-							}
-
-							int dynamicQuantity = strategy.CalculateDynamicQuantity(limitPrice, projectedStop);
-
-							string entryTag = string.Format("EntryA+_Long_{0:D2}", strategy.currentVwapNumber);
-
-							if (!strategy.CheckChartLag())
-							{
-								string msg = "Skipped: Network Lag Detected";
-								strategy.Log(strategy.Time[0] + " Long order BLOCKED: " + msg);
-								strategy.lastFilterReason = msg; strategy.lastFilterTime = DateTime.Now;
-								return;
-							}
-
-							// v1.14.61: Fix Race Condition - Set State BEFORE Order Submission
-							strategy.currentEntryState = EntryState.workingOrder;
-							strategy.entryOrder = strategy.SubmitOrderUnmanaged(0, OrderAction.Buy, OrderType.Limit, dynamicQuantity, limitPrice, 0, "", entryTag);
-							
-							if (strategy.entryOrder == null)
-							{
-								strategy.currentEntryState = EntryState.Idle; // Revert if submit failed
-								strategy.Log("CRITICAL: Order Submit Failed. Reverting State to Idle.");
-								return;
-							}
-
-							strategy.Log(strategy.Time[0] + " Order Submitted (Long Consolidated). Qty=" + dynamicQuantity);
+							strategy.Log("WARNING: Entry Order already exists? Overwriting.");
 						}
+
+						// v1.14.73: Entry Mode Selection
+						double entryPrice;
+						string entryTag;
+						OrderType orderType;
+						
+						if (strategy.SelectedEntryMode == EntryMode.Anticipado)
+						{
+							// ANTICIPATED MODE: Enter on confirmation candle close
+							entryPrice = strategy.Close[0];
+							entryTag = string.Format("EntryAnticipado_Long_{0:D2}", strategy.currentVwapNumber);
+							orderType = strategy.AnticipatedType == AnticipatedOrderType.Market ? OrderType.Market : OrderType.Limit;
+							strategy.Log(string.Format("{0} | ANTICIPATED ENTRY: {1} @ {2}", strategy.Time[0], orderType, entryPrice));
+						}
+						else
+						{
+							// A+ RETRACE MODE: Wait for VWAP pullback (original behavior)
+							entryPrice = limitPrice;
+							entryTag = string.Format("EntryA+_Long_{0:D2}", strategy.currentVwapNumber);
+							orderType = OrderType.Limit;
+						}
+
+						int dynamicQuantity = strategy.CalculateDynamicQuantity(entryPrice, projectedStop);
+
+						if (!strategy.CheckChartLag())
+						{
+							string msg = "Skipped: Network Lag Detected";
+							strategy.Log(strategy.Time[0] + " Long order BLOCKED: " + msg);
+							strategy.lastFilterReason = msg; strategy.lastFilterTime = DateTime.Now;
+							return;
+						}
+
+						// v1.14.61: Fix Race Condition - Set State BEFORE Order Submission
+						strategy.currentEntryState = EntryState.workingOrder;
+						
+						if (orderType == OrderType.Market)
+							strategy.entryOrder = strategy.SubmitOrderUnmanaged(0, OrderAction.Buy, OrderType.Market, dynamicQuantity, 0, 0, "", entryTag);
+						else
+							strategy.entryOrder = strategy.SubmitOrderUnmanaged(0, OrderAction.Buy, OrderType.Limit, dynamicQuantity, entryPrice, 0, "", entryTag);
+						
+						if (strategy.entryOrder == null)
+						{
+							strategy.currentEntryState = EntryState.Idle; // Revert if submit failed
+							strategy.Log("CRITICAL: Order Submit Failed. Reverting State to Idle.");
+							return;
+						}
+
+						strategy.Log(strategy.Time[0] + " Order Submitted (Long). Mode=" + strategy.SelectedEntryMode + " Type=" + orderType + " Qty=" + dynamicQuantity);
+					}
 						else
 						{
                             // Skipped
@@ -814,8 +868,15 @@ namespace NinjaTrader.NinjaScript.Strategies
                     if (strategy.entryOrder != null && strategy.entryOrder.OrderState == OrderState.Working)
                         strategy.CancelOrder(strategy.entryOrder);
 
-                    strategy.currentEntryState = EntryState.Idle;
-                    strategy.setupLevelName = "";
+                    // v1.14.80: Treat R/R Invalidation as "Virtual SL" -> Wait for VWAP Mitigation
+                    // Do NOT go to Idle. Wait for price to break anchor to retry.
+                    strategy.currentEntryState = EntryState.WaitingForVwapMitigation;
+                    strategy.waitingForVwapMitigation = true;
+                    strategy.visualConfirmationDone = false;
+                    strategy.vwapCandleExtreme = strategy.setupAnchorPrice; // Anchor becomes the breakout level
+                    strategy.currentVwapNumber++; // Count this as a failed attempt
+                    
+                    strategy.Log(string.Format("{0} R/R CANCEL -> ENTRO EN ESPERA DE MITIGACION (Virtual SL). Anchor={1}", strategy.Time[0], strategy.setupAnchorPrice));
                     return;
                 }
             }
@@ -824,8 +885,26 @@ namespace NinjaTrader.NinjaScript.Strategies
             bool anyFilled = (strategy.entryOrder.OrderState == OrderState.Filled || strategy.entryOrder.OrderState == OrderState.PartFilled);
             if (anyFilled)
             {
-                strategy.Log(strategy.Time[0] + " SYNC: Order Filled but State was Working. Forcing InPosition.");
-                strategy.currentEntryState = EntryState.PositionActive;
+                // v1.14.69: DIAGNOSTIC LOG - Capture timing to debug race condition
+                double msSinceFill = (DateTime.Now - strategy.entryOrder.Time).TotalMilliseconds;
+                strategy.Log($"SYNC_DEBUG: execution.Name={strategy.entryOrder.Name} OrderState={strategy.entryOrder.OrderState} " +
+                    $"Position.MarketPosition={strategy.Position.MarketPosition} Position.Qty={strategy.Position.Quantity} " +
+                    $"timeSinceFill={msSinceFill:F0}ms");
+                
+                // v1.14.70: FIX Race Condition - Only transition to PositionActive if Position is actually updated
+                // NinjaTrader can report OrderState=Filled before Position.MarketPosition is updated (race condition ~55ms)
+                if (strategy.Position.MarketPosition != MarketPosition.Flat)
+                {
+                    strategy.Log(strategy.Time[0] + " SYNC: Order Filled and Position confirmed. Forcing InPosition.");
+                    strategy.currentEntryState = EntryState.PositionActive;
+                }
+                else
+                {
+                    // Position not updated yet - stay in Working state, don't reset to Idle
+                    // OnPositionUpdate or next OnBarUpdate will catch the actual position
+                    strategy.Log($"SYNC_WAIT: OrderState=Filled but Position.MarketPosition=Flat ({msSinceFill:F0}ms ago). Waiting for Position update.");
+                    // DO NOT change state - remain in Working
+                }
                 return;
             }
 
@@ -862,19 +941,30 @@ namespace NinjaTrader.NinjaScript.Strategies
             }
 
             // 3c. Update order price (trailing) and quantity
+            // 3c. Update order price (trailing) and quantity
             if (strategy.entryOrder.OrderState == OrderState.Working)
             {
+                // v1.14.80: Throttling Check MOVED UP to prevent expensive Calculation & File I/O
+                // Limit updates/calcs to 4 times per second
+                bool isThrottled = (DateTime.Now - lastOrderUpdateTime).TotalMilliseconds < UpdateIntervalMs;
+                if (isThrottled) return;
+
                 double projectedStop = isShortSetup ? (setupAnchorPrice + TickSize) : (setupAnchorPrice - TickSize);
+                
+                // This call is expensive (File I/O + Logs) - now throttled
                 int newQuantity = strategy.CalculateDynamicQuantity(currentVWAP, projectedStop);
 
                 bool priceChanged = Math.Abs(strategy.entryOrder.LimitPrice - currentVWAP) >= TickSize;
                 bool quantityChanged = newQuantity != strategy.entryOrder.Quantity;
 
+                // Always update timestamp if we performed the check/calc
+                lastOrderUpdateTime = DateTime.Now; 
+
                 if (priceChanged || quantityChanged)
                 {
                     double newLimitPrice = priceChanged ? currentVWAP : strategy.entryOrder.LimitPrice;
                     strategy.ChangeOrder(strategy.entryOrder, newQuantity, newLimitPrice, 0);
-
+                    
                     if (quantityChanged)
                     {
                         strategy.Log(string.Format("{0} | DYNAMIC QTY ADJUST: Old={1} New={2} (Stop moved to {3:F2})",

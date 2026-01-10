@@ -36,7 +36,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.72"; // v1.14.72: Stale Execution Protection in OnExecutionUpdate
+		private const string StrategyVersion = "v1.14.77"; // v1.14.77: UI Risk Panel Fixes
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;
@@ -156,6 +156,11 @@ namespace NinjaTrader.NinjaScript.Strategies
             get { return tradeVwapActive; } 
             set { tradeVwapActive = value; }
         }
+        
+        // v1.14.74: New flag to indicate trade crossed 18:00 and should use Trade VWAP for TP1
+        [Browsable(false)]
+        [XmlIgnore]
+        public bool IsTradeVwapExtended { get; set; } = false;
 
 
 
@@ -196,7 +201,16 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private int vwapTouchBar = -1;                  // Bar where VWAP was touched
 
 		private bool enableDebugLogs = false; // Default false for performance
+		private bool enableHolidayProtection = true; // v1.14.79: Default true
 		private bool isLagPaused = false; // v1.14.36: Auto-pause when lag > 60s
+
+		[NinjaScriptProperty]
+		[Display(Name="Enable Holiday Protection", Description="If true, exits early on holidays/early closes. Disable if using bad backtest data.", Order=59, GroupName="General")]
+		public bool EnableHolidayProtection
+		{
+			get { return enableHolidayProtection; }
+			set { enableHolidayProtection = value; }
+		}
 
 		[NinjaScriptProperty]
 		[Display(Name="Enable Debug Logs", Description="Print detailed execution steps to Output. Disable for faster backtests.", Order=60, GroupName="General")]
@@ -644,6 +658,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 				Log("DEBUG: OnStateChange(DataLoaded) IsUnmanaged = " + IsUnmanaged);
 				// Initialize VWAP Calculator Module
 				vwapCalc = new VWAPCalculator(this);
+				riskManager = new RiskManager(this); // v1.14.76: Apteros Risk
+				riskManager.InitializeState();
 				sessionManager = new SessionManager(this); // v1.14.45: Fix Initialization
 				protectionManager = new OrderProtectionManager(this);
 				entryMachine = new EntryStateMachine(this); // Entry State Machine
@@ -825,6 +841,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 		{
 			// Disable Shared Risk in Backtest/Optimization to prevent state leak
 			if (State == State.Historical) return;
+            // v1.14.80: Disable in Playback to prevent File I/O Lag
+            if (Connection.PlaybackConnection != null) return;
 
 			// Only write if significantly different or every 5 seconds
 			if (Math.Abs(atrRisk - lastWrittenRisk) < 1 && (DateTime.Now - lastRiskWriteTime).TotalSeconds < 5)
@@ -855,6 +873,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 					File.WriteAllLines(path, lines.Values);
 					lastWrittenRisk = atrRisk;
 					lastRiskWriteTime = DateTime.Now;
+					
+					// v1.14.75: FIX CACHE - Ensure local cache reflects what we just wrote
+					// This prevents ReadMaxSharedRisk() from returning stale lower values from cache
+					if (atrRisk > cachedGlobalRisk) cachedGlobalRisk = atrRisk;
 				}
 			}
 			catch { }
@@ -867,6 +889,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 		{
 			// Disable Shared Risk in Backtest/Optimization
 			if (State == State.Historical) return RiskPerTradeUSD;
+            // v1.14.80: Disable in Playback
+            if (Connection.PlaybackConnection != null) return RiskPerTradeUSD;
 
 			// PERFORMANCE: Only read file every 5 seconds, use cache otherwise
 			if ((DateTime.Now - lastRiskReadTime).TotalSeconds < 5)
@@ -1188,8 +1212,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 			
 			if (Time[0].TimeOfDay >= sessionStartTime && lastTradingDate < currentDate)
 			{
-				// Only reset if flat (safety)
-				if (currentEntryState != EntryState.PositionActive)
+				// Only reset if flat (safety) - v1.14.81: Trust MarketPosition over internal state (Self-Healing)
+				if (currentEntryState != EntryState.PositionActive || Position.MarketPosition == MarketPosition.Flat)
 				{
 					Log(Time[0] + " SESSION RESET: Asia Open (18:00). Clearing previous session state.");
 					
@@ -1206,14 +1230,18 @@ namespace NinjaTrader.NinjaScript.Strategies
 				}
 				else
 				{
-					// Should we mark it as reset even if we skipped? 
-					// If we don't, it will try every bar. 
-					// Better to log once per date?
-					// Or just let it try until position closes? 
-					// If we mark it, we miss the reset.
-					// Let's log postponed and NOT mark date, so it resets as soon as position closes (next bar check).
-					// But we need to avoid spamming logs.
-					if (Convert.ToInt32(Time[0].TimeOfDay.TotalSeconds) % 60 == 0) // Log once per minute
+					// v1.14.74: Trade crosses 18:00 - Activate Trade VWAP Extension
+					// The Global VWAP will reset, but we need to continue with the accumulated value for TP1
+					if (!IsTradeVwapExtended && vwapCalc != null)
+					{
+						// Copy the accumulated values from Global to Trade VWAP before Global resets
+						vwapCalc.InheritFromGlobal(isShortSetup);
+						IsTradeVwapExtended = true;
+						Log(Time[0] + " TRADE VWAP EXTENDED: Position active at 18:00 crossing. TP1 will now use Trade VWAP.");
+					}
+					
+					// Log postponement (once per minute to avoid spam)
+					if (Convert.ToInt32(Time[0].TimeOfDay.TotalSeconds) % 60 == 0)
 						Log(Time[0] + " SESSION RESET POSTPONED: Position Active. Will retry when Flat.");
 				}
 			}
@@ -1590,6 +1618,18 @@ currentEntryState = EntryState.Idle;
 			CheckHardStop();
 			CheckSessionExit();
 
+			// v1.14.76: Apteros Risk Enforcement (Bar Update)
+            if (riskManager != null && SelectedRiskModel == RiskModelType.Apteros)
+            {
+               if (!riskManager.CheckRiskState(SelectedRiskModel, Account.Get(AccountItem.CashValue, Currency.UsDollar), ApterosDailyLossPercent, ApterosMaxTrailingDrawdown))
+               {
+                   if (Position.MarketPosition != MarketPosition.Flat)
+                       ClosePositionUnmanaged("Apteros Risk Limit Hit (OnBarUpdate)");
+                   
+                   return; // Stop processing entry logic
+               }
+            }
+
 			// HISTORICAL LOAD OPTIMIZATION
 			// Skip trading logic for old bars to speed up strategy loading
 			// Levels are still calculated above, only entry/exit logic is skipped
@@ -1685,6 +1725,7 @@ currentEntryState = EntryState.Idle;
 		// Visual Tracking
 		[XmlIgnore] public string triggerTag = "";
 		[XmlIgnore] public int triggerBar = 0;
+        [XmlIgnore] public int triggerLabelIndex = 0; // v1.14.80: For Recycling Labels
 		
 		// -------------------------------------------------------------------------
 		// GLOBAL ETH SESSION VWAP LOGIC
@@ -1845,46 +1886,58 @@ currentEntryState = EntryState.Idle;
 			// Early Close Definition: Market closes before 15:30 NY Time (Standard is 16:00 or 17:00)
 			bool isEarlyClose = nyClose.TimeOfDay < TimeSpan.FromHours(15.5);
 			
-			// Trigger logic if Friday OR Early Holiday
-			if (isFriday || isEarlyClose)
+			// v1.14.78: DEBUG HOLIDAY LOGIC
+			if (IsFirstTickOfBar && Time[0].Hour == 10 && Time[0].Minute == 29)
 			{
-				DateTime dynamicCutoff = actualSessionEnd.Subtract(exitBuffer);
-				
-				// Check Window: From Cutoff (End-30s) up to End+5min (Gap/Cleanup)
-				if (Time[0] >= dynamicCutoff && Time[0] <= actualSessionEnd.Add(gapBuffer))
-				{
-					// LOGIC ACTIVATED (Indent matches original block)
-				// 3. Execution Logic - ONLY ON FRIDAYS
-				
-				// A) Close Positions
-				if (Position.MarketPosition != MarketPosition.Flat)
-				{
-					// Only log once per bar to avoid spam
-					if (IsFirstTickOfBar)
-						Log(Time[0] + " FRIDAY CLOSE: Market closing for weekend. Forcing Exit.");
-						
-					ClosePositionUnmanaged("Exit on Friday Close");
-				}
-				
-				// B) Cancel Working Orders & Reset State
-				if (currentEntryState != EntryState.Idle)
-				{
-					if (IsFirstTickOfBar)
-						Log(Time[0] + " SESSION CLOSE PROTECT: Cancelling Pending Orders.");
-						
-					// CONSOLIDATED ENTRY
-					if (entryOrder != null && entryOrder.OrderState == OrderState.Working) CancelOrder(entryOrder);
-					if (stopOrder1 != null && stopOrder1.OrderState == OrderState.Working) CancelOrder(stopOrder1);
-					if (stopOrder2 != null && stopOrder2.OrderState == OrderState.Working) CancelOrder(stopOrder2);
-					if (tp1Order != null && tp1Order.OrderState == OrderState.Working) CancelOrder(tp1Order);
-					if (tp2Order != null && tp2Order.OrderState == OrderState.Working) CancelOrder(tp2Order);
-					
-					currentEntryState = EntryState.Idle; // Force Idle
-					setupLevelName = "";
-				}
+				Log(string.Format("DEBUG DATE: Time={0} ActualSessionEnd={1} (NY={2}) IsEarlyClose={3} IsFriday={4}", 
+					Time[0], actualSessionEnd, nyClose, isEarlyClose, isFriday));
 			}
+			
+	// Trigger logic if Friday OR Early Holiday
+	// v1.14.79: Allow disabling holiday protection (User Request for data mismatch scenarios)
+	if (EnableHolidayProtection && (isFriday || isEarlyClose))
+	{
+		DateTime dynamicCutoff = actualSessionEnd.Subtract(exitBuffer);
+		
+		// Check Window: From Cutoff (End-30s) up to End+5min (Gap/Cleanup)
+		if (Time[0] >= dynamicCutoff && Time[0] <= actualSessionEnd.Add(gapBuffer))
+		{
+			// LOGIC ACTIVATED (Indent matches original block)
+		// 3. Execution Logic - ONLY ON FRIDAYS/HOLIDAYS
+		
+		// A) Close Positions
+		if (Position.MarketPosition != MarketPosition.Flat)
+		{
+			// Only log once per bar to avoid spam
+			if (IsFirstTickOfBar)
+				Log(Time[0] + " SESSION CLOSE PROTECT: Market closing/holiday. Forcing Exit. (Reason: " + (isEarlyClose ? "Holiday" : "Friday") + ")");
+				
+			ClosePositionUnmanaged("Exit on Session Close (" + (isEarlyClose ? "Holiday" : "Friday") + ")");
+		}
+		
+		// B) Cancel Working Orders & Reset State
+		if (currentEntryState != EntryState.Idle)
+		{
+			if (IsFirstTickOfBar)
+				Log(Time[0] + " SESSION CLOSE PROTECT: Cancelling Pending Orders.");
+				
+			// CONSOLIDATED ENTRY
+			if (entryOrder != null && entryOrder.OrderState == OrderState.Working) CancelOrder(entryOrder);
+			// v1.14.80: Cancel MAIN stopOrder (Ghost SL fix)
+			if (stopOrder != null && (stopOrder.OrderState == OrderState.Working || stopOrder.OrderState == OrderState.Accepted)) CancelOrder(stopOrder);
+			
+			if (stopOrder1 != null && stopOrder1.OrderState == OrderState.Working) CancelOrder(stopOrder1);
+			if (stopOrder2 != null && stopOrder2.OrderState == OrderState.Working) CancelOrder(stopOrder2);
+			if (tp1Order != null && tp1Order.OrderState == OrderState.Working) CancelOrder(tp1Order);
+			if (tp2Order != null && tp2Order.OrderState == OrderState.Working) CancelOrder(tp2Order);
+			
+			currentEntryState = EntryState.Idle; // Force Idle
+			setupLevelName = "";
 		}
 	}
+}
+}
+
 
 
 		
@@ -1968,41 +2021,15 @@ currentEntryState = EntryState.Idle;
 			// 1. Zombie Position: We have a position, but State thinks we are Idle/Working.
 			if (Position.MarketPosition != MarketPosition.Flat && currentEntryState != EntryState.PositionActive)
 			{
-				// v1.14.70: PHANTOM POSITION CHECK - Validate against real Account.Positions
-				// During chart load, Position.MarketPosition may show historical positions that don't exist
-				bool hasRealPosition = false;
-				try
-				{
-					foreach (var pos in Account.Positions)
-					{
-						if (pos.Instrument.FullName == Instrument.FullName && pos.MarketPosition != MarketPosition.Flat)
-						{
-							hasRealPosition = true;
-							break;
-						}
-					}
-				}
-				catch (Exception ex) { Log("PHANTOM CHECK ERROR: " + ex.Message); }
-				
-				if (!hasRealPosition)
-				{
-					// This is a PHANTOM position from historical data - DO NOT act on it
-					Log(Time[0] + " PHANTOM POSITION DETECTED: Strategy shows " + Position.Quantity + " " + Position.MarketPosition + " but Account has 0. Resetting state.");
-					
-					// Full state cleanup to clear panel
-					currentEntryState = EntryState.Idle;
-					tradeOriginalQty = 0;
-					setupLevelName = "";
-					setupAnchorPrice = 0;
-					validatedTargetPrice = 0;
-					isShortSetup = false;
-					protectionManager?.ResetEntryState();
-					
-					return; // Skip Safety Net - no real position to protect
-				}
-				
 				Log(Time[0] + " CRITICAL: Safety Net Triggered! Position exists but State was " + currentEntryState);
 				Log($"DEBUG_SAFETYNET: Position.Qty={Position.Quantity} Position.MarketPosition={Position.MarketPosition} tradeOriginalQty={tradeOriginalQty}");
+				
+				// v1.14.69: DIAGNOSTIC LOG - Capture full state before EnsureProtection to debug phantom position creation
+				string tradeDir = isShortSetup ? "Short" : "Long";
+				double msSinceClose = (DateTime.Now - lastPositionCloseTime).TotalMilliseconds;
+				Log($"SAFETYNET_PRE: Position.MarketPosition={Position.MarketPosition} Position.Qty={Position.Quantity} " +
+					$"currentEntryState={currentEntryState} tradeDirection={tradeDir} " +
+					$"lastPositionCloseTime={msSinceClose:F0}ms ago");
 				
 				// --- SMART ADOPTION LOGIC (Strategy Position) ---
 				// ... (Existing Logic) ...
@@ -2082,6 +2109,7 @@ currentEntryState = EntryState.Idle;
 			tradeOriginalTp1Price = 0; // v1.11.24: Reset original TP prices
 			tradeOriginalTp2Price = 0;
 			tradeVwapActive = false; // v1.10.31: Reset Trade VWAP
+			IsTradeVwapExtended = false; // v1.14.74: Reset extension flag
 				
 				// Cancel orphan orders before nullifying references
 				// This handles cases where SL was manually moved and executed
@@ -2162,37 +2190,80 @@ currentEntryState = EntryState.Idle;
 				return MinQuantity;
 			}
 			
-			// RIESGO DINAMICO BASADO EN ATR
-			// Escalar el riesgo objetivo según la volatilidad actual
-			// ATR alto (volatilidad) = usar RiskPerTradeUSD completo
-			// ATR bajo (calma) = reducir riesgo proporcionalmente
-			double localAtrRisk = RiskPerTradeUSD;
-			if (atr != null && atr[0] > 0)
+			// v1.14.76: Risk Model Selection
+			double effectiveRisk = RiskPerTradeUSD; // Default
+
+			if (SelectedRiskModel == RiskModelType.Standard)
 			{
-				// ATR-scaled risk: riesgo proporcional al ATR
-				double atrInUSD = atr[0] * (Instrument.MasterInstrument.PointValue);
-				double scaledRisk = atrInUSD * ATRRiskScaleFactor;
+				// --- STANDARD MODEL (Legacy + ATR) ---
 				
-				// Usar el MENOR entre el riesgo máximo configurado y el escalado por ATR
-				localAtrRisk = Math.Min(RiskPerTradeUSD, scaledRisk);
+				// DEBUG: Log initial state
+                if (EnableDebugLogs)
+				    Log(string.Format("RISK_DEBUG_PRE: UseATR={0} | InitialRisk=${1:F2} | ATRFactor={2}", 
+					    UseATRScaling, effectiveRisk, ATRRiskScaleFactor));
 				
-				// Nunca menos de $5 de riesgo
-				if (localAtrRisk < 5.0) localAtrRisk = 5.0;
+				if (UseATRScaling && atr != null && atr[0] > 0)
+				{
+					// ATR-scaled risk: riesgo proporcional al ATR
+					double atrInUSD = atr[0] * (Instrument.MasterInstrument.PointValue);
+					double scaledRisk = atrInUSD * ATRRiskScaleFactor;
+					
+					if (EnableDebugLogs) 
+                        Log(string.Format("RISK_DEBUG_ATR: ATR=${0:F2} | ScaledRisk=${1:F2}", atrInUSD, scaledRisk));
+					
+					// Usar el MENOR entre el riesgo máximo configurado y el escalado por ATR
+					effectiveRisk = Math.Min(RiskPerTradeUSD, scaledRisk);
+					
+					// Nunca menos de $5 de riesgo
+					if (effectiveRisk < 5.0) effectiveRisk = 5.0;
+				}
 				
-				// Write our risk to shared file
-				WriteSharedRisk(localAtrRisk);
+				// Write to shared file for multi-instrument sync
+				WriteSharedRisk(effectiveRisk);
+				
+				// Read GLOBAL MAX risk from all instruments (for multi-instrument scenarios)
+				double fileRisk = ReadMaxSharedRisk();
+				
+				if (EnableDebugLogs)
+				    Log(string.Format("RISK_DEBUG_POST: Written=${0:F2} | ReadFromFile=${1:F2} | Using=${2:F2}", 
+					    effectiveRisk, fileRisk, (fileRisk > 0 ? fileRisk : effectiveRisk)));
+				
+				effectiveRisk = fileRisk;
 			}
-			
-			// Read GLOBAL MAX risk from all instruments
-			double effectiveRisk = ReadMaxSharedRisk();
+			else if (SelectedRiskModel == RiskModelType.Apteros)
+			{
+				// --- APTEROS MODEL (RiskManager) ---
+				// Uses StartOfDayBalance and Opportunity division
+				if (riskManager != null)
+				{
+					// Apteros logic determines the MAX risk per trade based on account size and remaining opportunities
+					effectiveRisk = riskManager.GetEffectiveRiskPerTrade(
+						SelectedRiskModel, 
+						RiskPerTradeUSD, 
+						Account.Get(AccountItem.CashValue, Currency.UsDollar), // Pass Current Account Value (or StartOfDay internally)
+						ApterosDailyLossPercent, 
+						ApterosDailyOpportunities,
+						RiskCalculationBasis,
+						ApterosMaxTrailingDrawdown,
+						ApterosAllocationDays
+					);
+					Log(string.Format("APTEROS RISK: Risk=${0:F2} (Based on {1}% Limit / {2} Opportunities)", 
+						effectiveRisk, ApterosDailyLossPercent, ApterosDailyOpportunities));
+				}
+			}
 			
 
 			
-			// Fórmula: Quantity = EffectiveRisk / (Ticks × Value)
+			// Formula: Quantity = EffectiveRisk / (Ticks * Value)
 			double calculatedQty = effectiveRisk / (riskInTicks * tickValue);
 			
 			// Redondear a entero
 			int quantity = (int)Math.Round(calculatedQty);
+			
+			// DEBUG LOG for Quantity Calculation
+            if (EnableDebugLogs)
+			    Log(string.Format("QTY_DEBUG: Risk=${0:F2} | SL_Ticks={1:F2} | TickVal=${2:F2} | CalcQty={3:F2} | MaxQty={4} | MinQty={5}", 
+				    effectiveRisk, riskInTicks, tickValue, calculatedQty, MaxQuantity, MinQuantity));
 			
 			// Aplicar límites
 			if (quantity < MinQuantity) quantity = MinQuantity;
@@ -2218,7 +2289,11 @@ currentEntryState = EntryState.Idle;
 			
 			// 1. TRIGGER DETECTION (Transition from Idle -> Waiting OR Switch Setup)
 			// Allow scanning for triggers if Idle OR Waiting (to switch setups).
-			bool canScan = (currentEntryState == EntryState.Idle || currentEntryState == EntryState.WaitingForConfirmation);
+            // v1.14.80: Also allow scanning if WaitingForVwapMitigation (Virtual SL)
+            // This ensures we catch OTHER opportunities while waiting for a specific level to break anchor
+			bool canScan = (currentEntryState == EntryState.Idle || 
+                            currentEntryState == EntryState.WaitingForConfirmation ||
+                            currentEntryState == EntryState.WaitingForVwapMitigation);
 			
 			// Always Update ADHOC VWAP if we are in a setup based on it
 			// Wait... we need to accumulate ONLY after trigger? Or always?
@@ -2824,6 +2899,17 @@ currentEntryState = EntryState.Idle;
 
 		protected override void OnPositionUpdate(Position position, double averagePrice, int quantity, MarketPosition marketPosition)
 		{
+			// v1.14.76: Check Apteros Risk Intra-bar (Realtime Monitoring)
+            if (riskManager != null && SelectedRiskModel == RiskModelType.Apteros)
+            {
+               // Check if we hit the limit RIGHT NOW
+               if (!riskManager.CheckRiskState(SelectedRiskModel, Account.Get(AccountItem.CashValue, Currency.UsDollar), ApterosDailyLossPercent, ApterosMaxTrailingDrawdown))
+               {
+                   if (marketPosition != MarketPosition.Flat)
+                       ClosePositionUnmanaged("Apteros Risk Limit Hit (Intra-bar)");
+               }
+            }
+
 			// Detect Trade Close (Transition to Flat)
 			if (marketPosition == MarketPosition.Flat && position.Instrument == Instrument)
 			{
@@ -3003,8 +3089,8 @@ currentEntryState = EntryState.Idle;
 			
 			if (isShortSetup)
 			{
-				// v1.14.58: Use vwapCalc.GetTradeVWAPCurrentValue() which mirrors Global VWAP correctly
-				if (tradeVwapActive && vwapCalc != null)
+				// v1.14.74: Use Trade VWAP only if trade crossed 18:00, otherwise use Global VWAP
+				if (IsTradeVwapExtended && vwapCalc != null)
 					targetGlobalVWAP = vwapCalc.GetTradeVWAPCurrentValue();
 				else
 					targetGlobalVWAP = GetCurrentLowVWAP(); 
@@ -3014,8 +3100,8 @@ currentEntryState = EntryState.Idle;
 			}
 			else
 			{
-				// v1.14.58: Use vwapCalc.GetTradeVWAPCurrentValue() which mirrors Global VWAP correctly
-				if (tradeVwapActive && vwapCalc != null)
+				// v1.14.74: Use Trade VWAP only if trade crossed 18:00, otherwise use Global VWAP
+				if (IsTradeVwapExtended && vwapCalc != null)
 					targetGlobalVWAP = vwapCalc.GetTradeVWAPCurrentValue();
 				else
 					targetGlobalVWAP = GetCurrentHighVWAP(); 
@@ -3120,42 +3206,6 @@ currentEntryState = EntryState.Idle;
 
 		protected override void OnExecutionUpdate(Execution execution, string executionId, double price, int quantity, MarketPosition marketPosition, string orderId, DateTime time)
 		{
-			// v1.14.72: STALE EXECUTION CHECK - Skip historical fills during chart load
-			// But ONLY if there's no real position (to handle reconnection scenarios)
-			if (State == State.Realtime)
-			{
-				TimeSpan executionAge = NinjaTrader.Core.Globals.Now - time;
-				if (executionAge.TotalMinutes > 5)
-				{
-					// Check if there's a REAL position - if yes, this might be a reconnection fill
-					bool hasRealPosition = false;
-					try
-					{
-						foreach (var pos in Account.Positions)
-						{
-							if (pos.Instrument.FullName == Instrument.FullName && pos.MarketPosition != MarketPosition.Flat)
-							{
-								hasRealPosition = true;
-								break;
-							}
-						}
-					}
-					catch { }
-					
-					if (!hasRealPosition)
-					{
-						// No real position = pure historical replay = safe to skip
-						Log(time + " STALE EXECUTION BLOCKED: " + execution.Order.Name + " is " + executionAge.TotalMinutes.ToString("F1") + " min old. No real position. Skipping.");
-						return;
-					}
-					else
-					{
-						// Real position exists - this might be a reconnection, process it
-						Log(time + " STALE EXECUTION ALLOWED (Reconnect?): " + execution.Order.Name + " is old but real position exists. Processing.");
-					}
-				}
-			}
-			
 			if (execution.Order.OrderState == OrderState.Filled || execution.Order.OrderState == OrderState.PartFilled)
 			{
 				string n = execution.Order.Name;
@@ -3205,10 +3255,16 @@ currentEntryState = EntryState.Idle;
 						{
 							tradeDeltaAtEntry = 0; tradeDeltaDirection = 0; tradeSessionDelta = 0;
 						}
+					}
+					else if (currentEntryState == EntryState.PositionActive)
+					{
+						// v1.14.77: Accumulate quantity on partial fills
+						tradeOriginalQty += quantity;
+						Log(Time + " Entry Partial Fill ("+n+") Qty=" + quantity + ". New TradeOriginalQty=" + tradeOriginalQty);
+					}
 						tradeDeltaAtTP1 = 0; // Reset, will be set when TP1 fills
 						
 						Log(Time + " CSV EXPORT: Trade #" + tradeExportId + " started - " + tradeDirection + " @ " + tradeEntryPrice);
-					}
 					
 					// Ensure Protection Runs based on FILLED QTY
 					// v1.7.17: We pass the filled amount, protection logic distributes it to buckets.
@@ -3514,6 +3570,7 @@ currentEntryState = EntryState.Idle;
 				tradeOriginalTp1Price = 0; // v1.11.24: Reset original TP prices
 				tradeOriginalTp2Price = 0;
 				tradeVwapActive = false; // v1.10.31: Reset Trade VWAP
+				IsTradeVwapExtended = false; // v1.14.74: Reset extension flag
 
 					// CLEARED
 				entryOrder = null;
@@ -3547,6 +3604,18 @@ currentEntryState = EntryState.Idle;
 		[NinjaScriptProperty]
 		[Display(Name="Europe Start Time", Order=3, GroupName="1. Sessions")]
 		public string EuropeStartTime { get; set; }
+		
+		// ===== ENTRY MODE SELECTION (v1.14.73) =====
+		
+		[NinjaScriptProperty]
+		[Display(Name="Entry Mode", Description="A+ Retrace waits for VWAP pullback. Anticipado enters on confirmation candle.", Order=0, GroupName="Order Management")]
+		public EntryMode SelectedEntryMode
+		{ get; set; } = EntryMode.APlusRetrace;
+		
+		[NinjaScriptProperty]
+		[Display(Name="Anticipated Order Type", Description="Only used when Entry Mode is Anticipado", Order=0, GroupName="Order Management")]
+		public AnticipatedOrderType AnticipatedType
+		{ get; set; } = AnticipatedOrderType.Market;
 		
 		[NinjaScriptProperty]
 		[Range(1, int.MaxValue)]
@@ -3603,10 +3672,52 @@ currentEntryState = EntryState.Idle;
 		{ get; set; } = true;
 		
 		[NinjaScriptProperty]
+		[Display(Name="Use ATR Scaling", Description="Limit risk based on ATR volatility", Order=7, GroupName="Order Management")]
+		public bool UseATRScaling
+		{ get; set; } = true;
+		
+		[NinjaScriptProperty]
 		[Range(0.1, 10.0)]
 		[Display(Name="ATR Risk Scale Factor", Description="Multiplier to convert ATR to risk $. Higher = more risk in volatile markets. (e.g. 2.0 means Risk$ = ATR × 2)", Order=8, GroupName="Order Management")]
 		public double ATRRiskScaleFactor
 		{ get; set; } = 2.0;
+
+		// ===== RISK MODEL SELECTION (v1.14.76) =====
+		
+		[NinjaScriptProperty]
+		[Display(Name="Selected Risk Model", Description="Choose between Standard (Fixed/ATR) or Apteros (Prop Firm Rules)", Order=0, GroupName="Apteros Risk Module")]
+		public RiskModelType SelectedRiskModel
+		{ get; set; } = RiskModelType.Standard;
+		
+		[NinjaScriptProperty]
+		[Display(Name="Daily Loss % Limit", Description="Daily Loss Limit as % of previous EOD Balance (Default 2.5%)", Order=1, GroupName="Apteros Risk Module")]
+		public double ApterosDailyLossPercent
+		{ get; set; } = 2.5;
+		
+		[NinjaScriptProperty]
+		[Range(1, 100)]
+		[Display(Name="Daily Opportunities", Description="Divisor for Daily Limit to calculate Risk Per Trade (e.g. Limit/10)", Order=2, GroupName="Apteros Risk Module")]
+		public int ApterosDailyOpportunities
+		{ get; set; } = 10;
+		
+		[NinjaScriptProperty]
+		[Display(Name="Max Trailing Drawdown", Description="Max Trailing Drawdown from High Water Mark (e.g. $5000)", Order=3, GroupName="Apteros Risk Module")]
+		public double ApterosMaxTrailingDrawdown
+		{ get; set; } = 5000.0;
+		
+		[NinjaScriptProperty]
+		[Display(Name="Risk Calculation Basis", Description="Choose between % of Daily Balance or Drawdown Allocation", Order=4, GroupName="Apteros Risk Module")]
+		public ApterosRiskBasis RiskCalculationBasis
+		{ get; set; } = ApterosRiskBasis.PercentageOfBalance;
+		
+		[NinjaScriptProperty]
+		[Range(1, 365)]
+		[Display(Name="Allocation Days", Description="Days to allocate the Max Drawdown over (e.g. 20 days)", Order=5, GroupName="Apteros Risk Module")]
+		public int ApterosAllocationDays
+		{ get; set; } = 20;
+		
+		[XmlIgnore]
+		public RiskManager riskManager;
 		
 		// Internal Targets State
 		[XmlIgnore] public double activeTp1Price = 0;

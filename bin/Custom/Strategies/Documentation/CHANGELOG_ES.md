@@ -4,30 +4,139 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v1.14.69 → v1.14.71] - 2026-01-08
-### FIX CRÍTICO: Protección Contra Datos Históricos y Posiciones Fantasma 🛡️👻
+## [v1.14.81] - 2026-01-09
+### Fixed
+- **Session Reset:** Se añadió mecanismo de auto-curación en `CheckWeekEndReset`. Ahora el reset de sesión ocurre forzosamente si `Position.MarketPosition` es `Flat`, previniendo que la estrategia quede atascada en un ciclo de "SESSION RESET POSTPONED" por estados desincronizados ("Ghost Positions").
+- **Blindness Bug:** Corregido error donde la estrategia dejaba de escanear nuevas oportunidades tras cancelar una orden por R/R inadecuado. Ahora se permite el escaneo incluso si el estado es `WaitingForVwapMitigation` (Virtual SL).
 
-**Problema Reportado**: Al activar la estrategia, se ejecutaban órdenes y se creaban SL/TP basados en datos históricos (meses atrás) durante la carga del chart.
+## [v1.14.80] - 2026-01-09
+### FIX: Ghost Stop Loss en Cierre Forzado 👻
+- **Problema**: Al ejecutarse un cierre forzado (ej: por protección de feriado `EnableHolidayProtection` o cierre de Viernes), la orden Stop Loss (`stopOrder`) quedaba activa con posición 0.
+- **Causa**: La lógica de limpieza en `CheckSessionExit` solo cancelaba `stopOrder1` y `stopOrder2` (versiones antiguas), pero no `stopOrder` (versión actual).
+- **Solución**: Añadida cancelación explícita de `stopOrder` en el bloque de limpieza de sesión.
+- **Archivo**: `SessionLevelsStrategy.cs`
 
-**Causa Raíz Identificada (3 puntos de fallo)**:
-1. **Stale Bar Processing**: Durante la carga del chart, `State == State.Realtime` pero los datos procesados eran de meses atrás.
-2. **Phantom Positions (Safety Net)**: `Position.MarketPosition` mostraba posiciones de sesiones pasadas que no existían en `Account.Positions`.
-3. **EnsureProtection**: Creaba órdenes SL/TP para posiciones fantasma sin validar contra la cuenta real.
+## [v1.14.79] - 2026-01-09
+### FEATURE: Parámetro de Protección de Feriados (Kill Switch) 🛡️
+- **Problema**: Backtests con datos históricos que tienen conflictos de formato de fecha (ej: leer 9/1 como 1/9) activaban falsamente la protección de "Cierre por Feriado" (Labor Day).
+- **Solución**: Nuevo parámetro `EnableHolidayProtection` (Default: True).
+  - Si se desactiva, la estrategia ignorará los cierres tempranos y feriados, permitiendo backtests en data imperfecta.
+- **Archivo**: `SessionLevelsStrategy.cs`
 
-**Soluciones Implementadas**:
+## [v1.14.78] - 2026-01-09
+### UPDATE: BidAskAnchoredVWAP v3 (Visuals & Data) 🎨
+- **Mejoras Visuales**:
+  - Todas las líneas activas son ahora **Blancas** y de **2px** de grosor.
+  - Al mitigarse (precio rompe el anchor), la línea se corta visualmente y el historial se vuelve **Gris**.
+- **Lógica**:
+  - Corrección de Anchoring para sesiones ETH (18:00 - 17:00) cruzando media noche.
+  - Aproximación de Volumen Bid/Ask usando Up/Down ticks si no hay Tick Replay.
+- **Archivo**: `BidAskAnchoredVWAP.cs`
 
-#### v1.14.69: Stale Bar Protection
-- En `EntryStateMachine.cs` → `ScanForTriggers()` y `HandleConfirmation()`: Bloquea si `barAge > 5 minutos` en Realtime.
+## [v1.14.76] - 2026-01-09
+### FEATURE: Módulo de Riesgo Apteros & Sincronización Multi-Instrumento 🚀
+- **Módulo de Riesgo Apteros**:
+    - Implementado `RiskManager.cs` para manejar reglas específicas de Prop Firms (Apteros T.E.P. por defecto).
+    - **Nuevos Parámetros**:
+        - `Selected Risk Model`: Alternar entre `Standard` (Fixed/ATR) y `Apteros`.
+        - `Daily Loss % Limit`: Límite de pérdida diaria (ej: 2.5%).
+        - `Daily Opportunities`: Divisor para calcular riesgo por trade (ej: Límite / 10).
+        - `Max Trailing Drawdown`: Límite de drawdown global ($5,000).
+        - **NEW**: `Risk Calculation Basis`: Elegir entre `% of Daily Balance` (Agresivo) o `Drawdown Allocation` (Conservador).
+        - **NEW**: `Allocation Days`: Días para dividir el Drawdown (ej: 20 días) en modo Conservador.
+    - **Cálculo de Cantidad**: 
+        - Modo `% Balance`: `(Balance * %) / Oportunidades`.
+        - Modo `Drawdown Allocation`: `(Drawdown / Días) / Oportunidades`.
 
-#### v1.14.70: Phantom Position Protection (Safety Net + Panel)
-- En `SessionLevelsStrategy.cs` → `CheckSafetyNet()`: Valida contra `Account.Positions` antes de actuar.
-- En `StrategyHelpers.cs` → `DrawStatePanel()`: Muestra "Flat (phantom)" si posición es fantasma.
-- Limpieza completa de estado cuando se detecta phantom (tradeOriginalQty, setupLevelName, etc.).
+## [v1.14.77] - 2026-01-09
+### FIX: Panel de Información y Cálculo de Riesgo Visual 🐛
+- **Corrección de "Partial Fill"**: Ahora el panel acumula correctamente la cantidad de contratos si la entrada se llena en varios pasos (antes mostraba riesgo de 1 solo contrato).
+- **Corrección de División Entera**: Solucionado error que mostraba "$0" en TP2 cuando la cantidad era impar (ej: 1 contrato).
 
-#### v1.14.71: Phantom Protection in EnsureProtection
-- En `OrderProtectionManager.cs` → `EnsureProtection()`: Bloquea creación de SL/TP si `Account.Positions` está vacío.
+- **Sincronización Multi-Instrumento**:
+    - Implementado archivo de estado compartido (`ApterosState.txt`).
+    - **Bloqueo Global**: Si una estrategia (ej: MNQ) toca el límite diario global, todas las estrategias conectadas (ej: ES) se bloquean automáticamente.
+    - Sincronización de Balance Inicial del Día entre múltiples instancias.
 
-**Resultado**: La estrategia ahora rechaza completamente cualquier acción basada en datos históricos o posiciones fantasma durante la carga del chart.
+## [v1.14.75] - 2026-01-08
+### IMPROVEMENTS: ATR Scaling & Logic Fixes 🛠️
+- **Nuevo Parámetro**: `UseATRScaling` (bool)
+  - Permite activar/desactivar el escalado de riesgo basado en ATR.
+  - Default: `True` (comportamiento original). Poner en `False` para usar `RiskPerTradeUSD` directamente sin límites por volatilidad.
+- **Fix Lógica Niveles Internos**:
+  - Los niveles de **días anteriores** ahora SIEMPRE se tratan como EXTERNOS (usan Global VWAP).
+  - Previene que un nivel "USA High" de hace 3 días force el uso de Adhoc VWAP incorrectamente.
+- **Mejoras Logging**:
+  - Log detallado para diagnóstico de `WAITING SHORT` (muestra VWAP Global vs Setup).
+
+## [v1.14.74] - 2026-01-08
+### FIX CRÍTICO: TP1 Usa VWAP Global ETH (No Trade VWAP) ⚠️
+- **Bug**: TP1 usaba Trade VWAP (21391) en lugar de VWAP Global ETH (21516), causando target 125 puntos más lejos.
+- **Root Cause 1**: `IsTradeVwapExtended` no se reseteaba al inicio de cada trade nuevo.
+- **Root Cause 2**: La actualización dinámica de TP1 usaba `tradeVwapActive` en lugar de `IsTradeVwapExtended`.
+- **Fixes aplicados**:
+  1. `OrderProtectionManager.ResetEntryState()`: Reset `IsTradeVwapExtended = false`
+  2. `SessionLevelsStrategy.UpdateProtectionOrders()`: Usar `IsTradeVwapExtended` en lugar de `tradeVwapActive`
+  3. `OrderProtectionManager.EnsureProtection()`: Usar `IsTradeVwapExtended` para selección de VWAP
+- **Comportamiento correcto**:
+  - Trade nuevo → TP1 = VWAP Global ETH de la sesión actual
+  - Trade cruza 18:00 → Trade VWAP hereda acumulado del Global y continúa
+- **Nuevo método**: `VWAPCalculator.InheritFromGlobal()` copia valores acumulados
+- **Archivos**: `SessionLevelsStrategy.cs`, `OrderProtectionManager.cs`, `VWAPCalculator.cs`
+
+## [v1.14.73] - 2026-01-08
+### NEW: Modo de Entrada Seleccionable (A+ Retrace vs Anticipado) 🚀
+- **Nuevos Parámetros**:
+  - `Entry Mode`: **A+ Retrace** (espera retroceso al VWAP) o **Anticipado** (entra en la confirmación)
+  - `Anticipated Order Type`: **Market** o **Limit** (solo para modo Anticipado)
+- **Comportamiento**:
+  - A+ Retrace: Comportamiento original (orden límite al VWAP)
+  - Anticipado Market: Entra inmediatamente con orden Market al cierre de confirmación
+  - Anticipado Limit: Entra con orden Limit al precio del cierre de confirmación
+- **Archivos**: `SessionLevelCore.cs`, `SessionLevelsStrategy.cs`, `EntryStateMachine.cs`
+
+## [v1.14.72] - 2026-01-08
+### NEW: Panel Muestra TP Proyectados Durante Orden Pendiente 📊
+- **Mejora**: Ahora el panel de estado muestra SL, TP1 y TP2 **mientras la orden límite está Working** (pendiente de llenado).
+- **Cálculo**:
+  - TP1 = VWAP actual (dinámico)
+  - TP2 = Nivel opuesto o `validatedTargetPrice`
+- **Visual**: Los valores muestran sufijo "(Est)" para indicar que son estimados hasta el fill.
+- **Archivo**: `StrategyHelpers.cs` línea 189
+
+## [v1.14.71] - 2026-01-08
+### FIX: Edad de Nivel Usa Sesión ETH en Lugar de Calendario 📅
+- **Problema**: Un nivel de "Asia High" creado a las 20:00 del 7 de enero (sesión ETH del 8) mostraba "1 Day" cuando debería ser "Today".
+- **Causa**: El cálculo usaba `Date` del calendario, no la fecha de sesión ETH (que inicia a las 18:00).
+- **Fix**: Ahora los niveles creados después de las 18:00 se consideran del "día siguiente" de sesión. Si el nivel pertenece a la misma sesión ETH que la hora actual, muestra "Today".
+- **Archivo**: `StrategyHelpers.cs` línea 140
+
+## [v1.14.70] - 2026-01-08
+### FIX CRÍTICO: Race Condition en HandleWorkingOrder 🐛
+- **Problema**: En MGC se detectó que `Position.MarketPosition` permanece `Flat` durante ~55ms después del fill. El código anterior forzaba `PositionActive` sin verificar, causando un reset inmediato a `Idle` (porque Position era Flat), lo que disparaba incorrectamente el Safety Net.
+- **Evidencia (Log v1.14.69)**:
+  ```
+  SYNC_DEBUG: Position.MarketPosition=Flat Position.Qty=0 timeSinceFill=55ms
+  SYNC: Order Filled but State was Working. Forcing InPosition.
+  SYNC: State is InPosition but MarketPosition is Flat. Resetting to Idle.  ← BUG
+  CRITICAL: Safety Net Triggered!
+  TP UPDATE (TP2): Modifying Qty=1 -> Qty=3  ← INCORRECTO
+  ```
+- **Fix**: Ahora `HandleWorkingOrder()` solo transiciona a `PositionActive` si `Position.MarketPosition ≠ Flat`. Si Position aún no se actualizó, el estado permanece en `Working` y se loguea `SYNC_WAIT`.
+- **Archivo**: `EntryStateMachine.cs` línea 818
+
+## [v1.14.69] - 2026-01-08
+### DIAGNÓSTICO: Logs para Investigar 5 Problemas Críticos 🔍
+- **Contexto**: Análisis de logs del 2026-01-08 reveló 5 problemas críticos que requieren investigación adicional.
+- **Logs Agregados (NO se modificó lógica)**:
+  1. **`SAFETYNET_PRE`** en `CheckSafetyNet()`: Captura estado completo (Position, tradeDirection, msSinceClose) antes de crear protección. Objetivo: detectar por qué Safety Net crea posiciones fantasma en dirección opuesta (M2K).
+  2. **`SYNC_DEBUG`** en `EntryStateMachine.HandleWorkingOrder()`: Captura timing entre fill y verificación de Position. Objetivo: detectar race condition donde Position.MarketPosition es Flat inmediatamente después del fill (6A, 6J).
+  3. **`TP1_PRE_CREATE` / `TP2_PRE_CREATE`** en `OrderProtectionManager.SubmitProtectionOrders()`: Captura estado de órdenes TP existentes antes de crear nuevas. Objetivo: detectar duplicación de TP1/TP2 (6J).
+  4. **`SWITCH_EVAL`** en `EntryStateMachine.ScanForTriggers()`: Captura delta de precio entre niveles. Objetivo: detectar loop infinito de SWITCH cuando niveles tienen mismo precio (ZW).
+- **Archivos Modificados**:
+  - `SessionLevelsStrategy.cs` (CheckSafetyNet)
+  - `EntryStateMachine.cs` (HandleWorkingOrder, ScanForTriggers)
+  - `OrderProtectionManager.cs` (SubmitProtectionOrders)
 
 ## [v1.14.65] - 2026-01-07
 ### NEW: Trade VWAP Persistente (Post-Sesión) 🌙
