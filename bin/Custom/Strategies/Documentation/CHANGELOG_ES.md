@@ -7,7 +7,18 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 ### Agregado
 - **Módulo SL Adaptativo (Supervivencia):** Reemplazo de la lógica de salida de emergencia. Ahora, si el precio salta el Stop Loss durante la entrada, el sistema adapta el SL a `Precio Actual +/- 4 ticks` para asegurar que la orden sea aceptada por NinjaTrader y la posición siga protegida, en lugar de cerrar o fallar.
 
-## [v1.15.6] - 2026-01-12
+## [v1.15.7] - 2026-01-13
+### Agregado
+- **Panel de Estado: Contador de Intentos por Nivel**: Ahora el panel muestra dos contadores separados:
+  - **`(VWAP X)`**: Número de reintento VWAP dentro del setup actual (ej. VWAP 2 después de un SL/BE)
+  - **`[X/20]`**: Intentos totales acumulados en ese nivel específico (ej. `[2/20]` = segundo intento de 20 máximos permitidos)
+  - **Ejemplo completo**: `Level: Asia High (VWAP 2) [3/20]` indica que es el tercer intento en Asia High, y dentro de este setup estamos en el segundo VWAP.
+
+### Técnico
+- Modificado `StrategyHelpers.cs:213-236` para buscar el nivel actual en `activeLevels` y mostrar su propiedad `EntryAttempts`.
+- El contador se muestra cuando el estado es `WaitingForConfirmation`, `workingOrder`, `PositionActive`, o `WaitingForVwapMitigation`.
+
+## [v1.15.6] - 2026-01-13
 ### Corregido
 - **Errores de Compilación en EntryStateMachine:** Completada la implementación de métodos faltantes que causaban errores CS1061 y CS0246.
   - **Agregado `using NinjaTrader.NinjaScript.Strategies.SessionLevels`**: Solucionó error CS0246 donde no se encontraba el tipo `EntryStateMachine`.

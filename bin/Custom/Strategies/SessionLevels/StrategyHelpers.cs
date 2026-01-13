@@ -211,10 +211,28 @@ namespace NinjaTrader.NinjaScript.Strategies
             }
             
             // v1.14.54: Show retry counter when applicable
+            // v1.15.6: Enhanced to show both VWAP retry and Level attempt counters
             string retryInfo = "";
+
+            // Show VWAP retry counter (within current setup)
             if (strategy.currentVwapNumber > 1 || strategy.waitingForVwapMitigation)
             {
-                retryInfo = string.Format(" (Intento {0}/{1})", strategy.currentVwapNumber, strategy.MaxRetriesPerLevel);
+                retryInfo = string.Format(" (VWAP {0})", strategy.currentVwapNumber);
+            }
+
+            // Show Level attempt counter (total attempts on this level)
+            if (!string.IsNullOrEmpty(strategy.setupLevelName) &&
+                (strategy.currentEntryState == EntryState.WaitingForConfirmation ||
+                 strategy.currentEntryState == EntryState.workingOrder ||
+                 strategy.currentEntryState == EntryState.PositionActive ||
+                 strategy.currentEntryState == EntryState.WaitingForVwapMitigation))
+            {
+                var currentLevel = strategy.activeLevels.FirstOrDefault(l => l.Name == strategy.setupLevelName);
+                if (currentLevel != null)
+                {
+                    string levelAttempts = string.Format(" [{0}/{1}]", currentLevel.EntryAttempts, strategy.MaxRetriesPerLevel);
+                    retryInfo += levelAttempts;
+                }
             }
 
             // v1.14.70: Detect phantom positions - NinjaTrader shows position but Account has none
@@ -241,7 +259,7 @@ namespace NinjaTrader.NinjaScript.Strategies
             }
 
             string text = string.Format("Ver: {0}\nState: {1}\nLevel: {2}{3}\nPosition: {4}\nPnL: {5} | Risk: {6:C0} (Min: {7:C0}){8}",
-                "v1.14.72", // Hardcoded version updated
+                "v1.15.7", // Hardcoded version updated
                 stateDisplay,
                 levelInfo,
                 retryInfo,
