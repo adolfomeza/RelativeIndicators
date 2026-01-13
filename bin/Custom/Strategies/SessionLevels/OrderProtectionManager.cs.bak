@@ -68,12 +68,8 @@ namespace NinjaTrader.NinjaScript.Strategies
                                      int currentVwapNumber, bool isShortSetup, string setupLevelName, 
                                      DateTime setupLevelTime, double setupAnchorPrice, double validatedTargetPrice)
 	    {
-		    // v1.15.14: PHANTOM POSITION CHECK - Modified to handle replay sync delays
-		    // During replay, Account.Positions may not sync instantly with Position.Quantity
-		    // Only block if Position.Quantity is also 0 (true phantom)
+		    // v1.14.70: PHANTOM POSITION CHECK - Don't create protection for phantom positions
 		    bool hasRealPosition = false;
-		    bool positionQuantityValid = Math.Abs(strategy.Position.Quantity) > 0;
-
 		    try
 		    {
 			    foreach (var pos in strategy.Account.Positions)
@@ -86,19 +82,11 @@ namespace NinjaTrader.NinjaScript.Strategies
 			    }
 		    }
 		    catch (Exception ex) { strategy.Log("PHANTOM CHECK ERROR (EnsureProtection): " + ex.Message); }
-
-		    // v1.15.14: Only block if BOTH Position.Quantity AND Account.Positions show 0
-		    // If Position.Quantity > 0, trust it (especially important for replay)
-		    if (!hasRealPosition && !positionQuantityValid)
+		    
+		    if (!hasRealPosition)
 		    {
-			    strategy.Log(strategy.Time[0] + " PHANTOM PROTECTION BLOCKED: Strategy shows position but Account has 0 AND Position.Quantity=0. Skipping EnsureProtection.");
+			    strategy.Log(strategy.Time[0] + " PHANTOM PROTECTION BLOCKED: Strategy shows position but Account has 0. Skipping EnsureProtection.");
 			    return; // Don't create SL/TP for phantom positions
-		    }
-
-		    // Log when proceeding despite Account.Positions mismatch (replay sync delay)
-		    if (!hasRealPosition && positionQuantityValid)
-		    {
-			    strategy.Log(strategy.Time[0] + " REPLAY_SYNC_DELAY: Account.Positions=0 but Position.Quantity=" + strategy.Position.Quantity + ". Proceeding with protection (replay sync delay).");
 		    }
 		    
 		    // v1.13.10: DIAGNOSTIC LOGS
@@ -493,44 +481,33 @@ namespace NinjaTrader.NinjaScript.Strategies
             if (cachedOppositeLevel != null) return cachedOppositeLevel.Price;
             if (oppositeSearchDone) return 0;
             if (string.IsNullOrEmpty(name)) return 0;
-
+            
             string oppName = "";
-            bool isSearchingHigh = false; // true if searching for High, false if searching for Low
-            if (name.Contains(" Low"))
-            {
-                oppName = name.Replace(" Low", " High");
-                isSearchingHigh = true;
-            }
-            else if (name.Contains(" High"))
-            {
-                oppName = name.Replace(" High", " Low");
-                isSearchingHigh = false;
-            }
+            if (name.Contains(" Low")) oppName = name.Replace(" Low", " High");
+            else if (name.Contains(" High")) oppName = name.Replace(" High", " Low");
             else return 0;
-
+            
             if (strategy.EnableDebugLogs) strategy.Log(string.Format("{0} | SEARCH_OPPOSITE: Looking for '{1}' from SAME DAY as '{2}' (RefDate: {3:yyyy-MM-dd})", strategy.Time[0], oppName, name, refTime.Date));
-
+            
             SessionLevel foundLvl = null;
             string setupSessionTicks = "";
-            // v1.14.64 FIX: Use refTime (StartTime) to find the EXACT setup level object,
+            // v1.14.64 FIX: Use refTime (StartTime) to find the EXACT setup level object, 
             // preventing the selection of old duplicate levels from history with the same Name but old Tags.
             SessionLevel setupLevel = activeLevels.FirstOrDefault(l => l.Name == name && l.StartTime == refTime);
-
+            
             // Fallback: If not found by exact time (shouldn't happen if logic is correct), try just by name
             if (setupLevel == null)
             {
                 strategy.Print("[OPP_SEARCH] WARNING: Setup level not found by Name+Time (" + name + " @ " + refTime + "). Falling back to Name only.");
                 setupLevel = activeLevels.FirstOrDefault(l => l.Name == name);
             }
-
+            
             if (setupLevel != null && !string.IsNullOrEmpty(setupLevel.Tag))
             {
                 string[] tagParts = setupLevel.Tag.Split('_');
                 if (tagParts.Length >= 3) setupSessionTicks = tagParts[tagParts.Length - 1];
             }
-
-            // v1.15.16: First find same-day opposite level
-            SessionLevel sameDayLevel = null;
+            
             foreach(var l in activeLevels)
             {
                 if (l.Name.Trim().Equals(oppName.Trim(), StringComparison.OrdinalIgnoreCase)) {
@@ -541,82 +518,23 @@ namespace NinjaTrader.NinjaScript.Strategies
                         string candidateTicks = candidateTagParts.Length >= 3 ? candidateTagParts[candidateTagParts.Length - 1] : "";
                         sameSession = (candidateTicks == setupSessionTicks);
                     }
-                    if (sameSession) { sameDayLevel = l; break; }
+                    if (sameSession) { foundLvl = l; break; }
                 }
             }
-
-            // v1.15.17: Now find the MOST EXTREME opposite level from SAME DAY (maximize TP2)
-            // For High: find highest price | For Low: find lowest price
-            // Only consider levels from the SAME DAY (matching setupSessionTicks)
-            SessionLevel mostExtremeLevel = sameDayLevel; // Start with same-day level
-
-            foreach(var l in activeLevels)
-            {
-                // Check if this level is from the SAME DAY
-                bool sameDay = false;
-                if (!string.IsNullOrEmpty(setupSessionTicks) && !string.IsNullOrEmpty(l.Tag))
-                {
-                    string[] candidateTagParts = l.Tag.Split('_');
-                    string candidateTicks = candidateTagParts.Length >= 3 ? candidateTagParts[candidateTagParts.Length - 1] : "";
-                    sameDay = (candidateTicks == setupSessionTicks);
-                }
-
-                if (!sameDay) continue; // Skip levels from other days
-
-                // Check if this is an opposite type level (High vs Low)
-                bool isOppositeType = false;
-                if (isSearchingHigh && l.Name.Contains(" High")) isOppositeType = true;
-                if (!isSearchingHigh && l.Name.Contains(" Low")) isOppositeType = true;
-
-                if (isOppositeType)
-                {
-                    if (mostExtremeLevel == null)
-                    {
-                        mostExtremeLevel = l;
-                    }
-                    else
-                    {
-                        // For High: pick higher price | For Low: pick lower price
-                        if (isSearchingHigh && l.Price > mostExtremeLevel.Price)
-                        {
-                            mostExtremeLevel = l;
-                        }
-                        else if (!isSearchingHigh && l.Price < mostExtremeLevel.Price)
-                        {
-                            mostExtremeLevel = l;
-                        }
-                    }
-                }
-            }
-
-            // v1.15.17: Log if we selected a more extreme level than same-session opposite
-            if (mostExtremeLevel != null && sameDayLevel != null && mostExtremeLevel != sameDayLevel)
-            {
-                strategy.Log(string.Format("TP2_MAXIMIZE: Using {0} @ {1} instead of {2} @ {3} (more extreme on same day)",
-                    mostExtremeLevel.Name, mostExtremeLevel.Price, sameDayLevel.Name, sameDayLevel.Price));
-            }
-
-            foundLevel = mostExtremeLevel;
-            return mostExtremeLevel != null ? mostExtremeLevel.Price : 0;
+            foundLevel = foundLvl;
+            return foundLvl != null ? foundLvl.Price : 0;
         }
         
         // v1.14.40: Handle TP1 Fill - Move SL to Breakeven
         public void HandleTP1Fill()
         {
-            // v1.15.18: Check if breakeven is enabled
-            if (!strategy.EnableBreakeven)
-            {
-                strategy.Log(strategy.Time[0] + " BE DISABLED: TP1 filled but breakeven move is disabled in settings");
-                return;
-            }
-
             strategy.Log(strategy.Time[0] + " BE LOGIC: TP1 Filled. Moving SL to BE.");
-
+            
             // Move single SL to breakeven
             if (strategy.stopOrder != null && strategy.entryOrder != null)
             {
                 int remainingQty = Math.Abs(strategy.Position.Quantity);
-
+                
                 // Guard against Qty=0 (position already fully closed by TP1)
                 if (remainingQty > 0)
                 {

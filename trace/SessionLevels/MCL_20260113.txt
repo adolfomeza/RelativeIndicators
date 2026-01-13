@@ -1,9 +1,1313 @@
-=== MCL Strategy Log - Started 2026-01-13 09:42:52 ===
+=== MCL Strategy Log - Started 2026-01-13 16:11:39 ===
 
-09:42:52.838 [09:42:52.838] DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
-09:42:52.840 [09:42:52.840] DEBUG_RECONNECT: Total Account.Positions count = 0
-09:42:52.850 [09:42:52.850] 20/1/25 7:01:00 p. m. v1.15.11 RESTART EVAL: Checking for pending orders or valid setup to continue...
-09:42:52.851 [09:42:52.851] 20/1/25 7:01:00 p. m. v1.15.11 RESTART: No valid setup found. Starting fresh.
-09:42:52.851 [09:42:52.851] 20/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-09:42:52.854 [09:42:52.854] 20/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-09:42:52.855 [09:42:52.855] PROTECTION_RESET: Cleared order references for new trade
+16:11:39.078 [16:11:39.078] DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
+16:11:39.080 [16:11:39.080] DEBUG_RECONNECT: Total Account.Positions count = 0
+16:11:39.082 [16:11:39.082] 19/1/25 7:01:00 p. m. v1.15.17 RESTART EVAL: Checking for pending orders or valid setup to continue...
+16:11:39.084 [16:11:39.084] 19/1/25 7:01:00 p. m. v1.15.17 RESTART: No valid setup found. Starting fresh.
+16:11:39.086 [16:11:39.086] 19/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 17/1/25 6:00:00 p. m. NY)
+16:11:39.087 [16:11:39.087] LEVEL SUMMARY (Price=77.54):
+16:11:39.089 [16:11:39.089]   Asia Low @ 71.64 | Currently ABOVE by 590 ticks
+16:11:39.091 [16:11:39.091]   Europe Low @ 71.74 | Currently ABOVE by 580 ticks
+16:11:39.093 [16:11:39.093]   USA Low @ 72.45 | Currently ABOVE by 509 ticks
+16:11:39.095 [16:11:39.095]   Asia Low @ 72.81 | Currently ABOVE by 473 ticks
+16:11:39.097 [16:11:39.097]   Europe Low @ 73.24 | Currently ABOVE by 430 ticks
+16:11:39.099 [16:11:39.099]   USA Low @ 74.21 | Currently ABOVE by 333 ticks
+16:11:39.100 [16:11:39.100]   Asia Low @ 75.33 | Currently ABOVE by 221 ticks
+16:11:39.103 [16:11:39.103]   Europe Low @ 76.16 | Currently ABOVE by 138 ticks
+16:11:39.104 [16:11:39.104]   Europe Low @ 76.16 | Currently ABOVE by 138 ticks
+16:11:39.106 [16:11:39.106]   USA High @ 79.38 | Currently BELOW by 184 ticks
+16:11:39.108 [16:11:39.108]   Asia High @ 79.2 | Currently BELOW by 166 ticks
+16:11:39.109 [16:11:39.109]   Europe High @ 78.93 | Currently BELOW by 139 ticks
+16:11:39.112 [16:11:39.112]   USA Low @ 76.93 | Currently ABOVE by 61 ticks
+16:11:39.113 [16:11:39.113]   Europe High @ 78.56 | Currently BELOW by 102 ticks
+16:11:39.114 [16:11:39.114]   USA High @ 77.88 | Currently BELOW by 34 ticks
+16:11:39.115 [16:11:39.115]   USA Low @ 77.13 | Currently ABOVE by 41 ticks
+16:11:39.118 [16:11:39.118] 19/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+16:11:39.118 [16:11:39.118] PROTECTION_RESET: Cleared order references for new trade
+16:11:39.119 [16:11:39.119] 19/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+16:11:39.121 [16:11:39.121] 19/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+16:11:39.122 [16:11:39.122] PROTECTION_RESET: Cleared order references for new trade
+16:14:22.429 [16:14:22.429] 20/1/25 2:27:00 a. m. ENTRY ATTEMPT #1/20 on USA Low (Deepest Selection)
+16:14:22.429 [16:14:22.429] INTERNAL LEVEL (EXTREME): USA Low @ 77.13 (No external protection below)
+16:14:24.532 [16:14:24.532] 20/1/25 2:33:00 a. m. | SEARCH_OPPOSITE: Looking for 'USA High' from SAME DAY as 'USA Low' (RefDate: 2025-01-17)
+16:14:24.533 [16:14:24.533] 20/1/25 2:33:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 77.14 (Raw: 77.1395564516128). Bid=77.17 Ask=77.18
+16:14:24.533 [16:14:24.533] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:24.533 [16:14:24.533] RISK_DEBUG_ATR: ATR=$2.57 | ScaledRisk=$5.13
+16:14:24.534 [16:14:24.534] RISK_DEBUG_POST: Written=$5.13 | ReadFromFile=$150.00 | Using=$150.00
+16:14:24.535 [16:14:24.535] QTY_DEBUG: Risk=$150.00 | SL_Ticks=3.00 | TickVal=$1.00 | CalcQty=50.00 | MaxQty=100 | MinQty=2
+16:14:24.554 [16:14:24.554] 20/1/25 2:33:00 a. m. Order Submitted (Long). Mode=APlusRetrace Type=Limit Qty=50
+16:14:24.555 [16:14:24.555] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:24.555 [16:14:24.555] RISK_DEBUG_ATR: ATR=$2.57 | ScaledRisk=$5.13
+16:14:24.556 [16:14:24.556] RISK_DEBUG_POST: Written=$5.13 | ReadFromFile=$150.00 | Using=$150.00
+16:14:24.556 [16:14:24.556] QTY_DEBUG: Risk=$150.00 | SL_Ticks=2.96 | TickVal=$1.00 | CalcQty=50.75 | MaxQty=100 | MinQty=2
+16:14:24.567 [16:14:24.567] 20/1/25 2:33:00 a. m. | DYNAMIC QTY ADJUST: Old=51 New=51 (Stop moved to 77.11)
+16:14:24.849 [16:14:24.849] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:24.849 [16:14:24.849] RISK_DEBUG_ATR: ATR=$2.57 | ScaledRisk=$5.13
+16:14:24.850 [16:14:24.850] RISK_DEBUG_POST: Written=$5.13 | ReadFromFile=$150.00 | Using=$150.00
+16:14:24.850 [16:14:24.850] QTY_DEBUG: Risk=$150.00 | SL_Ticks=3.06 | TickVal=$1.00 | CalcQty=48.98 | MaxQty=100 | MinQty=2
+16:14:24.850 [16:14:24.850] 20/1/25 2:33:00 a. m. | DYNAMIC QTY ADJUST: Old=49 New=49 (Stop moved to 77.11)
+16:14:25.111 [16:14:25.111] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:25.113 [16:14:25.113] RISK_DEBUG_ATR: ATR=$2.57 | ScaledRisk=$5.13
+16:14:25.113 [16:14:25.113] RISK_DEBUG_POST: Written=$5.13 | ReadFromFile=$150.00 | Using=$150.00
+16:14:25.113 [16:14:25.113] QTY_DEBUG: Risk=$150.00 | SL_Ticks=3.08 | TickVal=$1.00 | CalcQty=48.73 | MaxQty=100 | MinQty=2
+16:14:25.367 [16:14:25.367] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:25.367 [16:14:25.367] RISK_DEBUG_ATR: ATR=$2.71 | ScaledRisk=$5.42
+16:14:25.368 [16:14:25.368] RISK_DEBUG_POST: Written=$5.42 | ReadFromFile=$150.00 | Using=$150.00
+16:14:25.368 [16:14:25.368] QTY_DEBUG: Risk=$150.00 | SL_Ticks=3.25 | TickVal=$1.00 | CalcQty=46.18 | MaxQty=100 | MinQty=2
+16:14:25.368 [16:14:25.368] 20/1/25 2:33:00 a. m. | DYNAMIC QTY ADJUST: Old=46 New=46 (Stop moved to 77.11)
+16:14:25.619 [16:14:25.619] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:25.620 [16:14:25.620] RISK_DEBUG_ATR: ATR=$2.52 | ScaledRisk=$5.03
+16:14:25.620 [16:14:25.620] RISK_DEBUG_POST: Written=$5.03 | ReadFromFile=$150.00 | Using=$150.00
+16:14:25.621 [16:14:25.621] QTY_DEBUG: Risk=$150.00 | SL_Ticks=3.25 | TickVal=$1.00 | CalcQty=46.14 | MaxQty=100 | MinQty=2
+16:14:25.663 [16:14:25.663] NinjaTrader.NinjaScript.TimeSeries Entry Filled (EntryA+_Long_01) Qty=7. State -> PositionActive. TradeOriginalQty=7
+16:14:25.663 [16:14:25.663] 20/1/25 2:34:00 a. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+16:14:25.665 [16:14:25.665] PROTECTION_RESET: Cleared order references for new trade
+16:14:25.770 [16:14:25.770] NinjaTrader.NinjaScript.TimeSeries DELTA CAPTURE: Entry Delta=0 Direction=1
+16:14:25.770 [16:14:25.770] DIAG_EXEC: Name=EntryA+_Long_01 Qty=7 | Position.MP=Long Arg.MP=Long | State=PositionActive
+16:14:25.771 [16:14:25.771] ==========================================================================================
+16:14:25.772 [16:14:25.772]    TRADE START: #1 | Long | 20/1/25 2:34:00 a. m. | Price: 77.14
+16:14:25.772 [16:14:25.772] ==========================================================================================
+16:14:25.772 [16:14:25.772] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Long @ 77.14
+16:14:25.772 [16:14:25.772] 20/1/25 2:34:00 a. m. REPLAY_SYNC_DELAY: Account.Positions=0 but Position.Quantity=7. Proceeding with protection (replay sync delay).
+16:14:25.773 [16:14:25.773] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Long FilledQty=7 Position.Qty=7 Position.MarketPosition=Long
+16:14:25.774 [16:14:25.774] 20/1/25 2:34:00 a. m. TRADE VWAP: Initialized (Managed)
+16:14:25.774 [16:14:25.774]    -> Protection Alloc: Filled=7 | ForTP1=4 (Need:4) | ForTP2=3 (Need:3)
+16:14:25.775 [16:14:25.775] 20/1/25 2:34:00 a. m. | SEARCH_OPPOSITE: Looking for 'USA High' from SAME DAY as 'USA Low' (RefDate: 2025-01-17)
+16:14:25.775 [16:14:25.775] FORCE TARGET: Using Validated Price: 77.88
+16:14:25.775 [16:14:25.775] TP CALC (Long): Entry=77.14 | GlobalVWAP=77.4050540257932 | ZoneOpp=77.88 (Val=77.88) | TP1=77.4050540257932 TP2=77.88 | Selected=77.41
+16:14:25.776 [16:14:25.776] SL_CREATE_DEBUG (MGR): Instrument=MCL 03-25 Direction=Long Tag=SL_Long_01 Action=Sell Price=77.11 Qty=7
+16:14:25.800 [16:14:25.800] SL CREATED: SL_Long_01 @ 77.11 Qty=7 Risk=$21.00
+16:14:25.832 [16:14:25.832] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Submitted Price=77.41 Qty=4
+16:14:25.832 [16:14:25.832]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.832 [16:14:25.832] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Accepted Price=77.41 Qty=4
+16:14:25.832 [16:14:25.832]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.832 [16:14:25.832] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Working Price=77.41 Qty=4
+16:14:25.832 [16:14:25.832]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.834 [16:14:25.834] TP1 CREATED: TP1_Long_01 @ 77.41 Qty=4
+16:14:25.834 [16:14:25.834] FORCE TARGET: Using Validated Price: 77.88
+16:14:25.834 [16:14:25.834] TP CALC (Long): Entry=77.14 | GlobalVWAP=77.4050540257932 | ZoneOpp=77.88 (Val=77.88) | TP1=77.4050540257932 TP2=77.88 | Selected=77.88
+16:14:25.835 [16:14:25.835] SL SKIPPED: Already created in current entry (duplicate prevention)
+16:14:25.849 [16:14:25.849] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Submitted Price=77.88 Qty=3
+16:14:25.850 [16:14:25.850]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:25.850 [16:14:25.850] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Accepted Price=77.88 Qty=3
+16:14:25.850 [16:14:25.850]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:25.851 [16:14:25.851] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Working Price=77.88 Qty=3
+16:14:25.852 [16:14:25.852]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:25.852 [16:14:25.852] TP2 CREATED: TP2_Long_01 @ 77.88 Qty=3
+16:14:25.861 [16:14:25.861] 20/1/25 2:34:00 a. m. EnsureProtection COMPLETE
+16:14:25.866 [16:14:25.866] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Long_01) Qty=9. New TradeOriginalQty=16
+16:14:25.867 [16:14:25.867] DIAG_EXEC: Name=EntryA+_Long_01 Qty=9 | Position.MP=Long Arg.MP=Long | State=PositionActive
+16:14:25.868 [16:14:25.868] ==========================================================================================
+16:14:25.868 [16:14:25.868]    TRADE START: #1 | Long | 20/1/25 2:34:00 a. m. | Price: 77.14
+16:14:25.868 [16:14:25.868] ==========================================================================================
+16:14:25.868 [16:14:25.868] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Long @ 77.14
+16:14:25.868 [16:14:25.868] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Long FilledQty=9 Position.Qty=16 Position.MarketPosition=Long
+16:14:25.869 [16:14:25.869]    -> Protection Alloc: Filled=9 | ForTP1=4 (Need:4) | ForTP2=5 (Need:5)
+16:14:25.869 [16:14:25.869] FORCE TARGET: Using Validated Price: 77.88
+16:14:25.869 [16:14:25.869] TP CALC (Long): Entry=77.14 | GlobalVWAP=77.4050540257932 | ZoneOpp=77.88 (Val=77.88) | TP1=77.4050540257932 TP2=77.88 | Selected=77.41
+16:14:25.871 [16:14:25.871] SL UPDATE (Partial Fill): Old Qty=7 New Qty=16
+16:14:25.871 [16:14:25.871] TP UPDATE (TP1): Old Qty=4/Price=77.41 -> New Qty=8/Price=77.41 (ID=11067)
+16:14:25.872 [16:14:25.872] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangePending Price=77.41 Qty=4
+16:14:25.872 [16:14:25.872]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.872 [16:14:25.872] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangeSubmitted Price=77.41 Qty=8
+16:14:25.873 [16:14:25.873]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.874 [16:14:25.874] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Accepted Price=77.41 Qty=8
+16:14:25.874 [16:14:25.874]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.874 [16:14:25.874] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Working Price=77.41 Qty=8
+16:14:25.876 [16:14:25.876]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.876 [16:14:25.876] FORCE TARGET: Using Validated Price: 77.88
+16:14:25.876 [16:14:25.876] TP CALC (Long): Entry=77.14 | GlobalVWAP=77.4050540257932 | ZoneOpp=77.88 (Val=77.88) | TP1=77.4050540257932 TP2=77.88 | Selected=77.88
+16:14:25.878 [16:14:25.878] SL SKIPPED: Already created in current entry (duplicate prevention)
+16:14:25.878 [16:14:25.878] TP UPDATE (TP2): Old Qty=3/Price=77.88 -> New Qty=8/Price=77.88 (ID=11068)
+16:14:25.878 [16:14:25.878] ORDER_UPDATE_TP: Name='TP2_Long_01' State=ChangePending Price=77.88 Qty=3
+16:14:25.879 [16:14:25.879]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:25.879 [16:14:25.879] ORDER_UPDATE_TP: Name='TP2_Long_01' State=ChangeSubmitted Price=77.88 Qty=8
+16:14:25.880 [16:14:25.880]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:25.880 [16:14:25.880] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Accepted Price=77.88 Qty=8
+16:14:25.880 [16:14:25.880]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:25.881 [16:14:25.881] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Working Price=77.88 Qty=8
+16:14:25.881 [16:14:25.881]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:25.882 [16:14:25.882] 20/1/25 2:34:00 a. m. EnsureProtection COMPLETE
+16:14:25.886 [16:14:25.886] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Long_01) Qty=10. New TradeOriginalQty=26
+16:14:25.886 [16:14:25.886] DIAG_EXEC: Name=EntryA+_Long_01 Qty=10 | Position.MP=Long Arg.MP=Long | State=PositionActive
+16:14:25.886 [16:14:25.886] ==========================================================================================
+16:14:25.887 [16:14:25.887]    TRADE START: #1 | Long | 20/1/25 2:34:00 a. m. | Price: 77.14
+16:14:25.887 [16:14:25.887] ==========================================================================================
+16:14:25.887 [16:14:25.887] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Long @ 77.14
+16:14:25.887 [16:14:25.887] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Long FilledQty=10 Position.Qty=26 Position.MarketPosition=Long
+16:14:25.888 [16:14:25.888]    -> Protection Alloc: Filled=10 | ForTP1=5 (Need:5) | ForTP2=5 (Need:5)
+16:14:25.888 [16:14:25.888] FORCE TARGET: Using Validated Price: 77.88
+16:14:25.889 [16:14:25.889] TP CALC (Long): Entry=77.14 | GlobalVWAP=77.4050540257932 | ZoneOpp=77.88 (Val=77.88) | TP1=77.4050540257932 TP2=77.88 | Selected=77.41
+16:14:25.890 [16:14:25.890] SL UPDATE (Partial Fill): Old Qty=16 New Qty=26
+16:14:25.890 [16:14:25.890] TP UPDATE (TP1): Old Qty=8/Price=77.41 -> New Qty=13/Price=77.41 (ID=11067)
+16:14:25.892 [16:14:25.891] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangePending Price=77.41 Qty=8
+16:14:25.892 [16:14:25.892]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.893 [16:14:25.893] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangeSubmitted Price=77.41 Qty=13
+16:14:25.893 [16:14:25.893]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.894 [16:14:25.894] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Accepted Price=77.41 Qty=13
+16:14:25.894 [16:14:25.894]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.895 [16:14:25.895] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Working Price=77.41 Qty=13
+16:14:25.895 [16:14:25.895]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.896 [16:14:25.896] FORCE TARGET: Using Validated Price: 77.88
+16:14:25.896 [16:14:25.896] TP CALC (Long): Entry=77.14 | GlobalVWAP=77.4050540257932 | ZoneOpp=77.88 (Val=77.88) | TP1=77.4050540257932 TP2=77.88 | Selected=77.88
+16:14:25.897 [16:14:25.897] SL SKIPPED: Already created in current entry (duplicate prevention)
+16:14:25.898 [16:14:25.897] TP UPDATE (TP2): Old Qty=8/Price=77.88 -> New Qty=13/Price=77.88 (ID=11068)
+16:14:25.898 [16:14:25.898] ORDER_UPDATE_TP: Name='TP2_Long_01' State=ChangePending Price=77.88 Qty=8
+16:14:25.899 [16:14:25.899]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:25.899 [16:14:25.899] ORDER_UPDATE_TP: Name='TP2_Long_01' State=ChangeSubmitted Price=77.88 Qty=13
+16:14:25.899 [16:14:25.899]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:25.900 [16:14:25.900] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Accepted Price=77.88 Qty=13
+16:14:25.900 [16:14:25.900]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:25.901 [16:14:25.901] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Working Price=77.88 Qty=13
+16:14:25.902 [16:14:25.902]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:25.902 [16:14:25.902] 20/1/25 2:34:00 a. m. EnsureProtection COMPLETE
+16:14:25.906 [16:14:25.906] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Long_01) Qty=2. New TradeOriginalQty=28
+16:14:25.907 [16:14:25.907] DIAG_EXEC: Name=EntryA+_Long_01 Qty=2 | Position.MP=Long Arg.MP=Long | State=PositionActive
+16:14:25.907 [16:14:25.907] ==========================================================================================
+16:14:25.907 [16:14:25.907]    TRADE START: #1 | Long | 20/1/25 2:34:00 a. m. | Price: 77.14
+16:14:25.908 [16:14:25.908] ==========================================================================================
+16:14:25.908 [16:14:25.908] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Long @ 77.14
+16:14:25.908 [16:14:25.908] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Long FilledQty=2 Position.Qty=28 Position.MarketPosition=Long
+16:14:25.908 [16:14:25.908]    -> Protection Alloc: Filled=2 | ForTP1=1 (Need:1) | ForTP2=1 (Need:1)
+16:14:25.909 [16:14:25.909] FORCE TARGET: Using Validated Price: 77.88
+16:14:25.910 [16:14:25.910] TP CALC (Long): Entry=77.14 | GlobalVWAP=77.4050540257932 | ZoneOpp=77.88 (Val=77.88) | TP1=77.4050540257932 TP2=77.88 | Selected=77.41
+16:14:25.910 [16:14:25.910] SL UPDATE (Partial Fill): Old Qty=26 New Qty=28
+16:14:25.911 [16:14:25.911] TP UPDATE (TP1): Old Qty=13/Price=77.41 -> New Qty=14/Price=77.41 (ID=11067)
+16:14:25.911 [16:14:25.911] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangePending Price=77.41 Qty=13
+16:14:25.911 [16:14:25.911]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.911 [16:14:25.911] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangeSubmitted Price=77.41 Qty=14
+16:14:25.913 [16:14:25.913]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.913 [16:14:25.913] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Accepted Price=77.41 Qty=14
+16:14:25.913 [16:14:25.913]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.914 [16:14:25.914] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Working Price=77.41 Qty=14
+16:14:25.915 [16:14:25.915]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.916 [16:14:25.916] FORCE TARGET: Using Validated Price: 77.88
+16:14:25.916 [16:14:25.916] TP CALC (Long): Entry=77.14 | GlobalVWAP=77.4050540257932 | ZoneOpp=77.88 (Val=77.88) | TP1=77.4050540257932 TP2=77.88 | Selected=77.88
+16:14:25.917 [16:14:25.917] SL SKIPPED: Already created in current entry (duplicate prevention)
+16:14:25.917 [16:14:25.917] TP UPDATE (TP2): Old Qty=13/Price=77.88 -> New Qty=14/Price=77.88 (ID=11068)
+16:14:25.928 [16:14:25.928] ORDER_UPDATE_TP: Name='TP2_Long_01' State=ChangePending Price=77.88 Qty=13
+16:14:25.928 [16:14:25.928]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:25.929 [16:14:25.929] ORDER_UPDATE_TP: Name='TP2_Long_01' State=ChangeSubmitted Price=77.88 Qty=14
+16:14:25.929 [16:14:25.929]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:25.929 [16:14:25.929] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Accepted Price=77.88 Qty=14
+16:14:25.930 [16:14:25.930]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:25.931 [16:14:25.931] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Working Price=77.88 Qty=14
+16:14:25.932 [16:14:25.932]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:25.932 [16:14:25.932] 20/1/25 2:34:00 a. m. EnsureProtection COMPLETE
+16:14:25.935 [16:14:25.935] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Long_01) Qty=6. New TradeOriginalQty=34
+16:14:25.935 [16:14:25.935] DIAG_EXEC: Name=EntryA+_Long_01 Qty=6 | Position.MP=Long Arg.MP=Long | State=PositionActive
+16:14:25.936 [16:14:25.936] ==========================================================================================
+16:14:25.936 [16:14:25.936]    TRADE START: #1 | Long | 20/1/25 2:34:00 a. m. | Price: 77.14
+16:14:25.937 [16:14:25.937] ==========================================================================================
+16:14:25.937 [16:14:25.937] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Long @ 77.14
+16:14:25.937 [16:14:25.937] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Long FilledQty=6 Position.Qty=34 Position.MarketPosition=Long
+16:14:25.937 [16:14:25.937]    -> Protection Alloc: Filled=6 | ForTP1=3 (Need:3) | ForTP2=3 (Need:3)
+16:14:25.937 [16:14:25.937] FORCE TARGET: Using Validated Price: 77.88
+16:14:25.939 [16:14:25.939] TP CALC (Long): Entry=77.14 | GlobalVWAP=77.4050540257932 | ZoneOpp=77.88 (Val=77.88) | TP1=77.4050540257932 TP2=77.88 | Selected=77.41
+16:14:25.940 [16:14:25.940] SL UPDATE (Partial Fill): Old Qty=28 New Qty=34
+16:14:25.940 [16:14:25.940] TP UPDATE (TP1): Old Qty=14/Price=77.41 -> New Qty=17/Price=77.41 (ID=11067)
+16:14:25.941 [16:14:25.941] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangePending Price=77.41 Qty=14
+16:14:25.942 [16:14:25.942]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.942 [16:14:25.942] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangeSubmitted Price=77.41 Qty=17
+16:14:25.943 [16:14:25.943]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.943 [16:14:25.943] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Accepted Price=77.41 Qty=17
+16:14:25.944 [16:14:25.944]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.944 [16:14:25.944] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Working Price=77.41 Qty=17
+16:14:25.945 [16:14:25.945]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.945 [16:14:25.945] FORCE TARGET: Using Validated Price: 77.88
+16:14:25.946 [16:14:25.946] TP CALC (Long): Entry=77.14 | GlobalVWAP=77.4050540257932 | ZoneOpp=77.88 (Val=77.88) | TP1=77.4050540257932 TP2=77.88 | Selected=77.88
+16:14:25.946 [16:14:25.946] SL SKIPPED: Already created in current entry (duplicate prevention)
+16:14:25.947 [16:14:25.947] TP UPDATE (TP2): Old Qty=14/Price=77.88 -> New Qty=17/Price=77.88 (ID=11068)
+16:14:25.947 [16:14:25.947] ORDER_UPDATE_TP: Name='TP2_Long_01' State=ChangePending Price=77.88 Qty=14
+16:14:25.947 [16:14:25.947]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:25.948 [16:14:25.948] ORDER_UPDATE_TP: Name='TP2_Long_01' State=ChangeSubmitted Price=77.88 Qty=17
+16:14:25.948 [16:14:25.948]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:25.949 [16:14:25.949] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Accepted Price=77.88 Qty=17
+16:14:25.949 [16:14:25.949]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:25.949 [16:14:25.949] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Working Price=77.88 Qty=17
+16:14:25.950 [16:14:25.950]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:25.950 [16:14:25.950] 20/1/25 2:34:00 a. m. EnsureProtection COMPLETE
+16:14:25.953 [16:14:25.953] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Long_01) Qty=3. New TradeOriginalQty=37
+16:14:25.954 [16:14:25.954] DIAG_EXEC: Name=EntryA+_Long_01 Qty=3 | Position.MP=Long Arg.MP=Long | State=PositionActive
+16:14:25.954 [16:14:25.954] ==========================================================================================
+16:14:25.955 [16:14:25.955]    TRADE START: #1 | Long | 20/1/25 2:34:00 a. m. | Price: 77.14
+16:14:25.956 [16:14:25.956] ==========================================================================================
+16:14:25.956 [16:14:25.956] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Long @ 77.14
+16:14:25.956 [16:14:25.956] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Long FilledQty=3 Position.Qty=37 Position.MarketPosition=Long
+16:14:25.956 [16:14:25.956]    -> Protection Alloc: Filled=3 | ForTP1=2 (Need:2) | ForTP2=1 (Need:1)
+16:14:25.957 [16:14:25.957] FORCE TARGET: Using Validated Price: 77.88
+16:14:25.958 [16:14:25.958] TP CALC (Long): Entry=77.14 | GlobalVWAP=77.4050540257932 | ZoneOpp=77.88 (Val=77.88) | TP1=77.4050540257932 TP2=77.88 | Selected=77.41
+16:14:25.959 [16:14:25.959] SL UPDATE (Partial Fill): Old Qty=34 New Qty=37
+16:14:25.960 [16:14:25.960] TP UPDATE (TP1): Old Qty=17/Price=77.41 -> New Qty=19/Price=77.41 (ID=11067)
+16:14:25.960 [16:14:25.960] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangePending Price=77.41 Qty=17
+16:14:25.961 [16:14:25.961]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.961 [16:14:25.961] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangeSubmitted Price=77.41 Qty=19
+16:14:25.962 [16:14:25.962]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.962 [16:14:25.962] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Accepted Price=77.41 Qty=19
+16:14:25.962 [16:14:25.962]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.963 [16:14:25.963] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Working Price=77.41 Qty=19
+16:14:25.963 [16:14:25.963]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.964 [16:14:25.964] FORCE TARGET: Using Validated Price: 77.88
+16:14:25.964 [16:14:25.964] TP CALC (Long): Entry=77.14 | GlobalVWAP=77.4050540257932 | ZoneOpp=77.88 (Val=77.88) | TP1=77.4050540257932 TP2=77.88 | Selected=77.88
+16:14:25.965 [16:14:25.965] SL SKIPPED: Already created in current entry (duplicate prevention)
+16:14:25.966 [16:14:25.966] TP UPDATE (TP2): Old Qty=17/Price=77.88 -> New Qty=18/Price=77.88 (ID=11068)
+16:14:25.966 [16:14:25.966] ORDER_UPDATE_TP: Name='TP2_Long_01' State=ChangePending Price=77.88 Qty=17
+16:14:25.966 [16:14:25.966]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:25.967 [16:14:25.967] ORDER_UPDATE_TP: Name='TP2_Long_01' State=ChangeSubmitted Price=77.88 Qty=18
+16:14:25.967 [16:14:25.967]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:25.968 [16:14:25.968] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Accepted Price=77.88 Qty=18
+16:14:25.968 [16:14:25.968]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:25.968 [16:14:25.968] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Working Price=77.88 Qty=18
+16:14:25.969 [16:14:25.969]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:25.969 [16:14:25.969] 20/1/25 2:34:00 a. m. EnsureProtection COMPLETE
+16:14:25.974 [16:14:25.974] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Long_01) Qty=4. New TradeOriginalQty=41
+16:14:25.974 [16:14:25.974] DIAG_EXEC: Name=EntryA+_Long_01 Qty=4 | Position.MP=Long Arg.MP=Long | State=PositionActive
+16:14:25.974 [16:14:25.974] ==========================================================================================
+16:14:25.975 [16:14:25.975]    TRADE START: #1 | Long | 20/1/25 2:34:00 a. m. | Price: 77.14
+16:14:25.975 [16:14:25.975] ==========================================================================================
+16:14:25.976 [16:14:25.976] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Long @ 77.14
+16:14:25.976 [16:14:25.976] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Long FilledQty=4 Position.Qty=41 Position.MarketPosition=Long
+16:14:25.976 [16:14:25.976]    -> Protection Alloc: Filled=4 | ForTP1=2 (Need:2) | ForTP2=2 (Need:2)
+16:14:25.977 [16:14:25.977] FORCE TARGET: Using Validated Price: 77.88
+16:14:25.977 [16:14:25.977] TP CALC (Long): Entry=77.14 | GlobalVWAP=77.4050540257932 | ZoneOpp=77.88 (Val=77.88) | TP1=77.4050540257932 TP2=77.88 | Selected=77.41
+16:14:25.978 [16:14:25.978] SL UPDATE (Partial Fill): Old Qty=37 New Qty=41
+16:14:25.978 [16:14:25.978] TP UPDATE (TP1): Old Qty=19/Price=77.41 -> New Qty=21/Price=77.41 (ID=11067)
+16:14:25.979 [16:14:25.979] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangePending Price=77.41 Qty=19
+16:14:25.995 [16:14:25.995]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.996 [16:14:25.996] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangeSubmitted Price=77.41 Qty=21
+16:14:25.996 [16:14:25.996]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.997 [16:14:25.997] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Accepted Price=77.41 Qty=21
+16:14:25.997 [16:14:25.997]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.998 [16:14:25.998] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Working Price=77.41 Qty=21
+16:14:25.998 [16:14:25.998]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:25.999 [16:14:25.999] FORCE TARGET: Using Validated Price: 77.88
+16:14:26.000 [16:14:26.000] TP CALC (Long): Entry=77.14 | GlobalVWAP=77.4050540257932 | ZoneOpp=77.88 (Val=77.88) | TP1=77.4050540257932 TP2=77.88 | Selected=77.88
+16:14:26.000 [16:14:26.000] SL SKIPPED: Already created in current entry (duplicate prevention)
+16:14:26.000 [16:14:26.000] TP UPDATE (TP2): Old Qty=18/Price=77.88 -> New Qty=20/Price=77.88 (ID=11068)
+16:14:26.001 [16:14:26.001] ORDER_UPDATE_TP: Name='TP2_Long_01' State=ChangePending Price=77.88 Qty=18
+16:14:26.001 [16:14:26.001]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:26.002 [16:14:26.002] ORDER_UPDATE_TP: Name='TP2_Long_01' State=ChangeSubmitted Price=77.88 Qty=20
+16:14:26.002 [16:14:26.002]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:26.002 [16:14:26.002] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Accepted Price=77.88 Qty=20
+16:14:26.003 [16:14:26.003]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:26.004 [16:14:26.004] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Working Price=77.88 Qty=20
+16:14:26.004 [16:14:26.004]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:26.005 [16:14:26.005] 20/1/25 2:34:00 a. m. EnsureProtection COMPLETE
+16:14:26.023 [16:14:26.023] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Long_01) Qty=5. New TradeOriginalQty=46
+16:14:26.023 [16:14:26.023] DIAG_EXEC: Name=EntryA+_Long_01 Qty=5 | Position.MP=Long Arg.MP=Long | State=PositionActive
+16:14:26.023 [16:14:26.023] ==========================================================================================
+16:14:26.024 [16:14:26.024]    TRADE START: #1 | Long | 20/1/25 2:34:00 a. m. | Price: 77.14
+16:14:26.025 [16:14:26.025] ==========================================================================================
+16:14:26.025 [16:14:26.025] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Long @ 77.14
+16:14:26.025 [16:14:26.025] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Long FilledQty=5 Position.Qty=46 Position.MarketPosition=Long
+16:14:26.025 [16:14:26.025]    -> Protection Alloc: Filled=5 | ForTP1=2 (Need:2) | ForTP2=3 (Need:3)
+16:14:26.026 [16:14:26.026] FORCE TARGET: Using Validated Price: 77.88
+16:14:26.026 [16:14:26.026] TP CALC (Long): Entry=77.14 | GlobalVWAP=77.4050540257932 | ZoneOpp=77.88 (Val=77.88) | TP1=77.4050540257932 TP2=77.88 | Selected=77.41
+16:14:26.026 [16:14:26.026] SL UPDATE (Partial Fill): Old Qty=41 New Qty=46
+16:14:26.027 [16:14:26.027] TP UPDATE (TP1): Old Qty=21/Price=77.41 -> New Qty=23/Price=77.41 (ID=11067)
+16:14:26.035 [16:14:26.035] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangePending Price=77.41 Qty=21
+16:14:26.035 [16:14:26.035]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:26.036 [16:14:26.036] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangeSubmitted Price=77.41 Qty=23
+16:14:26.036 [16:14:26.036]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:26.037 [16:14:26.037] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Accepted Price=77.41 Qty=23
+16:14:26.037 [16:14:26.037]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:26.038 [16:14:26.038] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Working Price=77.41 Qty=23
+16:14:26.038 [16:14:26.038]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:26.039 [16:14:26.039] FORCE TARGET: Using Validated Price: 77.88
+16:14:26.039 [16:14:26.039] TP CALC (Long): Entry=77.14 | GlobalVWAP=77.4050540257932 | ZoneOpp=77.88 (Val=77.88) | TP1=77.4050540257932 TP2=77.88 | Selected=77.88
+16:14:26.040 [16:14:26.039] SL SKIPPED: Already created in current entry (duplicate prevention)
+16:14:26.040 [16:14:26.040] TP UPDATE (TP2): Old Qty=20/Price=77.88 -> New Qty=23/Price=77.88 (ID=11068)
+16:14:26.041 [16:14:26.041] ORDER_UPDATE_TP: Name='TP2_Long_01' State=ChangePending Price=77.88 Qty=20
+16:14:26.041 [16:14:26.041]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:26.042 [16:14:26.042] ORDER_UPDATE_TP: Name='TP2_Long_01' State=ChangeSubmitted Price=77.88 Qty=23
+16:14:26.042 [16:14:26.042]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:26.042 [16:14:26.042] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Accepted Price=77.88 Qty=23
+16:14:26.043 [16:14:26.043]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:26.043 [16:14:26.043] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Working Price=77.88 Qty=23
+16:14:26.043 [16:14:26.043]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:26.043 [16:14:26.043] 20/1/25 2:34:00 a. m. EnsureProtection COMPLETE
+16:14:26.045 [16:14:26.045] EXEC_FILL_DEBUG: Order=56966207 Name=EntryA+_Long_01 State=Filled Price=77.14 | tp1Order=45834668 tp1Name=TP1_Long_01
+16:14:31.772 [16:14:31.772] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 closed - SL_Long_01 PnL=-12.00
+16:14:31.772 [16:14:31.772] NinjaTrader.NinjaScript.TimeSeries Partial Execution (SL_Long_01). Position Active. Qty=42
+16:14:31.795 [16:14:31.795] EXEC_FILL_DEBUG: Order=53097588 Name=SL_Long_01 State=Filled Price=77.1008695652174 | tp1Order=45834668 tp1Name=TP1_Long_01
+16:14:31.796 [16:14:31.796] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1.2 closed - SL_Long_01 PnL=-168.00
+16:14:31.797 [16:14:31.797] NinjaTrader.NinjaScript.TimeSeries Position Closed (SL_Long_01). Resetting to Idle.
+16:14:31.797 [16:14:31.797] NinjaTrader.NinjaScript.TimeSeries VWAP RETRY: Waiting for price to break 77.12 for VWAP#2
+16:14:31.798 [16:14:31.798] ORDER_UPDATE_TP: Name='TP1_Long_01' State=CancelPending Price=77.41 Qty=23
+16:14:31.798 [16:14:31.798]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:31.808 [16:14:31.808] ORDER_UPDATE_TP: Name='TP1_Long_01' State=CancelSubmitted Price=77.41 Qty=23
+16:14:31.809 [16:14:31.809]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:31.860 [16:14:31.860] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Cancelled Price=77.41 Qty=23
+16:14:31.860 [16:14:31.860]   -> Updated tp1Order reference (ID=e7aa136058f6419ea7b1d51cd4bb735e)
+16:14:31.860 [16:14:31.860] CLEANUP: Cancelled orphan tp1Order
+16:14:31.861 [16:14:31.861] ORDER_UPDATE_TP: Name='TP2_Long_01' State=CancelPending Price=77.88 Qty=23
+16:14:31.861 [16:14:31.861]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:31.861 [16:14:31.861] ORDER_UPDATE_TP: Name='TP2_Long_01' State=CancelSubmitted Price=77.88 Qty=23
+16:14:31.863 [16:14:31.863]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:31.897 [16:14:31.897] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Cancelled Price=77.88 Qty=23
+16:14:31.897 [16:14:31.897]   -> Updated tp2Order reference (ID=b8cc78648bc14fd8a91d7dd114a67ea8)
+16:14:31.897 [16:14:31.897] CLEANUP: Cancelled orphan tp2Order
+16:14:31.902 [16:14:31.902] 13/1/26 4:14:31 p. m. TRADE CLOSED: TR_LONG at 77.14, Exit at 77.1, Profit: $-31,00
+16:14:31.932 [16:14:31.932] 20/1/25 2:35:00 a. m. VWAP RETRY TRIGGERED: Price broke 77.12. Starting attempt #2
+16:14:32.035 [16:14:32.035] RE-ANCHOR: New Low @ 77.1 (Setup: USA Low)
+16:14:32.921 [16:14:32.921] RE-ANCHOR: New Low @ 77.08 (Setup: USA Low)
+16:14:32.974 [16:14:32.974] RE-ANCHOR: New Low @ 77.07 (Setup: USA Low)
+16:14:33.669 [16:14:33.669] RE-ANCHOR: New Low @ 77.05 (Setup: USA Low)
+16:14:37.640 [16:14:37.640] 20/1/25 2:52:00 a. m. | SEARCH_OPPOSITE: Looking for 'USA High' from SAME DAY as 'USA Low' (RefDate: 2025-01-17)
+16:14:37.640 [16:14:37.640] 20/1/25 2:52:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 77.11 (Raw: 77.110042328042). Bid=77.13 Ask=77.14
+16:14:37.641 [16:14:37.641] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:37.642 [16:14:37.642] RISK_DEBUG_ATR: ATR=$2.62 | ScaledRisk=$5.25
+16:14:37.642 [16:14:37.642] RISK_DEBUG_POST: Written=$5.25 | ReadFromFile=$150.00 | Using=$150.00
+16:14:37.643 [16:14:37.643] QTY_DEBUG: Risk=$150.00 | SL_Ticks=7.00 | TickVal=$1.00 | CalcQty=21.43 | MaxQty=100 | MinQty=2
+16:14:37.673 [16:14:37.673] 20/1/25 2:52:00 a. m. Order Submitted (Long). Mode=APlusRetrace Type=Limit Qty=21
+16:14:37.673 [16:14:37.673] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:37.674 [16:14:37.674] RISK_DEBUG_ATR: ATR=$2.62 | ScaledRisk=$5.25
+16:14:37.674 [16:14:37.674] RISK_DEBUG_POST: Written=$5.25 | ReadFromFile=$150.00 | Using=$150.00
+16:14:37.675 [16:14:37.675] QTY_DEBUG: Risk=$150.00 | SL_Ticks=7.00 | TickVal=$1.00 | CalcQty=21.42 | MaxQty=100 | MinQty=2
+16:14:38.065 [16:14:38.065] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:38.066 [16:14:38.066] RISK_DEBUG_ATR: ATR=$2.62 | ScaledRisk=$5.25
+16:14:38.066 [16:14:38.066] RISK_DEBUG_POST: Written=$5.25 | ReadFromFile=$150.00 | Using=$150.00
+16:14:38.066 [16:14:38.066] QTY_DEBUG: Risk=$150.00 | SL_Ticks=7.01 | TickVal=$1.00 | CalcQty=21.41 | MaxQty=100 | MinQty=2
+16:14:38.401 [16:14:38.401] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:38.401 [16:14:38.401] RISK_DEBUG_ATR: ATR=$2.62 | ScaledRisk=$5.25
+16:14:38.402 [16:14:38.402] RISK_DEBUG_POST: Written=$5.25 | ReadFromFile=$150.00 | Using=$150.00
+16:14:38.402 [16:14:38.402] QTY_DEBUG: Risk=$150.00 | SL_Ticks=7.03 | TickVal=$1.00 | CalcQty=21.34 | MaxQty=100 | MinQty=2
+16:14:38.706 [16:14:38.706] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:38.707 [16:14:38.707] RISK_DEBUG_ATR: ATR=$2.62 | ScaledRisk=$5.25
+16:14:38.707 [16:14:38.707] RISK_DEBUG_POST: Written=$5.25 | ReadFromFile=$150.00 | Using=$150.00
+16:14:38.707 [16:14:38.707] QTY_DEBUG: Risk=$150.00 | SL_Ticks=7.06 | TickVal=$1.00 | CalcQty=21.24 | MaxQty=100 | MinQty=2
+16:14:38.974 [16:14:38.974] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:38.975 [16:14:38.975] RISK_DEBUG_ATR: ATR=$2.58 | ScaledRisk=$5.16
+16:14:38.975 [16:14:38.975] RISK_DEBUG_POST: Written=$5.16 | ReadFromFile=$150.00 | Using=$150.00
+16:14:38.975 [16:14:38.975] QTY_DEBUG: Risk=$150.00 | SL_Ticks=7.17 | TickVal=$1.00 | CalcQty=20.93 | MaxQty=100 | MinQty=2
+16:14:39.287 [16:14:39.287] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:39.287 [16:14:39.287] RISK_DEBUG_ATR: ATR=$2.58 | ScaledRisk=$5.16
+16:14:39.287 [16:14:39.287] RISK_DEBUG_POST: Written=$5.16 | ReadFromFile=$150.00 | Using=$150.00
+16:14:39.288 [16:14:39.288] QTY_DEBUG: Risk=$150.00 | SL_Ticks=7.25 | TickVal=$1.00 | CalcQty=20.68 | MaxQty=100 | MinQty=2
+16:14:39.589 [16:14:39.589] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:39.590 [16:14:39.590] RISK_DEBUG_ATR: ATR=$2.53 | ScaledRisk=$5.07
+16:14:39.590 [16:14:39.590] RISK_DEBUG_POST: Written=$5.07 | ReadFromFile=$150.00 | Using=$150.00
+16:14:39.591 [16:14:39.591] QTY_DEBUG: Risk=$150.00 | SL_Ticks=7.34 | TickVal=$1.00 | CalcQty=20.44 | MaxQty=100 | MinQty=2
+16:14:39.591 [16:14:39.591] 20/1/25 2:54:00 a. m. | DYNAMIC QTY ADJUST: Old=20 New=20 (Stop moved to 77.04)
+16:14:39.843 [16:14:39.843] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:39.844 [16:14:39.844] RISK_DEBUG_ATR: ATR=$2.60 | ScaledRisk=$5.21
+16:14:39.844 [16:14:39.844] RISK_DEBUG_POST: Written=$5.21 | ReadFromFile=$150.00 | Using=$150.00
+16:14:39.845 [16:14:39.845] QTY_DEBUG: Risk=$150.00 | SL_Ticks=7.44 | TickVal=$1.00 | CalcQty=20.17 | MaxQty=100 | MinQty=2
+16:14:40.122 [16:14:40.122] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:40.122 [16:14:40.122] RISK_DEBUG_ATR: ATR=$2.42 | ScaledRisk=$4.84
+16:14:40.123 [16:14:40.123] RISK_DEBUG_POST: Written=$5.00 | ReadFromFile=$150.00 | Using=$150.00
+16:14:40.124 [16:14:40.124] QTY_DEBUG: Risk=$150.00 | SL_Ticks=7.53 | TickVal=$1.00 | CalcQty=19.93 | MaxQty=100 | MinQty=2
+16:14:40.432 [16:14:40.432] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:40.432 [16:14:40.432] RISK_DEBUG_ATR: ATR=$2.63 | ScaledRisk=$5.26
+16:14:40.432 [16:14:40.432] RISK_DEBUG_POST: Written=$5.26 | ReadFromFile=$150.00 | Using=$150.00
+16:14:40.432 [16:14:40.432] QTY_DEBUG: Risk=$150.00 | SL_Ticks=7.73 | TickVal=$1.00 | CalcQty=19.42 | MaxQty=100 | MinQty=2
+16:14:40.434 [16:14:40.434] 20/1/25 2:55:00 a. m. | DYNAMIC QTY ADJUST: Old=19 New=19 (Stop moved to 77.04)
+16:14:40.725 [16:14:40.725] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:40.725 [16:14:40.725] RISK_DEBUG_ATR: ATR=$2.58 | ScaledRisk=$5.16
+16:14:40.726 [16:14:40.726] RISK_DEBUG_POST: Written=$5.16 | ReadFromFile=$150.00 | Using=$150.00
+16:14:40.726 [16:14:40.726] QTY_DEBUG: Risk=$150.00 | SL_Ticks=7.93 | TickVal=$1.00 | CalcQty=18.92 | MaxQty=100 | MinQty=2
+16:14:40.992 [16:14:40.992] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:40.993 [16:14:40.993] RISK_DEBUG_ATR: ATR=$2.87 | ScaledRisk=$5.74
+16:14:40.993 [16:14:40.993] RISK_DEBUG_POST: Written=$5.74 | ReadFromFile=$150.00 | Using=$150.00
+16:14:40.993 [16:14:40.993] QTY_DEBUG: Risk=$150.00 | SL_Ticks=8.53 | TickVal=$1.00 | CalcQty=17.58 | MaxQty=100 | MinQty=2
+16:14:40.994 [16:14:40.994] 20/1/25 2:56:00 a. m. | DYNAMIC QTY ADJUST: Old=18 New=18 (Stop moved to 77.04)
+16:14:41.250 [16:14:41.250] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:41.250 [16:14:41.250] RISK_DEBUG_ATR: ATR=$2.81 | ScaledRisk=$5.61
+16:14:41.251 [16:14:41.251] RISK_DEBUG_POST: Written=$5.61 | ReadFromFile=$150.00 | Using=$150.00
+16:14:41.251 [16:14:41.251] QTY_DEBUG: Risk=$150.00 | SL_Ticks=8.62 | TickVal=$1.00 | CalcQty=17.40 | MaxQty=100 | MinQty=2
+16:14:41.253 [16:14:41.253] 20/1/25 2:57:00 a. m. | DYNAMIC QTY ADJUST: Old=17 New=17 (Stop moved to 77.04)
+16:14:41.557 [16:14:41.557] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:41.557 [16:14:41.557] RISK_DEBUG_ATR: ATR=$2.81 | ScaledRisk=$5.61
+16:14:41.558 [16:14:41.558] RISK_DEBUG_POST: Written=$5.61 | ReadFromFile=$150.00 | Using=$150.00
+16:14:41.558 [16:14:41.558] QTY_DEBUG: Risk=$150.00 | SL_Ticks=8.75 | TickVal=$1.00 | CalcQty=17.14 | MaxQty=100 | MinQty=2
+16:14:41.811 [16:14:41.811] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:41.813 [16:14:41.813] RISK_DEBUG_ATR: ATR=$3.15 | ScaledRisk=$6.29
+16:14:41.813 [16:14:41.813] RISK_DEBUG_POST: Written=$6.29 | ReadFromFile=$150.00 | Using=$150.00
+16:14:41.813 [16:14:41.813] QTY_DEBUG: Risk=$150.00 | SL_Ticks=9.11 | TickVal=$1.00 | CalcQty=16.47 | MaxQty=100 | MinQty=2
+16:14:41.814 [16:14:41.814] 20/1/25 2:58:00 a. m. | DYNAMIC QTY ADJUST: Old=16 New=16 (Stop moved to 77.04)
+16:14:42.168 [16:14:42.168] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:42.168 [16:14:42.168] RISK_DEBUG_ATR: ATR=$3.22 | ScaledRisk=$6.44
+16:14:42.169 [16:14:42.169] RISK_DEBUG_POST: Written=$6.44 | ReadFromFile=$150.00 | Using=$150.00
+16:14:42.169 [16:14:42.169] QTY_DEBUG: Risk=$150.00 | SL_Ticks=9.15 | TickVal=$1.00 | CalcQty=16.39 | MaxQty=100 | MinQty=2
+16:14:42.491 [16:14:42.491] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:42.491 [16:14:42.491] RISK_DEBUG_ATR: ATR=$3.13 | ScaledRisk=$6.26
+16:14:42.491 [16:14:42.491] RISK_DEBUG_POST: Written=$6.26 | ReadFromFile=$150.00 | Using=$150.00
+16:14:42.492 [16:14:42.492] QTY_DEBUG: Risk=$150.00 | SL_Ticks=9.28 | TickVal=$1.00 | CalcQty=16.17 | MaxQty=100 | MinQty=2
+16:14:42.750 [16:14:42.750] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:42.751 [16:14:42.751] RISK_DEBUG_ATR: ATR=$3.12 | ScaledRisk=$6.23
+16:14:42.751 [16:14:42.751] RISK_DEBUG_POST: Written=$6.23 | ReadFromFile=$150.00 | Using=$150.00
+16:14:42.752 [16:14:42.752] QTY_DEBUG: Risk=$150.00 | SL_Ticks=9.37 | TickVal=$1.00 | CalcQty=16.00 | MaxQty=100 | MinQty=2
+16:14:43.007 [16:14:43.007] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:43.008 [16:14:43.008] RISK_DEBUG_ATR: ATR=$2.97 | ScaledRisk=$5.93
+16:14:43.009 [16:14:43.009] RISK_DEBUG_POST: Written=$5.93 | ReadFromFile=$150.00 | Using=$150.00
+16:14:43.009 [16:14:43.009] QTY_DEBUG: Risk=$150.00 | SL_Ticks=9.43 | TickVal=$1.00 | CalcQty=15.91 | MaxQty=100 | MinQty=2
+16:14:43.264 [16:14:43.264] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:43.265 [16:14:43.265] RISK_DEBUG_ATR: ATR=$3.25 | ScaledRisk=$6.50
+16:14:43.265 [16:14:43.265] RISK_DEBUG_POST: Written=$6.50 | ReadFromFile=$150.00 | Using=$150.00
+16:14:43.265 [16:14:43.265] QTY_DEBUG: Risk=$150.00 | SL_Ticks=9.59 | TickVal=$1.00 | CalcQty=15.64 | MaxQty=100 | MinQty=2
+16:14:43.534 [16:14:43.534] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:43.534 [16:14:43.534] RISK_DEBUG_ATR: ATR=$3.50 | ScaledRisk=$7.01
+16:14:43.534 [16:14:43.534] RISK_DEBUG_POST: Written=$7.01 | ReadFromFile=$150.00 | Using=$150.00
+16:14:43.535 [16:14:43.535] QTY_DEBUG: Risk=$150.00 | SL_Ticks=10.28 | TickVal=$1.00 | CalcQty=14.60 | MaxQty=100 | MinQty=2
+16:14:43.536 [16:14:43.536] 20/1/25 3:02:00 a. m. | DYNAMIC QTY ADJUST: Old=15 New=15 (Stop moved to 77.04)
+16:14:43.807 [16:14:43.807] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:43.807 [16:14:43.807] RISK_DEBUG_ATR: ATR=$3.50 | ScaledRisk=$7.01
+16:14:43.808 [16:14:43.808] RISK_DEBUG_POST: Written=$7.01 | ReadFromFile=$150.00 | Using=$150.00
+16:14:43.808 [16:14:43.808] QTY_DEBUG: Risk=$150.00 | SL_Ticks=10.45 | TickVal=$1.00 | CalcQty=14.36 | MaxQty=100 | MinQty=2
+16:14:43.808 [16:14:43.808] 20/1/25 3:02:00 a. m. | DYNAMIC QTY ADJUST: Old=14 New=14 (Stop moved to 77.04)
+16:14:44.084 [16:14:44.084] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:44.085 [16:14:44.085] RISK_DEBUG_ATR: ATR=$3.40 | ScaledRisk=$6.79
+16:14:44.086 [16:14:44.086] RISK_DEBUG_POST: Written=$6.79 | ReadFromFile=$150.00 | Using=$150.00
+16:14:44.087 [16:14:44.087] QTY_DEBUG: Risk=$150.00 | SL_Ticks=10.63 | TickVal=$1.00 | CalcQty=14.11 | MaxQty=100 | MinQty=2
+16:14:44.364 [16:14:44.364] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:44.365 [16:14:44.365] RISK_DEBUG_ATR: ATR=$3.68 | ScaledRisk=$7.36
+16:14:44.366 [16:14:44.366] RISK_DEBUG_POST: Written=$7.36 | ReadFromFile=$150.00 | Using=$150.00
+16:14:44.366 [16:14:44.366] QTY_DEBUG: Risk=$150.00 | SL_Ticks=12.00 | TickVal=$1.00 | CalcQty=12.50 | MaxQty=100 | MinQty=2
+16:14:44.367 [16:14:44.367] 20/1/25 3:03:00 a. m. | DYNAMIC QTY ADJUST: Old=12 New=12 (Stop moved to 77.04)
+16:14:44.634 [16:14:44.634] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:44.635 [16:14:44.635] RISK_DEBUG_ATR: ATR=$3.49 | ScaledRisk=$6.98
+16:14:44.635 [16:14:44.635] RISK_DEBUG_POST: Written=$6.98 | ReadFromFile=$150.00 | Using=$150.00
+16:14:44.635 [16:14:44.635] QTY_DEBUG: Risk=$150.00 | SL_Ticks=12.03 | TickVal=$1.00 | CalcQty=12.47 | MaxQty=100 | MinQty=2
+16:14:45.038 [16:14:45.038] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:45.038 [16:14:45.038] RISK_DEBUG_ATR: ATR=$3.78 | ScaledRisk=$7.55
+16:14:45.038 [16:14:45.038] RISK_DEBUG_POST: Written=$7.55 | ReadFromFile=$150.00 | Using=$150.00
+16:14:45.039 [16:14:45.039] QTY_DEBUG: Risk=$150.00 | SL_Ticks=12.62 | TickVal=$1.00 | CalcQty=11.88 | MaxQty=100 | MinQty=2
+16:14:45.479 [16:14:45.479] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:45.479 [16:14:45.479] RISK_DEBUG_ATR: ATR=$3.65 | ScaledRisk=$7.30
+16:14:45.480 [16:14:45.480] RISK_DEBUG_POST: Written=$7.30 | ReadFromFile=$150.00 | Using=$150.00
+16:14:45.481 [16:14:45.481] QTY_DEBUG: Risk=$150.00 | SL_Ticks=12.71 | TickVal=$1.00 | CalcQty=11.80 | MaxQty=100 | MinQty=2
+16:14:45.738 [16:14:45.738] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:45.738 [16:14:45.738] RISK_DEBUG_ATR: ATR=$3.60 | ScaledRisk=$7.20
+16:14:45.738 [16:14:45.738] RISK_DEBUG_POST: Written=$7.20 | ReadFromFile=$150.00 | Using=$150.00
+16:14:45.739 [16:14:45.739] QTY_DEBUG: Risk=$150.00 | SL_Ticks=12.86 | TickVal=$1.00 | CalcQty=11.66 | MaxQty=100 | MinQty=2
+16:14:46.038 [16:14:46.038] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:46.040 [16:14:46.040] RISK_DEBUG_ATR: ATR=$3.62 | ScaledRisk=$7.23
+16:14:46.040 [16:14:46.040] RISK_DEBUG_POST: Written=$7.23 | ReadFromFile=$150.00 | Using=$150.00
+16:14:46.041 [16:14:46.041] QTY_DEBUG: Risk=$150.00 | SL_Ticks=13.26 | TickVal=$1.00 | CalcQty=11.31 | MaxQty=100 | MinQty=2
+16:14:46.049 [16:14:46.049] 20/1/25 3:07:00 a. m. | DYNAMIC QTY ADJUST: Old=11 New=11 (Stop moved to 77.04)
+16:14:46.337 [16:14:46.337] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:46.337 [16:14:46.337] RISK_DEBUG_ATR: ATR=$3.62 | ScaledRisk=$7.23
+16:14:46.337 [16:14:46.337] RISK_DEBUG_POST: Written=$7.23 | ReadFromFile=$150.00 | Using=$150.00
+16:14:46.339 [16:14:46.339] QTY_DEBUG: Risk=$150.00 | SL_Ticks=13.34 | TickVal=$1.00 | CalcQty=11.25 | MaxQty=100 | MinQty=2
+16:14:46.621 [16:14:46.621] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:46.622 [16:14:46.622] RISK_DEBUG_ATR: ATR=$3.18 | ScaledRisk=$6.37
+16:14:46.622 [16:14:46.622] RISK_DEBUG_POST: Written=$6.37 | ReadFromFile=$150.00 | Using=$150.00
+16:14:46.622 [16:14:46.622] QTY_DEBUG: Risk=$150.00 | SL_Ticks=13.55 | TickVal=$1.00 | CalcQty=11.07 | MaxQty=100 | MinQty=2
+16:14:47.089 [16:14:47.089] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:47.089 [16:14:47.089] RISK_DEBUG_ATR: ATR=$3.16 | ScaledRisk=$6.32
+16:14:47.089 [16:14:47.089] RISK_DEBUG_POST: Written=$6.32 | ReadFromFile=$150.00 | Using=$150.00
+16:14:47.090 [16:14:47.090] QTY_DEBUG: Risk=$150.00 | SL_Ticks=13.71 | TickVal=$1.00 | CalcQty=10.94 | MaxQty=100 | MinQty=2
+16:14:47.643 [16:14:47.643] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:47.644 [16:14:47.644] RISK_DEBUG_ATR: ATR=$3.21 | ScaledRisk=$6.42
+16:14:47.645 [16:14:47.645] RISK_DEBUG_POST: Written=$6.42 | ReadFromFile=$150.00 | Using=$150.00
+16:14:47.645 [16:14:47.645] QTY_DEBUG: Risk=$150.00 | SL_Ticks=13.79 | TickVal=$1.00 | CalcQty=10.87 | MaxQty=100 | MinQty=2
+16:14:47.934 [16:14:47.934] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:47.934 [16:14:47.934] RISK_DEBUG_ATR: ATR=$3.21 | ScaledRisk=$6.42
+16:14:47.935 [16:14:47.935] RISK_DEBUG_POST: Written=$6.42 | ReadFromFile=$150.00 | Using=$150.00
+16:14:47.935 [16:14:47.935] QTY_DEBUG: Risk=$150.00 | SL_Ticks=13.96 | TickVal=$1.00 | CalcQty=10.75 | MaxQty=100 | MinQty=2
+16:14:48.219 [16:14:48.219] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:48.219 [16:14:48.219] RISK_DEBUG_ATR: ATR=$3.05 | ScaledRisk=$6.11
+16:14:48.219 [16:14:48.219] RISK_DEBUG_POST: Written=$6.11 | ReadFromFile=$150.00 | Using=$150.00
+16:14:48.219 [16:14:48.219] QTY_DEBUG: Risk=$150.00 | SL_Ticks=13.98 | TickVal=$1.00 | CalcQty=10.73 | MaxQty=100 | MinQty=2
+16:14:48.476 [16:14:48.476] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:48.482 [16:14:48.482] RISK_DEBUG_ATR: ATR=$3.19 | ScaledRisk=$6.37
+16:14:48.482 [16:14:48.482] RISK_DEBUG_POST: Written=$6.37 | ReadFromFile=$150.00 | Using=$150.00
+16:14:48.484 [16:14:48.484] QTY_DEBUG: Risk=$150.00 | SL_Ticks=14.17 | TickVal=$1.00 | CalcQty=10.59 | MaxQty=100 | MinQty=2
+16:14:48.783 [16:14:48.783] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:48.784 [16:14:48.784] RISK_DEBUG_ATR: ATR=$3.19 | ScaledRisk=$6.37
+16:14:48.784 [16:14:48.784] RISK_DEBUG_POST: Written=$6.37 | ReadFromFile=$150.00 | Using=$150.00
+16:14:48.785 [16:14:48.785] QTY_DEBUG: Risk=$150.00 | SL_Ticks=14.22 | TickVal=$1.00 | CalcQty=10.55 | MaxQty=100 | MinQty=2
+16:14:49.188 [16:14:49.188] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:49.189 [16:14:49.189] RISK_DEBUG_ATR: ATR=$3.03 | ScaledRisk=$6.06
+16:14:49.190 [16:14:49.190] RISK_DEBUG_POST: Written=$6.06 | ReadFromFile=$150.00 | Using=$150.00
+16:14:49.190 [16:14:49.190] QTY_DEBUG: Risk=$150.00 | SL_Ticks=14.26 | TickVal=$1.00 | CalcQty=10.52 | MaxQty=100 | MinQty=2
+16:14:49.672 [16:14:49.672] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:49.672 [16:14:49.672] RISK_DEBUG_ATR: ATR=$2.81 | ScaledRisk=$5.63
+16:14:49.673 [16:14:49.673] RISK_DEBUG_POST: Written=$5.63 | ReadFromFile=$150.00 | Using=$150.00
+16:14:49.674 [16:14:49.674] QTY_DEBUG: Risk=$150.00 | SL_Ticks=14.31 | TickVal=$1.00 | CalcQty=10.48 | MaxQty=100 | MinQty=2
+16:14:49.675 [16:14:49.675] 20/1/25 3:15:00 a. m. | DYNAMIC QTY ADJUST: Old=10 New=10 (Stop moved to 77.04)
+16:14:49.943 [16:14:49.943] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:49.944 [16:14:49.944] RISK_DEBUG_ATR: ATR=$3.10 | ScaledRisk=$6.20
+16:14:49.944 [16:14:49.944] RISK_DEBUG_POST: Written=$6.20 | ReadFromFile=$150.00 | Using=$150.00
+16:14:49.944 [16:14:49.944] QTY_DEBUG: Risk=$150.00 | SL_Ticks=14.45 | TickVal=$1.00 | CalcQty=10.38 | MaxQty=100 | MinQty=2
+16:14:50.228 [16:14:50.228] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:50.229 [16:14:50.229] RISK_DEBUG_ATR: ATR=$3.09 | ScaledRisk=$6.19
+16:14:50.229 [16:14:50.229] RISK_DEBUG_POST: Written=$6.19 | ReadFromFile=$150.00 | Using=$150.00
+16:14:50.229 [16:14:50.229] QTY_DEBUG: Risk=$150.00 | SL_Ticks=14.52 | TickVal=$1.00 | CalcQty=10.33 | MaxQty=100 | MinQty=2
+16:14:50.480 [16:14:50.480] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:50.481 [16:14:50.481] RISK_DEBUG_ATR: ATR=$3.01 | ScaledRisk=$6.02
+16:14:50.481 [16:14:50.481] RISK_DEBUG_POST: Written=$6.02 | ReadFromFile=$150.00 | Using=$150.00
+16:14:50.481 [16:14:50.481] QTY_DEBUG: Risk=$150.00 | SL_Ticks=14.60 | TickVal=$1.00 | CalcQty=10.28 | MaxQty=100 | MinQty=2
+16:14:50.761 [16:14:50.761] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:50.761 [16:14:50.761] RISK_DEBUG_ATR: ATR=$3.08 | ScaledRisk=$6.16
+16:14:50.761 [16:14:50.761] RISK_DEBUG_POST: Written=$6.16 | ReadFromFile=$150.00 | Using=$150.00
+16:14:50.761 [16:14:50.761] QTY_DEBUG: Risk=$150.00 | SL_Ticks=14.66 | TickVal=$1.00 | CalcQty=10.23 | MaxQty=100 | MinQty=2
+16:14:51.061 [16:14:51.061] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:51.061 [16:14:51.061] RISK_DEBUG_ATR: ATR=$3.15 | ScaledRisk=$6.29
+16:14:51.061 [16:14:51.061] RISK_DEBUG_POST: Written=$6.29 | ReadFromFile=$150.00 | Using=$150.00
+16:14:51.061 [16:14:51.061] QTY_DEBUG: Risk=$150.00 | SL_Ticks=14.81 | TickVal=$1.00 | CalcQty=10.13 | MaxQty=100 | MinQty=2
+16:14:51.336 [16:14:51.336] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:51.336 [16:14:51.336] RISK_DEBUG_ATR: ATR=$3.21 | ScaledRisk=$6.42
+16:14:51.336 [16:14:51.336] RISK_DEBUG_POST: Written=$6.42 | ReadFromFile=$150.00 | Using=$150.00
+16:14:51.337 [16:14:51.337] QTY_DEBUG: Risk=$150.00 | SL_Ticks=14.87 | TickVal=$1.00 | CalcQty=10.09 | MaxQty=100 | MinQty=2
+16:14:51.588 [16:14:51.588] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:51.588 [16:14:51.588] RISK_DEBUG_ATR: ATR=$3.12 | ScaledRisk=$6.24
+16:14:51.588 [16:14:51.588] RISK_DEBUG_POST: Written=$6.24 | ReadFromFile=$150.00 | Using=$150.00
+16:14:51.589 [16:14:51.589] QTY_DEBUG: Risk=$150.00 | SL_Ticks=14.90 | TickVal=$1.00 | CalcQty=10.07 | MaxQty=100 | MinQty=2
+16:14:51.848 [16:14:51.848] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:51.849 [16:14:51.849] RISK_DEBUG_ATR: ATR=$2.97 | ScaledRisk=$5.94
+16:14:51.849 [16:14:51.849] RISK_DEBUG_POST: Written=$5.94 | ReadFromFile=$150.00 | Using=$150.00
+16:14:51.850 [16:14:51.850] QTY_DEBUG: Risk=$150.00 | SL_Ticks=15.00 | TickVal=$1.00 | CalcQty=10.00 | MaxQty=100 | MinQty=2
+16:14:52.165 [16:14:52.165] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:52.165 [16:14:52.165] RISK_DEBUG_ATR: ATR=$3.04 | ScaledRisk=$6.08
+16:14:52.165 [16:14:52.165] RISK_DEBUG_POST: Written=$6.08 | ReadFromFile=$150.00 | Using=$150.00
+16:14:52.166 [16:14:52.166] QTY_DEBUG: Risk=$150.00 | SL_Ticks=15.01 | TickVal=$1.00 | CalcQty=9.99 | MaxQty=100 | MinQty=2
+16:14:52.416 [16:14:52.416] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:52.416 [16:14:52.416] RISK_DEBUG_ATR: ATR=$3.04 | ScaledRisk=$6.08
+16:14:52.417 [16:14:52.417] RISK_DEBUG_POST: Written=$6.08 | ReadFromFile=$150.00 | Using=$150.00
+16:14:52.417 [16:14:52.417] QTY_DEBUG: Risk=$150.00 | SL_Ticks=15.08 | TickVal=$1.00 | CalcQty=9.95 | MaxQty=100 | MinQty=2
+16:14:52.689 [16:14:52.689] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:52.690 [16:14:52.690] RISK_DEBUG_ATR: ATR=$2.82 | ScaledRisk=$5.65
+16:14:52.690 [16:14:52.690] RISK_DEBUG_POST: Written=$5.65 | ReadFromFile=$150.00 | Using=$150.00
+16:14:52.690 [16:14:52.690] QTY_DEBUG: Risk=$150.00 | SL_Ticks=15.11 | TickVal=$1.00 | CalcQty=9.92 | MaxQty=100 | MinQty=2
+16:14:53.060 [16:14:53.060] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:53.061 [16:14:53.061] RISK_DEBUG_ATR: ATR=$2.90 | ScaledRisk=$5.81
+16:14:53.061 [16:14:53.061] RISK_DEBUG_POST: Written=$5.81 | ReadFromFile=$150.00 | Using=$150.00
+16:14:53.061 [16:14:53.061] QTY_DEBUG: Risk=$150.00 | SL_Ticks=15.18 | TickVal=$1.00 | CalcQty=9.88 | MaxQty=100 | MinQty=2
+16:14:53.311 [16:14:53.311] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:53.313 [16:14:53.313] RISK_DEBUG_ATR: ATR=$2.83 | ScaledRisk=$5.67
+16:14:53.313 [16:14:53.313] RISK_DEBUG_POST: Written=$5.67 | ReadFromFile=$150.00 | Using=$150.00
+16:14:53.313 [16:14:53.313] QTY_DEBUG: Risk=$150.00 | SL_Ticks=15.23 | TickVal=$1.00 | CalcQty=9.85 | MaxQty=100 | MinQty=2
+16:14:53.789 [16:14:53.789] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:53.789 [16:14:53.789] RISK_DEBUG_ATR: ATR=$2.72 | ScaledRisk=$5.45
+16:14:53.789 [16:14:53.789] RISK_DEBUG_POST: Written=$5.45 | ReadFromFile=$150.00 | Using=$150.00
+16:14:53.790 [16:14:53.790] QTY_DEBUG: Risk=$150.00 | SL_Ticks=15.25 | TickVal=$1.00 | CalcQty=9.84 | MaxQty=100 | MinQty=2
+16:14:54.041 [16:14:54.041] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:54.041 [16:14:54.041] RISK_DEBUG_ATR: ATR=$2.72 | ScaledRisk=$5.45
+16:14:54.041 [16:14:54.041] RISK_DEBUG_POST: Written=$5.45 | ReadFromFile=$150.00 | Using=$150.00
+16:14:54.042 [16:14:54.042] QTY_DEBUG: Risk=$150.00 | SL_Ticks=15.27 | TickVal=$1.00 | CalcQty=9.83 | MaxQty=100 | MinQty=2
+16:14:54.340 [16:14:54.340] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:54.340 [16:14:54.340] RISK_DEBUG_ATR: ATR=$2.42 | ScaledRisk=$4.84
+16:14:54.340 [16:14:54.340] RISK_DEBUG_POST: Written=$5.00 | ReadFromFile=$150.00 | Using=$150.00
+16:14:54.341 [16:14:54.341] QTY_DEBUG: Risk=$150.00 | SL_Ticks=15.28 | TickVal=$1.00 | CalcQty=9.81 | MaxQty=100 | MinQty=2
+16:14:54.615 [16:14:54.615] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:54.615 [16:14:54.615] RISK_DEBUG_ATR: ATR=$2.45 | ScaledRisk=$4.89
+16:14:54.615 [16:14:54.615] RISK_DEBUG_POST: Written=$5.00 | ReadFromFile=$150.00 | Using=$150.00
+16:14:54.616 [16:14:54.616] QTY_DEBUG: Risk=$150.00 | SL_Ticks=15.34 | TickVal=$1.00 | CalcQty=9.78 | MaxQty=100 | MinQty=2
+16:14:55.029 [16:14:55.029] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:55.030 [16:14:55.030] RISK_DEBUG_ATR: ATR=$2.40 | ScaledRisk=$4.81
+16:14:55.031 [16:14:55.031] RISK_DEBUG_POST: Written=$5.00 | ReadFromFile=$150.00 | Using=$150.00
+16:14:55.031 [16:14:55.031] QTY_DEBUG: Risk=$150.00 | SL_Ticks=15.35 | TickVal=$1.00 | CalcQty=9.77 | MaxQty=100 | MinQty=2
+16:14:55.305 [16:14:55.305] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:55.305 [16:14:55.305] RISK_DEBUG_ATR: ATR=$2.51 | ScaledRisk=$5.02
+16:14:55.305 [16:14:55.305] RISK_DEBUG_POST: Written=$5.02 | ReadFromFile=$150.00 | Using=$150.00
+16:14:55.306 [16:14:55.306] QTY_DEBUG: Risk=$150.00 | SL_Ticks=15.40 | TickVal=$1.00 | CalcQty=9.74 | MaxQty=100 | MinQty=2
+16:14:55.602 [16:14:55.602] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:55.602 [16:14:55.602] RISK_DEBUG_ATR: ATR=$2.40 | ScaledRisk=$4.80
+16:14:55.603 [16:14:55.603] RISK_DEBUG_POST: Written=$5.00 | ReadFromFile=$150.00 | Using=$150.00
+16:14:55.603 [16:14:55.603] QTY_DEBUG: Risk=$150.00 | SL_Ticks=15.42 | TickVal=$1.00 | CalcQty=9.73 | MaxQty=100 | MinQty=2
+16:14:55.919 [16:14:55.919] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:55.920 [16:14:55.920] RISK_DEBUG_ATR: ATR=$2.37 | ScaledRisk=$4.74
+16:14:55.920 [16:14:55.920] RISK_DEBUG_POST: Written=$5.00 | ReadFromFile=$150.00 | Using=$150.00
+16:14:55.920 [16:14:55.920] QTY_DEBUG: Risk=$150.00 | SL_Ticks=15.43 | TickVal=$1.00 | CalcQty=9.72 | MaxQty=100 | MinQty=2
+16:14:56.433 [16:14:56.433] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:56.433 [16:14:56.433] RISK_DEBUG_ATR: ATR=$2.27 | ScaledRisk=$4.54
+16:14:56.434 [16:14:56.434] RISK_DEBUG_POST: Written=$5.00 | ReadFromFile=$150.00 | Using=$150.00
+16:14:56.434 [16:14:56.434] QTY_DEBUG: Risk=$150.00 | SL_Ticks=15.44 | TickVal=$1.00 | CalcQty=9.71 | MaxQty=100 | MinQty=2
+16:14:56.687 [16:14:56.687] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:14:56.688 [16:14:56.688] RISK_DEBUG_ATR: ATR=$2.45 | ScaledRisk=$4.91
+16:14:56.688 [16:14:56.688] RISK_DEBUG_POST: Written=$5.00 | ReadFromFile=$150.00 | Using=$150.00
+16:14:56.689 [16:14:56.689] QTY_DEBUG: Risk=$150.00 | SL_Ticks=15.46 | TickVal=$1.00 | CalcQty=9.70 | MaxQty=100 | MinQty=2
+16:14:56.926 [16:14:56.926] NinjaTrader.NinjaScript.TimeSeries Entry Filled (EntryA+_Long_02) Qty=10. State -> PositionActive. TradeOriginalQty=10
+16:14:56.928 [16:14:56.928] 20/1/25 3:37:00 a. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+16:14:56.928 [16:14:56.928] PROTECTION_RESET: Cleared order references for new trade
+16:14:56.929 [16:14:56.929] NinjaTrader.NinjaScript.TimeSeries DELTA CAPTURE: Entry Delta=0 Direction=1
+16:14:56.929 [16:14:56.929] DIAG_EXEC: Name=EntryA+_Long_02 Qty=10 | Position.MP=Long Arg.MP=Long | State=PositionActive
+16:14:56.929 [16:14:56.929] ==========================================================================================
+16:14:56.931 [16:14:56.931]    TRADE START: #2 | Long | 20/1/25 3:37:00 a. m. | Price: 77.19
+16:14:56.931 [16:14:56.931] ==========================================================================================
+16:14:56.932 [16:14:56.932] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #2 started - Long @ 77.19
+16:14:56.932 [16:14:56.932] 20/1/25 3:37:00 a. m. REPLAY_SYNC_DELAY: Account.Positions=0 but Position.Quantity=10. Proceeding with protection (replay sync delay).
+16:14:56.933 [16:14:56.933] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Long FilledQty=10 Position.Qty=10 Position.MarketPosition=Long
+16:14:56.933 [16:14:56.933] 20/1/25 3:37:00 a. m. TRADE VWAP: Initialized (Managed)
+16:14:56.933 [16:14:56.933]    -> Protection Alloc: Filled=10 | ForTP1=5 (Need:5) | ForTP2=5 (Need:5)
+16:14:56.933 [16:14:56.933] 20/1/25 3:37:00 a. m. | SEARCH_OPPOSITE: Looking for 'USA High' from SAME DAY as 'USA Low' (RefDate: 2025-01-17)
+16:14:56.934 [16:14:56.934] FORCE TARGET: Using Validated Price: 77.88
+16:14:56.934 [16:14:56.934] TP CALC (Long): Entry=77.19 | GlobalVWAP=77.3559023102313 | ZoneOpp=77.88 (Val=77.88) | TP1=77.3559023102313 TP2=77.88 | Selected=77.36
+16:14:56.935 [16:14:56.935] SL_CREATE_DEBUG (MGR): Instrument=MCL 03-25 Direction=Long Tag=SL_Long_02 Action=Sell Price=77.04 Qty=10
+16:14:56.955 [16:14:56.955] SL CREATED: SL_Long_02 @ 77.04 Qty=10 Risk=$150.00
+16:14:56.975 [16:14:56.975] ORDER_UPDATE_TP: Name='TP1_Long_02' State=Submitted Price=77.36 Qty=5
+16:14:56.975 [16:14:56.975]   -> Updated tp1Order reference (ID=cbb11b255d6e4fd59213597bffc3c81f)
+16:14:56.975 [16:14:56.975] ORDER_UPDATE_TP: Name='TP1_Long_02' State=Accepted Price=77.36 Qty=5
+16:14:56.976 [16:14:56.976]   -> Updated tp1Order reference (ID=cbb11b255d6e4fd59213597bffc3c81f)
+16:14:56.976 [16:14:56.976] ORDER_UPDATE_TP: Name='TP1_Long_02' State=Working Price=77.36 Qty=5
+16:14:56.976 [16:14:56.976]   -> Updated tp1Order reference (ID=cbb11b255d6e4fd59213597bffc3c81f)
+16:14:56.978 [16:14:56.978] TP1 CREATED: TP1_Long_02 @ 77.36 Qty=5
+16:14:56.978 [16:14:56.978] FORCE TARGET: Using Validated Price: 77.88
+16:14:56.979 [16:14:56.979] TP CALC (Long): Entry=77.19 | GlobalVWAP=77.3559023102313 | ZoneOpp=77.88 (Val=77.88) | TP1=77.3559023102313 TP2=77.88 | Selected=77.88
+16:14:56.979 [16:14:56.979] SL SKIPPED: Already created in current entry (duplicate prevention)
+16:14:56.991 [16:14:56.991] ORDER_UPDATE_TP: Name='TP2_Long_02' State=Submitted Price=77.88 Qty=5
+16:14:56.992 [16:14:56.992]   -> Updated tp2Order reference (ID=4ac2eb24a30540e2b8130f986d384759)
+16:14:56.992 [16:14:56.992] ORDER_UPDATE_TP: Name='TP2_Long_02' State=Accepted Price=77.88 Qty=5
+16:14:56.992 [16:14:56.992]   -> Updated tp2Order reference (ID=4ac2eb24a30540e2b8130f986d384759)
+16:14:56.993 [16:14:56.993] ORDER_UPDATE_TP: Name='TP2_Long_02' State=Working Price=77.88 Qty=5
+16:14:56.993 [16:14:56.993]   -> Updated tp2Order reference (ID=4ac2eb24a30540e2b8130f986d384759)
+16:14:56.993 [16:14:56.993] TP2 CREATED: TP2_Long_02 @ 77.88 Qty=5
+16:14:56.995 [16:14:56.995] 20/1/25 3:37:00 a. m. EnsureProtection COMPLETE
+16:14:56.996 [16:14:56.995] EXEC_FILL_DEBUG: Order=52009 Name=EntryA+_Long_02 State=Filled Price=77.19 | tp1Order=2957174 tp1Name=TP1_Long_02
+16:14:58.535 [16:14:58.535] ORDER_UPDATE_TP: Name='TP1_Long_02' State=ChangePending Price=77.36 Qty=5
+16:14:58.536 [16:14:58.536]   -> Updated tp1Order reference (ID=cbb11b255d6e4fd59213597bffc3c81f)
+16:14:58.537 [16:14:58.537] ORDER_UPDATE_TP: Name='TP1_Long_02' State=ChangeSubmitted Price=77.35 Qty=5
+16:14:58.537 [16:14:58.537]   -> Updated tp1Order reference (ID=cbb11b255d6e4fd59213597bffc3c81f)
+16:14:58.537 [16:14:58.537] ORDER_UPDATE_TP: Name='TP1_Long_02' State=Accepted Price=77.35 Qty=5
+16:14:58.538 [16:14:58.538]   -> Updated tp1Order reference (ID=cbb11b255d6e4fd59213597bffc3c81f)
+16:14:58.538 [16:14:58.538] ORDER_UPDATE_TP: Name='TP1_Long_02' State=Working Price=77.35 Qty=5
+16:14:58.539 [16:14:58.539]   -> Updated tp1Order reference (ID=cbb11b255d6e4fd59213597bffc3c81f)
+16:15:11.074 [16:15:11.074] ORDER_UPDATE_TP: Name='TP1_Long_02' State=Filled Price=77.35 Qty=5
+16:15:11.076 [16:15:11.076]   -> Updated tp1Order reference (ID=cbb11b255d6e4fd59213597bffc3c81f)
+16:15:11.076 [16:15:11.076] EXEC_FILL_DEBUG: Order=2957174 Name=TP1_Long_02 State=Filled Price=77.35 | tp1Order=2957174 tp1Name=TP1_Long_02
+16:15:11.076 [16:15:11.076] 20/1/25 4:03:00 a. m. DELTA CAPTURE: TP1 Delta=0
+16:15:11.078 [16:15:11.078] 20/1/25 4:03:00 a. m. BE LOGIC: TP1 Filled. Moving SL to BE.
+16:15:11.078 [16:15:11.078] 20/1/25 4:03:00 a. m. BE ACTION: Moving SL (SL_Long_02) to 77.19 Qty=5
+16:15:11.078 [16:15:11.078] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #2 closed - TP1_Long_02 PnL=80.00
+16:15:11.079 [16:15:11.079] NinjaTrader.NinjaScript.TimeSeries Partial Execution (TP1_Long_02). Position Active. Qty=5
+16:15:46.844 [16:15:46.844] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #2.2 closed - SL_Long_02 PnL=0.00
+16:15:46.844 [16:15:46.844] NinjaTrader.NinjaScript.TimeSeries Partial Execution (SL_Long_02). Position Active. Qty=2
+16:15:46.876 [16:15:46.876] EXEC_FILL_DEBUG: Order=847650 Name=SL_Long_02 State=Filled Price=77.186 | tp1Order=2957174 tp1Name=TP1_Long_02
+16:15:46.876 [16:15:46.876] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #2.3 closed - SL_Long_02 PnL=-2.00
+16:15:46.876 [16:15:46.876] NinjaTrader.NinjaScript.TimeSeries Position Closed (SL_Long_02). Resetting to Idle.
+16:15:46.878 [16:15:46.878] NinjaTrader.NinjaScript.TimeSeries VWAP RETRY: Waiting for price to break 77.05 for VWAP#3
+16:15:46.878 [16:15:46.878] ORDER_UPDATE_TP: Name='TP2_Long_02' State=CancelPending Price=77.88 Qty=5
+16:15:46.878 [16:15:46.878]   -> Updated tp2Order reference (ID=4ac2eb24a30540e2b8130f986d384759)
+16:15:46.879 [16:15:46.879] ORDER_UPDATE_TP: Name='TP2_Long_02' State=CancelSubmitted Price=77.88 Qty=5
+16:15:46.879 [16:15:46.879]   -> Updated tp2Order reference (ID=4ac2eb24a30540e2b8130f986d384759)
+16:15:46.903 [16:15:46.903] ORDER_UPDATE_TP: Name='TP2_Long_02' State=Cancelled Price=77.88 Qty=5
+16:15:46.903 [16:15:46.903]   -> Updated tp2Order reference (ID=4ac2eb24a30540e2b8130f986d384759)
+16:15:46.904 [16:15:46.904] CLEANUP: Cancelled orphan tp2Order
+16:15:46.909 [16:15:46.909] 13/1/26 4:15:46 p. m. TRADE CLOSED: TR_LONG at 77.19, Exit at 77.18, Profit: $-6,40
+16:16:29.379 [16:16:29.379] 20/1/25 5:07:00 a. m. VWAP RETRY TRIGGERED: Price broke 77.05. Starting attempt #3
+16:16:29.386 [16:16:29.386] RE-ANCHOR: New Low @ 77.03 (Setup: USA Low)
+16:16:29.387 [16:16:29.387] SWITCH_EVAL: Current=USA Low@71.98 New=Asia Low@77.04 Delta=5.06000 TickSize=0.01
+16:16:29.387 [16:16:29.387] 20/1/25 5:07:00 a. m. SWITCH: New Trigger on Asia Low overrides USA Low
+16:16:29.388 [16:16:29.388] 20/1/25 5:07:00 a. m. ENTRY ATTEMPT #1/20 on Asia Low (Deepest Selection)
+16:16:29.388 [16:16:29.388] EXTERNAL LEVEL: Asia Low @ 77.04 (Protected by: Europe Low @ 77.03)
+16:16:29.406 [16:16:29.406] RE-ANCHOR: New Low @ 77.02 (Setup: Asia Low)
+16:16:29.456 [16:16:29.456] RE-ANCHOR: New Low @ 77 (Setup: Asia Low)
+16:16:32.368 [16:16:32.368] 20/1/25 5:14:00 a. m. | SEARCH_OPPOSITE: Looking for 'Asia High' from SAME DAY as 'Asia Low' (RefDate: 2025-01-19)
+16:16:32.368 [16:16:32.368] 20/1/25 5:14:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 77.09 (Raw: 77.0946887966805). Bid=77.13 Ask=77.15
+16:16:32.368 [16:16:32.368] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:32.370 [16:16:32.370] RISK_DEBUG_ATR: ATR=$5.04 | ScaledRisk=$10.08
+16:16:32.370 [16:16:32.370] RISK_DEBUG_POST: Written=$10.08 | ReadFromFile=$150.00 | Using=$150.00
+16:16:32.370 [16:16:32.370] QTY_DEBUG: Risk=$150.00 | SL_Ticks=10.00 | TickVal=$1.00 | CalcQty=15.00 | MaxQty=100 | MinQty=2
+16:16:32.396 [16:16:32.396] 20/1/25 5:14:00 a. m. Order Submitted (Long). Mode=APlusRetrace Type=Limit Qty=15
+16:16:32.397 [16:16:32.397] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:32.398 [16:16:32.398] RISK_DEBUG_ATR: ATR=$5.04 | ScaledRisk=$10.08
+16:16:32.398 [16:16:32.398] RISK_DEBUG_POST: Written=$10.08 | ReadFromFile=$150.00 | Using=$150.00
+16:16:32.398 [16:16:32.398] QTY_DEBUG: Risk=$150.00 | SL_Ticks=10.47 | TickVal=$1.00 | CalcQty=14.33 | MaxQty=100 | MinQty=2
+16:16:32.400 [16:16:32.399] 20/1/25 5:14:00 a. m. | DYNAMIC QTY ADJUST: Old=14 New=14 (Stop moved to 76.99)
+16:16:32.758 [16:16:32.758] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:32.759 [16:16:32.759] RISK_DEBUG_ATR: ATR=$5.11 | ScaledRisk=$10.23
+16:16:32.759 [16:16:32.759] RISK_DEBUG_POST: Written=$10.23 | ReadFromFile=$150.00 | Using=$150.00
+16:16:32.760 [16:16:32.760] QTY_DEBUG: Risk=$150.00 | SL_Ticks=10.50 | TickVal=$1.00 | CalcQty=14.29 | MaxQty=100 | MinQty=2
+16:16:32.827 [16:16:32.827] NinjaTrader.NinjaScript.TimeSeries Entry Filled (EntryA+_Long_01) Qty=8. State -> PositionActive. TradeOriginalQty=8
+16:16:32.827 [16:16:32.827] 20/1/25 5:14:00 a. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+16:16:32.828 [16:16:32.828] PROTECTION_RESET: Cleared order references for new trade
+16:16:32.840 [16:16:32.840] NinjaTrader.NinjaScript.TimeSeries DELTA CAPTURE: Entry Delta=0 Direction=1
+16:16:32.841 [16:16:32.841] DIAG_EXEC: Name=EntryA+_Long_01 Qty=8 | Position.MP=Long Arg.MP=Long | State=PositionActive
+16:16:32.841 [16:16:32.841] ==========================================================================================
+16:16:32.841 [16:16:32.841]    TRADE START: #3 | Long | 20/1/25 5:14:00 a. m. | Price: 77.09
+16:16:32.842 [16:16:32.842] ==========================================================================================
+16:16:32.842 [16:16:32.842] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #3 started - Long @ 77.09
+16:16:32.842 [16:16:32.842] 20/1/25 5:14:00 a. m. REPLAY_SYNC_DELAY: Account.Positions=0 but Position.Quantity=8. Proceeding with protection (replay sync delay).
+16:16:32.844 [16:16:32.844] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Long FilledQty=8 Position.Qty=8 Position.MarketPosition=Long
+16:16:32.844 [16:16:32.844] 20/1/25 5:14:00 a. m. TRADE VWAP: Initialized (Managed)
+16:16:32.844 [16:16:32.844]    -> Protection Alloc: Filled=8 | ForTP1=4 (Need:4) | ForTP2=4 (Need:4)
+16:16:32.844 [16:16:32.844] 20/1/25 5:14:00 a. m. | SEARCH_OPPOSITE: Looking for 'Asia High' from SAME DAY as 'Asia Low' (RefDate: 2025-01-19)
+16:16:32.844 [16:16:32.844] FORCE TARGET: Using Validated Price: 77.85
+16:16:32.845 [16:16:32.845] TP CALC (Long): Entry=77.09 | GlobalVWAP=77.2994742969728 | ZoneOpp=77.85 (Val=77.85) | TP1=77.2994742969728 TP2=77.85 | Selected=77.3
+16:16:32.845 [16:16:32.845] SL_CREATE_DEBUG (MGR): Instrument=MCL 03-25 Direction=Long Tag=SL_Long_01 Action=Sell Price=76.99 Qty=8
+16:16:32.861 [16:16:32.861] SL CREATED: SL_Long_01 @ 76.99 Qty=8 Risk=$80.00
+16:16:32.879 [16:16:32.879] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Submitted Price=77.3 Qty=4
+16:16:32.881 [16:16:32.881]   -> Updated tp1Order reference (ID=543fbb9783b740598e5c3aabc84dc676)
+16:16:32.881 [16:16:32.881] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Accepted Price=77.3 Qty=4
+16:16:32.882 [16:16:32.882]   -> Updated tp1Order reference (ID=543fbb9783b740598e5c3aabc84dc676)
+16:16:32.883 [16:16:32.883] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Working Price=77.3 Qty=4
+16:16:32.883 [16:16:32.883]   -> Updated tp1Order reference (ID=543fbb9783b740598e5c3aabc84dc676)
+16:16:32.884 [16:16:32.884] TP1 CREATED: TP1_Long_01 @ 77.3 Qty=4
+16:16:32.884 [16:16:32.884] FORCE TARGET: Using Validated Price: 77.85
+16:16:32.884 [16:16:32.884] TP CALC (Long): Entry=77.09 | GlobalVWAP=77.2994742969728 | ZoneOpp=77.85 (Val=77.85) | TP1=77.2994742969728 TP2=77.85 | Selected=77.85
+16:16:32.884 [16:16:32.884] SL SKIPPED: Already created in current entry (duplicate prevention)
+16:16:32.905 [16:16:32.905] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Submitted Price=77.85 Qty=4
+16:16:32.905 [16:16:32.905]   -> Updated tp2Order reference (ID=241da4c8397d47deb65e4aa1d19522ec)
+16:16:32.905 [16:16:32.905] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Accepted Price=77.85 Qty=4
+16:16:32.907 [16:16:32.907]   -> Updated tp2Order reference (ID=241da4c8397d47deb65e4aa1d19522ec)
+16:16:32.907 [16:16:32.907] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Working Price=77.85 Qty=4
+16:16:32.908 [16:16:32.908]   -> Updated tp2Order reference (ID=241da4c8397d47deb65e4aa1d19522ec)
+16:16:32.909 [16:16:32.909] TP2 CREATED: TP2_Long_01 @ 77.85 Qty=4
+16:16:32.909 [16:16:32.909] 20/1/25 5:14:00 a. m. EnsureProtection COMPLETE
+16:16:32.927 [16:16:32.927] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Long_01) Qty=6. New TradeOriginalQty=14
+16:16:32.927 [16:16:32.927] DIAG_EXEC: Name=EntryA+_Long_01 Qty=6 | Position.MP=Long Arg.MP=Long | State=PositionActive
+16:16:32.927 [16:16:32.927] ==========================================================================================
+16:16:32.928 [16:16:32.928]    TRADE START: #3 | Long | 20/1/25 5:14:00 a. m. | Price: 77.09
+16:16:32.928 [16:16:32.928] ==========================================================================================
+16:16:32.929 [16:16:32.929] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #3 started - Long @ 77.09
+16:16:32.929 [16:16:32.929] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Long FilledQty=6 Position.Qty=14 Position.MarketPosition=Long
+16:16:32.929 [16:16:32.929]    -> Protection Alloc: Filled=6 | ForTP1=3 (Need:3) | ForTP2=3 (Need:3)
+16:16:32.929 [16:16:32.929] FORCE TARGET: Using Validated Price: 77.85
+16:16:32.930 [16:16:32.930] TP CALC (Long): Entry=77.09 | GlobalVWAP=77.2994742969728 | ZoneOpp=77.85 (Val=77.85) | TP1=77.2994742969728 TP2=77.85 | Selected=77.3
+16:16:32.931 [16:16:32.931] SL UPDATE (Partial Fill): Old Qty=8 New Qty=14
+16:16:32.931 [16:16:32.931] TP UPDATE (TP1): Old Qty=4/Price=77.3 -> New Qty=7/Price=77.3 (ID=11096)
+16:16:32.938 [16:16:32.938] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangePending Price=77.3 Qty=4
+16:16:32.939 [16:16:32.939]   -> Updated tp1Order reference (ID=543fbb9783b740598e5c3aabc84dc676)
+16:16:32.939 [16:16:32.939] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangeSubmitted Price=77.3 Qty=7
+16:16:32.940 [16:16:32.940]   -> Updated tp1Order reference (ID=543fbb9783b740598e5c3aabc84dc676)
+16:16:32.941 [16:16:32.941] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Accepted Price=77.3 Qty=7
+16:16:32.941 [16:16:32.941]   -> Updated tp1Order reference (ID=543fbb9783b740598e5c3aabc84dc676)
+16:16:32.942 [16:16:32.942] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Working Price=77.3 Qty=7
+16:16:32.942 [16:16:32.942]   -> Updated tp1Order reference (ID=543fbb9783b740598e5c3aabc84dc676)
+16:16:32.942 [16:16:32.942] FORCE TARGET: Using Validated Price: 77.85
+16:16:32.944 [16:16:32.944] TP CALC (Long): Entry=77.09 | GlobalVWAP=77.2994742969728 | ZoneOpp=77.85 (Val=77.85) | TP1=77.2994742969728 TP2=77.85 | Selected=77.85
+16:16:32.944 [16:16:32.944] SL SKIPPED: Already created in current entry (duplicate prevention)
+16:16:32.945 [16:16:32.945] TP UPDATE (TP2): Old Qty=4/Price=77.85 -> New Qty=7/Price=77.85 (ID=11097)
+16:16:32.945 [16:16:32.945] ORDER_UPDATE_TP: Name='TP2_Long_01' State=ChangePending Price=77.85 Qty=4
+16:16:32.945 [16:16:32.945]   -> Updated tp2Order reference (ID=241da4c8397d47deb65e4aa1d19522ec)
+16:16:32.946 [16:16:32.946] ORDER_UPDATE_TP: Name='TP2_Long_01' State=ChangeSubmitted Price=77.85 Qty=7
+16:16:32.946 [16:16:32.946]   -> Updated tp2Order reference (ID=241da4c8397d47deb65e4aa1d19522ec)
+16:16:32.947 [16:16:32.947] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Accepted Price=77.85 Qty=7
+16:16:32.947 [16:16:32.947]   -> Updated tp2Order reference (ID=241da4c8397d47deb65e4aa1d19522ec)
+16:16:32.948 [16:16:32.948] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Working Price=77.85 Qty=7
+16:16:32.948 [16:16:32.948]   -> Updated tp2Order reference (ID=241da4c8397d47deb65e4aa1d19522ec)
+16:16:32.949 [16:16:32.949] 20/1/25 5:14:00 a. m. EnsureProtection COMPLETE
+16:16:32.949 [16:16:32.949] EXEC_FILL_DEBUG: Order=9504541 Name=EntryA+_Long_01 State=Filled Price=77.09 | tp1Order=53336711 tp1Name=TP1_Long_01
+16:16:47.620 [16:16:47.620] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangePending Price=77.3 Qty=7
+16:16:47.620 [16:16:47.620]   -> Updated tp1Order reference (ID=543fbb9783b740598e5c3aabc84dc676)
+16:16:47.621 [16:16:47.621] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangeSubmitted Price=77.28 Qty=7
+16:16:47.621 [16:16:47.621]   -> Updated tp1Order reference (ID=543fbb9783b740598e5c3aabc84dc676)
+16:16:47.622 [16:16:47.622] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Accepted Price=77.28 Qty=7
+16:16:47.623 [16:16:47.623]   -> Updated tp1Order reference (ID=543fbb9783b740598e5c3aabc84dc676)
+16:16:47.623 [16:16:47.623] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Working Price=77.28 Qty=7
+16:16:47.624 [16:16:47.624]   -> Updated tp1Order reference (ID=543fbb9783b740598e5c3aabc84dc676)
+16:16:47.947 [16:16:47.947] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #3 closed - SL_Long_01 PnL=-40.00
+16:16:47.947 [16:16:47.947] NinjaTrader.NinjaScript.TimeSeries Partial Execution (SL_Long_01). Position Active. Qty=10
+16:16:47.973 [16:16:47.973] EXEC_FILL_DEBUG: Order=62874817 Name=SL_Long_01 State=Filled Price=76.9828571428571 | tp1Order=53336711 tp1Name=TP1_Long_01
+16:16:47.973 [16:16:47.973] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #3.2 closed - SL_Long_01 PnL=-110.00
+16:16:47.974 [16:16:47.974] NinjaTrader.NinjaScript.TimeSeries Position Closed (SL_Long_01). Resetting to Idle.
+16:16:47.974 [16:16:47.974] NinjaTrader.NinjaScript.TimeSeries VWAP RETRY: Waiting for price to break 77.00 for VWAP#2
+16:16:47.974 [16:16:47.974] ORDER_UPDATE_TP: Name='TP1_Long_01' State=CancelPending Price=77.28 Qty=7
+16:16:47.975 [16:16:47.975]   -> Updated tp1Order reference (ID=543fbb9783b740598e5c3aabc84dc676)
+16:16:47.975 [16:16:47.975] ORDER_UPDATE_TP: Name='TP1_Long_01' State=CancelSubmitted Price=77.28 Qty=7
+16:16:47.976 [16:16:47.976]   -> Updated tp1Order reference (ID=543fbb9783b740598e5c3aabc84dc676)
+16:16:47.989 [16:16:47.989] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Cancelled Price=77.28 Qty=7
+16:16:47.989 [16:16:47.989]   -> Updated tp1Order reference (ID=543fbb9783b740598e5c3aabc84dc676)
+16:16:47.990 [16:16:47.990] CLEANUP: Cancelled orphan tp1Order
+16:16:47.990 [16:16:47.990] ORDER_UPDATE_TP: Name='TP2_Long_01' State=CancelPending Price=77.85 Qty=7
+16:16:47.991 [16:16:47.991]   -> Updated tp2Order reference (ID=241da4c8397d47deb65e4aa1d19522ec)
+16:16:47.992 [16:16:47.992] ORDER_UPDATE_TP: Name='TP2_Long_01' State=CancelSubmitted Price=77.85 Qty=7
+16:16:47.992 [16:16:47.992]   -> Updated tp2Order reference (ID=241da4c8397d47deb65e4aa1d19522ec)
+16:16:48.015 [16:16:48.015] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Cancelled Price=77.85 Qty=7
+16:16:48.016 [16:16:48.016]   -> Updated tp2Order reference (ID=241da4c8397d47deb65e4aa1d19522ec)
+16:16:48.016 [16:16:48.016] CLEANUP: Cancelled orphan tp2Order
+16:16:48.020 [16:16:48.020] 13/1/26 4:16:48 p. m. TRADE CLOSED: TR_LONG at 77.09, Exit at 76.98, Profit: $-79,20
+16:16:48.055 [16:16:48.055] 20/1/25 5:48:00 a. m. VWAP RETRY TRIGGERED: Price broke 77.00. Starting attempt #2
+16:16:48.740 [16:16:48.740] RE-ANCHOR: New Low @ 76.97 (Setup: Asia Low)
+16:16:48.895 [16:16:48.895] RE-ANCHOR: New Low @ 76.96 (Setup: Asia Low)
+16:16:48.916 [16:16:48.916] RE-ANCHOR: New Low @ 76.94 (Setup: Asia Low)
+16:16:48.946 [16:16:48.946] RE-ANCHOR: New Low @ 76.92 (Setup: Asia Low)
+16:16:48.947 [16:16:48.947] SWITCH_EVAL: Current=Asia Low@72.39 New=USA Low@76.93 Delta=4.54000 TickSize=0.01
+16:16:48.948 [16:16:48.948] 20/1/25 5:48:00 a. m. SWITCH: New Trigger on USA Low overrides Asia Low
+16:16:48.948 [16:16:48.948] 20/1/25 5:48:00 a. m. ENTRY ATTEMPT #1/20 on USA Low (Deepest Selection)
+16:16:48.948 [16:16:48.948] EXTERNAL LEVEL: USA Low @ 76.93 (Protected by: Europe Low @ 76.92)
+16:16:48.959 [16:16:48.959] RE-ANCHOR: New Low @ 76.91 (Setup: USA Low)
+16:16:49.410 [16:16:49.410] RE-ANCHOR: New Low @ 76.89 (Setup: USA Low)
+16:16:49.464 [16:16:49.464] RE-ANCHOR: New Low @ 76.88 (Setup: USA Low)
+16:16:49.611 [16:16:49.611] RE-ANCHOR: New Low @ 76.86 (Setup: USA Low)
+16:16:49.721 [16:16:49.721] RE-ANCHOR: New Low @ 76.85 (Setup: USA Low)
+16:16:50.959 [16:16:50.959] RE-ANCHOR: New Low @ 76.83 (Setup: USA Low)
+16:16:50.966 [16:16:50.966] RE-ANCHOR: New Low @ 76.82 (Setup: USA Low)
+16:16:50.991 [16:16:50.991] RE-ANCHOR: New Low @ 76.8 (Setup: USA Low)
+16:16:51.016 [16:16:51.016] RE-ANCHOR: New Low @ 76.78 (Setup: USA Low)
+16:16:52.765 [16:16:52.765] 20/1/25 6:00:00 a. m. | SEARCH_OPPOSITE: Looking for 'USA High' from SAME DAY as 'USA Low' (RefDate: 2025-01-16)
+16:16:52.766 [16:16:52.766] 20/1/25 6:00:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 76.83 (Raw: 76.8333037694014). Bid=76.91 Ask=76.92
+16:16:52.766 [16:16:52.766] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:52.766 [16:16:52.766] RISK_DEBUG_ATR: ATR=$5.29 | ScaledRisk=$10.59
+16:16:52.766 [16:16:52.766] RISK_DEBUG_POST: Written=$10.59 | ReadFromFile=$150.00 | Using=$150.00
+16:16:52.767 [16:16:52.767] QTY_DEBUG: Risk=$150.00 | SL_Ticks=6.00 | TickVal=$1.00 | CalcQty=25.00 | MaxQty=100 | MinQty=2
+16:16:52.787 [16:16:52.787] 20/1/25 6:00:00 a. m. Order Submitted (Long). Mode=APlusRetrace Type=Limit Qty=25
+16:16:52.788 [16:16:52.788] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:52.788 [16:16:52.788] RISK_DEBUG_ATR: ATR=$5.29 | ScaledRisk=$10.59
+16:16:52.788 [16:16:52.788] RISK_DEBUG_POST: Written=$10.59 | ReadFromFile=$150.00 | Using=$150.00
+16:16:52.788 [16:16:52.788] QTY_DEBUG: Risk=$150.00 | SL_Ticks=6.33 | TickVal=$1.00 | CalcQty=23.70 | MaxQty=100 | MinQty=2
+16:16:52.789 [16:16:52.789] 20/1/25 6:00:00 a. m. | DYNAMIC QTY ADJUST: Old=24 New=24 (Stop moved to 76.77)
+16:16:53.163 [16:16:53.163] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:53.163 [16:16:53.163] RISK_DEBUG_ATR: ATR=$5.37 | ScaledRisk=$10.73
+16:16:53.163 [16:16:53.163] RISK_DEBUG_POST: Written=$10.73 | ReadFromFile=$150.00 | Using=$150.00
+16:16:53.164 [16:16:53.164] QTY_DEBUG: Risk=$150.00 | SL_Ticks=6.37 | TickVal=$1.00 | CalcQty=23.56 | MaxQty=100 | MinQty=2
+16:16:53.421 [16:16:53.421] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:53.422 [16:16:53.422] RISK_DEBUG_ATR: ATR=$5.51 | ScaledRisk=$11.02
+16:16:53.422 [16:16:53.422] RISK_DEBUG_POST: Written=$11.02 | ReadFromFile=$150.00 | Using=$150.00
+16:16:53.422 [16:16:53.422] QTY_DEBUG: Risk=$150.00 | SL_Ticks=6.85 | TickVal=$1.00 | CalcQty=21.91 | MaxQty=100 | MinQty=2
+16:16:53.424 [16:16:53.424] 20/1/25 6:00:00 a. m. | DYNAMIC QTY ADJUST: Old=22 New=22 (Stop moved to 76.77)
+16:16:53.732 [16:16:53.732] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:53.733 [16:16:53.733] RISK_DEBUG_ATR: ATR=$5.40 | ScaledRisk=$10.80
+16:16:53.733 [16:16:53.733] RISK_DEBUG_POST: Written=$10.80 | ReadFromFile=$150.00 | Using=$150.00
+16:16:53.733 [16:16:53.733] QTY_DEBUG: Risk=$150.00 | SL_Ticks=7.08 | TickVal=$1.00 | CalcQty=21.17 | MaxQty=100 | MinQty=2
+16:16:53.734 [16:16:53.734] 20/1/25 6:01:00 a. m. | DYNAMIC QTY ADJUST: Old=21 New=21 (Stop moved to 76.77)
+16:16:53.992 [16:16:53.992] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:53.993 [16:16:53.993] RISK_DEBUG_ATR: ATR=$5.40 | ScaledRisk=$10.80
+16:16:53.993 [16:16:53.993] RISK_DEBUG_POST: Written=$10.80 | ReadFromFile=$150.00 | Using=$150.00
+16:16:53.993 [16:16:53.993] QTY_DEBUG: Risk=$150.00 | SL_Ticks=7.11 | TickVal=$1.00 | CalcQty=21.10 | MaxQty=100 | MinQty=2
+16:16:54.431 [16:16:54.431] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:54.432 [16:16:54.432] RISK_DEBUG_ATR: ATR=$5.50 | ScaledRisk=$10.99
+16:16:54.432 [16:16:54.432] RISK_DEBUG_POST: Written=$10.99 | ReadFromFile=$150.00 | Using=$150.00
+16:16:54.433 [16:16:54.433] QTY_DEBUG: Risk=$150.00 | SL_Ticks=8.93 | TickVal=$1.00 | CalcQty=16.80 | MaxQty=100 | MinQty=2
+16:16:54.433 [16:16:54.433] 20/1/25 6:02:00 a. m. | DYNAMIC QTY ADJUST: Old=17 New=17 (Stop moved to 76.77)
+16:16:54.713 [16:16:54.713] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:54.714 [16:16:54.714] RISK_DEBUG_ATR: ATR=$5.50 | ScaledRisk=$10.99
+16:16:54.715 [16:16:54.715] RISK_DEBUG_POST: Written=$10.99 | ReadFromFile=$150.00 | Using=$150.00
+16:16:54.715 [16:16:54.715] QTY_DEBUG: Risk=$150.00 | SL_Ticks=9.49 | TickVal=$1.00 | CalcQty=15.81 | MaxQty=100 | MinQty=2
+16:16:54.716 [16:16:54.716] 20/1/25 6:02:00 a. m. | DYNAMIC QTY ADJUST: Old=16 New=16 (Stop moved to 76.77)
+16:16:54.979 [16:16:54.979] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:54.979 [16:16:54.979] RISK_DEBUG_ATR: ATR=$5.50 | ScaledRisk=$10.99
+16:16:54.979 [16:16:54.979] RISK_DEBUG_POST: Written=$10.99 | ReadFromFile=$150.00 | Using=$150.00
+16:16:54.980 [16:16:54.980] QTY_DEBUG: Risk=$150.00 | SL_Ticks=9.52 | TickVal=$1.00 | CalcQty=15.76 | MaxQty=100 | MinQty=2
+16:16:55.289 [16:16:55.289] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:55.290 [16:16:55.290] RISK_DEBUG_ATR: ATR=$5.17 | ScaledRisk=$10.34
+16:16:55.291 [16:16:55.291] RISK_DEBUG_POST: Written=$10.34 | ReadFromFile=$150.00 | Using=$150.00
+16:16:55.291 [16:16:55.291] QTY_DEBUG: Risk=$150.00 | SL_Ticks=10.82 | TickVal=$1.00 | CalcQty=13.86 | MaxQty=100 | MinQty=2
+16:16:55.292 [16:16:55.292] 20/1/25 6:03:00 a. m. | DYNAMIC QTY ADJUST: Old=14 New=14 (Stop moved to 76.77)
+16:16:55.569 [16:16:55.569] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:55.569 [16:16:55.569] RISK_DEBUG_ATR: ATR=$5.31 | ScaledRisk=$10.62
+16:16:55.569 [16:16:55.569] RISK_DEBUG_POST: Written=$10.62 | ReadFromFile=$150.00 | Using=$150.00
+16:16:55.569 [16:16:55.569] QTY_DEBUG: Risk=$150.00 | SL_Ticks=10.94 | TickVal=$1.00 | CalcQty=13.71 | MaxQty=100 | MinQty=2
+16:16:55.894 [16:16:55.894] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:55.894 [16:16:55.894] RISK_DEBUG_ATR: ATR=$5.34 | ScaledRisk=$10.68
+16:16:55.895 [16:16:55.895] RISK_DEBUG_POST: Written=$10.68 | ReadFromFile=$150.00 | Using=$150.00
+16:16:55.895 [16:16:55.895] QTY_DEBUG: Risk=$150.00 | SL_Ticks=11.33 | TickVal=$1.00 | CalcQty=13.24 | MaxQty=100 | MinQty=2
+16:16:55.896 [16:16:55.896] 20/1/25 6:04:00 a. m. | DYNAMIC QTY ADJUST: Old=13 New=13 (Stop moved to 76.77)
+16:16:56.153 [16:16:56.153] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:56.154 [16:16:56.154] RISK_DEBUG_ATR: ATR=$5.55 | ScaledRisk=$11.11
+16:16:56.154 [16:16:56.154] RISK_DEBUG_POST: Written=$11.11 | ReadFromFile=$150.00 | Using=$150.00
+16:16:56.154 [16:16:56.154] QTY_DEBUG: Risk=$150.00 | SL_Ticks=11.66 | TickVal=$1.00 | CalcQty=12.87 | MaxQty=100 | MinQty=2
+16:16:56.431 [16:16:56.431] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:56.431 [16:16:56.431] RISK_DEBUG_ATR: ATR=$5.30 | ScaledRisk=$10.60
+16:16:56.431 [16:16:56.431] RISK_DEBUG_POST: Written=$10.60 | ReadFromFile=$150.00 | Using=$150.00
+16:16:56.432 [16:16:56.432] QTY_DEBUG: Risk=$150.00 | SL_Ticks=11.67 | TickVal=$1.00 | CalcQty=12.85 | MaxQty=100 | MinQty=2
+16:16:56.686 [16:16:56.686] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:56.687 [16:16:56.687] RISK_DEBUG_ATR: ATR=$5.30 | ScaledRisk=$10.60
+16:16:56.687 [16:16:56.687] RISK_DEBUG_POST: Written=$10.60 | ReadFromFile=$150.00 | Using=$150.00
+16:16:56.688 [16:16:56.688] QTY_DEBUG: Risk=$150.00 | SL_Ticks=11.69 | TickVal=$1.00 | CalcQty=12.83 | MaxQty=100 | MinQty=2
+16:16:57.233 [16:16:57.233] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:57.234 [16:16:57.234] RISK_DEBUG_ATR: ATR=$5.20 | ScaledRisk=$10.40
+16:16:57.234 [16:16:57.234] RISK_DEBUG_POST: Written=$10.40 | ReadFromFile=$150.00 | Using=$150.00
+16:16:57.234 [16:16:57.234] QTY_DEBUG: Risk=$150.00 | SL_Ticks=12.31 | TickVal=$1.00 | CalcQty=12.18 | MaxQty=100 | MinQty=2
+16:16:57.235 [16:16:57.235] 20/1/25 6:06:00 a. m. | DYNAMIC QTY ADJUST: Old=12 New=12 (Stop moved to 76.77)
+16:16:57.549 [16:16:57.549] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:57.550 [16:16:57.550] RISK_DEBUG_ATR: ATR=$5.27 | ScaledRisk=$10.54
+16:16:57.551 [16:16:57.550] RISK_DEBUG_POST: Written=$10.54 | ReadFromFile=$150.00 | Using=$150.00
+16:16:57.551 [16:16:57.551] QTY_DEBUG: Risk=$150.00 | SL_Ticks=12.41 | TickVal=$1.00 | CalcQty=12.09 | MaxQty=100 | MinQty=2
+16:16:57.803 [16:16:57.803] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:57.804 [16:16:57.804] RISK_DEBUG_ATR: ATR=$5.11 | ScaledRisk=$10.21
+16:16:57.804 [16:16:57.804] RISK_DEBUG_POST: Written=$10.21 | ReadFromFile=$150.00 | Using=$150.00
+16:16:57.804 [16:16:57.804] QTY_DEBUG: Risk=$150.00 | SL_Ticks=12.81 | TickVal=$1.00 | CalcQty=11.71 | MaxQty=100 | MinQty=2
+16:16:58.059 [16:16:58.059] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:58.059 [16:16:58.059] RISK_DEBUG_ATR: ATR=$4.81 | ScaledRisk=$9.62
+16:16:58.060 [16:16:58.060] RISK_DEBUG_POST: Written=$9.62 | ReadFromFile=$150.00 | Using=$150.00
+16:16:58.060 [16:16:58.060] QTY_DEBUG: Risk=$150.00 | SL_Ticks=13.31 | TickVal=$1.00 | CalcQty=11.27 | MaxQty=100 | MinQty=2
+16:16:58.061 [16:16:58.061] 20/1/25 6:08:00 a. m. | DYNAMIC QTY ADJUST: Old=11 New=11 (Stop moved to 76.77)
+16:16:58.329 [16:16:58.329] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:58.329 [16:16:58.329] RISK_DEBUG_ATR: ATR=$5.02 | ScaledRisk=$10.05
+16:16:58.329 [16:16:58.329] RISK_DEBUG_POST: Written=$10.05 | ReadFromFile=$150.00 | Using=$150.00
+16:16:58.329 [16:16:58.329] QTY_DEBUG: Risk=$150.00 | SL_Ticks=13.36 | TickVal=$1.00 | CalcQty=11.23 | MaxQty=100 | MinQty=2
+16:16:58.636 [16:16:58.636] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:58.636 [16:16:58.636] RISK_DEBUG_ATR: ATR=$5.09 | ScaledRisk=$10.19
+16:16:58.636 [16:16:58.636] RISK_DEBUG_POST: Written=$10.19 | ReadFromFile=$150.00 | Using=$150.00
+16:16:58.637 [16:16:58.637] QTY_DEBUG: Risk=$150.00 | SL_Ticks=13.42 | TickVal=$1.00 | CalcQty=11.18 | MaxQty=100 | MinQty=2
+16:16:58.943 [16:16:58.943] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:58.944 [16:16:58.944] RISK_DEBUG_ATR: ATR=$4.80 | ScaledRisk=$9.60
+16:16:58.944 [16:16:58.944] RISK_DEBUG_POST: Written=$9.60 | ReadFromFile=$150.00 | Using=$150.00
+16:16:58.945 [16:16:58.945] QTY_DEBUG: Risk=$150.00 | SL_Ticks=13.48 | TickVal=$1.00 | CalcQty=11.13 | MaxQty=100 | MinQty=2
+16:16:59.813 [16:16:59.813] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:16:59.816 [16:16:59.815] RISK_DEBUG_ATR: ATR=$4.87 | ScaledRisk=$9.75
+16:16:59.816 [16:16:59.816] RISK_DEBUG_POST: Written=$9.75 | ReadFromFile=$150.00 | Using=$150.00
+16:16:59.816 [16:16:59.816] QTY_DEBUG: Risk=$150.00 | SL_Ticks=13.59 | TickVal=$1.00 | CalcQty=11.03 | MaxQty=100 | MinQty=2
+16:17:00.161 [16:17:00.161] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:00.161 [16:17:00.161] RISK_DEBUG_ATR: ATR=$4.94 | ScaledRisk=$9.89
+16:17:00.161 [16:17:00.161] RISK_DEBUG_POST: Written=$9.89 | ReadFromFile=$150.00 | Using=$150.00
+16:17:00.161 [16:17:00.161] QTY_DEBUG: Risk=$150.00 | SL_Ticks=13.65 | TickVal=$1.00 | CalcQty=10.99 | MaxQty=100 | MinQty=2
+16:17:00.445 [16:17:00.445] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:00.445 [16:17:00.445] RISK_DEBUG_ATR: ATR=$4.81 | ScaledRisk=$9.61
+16:17:00.446 [16:17:00.446] RISK_DEBUG_POST: Written=$9.61 | ReadFromFile=$150.00 | Using=$150.00
+16:17:00.447 [16:17:00.447] QTY_DEBUG: Risk=$150.00 | SL_Ticks=13.70 | TickVal=$1.00 | CalcQty=10.95 | MaxQty=100 | MinQty=2
+16:17:01.122 [16:17:01.122] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:01.123 [16:17:01.123] RISK_DEBUG_ATR: ATR=$4.35 | ScaledRisk=$8.70
+16:17:01.123 [16:17:01.123] RISK_DEBUG_POST: Written=$8.70 | ReadFromFile=$150.00 | Using=$150.00
+16:17:01.124 [16:17:01.124] QTY_DEBUG: Risk=$150.00 | SL_Ticks=13.83 | TickVal=$1.00 | CalcQty=10.85 | MaxQty=100 | MinQty=2
+16:17:01.393 [16:17:01.393] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:01.394 [16:17:01.394] RISK_DEBUG_ATR: ATR=$4.78 | ScaledRisk=$9.55
+16:17:01.394 [16:17:01.394] RISK_DEBUG_POST: Written=$9.55 | ReadFromFile=$150.00 | Using=$150.00
+16:17:01.395 [16:17:01.395] QTY_DEBUG: Risk=$150.00 | SL_Ticks=14.45 | TickVal=$1.00 | CalcQty=10.38 | MaxQty=100 | MinQty=2
+16:17:01.395 [16:17:01.395] 20/1/25 6:12:00 a. m. | DYNAMIC QTY ADJUST: Old=10 New=10 (Stop moved to 76.77)
+16:17:01.659 [16:17:01.658] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:01.659 [16:17:01.659] RISK_DEBUG_ATR: ATR=$4.51 | ScaledRisk=$9.01
+16:17:01.659 [16:17:01.659] RISK_DEBUG_POST: Written=$9.01 | ReadFromFile=$150.00 | Using=$150.00
+16:17:01.659 [16:17:01.659] QTY_DEBUG: Risk=$150.00 | SL_Ticks=14.53 | TickVal=$1.00 | CalcQty=10.32 | MaxQty=100 | MinQty=2
+16:17:02.190 [16:17:02.190] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:02.191 [16:17:02.191] RISK_DEBUG_ATR: ATR=$4.32 | ScaledRisk=$8.63
+16:17:02.191 [16:17:02.191] RISK_DEBUG_POST: Written=$8.63 | ReadFromFile=$150.00 | Using=$150.00
+16:17:02.192 [16:17:02.192] QTY_DEBUG: Risk=$150.00 | SL_Ticks=14.61 | TickVal=$1.00 | CalcQty=10.26 | MaxQty=100 | MinQty=2
+16:17:02.463 [16:17:02.463] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:02.463 [16:17:02.463] RISK_DEBUG_ATR: ATR=$4.53 | ScaledRisk=$9.06
+16:17:02.463 [16:17:02.463] RISK_DEBUG_POST: Written=$9.06 | ReadFromFile=$150.00 | Using=$150.00
+16:17:02.464 [16:17:02.464] QTY_DEBUG: Risk=$150.00 | SL_Ticks=14.84 | TickVal=$1.00 | CalcQty=10.11 | MaxQty=100 | MinQty=2
+16:17:02.760 [16:17:02.760] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:02.760 [16:17:02.760] RISK_DEBUG_ATR: ATR=$4.63 | ScaledRisk=$9.26
+16:17:02.761 [16:17:02.761] RISK_DEBUG_POST: Written=$9.26 | ReadFromFile=$150.00 | Using=$150.00
+16:17:02.761 [16:17:02.761] QTY_DEBUG: Risk=$150.00 | SL_Ticks=15.11 | TickVal=$1.00 | CalcQty=9.93 | MaxQty=100 | MinQty=2
+16:17:03.044 [16:17:03.044] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:03.045 [16:17:03.045] RISK_DEBUG_ATR: ATR=$4.63 | ScaledRisk=$9.26
+16:17:03.045 [16:17:03.045] RISK_DEBUG_POST: Written=$9.26 | ReadFromFile=$150.00 | Using=$150.00
+16:17:03.045 [16:17:03.045] QTY_DEBUG: Risk=$150.00 | SL_Ticks=15.12 | TickVal=$1.00 | CalcQty=9.92 | MaxQty=100 | MinQty=2
+16:17:03.317 [16:17:03.317] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:03.317 [16:17:03.317] RISK_DEBUG_ATR: ATR=$5.01 | ScaledRisk=$10.03
+16:17:03.318 [16:17:03.318] RISK_DEBUG_POST: Written=$10.03 | ReadFromFile=$150.00 | Using=$150.00
+16:17:03.318 [16:17:03.318] QTY_DEBUG: Risk=$150.00 | SL_Ticks=15.82 | TickVal=$1.00 | CalcQty=9.48 | MaxQty=100 | MinQty=2
+16:17:03.322 [16:17:03.322] 20/1/25 6:16:00 a. m. | DYNAMIC QTY ADJUST: Old=9 New=9 (Stop moved to 76.77)
+16:17:03.573 [16:17:03.573] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:03.573 [16:17:03.573] RISK_DEBUG_ATR: ATR=$4.80 | ScaledRisk=$9.60
+16:17:03.573 [16:17:03.573] RISK_DEBUG_POST: Written=$9.60 | ReadFromFile=$150.00 | Using=$150.00
+16:17:03.574 [16:17:03.574] QTY_DEBUG: Risk=$150.00 | SL_Ticks=15.92 | TickVal=$1.00 | CalcQty=9.42 | MaxQty=100 | MinQty=2
+16:17:03.829 [16:17:03.829] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:03.829 [16:17:03.829] RISK_DEBUG_ATR: ATR=$4.67 | ScaledRisk=$9.34
+16:17:03.829 [16:17:03.829] RISK_DEBUG_POST: Written=$9.34 | ReadFromFile=$150.00 | Using=$150.00
+16:17:03.831 [16:17:03.831] QTY_DEBUG: Risk=$150.00 | SL_Ticks=17.04 | TickVal=$1.00 | CalcQty=8.80 | MaxQty=100 | MinQty=2
+16:17:04.313 [16:17:04.313] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:04.313 [16:17:04.313] RISK_DEBUG_ATR: ATR=$4.67 | ScaledRisk=$9.34
+16:17:04.313 [16:17:04.313] RISK_DEBUG_POST: Written=$9.34 | ReadFromFile=$150.00 | Using=$150.00
+16:17:04.314 [16:17:04.314] QTY_DEBUG: Risk=$150.00 | SL_Ticks=17.05 | TickVal=$1.00 | CalcQty=8.80 | MaxQty=100 | MinQty=2
+16:17:04.693 [16:17:04.693] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:04.693 [16:17:04.693] RISK_DEBUG_ATR: ATR=$4.61 | ScaledRisk=$9.22
+16:17:04.694 [16:17:04.694] RISK_DEBUG_POST: Written=$9.22 | ReadFromFile=$150.00 | Using=$150.00
+16:17:04.694 [16:17:04.694] QTY_DEBUG: Risk=$150.00 | SL_Ticks=17.13 | TickVal=$1.00 | CalcQty=8.75 | MaxQty=100 | MinQty=2
+16:17:05.073 [16:17:05.073] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:05.073 [16:17:05.073] RISK_DEBUG_ATR: ATR=$4.35 | ScaledRisk=$8.70
+16:17:05.074 [16:17:05.074] RISK_DEBUG_POST: Written=$8.70 | ReadFromFile=$150.00 | Using=$150.00
+16:17:05.074 [16:17:05.074] QTY_DEBUG: Risk=$150.00 | SL_Ticks=17.20 | TickVal=$1.00 | CalcQty=8.72 | MaxQty=100 | MinQty=2
+16:17:05.361 [16:17:05.361] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:05.363 [16:17:05.363] RISK_DEBUG_ATR: ATR=$4.38 | ScaledRisk=$8.75
+16:17:05.363 [16:17:05.363] RISK_DEBUG_POST: Written=$8.75 | ReadFromFile=$150.00 | Using=$150.00
+16:17:05.363 [16:17:05.363] QTY_DEBUG: Risk=$150.00 | SL_Ticks=17.37 | TickVal=$1.00 | CalcQty=8.64 | MaxQty=100 | MinQty=2
+16:17:05.620 [16:17:05.620] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:05.620 [16:17:05.620] RISK_DEBUG_ATR: ATR=$4.80 | ScaledRisk=$9.61
+16:17:05.621 [16:17:05.621] RISK_DEBUG_POST: Written=$9.61 | ReadFromFile=$150.00 | Using=$150.00
+16:17:05.621 [16:17:05.621] QTY_DEBUG: Risk=$150.00 | SL_Ticks=17.50 | TickVal=$1.00 | CalcQty=8.57 | MaxQty=100 | MinQty=2
+16:17:06.020 [16:17:06.020] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:06.020 [16:17:06.020] RISK_DEBUG_ATR: ATR=$4.53 | ScaledRisk=$9.07
+16:17:06.021 [16:17:06.021] RISK_DEBUG_POST: Written=$9.07 | ReadFromFile=$150.00 | Using=$150.00
+16:17:06.021 [16:17:06.021] QTY_DEBUG: Risk=$150.00 | SL_Ticks=17.51 | TickVal=$1.00 | CalcQty=8.57 | MaxQty=100 | MinQty=2
+16:17:06.281 [16:17:06.281] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:06.281 [16:17:06.281] RISK_DEBUG_ATR: ATR=$4.60 | ScaledRisk=$9.21
+16:17:06.282 [16:17:06.282] RISK_DEBUG_POST: Written=$9.21 | ReadFromFile=$150.00 | Using=$150.00
+16:17:06.282 [16:17:06.282] QTY_DEBUG: Risk=$150.00 | SL_Ticks=17.61 | TickVal=$1.00 | CalcQty=8.52 | MaxQty=100 | MinQty=2
+16:17:06.808 [16:17:06.808] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:06.809 [16:17:06.809] RISK_DEBUG_ATR: ATR=$4.11 | ScaledRisk=$8.22
+16:17:06.809 [16:17:06.809] RISK_DEBUG_POST: Written=$8.22 | ReadFromFile=$150.00 | Using=$150.00
+16:17:06.809 [16:17:06.809] QTY_DEBUG: Risk=$150.00 | SL_Ticks=17.64 | TickVal=$1.00 | CalcQty=8.50 | MaxQty=100 | MinQty=2
+16:17:07.104 [16:17:07.104] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:07.104 [16:17:07.104] RISK_DEBUG_ATR: ATR=$4.32 | ScaledRisk=$8.64
+16:17:07.104 [16:17:07.104] RISK_DEBUG_POST: Written=$8.64 | ReadFromFile=$150.00 | Using=$150.00
+16:17:07.105 [16:17:07.105] QTY_DEBUG: Risk=$150.00 | SL_Ticks=17.68 | TickVal=$1.00 | CalcQty=8.48 | MaxQty=100 | MinQty=2
+16:17:07.106 [16:17:07.106] 20/1/25 6:24:00 a. m. | DYNAMIC QTY ADJUST: Old=8 New=8 (Stop moved to 76.77)
+16:17:07.358 [16:17:07.358] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:07.359 [16:17:07.359] RISK_DEBUG_ATR: ATR=$4.01 | ScaledRisk=$8.03
+16:17:07.359 [16:17:07.359] RISK_DEBUG_POST: Written=$8.03 | ReadFromFile=$150.00 | Using=$150.00
+16:17:07.360 [16:17:07.360] QTY_DEBUG: Risk=$150.00 | SL_Ticks=17.71 | TickVal=$1.00 | CalcQty=8.47 | MaxQty=100 | MinQty=2
+16:17:07.778 [16:17:07.778] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:07.779 [16:17:07.779] RISK_DEBUG_ATR: ATR=$4.26 | ScaledRisk=$8.52
+16:17:07.779 [16:17:07.779] RISK_DEBUG_POST: Written=$8.52 | ReadFromFile=$150.00 | Using=$150.00
+16:17:07.779 [16:17:07.779] QTY_DEBUG: Risk=$150.00 | SL_Ticks=18.02 | TickVal=$1.00 | CalcQty=8.32 | MaxQty=100 | MinQty=2
+16:17:08.111 [16:17:08.111] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:08.111 [16:17:08.111] RISK_DEBUG_ATR: ATR=$4.33 | ScaledRisk=$8.67
+16:17:08.111 [16:17:08.111] RISK_DEBUG_POST: Written=$8.67 | ReadFromFile=$150.00 | Using=$150.00
+16:17:08.113 [16:17:08.113] QTY_DEBUG: Risk=$150.00 | SL_Ticks=18.08 | TickVal=$1.00 | CalcQty=8.30 | MaxQty=100 | MinQty=2
+16:17:08.410 [16:17:08.410] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:08.411 [16:17:08.411] RISK_DEBUG_ATR: ATR=$4.24 | ScaledRisk=$8.48
+16:17:08.411 [16:17:08.411] RISK_DEBUG_POST: Written=$8.48 | ReadFromFile=$150.00 | Using=$150.00
+16:17:08.411 [16:17:08.411] QTY_DEBUG: Risk=$150.00 | SL_Ticks=18.13 | TickVal=$1.00 | CalcQty=8.27 | MaxQty=100 | MinQty=2
+16:17:08.669 [16:17:08.669] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:08.670 [16:17:08.670] RISK_DEBUG_ATR: ATR=$4.22 | ScaledRisk=$8.43
+16:17:08.670 [16:17:08.670] RISK_DEBUG_POST: Written=$8.43 | ReadFromFile=$150.00 | Using=$150.00
+16:17:08.670 [16:17:08.670] QTY_DEBUG: Risk=$150.00 | SL_Ticks=18.32 | TickVal=$1.00 | CalcQty=8.19 | MaxQty=100 | MinQty=2
+16:17:08.977 [16:17:08.977] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:08.978 [16:17:08.978] RISK_DEBUG_ATR: ATR=$3.99 | ScaledRisk=$7.97
+16:17:08.978 [16:17:08.978] RISK_DEBUG_POST: Written=$7.97 | ReadFromFile=$150.00 | Using=$150.00
+16:17:08.979 [16:17:08.979] QTY_DEBUG: Risk=$150.00 | SL_Ticks=18.60 | TickVal=$1.00 | CalcQty=8.06 | MaxQty=100 | MinQty=2
+16:17:09.256 [16:17:09.256] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:09.256 [16:17:09.256] RISK_DEBUG_ATR: ATR=$4.13 | ScaledRisk=$8.26
+16:17:09.256 [16:17:09.256] RISK_DEBUG_POST: Written=$8.26 | ReadFromFile=$150.00 | Using=$150.00
+16:17:09.257 [16:17:09.257] QTY_DEBUG: Risk=$150.00 | SL_Ticks=18.66 | TickVal=$1.00 | CalcQty=8.04 | MaxQty=100 | MinQty=2
+16:17:09.511 [16:17:09.511] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:09.511 [16:17:09.511] RISK_DEBUG_ATR: ATR=$4.19 | ScaledRisk=$8.39
+16:17:09.511 [16:17:09.511] RISK_DEBUG_POST: Written=$8.39 | ReadFromFile=$150.00 | Using=$150.00
+16:17:09.511 [16:17:09.511] QTY_DEBUG: Risk=$150.00 | SL_Ticks=18.76 | TickVal=$1.00 | CalcQty=8.00 | MaxQty=100 | MinQty=2
+16:17:09.763 [16:17:09.763] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:09.765 [16:17:09.765] RISK_DEBUG_ATR: ATR=$4.18 | ScaledRisk=$8.36
+16:17:09.765 [16:17:09.765] RISK_DEBUG_POST: Written=$8.36 | ReadFromFile=$150.00 | Using=$150.00
+16:17:09.765 [16:17:09.765] QTY_DEBUG: Risk=$150.00 | SL_Ticks=19.23 | TickVal=$1.00 | CalcQty=7.80 | MaxQty=100 | MinQty=2
+16:17:10.056 [16:17:10.056] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:10.056 [16:17:10.056] RISK_DEBUG_ATR: ATR=$4.32 | ScaledRisk=$8.64
+16:17:10.057 [16:17:10.057] RISK_DEBUG_POST: Written=$8.64 | ReadFromFile=$150.00 | Using=$150.00
+16:17:10.057 [16:17:10.057] QTY_DEBUG: Risk=$150.00 | SL_Ticks=19.48 | TickVal=$1.00 | CalcQty=7.70 | MaxQty=100 | MinQty=2
+16:17:10.429 [16:17:10.429] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:10.429 [16:17:10.429] RISK_DEBUG_ATR: ATR=$4.20 | ScaledRisk=$8.39
+16:17:10.429 [16:17:10.429] RISK_DEBUG_POST: Written=$8.39 | ReadFromFile=$150.00 | Using=$150.00
+16:17:10.429 [16:17:10.429] QTY_DEBUG: Risk=$150.00 | SL_Ticks=19.76 | TickVal=$1.00 | CalcQty=7.59 | MaxQty=100 | MinQty=2
+16:17:10.868 [16:17:10.868] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:10.869 [16:17:10.869] RISK_DEBUG_ATR: ATR=$4.17 | ScaledRisk=$8.33
+16:17:10.870 [16:17:10.870] RISK_DEBUG_POST: Written=$8.33 | ReadFromFile=$150.00 | Using=$150.00
+16:17:10.870 [16:17:10.870] QTY_DEBUG: Risk=$150.00 | SL_Ticks=19.79 | TickVal=$1.00 | CalcQty=7.58 | MaxQty=100 | MinQty=2
+16:17:11.124 [16:17:11.124] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:11.124 [16:17:11.124] RISK_DEBUG_ATR: ATR=$4.24 | ScaledRisk=$8.48
+16:17:11.125 [16:17:11.125] RISK_DEBUG_POST: Written=$8.48 | ReadFromFile=$150.00 | Using=$150.00
+16:17:11.125 [16:17:11.125] QTY_DEBUG: Risk=$150.00 | SL_Ticks=19.88 | TickVal=$1.00 | CalcQty=7.54 | MaxQty=100 | MinQty=2
+16:17:11.428 [16:17:11.428] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:11.428 [16:17:11.428] RISK_DEBUG_ATR: ATR=$4.06 | ScaledRisk=$8.11
+16:17:11.428 [16:17:11.428] RISK_DEBUG_POST: Written=$8.11 | ReadFromFile=$150.00 | Using=$150.00
+16:17:11.429 [16:17:11.429] QTY_DEBUG: Risk=$150.00 | SL_Ticks=20.01 | TickVal=$1.00 | CalcQty=7.50 | MaxQty=100 | MinQty=2
+16:17:11.429 [16:17:11.429] 20/1/25 6:37:00 a. m. | DYNAMIC QTY ADJUST: Old=7 New=7 (Stop moved to 76.77)
+16:17:11.702 [16:17:11.702] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:11.703 [16:17:11.703] RISK_DEBUG_ATR: ATR=$4.06 | ScaledRisk=$8.11
+16:17:11.703 [16:17:11.703] RISK_DEBUG_POST: Written=$8.11 | ReadFromFile=$150.00 | Using=$150.00
+16:17:11.703 [16:17:11.703] QTY_DEBUG: Risk=$150.00 | SL_Ticks=20.02 | TickVal=$1.00 | CalcQty=7.49 | MaxQty=100 | MinQty=2
+16:17:12.013 [16:17:12.013] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:12.014 [16:17:12.014] RISK_DEBUG_ATR: ATR=$3.97 | ScaledRisk=$7.94
+16:17:12.015 [16:17:12.015] RISK_DEBUG_POST: Written=$7.94 | ReadFromFile=$150.00 | Using=$150.00
+16:17:12.015 [16:17:12.015] QTY_DEBUG: Risk=$150.00 | SL_Ticks=20.16 | TickVal=$1.00 | CalcQty=7.44 | MaxQty=100 | MinQty=2
+16:17:12.266 [16:17:12.266] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:12.267 [16:17:12.267] RISK_DEBUG_ATR: ATR=$3.90 | ScaledRisk=$7.79
+16:17:12.267 [16:17:12.267] RISK_DEBUG_POST: Written=$7.79 | ReadFromFile=$150.00 | Using=$150.00
+16:17:12.267 [16:17:12.267] QTY_DEBUG: Risk=$150.00 | SL_Ticks=20.27 | TickVal=$1.00 | CalcQty=7.40 | MaxQty=100 | MinQty=2
+16:17:12.575 [16:17:12.575] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:12.576 [16:17:12.576] RISK_DEBUG_ATR: ATR=$3.76 | ScaledRisk=$7.52
+16:17:12.576 [16:17:12.576] RISK_DEBUG_POST: Written=$7.52 | ReadFromFile=$150.00 | Using=$150.00
+16:17:12.576 [16:17:12.576] QTY_DEBUG: Risk=$150.00 | SL_Ticks=20.35 | TickVal=$1.00 | CalcQty=7.37 | MaxQty=100 | MinQty=2
+16:17:12.891 [16:17:12.891] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:12.891 [16:17:12.891] RISK_DEBUG_ATR: ATR=$3.31 | ScaledRisk=$6.62
+16:17:12.892 [16:17:12.892] RISK_DEBUG_POST: Written=$6.62 | ReadFromFile=$150.00 | Using=$150.00
+16:17:12.892 [16:17:12.892] QTY_DEBUG: Risk=$150.00 | SL_Ticks=20.38 | TickVal=$1.00 | CalcQty=7.36 | MaxQty=100 | MinQty=2
+16:17:13.190 [16:17:13.190] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:13.191 [16:17:13.191] RISK_DEBUG_ATR: ATR=$3.49 | ScaledRisk=$6.97
+16:17:13.192 [16:17:13.192] RISK_DEBUG_POST: Written=$6.97 | ReadFromFile=$150.00 | Using=$150.00
+16:17:13.192 [16:17:13.192] QTY_DEBUG: Risk=$150.00 | SL_Ticks=20.65 | TickVal=$1.00 | CalcQty=7.26 | MaxQty=100 | MinQty=2
+16:17:13.495 [16:17:13.495] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:13.496 [16:17:13.495] RISK_DEBUG_ATR: ATR=$3.63 | ScaledRisk=$7.26
+16:17:13.496 [16:17:13.496] RISK_DEBUG_POST: Written=$7.26 | ReadFromFile=$150.00 | Using=$150.00
+16:17:13.496 [16:17:13.496] QTY_DEBUG: Risk=$150.00 | SL_Ticks=20.77 | TickVal=$1.00 | CalcQty=7.22 | MaxQty=100 | MinQty=2
+16:17:13.756 [16:17:13.756] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:13.757 [16:17:13.757] RISK_DEBUG_ATR: ATR=$3.63 | ScaledRisk=$7.26
+16:17:13.758 [16:17:13.758] RISK_DEBUG_POST: Written=$7.26 | ReadFromFile=$150.00 | Using=$150.00
+16:17:13.758 [16:17:13.758] QTY_DEBUG: Risk=$150.00 | SL_Ticks=20.78 | TickVal=$1.00 | CalcQty=7.22 | MaxQty=100 | MinQty=2
+16:17:14.054 [16:17:14.054] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:14.054 [16:17:14.054] RISK_DEBUG_ATR: ATR=$3.51 | ScaledRisk=$7.03
+16:17:14.056 [16:17:14.056] RISK_DEBUG_POST: Written=$7.03 | ReadFromFile=$150.00 | Using=$150.00
+16:17:14.056 [16:17:14.056] QTY_DEBUG: Risk=$150.00 | SL_Ticks=20.84 | TickVal=$1.00 | CalcQty=7.20 | MaxQty=100 | MinQty=2
+16:17:14.345 [16:17:14.345] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:14.345 [16:17:14.345] RISK_DEBUG_ATR: ATR=$3.38 | ScaledRisk=$6.75
+16:17:14.347 [16:17:14.347] RISK_DEBUG_POST: Written=$6.75 | ReadFromFile=$150.00 | Using=$150.00
+16:17:14.347 [16:17:14.347] QTY_DEBUG: Risk=$150.00 | SL_Ticks=20.91 | TickVal=$1.00 | CalcQty=7.17 | MaxQty=100 | MinQty=2
+16:17:14.634 [16:17:14.634] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:14.634 [16:17:14.634] RISK_DEBUG_ATR: ATR=$3.28 | ScaledRisk=$6.56
+16:17:14.635 [16:17:14.635] RISK_DEBUG_POST: Written=$6.56 | ReadFromFile=$150.00 | Using=$150.00
+16:17:14.635 [16:17:14.635] QTY_DEBUG: Risk=$150.00 | SL_Ticks=20.97 | TickVal=$1.00 | CalcQty=7.15 | MaxQty=100 | MinQty=2
+16:17:14.913 [16:17:14.913] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:14.913 [16:17:14.913] RISK_DEBUG_ATR: ATR=$3.04 | ScaledRisk=$6.09
+16:17:14.913 [16:17:14.913] RISK_DEBUG_POST: Written=$6.09 | ReadFromFile=$150.00 | Using=$150.00
+16:17:14.913 [16:17:14.913] QTY_DEBUG: Risk=$150.00 | SL_Ticks=20.98 | TickVal=$1.00 | CalcQty=7.15 | MaxQty=100 | MinQty=2
+16:17:15.178 [16:17:15.178] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:15.178 [16:17:15.178] RISK_DEBUG_ATR: ATR=$3.30 | ScaledRisk=$6.59
+16:17:15.178 [16:17:15.178] RISK_DEBUG_POST: Written=$6.59 | ReadFromFile=$150.00 | Using=$150.00
+16:17:15.185 [16:17:15.185] QTY_DEBUG: Risk=$150.00 | SL_Ticks=21.12 | TickVal=$1.00 | CalcQty=7.10 | MaxQty=100 | MinQty=2
+16:17:15.681 [16:17:15.681] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:17:15.681 [16:17:15.681] RISK_DEBUG_ATR: ATR=$3.30 | ScaledRisk=$6.59
+16:17:15.682 [16:17:15.682] RISK_DEBUG_POST: Written=$6.59 | ReadFromFile=$150.00 | Using=$150.00
+16:17:15.682 [16:17:15.682] QTY_DEBUG: Risk=$150.00 | SL_Ticks=21.13 | TickVal=$1.00 | CalcQty=7.10 | MaxQty=100 | MinQty=2
+16:17:15.758 [16:17:15.758] NinjaTrader.NinjaScript.TimeSeries Entry Filled (EntryA+_Long_01) Qty=1. State -> PositionActive. TradeOriginalQty=1
+16:17:15.758 [16:17:15.758] 20/1/25 6:49:00 a. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+16:17:15.758 [16:17:15.758] PROTECTION_RESET: Cleared order references for new trade
+16:17:15.760 [16:17:15.760] NinjaTrader.NinjaScript.TimeSeries DELTA CAPTURE: Entry Delta=0 Direction=1
+16:17:15.760 [16:17:15.760] DIAG_EXEC: Name=EntryA+_Long_01 Qty=1 | Position.MP=Long Arg.MP=Long | State=PositionActive
+16:17:15.761 [16:17:15.761] ==========================================================================================
+16:17:15.761 [16:17:15.761]    TRADE START: #4 | Long | 20/1/25 6:49:00 a. m. | Price: 76.98
+16:17:15.761 [16:17:15.761] ==========================================================================================
+16:17:15.761 [16:17:15.761] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #4 started - Long @ 76.98
+16:17:15.761 [16:17:15.761] 20/1/25 6:49:00 a. m. REPLAY_SYNC_DELAY: Account.Positions=0 but Position.Quantity=1. Proceeding with protection (replay sync delay).
+16:17:15.763 [16:17:15.763] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Long FilledQty=1 Position.Qty=1 Position.MarketPosition=Long
+16:17:15.763 [16:17:15.763] 20/1/25 6:49:00 a. m. TRADE VWAP: Initialized (Managed)
+16:17:15.763 [16:17:15.763]    -> Protection Alloc: Filled=1 | ForTP1=1 (Need:1) | ForTP2=0 (Need:0)
+16:17:15.764 [16:17:15.764] 20/1/25 6:49:00 a. m. | SEARCH_OPPOSITE: Looking for 'USA High' from SAME DAY as 'USA Low' (RefDate: 2025-01-16)
+16:17:15.764 [16:17:15.764] FORCE TARGET: Using Validated Price: 78.45
+16:17:15.764 [16:17:15.764] TP CALC (Long): Entry=76.98 | GlobalVWAP=77.2317434278284 | ZoneOpp=78.45 (Val=78.45) | TP1=77.2317434278284 TP2=78.45 | Selected=77.23
+16:17:15.765 [16:17:15.765] SL_CREATE_DEBUG (MGR): Instrument=MCL 03-25 Direction=Long Tag=SL_Long_01 Action=Sell Price=76.77 Qty=1
+16:17:15.789 [16:17:15.789] SL CREATED: SL_Long_01 @ 76.77 Qty=1 Risk=$21.00
+16:17:15.802 [16:17:15.802] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Submitted Price=77.23 Qty=1
+16:17:15.802 [16:17:15.802]   -> Updated tp1Order reference (ID=b3d7ded88ed94f70bbd20ee4c5af9fd9)
+16:17:15.802 [16:17:15.802] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Accepted Price=77.23 Qty=1
+16:17:15.803 [16:17:15.803]   -> Updated tp1Order reference (ID=b3d7ded88ed94f70bbd20ee4c5af9fd9)
+16:17:15.804 [16:17:15.804] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Working Price=77.23 Qty=1
+16:17:15.804 [16:17:15.804]   -> Updated tp1Order reference (ID=b3d7ded88ed94f70bbd20ee4c5af9fd9)
+16:17:15.805 [16:17:15.804] TP1 CREATED: TP1_Long_01 @ 77.23 Qty=1
+16:17:15.805 [16:17:15.805] 20/1/25 6:49:00 a. m. EnsureProtection COMPLETE
+16:17:15.818 [16:17:15.818] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Long_01) Qty=1. New TradeOriginalQty=2
+16:17:15.819 [16:17:15.819] DIAG_EXEC: Name=EntryA+_Long_01 Qty=1 | Position.MP=Long Arg.MP=Long | State=PositionActive
+16:17:15.820 [16:17:15.820] ==========================================================================================
+16:17:15.821 [16:17:15.821]    TRADE START: #4 | Long | 20/1/25 6:49:00 a. m. | Price: 76.98
+16:17:15.821 [16:17:15.821] ==========================================================================================
+16:17:15.821 [16:17:15.821] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #4 started - Long @ 76.98
+16:17:15.822 [16:17:15.822] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Long FilledQty=1 Position.Qty=2 Position.MarketPosition=Long
+16:17:15.822 [16:17:15.822]    -> Protection Alloc: Filled=1 | ForTP1=0 (Need:0) | ForTP2=1 (Need:1)
+16:17:15.822 [16:17:15.822] FORCE TARGET: Using Validated Price: 78.45
+16:17:15.823 [16:17:15.823] TP CALC (Long): Entry=76.98 | GlobalVWAP=77.2317254632829 | ZoneOpp=78.45 (Val=78.45) | TP1=77.2317254632829 TP2=78.45 | Selected=78.45
+16:17:15.823 [16:17:15.823] SL UPDATE (Partial Fill): Old Qty=1 New Qty=2
+16:17:15.845 [16:17:15.845] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Submitted Price=78.45 Qty=1
+16:17:15.845 [16:17:15.845]   -> Updated tp2Order reference (ID=1506db7ca56347d092a3a1aedf16e235)
+16:17:15.845 [16:17:15.845] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Accepted Price=78.45 Qty=1
+16:17:15.846 [16:17:15.846]   -> Updated tp2Order reference (ID=1506db7ca56347d092a3a1aedf16e235)
+16:17:15.846 [16:17:15.846] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Working Price=78.45 Qty=1
+16:17:15.846 [16:17:15.846]   -> Updated tp2Order reference (ID=1506db7ca56347d092a3a1aedf16e235)
+16:17:15.847 [16:17:15.847] TP2 CREATED: TP2_Long_01 @ 78.45 Qty=1
+16:17:15.848 [16:17:15.848] 20/1/25 6:49:00 a. m. EnsureProtection COMPLETE
+16:17:15.873 [16:17:15.873] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Long_01) Qty=5. New TradeOriginalQty=7
+16:17:15.873 [16:17:15.873] DIAG_EXEC: Name=EntryA+_Long_01 Qty=5 | Position.MP=Long Arg.MP=Long | State=PositionActive
+16:17:15.874 [16:17:15.874] ==========================================================================================
+16:17:15.874 [16:17:15.874]    TRADE START: #4 | Long | 20/1/25 6:49:00 a. m. | Price: 76.98
+16:17:15.875 [16:17:15.875] ==========================================================================================
+16:17:15.875 [16:17:15.875] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #4 started - Long @ 76.98
+16:17:15.875 [16:17:15.875] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Long FilledQty=5 Position.Qty=7 Position.MarketPosition=Long
+16:17:15.875 [16:17:15.875]    -> Protection Alloc: Filled=5 | ForTP1=3 (Need:3) | ForTP2=2 (Need:2)
+16:17:15.876 [16:17:15.876] FORCE TARGET: Using Validated Price: 78.45
+16:17:15.876 [16:17:15.876] TP CALC (Long): Entry=76.98 | GlobalVWAP=77.2317254632829 | ZoneOpp=78.45 (Val=78.45) | TP1=77.2317254632829 TP2=78.45 | Selected=77.23
+16:17:15.878 [16:17:15.878] SL UPDATE (Partial Fill): Old Qty=2 New Qty=7
+16:17:15.878 [16:17:15.878] TP UPDATE (TP1): Old Qty=1/Price=77.23 -> New Qty=4/Price=77.23 (ID=11100)
+16:17:15.878 [16:17:15.878] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangePending Price=77.23 Qty=1
+16:17:15.879 [16:17:15.879]   -> Updated tp1Order reference (ID=b3d7ded88ed94f70bbd20ee4c5af9fd9)
+16:17:15.879 [16:17:15.879] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangeSubmitted Price=77.23 Qty=4
+16:17:15.879 [16:17:15.879]   -> Updated tp1Order reference (ID=b3d7ded88ed94f70bbd20ee4c5af9fd9)
+16:17:15.881 [16:17:15.881] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Accepted Price=77.23 Qty=4
+16:17:15.881 [16:17:15.881]   -> Updated tp1Order reference (ID=b3d7ded88ed94f70bbd20ee4c5af9fd9)
+16:17:15.882 [16:17:15.882] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Working Price=77.23 Qty=4
+16:17:15.882 [16:17:15.882]   -> Updated tp1Order reference (ID=b3d7ded88ed94f70bbd20ee4c5af9fd9)
+16:17:15.883 [16:17:15.883] FORCE TARGET: Using Validated Price: 78.45
+16:17:15.883 [16:17:15.883] TP CALC (Long): Entry=76.98 | GlobalVWAP=77.2317254632829 | ZoneOpp=78.45 (Val=78.45) | TP1=77.2317254632829 TP2=78.45 | Selected=78.45
+16:17:15.883 [16:17:15.883] SL SKIPPED: Already created in current entry (duplicate prevention)
+16:17:15.883 [16:17:15.883] TP UPDATE (TP2): Old Qty=1/Price=78.45 -> New Qty=3/Price=78.45 (ID=11101)
+16:17:15.884 [16:17:15.884] ORDER_UPDATE_TP: Name='TP2_Long_01' State=ChangePending Price=78.45 Qty=1
+16:17:15.884 [16:17:15.884]   -> Updated tp2Order reference (ID=1506db7ca56347d092a3a1aedf16e235)
+16:17:15.885 [16:17:15.885] ORDER_UPDATE_TP: Name='TP2_Long_01' State=ChangeSubmitted Price=78.45 Qty=3
+16:17:15.886 [16:17:15.886]   -> Updated tp2Order reference (ID=1506db7ca56347d092a3a1aedf16e235)
+16:17:15.887 [16:17:15.887] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Accepted Price=78.45 Qty=3
+16:17:15.887 [16:17:15.887]   -> Updated tp2Order reference (ID=1506db7ca56347d092a3a1aedf16e235)
+16:17:15.887 [16:17:15.887] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Working Price=78.45 Qty=3
+16:17:15.888 [16:17:15.888]   -> Updated tp2Order reference (ID=1506db7ca56347d092a3a1aedf16e235)
+16:17:15.888 [16:17:15.888] 20/1/25 6:49:00 a. m. EnsureProtection COMPLETE
+16:17:15.888 [16:17:15.888] EXEC_FILL_DEBUG: Order=37665337 Name=EntryA+_Long_01 State=Filled Price=76.98 | tp1Order=17185048 tp1Name=TP1_Long_01
+16:17:22.126 [16:17:22.126] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangePending Price=77.23 Qty=4
+16:17:22.128 [16:17:22.128]   -> Updated tp1Order reference (ID=b3d7ded88ed94f70bbd20ee4c5af9fd9)
+16:17:22.128 [16:17:22.128] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangeSubmitted Price=77.22 Qty=4
+16:17:22.129 [16:17:22.129]   -> Updated tp1Order reference (ID=b3d7ded88ed94f70bbd20ee4c5af9fd9)
+16:17:22.129 [16:17:22.129] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Accepted Price=77.22 Qty=4
+16:17:22.129 [16:17:22.129]   -> Updated tp1Order reference (ID=b3d7ded88ed94f70bbd20ee4c5af9fd9)
+16:17:22.129 [16:17:22.129] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Working Price=77.22 Qty=4
+16:17:22.130 [16:17:22.130]   -> Updated tp1Order reference (ID=b3d7ded88ed94f70bbd20ee4c5af9fd9)
+16:17:39.673 [16:17:39.673] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangePending Price=77.22 Qty=4
+16:17:39.674 [16:17:39.674]   -> Updated tp1Order reference (ID=b3d7ded88ed94f70bbd20ee4c5af9fd9)
+16:17:39.675 [16:17:39.675] ORDER_UPDATE_TP: Name='TP1_Long_01' State=ChangeSubmitted Price=77.21 Qty=4
+16:17:39.675 [16:17:39.675]   -> Updated tp1Order reference (ID=b3d7ded88ed94f70bbd20ee4c5af9fd9)
+16:17:39.676 [16:17:39.676] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Accepted Price=77.21 Qty=4
+16:17:39.676 [16:17:39.676]   -> Updated tp1Order reference (ID=b3d7ded88ed94f70bbd20ee4c5af9fd9)
+16:17:39.677 [16:17:39.677] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Working Price=77.21 Qty=4
+16:17:39.677 [16:17:39.677]   -> Updated tp1Order reference (ID=b3d7ded88ed94f70bbd20ee4c5af9fd9)
+16:17:44.954 [16:17:44.954] ORDER_UPDATE_TP: Name='TP1_Long_01' State=PartFilled Price=77.21 Qty=4
+16:17:44.954 [16:17:44.954]   -> Updated tp1Order reference (ID=b3d7ded88ed94f70bbd20ee4c5af9fd9)
+16:17:44.955 [16:17:44.955] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #4.1 closed - TP1_Long_01 PnL=23.00
+16:17:44.955 [16:17:44.955] NinjaTrader.NinjaScript.TimeSeries Partial Execution (TP1_Long_01). Position Active. Qty=6
+16:17:44.986 [16:17:44.986] ORDER_UPDATE_TP: Name='TP1_Long_01' State=Filled Price=77.21 Qty=4
+16:17:44.987 [16:17:44.987]   -> Updated tp1Order reference (ID=b3d7ded88ed94f70bbd20ee4c5af9fd9)
+16:17:44.987 [16:17:44.987] EXEC_FILL_DEBUG: Order=17185048 Name=TP1_Long_01 State=Filled Price=77.21 | tp1Order=17185048 tp1Name=TP1_Long_01
+16:17:44.988 [16:17:44.988] 20/1/25 7:58:00 a. m. DELTA CAPTURE: TP1 Delta=0
+16:17:44.988 [16:17:44.988] 20/1/25 7:58:00 a. m. BE LOGIC: TP1 Filled. Moving SL to BE.
+16:17:44.990 [16:17:44.990] 20/1/25 7:58:00 a. m. BE ACTION: Moving SL (SL_Long_01) to 76.98 Qty=3
+16:17:44.991 [16:17:44.991] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #4.2 closed - TP1_Long_01 PnL=69.00
+16:17:44.991 [16:17:44.991] NinjaTrader.NinjaScript.TimeSeries Partial Execution (TP1_Long_01). Position Active. Qty=3
+16:19:22.274 [16:19:22.274] EXEC_FILL_DEBUG: Order=25689628 Name=SL_Long_01 State=Filled Price=76.98 | tp1Order=17185048 tp1Name=TP1_Long_01
+16:19:22.275 [16:19:22.275] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #4.3 closed - SL_Long_01 PnL=0.00
+16:19:22.275 [16:19:22.275] NinjaTrader.NinjaScript.TimeSeries Position Closed (SL_Long_01). Resetting to Idle.
+16:19:22.276 [16:19:22.276] NinjaTrader.NinjaScript.TimeSeries VWAP RETRY: Waiting for price to break 76.78 for VWAP#2
+16:19:22.276 [16:19:22.276] ORDER_UPDATE_TP: Name='TP2_Long_01' State=CancelPending Price=78.45 Qty=3
+16:19:22.276 [16:19:22.276]   -> Updated tp2Order reference (ID=1506db7ca56347d092a3a1aedf16e235)
+16:19:22.278 [16:19:22.278] ORDER_UPDATE_TP: Name='TP2_Long_01' State=CancelSubmitted Price=78.45 Qty=3
+16:19:22.279 [16:19:22.279]   -> Updated tp2Order reference (ID=1506db7ca56347d092a3a1aedf16e235)
+16:19:22.307 [16:19:22.307] ORDER_UPDATE_TP: Name='TP2_Long_01' State=Cancelled Price=78.45 Qty=3
+16:19:22.308 [16:19:22.308]   -> Updated tp2Order reference (ID=1506db7ca56347d092a3a1aedf16e235)
+16:19:22.308 [16:19:22.308] CLEANUP: Cancelled orphan tp2Order
+16:19:22.311 [16:19:22.311] 13/1/26 4:19:22 p. m. TRADE CLOSED: TR_LONG at 76.98, Exit at 76.98, Profit: $-6,60
+16:19:32.300 [16:19:32.300] 20/1/25 9:43:00 a. m. VWAP RETRY TRIGGERED: Price broke 76.78. Starting attempt #2
+16:19:32.536 [16:19:32.536] RE-ANCHOR: New Low @ 76.75 (Setup: USA Low)
+16:19:32.554 [16:19:32.554] RE-ANCHOR: New Low @ 76.74 (Setup: USA Low)
+16:19:32.612 [16:19:32.612] RE-ANCHOR: New Low @ 76.72 (Setup: USA Low)
+16:19:32.629 [16:19:32.629] RE-ANCHOR: New Low @ 76.71 (Setup: USA Low)
+16:19:33.084 [16:19:33.084] RE-ANCHOR: New Low @ 76.69 (Setup: USA Low)
+16:19:33.146 [16:19:33.146] RE-ANCHOR: New Low @ 76.67 (Setup: USA Low)
+16:19:33.150 [16:19:33.150] RE-ANCHOR: New Low @ 76.66 (Setup: USA Low)
+16:19:33.171 [16:19:33.171] RE-ANCHOR: New Low @ 76.64 (Setup: USA Low)
+16:19:33.186 [16:19:33.186] RE-ANCHOR: New Low @ 76.63 (Setup: USA Low)
+16:19:33.451 [16:19:33.451] RE-ANCHOR: New Low @ 76.61 (Setup: USA Low)
+16:19:33.462 [16:19:33.462] RE-ANCHOR: New Low @ 76.6 (Setup: USA Low)
+16:19:33.526 [16:19:33.526] RE-ANCHOR: New Low @ 76.58 (Setup: USA Low)
+16:19:33.604 [16:19:33.604] RE-ANCHOR: New Low @ 76.57 (Setup: USA Low)
+16:19:33.624 [16:19:33.624] RE-ANCHOR: New Low @ 76.55 (Setup: USA Low)
+16:19:39.896 [16:19:39.896] RE-ANCHOR: New Low @ 76.53 (Setup: USA Low)
+16:19:40.056 [16:19:40.056] RE-ANCHOR: New Low @ 76.52 (Setup: USA Low)
+16:19:40.733 [16:19:40.733] RE-ANCHOR: New Low @ 76.5 (Setup: USA Low)
+16:19:40.780 [16:19:40.780] RE-ANCHOR: New Low @ 76.49 (Setup: USA Low)
+16:19:40.898 [16:19:40.898] RE-ANCHOR: New Low @ 76.47 (Setup: USA Low)
+16:19:40.969 [16:19:40.969] RE-ANCHOR: New Low @ 76.46 (Setup: USA Low)
+16:19:41.074 [16:19:41.074] RE-ANCHOR: New Low @ 76.44 (Setup: USA Low)
+16:19:41.229 [16:19:41.229] RE-ANCHOR: New Low @ 76.42 (Setup: USA Low)
+16:19:41.243 [16:19:41.243] RE-ANCHOR: New Low @ 76.41 (Setup: USA Low)
+16:19:50.024 [16:19:50.024] RE-ANCHOR: New Low @ 76.39 (Setup: USA Low)
+16:19:50.026 [16:19:50.026] RE-ANCHOR: New Low @ 76.38 (Setup: USA Low)
+16:19:51.499 [16:19:51.499] RE-ANCHOR: New Low @ 76.36 (Setup: USA Low)
+16:19:55.182 [16:19:55.182] RE-ANCHOR: New Low @ 76.35 (Setup: USA Low)
+16:19:55.234 [16:19:55.234] RE-ANCHOR: New Low @ 76.33 (Setup: USA Low)
+16:19:55.265 [16:19:55.265] RE-ANCHOR: New Low @ 76.32 (Setup: USA Low)
+16:19:57.205 [16:19:57.205] RE-ANCHOR: New Low @ 76.3 (Setup: USA Low)
+16:19:57.878 [16:19:57.878] RE-ANCHOR: New Low @ 76.28 (Setup: USA Low)
+16:19:58.063 [16:19:58.063] RE-ANCHOR: New Low @ 76.27 (Setup: USA Low)
+16:19:58.136 [16:19:58.136] RE-ANCHOR: New Low @ 76.25 (Setup: USA Low)
+16:19:58.159 [16:19:58.159] RE-ANCHOR: New Low @ 76.24 (Setup: USA Low)
+16:19:58.802 [16:19:58.802] RE-ANCHOR: New Low @ 76.22 (Setup: USA Low)
+16:19:58.945 [16:19:58.945] RE-ANCHOR: New Low @ 76.21 (Setup: USA Low)
+16:19:59.033 [16:19:59.033] RE-ANCHOR: New Low @ 76.19 (Setup: USA Low)
+16:20:05.400 [16:20:05.400] RE-ANCHOR: New Low @ 76.17 (Setup: USA Low)
+16:20:05.411 [16:20:05.411] RE-ANCHOR: New Low @ 76.16 (Setup: USA Low)
+16:20:05.606 [16:20:05.606] SWITCH_EVAL: Current=USA Low@71.98 New=Europe Low@76.16 Delta=4.18000 TickSize=0.01
+16:20:05.607 [16:20:05.607] 20/1/25 9:57:00 a. m. SWITCH: New Trigger on Europe Low overrides USA Low
+16:20:05.608 [16:20:05.608] 20/1/25 9:57:00 a. m. ENTRY ATTEMPT #1/20 on Europe Low (Deepest Selection)
+16:20:05.618 [16:20:05.618] INTERNAL LEVEL (EXTREME): Europe Low @ 76.16 (No external protection below)
+16:20:05.625 [16:20:05.625] RE-ANCHOR: New Low @ 76.14 (Setup: Europe Low)
+16:20:05.674 [16:20:05.674] RE-ANCHOR: New Low @ 76.13 (Setup: Europe Low)
+16:20:05.730 [16:20:05.730] RE-ANCHOR: New Low @ 76.11 (Setup: Europe Low)
+16:20:05.803 [16:20:05.803] RE-ANCHOR: New Low @ 76.1 (Setup: Europe Low)
+16:20:06.018 [16:20:06.018] RE-ANCHOR: New Low @ 76.08 (Setup: Europe Low)
+16:20:06.027 [16:20:06.027] RE-ANCHOR: New Low @ 76.07 (Setup: Europe Low)
+16:20:08.282 [16:20:08.282] RE-ANCHOR: New Low @ 76.05 (Setup: Europe Low)
+16:20:08.451 [16:20:08.451] RE-ANCHOR: New Low @ 76.03 (Setup: Europe Low)
+16:20:10.616 [16:20:10.616] RE-ANCHOR: New Low @ 76.02 (Setup: Europe Low)
+16:20:10.657 [16:20:10.657] RE-ANCHOR: New Low @ 76 (Setup: Europe Low)
+16:20:10.713 [16:20:10.713] RE-ANCHOR: New Low @ 75.99 (Setup: Europe Low)
+16:20:10.731 [16:20:10.731] RE-ANCHOR: New Low @ 75.97 (Setup: Europe Low)
+16:20:10.738 [16:20:10.738] RE-ANCHOR: New Low @ 75.96 (Setup: Europe Low)
+16:20:10.789 [16:20:10.789] RE-ANCHOR: New Low @ 75.94 (Setup: Europe Low)
+16:20:11.864 [16:20:11.864] RE-ANCHOR: New Low @ 75.92 (Setup: Europe Low)
+16:20:11.983 [16:20:11.983] RE-ANCHOR: New Low @ 75.91 (Setup: Europe Low)
+16:20:12.045 [16:20:12.045] RE-ANCHOR: New Low @ 75.89 (Setup: Europe Low)
+16:21:26.730 [16:21:26.730] DEBUG DATE: Time=20/1/25 10:29:00 a. m. ActualSessionEnd=20/1/25 3:30:00 p. m. (NY=20/1/25 2:30:00 p. m.) IsEarlyClose=True IsFriday=False

@@ -220,19 +220,19 @@ namespace NinjaTrader.NinjaScript.Strategies
                 retryInfo = string.Format(" (VWAP {0})", strategy.currentVwapNumber);
             }
 
-            // Show VWAP attempt counter (matches order suffix numbering)
-            // v1.15.16: Changed to use currentVwapNumber to match EntryA+_Long_XX suffix
+            // Show Level attempt counter (total attempts on this level)
             if (!string.IsNullOrEmpty(strategy.setupLevelName) &&
                 (strategy.currentEntryState == EntryState.WaitingForConfirmation ||
                  strategy.currentEntryState == EntryState.workingOrder ||
                  strategy.currentEntryState == EntryState.PositionActive ||
                  strategy.currentEntryState == EntryState.WaitingForVwapMitigation))
             {
-                // Use currentVwapNumber which is the same counter used for entry order suffix
-                int attemptsToShow = strategy.currentVwapNumber;
-
-                string levelAttempts = string.Format(" [{0}/{1}]", attemptsToShow, strategy.MaxRetriesPerLevel);
-                retryInfo += levelAttempts;
+                var currentLevel = strategy.activeLevels.FirstOrDefault(l => l.Name == strategy.setupLevelName);
+                if (currentLevel != null)
+                {
+                    string levelAttempts = string.Format(" [{0}/{1}]", currentLevel.EntryAttempts, strategy.MaxRetriesPerLevel);
+                    retryInfo += levelAttempts;
+                }
             }
 
             // v1.14.70: Detect phantom positions - NinjaTrader shows position but Account has none
@@ -259,7 +259,7 @@ namespace NinjaTrader.NinjaScript.Strategies
             }
 
             string text = string.Format("Ver: {0}\nState: {1}\nLevel: {2}{3}\nPosition: {4}\nPnL: {5} | Risk: {6:C0} (Min: {7:C0}){8}",
-                "v1.15.19", // Hardcoded version updated
+                "v1.15.14", // Hardcoded version updated
                 stateDisplay,
                 levelInfo,
                 retryInfo,

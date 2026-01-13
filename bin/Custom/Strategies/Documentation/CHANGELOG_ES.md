@@ -7,6 +7,164 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 ### Agregado
 - **Módulo SL Adaptativo (Supervivencia):** Reemplazo de la lógica de salida de emergencia. Ahora, si el precio salta el Stop Loss durante la entrada, el sistema adapta el SL a `Precio Actual +/- 4 ticks` para asegurar que la orden sea aceptada por NinjaTrader y la posición siga protegida, en lugar de cerrar o fallar.
 
+## [v1.15.19] - 2026-01-13
+### Corregido
+- **Bug: Órdenes de Mercado con Precio Incorrecto (Slippage Excesivo)**
+  - **Problema**: Las órdenes de mercado (FAILSAFE y Emergency Close) se ejecutaban con slippage excesivo, resultando en precios de salida desfavorables. En el trade M2K reportado: entrada Short a 2292.4, FAILSAFE se activó en 2293.8, pero las salidas se ejecutaron a 2293.9 y 2294.0.
+  - **Causa Raíz**: Las órdenes de mercado se enviaban con `limitPrice: 0`, lo que no proporciona protección contra slippage. En NinjaTrader, aunque el tipo sea `OrderType.Market`, el parámetro `limitPrice` actúa como "precio máximo/mínimo aceptable" para proteger contra slippage extremo.
+  - **Ejemplo del Bug**:
+    ```
+    FAILSAFE: Price (High=2293.8) violated Anchor (2293.4)
+    UNMANAGED EXIT: Closing Short. Reason: Anchor Violation
+    → Orden: BuyToCover @ Market, limitPrice=0 (sin protección)
+    → Fill: 2293.9 y 2294.0 (slippage de +1.1 y +1.2 ticks desde trigger)
+    ```
+  - **Solución v1.15.19**: Implementado límite de precio basado en Bid/Ask + buffer de 2 ticks:
+    ```csharp
+    // Para Short Exit (BuyToCover): Usar Ask + 2 ticks como límite
+    double askPrice = GetCurrentAsk();
+    double limitPrice = RoundToTickSize(askPrice + (2 * TickSize));
+    Log(string.Format("UNMANAGED EXIT: Closing Short. Ask={0} Limit={1}", askPrice, limitPrice));
+    SubmitOrderUnmanaged(0, OrderAction.BuyToCover, OrderType.Market, qty, limitPrice, 0, "", "Exit_Short_Market");
+
+    // Para Long Exit (Sell): Usar Bid - 2 ticks como límite
+    double bidPrice = GetCurrentBid();
+    double limitPrice = RoundToTickSize(bidPrice - (2 * TickSize));
+    SubmitOrderUnmanaged(0, OrderAction.Sell, OrderType.Market, qty, limitPrice, 0, "", "Exit_Long_Market");
+    ```
+  - **Resultado**: Las órdenes de mercado ahora actúan como **órdenes límite marketables**:
+    - Se ejecutan inmediatamente como orden de mercado si el precio es favorable
+    - Rechazan fills peores que Ask+2 ticks (Short) o Bid-2 ticks (Long)
+    - El buffer de 2 ticks permite movimiento normal del mercado
+    - Logs ahora muestran Bid/Ask y precio límite para transparencia
+  - **Archivos Modificados**:
+    - `SessionLevelsStrategy.cs:4202-4230` - ClosePositionUnmanaged() con protección Bid/Ask
+    - `SessionLevelsStrategy.cs:1530-1582` - Emergency Close con protección Bid/Ask
+    - Agregado logging detallado de Bid/Ask y límite en todas las órdenes de mercado
+
+### Técnico
+- Modificado `SessionLevelsStrategy.cs:4202-4230` - ClosePositionUnmanaged() ahora usa Bid/Ask + buffer.
+- Modificado `SessionLevelsStrategy.cs:1530-1550` - EmergencyClose primera ubicación con Bid/Ask + buffer.
+- Modificado `SessionLevelsStrategy.cs:1558-1582` - EmergencyClose segunda ubicación con Bid/Ask + buffer.
+- Actualizado `StrategyHelpers.cs:262` - Display de versión a v1.15.19.
+
+## [v1.15.18] - 2026-01-13
+### Corregido
+- **Bug: Breakeven Ignoraba Configuración EnableBreakeven**
+  - **Problema**: El Stop Loss se movía a breakeven después de TP1 fill incluso cuando `EnableBreakeven = false`.
+  - **Causa Raíz**: El método `HandleTP1Fill()` no verificaba el parámetro `EnableBreakeven` antes de mover el SL.
+  - **Solución**: Agregado check al inicio de `HandleTP1Fill()` que retorna inmediatamente si `EnableBreakeven = false`, con log de notificación.
+  - **Resultado**: El SL ahora respeta la configuración y solo se mueve a BE cuando está habilitado.
+
+### Técnico
+- Modificado `OrderProtectionManager.cs:606-611` - Agregado check de EnableBreakeven con early return.
+
+## [v1.15.17] - 2026-01-13
+### Mejorado
+- **TP2 Maximizado: Usar Nivel Opuesto Más Extremo del Mismo Día**
+  - **Cambio**: TP2 ahora busca el nivel opuesto más extremo del mismo día de trading para maximizar beneficios.
+  - **Ejemplo**: Si trabajamos con Europa Low @ 100, y los niveles opuestos del mismo día son Europa High @ 200 y Asia High @ 300, TP2 ahora selecciona Asia High @ 300 (el más extremo).
+  - **Lógica**:
+    - Para Short: Busca el High más alto del mismo día
+    - Para Long: Busca el Low más bajo del mismo día
+    - Solo considera niveles del mismo día (matching sessionTicks)
+  - **Resultado**: TP2 maximiza el potencial de ganancia utilizando el rango completo del día.
+
+### Técnico
+- Modificado `OrderProtectionManager.cs:470-582` - GetOppositeLevelPrice() ahora escanea todos los niveles del mismo día y selecciona el más extremo.
+- Agregado logging cuando se selecciona un nivel más extremo que el opuesto directo.
+
+## [v1.15.16] - 2026-01-13
+### Corregido
+- **Bug: Contador del Panel No Coincidía con Sufijo de Orden**
+  - **Problema**: El panel mostraba "[1/20]" cuando la orden era "EntryA+_Long_02" (mismatch entre display y sufijo).
+  - **Causa Raíz**: Dos contadores diferentes: `currentVwapNumber` (usado en sufijos de orden) vs `currentLevelAttempts` (usado en panel).
+  - **Solución**: Panel ahora usa `currentVwapNumber` para que coincida con el sufijo de las órdenes.
+  - **Resultado**: El contador del panel ahora coincide exactamente con el número en el sufijo de la orden.
+
+### Técnico
+- Modificado `StrategyHelpers.cs:223-235` - Display usa `currentVwapNumber` en lugar de `currentLevelAttempts`.
+
+## [v1.15.15] - 2026-01-13
+### Corregido
+- **Bug: Contador de Intentos por Nivel Mostraba 0 en Lugar del Valor Correcto**
+  - **Problema**: El panel de estrategia mostraba "[0/20]" para el contador de intentos por nivel, incluso después de haber ejecutado un trade en ese nivel. El log mostraba "ENTRY ATTEMPT #1/20 on USA Low" pero el display mostraba "[0/20]".
+  - **Causa Raíz**: El contador `EntryAttempts` se almacenaba en el objeto `SessionLevel` dentro de `activeLevels`. Si los niveles se reconstruían (por ejemplo, al escanear niveles históricos), se creaban nuevos objetos `SessionLevel` con `EntryAttempts = 0` (valor por defecto), perdiendo el contador anterior.
+  - **Ejemplo del Bug**:
+    - Trade #1: "ENTRY ATTEMPT #1/20 on USA Low" → lvl.EntryAttempts = 1 ✓
+    - Niveles se reconstruyen → Nuevo objeto SessionLevel creado → EntryAttempts = 0 ❌
+    - Panel muestra "[0/20]" en lugar de "[1/20]"
+  - **Solución v1.15.15**: Implementado sistema de persistencia de contador:
+    ```csharp
+    // 1. Variable persistente en estrategia (no se pierde al reconstruir niveles)
+    [XmlIgnore] public int currentLevelAttempts = 0;
+
+    // 2. Copiar contador al incrementar (EntryStateMachine.cs:240)
+    lvl.EntryAttempts++;
+    strategy.currentLevelAttempts = lvl.EntryAttempts; // Backup persistente
+
+    // 3. Display usa valor persistente como fallback (StrategyHelpers.cs:232)
+    int attemptsToShow = strategy.currentLevelAttempts; // Default
+    if (currentLevel != null && currentLevel.EntryAttempts > 0)
+        attemptsToShow = currentLevel.EntryAttempts; // Use object if valid
+    ```
+  - **Resultado**: El contador ahora persiste correctamente incluso si los niveles se reconstruyen. El panel siempre muestra el número correcto de intentos.
+
+### Técnico
+- Agregado `SessionLevelsStrategy.cs:1823` - Variable `currentLevelAttempts` para persistencia.
+- Modificado `EntryStateMachine.cs:241,287` - Copia `EntryAttempts` a variable persistente al incrementar.
+- Modificado `StrategyHelpers.cs:223-242` - Usa valor persistente como fallback si `SessionLevel.EntryAttempts == 0`.
+
+## [v1.15.14] - 2026-01-13
+### Corregido
+- **Bug Crítico: Órdenes de Protección No Se Creaban en Replay (Phantom Position Block)**
+  - **Problema**: En el segundo trade de MCL, la estrategia entró con 10 contratos pero NO creó SL, TP1 ni TP2. El log mostraba: "PHANTOM PROTECTION BLOCKED: Strategy shows position but Account has 0. Skipping EnsureProtection."
+  - **Causa Raíz**: Durante replay, cuando un fill completo ocurre de una vez (sin fills parciales adicionales), `Account.Positions` puede no sincronizarse instantáneamente con `Position.Quantity`. El check de "phantom position" bloqueaba la creación de órdenes de protección incluso cuando `Position.Quantity = 10` era válido.
+  - **Ejemplo del Bug**:
+    - Trade #1 MCL: Fill inicial de 7 contratos → Phantom blocked → Segundo fill de 9 contratos → Protección creada ✓
+    - Trade #2 MCL: Fill completo de 10 contratos → Phantom blocked → Sin fills adicionales → **SIN PROTECCIÓN** ❌
+  - **Solución v1.15.14**: Modificada la lógica de phantom check:
+    ```csharp
+    // ANTES (v1.14.70) - Bloqueaba si Account.Positions = 0
+    if (!hasRealPosition) {
+        return; // Block protection
+    }
+
+    // AHORA (v1.15.14) - Solo bloquea si AMBOS son 0
+    bool positionQuantityValid = Math.Abs(strategy.Position.Quantity) > 0;
+    if (!hasRealPosition && !positionQuantityValid) {
+        return; // Block only if BOTH are 0 (true phantom)
+    }
+
+    // Procede si Position.Quantity > 0 (confía en replay)
+    if (!hasRealPosition && positionQuantityValid) {
+        Log("REPLAY_SYNC_DELAY: Proceeding with protection (replay sync delay)");
+    }
+    ```
+  - **Resultado**: Ahora la estrategia confía en `Position.Quantity` durante replay y crea las órdenes de protección incluso si `Account.Positions` aún no se ha sincronizado. Solo bloquea si AMBOS son 0 (verdadero phantom).
+
+### Técnico
+- Modificado `OrderProtectionManager.cs:71-102` - Agregada verificación adicional `positionQuantityValid`.
+- El cambio permite que fills completos en replay creen protección inmediatamente sin esperar sincronización de `Account.Positions`.
+- Log adicional: "REPLAY_SYNC_DELAY" cuando procede con `Position.Quantity` válido pero `Account.Positions` = 0.
+
+## [v1.15.13] - 2026-01-13
+### Corregido
+- **Bug Crítico: Estrategia No Escaneaba Otros Niveles Durante VWAP Retry**
+  - **Problema**: Cuando la estrategia entraba en modo "VWAP Retry" (esperando que el precio rompa el extremo VWAP para reintentar entrada), NO escaneaba otros niveles que estaban siendo tocados.
+  - **Ejemplo del Bug**: MCL trabajó con USA Low (viernes anterior), luego el precio tocó USA Low (16/01) y Europe Low (15/01), pero la estrategia no detectó ni cambió a estos nuevos niveles porque estaba "bloqueada" esperando el VWAP retry.
+  - **Causa Raíz**: En `SessionLevelsStrategy.cs:2507-2508`, `HandleVwapMitigationRetry()` retornaba early, bloqueando TODA la lógica de escaneo de niveles. Aunque el código en línea 2517 incluía `WaitingForVwapMitigation` en `canScan`, este código nunca se ejecutaba debido al early return.
+  - **Solución v1.15.13**: Eliminado el early return en línea 2507-2508. Ahora la estrategia ejecuta AMBAS lógicas en paralelo:
+    - Continúa monitoreando el VWAP retry breakout en el nivel actual
+    - TAMBIÉN escanea y detecta otros niveles siendo tocados
+    - Si un nuevo nivel es triggereado, la estrategia puede cambiar automáticamente
+  - **Resultado**: La estrategia ahora es consciente de "dónde está trabajando" - puede esperar una nueva ruptura VWAP Y TAMBIÉN estar pendiente de otros niveles más arriba/abajo.
+
+### Técnico
+- Modificado `SessionLevelsStrategy.cs:2505-2508` - Eliminado early return de `HandleVwapMitigationRetry()`.
+- Agregado comentario v1.15.13 en línea 2515 documentando que la feature de v1.14.80 ahora funciona correctamente.
+- El cambio permite que `ScanForTriggers()` (línea 2572) se ejecute cuando `currentEntryState == WaitingForVwapMitigation`.
+
 ## [v1.15.12] - 2026-01-13
 ### Corregido
 - **Bug Crítico: TP2 Faltante Cuando Fill Se Va Completo a TP1**

@@ -8,7 +8,12 @@
       "Bash(git commit:*)",
       "Bash(ls -lh \"c:\\\\Users\\\\prueba\\\\Documents\\\\NinjaTrader 8\\\\trace\\\\SessionLevels\"\" | grep \"MGC.*2026 \")",
       "Bash(dir \"c:\\\\Users\\\\prueba\\\\Documents\\\\NinjaTrader 8\\\\trace\\\\SessionLevels\"\")",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Read(//c/Users/prueba/Documents/NinjaTrader 8/bin/**)",
+      "Bash(powershell -Command \"& ''c:\\\\Users\\\\prueba\\\\Documents\\\\NinjaTrader 8\\\\bin\\\\NinjaTrader.exe'' /compile\")",
+      "Bash(powershell -Command \"Test-Path ''c:\\\\Users\\\\prueba\\\\Documents\\\\NinjaTrader 8\\\\bin\\\\NinjaTrader.exe''\")",
+      "Bash(powershell -Command \"Get-ChildItem ''c:\\\\Users\\\\prueba\\\\Documents\\\\NinjaTrader 8\\\\bin'' | Select-Object Name\")",
+      "Bash(git log:*)"
     ]
   }
 }

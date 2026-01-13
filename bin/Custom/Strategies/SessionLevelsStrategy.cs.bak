@@ -37,7 +37,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.15.19"; // v1.15.19: Fixed market order slippage by using Bid/Ask + buffer as limit price
+		private const string StrategyVersion = "v1.15.12"; // v1.15.12: Fixed TP creation logic - always create/update TP orders based on total target, not fill allocation
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;
@@ -180,7 +180,6 @@ namespace NinjaTrader.NinjaScript.Strategies
 		[XmlIgnore] public TimeZoneInfo chartTimeZone;
 		
 		[XmlIgnore] public List<SessionLevel> activeLevels = new List<SessionLevel>();
-	[XmlIgnore] public Dictionary<string, int> levelEntryAttempts = new Dictionary<string, int>(); // v1.15.15: Persistent counter
 		// v1.14.42: Public property for SessionManager access
 		public string USAEndTime => "18:00:00"; // USA session close time
 		
@@ -1530,21 +1529,10 @@ Log(Time[0] + " EMERGENCY ORDER FAILED: " + ex.Message);
 // CRITICAL - If cant protect, CLOSE
 Log(Time[0] + " CRITICAL: Cannot protect. CLOSING.");
 try {
-// v1.15.19: Use Bid/Ask with buffer for slippage protection on emergency market orders
 if (isShortSetup)
-{
-	double askPrice = GetCurrentAsk();
-	double limitPrice = Instrument.MasterInstrument.RoundToTickSize(askPrice + (2 * TickSize));
-	Log(Time[0] + " EMERGENCY CLOSE SHORT: Ask=" + askPrice + " Limit=" + limitPrice);
-	SubmitOrderUnmanaged(0, OrderAction.BuyToCover, OrderType.Market, posQty, limitPrice, 0, "", "EmergencyClose_Short");
-}
+SubmitOrderUnmanaged(0, OrderAction.BuyToCover, OrderType.Market, posQty, 0, 0, "", "EmergencyClose_Short");
 else
-{
-	double bidPrice = GetCurrentBid();
-	double limitPrice = Instrument.MasterInstrument.RoundToTickSize(bidPrice - (2 * TickSize));
-	Log(Time[0] + " EMERGENCY CLOSE LONG: Bid=" + bidPrice + " Limit=" + limitPrice);
-	SubmitOrderUnmanaged(0, OrderAction.Sell, OrderType.Market, posQty, limitPrice, 0, "", "EmergencyClose_Long");
-}
+SubmitOrderUnmanaged(0, OrderAction.Sell, OrderType.Market, posQty, 0, 0, "", "EmergencyClose_Long");
 Log(Time[0] + " EMERGENCY CLOSE: Qty=" + posQty);
 currentEntryState = EntryState.Idle;
 } catch (Exception ex2) { Log(Time[0] + " FATAL: " + ex2.Message); }
@@ -1554,25 +1542,14 @@ currentEntryState = EntryState.Idle;
 								{
 									// SL would be on wrong side - position already in loss beyond SL
 									Log(Time[0] + " EMERGENCY: SL invalid (price already beyond). CLOSING POSITION.");
-
+									
 									try
 									{
-										// v1.15.19: Use Bid/Ask with buffer for slippage protection on emergency market orders
 										if (isShortSetup)
-										{
-											double askPrice = GetCurrentAsk();
-											double limitPrice = Instrument.MasterInstrument.RoundToTickSize(askPrice + (2 * TickSize));
-											Log(Time[0] + " EMERGENCY CLOSE SHORT: Ask=" + askPrice + " Limit=" + limitPrice);
-											SubmitOrderUnmanaged(0, OrderAction.BuyToCover, OrderType.Market, posQty, limitPrice, 0, "", "EmergencyClose_Short");
-										}
+											SubmitOrderUnmanaged(0, OrderAction.BuyToCover, OrderType.Market, posQty, 0, 0, "", "EmergencyClose_Short");
 										else
-										{
-											double bidPrice = GetCurrentBid();
-											double limitPrice = Instrument.MasterInstrument.RoundToTickSize(bidPrice - (2 * TickSize));
-											Log(Time[0] + " EMERGENCY CLOSE LONG: Bid=" + bidPrice + " Limit=" + limitPrice);
-											SubmitOrderUnmanaged(0, OrderAction.Sell, OrderType.Market, posQty, limitPrice, 0, "", "EmergencyClose_Long");
-										}
-
+											SubmitOrderUnmanaged(0, OrderAction.Sell, OrderType.Market, posQty, 0, 0, "", "EmergencyClose_Long");
+										
 										Log(Time[0] + " EMERGENCY CLOSE SUBMITTED for Qty=" + posQty);
 										currentEntryState = EntryState.Idle;
 									}
@@ -1842,7 +1819,6 @@ currentEntryState = EntryState.Idle;
 		[XmlIgnore] public EntryState currentEntryState = EntryState.Idle;
 		[XmlIgnore] public string setupLevelName = "";
 		[XmlIgnore] public DateTime setupLevelTime = DateTime.MinValue; // NEW (v1.5.8): Track time of the level we are trading
-	[XmlIgnore] public int currentLevelAttempts = 0; // v1.15.15: Current level entry attempts
 		[XmlIgnore] public double setupAnchorPrice = 0;
 		[XmlIgnore] public bool isShortSetup = false; // true = Short, false = Long
 		[XmlIgnore] public bool visualConfirmationDone = false; // Control para pintar vela solo la primera vez
@@ -2526,17 +2502,16 @@ currentEntryState = EntryState.Idle;
 			if (!entryMachine.CheckTradingModeGuards())
 				return;
 			
-			// v1.15.15: REMOVED early return for VWAP Mitigation Retry
-			// Previously this blocked ALL other entry logic while waiting for VWAP retry
-			// Now we allow level scanning to run in parallel with VWAP retry monitoring
-			// This allows the strategy to detect and switch to other levels while waiting
+			// VWAP MITIGATION RETRY DETECTION
+			// v1.14.45: Delegated to EntryStateMachine
+			if (entryMachine.HandleVwapMitigationRetry())
+				return; // Don't proceed with other logic while waiting or if mitigated
 
 			
 			// 1. TRIGGER DETECTION (Transition from Idle -> Waiting OR Switch Setup)
 			// Allow scanning for triggers if Idle OR Waiting (to switch setups).
             // v1.14.80: Also allow scanning if WaitingForVwapMitigation (Virtual SL)
             // This ensures we catch OTHER opportunities while waiting for a specific level to break anchor
-            // v1.15.15: Now actually works since we removed the early return above
 			bool canScan = (currentEntryState == EntryState.Idle || 
                             currentEntryState == EntryState.WaitingForConfirmation ||
                             currentEntryState == EntryState.WaitingForVwapMitigation);
@@ -4225,27 +4200,15 @@ currentEntryState = EntryState.Idle;
 		{
 			if (Position.MarketPosition == MarketPosition.Long)
 			{
-				// v1.15.19: Use Bid as limit for slippage protection on Sell market orders
-				double bidPrice = GetCurrentBid();
-				double limitPrice = Instrument.MasterInstrument.RoundToTickSize(bidPrice - (2 * TickSize)); // 2 ticks buffer for slippage
-
-				Log(string.Format("{0} UNMANAGED EXIT: Closing Long. Reason: {1} | Bid={2} Limit={3}",
-					Time, reason, bidPrice, limitPrice));
-
-				SubmitOrderUnmanaged(0, OrderAction.Sell, OrderType.Market, Position.Quantity, limitPrice, 0, "", "Exit_Long_Market");
+				Log(Time + " UNMANAGED EXIT: Closing Long. Reason: " + reason);
+				SubmitOrderUnmanaged(0, OrderAction.Sell, OrderType.Market, Position.Quantity, 0, 0, "", "Exit_Long_Market");
 			}
 			else if (Position.MarketPosition == MarketPosition.Short)
 			{
-				// v1.15.19: Use Ask as limit for slippage protection on BuyToCover market orders
-				double askPrice = GetCurrentAsk();
-				double limitPrice = Instrument.MasterInstrument.RoundToTickSize(askPrice + (2 * TickSize)); // 2 ticks buffer for slippage
-
-				Log(string.Format("{0} UNMANAGED EXIT: Closing Short. Reason: {1} | Ask={2} Limit={3}",
-					Time, reason, askPrice, limitPrice));
-
-				SubmitOrderUnmanaged(0, OrderAction.BuyToCover, OrderType.Market, Position.Quantity, limitPrice, 0, "", "Exit_Short_Market");
+				Log(Time + " UNMANAGED EXIT: Closing Short. Reason: " + reason);
+				SubmitOrderUnmanaged(0, OrderAction.BuyToCover, OrderType.Market, Position.Quantity, 0, 0, "", "Exit_Short_Market");
 			}
-
+			
 			// Cancel any working entry orders to be safe
 			// Cancel any working entry orders to be safe
 			if (entryOrder != null && entryOrder.OrderState == OrderState.Working) CancelOrder(entryOrder);

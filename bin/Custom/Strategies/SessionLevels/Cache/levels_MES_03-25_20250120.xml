@@ -10,8 +10,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Asia_High_638716968000000000</Tag>
-    <VolSum>10383223</VolSum>
-    <PvSum>61772958057.5</PvSum>
+    <VolSum>10256391</VolSum>
+    <PvSum>61004580926.75</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -25,8 +25,8 @@
     <IsResistance>false</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Asia_Low_638716968000000000</Tag>
-    <VolSum>10406459</VolSum>
-    <PvSum>61912130122</PvSum>
+    <VolSum>10279627</VolSum>
+    <PvSum>61143752991.25</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -40,8 +40,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Europe_High_638717292000000000</Tag>
-    <VolSum>10277952</VolSum>
-    <PvSum>61138891964.75</PvSum>
+    <VolSum>10151120</VolSum>
+    <PvSum>60370514834</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -55,8 +55,8 @@
     <IsResistance>false</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Europe_Low_638717292000000000</Tag>
-    <VolSum>10375621</VolSum>
-    <PvSum>61727344891.5</PvSum>
+    <VolSum>10248789</VolSum>
+    <PvSum>60958967760.75</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -64,14 +64,14 @@
     <Name>USA High</Name>
     <Price>6068.25</Price>
     <StartTime>2025-01-06T10:30:00</StartTime>
-    <EndTime>2025-01-20T14:00:00</EndTime>
+    <EndTime>2025-01-20T10:30:00</EndTime>
     <ActualSessionEnd>PT18H</ActualSessionEnd>
-    <MitigationTime>2025-01-20T10:37:00</MitigationTime>
+    <MitigationTime>0001-01-01T00:00:00</MitigationTime>
     <IsResistance>true</IsResistance>
-    <IsMitigated>true</IsMitigated>
+    <IsMitigated>false</IsMitigated>
     <Tag>USA_High_638717526000000000</Tag>
-    <VolSum>9916236</VolSum>
-    <PvSum>58951833579.75</PvSum>
+    <VolSum>9789404</VolSum>
+    <PvSum>58183456449</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -85,8 +85,8 @@
     <IsResistance>false</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>USA_Low_638717526000000000</Tag>
-    <VolSum>9570533</VolSum>
-    <PvSum>56866039603</PvSum>
+    <VolSum>9443701</VolSum>
+    <PvSum>56097662472.25</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -100,8 +100,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Asia_High_638717832000000000</Tag>
-    <VolSum>9516726</VolSum>
-    <PvSum>56542063021.5</PvSum>
+    <VolSum>9389894</VolSum>
+    <PvSum>55773685890.75</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -115,8 +115,8 @@
     <IsResistance>false</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Asia_Low_638717832000000000</Tag>
-    <VolSum>9478974</VolSum>
-    <PvSum>56314768340.75</PvSum>
+    <VolSum>9352142</VolSum>
+    <PvSum>55546391210</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -145,8 +145,8 @@
     <IsResistance>false</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Europe_Low_638718156000000000</Tag>
-    <VolSum>9455165</VolSum>
-    <PvSum>56171570185.5</PvSum>
+    <VolSum>9328333</VolSum>
+    <PvSum>55403193054.75</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -160,8 +160,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>USA_High_638718390000000000</Tag>
-    <VolSum>9367532</VolSum>
-    <PvSum>55643196744</PvSum>
+    <VolSum>9240700</VolSum>
+    <PvSum>54874819613.25</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -175,8 +175,8 @@
     <IsResistance>false</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>USA_Low_638718390000000000</Tag>
-    <VolSum>8323596</VolSum>
-    <PvSum>49390131620.25</PvSum>
+    <VolSum>8196764</VolSum>
+    <PvSum>48621754489.5</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -190,8 +190,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Asia_High_638718696000000000</Tag>
-    <VolSum>8166637</VolSum>
-    <PvSum>48455641296</PvSum>
+    <VolSum>8039805</VolSum>
+    <PvSum>47687264165.25</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -205,8 +205,8 @@
     <IsResistance>false</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Asia_Low_638718696000000000</Tag>
-    <VolSum>8209417</VolSum>
-    <PvSum>48710750455.5</PvSum>
+    <VolSum>8082585</VolSum>
+    <PvSum>47942373324.75</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -220,8 +220,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Europe_High_638719020000000000</Tag>
-    <VolSum>8124343</VolSum>
-    <PvSum>48203294933</PvSum>
+    <VolSum>7997511</VolSum>
+    <PvSum>47434917802.25</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -235,8 +235,8 @@
     <IsResistance>false</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Europe_Low_638719020000000000</Tag>
-    <VolSum>8042663</VolSum>
-    <PvSum>47717503718.75</PvSum>
+    <VolSum>7915831</VolSum>
+    <PvSum>46949126588</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -250,8 +250,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>USA_High_638719254000000000</Tag>
-    <VolSum>7230722</VolSum>
-    <PvSum>42891036684.75</PvSum>
+    <VolSum>7103890</VolSum>
+    <PvSum>42122659554</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -265,8 +265,8 @@
     <IsResistance>false</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>USA_Low_638719254000000000</Tag>
-    <VolSum>7456987</VolSum>
-    <PvSum>44236283867.25</PvSum>
+    <VolSum>7330155</VolSum>
+    <PvSum>43467906736.5</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -280,8 +280,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Asia_High_638719560000000000</Tag>
-    <VolSum>7062933</VolSum>
-    <PvSum>41891769594.5</PvSum>
+    <VolSum>6936101</VolSum>
+    <PvSum>41123392463.75</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -295,8 +295,8 @@
     <IsResistance>false</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Asia_Low_638719560000000000</Tag>
-    <VolSum>7020547</VolSum>
-    <PvSum>41639737328</PvSum>
+    <VolSum>6893715</VolSum>
+    <PvSum>40871360197.25</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -310,8 +310,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Europe_High_638719884000000000</Tag>
-    <VolSum>6995180</VolSum>
-    <PvSum>41488950611.75</PvSum>
+    <VolSum>6868348</VolSum>
+    <PvSum>40720573481</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -325,8 +325,8 @@
     <IsResistance>false</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Europe_Low_638719884000000000</Tag>
-    <VolSum>7016719</VolSum>
-    <PvSum>41617016480.5</PvSum>
+    <VolSum>6889887</VolSum>
+    <PvSum>40848639349.75</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -370,8 +370,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Asia_High_638720424000000000</Tag>
-    <VolSum>6865733</VolSum>
-    <PvSum>40720180202.5</PvSum>
+    <VolSum>6738901</VolSum>
+    <PvSum>39951803071.75</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -385,8 +385,8 @@
     <IsResistance>false</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Asia_Low_638720424000000000</Tag>
-    <VolSum>6915502</VolSum>
-    <PvSum>41015542863.25</PvSum>
+    <VolSum>6788670</VolSum>
+    <PvSum>40247165732.5</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -400,8 +400,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Europe_High_638720748000000000</Tag>
-    <VolSum>6794830</VolSum>
-    <PvSum>40298760377.25</PvSum>
+    <VolSum>6667998</VolSum>
+    <PvSum>39530383246.5</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -415,8 +415,8 @@
     <IsResistance>false</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Europe_Low_638720748000000000</Tag>
-    <VolSum>6720984</VolSum>
-    <PvSum>39860764364.5</PvSum>
+    <VolSum>6594152</VolSum>
+    <PvSum>39092387233.75</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -430,8 +430,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>USA_High_638720982000000000</Tag>
-    <VolSum>6617503</VolSum>
-    <PvSum>39249332731.75</PvSum>
+    <VolSum>6490671</VolSum>
+    <PvSum>38480955601</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -445,8 +445,8 @@
     <IsResistance>false</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>USA_Low_638720982000000000</Tag>
-    <VolSum>6089195</VolSum>
-    <PvSum>36144547321.75</PvSum>
+    <VolSum>5962363</VolSum>
+    <PvSum>35376170191</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -460,8 +460,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Asia_High_638723016000000000</Tag>
-    <VolSum>5640765</VolSum>
-    <PvSum>33509892193.75</PvSum>
+    <VolSum>5513933</VolSum>
+    <PvSum>32741515063</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -475,8 +475,8 @@
     <IsResistance>false</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Asia_Low_638723016000000000</Tag>
-    <VolSum>5592475</VolSum>
-    <PvSum>33227466983.5</PvSum>
+    <VolSum>5465643</VolSum>
+    <PvSum>32459089852.75</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -490,8 +490,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Europe_High_638723340000000000</Tag>
-    <VolSum>5544419</VolSum>
-    <PvSum>32946831654</PvSum>
+    <VolSum>5417587</VolSum>
+    <PvSum>32178454523.25</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -499,14 +499,14 @@
     <Name>Europe Low</Name>
     <Price>5809</Price>
     <StartTime>2025-01-13T04:00:00</StartTime>
-    <EndTime>2025-01-20T19:01:00</EndTime>
+    <EndTime>2025-01-20T10:30:00</EndTime>
     <ActualSessionEnd>PT9H30M</ActualSessionEnd>
     <MitigationTime>0001-01-01T00:00:00</MitigationTime>
     <IsResistance>false</IsResistance>
     <IsMitigated>false</IsMitigated>
     <Tag>Europe_Low_638723340000000000</Tag>
-    <VolSum>5509305</VolSum>
-    <PvSum>32742103296.25</PvSum>
+    <VolSum>5382473</VolSum>
+    <PvSum>31973726165.5</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -520,8 +520,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>USA_High_638723574000000000</Tag>
-    <VolSum>4529454</VolSum>
-    <PvSum>27019862886</PvSum>
+    <VolSum>4402622</VolSum>
+    <PvSum>26251485755.25</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -529,14 +529,14 @@
     <Name>USA Low</Name>
     <Price>5813</Price>
     <StartTime>2025-01-13T10:30:00</StartTime>
-    <EndTime>2025-01-20T19:01:00</EndTime>
+    <EndTime>2025-01-20T10:30:00</EndTime>
     <ActualSessionEnd>PT18H</ActualSessionEnd>
     <MitigationTime>0001-01-01T00:00:00</MitigationTime>
     <IsResistance>false</IsResistance>
     <IsMitigated>false</IsMitigated>
     <Tag>USA_Low_638723574000000000</Tag>
-    <VolSum>5322546</VolSum>
-    <PvSum>31655177548</PvSum>
+    <VolSum>5195714</VolSum>
+    <PvSum>30886800417.25</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -550,8 +550,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Asia_High_638723880000000000</Tag>
-    <VolSum>4515212</VolSum>
-    <PvSum>26935982819</PvSum>
+    <VolSum>4388380</VolSum>
+    <PvSum>26167605688.25</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -565,8 +565,8 @@
     <IsResistance>false</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Asia_Low_638723880000000000</Tag>
-    <VolSum>4494636</VolSum>
-    <PvSum>26814756870.75</PvSum>
+    <VolSum>4367804</VolSum>
+    <PvSum>26046379740</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -580,8 +580,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Europe_High_638724204000000000</Tag>
-    <VolSum>4370844</VolSum>
-    <PvSum>26084841532.75</PvSum>
+    <VolSum>4244012</VolSum>
+    <PvSum>25316464402</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -595,8 +595,8 @@
     <IsResistance>false</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Europe_Low_638724204000000000</Tag>
-    <VolSum>4380059</VolSum>
-    <PvSum>26139260449.25</PvSum>
+    <VolSum>4253227</VolSum>
+    <PvSum>25370883318.5</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -610,8 +610,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>USA_High_638724438000000000</Tag>
-    <VolSum>4243625</VolSum>
-    <PvSum>25334020571</PvSum>
+    <VolSum>4116793</VolSum>
+    <PvSum>24565643440.25</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -619,14 +619,14 @@
     <Name>USA Low</Name>
     <Price>5842.25</Price>
     <StartTime>2025-01-14T10:30:00</StartTime>
-    <EndTime>2025-01-20T19:01:00</EndTime>
+    <EndTime>2025-01-20T10:30:00</EndTime>
     <ActualSessionEnd>PT18H</ActualSessionEnd>
     <MitigationTime>0001-01-01T00:00:00</MitigationTime>
     <IsResistance>false</IsResistance>
     <IsMitigated>false</IsMitigated>
     <Tag>USA_Low_638724438000000000</Tag>
-    <VolSum>3697011</VolSum>
-    <PvSum>22120896572.25</PvSum>
+    <VolSum>3570179</VolSum>
+    <PvSum>21352519441.5</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -640,8 +640,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Asia_High_638724744000000000</Tag>
-    <VolSum>3242429</VolSum>
-    <PvSum>19451202160</PvSum>
+    <VolSum>3115597</VolSum>
+    <PvSum>18682825029.25</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -655,8 +655,8 @@
     <IsResistance>false</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Asia_Low_638724744000000000</Tag>
-    <VolSum>3221348</VolSum>
-    <PvSum>19327119841</PvSum>
+    <VolSum>3094516</VolSum>
+    <PvSum>18558742710.25</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -670,8 +670,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Europe_High_638725068000000000</Tag>
-    <VolSum>3099725</VolSum>
-    <PvSum>18606232003</PvSum>
+    <VolSum>2972893</VolSum>
+    <PvSum>17837854872.25</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -679,14 +679,14 @@
     <Name>Europe Low</Name>
     <Price>5879.5</Price>
     <StartTime>2025-01-15T04:00:00</StartTime>
-    <EndTime>2025-01-20T19:01:00</EndTime>
+    <EndTime>2025-01-20T10:30:00</EndTime>
     <ActualSessionEnd>PT9H30M</ActualSessionEnd>
     <MitigationTime>0001-01-01T00:00:00</MitigationTime>
     <IsResistance>false</IsResistance>
     <IsMitigated>false</IsMitigated>
     <Tag>Europe_Low_638725068000000000</Tag>
-    <VolSum>3211260</VolSum>
-    <PvSum>19267762778.5</PvSum>
+    <VolSum>3084428</VolSum>
+    <PvSum>18499385647.75</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -700,8 +700,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>USA_High_638725302000000000</Tag>
-    <VolSum>2362456</VolSum>
-    <PvSum>14199967734.75</PvSum>
+    <VolSum>2235624</VolSum>
+    <PvSum>13431590604</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -709,14 +709,14 @@
     <Name>USA Low</Name>
     <Price>5952.5</Price>
     <StartTime>2025-01-15T10:30:00</StartTime>
-    <EndTime>2025-01-20T19:01:00</EndTime>
+    <EndTime>2025-01-20T10:30:00</EndTime>
     <ActualSessionEnd>PT18H</ActualSessionEnd>
     <MitigationTime>0001-01-01T00:00:00</MitigationTime>
     <IsResistance>false</IsResistance>
     <IsMitigated>false</IsMitigated>
     <Tag>USA_Low_638725302000000000</Tag>
-    <VolSum>3021150</VolSum>
-    <PvSum>18137427890.5</PvSum>
+    <VolSum>2894318</VolSum>
+    <PvSum>17369050759.75</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -745,8 +745,8 @@
     <IsResistance>false</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Asia_Low_638725608000000000</Tag>
-    <VolSum>2246044</VolSum>
-    <PvSum>13502390737.25</PvSum>
+    <VolSum>2119212</VolSum>
+    <PvSum>12734013606.5</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -760,8 +760,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Europe_High_638725932000000000</Tag>
-    <VolSum>2205686</VolSum>
-    <PvSum>13260223732.25</PvSum>
+    <VolSum>2078854</VolSum>
+    <PvSum>12491846601.5</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -775,8 +775,8 @@
     <IsResistance>false</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Europe_Low_638725932000000000</Tag>
-    <VolSum>2113377</VolSum>
-    <PvSum>12706122710.75</PvSum>
+    <VolSum>1986545</VolSum>
+    <PvSum>11937745580</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -790,8 +790,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>USA_High_638726166000000000</Tag>
-    <VolSum>1680351</VolSum>
-    <PvSum>10113089991.5</PvSum>
+    <VolSum>1553519</VolSum>
+    <PvSum>9344712860.75</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -799,14 +799,14 @@
     <Name>USA Low</Name>
     <Price>5962</Price>
     <StartTime>2025-01-16T10:30:00</StartTime>
-    <EndTime>2025-01-20T19:01:00</EndTime>
+    <EndTime>2025-01-20T10:30:00</EndTime>
     <ActualSessionEnd>PT18H</ActualSessionEnd>
     <MitigationTime>0001-01-01T00:00:00</MitigationTime>
     <IsResistance>false</IsResistance>
     <IsMitigated>false</IsMitigated>
     <Tag>USA_Low_638726166000000000</Tag>
-    <VolSum>1199357</VolSum>
-    <PvSum>7233935666.25</PvSum>
+    <VolSum>1072525</VolSum>
+    <PvSum>6465558535.5</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -820,8 +820,8 @@
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Asia_High_638726472000000000</Tag>
-    <VolSum>1160068</VolSum>
-    <PvSum>6999149320.25</PvSum>
+    <VolSum>1033236</VolSum>
+    <PvSum>6230772189.5</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -829,14 +829,14 @@
     <Name>Asia Low</Name>
     <Price>5968</Price>
     <StartTime>2025-01-16T19:00:00</StartTime>
-    <EndTime>2025-01-20T19:01:00</EndTime>
+    <EndTime>2025-01-20T10:30:00</EndTime>
     <ActualSessionEnd>PT3H</ActualSessionEnd>
     <MitigationTime>0001-01-01T00:00:00</MitigationTime>
     <IsResistance>false</IsResistance>
     <IsMitigated>false</IsMitigated>
     <Tag>Asia_Low_638726472000000000</Tag>
-    <VolSum>1188575</VolSum>
-    <PvSum>7169590276.5</PvSum>
+    <VolSum>1061743</VolSum>
+    <PvSum>6401213145.75</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -859,14 +859,14 @@
     <Name>Europe Low</Name>
     <Price>5982.75</Price>
     <StartTime>2025-01-17T04:00:00</StartTime>
-    <EndTime>2025-01-20T19:01:00</EndTime>
+    <EndTime>2025-01-20T10:30:00</EndTime>
     <ActualSessionEnd>PT9H30M</ActualSessionEnd>
     <MitigationTime>0001-01-01T00:00:00</MitigationTime>
     <IsResistance>false</IsResistance>
     <IsMitigated>false</IsMitigated>
     <Tag>Europe_Low_638726796000000000</Tag>
-    <VolSum>1140629</VolSum>
-    <PvSum>6882825971.75</PvSum>
+    <VolSum>1013797</VolSum>
+    <PvSum>6114448841</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -874,29 +874,29 @@
     <Name>USA High</Name>
     <Price>6051.75</Price>
     <StartTime>2025-01-17T10:30:00</StartTime>
-    <EndTime>2025-01-20T14:00:00</EndTime>
+    <EndTime>2025-01-20T10:30:00</EndTime>
     <ActualSessionEnd>PT18H</ActualSessionEnd>
     <MitigationTime>2025-01-20T09:54:00</MitigationTime>
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>USA_High_638727030000000000</Tag>
-    <VolSum>505642</VolSum>
-    <PvSum>3055839162.5</PvSum>
+    <VolSum>378810</VolSum>
+    <PvSum>2287462031.75</PvSum>
     <JustReset>false</JustReset>
-    <EntryAttempts>0</EntryAttempts>
+    <EntryAttempts>1</EntryAttempts>
   </SessionLevel>
   <SessionLevel>
     <Name>USA Low</Name>
     <Price>6012.75</Price>
     <StartTime>2025-01-17T10:30:00</StartTime>
-    <EndTime>2025-01-20T19:01:00</EndTime>
+    <EndTime>2025-01-20T10:30:00</EndTime>
     <ActualSessionEnd>PT18H</ActualSessionEnd>
     <MitigationTime>0001-01-01T00:00:00</MitigationTime>
     <IsResistance>false</IsResistance>
     <IsMitigated>false</IsMitigated>
     <Tag>USA_Low_638727030000000000</Tag>
-    <VolSum>900275</VolSum>
-    <PvSum>5437061346.25</PvSum>
+    <VolSum>773443</VolSum>
+    <PvSum>4668684215.5</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -904,44 +904,44 @@
     <Name>Asia High</Name>
     <Price>6041.75</Price>
     <StartTime>2025-01-19T19:00:00</StartTime>
-    <EndTime>2025-01-20T14:00:00</EndTime>
+    <EndTime>2025-01-20T10:30:00</EndTime>
     <ActualSessionEnd>PT3H</ActualSessionEnd>
     <MitigationTime>2025-01-20T04:06:00</MitigationTime>
     <IsResistance>true</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Asia_High_638729064000000000</Tag>
-    <VolSum>224308</VolSum>
-    <PvSum>1357249527.5</PvSum>
+    <VolSum>97472</VolSum>
+    <PvSum>588846201.75</PvSum>
     <JustReset>false</JustReset>
-    <EntryAttempts>0</EntryAttempts>
+    <EntryAttempts>1</EntryAttempts>
   </SessionLevel>
   <SessionLevel>
     <Name>Asia Low</Name>
     <Price>6020.25</Price>
     <StartTime>2025-01-19T19:00:00</StartTime>
-    <EndTime>2025-01-20T14:00:00</EndTime>
+    <EndTime>2025-01-20T10:30:00</EndTime>
     <ActualSessionEnd>PT3H</ActualSessionEnd>
     <MitigationTime>2025-01-20T09:31:00</MitigationTime>
     <IsResistance>false</IsResistance>
     <IsMitigated>true</IsMitigated>
     <Tag>Asia_Low_638729064000000000</Tag>
-    <VolSum>261970</VolSum>
-    <PvSum>1584310183.25</PvSum>
+    <VolSum>135138</VolSum>
+    <PvSum>815929413.5</PvSum>
     <JustReset>false</JustReset>
-    <EntryAttempts>0</EntryAttempts>
+    <EntryAttempts>1</EntryAttempts>
   </SessionLevel>
   <SessionLevel>
     <Name>Europe High</Name>
     <Price>6066</Price>
     <StartTime>2025-01-20T04:00:00</StartTime>
-    <EndTime>2025-01-20T14:00:00</EndTime>
+    <EndTime>2025-01-20T10:30:00</EndTime>
     <ActualSessionEnd>PT9H30M</ActualSessionEnd>
-    <MitigationTime>2025-01-20T10:32:00</MitigationTime>
+    <MitigationTime>0001-01-01T00:00:00</MitigationTime>
     <IsResistance>true</IsResistance>
-    <IsMitigated>true</IsMitigated>
+    <IsMitigated>false</IsMitigated>
     <Tag>Europe_High_638729388000000000</Tag>
-    <VolSum>129080</VolSum>
-    <PvSum>782010294.75</PvSum>
+    <VolSum>2245</VolSum>
+    <PvSum>13616488.5</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
@@ -949,74 +949,44 @@
     <Name>Europe Low</Name>
     <Price>6018.75</Price>
     <StartTime>2025-01-20T04:00:00</StartTime>
-    <EndTime>2025-01-20T19:01:00</EndTime>
+    <EndTime>2025-01-20T10:30:00</EndTime>
     <ActualSessionEnd>PT9H30M</ActualSessionEnd>
     <MitigationTime>0001-01-01T00:00:00</MitigationTime>
     <IsResistance>false</IsResistance>
     <IsMitigated>false</IsMitigated>
     <Tag>Europe_Low_638729388000000000</Tag>
-    <VolSum>184066</VolSum>
-    <PvSum>1114404849.75</PvSum>
+    <VolSum>57231</VolSum>
+    <PvSum>346003121.75</PvSum>
     <JustReset>false</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
   <SessionLevel>
     <Name>USA High</Name>
-    <Price>6078</Price>
+    <Price>6064.75</Price>
     <StartTime>2025-01-20T10:30:00</StartTime>
-    <EndTime>2025-01-20T19:01:00</EndTime>
+    <EndTime>2025-01-20T10:30:00</EndTime>
     <ActualSessionEnd>PT18H</ActualSessionEnd>
     <MitigationTime>0001-01-01T00:00:00</MitigationTime>
     <IsResistance>true</IsResistance>
     <IsMitigated>false</IsMitigated>
     <Tag>USA_High_638729622000000000</Tag>
-    <VolSum>112356</VolSum>
-    <PvSum>680511175.75</PvSum>
-    <JustReset>false</JustReset>
+    <VolSum>1</VolSum>
+    <PvSum>6064.75</PvSum>
+    <JustReset>true</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>
   <SessionLevel>
     <Name>USA Low</Name>
-    <Price>6036</Price>
+    <Price>6064.75</Price>
     <StartTime>2025-01-20T10:30:00</StartTime>
-    <EndTime>2025-01-20T19:01:00</EndTime>
+    <EndTime>2025-01-20T10:30:00</EndTime>
     <ActualSessionEnd>PT18H</ActualSessionEnd>
     <MitigationTime>0001-01-01T00:00:00</MitigationTime>
     <IsResistance>false</IsResistance>
     <IsMitigated>false</IsMitigated>
     <Tag>USA_Low_638729622000000000</Tag>
-    <VolSum>20803</VolSum>
-    <PvSum>125884325.75</PvSum>
-    <JustReset>false</JustReset>
-    <EntryAttempts>0</EntryAttempts>
-  </SessionLevel>
-  <SessionLevel>
-    <Name>Asia High</Name>
-    <Price>6060</Price>
-    <StartTime>2025-01-20T19:00:00</StartTime>
-    <EndTime>2025-01-20T19:01:00</EndTime>
-    <ActualSessionEnd>PT3H</ActualSessionEnd>
-    <MitigationTime>0001-01-01T00:00:00</MitigationTime>
-    <IsResistance>true</IsResistance>
-    <IsMitigated>false</IsMitigated>
-    <Tag>Asia_High_638729928000000000</Tag>
-    <VolSum>123</VolSum>
-    <PvSum>745380</PvSum>
-    <JustReset>true</JustReset>
-    <EntryAttempts>0</EntryAttempts>
-  </SessionLevel>
-  <SessionLevel>
-    <Name>Asia Low</Name>
-    <Price>6060</Price>
-    <StartTime>2025-01-20T19:00:00</StartTime>
-    <EndTime>2025-01-20T19:01:00</EndTime>
-    <ActualSessionEnd>PT3H</ActualSessionEnd>
-    <MitigationTime>0001-01-01T00:00:00</MitigationTime>
-    <IsResistance>false</IsResistance>
-    <IsMitigated>false</IsMitigated>
-    <Tag>Asia_Low_638729928000000000</Tag>
-    <VolSum>123</VolSum>
-    <PvSum>745380</PvSum>
+    <VolSum>1</VolSum>
+    <PvSum>6064.75</PvSum>
     <JustReset>true</JustReset>
     <EntryAttempts>0</EntryAttempts>
   </SessionLevel>

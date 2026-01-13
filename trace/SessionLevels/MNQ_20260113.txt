@@ -1,9 +1,1604 @@
-=== MNQ Strategy Log - Started 2026-01-13 09:42:52 ===
+=== MNQ Strategy Log - Started 2026-01-13 16:11:39 ===
 
-09:42:52.838 [09:42:52.838] DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
-09:42:52.840 [09:42:52.840] DEBUG_RECONNECT: Total Account.Positions count = 0
-09:42:52.849 [09:42:52.849] 20/1/25 7:01:00 p. m. v1.15.11 RESTART EVAL: Checking for pending orders or valid setup to continue...
-09:42:52.849 [09:42:52.849] 20/1/25 7:01:00 p. m. v1.15.11 RESTART: No valid setup found. Starting fresh.
-09:42:52.850 [09:42:52.849] 20/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-09:42:52.850 [09:42:52.850] 20/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-09:42:52.851 [09:42:52.851] PROTECTION_RESET: Cleared order references for new trade
+16:11:39.063 [16:11:39.063] DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
+16:11:39.078 [16:11:39.078] DEBUG_RECONNECT: Total Account.Positions count = 0
+16:11:39.080 [16:11:39.080] 19/1/25 7:01:00 p. m. v1.15.17 RESTART EVAL: Checking for pending orders or valid setup to continue...
+16:11:39.082 [16:11:39.082] 19/1/25 7:01:00 p. m. v1.15.17 RESTART: No valid setup found. Starting fresh.
+16:11:39.084 [16:11:39.084] 19/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 17/1/25 6:00:00 p. m. NY)
+16:11:39.086 [16:11:39.086] LEVEL SUMMARY (Price=21601):
+16:11:39.087 [16:11:39.087]   USA High @ 21897 | Currently BELOW by 1184 ticks
+16:11:39.089 [16:11:39.089]   USA High @ 21806.25 | Currently BELOW by 821 ticks
+16:11:39.091 [16:11:39.091]   Europe Low @ 20693.5 | Currently ABOVE by 3630 ticks
+16:11:39.093 [16:11:39.093]   USA Low @ 20701.5 | Currently ABOVE by 3598 ticks
+16:11:39.095 [16:11:39.095]   USA Low @ 20773.25 | Currently ABOVE by 3311 ticks
+16:11:39.097 [16:11:39.097]   Europe Low @ 20908.75 | Currently ABOVE by 2769 ticks
+16:11:39.099 [16:11:39.099]   USA Low @ 21171.75 | Currently ABOVE by 1717 ticks
+16:11:39.100 [16:11:39.100]   Asia Low @ 21208.75 | Currently ABOVE by 1569 ticks
+16:11:39.102 [16:11:39.102]   Europe High @ 21680 | Currently BELOW by 316 ticks
+16:11:39.104 [16:11:39.104]   Europe Low @ 21271.5 | Currently ABOVE by 1318 ticks
+16:11:39.106 [16:11:39.106]   USA High @ 21672.5 | Currently BELOW by 286 ticks
+16:11:39.108 [16:11:39.108]   USA Low @ 21481 | Currently ABOVE by 480 ticks
+16:11:39.109 [16:11:39.109] 19/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+16:11:39.111 [16:11:39.111] PROTECTION_RESET: Cleared order references for new trade
+16:11:39.113 [16:11:39.113] 19/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+16:11:39.114 [16:11:39.114] 19/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+16:11:39.115 [16:11:39.115] PROTECTION_RESET: Cleared order references for new trade
+16:15:28.068 [16:15:28.068] 20/1/25 4:06:00 a. m. ENTRY ATTEMPT #1/20 on Asia High (Deepest Selection)
+16:15:28.068 [16:15:28.068] EXTERNAL LEVEL: Asia High @ 21631.25 (Protected by: Europe High @ 21631.5)
+16:15:28.076 [16:15:28.076] RE-ANCHOR: New High @ 21631.75 (Setup: Asia High)
+16:15:28.081 [16:15:28.081] RE-ANCHOR: New High @ 21632 (Setup: Asia High)
+16:15:28.095 [16:15:28.095] RE-ANCHOR: New High @ 21632.25 (Setup: Asia High)
+16:15:28.108 [16:15:28.108] RE-ANCHOR: New High @ 21632.5 (Setup: Asia High)
+16:15:28.145 [16:15:28.145] RE-ANCHOR: New High @ 21632.75 (Setup: Asia High)
+16:15:28.148 [16:15:28.148] RE-ANCHOR: New High @ 21633 (Setup: Asia High)
+16:15:28.199 [16:15:28.199] RE-ANCHOR: New High @ 21633.25 (Setup: Asia High)
+16:15:28.206 [16:15:28.206] RE-ANCHOR: New High @ 21633.5 (Setup: Asia High)
+16:15:28.271 [16:15:28.271] RE-ANCHOR: New High @ 21633.75 (Setup: Asia High)
+16:15:28.282 [16:15:28.282] RE-ANCHOR: New High @ 21634 (Setup: Asia High)
+16:15:28.286 [16:15:28.286] RE-ANCHOR: New High @ 21634.25 (Setup: Asia High)
+16:15:28.289 [16:15:28.289] RE-ANCHOR: New High @ 21634.5 (Setup: Asia High)
+16:15:28.290 [16:15:28.290] RE-ANCHOR: New High @ 21634.75 (Setup: Asia High)
+16:15:28.309 [16:15:28.309] RE-ANCHOR: New High @ 21635 (Setup: Asia High)
+16:15:28.367 [16:15:28.367] RE-ANCHOR: New High @ 21635.25 (Setup: Asia High)
+16:15:28.369 [16:15:28.369] RE-ANCHOR: New High @ 21635.5 (Setup: Asia High)
+16:15:28.381 [16:15:28.381] RE-ANCHOR: New High @ 21635.75 (Setup: Asia High)
+16:15:28.529 [16:15:28.529] RE-ANCHOR: New High @ 21636 (Setup: Asia High)
+16:15:28.586 [16:15:28.586] RE-ANCHOR: New High @ 21636.25 (Setup: Asia High)
+16:15:28.614 [16:15:28.614] RE-ANCHOR: New High @ 21636.5 (Setup: Asia High)
+16:15:28.617 [16:15:28.617] RE-ANCHOR: New High @ 21636.75 (Setup: Asia High)
+16:15:28.667 [16:15:28.667] RE-ANCHOR: New High @ 21637 (Setup: Asia High)
+16:15:28.967 [16:15:28.967] RE-ANCHOR: New High @ 21637.25 (Setup: Asia High)
+16:15:28.979 [16:15:28.979] RE-ANCHOR: New High @ 21637.5 (Setup: Asia High)
+16:15:29.748 [16:15:29.748] RE-ANCHOR: New High @ 21637.75 (Setup: Asia High)
+16:15:33.976 [16:15:33.976] 20/1/25 4:15:00 a. m. | SEARCH_OPPOSITE: Looking for 'Asia Low' from SAME DAY as 'Asia High' (RefDate: 2025-01-19)
+16:15:33.976 [16:15:33.976] 20/1/25 4:15:00 a. m. | EXEC_DEBUG: Submitting Short Limit @ 21632 (Raw: 21631.9479367528). Bid=21625.5 Ask=21626
+16:15:33.976 [16:15:33.976] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:15:33.976 [16:15:33.976] RISK_DEBUG_ATR: ATR=$11.53 | ScaledRisk=$23.05
+16:15:33.978 [16:15:33.978] RISK_DEBUG_POST: Written=$23.05 | ReadFromFile=$150.00 | Using=$150.00
+16:15:33.978 [16:15:33.978] QTY_DEBUG: Risk=$150.00 | SL_Ticks=24.00 | TickVal=$0.50 | CalcQty=12.50 | MaxQty=100 | MinQty=2
+16:15:33.999 [16:15:33.999] 20/1/25 4:15:00 a. m. Order Submitted (Short). Mode=APlusRetrace Type=Limit Qty=12
+16:15:33.999 [16:15:33.999] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:15:34.000 [16:15:34.000] RISK_DEBUG_ATR: ATR=$11.53 | ScaledRisk=$23.05
+16:15:34.000 [16:15:34.000] RISK_DEBUG_POST: Written=$23.05 | ReadFromFile=$150.00 | Using=$150.00
+16:15:34.001 [16:15:34.001] QTY_DEBUG: Risk=$150.00 | SL_Ticks=24.21 | TickVal=$0.50 | CalcQty=12.39 | MaxQty=100 | MinQty=2
+16:15:34.346 [16:15:34.346] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:15:34.346 [16:15:34.346] RISK_DEBUG_ATR: ATR=$11.67 | ScaledRisk=$23.34
+16:15:34.347 [16:15:34.347] RISK_DEBUG_POST: Written=$23.34 | ReadFromFile=$150.00 | Using=$150.00
+16:15:34.347 [16:15:34.347] QTY_DEBUG: Risk=$150.00 | SL_Ticks=24.82 | TickVal=$0.50 | CalcQty=12.09 | MaxQty=100 | MinQty=2
+16:15:34.691 [16:15:34.691] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:15:34.691 [16:15:34.691] RISK_DEBUG_ATR: ATR=$12.31 | ScaledRisk=$24.63
+16:15:34.692 [16:15:34.692] RISK_DEBUG_POST: Written=$24.63 | ReadFromFile=$150.00 | Using=$150.00
+16:15:34.692 [16:15:34.692] QTY_DEBUG: Risk=$150.00 | SL_Ticks=25.54 | TickVal=$0.50 | CalcQty=11.75 | MaxQty=100 | MinQty=2
+16:15:35.026 [16:15:35.026] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:15:35.026 [16:15:35.026] RISK_DEBUG_ATR: ATR=$12.31 | ScaledRisk=$24.63
+16:15:35.026 [16:15:35.026] RISK_DEBUG_POST: Written=$24.63 | ReadFromFile=$150.00 | Using=$150.00
+16:15:35.027 [16:15:35.027] QTY_DEBUG: Risk=$150.00 | SL_Ticks=25.59 | TickVal=$0.50 | CalcQty=11.73 | MaxQty=100 | MinQty=2
+16:15:35.092 [16:15:35.092] NinjaTrader.NinjaScript.TimeSeries Entry Filled (EntryA+_Short_01) Qty=4. State -> PositionActive. TradeOriginalQty=4
+16:15:35.092 [16:15:35.092] 20/1/25 4:15:00 a. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+16:15:35.093 [16:15:35.093] PROTECTION_RESET: Cleared order references for new trade
+16:15:38.172 [16:15:38.172] NinjaTrader.NinjaScript.TimeSeries DELTA CAPTURE: Entry Delta=0 Direction=1
+16:15:38.172 [16:15:38.172] DIAG_EXEC: Name=EntryA+_Short_01 Qty=4 | Position.MP=Short Arg.MP=Short | State=PositionActive
+16:15:38.172 [16:15:38.172] ==========================================================================================
+16:15:38.172 [16:15:38.172]    TRADE START: #1 | Short | 20/1/25 4:15:00 a. m. | Price: 21631.5
+16:15:38.173 [16:15:38.173] ==========================================================================================
+16:15:38.174 [16:15:38.174] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Short @ 21631.5
+16:15:38.175 [16:15:38.175] 20/1/25 4:15:00 a. m. REPLAY_SYNC_DELAY: Account.Positions=0 but Position.Quantity=4. Proceeding with protection (replay sync delay).
+16:15:38.175 [16:15:38.175] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Short FilledQty=4 Position.Qty=4 Position.MarketPosition=Short
+16:15:38.175 [16:15:38.175] 20/1/25 4:15:00 a. m. TRADE VWAP: Initialized (Managed)
+16:15:38.175 [16:15:38.175]    -> Protection Alloc: Filled=4 | ForTP1=2 (Need:2) | ForTP2=2 (Need:2)
+16:15:38.176 [16:15:38.176] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=21571.5429782419 | targetGlobalVWAP=21571.5429782419 | avgEntry=21631.5
+16:15:38.176 [16:15:38.176] 20/1/25 4:15:00 a. m. | SEARCH_OPPOSITE: Looking for 'Asia Low' from SAME DAY as 'Asia High' (RefDate: 2025-01-19)
+16:15:38.178 [16:15:38.178] FORCE TARGET: Using Validated Price: 21527.25
+16:15:38.178 [16:15:38.178] TP CALC (Short): Entry=21631.5 | GlobalVWAP=21571.5429782419 | ZoneOpp=21527.25 (Val=21527.25) | TP1=21571.5429782419 TP2=21527.25 | Selected=21571.5
+16:15:38.179 [16:15:38.179] SL_CREATE_DEBUG (MGR): Instrument=MNQ 03-25 Direction=Short Tag=SL_Short_01 Action=BuyToCover Price=21638 Qty=4
+16:15:38.203 [16:15:38.203] SL CREATED: SL_Short_01 @ 21638 Qty=4 Risk=$52.00
+16:15:38.228 [16:15:38.228] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Submitted Price=21571.5 Qty=2
+16:15:38.228 [16:15:38.228]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:38.229 [16:15:38.229] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21571.5 Qty=2
+16:15:38.229 [16:15:38.229]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:38.229 [16:15:38.229] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21571.5 Qty=2
+16:15:38.231 [16:15:38.231]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:38.231 [16:15:38.231] TP1 CREATED: TP1_Short_01 @ 21571.5 Qty=2
+16:15:38.231 [16:15:38.231] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=21571.5429782419 | targetGlobalVWAP=21571.5429782419 | avgEntry=21631.5
+16:15:38.232 [16:15:38.232] FORCE TARGET: Using Validated Price: 21527.25
+16:15:38.232 [16:15:38.232] TP CALC (Short): Entry=21631.5 | GlobalVWAP=21571.5429782419 | ZoneOpp=21527.25 (Val=21527.25) | TP1=21571.5429782419 TP2=21527.25 | Selected=21527.25
+16:15:38.232 [16:15:38.232] SL SKIPPED: Already created in current entry (duplicate prevention)
+16:15:38.259 [16:15:38.259] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Submitted Price=21527.25 Qty=2
+16:15:38.259 [16:15:38.259]   -> Updated tp2Order reference (ID=357d2ffab98844d49b0f5d3133174b84)
+16:15:38.259 [16:15:38.259] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Accepted Price=21527.25 Qty=2
+16:15:38.260 [16:15:38.260]   -> Updated tp2Order reference (ID=357d2ffab98844d49b0f5d3133174b84)
+16:15:38.261 [16:15:38.261] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Working Price=21527.25 Qty=2
+16:15:38.261 [16:15:38.261]   -> Updated tp2Order reference (ID=357d2ffab98844d49b0f5d3133174b84)
+16:15:38.261 [16:15:38.261] TP2 CREATED: TP2_Short_01 @ 21527.25 Qty=2
+16:15:38.261 [16:15:38.261] 20/1/25 4:15:00 a. m. EnsureProtection COMPLETE
+16:15:38.265 [16:15:38.265] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Short_01) Qty=2. New TradeOriginalQty=6
+16:15:38.265 [16:15:38.265] DIAG_EXEC: Name=EntryA+_Short_01 Qty=2 | Position.MP=Short Arg.MP=Short | State=PositionActive
+16:15:38.265 [16:15:38.265] ==========================================================================================
+16:15:38.267 [16:15:38.267]    TRADE START: #1 | Short | 20/1/25 4:15:00 a. m. | Price: 21631.5
+16:15:38.268 [16:15:38.268] ==========================================================================================
+16:15:38.268 [16:15:38.268] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Short @ 21631.5
+16:15:38.269 [16:15:38.269] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Short FilledQty=2 Position.Qty=6 Position.MarketPosition=Short
+16:15:38.269 [16:15:38.269]    -> Protection Alloc: Filled=2 | ForTP1=1 (Need:1) | ForTP2=1 (Need:1)
+16:15:38.269 [16:15:38.269] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=21571.5429782419 | targetGlobalVWAP=21571.5429782419 | avgEntry=21631.5
+16:15:38.270 [16:15:38.270] FORCE TARGET: Using Validated Price: 21527.25
+16:15:38.270 [16:15:38.270] TP CALC (Short): Entry=21631.5 | GlobalVWAP=21571.5429782419 | ZoneOpp=21527.25 (Val=21527.25) | TP1=21571.5429782419 TP2=21527.25 | Selected=21571.5
+16:15:38.270 [16:15:38.270] SL UPDATE (Partial Fill): Old Qty=4 New Qty=6
+16:15:38.271 [16:15:38.271] TP UPDATE (TP1): Old Qty=2/Price=21571.5 -> New Qty=3/Price=21571.5 (ID=11086)
+16:15:38.271 [16:15:38.271] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21571.5 Qty=2
+16:15:38.272 [16:15:38.272]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:38.273 [16:15:38.273] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21571.5 Qty=3
+16:15:38.274 [16:15:38.274]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:38.274 [16:15:38.274] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21571.5 Qty=3
+16:15:38.275 [16:15:38.275]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:38.275 [16:15:38.275] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21571.5 Qty=3
+16:15:38.275 [16:15:38.275]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:38.276 [16:15:38.276] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=21571.5429782419 | targetGlobalVWAP=21571.5429782419 | avgEntry=21631.5
+16:15:38.276 [16:15:38.276] FORCE TARGET: Using Validated Price: 21527.25
+16:15:38.276 [16:15:38.276] TP CALC (Short): Entry=21631.5 | GlobalVWAP=21571.5429782419 | ZoneOpp=21527.25 (Val=21527.25) | TP1=21571.5429782419 TP2=21527.25 | Selected=21527.25
+16:15:38.276 [16:15:38.276] SL SKIPPED: Already created in current entry (duplicate prevention)
+16:15:38.278 [16:15:38.278] TP UPDATE (TP2): Old Qty=2/Price=21527.25 -> New Qty=3/Price=21527.25 (ID=11087)
+16:15:38.278 [16:15:38.278] ORDER_UPDATE_TP: Name='TP2_Short_01' State=ChangePending Price=21527.25 Qty=2
+16:15:38.279 [16:15:38.279]   -> Updated tp2Order reference (ID=357d2ffab98844d49b0f5d3133174b84)
+16:15:38.279 [16:15:38.279] ORDER_UPDATE_TP: Name='TP2_Short_01' State=ChangeSubmitted Price=21527.25 Qty=3
+16:15:38.279 [16:15:38.279]   -> Updated tp2Order reference (ID=357d2ffab98844d49b0f5d3133174b84)
+16:15:38.279 [16:15:38.279] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Accepted Price=21527.25 Qty=3
+16:15:38.281 [16:15:38.281]   -> Updated tp2Order reference (ID=357d2ffab98844d49b0f5d3133174b84)
+16:15:38.281 [16:15:38.281] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Working Price=21527.25 Qty=3
+16:15:38.282 [16:15:38.282]   -> Updated tp2Order reference (ID=357d2ffab98844d49b0f5d3133174b84)
+16:15:38.282 [16:15:38.282] 20/1/25 4:15:00 a. m. EnsureProtection COMPLETE
+16:15:38.290 [16:15:38.290] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Short_01) Qty=1. New TradeOriginalQty=7
+16:15:38.290 [16:15:38.290] DIAG_EXEC: Name=EntryA+_Short_01 Qty=1 | Position.MP=Short Arg.MP=Short | State=PositionActive
+16:15:38.290 [16:15:38.290] ==========================================================================================
+16:15:38.291 [16:15:38.291]    TRADE START: #1 | Short | 20/1/25 4:15:00 a. m. | Price: 21631.5
+16:15:38.291 [16:15:38.291] ==========================================================================================
+16:15:38.291 [16:15:38.291] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Short @ 21631.5
+16:15:38.291 [16:15:38.291] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Short FilledQty=1 Position.Qty=7 Position.MarketPosition=Short
+16:15:38.292 [16:15:38.292]    -> Protection Alloc: Filled=1 | ForTP1=1 (Need:1) | ForTP2=0 (Need:0)
+16:15:38.292 [16:15:38.292] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=21571.5429782419 | targetGlobalVWAP=21571.5429782419 | avgEntry=21631.5
+16:15:38.292 [16:15:38.292] FORCE TARGET: Using Validated Price: 21527.25
+16:15:38.293 [16:15:38.293] TP CALC (Short): Entry=21631.5 | GlobalVWAP=21571.5429782419 | ZoneOpp=21527.25 (Val=21527.25) | TP1=21571.5429782419 TP2=21527.25 | Selected=21571.5
+16:15:38.293 [16:15:38.293] SL UPDATE (Partial Fill): Old Qty=6 New Qty=7
+16:15:38.295 [16:15:38.295] TP UPDATE (TP1): Old Qty=3/Price=21571.5 -> New Qty=4/Price=21571.5 (ID=11086)
+16:15:38.295 [16:15:38.295] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21571.5 Qty=3
+16:15:38.296 [16:15:38.296]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:38.296 [16:15:38.296] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21571.5 Qty=4
+16:15:38.297 [16:15:38.297]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:38.297 [16:15:38.297] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21571.5 Qty=4
+16:15:38.297 [16:15:38.297]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:38.298 [16:15:38.298] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21571.5 Qty=4
+16:15:38.299 [16:15:38.299]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:38.299 [16:15:38.299] 20/1/25 4:15:00 a. m. EnsureProtection COMPLETE
+16:15:38.318 [16:15:38.318] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Short_01) Qty=2. New TradeOriginalQty=9
+16:15:38.318 [16:15:38.318] DIAG_EXEC: Name=EntryA+_Short_01 Qty=2 | Position.MP=Short Arg.MP=Short | State=PositionActive
+16:15:38.319 [16:15:38.319] ==========================================================================================
+16:15:38.320 [16:15:38.320]    TRADE START: #1 | Short | 20/1/25 4:15:00 a. m. | Price: 21631.5
+16:15:38.320 [16:15:38.320] ==========================================================================================
+16:15:38.320 [16:15:38.320] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Short @ 21631.5
+16:15:38.321 [16:15:38.321] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Short FilledQty=2 Position.Qty=9 Position.MarketPosition=Short
+16:15:38.322 [16:15:38.322]    -> Protection Alloc: Filled=2 | ForTP1=1 (Need:1) | ForTP2=1 (Need:1)
+16:15:38.322 [16:15:38.322] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=21571.5429782419 | targetGlobalVWAP=21571.5429782419 | avgEntry=21631.5
+16:15:38.322 [16:15:38.322] FORCE TARGET: Using Validated Price: 21527.25
+16:15:38.323 [16:15:38.323] TP CALC (Short): Entry=21631.5 | GlobalVWAP=21571.5429782419 | ZoneOpp=21527.25 (Val=21527.25) | TP1=21571.5429782419 TP2=21527.25 | Selected=21571.5
+16:15:38.323 [16:15:38.323] SL UPDATE (Partial Fill): Old Qty=7 New Qty=9
+16:15:38.324 [16:15:38.324] TP UPDATE (TP1): Old Qty=4/Price=21571.5 -> New Qty=5/Price=21571.5 (ID=11086)
+16:15:38.324 [16:15:38.324] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21571.5 Qty=4
+16:15:38.324 [16:15:38.324]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:38.324 [16:15:38.324] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21571.5 Qty=5
+16:15:38.326 [16:15:38.326]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:38.326 [16:15:38.326] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21571.5 Qty=5
+16:15:38.326 [16:15:38.326]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:38.328 [16:15:38.328] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21571.5 Qty=5
+16:15:38.328 [16:15:38.328]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:38.328 [16:15:38.328] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=21571.5429782419 | targetGlobalVWAP=21571.5429782419 | avgEntry=21631.5
+16:15:38.328 [16:15:38.328] FORCE TARGET: Using Validated Price: 21527.25
+16:15:38.329 [16:15:38.329] TP CALC (Short): Entry=21631.5 | GlobalVWAP=21571.5429782419 | ZoneOpp=21527.25 (Val=21527.25) | TP1=21571.5429782419 TP2=21527.25 | Selected=21527.25
+16:15:38.329 [16:15:38.329] SL SKIPPED: Already created in current entry (duplicate prevention)
+16:15:38.329 [16:15:38.329] TP UPDATE (TP2): Old Qty=3/Price=21527.25 -> New Qty=4/Price=21527.25 (ID=11087)
+16:15:38.330 [16:15:38.330] ORDER_UPDATE_TP: Name='TP2_Short_01' State=ChangePending Price=21527.25 Qty=3
+16:15:38.330 [16:15:38.330]   -> Updated tp2Order reference (ID=357d2ffab98844d49b0f5d3133174b84)
+16:15:38.332 [16:15:38.332] ORDER_UPDATE_TP: Name='TP2_Short_01' State=ChangeSubmitted Price=21527.25 Qty=4
+16:15:38.332 [16:15:38.332]   -> Updated tp2Order reference (ID=357d2ffab98844d49b0f5d3133174b84)
+16:15:38.332 [16:15:38.332] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Accepted Price=21527.25 Qty=4
+16:15:38.333 [16:15:38.333]   -> Updated tp2Order reference (ID=357d2ffab98844d49b0f5d3133174b84)
+16:15:38.333 [16:15:38.333] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Working Price=21527.25 Qty=4
+16:15:38.333 [16:15:38.333]   -> Updated tp2Order reference (ID=357d2ffab98844d49b0f5d3133174b84)
+16:15:38.335 [16:15:38.335] 20/1/25 4:15:00 a. m. EnsureProtection COMPLETE
+16:15:38.361 [16:15:38.361] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Short_01) Qty=3. New TradeOriginalQty=12
+16:15:38.362 [16:15:38.362] DIAG_EXEC: Name=EntryA+_Short_01 Qty=3 | Position.MP=Short Arg.MP=Short | State=PositionActive
+16:15:38.362 [16:15:38.362] ==========================================================================================
+16:15:38.362 [16:15:38.362]    TRADE START: #1 | Short | 20/1/25 4:15:00 a. m. | Price: 21631.5
+16:15:38.363 [16:15:38.363] ==========================================================================================
+16:15:38.363 [16:15:38.363] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Short @ 21631.5
+16:15:38.363 [16:15:38.363] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Short FilledQty=3 Position.Qty=12 Position.MarketPosition=Short
+16:15:38.363 [16:15:38.363]    -> Protection Alloc: Filled=3 | ForTP1=1 (Need:1) | ForTP2=2 (Need:2)
+16:15:38.365 [16:15:38.365] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=21571.5429782419 | targetGlobalVWAP=21571.5429782419 | avgEntry=21631.5
+16:15:38.365 [16:15:38.365] FORCE TARGET: Using Validated Price: 21527.25
+16:15:38.366 [16:15:38.366] TP CALC (Short): Entry=21631.5 | GlobalVWAP=21571.5429782419 | ZoneOpp=21527.25 (Val=21527.25) | TP1=21571.5429782419 TP2=21527.25 | Selected=21571.5
+16:15:38.366 [16:15:38.366] SL UPDATE (Partial Fill): Old Qty=9 New Qty=12
+16:15:38.367 [16:15:38.367] TP UPDATE (TP1): Old Qty=5/Price=21571.5 -> New Qty=6/Price=21571.5 (ID=11086)
+16:15:38.368 [16:15:38.368] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21571.5 Qty=5
+16:15:38.368 [16:15:38.368]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:38.369 [16:15:38.369] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21571.5 Qty=6
+16:15:38.369 [16:15:38.369]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:38.371 [16:15:38.371] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21571.5 Qty=6
+16:15:38.371 [16:15:38.371]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:38.372 [16:15:38.372] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21571.5 Qty=6
+16:15:38.372 [16:15:38.372]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:38.373 [16:15:38.373] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=21571.5429782419 | targetGlobalVWAP=21571.5429782419 | avgEntry=21631.5
+16:15:38.373 [16:15:38.373] FORCE TARGET: Using Validated Price: 21527.25
+16:15:38.374 [16:15:38.374] TP CALC (Short): Entry=21631.5 | GlobalVWAP=21571.5429782419 | ZoneOpp=21527.25 (Val=21527.25) | TP1=21571.5429782419 TP2=21527.25 | Selected=21527.25
+16:15:38.374 [16:15:38.374] SL SKIPPED: Already created in current entry (duplicate prevention)
+16:15:38.374 [16:15:38.374] TP UPDATE (TP2): Old Qty=4/Price=21527.25 -> New Qty=6/Price=21527.25 (ID=11087)
+16:15:38.375 [16:15:38.375] ORDER_UPDATE_TP: Name='TP2_Short_01' State=ChangePending Price=21527.25 Qty=4
+16:15:38.375 [16:15:38.375]   -> Updated tp2Order reference (ID=357d2ffab98844d49b0f5d3133174b84)
+16:15:38.375 [16:15:38.375] ORDER_UPDATE_TP: Name='TP2_Short_01' State=ChangeSubmitted Price=21527.25 Qty=6
+16:15:38.376 [16:15:38.376]   -> Updated tp2Order reference (ID=357d2ffab98844d49b0f5d3133174b84)
+16:15:38.376 [16:15:38.376] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Accepted Price=21527.25 Qty=6
+16:15:38.376 [16:15:38.376]   -> Updated tp2Order reference (ID=357d2ffab98844d49b0f5d3133174b84)
+16:15:38.378 [16:15:38.378] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Working Price=21527.25 Qty=6
+16:15:38.378 [16:15:38.378]   -> Updated tp2Order reference (ID=357d2ffab98844d49b0f5d3133174b84)
+16:15:38.378 [16:15:38.378] 20/1/25 4:15:00 a. m. EnsureProtection COMPLETE
+16:15:38.379 [16:15:38.379] EXEC_FILL_DEBUG: Order=2150025 Name=EntryA+_Short_01 State=Filled Price=21631.5 | tp1Order=65744982 tp1Name=TP1_Short_01
+16:15:41.559 [16:15:41.559] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21571.5 Qty=6
+16:15:41.560 [16:15:41.560]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:41.561 [16:15:41.561] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21571.75 Qty=6
+16:15:41.561 [16:15:41.561]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:41.561 [16:15:41.561] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21571.75 Qty=6
+16:15:41.561 [16:15:41.561]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:41.561 [16:15:41.561] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21571.75 Qty=6
+16:15:41.569 [16:15:41.569]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:43.753 [16:15:43.753] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21571.75 Qty=6
+16:15:43.753 [16:15:43.753]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:43.754 [16:15:43.754] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21572 Qty=6
+16:15:43.755 [16:15:43.755]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:43.755 [16:15:43.755] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21572 Qty=6
+16:15:43.755 [16:15:43.755]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:43.756 [16:15:43.756] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21572 Qty=6
+16:15:43.756 [16:15:43.756]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:45.709 [16:15:45.709] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21572 Qty=6
+16:15:45.710 [16:15:45.710]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:45.710 [16:15:45.710] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21572.25 Qty=6
+16:15:45.711 [16:15:45.711]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:45.711 [16:15:45.711] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21572.25 Qty=6
+16:15:45.711 [16:15:45.711]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:45.712 [16:15:45.712] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21572.25 Qty=6
+16:15:45.712 [16:15:45.712]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:47.726 [16:15:47.726] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21572.25 Qty=6
+16:15:47.726 [16:15:47.726]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:47.726 [16:15:47.726] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21572.5 Qty=6
+16:15:47.728 [16:15:47.728]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:47.728 [16:15:47.728] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21572.5 Qty=6
+16:15:47.728 [16:15:47.728]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:47.728 [16:15:47.728] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21572.5 Qty=6
+16:15:47.730 [16:15:47.730]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:48.761 [16:15:48.761] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21572.5 Qty=6
+16:15:48.761 [16:15:48.761]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:48.761 [16:15:48.761] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21572.75 Qty=6
+16:15:48.761 [16:15:48.761]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:48.763 [16:15:48.763] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21572.75 Qty=6
+16:15:48.763 [16:15:48.763]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:48.763 [16:15:48.763] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21572.75 Qty=6
+16:15:48.772 [16:15:48.771]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:50.628 [16:15:50.628] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21572.75 Qty=6
+16:15:50.628 [16:15:50.628]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:50.628 [16:15:50.628] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21573 Qty=6
+16:15:50.629 [16:15:50.629]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:50.629 [16:15:50.629] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21573 Qty=6
+16:15:50.629 [16:15:50.629]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:50.630 [16:15:50.630] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21573 Qty=6
+16:15:50.630 [16:15:50.630]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:52.164 [16:15:52.164] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21573 Qty=6
+16:15:52.165 [16:15:52.165]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:52.166 [16:15:52.166] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21573.25 Qty=6
+16:15:52.166 [16:15:52.166]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:52.167 [16:15:52.167] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21573.25 Qty=6
+16:15:52.167 [16:15:52.167]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:52.168 [16:15:52.168] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21573.25 Qty=6
+16:15:52.168 [16:15:52.168]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:54.116 [16:15:54.116] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21573.25 Qty=6
+16:15:54.117 [16:15:54.117]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:54.117 [16:15:54.117] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21573.5 Qty=6
+16:15:54.117 [16:15:54.117]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:54.118 [16:15:54.118] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21573.5 Qty=6
+16:15:54.118 [16:15:54.118]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:54.119 [16:15:54.119] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21573.5 Qty=6
+16:15:54.120 [16:15:54.120]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:55.808 [16:15:55.808] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21573.5 Qty=6
+16:15:55.808 [16:15:55.808]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:55.808 [16:15:55.808] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21573.75 Qty=6
+16:15:55.810 [16:15:55.810]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:55.810 [16:15:55.810] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21573.75 Qty=6
+16:15:55.811 [16:15:55.811]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:55.811 [16:15:55.811] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21573.75 Qty=6
+16:15:55.811 [16:15:55.811]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:58.161 [16:15:58.161] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21573.75 Qty=6
+16:15:58.161 [16:15:58.161]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:58.163 [16:15:58.163] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21574 Qty=6
+16:15:58.163 [16:15:58.163]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:58.163 [16:15:58.163] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21574 Qty=6
+16:15:58.163 [16:15:58.163]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:15:58.164 [16:15:58.164] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21574 Qty=6
+16:15:58.164 [16:15:58.164]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:00.333 [16:16:00.333] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21574 Qty=6
+16:16:00.333 [16:16:00.333]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:00.335 [16:16:00.335] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21574.25 Qty=6
+16:16:00.336 [16:16:00.336]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:00.336 [16:16:00.336] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21574.25 Qty=6
+16:16:00.337 [16:16:00.337]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:00.337 [16:16:00.337] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21574.25 Qty=6
+16:16:00.338 [16:16:00.338]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:02.668 [16:16:02.668] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21574.25 Qty=6
+16:16:02.668 [16:16:02.668]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:02.668 [16:16:02.668] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21574.5 Qty=6
+16:16:02.668 [16:16:02.668]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:02.670 [16:16:02.670] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21574.5 Qty=6
+16:16:02.670 [16:16:02.670]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:02.670 [16:16:02.670] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21574.5 Qty=6
+16:16:02.671 [16:16:02.671]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:04.308 [16:16:04.308] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21574.5 Qty=6
+16:16:04.309 [16:16:04.309]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:04.310 [16:16:04.310] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21574.75 Qty=6
+16:16:04.310 [16:16:04.310]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:04.311 [16:16:04.311] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21574.75 Qty=6
+16:16:04.311 [16:16:04.311]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:04.311 [16:16:04.311] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21574.75 Qty=6
+16:16:04.311 [16:16:04.311]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:06.056 [16:16:06.056] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21574.75 Qty=6
+16:16:06.056 [16:16:06.056]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:06.058 [16:16:06.058] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21575 Qty=6
+16:16:06.058 [16:16:06.058]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:06.059 [16:16:06.059] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21575 Qty=6
+16:16:06.059 [16:16:06.059]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:06.060 [16:16:06.060] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21575 Qty=6
+16:16:06.060 [16:16:06.060]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:12.063 [16:16:12.063] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21575 Qty=6
+16:16:12.064 [16:16:12.064]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:12.066 [16:16:12.066] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21575.25 Qty=6
+16:16:12.066 [16:16:12.066]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:12.067 [16:16:12.067] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21575.25 Qty=6
+16:16:12.067 [16:16:12.067]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:12.068 [16:16:12.068] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21575.25 Qty=6
+16:16:12.068 [16:16:12.068]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:15.347 [16:16:15.347] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21575.25 Qty=6
+16:16:15.348 [16:16:15.348]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:15.349 [16:16:15.349] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21575.5 Qty=6
+16:16:15.349 [16:16:15.349]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:15.350 [16:16:15.350] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21575.5 Qty=6
+16:16:15.350 [16:16:15.350]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:15.351 [16:16:15.351] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21575.5 Qty=6
+16:16:15.352 [16:16:15.352]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:16.987 [16:16:16.987] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21575.5 Qty=6
+16:16:16.988 [16:16:16.988]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:16.988 [16:16:16.988] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21575.75 Qty=6
+16:16:16.989 [16:16:16.989]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:16.990 [16:16:16.990] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21575.75 Qty=6
+16:16:16.990 [16:16:16.990]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:16.991 [16:16:16.991] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21575.75 Qty=6
+16:16:16.991 [16:16:16.991]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:19.105 [16:16:19.105] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21575.75 Qty=6
+16:16:19.106 [16:16:19.106]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:19.107 [16:16:19.107] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21576 Qty=6
+16:16:19.108 [16:16:19.108]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:19.109 [16:16:19.109] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21576 Qty=6
+16:16:19.109 [16:16:19.109]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:19.110 [16:16:19.110] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21576 Qty=6
+16:16:19.110 [16:16:19.110]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:20.425 [16:16:20.425] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21576 Qty=6
+16:16:20.426 [16:16:20.426]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:20.428 [16:16:20.428] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21576.25 Qty=6
+16:16:20.429 [16:16:20.429]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:20.429 [16:16:20.429] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21576.25 Qty=6
+16:16:20.429 [16:16:20.429]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:20.429 [16:16:20.429] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21576.25 Qty=6
+16:16:20.431 [16:16:20.431]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:21.850 [16:16:21.850] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21576.25 Qty=6
+16:16:21.850 [16:16:21.850]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:21.851 [16:16:21.851] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21576.5 Qty=6
+16:16:21.851 [16:16:21.851]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:21.852 [16:16:21.852] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21576.5 Qty=6
+16:16:21.852 [16:16:21.852]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:21.852 [16:16:21.852] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21576.5 Qty=6
+16:16:21.852 [16:16:21.852]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:23.502 [16:16:23.502] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21576.5 Qty=6
+16:16:23.502 [16:16:23.502]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:23.504 [16:16:23.504] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21576.75 Qty=6
+16:16:23.504 [16:16:23.504]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:23.505 [16:16:23.505] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21576.75 Qty=6
+16:16:23.505 [16:16:23.505]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:23.506 [16:16:23.506] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21576.75 Qty=6
+16:16:23.506 [16:16:23.506]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:25.604 [16:16:25.604] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21576.75 Qty=6
+16:16:25.605 [16:16:25.605]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:25.606 [16:16:25.606] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21577 Qty=6
+16:16:25.606 [16:16:25.606]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:25.607 [16:16:25.607] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21577 Qty=6
+16:16:25.608 [16:16:25.608]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:25.608 [16:16:25.608] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21577 Qty=6
+16:16:25.608 [16:16:25.608]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:27.151 [16:16:27.151] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21577 Qty=6
+16:16:27.151 [16:16:27.151]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:27.153 [16:16:27.153] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21577.25 Qty=6
+16:16:27.153 [16:16:27.153]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:27.154 [16:16:27.154] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21577.25 Qty=6
+16:16:27.154 [16:16:27.154]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:27.155 [16:16:27.155] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21577.25 Qty=6
+16:16:27.155 [16:16:27.155]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:28.461 [16:16:28.461] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21577.25 Qty=6
+16:16:28.463 [16:16:28.463]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:28.463 [16:16:28.463] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21577.5 Qty=6
+16:16:28.463 [16:16:28.463]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:28.464 [16:16:28.464] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21577.5 Qty=6
+16:16:28.464 [16:16:28.464]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:28.466 [16:16:28.466] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21577.5 Qty=6
+16:16:28.466 [16:16:28.466]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:29.995 [16:16:29.995] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21577.5 Qty=6
+16:16:29.995 [16:16:29.995]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:29.995 [16:16:29.995] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21577.75 Qty=6
+16:16:29.995 [16:16:29.995]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:29.996 [16:16:29.996] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21577.75 Qty=6
+16:16:29.996 [16:16:29.996]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:30.005 [16:16:30.005] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21577.75 Qty=6
+16:16:30.005 [16:16:30.005]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:31.054 [16:16:31.054] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21577.75 Qty=6
+16:16:31.054 [16:16:31.054]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:31.054 [16:16:31.054] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21578 Qty=6
+16:16:31.056 [16:16:31.056]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:31.056 [16:16:31.056] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21578 Qty=6
+16:16:31.056 [16:16:31.056]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:31.056 [16:16:31.056] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21578 Qty=6
+16:16:31.057 [16:16:31.057]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:34.636 [16:16:34.636] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21578 Qty=6
+16:16:34.637 [16:16:34.637]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:34.638 [16:16:34.638] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21578.25 Qty=6
+16:16:34.638 [16:16:34.638]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:34.638 [16:16:34.638] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21578.25 Qty=6
+16:16:34.639 [16:16:34.639]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:34.640 [16:16:34.640] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21578.25 Qty=6
+16:16:34.641 [16:16:34.641]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:36.176 [16:16:36.176] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21578.25 Qty=6
+16:16:36.176 [16:16:36.176]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:36.178 [16:16:36.178] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21578.5 Qty=6
+16:16:36.178 [16:16:36.178]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:36.178 [16:16:36.178] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21578.5 Qty=6
+16:16:36.179 [16:16:36.179]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:36.179 [16:16:36.179] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21578.5 Qty=6
+16:16:36.180 [16:16:36.180]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:37.541 [16:16:37.541] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21578.5 Qty=6
+16:16:37.541 [16:16:37.541]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:37.542 [16:16:37.542] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21578.75 Qty=6
+16:16:37.542 [16:16:37.542]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:37.542 [16:16:37.542] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21578.75 Qty=6
+16:16:37.542 [16:16:37.542]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:37.544 [16:16:37.544] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21578.75 Qty=6
+16:16:37.544 [16:16:37.544]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:39.333 [16:16:39.333] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21578.75 Qty=6
+16:16:39.333 [16:16:39.333]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:39.335 [16:16:39.335] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21579 Qty=6
+16:16:39.335 [16:16:39.335]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:39.336 [16:16:39.336] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21579 Qty=6
+16:16:39.337 [16:16:39.337]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:39.337 [16:16:39.337] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21579 Qty=6
+16:16:39.337 [16:16:39.337]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:41.104 [16:16:41.104] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21579 Qty=6
+16:16:41.104 [16:16:41.104]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:41.105 [16:16:41.105] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21579.25 Qty=6
+16:16:41.106 [16:16:41.106]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:41.106 [16:16:41.106] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21579.25 Qty=6
+16:16:41.106 [16:16:41.106]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:41.107 [16:16:41.107] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21579.25 Qty=6
+16:16:41.107 [16:16:41.107]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:42.861 [16:16:42.861] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21579.25 Qty=6
+16:16:42.861 [16:16:42.861]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:42.872 [16:16:42.872] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21579.5 Qty=6
+16:16:42.872 [16:16:42.872]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:42.873 [16:16:42.873] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21579.5 Qty=6
+16:16:42.873 [16:16:42.873]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:42.874 [16:16:42.874] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21579.5 Qty=6
+16:16:42.875 [16:16:42.875]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:44.653 [16:16:44.653] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21579.5 Qty=6
+16:16:44.654 [16:16:44.654]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:44.655 [16:16:44.655] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21579.75 Qty=6
+16:16:44.655 [16:16:44.655]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:44.656 [16:16:44.656] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21579.75 Qty=6
+16:16:44.656 [16:16:44.656]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:44.658 [16:16:44.658] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21579.75 Qty=6
+16:16:44.658 [16:16:44.658]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:46.947 [16:16:46.947] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21579.75 Qty=6
+16:16:46.947 [16:16:46.947]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:46.948 [16:16:46.948] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21580 Qty=6
+16:16:46.948 [16:16:46.948]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:46.948 [16:16:46.948] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21580 Qty=6
+16:16:46.948 [16:16:46.948]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:46.949 [16:16:46.949] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21580 Qty=6
+16:16:46.955 [16:16:46.955]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:51.381 [16:16:51.381] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21580 Qty=6
+16:16:51.382 [16:16:51.382]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:51.384 [16:16:51.384] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21580.25 Qty=6
+16:16:51.384 [16:16:51.384]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:51.384 [16:16:51.384] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21580.25 Qty=6
+16:16:51.386 [16:16:51.386]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:51.386 [16:16:51.386] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21580.25 Qty=6
+16:16:51.386 [16:16:51.386]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:54.242 [16:16:54.242] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21580.25 Qty=6
+16:16:54.243 [16:16:54.243]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:54.243 [16:16:54.243] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21580.5 Qty=6
+16:16:54.243 [16:16:54.243]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:54.243 [16:16:54.243] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21580.5 Qty=6
+16:16:54.243 [16:16:54.243]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:54.245 [16:16:54.245] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21580.5 Qty=6
+16:16:54.245 [16:16:54.245]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:56.254 [16:16:56.254] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21580.5 Qty=6
+16:16:56.254 [16:16:56.254]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:56.254 [16:16:56.254] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21580.75 Qty=6
+16:16:56.254 [16:16:56.254]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:56.255 [16:16:56.255] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21580.75 Qty=6
+16:16:56.256 [16:16:56.256]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:56.256 [16:16:56.256] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21580.75 Qty=6
+16:16:56.256 [16:16:56.256]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:58.617 [16:16:58.617] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21580.75 Qty=6
+16:16:58.619 [16:16:58.619]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:58.620 [16:16:58.620] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21581 Qty=6
+16:16:58.620 [16:16:58.620]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:58.620 [16:16:58.620] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21581 Qty=6
+16:16:58.620 [16:16:58.620]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:16:58.622 [16:16:58.622] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21581 Qty=6
+16:16:58.622 [16:16:58.622]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:00.667 [16:17:00.667] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21581 Qty=6
+16:17:00.667 [16:17:00.667]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:00.667 [16:17:00.667] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21581.25 Qty=6
+16:17:00.668 [16:17:00.668]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:00.668 [16:17:00.668] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21581.25 Qty=6
+16:17:00.668 [16:17:00.668]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:00.668 [16:17:00.668] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21581.25 Qty=6
+16:17:00.670 [16:17:00.670]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:04.114 [16:17:04.114] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21581.25 Qty=6
+16:17:04.115 [16:17:04.115]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:04.116 [16:17:04.116] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21581.5 Qty=6
+16:17:04.117 [16:17:04.117]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:04.117 [16:17:04.117] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21581.5 Qty=6
+16:17:04.117 [16:17:04.117]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:04.118 [16:17:04.118] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21581.5 Qty=6
+16:17:04.118 [16:17:04.118]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:05.742 [16:17:05.742] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21581.5 Qty=6
+16:17:05.742 [16:17:05.742]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:05.743 [16:17:05.743] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21581.75 Qty=6
+16:17:05.743 [16:17:05.743]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:05.743 [16:17:05.743] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21581.75 Qty=6
+16:17:05.744 [16:17:05.744]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:05.751 [16:17:05.751] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21581.75 Qty=6
+16:17:05.752 [16:17:05.752]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:07.602 [16:17:07.602] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21581.75 Qty=6
+16:17:07.603 [16:17:07.603]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:07.604 [16:17:07.604] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21582 Qty=6
+16:17:07.604 [16:17:07.604]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:07.604 [16:17:07.604] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21582 Qty=6
+16:17:07.604 [16:17:07.604]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:07.604 [16:17:07.604] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21582 Qty=6
+16:17:07.605 [16:17:07.605]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:10.692 [16:17:10.692] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21582 Qty=6
+16:17:10.694 [16:17:10.694]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:10.694 [16:17:10.694] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21582.25 Qty=6
+16:17:10.695 [16:17:10.695]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:10.695 [16:17:10.695] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21582.25 Qty=6
+16:17:10.695 [16:17:10.695]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:10.695 [16:17:10.695] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21582.25 Qty=6
+16:17:10.697 [16:17:10.697]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:13.522 [16:17:13.522] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21582.25 Qty=6
+16:17:13.523 [16:17:13.523]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:13.524 [16:17:13.524] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21582.5 Qty=6
+16:17:13.524 [16:17:13.524]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:13.525 [16:17:13.525] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21582.5 Qty=6
+16:17:13.525 [16:17:13.525]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:13.526 [16:17:13.526] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21582.5 Qty=6
+16:17:13.527 [16:17:13.527]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:15.515 [16:17:15.515] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21582.5 Qty=6
+16:17:15.515 [16:17:15.515]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:15.516 [16:17:15.516] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21582.75 Qty=6
+16:17:15.517 [16:17:15.517]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:15.517 [16:17:15.517] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21582.75 Qty=6
+16:17:15.518 [16:17:15.518]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:15.518 [16:17:15.518] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21582.75 Qty=6
+16:17:15.518 [16:17:15.518]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:18.551 [16:17:18.551] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21582.75 Qty=6
+16:17:18.551 [16:17:18.551]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:18.552 [16:17:18.552] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21583 Qty=6
+16:17:18.552 [16:17:18.552]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:18.553 [16:17:18.553] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21583 Qty=6
+16:17:18.554 [16:17:18.554]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:18.554 [16:17:18.554] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21583 Qty=6
+16:17:18.554 [16:17:18.554]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:20.081 [16:17:20.081] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21583 Qty=6
+16:17:20.081 [16:17:20.081]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:20.082 [16:17:20.082] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21583.25 Qty=6
+16:17:20.082 [16:17:20.082]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:20.083 [16:17:20.083] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21583.25 Qty=6
+16:17:20.083 [16:17:20.083]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:20.083 [16:17:20.083] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21583.25 Qty=6
+16:17:20.084 [16:17:20.084]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:21.744 [16:17:21.744] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21583.25 Qty=6
+16:17:21.744 [16:17:21.744]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:21.745 [16:17:21.745] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21583.5 Qty=6
+16:17:21.752 [16:17:21.752]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:21.752 [16:17:21.752] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21583.5 Qty=6
+16:17:21.754 [16:17:21.754]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:21.754 [16:17:21.754] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21583.5 Qty=6
+16:17:21.754 [16:17:21.754]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:23.534 [16:17:23.534] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21583.5 Qty=6
+16:17:23.535 [16:17:23.535]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:23.535 [16:17:23.535] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21583.75 Qty=6
+16:17:23.536 [16:17:23.536]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:23.537 [16:17:23.537] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21583.75 Qty=6
+16:17:23.537 [16:17:23.537]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:23.537 [16:17:23.537] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21583.75 Qty=6
+16:17:23.538 [16:17:23.538]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:26.380 [16:17:26.380] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21583.75 Qty=6
+16:17:26.381 [16:17:26.381]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:26.381 [16:17:26.381] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21584 Qty=6
+16:17:26.382 [16:17:26.382]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:26.382 [16:17:26.382] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21584 Qty=6
+16:17:26.382 [16:17:26.382]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:26.383 [16:17:26.383] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21584 Qty=6
+16:17:26.383 [16:17:26.383]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:28.509 [16:17:28.509] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21584 Qty=6
+16:17:28.510 [16:17:28.510]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:28.510 [16:17:28.510] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21584.25 Qty=6
+16:17:28.511 [16:17:28.511]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:28.511 [16:17:28.511] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21584.25 Qty=6
+16:17:28.511 [16:17:28.511]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:28.511 [16:17:28.511] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21584.25 Qty=6
+16:17:28.511 [16:17:28.511]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:30.967 [16:17:30.967] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21584.25 Qty=6
+16:17:30.967 [16:17:30.967]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:30.967 [16:17:30.967] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21584.5 Qty=6
+16:17:30.968 [16:17:30.968]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:30.968 [16:17:30.968] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21584.5 Qty=6
+16:17:30.968 [16:17:30.968]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:30.968 [16:17:30.968] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21584.5 Qty=6
+16:17:30.970 [16:17:30.970]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:33.123 [16:17:33.123] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21584.5 Qty=6
+16:17:33.123 [16:17:33.123]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:33.123 [16:17:33.123] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21584.75 Qty=6
+16:17:33.124 [16:17:33.124]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:33.125 [16:17:33.125] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21584.75 Qty=6
+16:17:33.125 [16:17:33.125]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:33.125 [16:17:33.125] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21584.75 Qty=6
+16:17:33.125 [16:17:33.125]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:35.530 [16:17:35.530] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21584.75 Qty=6
+16:17:35.530 [16:17:35.530]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:35.531 [16:17:35.531] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21585 Qty=6
+16:17:35.532 [16:17:35.532]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:35.533 [16:17:35.533] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21585 Qty=6
+16:17:35.535 [16:17:35.535]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:35.535 [16:17:35.535] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21585 Qty=6
+16:17:35.536 [16:17:35.536]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:37.208 [16:17:37.208] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21585 Qty=6
+16:17:37.209 [16:17:37.209]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:37.209 [16:17:37.209] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21585.25 Qty=6
+16:17:37.209 [16:17:37.209]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:37.210 [16:17:37.210] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21585.25 Qty=6
+16:17:37.210 [16:17:37.210]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:37.211 [16:17:37.211] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21585.25 Qty=6
+16:17:37.211 [16:17:37.211]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:39.278 [16:17:39.278] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21585.25 Qty=6
+16:17:39.278 [16:17:39.278]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:39.279 [16:17:39.279] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21585.5 Qty=6
+16:17:39.280 [16:17:39.280]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:39.280 [16:17:39.280] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21585.5 Qty=6
+16:17:39.280 [16:17:39.280]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:39.280 [16:17:39.280] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21585.5 Qty=6
+16:17:39.281 [16:17:39.281]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:41.356 [16:17:41.356] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21585.5 Qty=6
+16:17:41.357 [16:17:41.357]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:41.357 [16:17:41.357] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21585.75 Qty=6
+16:17:41.359 [16:17:41.359]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:41.359 [16:17:41.359] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21585.75 Qty=6
+16:17:41.359 [16:17:41.359]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:41.360 [16:17:41.360] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21585.75 Qty=6
+16:17:41.360 [16:17:41.360]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:43.498 [16:17:43.498] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21585.75 Qty=6
+16:17:43.499 [16:17:43.499]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:43.500 [16:17:43.500] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21586 Qty=6
+16:17:43.500 [16:17:43.500]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:43.501 [16:17:43.501] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21586 Qty=6
+16:17:43.501 [16:17:43.501]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:43.502 [16:17:43.502] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21586 Qty=6
+16:17:43.504 [16:17:43.504]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:46.395 [16:17:46.395] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21586 Qty=6
+16:17:46.395 [16:17:46.395]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:46.398 [16:17:46.398] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21586.25 Qty=6
+16:17:46.398 [16:17:46.398]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:46.399 [16:17:46.399] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21586.25 Qty=6
+16:17:46.399 [16:17:46.399]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:46.400 [16:17:46.400] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21586.25 Qty=6
+16:17:46.400 [16:17:46.400]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:48.476 [16:17:48.476] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21586.25 Qty=6
+16:17:48.478 [16:17:48.478]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:48.478 [16:17:48.478] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21586.5 Qty=6
+16:17:48.479 [16:17:48.479]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:48.479 [16:17:48.479] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21586.5 Qty=6
+16:17:48.479 [16:17:48.479]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:48.481 [16:17:48.481] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21586.5 Qty=6
+16:17:48.482 [16:17:48.482]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:51.010 [16:17:51.010] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21586.5 Qty=6
+16:17:51.011 [16:17:51.011]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:51.011 [16:17:51.011] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21586.75 Qty=6
+16:17:51.013 [16:17:51.013]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:51.013 [16:17:51.013] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21586.75 Qty=6
+16:17:51.015 [16:17:51.015]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:51.016 [16:17:51.016] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21586.75 Qty=6
+16:17:51.016 [16:17:51.016]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:53.883 [16:17:53.883] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21586.75 Qty=6
+16:17:53.883 [16:17:53.883]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:53.883 [16:17:53.883] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21587 Qty=6
+16:17:53.884 [16:17:53.884]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:53.884 [16:17:53.884] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21587 Qty=6
+16:17:53.884 [16:17:53.884]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:53.884 [16:17:53.884] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21587 Qty=6
+16:17:53.886 [16:17:53.886]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:57.088 [16:17:57.088] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21587 Qty=6
+16:17:57.088 [16:17:57.088]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:57.090 [16:17:57.090] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21587.25 Qty=6
+16:17:57.090 [16:17:57.090]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:57.090 [16:17:57.090] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21587.25 Qty=6
+16:17:57.091 [16:17:57.091]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:57.091 [16:17:57.091] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21587.25 Qty=6
+16:17:57.091 [16:17:57.091]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:59.829 [16:17:59.829] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Filled Price=21587.25 Qty=6
+16:17:59.830 [16:17:59.830]   -> Updated tp1Order reference (ID=cc961c52c68343a5af9207cad840d4b3)
+16:17:59.830 [16:17:59.830] EXEC_FILL_DEBUG: Order=65744982 Name=TP1_Short_01 State=Filled Price=21587.25 | tp1Order=65744982 tp1Name=TP1_Short_01
+16:17:59.851 [16:17:59.851] 20/1/25 8:21:00 a. m. DELTA CAPTURE: TP1 Delta=0
+16:17:59.851 [16:17:59.851] 20/1/25 8:21:00 a. m. BE LOGIC: TP1 Filled. Moving SL to BE.
+16:17:59.851 [16:17:59.851] 20/1/25 8:21:00 a. m. BE ACTION: Moving SL (SL_Short_01) to 21631.5 Qty=6
+16:17:59.858 [16:17:59.858] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 closed - TP1_Short_01 PnL=531.00
+16:17:59.858 [16:17:59.858] NinjaTrader.NinjaScript.TimeSeries Partial Execution (TP1_Short_01). Position Active. Qty=6
+16:18:46.909 [16:18:46.909] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1.2 closed - SL_Short_01 PnL=0.00
+16:18:46.909 [16:18:46.909] NinjaTrader.NinjaScript.TimeSeries Partial Execution (SL_Short_01). Position Active. Qty=5
+16:18:46.937 [16:18:46.936] EXEC_FILL_DEBUG: Order=20443628 Name=SL_Short_01 State=Filled Price=21631.7083333333 | tp1Order=65744982 tp1Name=TP1_Short_01
+16:18:46.938 [16:18:46.938] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1.3 closed - SL_Short_01 PnL=-2.50
+16:18:46.938 [16:18:46.938] NinjaTrader.NinjaScript.TimeSeries Position Closed (SL_Short_01). Resetting to Idle.
+16:18:46.938 [16:18:46.938] NinjaTrader.NinjaScript.TimeSeries VWAP RETRY: Waiting for price to break 21637.75 for VWAP#2
+16:18:46.939 [16:18:46.939] ORDER_UPDATE_TP: Name='TP2_Short_01' State=CancelPending Price=21527.25 Qty=6
+16:18:46.940 [16:18:46.940]   -> Updated tp2Order reference (ID=357d2ffab98844d49b0f5d3133174b84)
+16:18:46.940 [16:18:46.940] ORDER_UPDATE_TP: Name='TP2_Short_01' State=CancelSubmitted Price=21527.25 Qty=6
+16:18:46.941 [16:18:46.941]   -> Updated tp2Order reference (ID=357d2ffab98844d49b0f5d3133174b84)
+16:18:46.963 [16:18:46.963] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Cancelled Price=21527.25 Qty=6
+16:18:46.963 [16:18:46.963]   -> Updated tp2Order reference (ID=357d2ffab98844d49b0f5d3133174b84)
+16:18:46.963 [16:18:46.963] CLEANUP: Cancelled orphan tp2Order
+16:18:46.970 [16:18:46.970] 13/1/26 4:18:46 p. m. TRADE CLOSED: TR_SHORT at 21631.5, Exit at 21631.75, Profit: $-7,20
+16:18:48.335 [16:18:48.335] 20/1/25 9:31:00 a. m. VWAP RETRY TRIGGERED: Price broke 21637.75. Starting attempt #2
+16:18:48.340 [16:18:48.340] RE-ANCHOR: New High @ 21638.25 (Setup: Asia High)
+16:18:48.341 [16:18:48.341] RE-ANCHOR: New High @ 21638.5 (Setup: Asia High)
+16:18:48.466 [16:18:48.466] RE-ANCHOR: New High @ 21638.75 (Setup: Asia High)
+16:18:48.469 [16:18:48.469] RE-ANCHOR: New High @ 21639 (Setup: Asia High)
+16:18:48.474 [16:18:48.474] RE-ANCHOR: New High @ 21639.25 (Setup: Asia High)
+16:18:48.483 [16:18:48.483] RE-ANCHOR: New High @ 21639.5 (Setup: Asia High)
+16:18:48.488 [16:18:48.488] RE-ANCHOR: New High @ 21639.75 (Setup: Asia High)
+16:18:48.497 [16:18:48.497] RE-ANCHOR: New High @ 21640 (Setup: Asia High)
+16:18:48.523 [16:18:48.523] RE-ANCHOR: New High @ 21640.25 (Setup: Asia High)
+16:18:48.525 [16:18:48.525] RE-ANCHOR: New High @ 21641 (Setup: Asia High)
+16:18:48.533 [16:18:48.533] RE-ANCHOR: New High @ 21641.5 (Setup: Asia High)
+16:18:48.535 [16:18:48.535] RE-ANCHOR: New High @ 21641.75 (Setup: Asia High)
+16:18:48.537 [16:18:48.537] RE-ANCHOR: New High @ 21642 (Setup: Asia High)
+16:18:48.542 [16:18:48.542] RE-ANCHOR: New High @ 21642.25 (Setup: Asia High)
+16:18:48.544 [16:18:48.544] RE-ANCHOR: New High @ 21642.5 (Setup: Asia High)
+16:18:48.556 [16:18:48.556] RE-ANCHOR: New High @ 21642.75 (Setup: Asia High)
+16:18:48.557 [16:18:48.557] RE-ANCHOR: New High @ 21643 (Setup: Asia High)
+16:18:48.559 [16:18:48.559] RE-ANCHOR: New High @ 21643.25 (Setup: Asia High)
+16:18:48.560 [16:18:48.560] RE-ANCHOR: New High @ 21643.5 (Setup: Asia High)
+16:18:48.562 [16:18:48.562] RE-ANCHOR: New High @ 21643.75 (Setup: Asia High)
+16:18:48.562 [16:18:48.562] RE-ANCHOR: New High @ 21644 (Setup: Asia High)
+16:18:48.572 [16:18:48.572] RE-ANCHOR: New High @ 21644.25 (Setup: Asia High)
+16:18:48.574 [16:18:48.574] RE-ANCHOR: New High @ 21644.5 (Setup: Asia High)
+16:18:48.576 [16:18:48.576] RE-ANCHOR: New High @ 21644.75 (Setup: Asia High)
+16:18:48.579 [16:18:48.579] RE-ANCHOR: New High @ 21645 (Setup: Asia High)
+16:18:48.592 [16:18:48.592] RE-ANCHOR: New High @ 21645.25 (Setup: Asia High)
+16:18:48.594 [16:18:48.594] RE-ANCHOR: New High @ 21645.5 (Setup: Asia High)
+16:18:48.595 [16:18:48.595] RE-ANCHOR: New High @ 21645.75 (Setup: Asia High)
+16:18:48.612 [16:18:48.612] RE-ANCHOR: New High @ 21646 (Setup: Asia High)
+16:18:48.617 [16:18:48.617] RE-ANCHOR: New High @ 21646.25 (Setup: Asia High)
+16:18:48.618 [16:18:48.618] RE-ANCHOR: New High @ 21646.5 (Setup: Asia High)
+16:18:48.620 [16:18:48.620] RE-ANCHOR: New High @ 21646.75 (Setup: Asia High)
+16:18:48.621 [16:18:48.621] RE-ANCHOR: New High @ 21647 (Setup: Asia High)
+16:18:48.631 [16:18:48.631] RE-ANCHOR: New High @ 21647.25 (Setup: Asia High)
+16:18:48.633 [16:18:48.633] RE-ANCHOR: New High @ 21647.5 (Setup: Asia High)
+16:18:48.634 [16:18:48.634] RE-ANCHOR: New High @ 21647.75 (Setup: Asia High)
+16:18:48.637 [16:18:48.637] RE-ANCHOR: New High @ 21648 (Setup: Asia High)
+16:18:48.644 [16:18:48.644] RE-ANCHOR: New High @ 21648.25 (Setup: Asia High)
+16:18:48.653 [16:18:48.653] RE-ANCHOR: New High @ 21648.5 (Setup: Asia High)
+16:18:48.654 [16:18:48.654] RE-ANCHOR: New High @ 21648.75 (Setup: Asia High)
+16:18:48.656 [16:18:48.656] RE-ANCHOR: New High @ 21649 (Setup: Asia High)
+16:18:48.670 [16:18:48.670] RE-ANCHOR: New High @ 21649.25 (Setup: Asia High)
+16:18:48.676 [16:18:48.676] RE-ANCHOR: New High @ 21649.5 (Setup: Asia High)
+16:19:06.829 [16:19:06.829] RE-ANCHOR: New High @ 21649.75 (Setup: Asia High)
+16:19:06.874 [16:19:06.874] RE-ANCHOR: New High @ 21650 (Setup: Asia High)
+16:19:07.101 [16:19:07.101] RE-ANCHOR: New High @ 21650.25 (Setup: Asia High)
+16:19:07.127 [16:19:07.127] RE-ANCHOR: New High @ 21650.5 (Setup: Asia High)
+16:19:07.145 [16:19:07.145] RE-ANCHOR: New High @ 21650.75 (Setup: Asia High)
+16:19:07.149 [16:19:07.149] RE-ANCHOR: New High @ 21651 (Setup: Asia High)
+16:19:07.191 [16:19:07.191] RE-ANCHOR: New High @ 21651.25 (Setup: Asia High)
+16:19:07.202 [16:19:07.202] RE-ANCHOR: New High @ 21651.5 (Setup: Asia High)
+16:19:07.208 [16:19:07.207] RE-ANCHOR: New High @ 21651.75 (Setup: Asia High)
+16:19:07.216 [16:19:07.216] RE-ANCHOR: New High @ 21652 (Setup: Asia High)
+16:19:07.224 [16:19:07.224] RE-ANCHOR: New High @ 21652.25 (Setup: Asia High)
+16:19:08.058 [16:19:08.058] RE-ANCHOR: New High @ 21652.5 (Setup: Asia High)
+16:19:08.060 [16:19:08.060] RE-ANCHOR: New High @ 21652.75 (Setup: Asia High)
+16:19:08.064 [16:19:08.064] RE-ANCHOR: New High @ 21653 (Setup: Asia High)
+16:19:08.074 [16:19:08.074] RE-ANCHOR: New High @ 21653.25 (Setup: Asia High)
+16:19:08.075 [16:19:08.075] RE-ANCHOR: New High @ 21653.5 (Setup: Asia High)
+16:19:08.076 [16:19:08.076] RE-ANCHOR: New High @ 21653.75 (Setup: Asia High)
+16:19:08.079 [16:19:08.079] RE-ANCHOR: New High @ 21654 (Setup: Asia High)
+16:19:08.197 [16:19:08.197] RE-ANCHOR: New High @ 21654.25 (Setup: Asia High)
+16:19:08.199 [16:19:08.199] RE-ANCHOR: New High @ 21654.5 (Setup: Asia High)
+16:19:08.201 [16:19:08.201] RE-ANCHOR: New High @ 21654.75 (Setup: Asia High)
+16:19:08.202 [16:19:08.202] RE-ANCHOR: New High @ 21655 (Setup: Asia High)
+16:19:08.218 [16:19:08.218] RE-ANCHOR: New High @ 21655.25 (Setup: Asia High)
+16:19:08.247 [16:19:08.247] RE-ANCHOR: New High @ 21655.5 (Setup: Asia High)
+16:19:08.259 [16:19:08.259] RE-ANCHOR: New High @ 21655.75 (Setup: Asia High)
+16:19:08.263 [16:19:08.263] RE-ANCHOR: New High @ 21656 (Setup: Asia High)
+16:19:08.267 [16:19:08.267] RE-ANCHOR: New High @ 21656.25 (Setup: Asia High)
+16:19:15.468 [16:19:15.468] 20/1/25 9:38:00 a. m. | SEARCH_OPPOSITE: Looking for 'Asia Low' from SAME DAY as 'Asia High' (RefDate: 2025-01-19)
+16:19:15.468 [16:19:15.468] 20/1/25 9:38:00 a. m. | EXEC_DEBUG: Submitting Short Limit @ 21641.5 (Raw: 21641.4797979798). Bid=21619.75 Ask=21621
+16:19:15.469 [16:19:15.469] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:15.469 [16:19:15.469] RISK_DEBUG_ATR: ATR=$32.80 | ScaledRisk=$65.60
+16:19:15.476 [16:19:15.476] RISK_DEBUG_POST: Written=$65.60 | ReadFromFile=$150.00 | Using=$150.00
+16:19:15.476 [16:19:15.476] QTY_DEBUG: Risk=$150.00 | SL_Ticks=60.00 | TickVal=$0.50 | CalcQty=5.00 | MaxQty=100 | MinQty=2
+16:19:15.510 [16:19:15.510] 20/1/25 9:38:00 a. m. Order Submitted (Short). Mode=APlusRetrace Type=Limit Qty=5
+16:19:15.510 [16:19:15.510] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:15.511 [16:19:15.511] RISK_DEBUG_ATR: ATR=$32.80 | ScaledRisk=$65.60
+16:19:15.511 [16:19:15.511] RISK_DEBUG_POST: Written=$65.60 | ReadFromFile=$150.00 | Using=$150.00
+16:19:15.512 [16:19:15.512] QTY_DEBUG: Risk=$150.00 | SL_Ticks=60.08 | TickVal=$0.50 | CalcQty=4.99 | MaxQty=100 | MinQty=2
+16:19:15.773 [16:19:15.773] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:15.774 [16:19:15.774] RISK_DEBUG_ATR: ATR=$33.41 | ScaledRisk=$66.81
+16:19:15.774 [16:19:15.774] RISK_DEBUG_POST: Written=$66.81 | ReadFromFile=$150.00 | Using=$150.00
+16:19:15.775 [16:19:15.775] QTY_DEBUG: Risk=$150.00 | SL_Ticks=61.03 | TickVal=$0.50 | CalcQty=4.92 | MaxQty=100 | MinQty=2
+16:19:16.025 [16:19:16.025] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:16.025 [16:19:16.025] RISK_DEBUG_ATR: ATR=$33.73 | ScaledRisk=$67.45
+16:19:16.027 [16:19:16.027] RISK_DEBUG_POST: Written=$67.45 | ReadFromFile=$150.00 | Using=$150.00
+16:19:16.027 [16:19:16.027] QTY_DEBUG: Risk=$150.00 | SL_Ticks=61.62 | TickVal=$0.50 | CalcQty=4.87 | MaxQty=100 | MinQty=2
+16:19:16.281 [16:19:16.281] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:16.281 [16:19:16.281] RISK_DEBUG_ATR: ATR=$33.73 | ScaledRisk=$67.45
+16:19:16.282 [16:19:16.282] RISK_DEBUG_POST: Written=$67.45 | ReadFromFile=$150.00 | Using=$150.00
+16:19:16.282 [16:19:16.282] QTY_DEBUG: Risk=$150.00 | SL_Ticks=63.75 | TickVal=$0.50 | CalcQty=4.71 | MaxQty=100 | MinQty=2
+16:19:16.533 [16:19:16.533] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:16.533 [16:19:16.533] RISK_DEBUG_ATR: ATR=$34.26 | ScaledRisk=$68.53
+16:19:16.533 [16:19:16.533] RISK_DEBUG_POST: Written=$68.53 | ReadFromFile=$150.00 | Using=$150.00
+16:19:16.534 [16:19:16.534] QTY_DEBUG: Risk=$150.00 | SL_Ticks=64.37 | TickVal=$0.50 | CalcQty=4.66 | MaxQty=100 | MinQty=2
+16:19:16.785 [16:19:16.785] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:16.785 [16:19:16.785] RISK_DEBUG_ATR: ATR=$34.33 | ScaledRisk=$68.67
+16:19:16.786 [16:19:16.786] RISK_DEBUG_POST: Written=$68.67 | ReadFromFile=$150.00 | Using=$150.00
+16:19:16.786 [16:19:16.786] QTY_DEBUG: Risk=$150.00 | SL_Ticks=65.22 | TickVal=$0.50 | CalcQty=4.60 | MaxQty=100 | MinQty=2
+16:19:17.056 [16:19:17.056] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:17.056 [16:19:17.056] RISK_DEBUG_ATR: ATR=$34.33 | ScaledRisk=$68.67
+16:19:17.057 [16:19:17.056] RISK_DEBUG_POST: Written=$68.67 | ReadFromFile=$150.00 | Using=$150.00
+16:19:17.057 [16:19:17.057] QTY_DEBUG: Risk=$150.00 | SL_Ticks=65.64 | TickVal=$0.50 | CalcQty=4.57 | MaxQty=100 | MinQty=2
+16:19:17.308 [16:19:17.308] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:17.308 [16:19:17.308] RISK_DEBUG_ATR: ATR=$34.33 | ScaledRisk=$68.67
+16:19:17.308 [16:19:17.308] RISK_DEBUG_POST: Written=$68.67 | ReadFromFile=$150.00 | Using=$150.00
+16:19:17.309 [16:19:17.309] QTY_DEBUG: Risk=$150.00 | SL_Ticks=66.63 | TickVal=$0.50 | CalcQty=4.50 | MaxQty=100 | MinQty=2
+16:19:17.624 [16:19:17.624] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:17.624 [16:19:17.624] RISK_DEBUG_ATR: ATR=$34.33 | ScaledRisk=$68.67
+16:19:17.624 [16:19:17.624] RISK_DEBUG_POST: Written=$68.67 | ReadFromFile=$150.00 | Using=$150.00
+16:19:17.624 [16:19:17.624] QTY_DEBUG: Risk=$150.00 | SL_Ticks=66.99 | TickVal=$0.50 | CalcQty=4.48 | MaxQty=100 | MinQty=2
+16:19:17.625 [16:19:17.625] 20/1/25 9:38:00 a. m. | DYNAMIC QTY ADJUST: Old=4 New=4 (Stop moved to 21656.50)
+16:19:17.897 [16:19:17.897] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:17.899 [16:19:17.899] RISK_DEBUG_ATR: ATR=$34.33 | ScaledRisk=$68.67
+16:19:17.899 [16:19:17.899] RISK_DEBUG_POST: Written=$68.67 | ReadFromFile=$150.00 | Using=$150.00
+16:19:17.899 [16:19:17.899] QTY_DEBUG: Risk=$150.00 | SL_Ticks=67.08 | TickVal=$0.50 | CalcQty=4.47 | MaxQty=100 | MinQty=2
+16:19:18.182 [16:19:18.182] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:18.183 [16:19:18.183] RISK_DEBUG_ATR: ATR=$34.33 | ScaledRisk=$68.67
+16:19:18.183 [16:19:18.183] RISK_DEBUG_POST: Written=$68.67 | ReadFromFile=$150.00 | Using=$150.00
+16:19:18.184 [16:19:18.184] QTY_DEBUG: Risk=$150.00 | SL_Ticks=67.30 | TickVal=$0.50 | CalcQty=4.46 | MaxQty=100 | MinQty=2
+16:19:18.451 [16:19:18.451] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:18.458 [16:19:18.458] RISK_DEBUG_ATR: ATR=$34.33 | ScaledRisk=$68.67
+16:19:18.459 [16:19:18.459] RISK_DEBUG_POST: Written=$68.67 | ReadFromFile=$150.00 | Using=$150.00
+16:19:18.459 [16:19:18.459] QTY_DEBUG: Risk=$150.00 | SL_Ticks=67.81 | TickVal=$0.50 | CalcQty=4.42 | MaxQty=100 | MinQty=2
+16:19:18.837 [16:19:18.837] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:18.837 [16:19:18.837] RISK_DEBUG_ATR: ATR=$34.33 | ScaledRisk=$68.67
+16:19:18.838 [16:19:18.838] RISK_DEBUG_POST: Written=$68.67 | ReadFromFile=$150.00 | Using=$150.00
+16:19:18.838 [16:19:18.838] QTY_DEBUG: Risk=$150.00 | SL_Ticks=68.67 | TickVal=$0.50 | CalcQty=4.37 | MaxQty=100 | MinQty=2
+16:19:19.089 [16:19:19.089] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:19.089 [16:19:19.089] RISK_DEBUG_ATR: ATR=$34.33 | ScaledRisk=$68.67
+16:19:19.089 [16:19:19.089] RISK_DEBUG_POST: Written=$68.67 | ReadFromFile=$150.00 | Using=$150.00
+16:19:19.097 [16:19:19.097] QTY_DEBUG: Risk=$150.00 | SL_Ticks=68.96 | TickVal=$0.50 | CalcQty=4.35 | MaxQty=100 | MinQty=2
+16:19:19.358 [16:19:19.358] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:19.358 [16:19:19.358] RISK_DEBUG_ATR: ATR=$34.33 | ScaledRisk=$68.67
+16:19:19.359 [16:19:19.359] RISK_DEBUG_POST: Written=$68.67 | ReadFromFile=$150.00 | Using=$150.00
+16:19:19.359 [16:19:19.359] QTY_DEBUG: Risk=$150.00 | SL_Ticks=69.60 | TickVal=$0.50 | CalcQty=4.31 | MaxQty=100 | MinQty=2
+16:19:19.625 [16:19:19.625] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:19.626 [16:19:19.626] RISK_DEBUG_ATR: ATR=$32.56 | ScaledRisk=$65.12
+16:19:19.626 [16:19:19.626] RISK_DEBUG_POST: Written=$65.12 | ReadFromFile=$150.00 | Using=$150.00
+16:19:19.627 [16:19:19.627] QTY_DEBUG: Risk=$150.00 | SL_Ticks=70.36 | TickVal=$0.50 | CalcQty=4.26 | MaxQty=100 | MinQty=2
+16:19:19.878 [16:19:19.878] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:19.878 [16:19:19.878] RISK_DEBUG_ATR: ATR=$32.74 | ScaledRisk=$65.48
+16:19:19.879 [16:19:19.879] RISK_DEBUG_POST: Written=$65.48 | ReadFromFile=$150.00 | Using=$150.00
+16:19:19.879 [16:19:19.879] QTY_DEBUG: Risk=$150.00 | SL_Ticks=70.71 | TickVal=$0.50 | CalcQty=4.24 | MaxQty=100 | MinQty=2
+16:19:20.132 [16:19:20.132] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:20.132 [16:19:20.132] RISK_DEBUG_ATR: ATR=$32.99 | ScaledRisk=$65.98
+16:19:20.139 [16:19:20.139] RISK_DEBUG_POST: Written=$65.98 | ReadFromFile=$150.00 | Using=$150.00
+16:19:20.140 [16:19:20.140] QTY_DEBUG: Risk=$150.00 | SL_Ticks=72.80 | TickVal=$0.50 | CalcQty=4.12 | MaxQty=100 | MinQty=2
+16:19:20.390 [16:19:20.390] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:20.391 [16:19:20.391] RISK_DEBUG_ATR: ATR=$33.42 | ScaledRisk=$66.83
+16:19:20.392 [16:19:20.392] RISK_DEBUG_POST: Written=$66.83 | ReadFromFile=$150.00 | Using=$150.00
+16:19:20.392 [16:19:20.392] QTY_DEBUG: Risk=$150.00 | SL_Ticks=73.75 | TickVal=$0.50 | CalcQty=4.07 | MaxQty=100 | MinQty=2
+16:19:20.643 [16:19:20.643] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:20.644 [16:19:20.644] RISK_DEBUG_ATR: ATR=$33.74 | ScaledRisk=$67.48
+16:19:20.644 [16:19:20.644] RISK_DEBUG_POST: Written=$67.48 | ReadFromFile=$150.00 | Using=$150.00
+16:19:20.644 [16:19:20.644] QTY_DEBUG: Risk=$150.00 | SL_Ticks=76.01 | TickVal=$0.50 | CalcQty=3.95 | MaxQty=100 | MinQty=2
+16:19:20.896 [16:19:20.896] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:20.897 [16:19:20.897] RISK_DEBUG_ATR: ATR=$33.74 | ScaledRisk=$67.48
+16:19:20.897 [16:19:20.897] RISK_DEBUG_POST: Written=$67.48 | ReadFromFile=$150.00 | Using=$150.00
+16:19:20.897 [16:19:20.897] QTY_DEBUG: Risk=$150.00 | SL_Ticks=76.48 | TickVal=$0.50 | CalcQty=3.92 | MaxQty=100 | MinQty=2
+16:19:21.148 [16:19:21.148] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:21.149 [16:19:21.149] RISK_DEBUG_ATR: ATR=$33.85 | ScaledRisk=$67.69
+16:19:21.149 [16:19:21.149] RISK_DEBUG_POST: Written=$67.69 | ReadFromFile=$150.00 | Using=$150.00
+16:19:21.149 [16:19:21.149] QTY_DEBUG: Risk=$150.00 | SL_Ticks=77.55 | TickVal=$0.50 | CalcQty=3.87 | MaxQty=100 | MinQty=2
+16:19:21.400 [16:19:21.400] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:21.400 [16:19:21.400] RISK_DEBUG_ATR: ATR=$34.31 | ScaledRisk=$68.62
+16:19:21.400 [16:19:21.400] RISK_DEBUG_POST: Written=$68.62 | ReadFromFile=$150.00 | Using=$150.00
+16:19:21.401 [16:19:21.401] QTY_DEBUG: Risk=$150.00 | SL_Ticks=78.14 | TickVal=$0.50 | CalcQty=3.84 | MaxQty=100 | MinQty=2
+16:19:21.652 [16:19:21.652] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:21.652 [16:19:21.652] RISK_DEBUG_ATR: ATR=$34.31 | ScaledRisk=$68.62
+16:19:21.652 [16:19:21.652] RISK_DEBUG_POST: Written=$68.62 | ReadFromFile=$150.00 | Using=$150.00
+16:19:21.652 [16:19:21.652] QTY_DEBUG: Risk=$150.00 | SL_Ticks=78.67 | TickVal=$0.50 | CalcQty=3.81 | MaxQty=100 | MinQty=2
+16:19:21.905 [16:19:21.905] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:21.905 [16:19:21.905] RISK_DEBUG_ATR: ATR=$34.31 | ScaledRisk=$68.62
+16:19:21.906 [16:19:21.906] RISK_DEBUG_POST: Written=$68.62 | ReadFromFile=$150.00 | Using=$150.00
+16:19:21.906 [16:19:21.906] QTY_DEBUG: Risk=$150.00 | SL_Ticks=79.00 | TickVal=$0.50 | CalcQty=3.80 | MaxQty=100 | MinQty=2
+16:19:22.157 [16:19:22.157] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:22.157 [16:19:22.157] RISK_DEBUG_ATR: ATR=$34.31 | ScaledRisk=$68.62
+16:19:22.158 [16:19:22.158] RISK_DEBUG_POST: Written=$68.62 | ReadFromFile=$150.00 | Using=$150.00
+16:19:22.158 [16:19:22.158] QTY_DEBUG: Risk=$150.00 | SL_Ticks=79.30 | TickVal=$0.50 | CalcQty=3.78 | MaxQty=100 | MinQty=2
+16:19:22.633 [16:19:22.633] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:22.633 [16:19:22.633] RISK_DEBUG_ATR: ATR=$34.31 | ScaledRisk=$68.62
+16:19:22.633 [16:19:22.633] RISK_DEBUG_POST: Written=$68.62 | ReadFromFile=$150.00 | Using=$150.00
+16:19:22.634 [16:19:22.634] QTY_DEBUG: Risk=$150.00 | SL_Ticks=79.93 | TickVal=$0.50 | CalcQty=3.75 | MaxQty=100 | MinQty=2
+16:19:22.916 [16:19:22.916] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:22.916 [16:19:22.916] RISK_DEBUG_ATR: ATR=$34.31 | ScaledRisk=$68.62
+16:19:22.917 [16:19:22.917] RISK_DEBUG_POST: Written=$68.62 | ReadFromFile=$150.00 | Using=$150.00
+16:19:22.918 [16:19:22.918] QTY_DEBUG: Risk=$150.00 | SL_Ticks=80.19 | TickVal=$0.50 | CalcQty=3.74 | MaxQty=100 | MinQty=2
+16:19:23.174 [16:19:23.174] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:23.174 [16:19:23.174] RISK_DEBUG_ATR: ATR=$34.31 | ScaledRisk=$68.62
+16:19:23.174 [16:19:23.174] RISK_DEBUG_POST: Written=$68.62 | ReadFromFile=$150.00 | Using=$150.00
+16:19:23.175 [16:19:23.175] QTY_DEBUG: Risk=$150.00 | SL_Ticks=80.41 | TickVal=$0.50 | CalcQty=3.73 | MaxQty=100 | MinQty=2
+16:19:23.425 [16:19:23.425] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:23.425 [16:19:23.425] RISK_DEBUG_ATR: ATR=$35.02 | ScaledRisk=$70.05
+16:19:23.426 [16:19:23.426] RISK_DEBUG_POST: Written=$70.05 | ReadFromFile=$150.00 | Using=$150.00
+16:19:23.427 [16:19:23.427] QTY_DEBUG: Risk=$150.00 | SL_Ticks=80.95 | TickVal=$0.50 | CalcQty=3.71 | MaxQty=100 | MinQty=2
+16:19:23.698 [16:19:23.698] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:23.699 [16:19:23.699] RISK_DEBUG_ATR: ATR=$35.56 | ScaledRisk=$71.12
+16:19:23.699 [16:19:23.699] RISK_DEBUG_POST: Written=$71.12 | ReadFromFile=$150.00 | Using=$150.00
+16:19:23.699 [16:19:23.699] QTY_DEBUG: Risk=$150.00 | SL_Ticks=81.33 | TickVal=$0.50 | CalcQty=3.69 | MaxQty=100 | MinQty=2
+16:19:23.963 [16:19:23.963] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:23.964 [16:19:23.964] RISK_DEBUG_ATR: ATR=$35.56 | ScaledRisk=$71.12
+16:19:23.964 [16:19:23.964] RISK_DEBUG_POST: Written=$71.12 | ReadFromFile=$150.00 | Using=$150.00
+16:19:23.964 [16:19:23.964] QTY_DEBUG: Risk=$150.00 | SL_Ticks=81.45 | TickVal=$0.50 | CalcQty=3.68 | MaxQty=100 | MinQty=2
+16:19:24.216 [16:19:24.216] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:24.216 [16:19:24.216] RISK_DEBUG_ATR: ATR=$35.56 | ScaledRisk=$71.12
+16:19:24.216 [16:19:24.216] RISK_DEBUG_POST: Written=$71.12 | ReadFromFile=$150.00 | Using=$150.00
+16:19:24.216 [16:19:24.216] QTY_DEBUG: Risk=$150.00 | SL_Ticks=81.88 | TickVal=$0.50 | CalcQty=3.66 | MaxQty=100 | MinQty=2
+16:19:24.505 [16:19:24.505] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:24.512 [16:19:24.512] RISK_DEBUG_ATR: ATR=$35.56 | ScaledRisk=$71.12
+16:19:24.512 [16:19:24.512] RISK_DEBUG_POST: Written=$71.12 | ReadFromFile=$150.00 | Using=$150.00
+16:19:24.513 [16:19:24.513] QTY_DEBUG: Risk=$150.00 | SL_Ticks=82.14 | TickVal=$0.50 | CalcQty=3.65 | MaxQty=100 | MinQty=2
+16:19:24.768 [16:19:24.768] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:24.768 [16:19:24.768] RISK_DEBUG_ATR: ATR=$35.56 | ScaledRisk=$71.12
+16:19:24.769 [16:19:24.769] RISK_DEBUG_POST: Written=$71.12 | ReadFromFile=$150.00 | Using=$150.00
+16:19:24.769 [16:19:24.769] QTY_DEBUG: Risk=$150.00 | SL_Ticks=82.20 | TickVal=$0.50 | CalcQty=3.65 | MaxQty=100 | MinQty=2
+16:19:25.026 [16:19:25.026] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:25.026 [16:19:25.026] RISK_DEBUG_ATR: ATR=$33.81 | ScaledRisk=$67.61
+16:19:25.027 [16:19:25.027] RISK_DEBUG_POST: Written=$67.61 | ReadFromFile=$150.00 | Using=$150.00
+16:19:25.027 [16:19:25.027] QTY_DEBUG: Risk=$150.00 | SL_Ticks=82.80 | TickVal=$0.50 | CalcQty=3.62 | MaxQty=100 | MinQty=2
+16:19:25.279 [16:19:25.279] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:25.279 [16:19:25.279] RISK_DEBUG_ATR: ATR=$34.34 | ScaledRisk=$68.68
+16:19:25.279 [16:19:25.279] RISK_DEBUG_POST: Written=$68.68 | ReadFromFile=$150.00 | Using=$150.00
+16:19:25.279 [16:19:25.279] QTY_DEBUG: Risk=$150.00 | SL_Ticks=83.11 | TickVal=$0.50 | CalcQty=3.61 | MaxQty=100 | MinQty=2
+16:19:25.532 [16:19:25.532] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:25.533 [16:19:25.533] RISK_DEBUG_ATR: ATR=$34.59 | ScaledRisk=$69.18
+16:19:25.533 [16:19:25.533] RISK_DEBUG_POST: Written=$69.18 | ReadFromFile=$150.00 | Using=$150.00
+16:19:25.533 [16:19:25.533] QTY_DEBUG: Risk=$150.00 | SL_Ticks=83.26 | TickVal=$0.50 | CalcQty=3.60 | MaxQty=100 | MinQty=2
+16:19:25.786 [16:19:25.786] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+16:19:25.787 [16:19:25.787] RISK_DEBUG_ATR: ATR=$34.98 | ScaledRisk=$69.97
+16:19:25.787 [16:19:25.787] RISK_DEBUG_POST: Written=$69.97 | ReadFromFile=$150.00 | Using=$150.00
+16:19:25.787 [16:19:25.787] QTY_DEBUG: Risk=$150.00 | SL_Ticks=83.46 | TickVal=$0.50 | CalcQty=3.59 | MaxQty=100 | MinQty=2
+16:19:25.962 [16:19:25.962] NinjaTrader.NinjaScript.TimeSeries Entry Filled (EntryA+_Short_02) Qty=1. State -> PositionActive. TradeOriginalQty=1
+16:19:25.962 [16:19:25.962] 20/1/25 9:40:00 a. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+16:19:25.963 [16:19:25.963] PROTECTION_RESET: Cleared order references for new trade
+16:19:25.975 [16:19:25.975] NinjaTrader.NinjaScript.TimeSeries DELTA CAPTURE: Entry Delta=0 Direction=1
+16:19:25.977 [16:19:25.977] DIAG_EXEC: Name=EntryA+_Short_02 Qty=1 | Position.MP=Short Arg.MP=Short | State=PositionActive
+16:19:25.977 [16:19:25.977] ==========================================================================================
+16:19:25.977 [16:19:25.977]    TRADE START: #2 | Short | 20/1/25 9:40:00 a. m. | Price: 21635.75
+16:19:25.977 [16:19:25.977] ==========================================================================================
+16:19:25.977 [16:19:25.977] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #2 started - Short @ 21635.75
+16:19:25.978 [16:19:25.978] 20/1/25 9:40:00 a. m. REPLAY_SYNC_DELAY: Account.Positions=0 but Position.Quantity=1. Proceeding with protection (replay sync delay).
+16:19:25.978 [16:19:25.978] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Short FilledQty=1 Position.Qty=1 Position.MarketPosition=Short
+16:19:25.979 [16:19:25.979] 20/1/25 9:40:00 a. m. TRADE VWAP: Initialized (Managed)
+16:19:25.980 [16:19:25.980]    -> Protection Alloc: Filled=1 | ForTP1=1 (Need:1) | ForTP2=0 (Need:0)
+16:19:25.980 [16:19:25.980] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=21589.6575668859 | targetGlobalVWAP=21589.6575668859 | avgEntry=21635.75
+16:19:25.980 [16:19:25.980] 20/1/25 9:40:00 a. m. | SEARCH_OPPOSITE: Looking for 'Asia Low' from SAME DAY as 'Asia High' (RefDate: 2025-01-19)
+16:19:25.980 [16:19:25.980] FORCE TARGET: Using Validated Price: 21527.25
+16:19:25.980 [16:19:25.980] TP CALC (Short): Entry=21635.75 | GlobalVWAP=21589.6575668859 | ZoneOpp=21527.25 (Val=21527.25) | TP1=21589.6575668859 TP2=21527.25 | Selected=21589.75
+16:19:25.980 [16:19:25.980] SL_CREATE_DEBUG (MGR): Instrument=MNQ 03-25 Direction=Short Tag=SL_Short_02 Action=BuyToCover Price=21656.5 Qty=1
+16:19:26.009 [16:19:26.009] SL CREATED: SL_Short_02 @ 21656.5 Qty=1 Risk=$41.50
+16:19:26.035 [16:19:26.035] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Submitted Price=21589.75 Qty=1
+16:19:26.035 [16:19:26.035]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:26.036 [16:19:26.036] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Accepted Price=21589.75 Qty=1
+16:19:26.036 [16:19:26.036]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:26.037 [16:19:26.037] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Working Price=21589.75 Qty=1
+16:19:26.037 [16:19:26.037]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:26.038 [16:19:26.038] TP1 CREATED: TP1_Short_02 @ 21589.75 Qty=1
+16:19:26.038 [16:19:26.038] 20/1/25 9:40:00 a. m. EnsureProtection COMPLETE
+16:19:26.110 [16:19:26.110] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Short_02) Qty=3. New TradeOriginalQty=4
+16:19:26.111 [16:19:26.111] DIAG_EXEC: Name=EntryA+_Short_02 Qty=3 | Position.MP=Short Arg.MP=Short | State=PositionActive
+16:19:26.112 [16:19:26.112] ==========================================================================================
+16:19:26.112 [16:19:26.112]    TRADE START: #2 | Short | 20/1/25 9:40:00 a. m. | Price: 21635.75
+16:19:26.112 [16:19:26.112] ==========================================================================================
+16:19:26.113 [16:19:26.113] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #2 started - Short @ 21635.75
+16:19:26.113 [16:19:26.113] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Short FilledQty=3 Position.Qty=4 Position.MarketPosition=Short
+16:19:26.114 [16:19:26.114]    -> Protection Alloc: Filled=3 | ForTP1=1 (Need:1) | ForTP2=2 (Need:2)
+16:19:26.114 [16:19:26.114] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=21589.6581930701 | targetGlobalVWAP=21589.6581930701 | avgEntry=21635.75
+16:19:26.115 [16:19:26.115] FORCE TARGET: Using Validated Price: 21527.25
+16:19:26.115 [16:19:26.115] TP CALC (Short): Entry=21635.75 | GlobalVWAP=21589.6581930701 | ZoneOpp=21527.25 (Val=21527.25) | TP1=21589.6581930701 TP2=21527.25 | Selected=21589.75
+16:19:26.116 [16:19:26.116] SL UPDATE (Partial Fill): Old Qty=1 New Qty=4
+16:19:26.116 [16:19:26.116] TP UPDATE (TP1): Old Qty=1/Price=21589.75 -> New Qty=2/Price=21589.75 (ID=11106)
+16:19:26.116 [16:19:26.116] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangePending Price=21589.75 Qty=1
+16:19:26.118 [16:19:26.118]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:26.131 [16:19:26.131] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangeSubmitted Price=21589.75 Qty=2
+16:19:26.131 [16:19:26.131]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:26.132 [16:19:26.132] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Accepted Price=21589.75 Qty=2
+16:19:26.132 [16:19:26.132]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:26.133 [16:19:26.133] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Working Price=21589.75 Qty=2
+16:19:26.133 [16:19:26.133]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:26.141 [16:19:26.141] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=21589.6581930701 | targetGlobalVWAP=21589.6581930701 | avgEntry=21635.75
+16:19:26.142 [16:19:26.142] FORCE TARGET: Using Validated Price: 21527.25
+16:19:26.142 [16:19:26.142] TP CALC (Short): Entry=21635.75 | GlobalVWAP=21589.6581930701 | ZoneOpp=21527.25 (Val=21527.25) | TP1=21589.6581930701 TP2=21527.25 | Selected=21527.25
+16:19:26.142 [16:19:26.142] SL SKIPPED: Already created in current entry (duplicate prevention)
+16:19:26.157 [16:19:26.157] ORDER_UPDATE_TP: Name='TP2_Short_02' State=Submitted Price=21527.25 Qty=2
+16:19:26.158 [16:19:26.158]   -> Updated tp2Order reference (ID=70392fa88dd34cd189063dfdfdef1293)
+16:19:26.158 [16:19:26.158] ORDER_UPDATE_TP: Name='TP2_Short_02' State=Accepted Price=21527.25 Qty=2
+16:19:26.158 [16:19:26.158]   -> Updated tp2Order reference (ID=70392fa88dd34cd189063dfdfdef1293)
+16:19:26.159 [16:19:26.159] ORDER_UPDATE_TP: Name='TP2_Short_02' State=Working Price=21527.25 Qty=2
+16:19:26.159 [16:19:26.159]   -> Updated tp2Order reference (ID=70392fa88dd34cd189063dfdfdef1293)
+16:19:26.160 [16:19:26.160] TP2 CREATED: TP2_Short_02 @ 21527.25 Qty=2
+16:19:26.160 [16:19:26.160] 20/1/25 9:40:00 a. m. EnsureProtection COMPLETE
+16:19:26.161 [16:19:26.161] EXEC_FILL_DEBUG: Order=57368791 Name=EntryA+_Short_02 State=Filled Price=21635.75 | tp1Order=37924672 tp1Name=TP1_Short_02
+16:19:30.248 [16:19:30.248] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangePending Price=21589.75 Qty=2
+16:19:30.249 [16:19:30.249]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:30.249 [16:19:30.249] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangeSubmitted Price=21590 Qty=2
+16:19:30.250 [16:19:30.250]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:30.251 [16:19:30.251] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Accepted Price=21590 Qty=2
+16:19:30.251 [16:19:30.251]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:30.259 [16:19:30.259] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Working Price=21590 Qty=2
+16:19:30.259 [16:19:30.259]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:34.216 [16:19:34.216] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangePending Price=21590 Qty=2
+16:19:34.216 [16:19:34.216]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:34.217 [16:19:34.217] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangeSubmitted Price=21590.25 Qty=2
+16:19:34.218 [16:19:34.218]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:34.218 [16:19:34.218] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Accepted Price=21590.25 Qty=2
+16:19:34.219 [16:19:34.219]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:34.220 [16:19:34.220] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Working Price=21590.25 Qty=2
+16:19:34.220 [16:19:34.220]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:38.049 [16:19:38.049] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangePending Price=21590.25 Qty=2
+16:19:38.049 [16:19:38.049]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:38.051 [16:19:38.051] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangeSubmitted Price=21590.5 Qty=2
+16:19:38.051 [16:19:38.051]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:38.051 [16:19:38.051] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Accepted Price=21590.5 Qty=2
+16:19:38.059 [16:19:38.059]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:38.060 [16:19:38.060] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Working Price=21590.5 Qty=2
+16:19:38.060 [16:19:38.060]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:40.122 [16:19:40.122] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangePending Price=21590.5 Qty=2
+16:19:40.123 [16:19:40.123]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:40.124 [16:19:40.124] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangeSubmitted Price=21590.75 Qty=2
+16:19:40.125 [16:19:40.125]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:40.125 [16:19:40.125] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Accepted Price=21590.75 Qty=2
+16:19:40.125 [16:19:40.125]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:40.125 [16:19:40.125] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Working Price=21590.75 Qty=2
+16:19:40.127 [16:19:40.127]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:42.270 [16:19:42.270] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangePending Price=21590.75 Qty=2
+16:19:42.272 [16:19:42.272]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:42.272 [16:19:42.272] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangeSubmitted Price=21591 Qty=2
+16:19:42.273 [16:19:42.273]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:42.273 [16:19:42.273] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Accepted Price=21591 Qty=2
+16:19:42.274 [16:19:42.274]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:42.274 [16:19:42.274] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Working Price=21591 Qty=2
+16:19:42.275 [16:19:42.275]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:44.361 [16:19:44.361] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangePending Price=21591 Qty=2
+16:19:44.362 [16:19:44.362]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:44.363 [16:19:44.363] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangeSubmitted Price=21591.25 Qty=2
+16:19:44.363 [16:19:44.363]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:44.364 [16:19:44.364] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Accepted Price=21591.25 Qty=2
+16:19:44.365 [16:19:44.365]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:44.365 [16:19:44.365] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Working Price=21591.25 Qty=2
+16:19:44.366 [16:19:44.366]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:46.165 [16:19:46.165] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangePending Price=21591.25 Qty=2
+16:19:46.165 [16:19:46.165]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:46.166 [16:19:46.166] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangeSubmitted Price=21591.5 Qty=2
+16:19:46.166 [16:19:46.166]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:46.166 [16:19:46.166] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Accepted Price=21591.5 Qty=2
+16:19:46.167 [16:19:46.167]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:46.168 [16:19:46.168] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Working Price=21591.5 Qty=2
+16:19:46.168 [16:19:46.168]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:48.189 [16:19:48.189] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangePending Price=21591.5 Qty=2
+16:19:48.190 [16:19:48.190]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:48.192 [16:19:48.192] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangeSubmitted Price=21591.75 Qty=2
+16:19:48.192 [16:19:48.192]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:48.193 [16:19:48.193] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Accepted Price=21591.75 Qty=2
+16:19:48.193 [16:19:48.193]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:48.194 [16:19:48.194] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Working Price=21591.75 Qty=2
+16:19:48.194 [16:19:48.194]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:50.175 [16:19:50.175] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangePending Price=21591.75 Qty=2
+16:19:50.177 [16:19:50.177]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:50.177 [16:19:50.177] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangeSubmitted Price=21592 Qty=2
+16:19:50.178 [16:19:50.178]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:50.179 [16:19:50.179] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Accepted Price=21592 Qty=2
+16:19:50.179 [16:19:50.179]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:50.179 [16:19:50.179] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Working Price=21592 Qty=2
+16:19:50.179 [16:19:50.179]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:51.935 [16:19:51.935] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangePending Price=21592 Qty=2
+16:19:51.936 [16:19:51.936]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:51.936 [16:19:51.936] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangeSubmitted Price=21592.25 Qty=2
+16:19:51.937 [16:19:51.937]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:51.937 [16:19:51.937] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Accepted Price=21592.25 Qty=2
+16:19:51.937 [16:19:51.937]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:51.938 [16:19:51.938] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Working Price=21592.25 Qty=2
+16:19:51.938 [16:19:51.938]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:53.084 [16:19:53.084] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #2 closed - SL_Short_02 PnL=-83.00
+16:19:53.086 [16:19:53.086] NinjaTrader.NinjaScript.TimeSeries Partial Execution (SL_Short_02). Position Active. Qty=2
+16:19:53.123 [16:19:53.123] EXEC_FILL_DEBUG: Order=39045585 Name=SL_Short_02 State=Filled Price=21656.625 | tp1Order=37924672 tp1Name=TP1_Short_02
+16:19:53.123 [16:19:53.123] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #2.2 closed - SL_Short_02 PnL=-84.00
+16:19:53.124 [16:19:53.124] NinjaTrader.NinjaScript.TimeSeries Position Closed (SL_Short_02). Resetting to Idle.
+16:19:53.124 [16:19:53.124] NinjaTrader.NinjaScript.TimeSeries VWAP RETRY: Waiting for price to break 21656.25 for VWAP#3
+16:19:53.124 [16:19:53.124] ORDER_UPDATE_TP: Name='TP1_Short_02' State=CancelPending Price=21592.25 Qty=2
+16:19:53.125 [16:19:53.125]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:53.125 [16:19:53.125] ORDER_UPDATE_TP: Name='TP1_Short_02' State=CancelSubmitted Price=21592.25 Qty=2
+16:19:53.126 [16:19:53.126]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:53.148 [16:19:53.148] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Cancelled Price=21592.25 Qty=2
+16:19:53.148 [16:19:53.148]   -> Updated tp1Order reference (ID=c805f96eb7ac48b886aad50e872e8c11)
+16:19:53.149 [16:19:53.149] CLEANUP: Cancelled orphan tp1Order
+16:19:53.149 [16:19:53.149] ORDER_UPDATE_TP: Name='TP2_Short_02' State=CancelPending Price=21527.25 Qty=2
+16:19:53.149 [16:19:53.149]   -> Updated tp2Order reference (ID=70392fa88dd34cd189063dfdfdef1293)
+16:19:53.150 [16:19:53.150] ORDER_UPDATE_TP: Name='TP2_Short_02' State=CancelSubmitted Price=21527.25 Qty=2
+16:19:53.151 [16:19:53.151]   -> Updated tp2Order reference (ID=70392fa88dd34cd189063dfdfdef1293)
+16:19:53.183 [16:19:53.183] ORDER_UPDATE_TP: Name='TP2_Short_02' State=Cancelled Price=21527.25 Qty=2
+16:19:53.183 [16:19:53.183]   -> Updated tp2Order reference (ID=70392fa88dd34cd189063dfdfdef1293)
+16:19:53.184 [16:19:53.184] CLEANUP: Cancelled orphan tp2Order
+16:19:53.188 [16:19:53.188] 13/1/26 4:19:53 p. m. TRADE CLOSED: TR_SHORT at 21635.75, Exit at 21656.75, Profit: $-87,80
+16:19:53.198 [16:19:53.198] 20/1/25 9:52:00 a. m. VWAP RETRY TRIGGERED: Price broke 21656.25. Starting attempt #3
+16:19:53.599 [16:19:53.599] RE-ANCHOR: New High @ 21656.75 (Setup: Asia High)
+16:19:53.650 [16:19:53.650] RE-ANCHOR: New High @ 21657 (Setup: Asia High)
+16:19:53.652 [16:19:53.652] RE-ANCHOR: New High @ 21657.25 (Setup: Asia High)
+16:19:53.665 [16:19:53.665] RE-ANCHOR: New High @ 21657.5 (Setup: Asia High)
+16:19:53.670 [16:19:53.670] RE-ANCHOR: New High @ 21657.75 (Setup: Asia High)
+16:19:53.677 [16:19:53.677] RE-ANCHOR: New High @ 21658 (Setup: Asia High)
+16:19:53.691 [16:19:53.691] RE-ANCHOR: New High @ 21658.25 (Setup: Asia High)
+16:19:53.694 [16:19:53.694] RE-ANCHOR: New High @ 21658.5 (Setup: Asia High)
+16:19:53.700 [16:19:53.700] RE-ANCHOR: New High @ 21658.75 (Setup: Asia High)
+16:19:53.704 [16:19:53.704] RE-ANCHOR: New High @ 21659 (Setup: Asia High)
+16:19:55.130 [16:19:55.130] RE-ANCHOR: New High @ 21659.25 (Setup: Asia High)
+16:19:55.166 [16:19:55.166] RE-ANCHOR: New High @ 21659.5 (Setup: Asia High)
+16:19:55.170 [16:19:55.170] RE-ANCHOR: New High @ 21659.75 (Setup: Asia High)
+16:19:55.184 [16:19:55.184] RE-ANCHOR: New High @ 21660 (Setup: Asia High)
+16:19:55.338 [16:19:55.338] RE-ANCHOR: New High @ 21660.25 (Setup: Asia High)
+16:19:55.343 [16:19:55.343] RE-ANCHOR: New High @ 21660.5 (Setup: Asia High)
+16:19:55.347 [16:19:55.347] RE-ANCHOR: New High @ 21660.75 (Setup: Asia High)
+16:19:55.352 [16:19:55.352] RE-ANCHOR: New High @ 21661 (Setup: Asia High)
+16:19:55.476 [16:19:55.476] RE-ANCHOR: New High @ 21661.25 (Setup: Asia High)
+16:19:55.570 [16:19:55.570] RE-ANCHOR: New High @ 21661.5 (Setup: Asia High)
+16:19:55.575 [16:19:55.575] RE-ANCHOR: New High @ 21661.75 (Setup: Asia High)
+16:19:55.597 [16:19:55.597] RE-ANCHOR: New High @ 21662 (Setup: Asia High)
+16:19:55.614 [16:19:55.614] RE-ANCHOR: New High @ 21662.25 (Setup: Asia High)
+16:19:55.619 [16:19:55.619] RE-ANCHOR: New High @ 21662.5 (Setup: Asia High)
+16:19:55.632 [16:19:55.632] RE-ANCHOR: New High @ 21662.75 (Setup: Asia High)
+16:19:55.636 [16:19:55.636] RE-ANCHOR: New High @ 21663 (Setup: Asia High)
+16:19:55.651 [16:19:55.650] RE-ANCHOR: New High @ 21663.25 (Setup: Asia High)
+16:19:55.656 [16:19:55.656] RE-ANCHOR: New High @ 21663.5 (Setup: Asia High)
+16:19:55.734 [16:19:55.734] RE-ANCHOR: New High @ 21663.75 (Setup: Asia High)
+16:19:55.745 [16:19:55.745] RE-ANCHOR: New High @ 21664 (Setup: Asia High)
+16:19:55.763 [16:19:55.763] RE-ANCHOR: New High @ 21664.25 (Setup: Asia High)
+16:19:55.780 [16:19:55.780] RE-ANCHOR: New High @ 21664.5 (Setup: Asia High)
+16:19:56.208 [16:19:56.208] RE-ANCHOR: New High @ 21664.75 (Setup: Asia High)
+16:19:56.210 [16:19:56.210] RE-ANCHOR: New High @ 21665 (Setup: Asia High)
+16:19:56.252 [16:19:56.252] RE-ANCHOR: New High @ 21665.25 (Setup: Asia High)
+16:19:56.258 [16:19:56.258] RE-ANCHOR: New High @ 21665.5 (Setup: Asia High)
+16:19:56.270 [16:19:56.270] RE-ANCHOR: New High @ 21665.75 (Setup: Asia High)
+16:19:56.318 [16:19:56.318] RE-ANCHOR: New High @ 21666 (Setup: Asia High)
+16:19:56.380 [16:19:56.380] RE-ANCHOR: New High @ 21666.25 (Setup: Asia High)
+16:19:56.385 [16:19:56.385] RE-ANCHOR: New High @ 21666.5 (Setup: Asia High)
+16:19:56.392 [16:19:56.392] RE-ANCHOR: New High @ 21666.75 (Setup: Asia High)
+16:19:56.407 [16:19:56.407] RE-ANCHOR: New High @ 21667 (Setup: Asia High)
+16:19:56.413 [16:19:56.413] RE-ANCHOR: New High @ 21667.25 (Setup: Asia High)
+16:19:56.469 [16:19:56.469] RE-ANCHOR: New High @ 21667.5 (Setup: Asia High)
+16:19:56.473 [16:19:56.473] RE-ANCHOR: New High @ 21667.75 (Setup: Asia High)
+16:19:56.503 [16:19:56.503] RE-ANCHOR: New High @ 21668 (Setup: Asia High)
+16:19:56.506 [16:19:56.506] RE-ANCHOR: New High @ 21668.25 (Setup: Asia High)
+16:19:56.509 [16:19:56.509] RE-ANCHOR: New High @ 21668.5 (Setup: Asia High)
+16:19:57.459 [16:19:57.459] RE-ANCHOR: New High @ 21668.75 (Setup: Asia High)
+16:19:57.464 [16:19:57.464] RE-ANCHOR: New High @ 21669 (Setup: Asia High)
+16:19:57.479 [16:19:57.479] RE-ANCHOR: New High @ 21669.25 (Setup: Asia High)
+16:19:57.485 [16:19:57.485] RE-ANCHOR: New High @ 21669.5 (Setup: Asia High)
+16:19:57.492 [16:19:57.492] RE-ANCHOR: New High @ 21669.75 (Setup: Asia High)
+16:19:57.512 [16:19:57.512] RE-ANCHOR: New High @ 21670 (Setup: Asia High)
+16:19:57.622 [16:19:57.622] RE-ANCHOR: New High @ 21670.25 (Setup: Asia High)
+16:19:57.636 [16:19:57.636] RE-ANCHOR: New High @ 21670.5 (Setup: Asia High)
+16:19:57.647 [16:19:57.647] RE-ANCHOR: New High @ 21670.75 (Setup: Asia High)
+16:19:57.654 [16:19:57.654] RE-ANCHOR: New High @ 21671 (Setup: Asia High)
+16:19:57.666 [16:19:57.666] RE-ANCHOR: New High @ 21671.25 (Setup: Asia High)
+16:19:57.670 [16:19:57.670] RE-ANCHOR: New High @ 21671.5 (Setup: Asia High)
+16:19:57.797 [16:19:57.797] RE-ANCHOR: New High @ 21671.75 (Setup: Asia High)
+16:19:57.800 [16:19:57.800] RE-ANCHOR: New High @ 21672 (Setup: Asia High)
+16:19:57.854 [16:19:57.854] RE-ANCHOR: New High @ 21672.25 (Setup: Asia High)
+16:19:57.857 [16:19:57.857] RE-ANCHOR: New High @ 21672.5 (Setup: Asia High)
+16:19:57.889 [16:19:57.889] RE-ANCHOR: New High @ 21672.75 (Setup: Asia High)
+16:19:57.890 [16:19:57.890] SWITCH_EVAL: Current=Asia High@21576.75 New=USA High@21672.5 Delta=95.75000 TickSize=0.25
+16:19:57.890 [16:19:57.890] 20/1/25 9:54:00 a. m. SWITCH: New Trigger on USA High overrides Asia High
+16:19:57.891 [16:19:57.891] 20/1/25 9:54:00 a. m. ENTRY ATTEMPT #1/20 on USA High (Deepest Selection)
+16:19:57.891 [16:19:57.891] EXTERNAL LEVEL: USA High @ 21672.5 (Protected by: Europe High @ 21672.75)
+16:19:57.893 [16:19:57.893] RE-ANCHOR: New High @ 21673 (Setup: USA High)
+16:19:57.904 [16:19:57.904] RE-ANCHOR: New High @ 21673.25 (Setup: USA High)
+16:19:57.920 [16:19:57.920] RE-ANCHOR: New High @ 21673.5 (Setup: USA High)
+16:19:57.949 [16:19:57.949] RE-ANCHOR: New High @ 21673.75 (Setup: USA High)
+16:19:57.958 [16:19:57.958] RE-ANCHOR: New High @ 21674 (Setup: USA High)
+16:19:58.041 [16:19:58.041] RE-ANCHOR: New High @ 21674.25 (Setup: USA High)
+16:19:58.045 [16:19:58.045] RE-ANCHOR: New High @ 21674.5 (Setup: USA High)
+16:19:58.081 [16:19:58.081] RE-ANCHOR: New High @ 21674.75 (Setup: USA High)
+16:19:58.092 [16:19:58.092] RE-ANCHOR: New High @ 21675 (Setup: USA High)
+16:19:59.164 [16:19:59.164] RE-ANCHOR: New High @ 21675.25 (Setup: USA High)
+16:19:59.167 [16:19:59.167] RE-ANCHOR: New High @ 21675.5 (Setup: USA High)
+16:19:59.175 [16:19:59.175] RE-ANCHOR: New High @ 21675.75 (Setup: USA High)
+16:19:59.181 [16:19:59.181] RE-ANCHOR: New High @ 21676 (Setup: USA High)
+16:20:00.457 [16:20:00.457] RE-ANCHOR: New High @ 21676.25 (Setup: USA High)
+16:20:02.849 [16:20:02.849] RE-ANCHOR: New High @ 21676.5 (Setup: USA High)
+16:20:02.862 [16:20:02.862] RE-ANCHOR: New High @ 21676.75 (Setup: USA High)
+16:20:02.866 [16:20:02.866] RE-ANCHOR: New High @ 21677 (Setup: USA High)
+16:20:02.887 [16:20:02.887] RE-ANCHOR: New High @ 21677.25 (Setup: USA High)
+16:20:02.983 [16:20:02.983] RE-ANCHOR: New High @ 21677.5 (Setup: USA High)
+16:20:02.991 [16:20:02.991] RE-ANCHOR: New High @ 21677.75 (Setup: USA High)
+16:20:03.002 [16:20:03.002] RE-ANCHOR: New High @ 21678 (Setup: USA High)
+16:20:03.025 [16:20:03.025] RE-ANCHOR: New High @ 21678.25 (Setup: USA High)
+16:20:03.027 [16:20:03.027] RE-ANCHOR: New High @ 21678.5 (Setup: USA High)
+16:20:03.062 [16:20:03.062] RE-ANCHOR: New High @ 21678.75 (Setup: USA High)
+16:20:03.072 [16:20:03.072] RE-ANCHOR: New High @ 21679 (Setup: USA High)
+16:20:03.087 [16:20:03.087] RE-ANCHOR: New High @ 21679.25 (Setup: USA High)
+16:20:03.099 [16:20:03.099] RE-ANCHOR: New High @ 21679.5 (Setup: USA High)
+16:20:03.111 [16:20:03.111] RE-ANCHOR: New High @ 21679.75 (Setup: USA High)
+16:20:03.152 [16:20:03.152] RE-ANCHOR: New High @ 21680 (Setup: USA High)
+16:20:03.200 [16:20:03.200] RE-ANCHOR: New High @ 21680.25 (Setup: USA High)
+16:20:03.201 [16:20:03.201] SWITCH_EVAL: Current=USA High@21897 New=Europe High@21680 Delta=217.00000 TickSize=0.25
+16:20:03.201 [16:20:03.201] 20/1/25 9:57:00 a. m. SWITCH: New Trigger on Europe High overrides USA High
+16:20:03.202 [16:20:03.202] 20/1/25 9:57:00 a. m. ENTRY ATTEMPT #1/20 on Europe High (Deepest Selection)
+16:20:03.202 [16:20:03.202] INTERNAL LEVEL (EXTREME): Europe High @ 21680 (No external protection above)
+16:20:03.210 [16:20:03.210] RE-ANCHOR: New High @ 21680.5 (Setup: Europe High)
+16:20:03.225 [16:20:03.225] RE-ANCHOR: New High @ 21680.75 (Setup: Europe High)
+16:20:03.231 [16:20:03.231] RE-ANCHOR: New High @ 21681 (Setup: Europe High)
+16:20:03.237 [16:20:03.237] RE-ANCHOR: New High @ 21681.25 (Setup: Europe High)
+16:20:03.249 [16:20:03.249] RE-ANCHOR: New High @ 21681.5 (Setup: Europe High)
+16:20:03.257 [16:20:03.257] RE-ANCHOR: New High @ 21681.75 (Setup: Europe High)
+16:20:03.264 [16:20:03.264] RE-ANCHOR: New High @ 21682 (Setup: Europe High)
+16:20:03.284 [16:20:03.284] RE-ANCHOR: New High @ 21682.25 (Setup: Europe High)
+16:20:03.293 [16:20:03.293] RE-ANCHOR: New High @ 21682.5 (Setup: Europe High)
+16:20:03.310 [16:20:03.310] RE-ANCHOR: New High @ 21682.75 (Setup: Europe High)
+16:20:03.316 [16:20:03.316] RE-ANCHOR: New High @ 21683 (Setup: Europe High)
+16:20:03.332 [16:20:03.332] RE-ANCHOR: New High @ 21683.25 (Setup: Europe High)
+16:20:03.340 [16:20:03.340] RE-ANCHOR: New High @ 21683.5 (Setup: Europe High)
+16:20:03.351 [16:20:03.351] RE-ANCHOR: New High @ 21683.75 (Setup: Europe High)
+16:20:03.361 [16:20:03.361] RE-ANCHOR: New High @ 21684 (Setup: Europe High)
+16:20:03.370 [16:20:03.370] RE-ANCHOR: New High @ 21684.25 (Setup: Europe High)
+16:20:03.373 [16:20:03.373] RE-ANCHOR: New High @ 21684.5 (Setup: Europe High)
+16:20:03.376 [16:20:03.376] RE-ANCHOR: New High @ 21684.75 (Setup: Europe High)
+16:20:03.379 [16:20:03.379] RE-ANCHOR: New High @ 21685 (Setup: Europe High)
+16:20:03.397 [16:20:03.397] RE-ANCHOR: New High @ 21685.25 (Setup: Europe High)
+16:20:03.402 [16:20:03.402] RE-ANCHOR: New High @ 21685.5 (Setup: Europe High)
+16:20:03.628 [16:20:03.628] RE-ANCHOR: New High @ 21685.75 (Setup: Europe High)
+16:20:03.638 [16:20:03.638] RE-ANCHOR: New High @ 21686 (Setup: Europe High)
+16:20:03.652 [16:20:03.651] RE-ANCHOR: New High @ 21686.25 (Setup: Europe High)
+16:20:03.749 [16:20:03.749] RE-ANCHOR: New High @ 21686.5 (Setup: Europe High)
+16:20:03.990 [16:20:03.990] RE-ANCHOR: New High @ 21686.75 (Setup: Europe High)
+16:20:04.093 [16:20:04.093] RE-ANCHOR: New High @ 21687 (Setup: Europe High)
+16:20:04.110 [16:20:04.110] RE-ANCHOR: New High @ 21687.25 (Setup: Europe High)
+16:20:04.121 [16:20:04.121] RE-ANCHOR: New High @ 21687.5 (Setup: Europe High)
+16:20:04.320 [16:20:04.320] RE-ANCHOR: New High @ 21687.75 (Setup: Europe High)
+16:20:04.329 [16:20:04.329] RE-ANCHOR: New High @ 21688 (Setup: Europe High)
+16:20:04.624 [16:20:04.624] RE-ANCHOR: New High @ 21688.25 (Setup: Europe High)
+16:20:04.659 [16:20:04.659] RE-ANCHOR: New High @ 21688.5 (Setup: Europe High)
+16:20:04.670 [16:20:04.670] RE-ANCHOR: New High @ 21688.75 (Setup: Europe High)
+16:20:04.696 [16:20:04.696] RE-ANCHOR: New High @ 21689 (Setup: Europe High)
+16:20:04.702 [16:20:04.702] RE-ANCHOR: New High @ 21689.25 (Setup: Europe High)
+16:20:04.717 [16:20:04.717] RE-ANCHOR: New High @ 21689.5 (Setup: Europe High)
+16:20:04.763 [16:20:04.763] RE-ANCHOR: New High @ 21689.75 (Setup: Europe High)
+16:20:04.764 [16:20:04.764] RE-ANCHOR: New High @ 21690 (Setup: Europe High)
+16:20:05.009 [16:20:05.009] RE-ANCHOR: New High @ 21690.25 (Setup: Europe High)
+16:20:05.011 [16:20:05.011] RE-ANCHOR: New High @ 21690.5 (Setup: Europe High)
+16:20:05.013 [16:20:05.013] RE-ANCHOR: New High @ 21690.75 (Setup: Europe High)
+16:20:05.026 [16:20:05.026] RE-ANCHOR: New High @ 21691 (Setup: Europe High)
+16:20:05.068 [16:20:05.068] RE-ANCHOR: New High @ 21691.25 (Setup: Europe High)
+16:20:05.152 [16:20:05.152] RE-ANCHOR: New High @ 21691.5 (Setup: Europe High)
+16:20:05.157 [16:20:05.157] RE-ANCHOR: New High @ 21691.75 (Setup: Europe High)
+16:20:05.491 [16:20:05.491] RE-ANCHOR: New High @ 21692 (Setup: Europe High)
+16:20:11.330 [16:20:11.330] RE-ANCHOR: New High @ 21692.25 (Setup: Europe High)
+16:20:11.335 [16:20:11.335] RE-ANCHOR: New High @ 21692.5 (Setup: Europe High)
+16:20:11.342 [16:20:11.342] RE-ANCHOR: New High @ 21692.75 (Setup: Europe High)
+16:20:11.414 [16:20:11.414] RE-ANCHOR: New High @ 21693 (Setup: Europe High)
+16:20:11.420 [16:20:11.420] RE-ANCHOR: New High @ 21693.25 (Setup: Europe High)
+16:20:14.805 [16:20:14.805] RE-ANCHOR: New High @ 21693.5 (Setup: Europe High)
+16:20:14.818 [16:20:14.818] RE-ANCHOR: New High @ 21693.75 (Setup: Europe High)
+16:20:14.820 [16:20:14.820] RE-ANCHOR: New High @ 21694 (Setup: Europe High)
+16:20:14.849 [16:20:14.849] RE-ANCHOR: New High @ 21694.25 (Setup: Europe High)
+16:20:14.874 [16:20:14.874] RE-ANCHOR: New High @ 21694.5 (Setup: Europe High)
+16:20:14.895 [16:20:14.895] RE-ANCHOR: New High @ 21694.75 (Setup: Europe High)
+16:20:14.933 [16:20:14.933] RE-ANCHOR: New High @ 21695 (Setup: Europe High)
+16:20:15.006 [16:20:15.006] RE-ANCHOR: New High @ 21695.25 (Setup: Europe High)
+16:20:15.212 [16:20:15.212] RE-ANCHOR: New High @ 21695.5 (Setup: Europe High)
+16:20:15.265 [16:20:15.265] RE-ANCHOR: New High @ 21695.75 (Setup: Europe High)
+16:20:15.712 [16:20:15.712] RE-ANCHOR: New High @ 21696 (Setup: Europe High)
+16:20:15.722 [16:20:15.722] RE-ANCHOR: New High @ 21696.25 (Setup: Europe High)
+16:20:15.725 [16:20:15.725] RE-ANCHOR: New High @ 21696.5 (Setup: Europe High)
+16:20:15.727 [16:20:15.727] RE-ANCHOR: New High @ 21696.75 (Setup: Europe High)
+16:20:15.733 [16:20:15.733] RE-ANCHOR: New High @ 21697 (Setup: Europe High)
+16:20:15.758 [16:20:15.758] RE-ANCHOR: New High @ 21697.25 (Setup: Europe High)
+16:20:15.761 [16:20:15.761] RE-ANCHOR: New High @ 21697.5 (Setup: Europe High)
+16:20:15.770 [16:20:15.770] RE-ANCHOR: New High @ 21697.75 (Setup: Europe High)
+16:20:15.775 [16:20:15.775] RE-ANCHOR: New High @ 21698 (Setup: Europe High)
+16:20:15.887 [16:20:15.887] RE-ANCHOR: New High @ 21698.25 (Setup: Europe High)
+16:20:16.033 [16:20:16.033] RE-ANCHOR: New High @ 21698.5 (Setup: Europe High)
+16:20:16.054 [16:20:16.054] RE-ANCHOR: New High @ 21698.75 (Setup: Europe High)
+16:20:16.060 [16:20:16.060] RE-ANCHOR: New High @ 21699 (Setup: Europe High)
+16:20:16.081 [16:20:16.081] RE-ANCHOR: New High @ 21699.25 (Setup: Europe High)
+16:20:16.096 [16:20:16.096] RE-ANCHOR: New High @ 21699.5 (Setup: Europe High)
+16:20:16.133 [16:20:16.133] RE-ANCHOR: New High @ 21699.75 (Setup: Europe High)
+16:20:16.237 [16:20:16.237] RE-ANCHOR: New High @ 21700 (Setup: Europe High)
+16:20:16.359 [16:20:16.359] RE-ANCHOR: New High @ 21700.25 (Setup: Europe High)
+16:20:16.369 [16:20:16.369] RE-ANCHOR: New High @ 21700.5 (Setup: Europe High)
+16:20:16.370 [16:20:16.370] RE-ANCHOR: New High @ 21700.75 (Setup: Europe High)
+16:20:16.400 [16:20:16.400] RE-ANCHOR: New High @ 21701 (Setup: Europe High)
+16:20:16.417 [16:20:16.417] RE-ANCHOR: New High @ 21701.25 (Setup: Europe High)
+16:20:16.419 [16:20:16.419] RE-ANCHOR: New High @ 21701.5 (Setup: Europe High)
+16:20:16.420 [16:20:16.420] RE-ANCHOR: New High @ 21701.75 (Setup: Europe High)
+16:20:16.434 [16:20:16.434] RE-ANCHOR: New High @ 21702 (Setup: Europe High)
+16:20:16.442 [16:20:16.442] RE-ANCHOR: New High @ 21702.25 (Setup: Europe High)
+16:20:18.266 [16:20:18.266] RE-ANCHOR: New High @ 21702.5 (Setup: Europe High)
+16:20:18.278 [16:20:18.278] RE-ANCHOR: New High @ 21702.75 (Setup: Europe High)
+16:20:18.323 [16:20:18.323] RE-ANCHOR: New High @ 21703 (Setup: Europe High)
+16:20:18.341 [16:20:18.341] RE-ANCHOR: New High @ 21703.25 (Setup: Europe High)
+16:20:19.227 [16:20:19.227] RE-ANCHOR: New High @ 21703.5 (Setup: Europe High)
+16:20:25.437 [16:20:25.437] RE-ANCHOR: New High @ 21703.75 (Setup: Europe High)
+16:20:25.442 [16:20:25.442] RE-ANCHOR: New High @ 21704 (Setup: Europe High)
+16:20:25.463 [16:20:25.463] RE-ANCHOR: New High @ 21704.25 (Setup: Europe High)
+16:21:14.433 [16:21:14.433] RE-ANCHOR: New High @ 21704.5 (Setup: Europe High)
+16:21:14.472 [16:21:14.472] RE-ANCHOR: New High @ 21704.75 (Setup: Europe High)
+16:21:14.477 [16:21:14.477] RE-ANCHOR: New High @ 21705 (Setup: Europe High)
+16:21:14.501 [16:21:14.501] RE-ANCHOR: New High @ 21705.25 (Setup: Europe High)
+16:21:14.515 [16:21:14.515] RE-ANCHOR: New High @ 21705.5 (Setup: Europe High)
+16:21:14.524 [16:21:14.524] RE-ANCHOR: New High @ 21705.75 (Setup: Europe High)
+16:21:14.548 [16:21:14.548] RE-ANCHOR: New High @ 21706 (Setup: Europe High)
+16:21:14.592 [16:21:14.592] RE-ANCHOR: New High @ 21706.25 (Setup: Europe High)
+16:21:14.599 [16:21:14.599] RE-ANCHOR: New High @ 21706.5 (Setup: Europe High)
+16:21:14.618 [16:21:14.618] RE-ANCHOR: New High @ 21706.75 (Setup: Europe High)
+16:21:14.642 [16:21:14.642] RE-ANCHOR: New High @ 21707 (Setup: Europe High)
+16:21:14.672 [16:21:14.672] RE-ANCHOR: New High @ 21707.25 (Setup: Europe High)
+16:21:15.393 [16:21:15.393] RE-ANCHOR: New High @ 21707.5 (Setup: Europe High)
+16:21:15.395 [16:21:15.395] RE-ANCHOR: New High @ 21707.75 (Setup: Europe High)
+16:21:15.420 [16:21:15.420] RE-ANCHOR: New High @ 21708 (Setup: Europe High)
+16:21:18.064 [16:21:18.064] RE-ANCHOR: New High @ 21708.25 (Setup: Europe High)
+16:21:18.080 [16:21:18.080] RE-ANCHOR: New High @ 21708.5 (Setup: Europe High)
+16:21:18.092 [16:21:18.092] RE-ANCHOR: New High @ 21708.75 (Setup: Europe High)
+16:21:18.107 [16:21:18.107] RE-ANCHOR: New High @ 21709 (Setup: Europe High)
+16:21:18.126 [16:21:18.126] RE-ANCHOR: New High @ 21709.25 (Setup: Europe High)
+16:21:18.523 [16:21:18.523] RE-ANCHOR: New High @ 21709.5 (Setup: Europe High)
+16:21:18.542 [16:21:18.542] RE-ANCHOR: New High @ 21709.75 (Setup: Europe High)
+16:21:18.545 [16:21:18.545] RE-ANCHOR: New High @ 21710 (Setup: Europe High)
+16:21:18.696 [16:21:18.696] RE-ANCHOR: New High @ 21710.25 (Setup: Europe High)
+16:21:18.708 [16:21:18.708] RE-ANCHOR: New High @ 21710.5 (Setup: Europe High)
+16:21:18.716 [16:21:18.716] RE-ANCHOR: New High @ 21710.75 (Setup: Europe High)
+16:21:19.112 [16:21:19.112] RE-ANCHOR: New High @ 21711 (Setup: Europe High)
+16:21:19.145 [16:21:19.145] RE-ANCHOR: New High @ 21711.25 (Setup: Europe High)
+16:21:19.151 [16:21:19.151] RE-ANCHOR: New High @ 21711.5 (Setup: Europe High)
+16:21:19.155 [16:21:19.155] RE-ANCHOR: New High @ 21711.75 (Setup: Europe High)
+16:21:19.160 [16:21:19.160] RE-ANCHOR: New High @ 21712 (Setup: Europe High)
+16:21:19.184 [16:21:19.184] RE-ANCHOR: New High @ 21712.25 (Setup: Europe High)
+16:21:19.477 [16:21:19.477] RE-ANCHOR: New High @ 21712.5 (Setup: Europe High)
+16:21:19.480 [16:21:19.480] RE-ANCHOR: New High @ 21712.75 (Setup: Europe High)
+16:21:19.494 [16:21:19.494] RE-ANCHOR: New High @ 21713 (Setup: Europe High)
+16:21:19.502 [16:21:19.502] RE-ANCHOR: New High @ 21713.25 (Setup: Europe High)
+16:21:20.250 [16:21:20.250] RE-ANCHOR: New High @ 21713.5 (Setup: Europe High)
+16:21:20.270 [16:21:20.270] RE-ANCHOR: New High @ 21713.75 (Setup: Europe High)
+16:21:20.813 [16:21:20.813] RE-ANCHOR: New High @ 21714 (Setup: Europe High)
+16:21:20.823 [16:21:20.823] RE-ANCHOR: New High @ 21714.25 (Setup: Europe High)
+16:21:20.825 [16:21:20.825] RE-ANCHOR: New High @ 21714.5 (Setup: Europe High)
+16:21:21.224 [16:21:21.224] RE-ANCHOR: New High @ 21714.75 (Setup: Europe High)
+16:21:21.320 [16:21:21.320] RE-ANCHOR: New High @ 21715 (Setup: Europe High)
+16:21:21.341 [16:21:21.341] RE-ANCHOR: New High @ 21715.25 (Setup: Europe High)
+16:21:21.344 [16:21:21.344] RE-ANCHOR: New High @ 21715.5 (Setup: Europe High)
+16:21:21.381 [16:21:21.381] RE-ANCHOR: New High @ 21715.75 (Setup: Europe High)
+16:21:21.506 [16:21:21.506] RE-ANCHOR: New High @ 21716 (Setup: Europe High)
+16:21:21.581 [16:21:21.581] RE-ANCHOR: New High @ 21716.25 (Setup: Europe High)
+16:21:21.586 [16:21:21.586] RE-ANCHOR: New High @ 21716.5 (Setup: Europe High)
+16:21:21.634 [16:21:21.634] RE-ANCHOR: New High @ 21716.75 (Setup: Europe High)
+16:21:21.888 [16:21:21.888] RE-ANCHOR: New High @ 21717 (Setup: Europe High)
+16:21:21.892 [16:21:21.892] RE-ANCHOR: New High @ 21717.25 (Setup: Europe High)
+16:21:22.440 [16:21:22.440] RE-ANCHOR: New High @ 21717.5 (Setup: Europe High)
+16:21:22.461 [16:21:22.461] RE-ANCHOR: New High @ 21717.75 (Setup: Europe High)
+16:21:22.486 [16:21:22.486] RE-ANCHOR: New High @ 21718 (Setup: Europe High)
+16:21:22.490 [16:21:22.490] RE-ANCHOR: New High @ 21718.25 (Setup: Europe High)
+16:21:22.515 [16:21:22.515] RE-ANCHOR: New High @ 21718.5 (Setup: Europe High)
+16:21:23.374 [16:21:23.374] RE-ANCHOR: New High @ 21718.75 (Setup: Europe High)
+16:21:23.395 [16:21:23.395] RE-ANCHOR: New High @ 21719 (Setup: Europe High)
+16:21:23.415 [16:21:23.415] RE-ANCHOR: New High @ 21719.25 (Setup: Europe High)
+16:21:23.420 [16:21:23.420] RE-ANCHOR: New High @ 21719.5 (Setup: Europe High)
+16:21:23.436 [16:21:23.436] RE-ANCHOR: New High @ 21719.75 (Setup: Europe High)
+16:21:23.444 [16:21:23.444] RE-ANCHOR: New High @ 21720 (Setup: Europe High)
+16:21:23.476 [16:21:23.476] RE-ANCHOR: New High @ 21720.25 (Setup: Europe High)
+16:21:23.499 [16:21:23.499] RE-ANCHOR: New High @ 21720.5 (Setup: Europe High)
+16:21:23.507 [16:21:23.507] RE-ANCHOR: New High @ 21720.75 (Setup: Europe High)
+16:21:23.597 [16:21:23.597] RE-ANCHOR: New High @ 21721 (Setup: Europe High)
+16:21:23.602 [16:21:23.602] RE-ANCHOR: New High @ 21721.25 (Setup: Europe High)
+16:21:23.641 [16:21:23.641] RE-ANCHOR: New High @ 21721.5 (Setup: Europe High)
+16:21:23.658 [16:21:23.658] RE-ANCHOR: New High @ 21721.75 (Setup: Europe High)
+16:21:23.677 [16:21:23.677] RE-ANCHOR: New High @ 21722 (Setup: Europe High)
+16:21:23.684 [16:21:23.684] RE-ANCHOR: New High @ 21722.25 (Setup: Europe High)
+16:21:23.695 [16:21:23.695] RE-ANCHOR: New High @ 21722.5 (Setup: Europe High)
+16:21:23.716 [16:21:23.716] RE-ANCHOR: New High @ 21722.75 (Setup: Europe High)
+16:21:23.719 [16:21:23.719] RE-ANCHOR: New High @ 21723 (Setup: Europe High)
+16:21:23.725 [16:21:23.725] RE-ANCHOR: New High @ 21723.25 (Setup: Europe High)
+16:21:23.925 [16:21:23.925] RE-ANCHOR: New High @ 21723.5 (Setup: Europe High)
+16:21:23.929 [16:21:23.929] RE-ANCHOR: New High @ 21723.75 (Setup: Europe High)
+16:21:23.933 [16:21:23.933] RE-ANCHOR: New High @ 21724 (Setup: Europe High)
+16:21:24.229 [16:21:24.229] RE-ANCHOR: New High @ 21724.25 (Setup: Europe High)
+16:21:24.246 [16:21:24.246] RE-ANCHOR: New High @ 21724.5 (Setup: Europe High)
+16:21:26.258 [16:21:26.258] RE-ANCHOR: New High @ 21724.75 (Setup: Europe High)
+16:21:26.730 [16:21:26.730] DEBUG DATE: Time=20/1/25 10:29:00 a. m. ActualSessionEnd=20/1/25 2:00:00 p. m. (NY=20/1/25 1:00:00 p. m.) IsEarlyClose=True IsFriday=False
+16:21:28.656 [16:21:28.656] RE-ANCHOR: New High @ 21725 (Setup: Europe High)
+16:21:28.685 [16:21:28.685] RE-ANCHOR: New High @ 21725.25 (Setup: Europe High)
+16:21:28.698 [16:21:28.698] RE-ANCHOR: New High @ 21725.5 (Setup: Europe High)
+16:21:28.701 [16:21:28.701] RE-ANCHOR: New High @ 21725.75 (Setup: Europe High)
+16:21:29.070 [16:21:29.070] RE-ANCHOR: New High @ 21726 (Setup: Europe High)
+16:21:29.085 [16:21:29.085] RE-ANCHOR: New High @ 21726.25 (Setup: Europe High)
+16:21:29.107 [16:21:29.107] RE-ANCHOR: New High @ 21726.5 (Setup: Europe High)
+16:21:30.086 [16:21:30.086] RE-ANCHOR: New High @ 21726.75 (Setup: Europe High)
+16:21:30.089 [16:21:30.089] RE-ANCHOR: New High @ 21727 (Setup: Europe High)
+16:21:30.164 [16:21:30.164] RE-ANCHOR: New High @ 21727.25 (Setup: Europe High)
+16:21:30.180 [16:21:30.180] RE-ANCHOR: New High @ 21727.5 (Setup: Europe High)
+16:21:30.184 [16:21:30.184] RE-ANCHOR: New High @ 21727.75 (Setup: Europe High)
+16:21:30.187 [16:21:30.187] RE-ANCHOR: New High @ 21728 (Setup: Europe High)
+16:21:30.203 [16:21:30.203] RE-ANCHOR: New High @ 21728.5 (Setup: Europe High)
+16:21:30.206 [16:21:30.206] RE-ANCHOR: New High @ 21728.75 (Setup: Europe High)
+16:21:30.211 [16:21:30.211] RE-ANCHOR: New High @ 21729 (Setup: Europe High)
+16:21:30.232 [16:21:30.232] RE-ANCHOR: New High @ 21729.25 (Setup: Europe High)
+16:21:30.238 [16:21:30.238] RE-ANCHOR: New High @ 21729.5 (Setup: Europe High)
+16:21:30.874 [16:21:30.874] RE-ANCHOR: New High @ 21729.75 (Setup: Europe High)
+16:21:33.641 [16:21:33.641] RE-ANCHOR: New High @ 21730 (Setup: Europe High)
+16:21:33.781 [16:21:33.781] RE-ANCHOR: New High @ 21730.25 (Setup: Europe High)
+16:21:33.788 [16:21:33.788] RE-ANCHOR: New High @ 21730.5 (Setup: Europe High)
+16:21:33.790 [16:21:33.790] RE-ANCHOR: New High @ 21730.75 (Setup: Europe High)
+16:21:33.797 [16:21:33.797] RE-ANCHOR: New High @ 21731 (Setup: Europe High)
+16:21:33.812 [16:21:33.812] RE-ANCHOR: New High @ 21731.25 (Setup: Europe High)
+16:21:33.837 [16:21:33.837] RE-ANCHOR: New High @ 21731.5 (Setup: Europe High)
+16:21:33.841 [16:21:33.841] RE-ANCHOR: New High @ 21731.75 (Setup: Europe High)
+16:21:33.846 [16:21:33.846] RE-ANCHOR: New High @ 21732 (Setup: Europe High)
+16:21:33.936 [16:21:33.936] RE-ANCHOR: New High @ 21732.25 (Setup: Europe High)
+16:21:37.873 [16:21:37.873] RE-ANCHOR: New High @ 21732.5 (Setup: Europe High)
+16:21:37.898 [16:21:37.898] RE-ANCHOR: New High @ 21732.75 (Setup: Europe High)
+16:21:37.902 [16:21:37.902] RE-ANCHOR: New High @ 21733 (Setup: Europe High)
+16:21:38.029 [16:21:38.029] RE-ANCHOR: New High @ 21733.25 (Setup: Europe High)
+16:21:38.230 [16:21:38.230] RE-ANCHOR: New High @ 21733.5 (Setup: Europe High)
+16:21:38.243 [16:21:38.243] RE-ANCHOR: New High @ 21733.75 (Setup: Europe High)
+16:21:38.244 [16:21:38.244] RE-ANCHOR: New High @ 21734 (Setup: Europe High)
+16:21:38.250 [16:21:38.250] RE-ANCHOR: New High @ 21734.25 (Setup: Europe High)
+16:21:38.258 [16:21:38.258] RE-ANCHOR: New High @ 21734.5 (Setup: Europe High)
+16:21:38.270 [16:21:38.270] RE-ANCHOR: New High @ 21734.75 (Setup: Europe High)
+16:21:38.288 [16:21:38.288] RE-ANCHOR: New High @ 21735 (Setup: Europe High)
+16:21:38.365 [16:21:38.365] RE-ANCHOR: New High @ 21735.25 (Setup: Europe High)
+16:21:38.409 [16:21:38.409] RE-ANCHOR: New High @ 21735.5 (Setup: Europe High)
+16:21:39.906 [16:21:39.906] RE-ANCHOR: New High @ 21735.75 (Setup: Europe High)
+16:21:39.930 [16:21:39.930] RE-ANCHOR: New High @ 21736 (Setup: Europe High)
+16:21:39.950 [16:21:39.950] RE-ANCHOR: New High @ 21736.25 (Setup: Europe High)
+16:21:39.963 [16:21:39.963] RE-ANCHOR: New High @ 21736.5 (Setup: Europe High)
+16:21:39.966 [16:21:39.966] RE-ANCHOR: New High @ 21736.75 (Setup: Europe High)
+16:21:39.980 [16:21:39.980] RE-ANCHOR: New High @ 21737 (Setup: Europe High)
+16:21:40.001 [16:21:40.001] RE-ANCHOR: New High @ 21737.25 (Setup: Europe High)
+16:21:40.006 [16:21:40.006] RE-ANCHOR: New High @ 21737.5 (Setup: Europe High)
+16:21:40.070 [16:21:40.070] RE-ANCHOR: New High @ 21737.75 (Setup: Europe High)
+16:21:40.082 [16:21:40.082] RE-ANCHOR: New High @ 21738 (Setup: Europe High)
+16:21:40.090 [16:21:40.090] RE-ANCHOR: New High @ 21738.25 (Setup: Europe High)
+16:21:40.098 [16:21:40.098] RE-ANCHOR: New High @ 21738.5 (Setup: Europe High)
+16:21:40.118 [16:21:40.118] RE-ANCHOR: New High @ 21738.75 (Setup: Europe High)
+16:21:40.136 [16:21:40.136] RE-ANCHOR: New High @ 21739 (Setup: Europe High)
+16:21:40.196 [16:21:40.196] RE-ANCHOR: New High @ 21739.25 (Setup: Europe High)
+16:21:40.219 [16:21:40.219] RE-ANCHOR: New High @ 21739.5 (Setup: Europe High)
+16:21:40.222 [16:21:40.222] RE-ANCHOR: New High @ 21739.75 (Setup: Europe High)
+16:21:40.253 [16:21:40.253] RE-ANCHOR: New High @ 21740 (Setup: Europe High)
+16:21:40.305 [16:21:40.305] RE-ANCHOR: New High @ 21740.25 (Setup: Europe High)
+16:21:45.470 [16:21:45.470] RE-ANCHOR: New High @ 21740.5 (Setup: Europe High)
+16:21:45.476 [16:21:45.476] RE-ANCHOR: New High @ 21740.75 (Setup: Europe High)
+16:21:45.487 [16:21:45.487] RE-ANCHOR: New High @ 21741 (Setup: Europe High)
+16:21:45.495 [16:21:45.495] RE-ANCHOR: New High @ 21741.25 (Setup: Europe High)
+16:21:45.518 [16:21:45.518] RE-ANCHOR: New High @ 21741.5 (Setup: Europe High)
+16:21:45.608 [16:21:45.608] RE-ANCHOR: New High @ 21741.75 (Setup: Europe High)
+16:21:45.619 [16:21:45.619] RE-ANCHOR: New High @ 21742 (Setup: Europe High)
+16:21:45.624 [16:21:45.624] RE-ANCHOR: New High @ 21742.25 (Setup: Europe High)
+16:21:45.630 [16:21:45.630] RE-ANCHOR: New High @ 21742.5 (Setup: Europe High)
+16:21:45.644 [16:21:45.644] RE-ANCHOR: New High @ 21742.75 (Setup: Europe High)
+16:21:45.704 [16:21:45.704] RE-ANCHOR: New High @ 21743 (Setup: Europe High)
+16:21:45.711 [16:21:45.711] RE-ANCHOR: New High @ 21743.25 (Setup: Europe High)
+16:21:45.804 [16:21:45.804] RE-ANCHOR: New High @ 21743.5 (Setup: Europe High)
+16:21:46.441 [16:21:46.441] RE-ANCHOR: New High @ 21743.75 (Setup: Europe High)
+16:21:46.502 [16:21:46.502] RE-ANCHOR: New High @ 21744 (Setup: Europe High)
+16:21:46.520 [16:21:46.520] RE-ANCHOR: New High @ 21744.25 (Setup: Europe High)
+16:21:46.539 [16:21:46.539] RE-ANCHOR: New High @ 21744.5 (Setup: Europe High)
+16:21:46.665 [16:21:46.665] RE-ANCHOR: New High @ 21744.75 (Setup: Europe High)
+16:21:46.687 [16:21:46.687] RE-ANCHOR: New High @ 21745 (Setup: Europe High)
+16:21:47.231 [16:21:47.231] RE-ANCHOR: New High @ 21745.25 (Setup: Europe High)
+16:21:47.254 [16:21:47.254] RE-ANCHOR: New High @ 21745.5 (Setup: Europe High)
+16:21:47.255 [16:21:47.255] RE-ANCHOR: New High @ 21745.75 (Setup: Europe High)
+16:21:47.319 [16:21:47.319] RE-ANCHOR: New High @ 21746 (Setup: Europe High)
+16:21:47.344 [16:21:47.344] RE-ANCHOR: New High @ 21746.25 (Setup: Europe High)
+16:21:47.355 [16:21:47.355] RE-ANCHOR: New High @ 21746.5 (Setup: Europe High)
+16:21:47.376 [16:21:47.376] RE-ANCHOR: New High @ 21746.75 (Setup: Europe High)
+16:21:47.379 [16:21:47.379] RE-ANCHOR: New High @ 21747 (Setup: Europe High)
+16:21:47.395 [16:21:47.395] RE-ANCHOR: New High @ 21747.25 (Setup: Europe High)
+16:21:47.757 [16:21:47.757] RE-ANCHOR: New High @ 21747.5 (Setup: Europe High)
+16:21:47.763 [16:21:47.763] RE-ANCHOR: New High @ 21747.75 (Setup: Europe High)
+16:21:48.654 [16:21:48.654] RE-ANCHOR: New High @ 21748 (Setup: Europe High)
+16:21:48.666 [16:21:48.666] RE-ANCHOR: New High @ 21748.25 (Setup: Europe High)
+16:21:48.682 [16:21:48.682] RE-ANCHOR: New High @ 21748.5 (Setup: Europe High)
+16:21:48.687 [16:21:48.687] RE-ANCHOR: New High @ 21748.75 (Setup: Europe High)
+16:21:48.708 [16:21:48.708] RE-ANCHOR: New High @ 21749 (Setup: Europe High)
+16:21:48.723 [16:21:48.723] RE-ANCHOR: New High @ 21749.25 (Setup: Europe High)
+16:21:48.769 [16:21:48.769] RE-ANCHOR: New High @ 21749.5 (Setup: Europe High)
+16:21:48.791 [16:21:48.791] RE-ANCHOR: New High @ 21749.75 (Setup: Europe High)
+16:21:48.984 [16:21:48.984] RE-ANCHOR: New High @ 21750 (Setup: Europe High)
+16:21:49.219 [16:21:49.219] RE-ANCHOR: New High @ 21750.25 (Setup: Europe High)
+16:21:49.238 [16:21:49.238] RE-ANCHOR: New High @ 21750.5 (Setup: Europe High)
+16:21:49.247 [16:21:49.247] RE-ANCHOR: New High @ 21750.75 (Setup: Europe High)
+16:21:49.255 [16:21:49.255] RE-ANCHOR: New High @ 21751 (Setup: Europe High)
+16:21:49.261 [16:21:49.261] RE-ANCHOR: New High @ 21751.25 (Setup: Europe High)
+16:21:49.264 [16:21:49.264] RE-ANCHOR: New High @ 21751.5 (Setup: Europe High)
+16:21:49.275 [16:21:49.275] RE-ANCHOR: New High @ 21751.75 (Setup: Europe High)
+16:21:49.280 [16:21:49.280] RE-ANCHOR: New High @ 21752 (Setup: Europe High)
+16:21:49.294 [16:21:49.294] RE-ANCHOR: New High @ 21752.25 (Setup: Europe High)
+16:21:49.299 [16:21:49.299] RE-ANCHOR: New High @ 21752.5 (Setup: Europe High)
+16:21:49.309 [16:21:49.309] RE-ANCHOR: New High @ 21752.75 (Setup: Europe High)
+16:21:51.034 [16:21:51.034] RE-ANCHOR: New High @ 21753 (Setup: Europe High)
+16:21:51.048 [16:21:51.048] RE-ANCHOR: New High @ 21753.25 (Setup: Europe High)
+16:21:51.065 [16:21:51.065] RE-ANCHOR: New High @ 21753.5 (Setup: Europe High)
+16:21:51.073 [16:21:51.073] RE-ANCHOR: New High @ 21753.75 (Setup: Europe High)
+16:21:51.075 [16:21:51.075] RE-ANCHOR: New High @ 21754 (Setup: Europe High)
+16:21:51.092 [16:21:51.092] RE-ANCHOR: New High @ 21754.25 (Setup: Europe High)
+16:21:51.127 [16:21:51.127] RE-ANCHOR: New High @ 21754.5 (Setup: Europe High)
+16:21:51.137 [16:21:51.137] RE-ANCHOR: New High @ 21754.75 (Setup: Europe High)
+16:21:51.241 [16:21:51.241] RE-ANCHOR: New High @ 21755 (Setup: Europe High)
+16:22:00.840 [16:22:00.840] RE-ANCHOR: New High @ 21755.25 (Setup: Europe High)
+16:22:00.843 [16:22:00.843] RE-ANCHOR: New High @ 21755.5 (Setup: Europe High)
+16:22:00.849 [16:22:00.849] RE-ANCHOR: New High @ 21755.75 (Setup: Europe High)
+16:22:00.854 [16:22:00.854] RE-ANCHOR: New High @ 21756 (Setup: Europe High)
+16:22:00.870 [16:22:00.870] RE-ANCHOR: New High @ 21756.25 (Setup: Europe High)
+16:22:00.875 [16:22:00.875] RE-ANCHOR: New High @ 21756.5 (Setup: Europe High)
+16:22:00.877 [16:22:00.877] RE-ANCHOR: New High @ 21756.75 (Setup: Europe High)
+16:22:00.887 [16:22:00.887] RE-ANCHOR: New High @ 21757 (Setup: Europe High)
+16:22:00.892 [16:22:00.892] RE-ANCHOR: New High @ 21757.25 (Setup: Europe High)
+16:22:00.917 [16:22:00.917] RE-ANCHOR: New High @ 21757.5 (Setup: Europe High)
+16:22:00.920 [16:22:00.920] RE-ANCHOR: New High @ 21757.75 (Setup: Europe High)
+16:22:00.922 [16:22:00.922] RE-ANCHOR: New High @ 21758 (Setup: Europe High)
+16:22:01.020 [16:22:01.020] RE-ANCHOR: New High @ 21758.25 (Setup: Europe High)
+16:22:01.031 [16:22:01.031] RE-ANCHOR: New High @ 21758.5 (Setup: Europe High)
+16:22:01.059 [16:22:01.059] RE-ANCHOR: New High @ 21758.75 (Setup: Europe High)
+16:22:01.069 [16:22:01.069] RE-ANCHOR: New High @ 21759 (Setup: Europe High)
+16:22:01.077 [16:22:01.077] RE-ANCHOR: New High @ 21759.25 (Setup: Europe High)
+16:22:01.088 [16:22:01.088] RE-ANCHOR: New High @ 21759.5 (Setup: Europe High)
+16:22:01.092 [16:22:01.092] RE-ANCHOR: New High @ 21759.75 (Setup: Europe High)
+16:22:01.094 [16:22:01.094] RE-ANCHOR: New High @ 21760 (Setup: Europe High)
+16:22:01.943 [16:22:01.943] RE-ANCHOR: New High @ 21760.25 (Setup: Europe High)
+16:22:02.872 [16:22:02.872] RE-ANCHOR: New High @ 21760.5 (Setup: Europe High)
+16:22:02.914 [16:22:02.914] RE-ANCHOR: New High @ 21760.75 (Setup: Europe High)
+16:22:04.187 [16:22:04.187] RE-ANCHOR: New High @ 21761 (Setup: Europe High)
+16:22:04.425 [16:22:04.425] RE-ANCHOR: New High @ 21761.25 (Setup: Europe High)
+16:22:04.430 [16:22:04.430] RE-ANCHOR: New High @ 21761.5 (Setup: Europe High)
+16:22:04.438 [16:22:04.438] RE-ANCHOR: New High @ 21761.75 (Setup: Europe High)
+16:22:04.443 [16:22:04.443] RE-ANCHOR: New High @ 21762 (Setup: Europe High)
+16:22:04.455 [16:22:04.455] RE-ANCHOR: New High @ 21762.25 (Setup: Europe High)
+16:22:04.461 [16:22:04.461] RE-ANCHOR: New High @ 21762.5 (Setup: Europe High)
+16:22:04.462 [16:22:04.462] RE-ANCHOR: New High @ 21762.75 (Setup: Europe High)
+16:22:04.465 [16:22:04.465] RE-ANCHOR: New High @ 21763 (Setup: Europe High)
+16:22:04.483 [16:22:04.483] RE-ANCHOR: New High @ 21763.25 (Setup: Europe High)
+16:22:04.493 [16:22:04.493] RE-ANCHOR: New High @ 21763.5 (Setup: Europe High)
+16:22:04.513 [16:22:04.513] RE-ANCHOR: New High @ 21763.75 (Setup: Europe High)
+16:22:04.611 [16:22:04.611] RE-ANCHOR: New High @ 21764 (Setup: Europe High)
+16:22:04.620 [16:22:04.620] RE-ANCHOR: New High @ 21764.25 (Setup: Europe High)

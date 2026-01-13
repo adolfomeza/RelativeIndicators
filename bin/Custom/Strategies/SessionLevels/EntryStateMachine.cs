@@ -238,6 +238,7 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
                 
                 lvl.EntryAttempts++;
                 strategy.Log(string.Format("{0} ENTRY ATTEMPT #{1}/{2} on {3} (Deepest Selection)", strategy.Time[0], lvl.EntryAttempts, strategy.MaxRetriesPerLevel, lvl.Name));
+				strategy.currentLevelAttempts = lvl.EntryAttempts; // v1.15.15: Store for persistent display
                 
                 strategy.DetectInternalLevel(lvl, strategy.activeLevels);
                 
@@ -283,6 +284,7 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
                 strategy.vwapCandleExtreme = 0;
                 
                 lvl.EntryAttempts++;
+				strategy.currentLevelAttempts = lvl.EntryAttempts; // v1.15.15: Store for persistent display
                 strategy.Log(string.Format("{0} ENTRY ATTEMPT #{1}/{2} on {3} (Deepest Selection)", strategy.Time[0], lvl.EntryAttempts, strategy.MaxRetriesPerLevel, lvl.Name));
                 
                 strategy.DetectInternalLevel(lvl, strategy.activeLevels);
