@@ -1,310 +1,72 @@
+#region Using declarations
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Xml.Serialization;
 using NinjaTrader.Cbi;
+using NinjaTrader.Gui;
+using NinjaTrader.Gui.Chart;
+using NinjaTrader.Gui.SuperDom;
+using NinjaTrader.Gui.Tools;
+using NinjaTrader.Data;
 using NinjaTrader.NinjaScript;
+using NinjaTrader.Core.FloatingPoint;
+using NinjaTrader.NinjaScript.Indicators;
+using NinjaTrader.NinjaScript.DrawingTools;
+#endregion
 
-namespace NinjaTrader.NinjaScript.Strategies
+namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
 {
-    // v1.14.40: Entry State Machine - Extracted from ManageEntryA_Plus
-    // Handles entry logic flow: triggers, confirmation, order management
+    /// <summary>
+    /// Handles the core entry logic state machine:
+    /// Idle -> ScanForTriggers -> WaitingForConfirmation -> OrderSubmitted -> PositionActive
+    /// </summary>
     public class EntryStateMachine
     {
         private SessionLevelsStrategy strategy;
+		// v1.14.80: Throttling for ChangeOrder
+        private DateTime lastOrderUpdateTime = DateTime.MinValue;
+        private const int UpdateIntervalMs = 250; // Max 4 updates/sec
 
         public EntryStateMachine(SessionLevelsStrategy strategy)
         {
             this.strategy = strategy;
         }
 
-        // v1.14.80: Performance Optimization - Throttling
-        private DateTime lastOrderUpdateTime = DateTime.MinValue;
-        private const int UpdateIntervalMs = 250;
-
-
+        // --- CORE METHODS ---
 
         /// <summary>
-        /// Checks trading mode guards (Paused, LongOnly, ShortOnly)
+        /// Checks if trading is allowed based on current trading mode (Paused/LongOnly/ShortOnly)
+        /// Returns true if trading is allowed, false otherwise
         /// </summary>
-        /// <returns>true if trading is allowed, false if should skip</returns>
         public bool CheckTradingModeGuards()
         {
-            // If paused, cancel any working orders and block all entry logic
+            // Check if paused
             if (strategy.currentTradingMode == TradingMode.Paused)
-            {
-                if (strategy.currentEntryState == EntryState.workingOrder && strategy.entryOrder != null &&
-                    (strategy.entryOrder.OrderState == OrderState.Working || strategy.entryOrder.OrderState == OrderState.Accepted))
-                {
-                    strategy.Log(strategy.Time[0] + " PAUSED: Cancelling working entry order");
-                    strategy.CancelOrderWrapper(strategy.entryOrder);
-                }
-                return false; // Block all entry logic when paused
-            }
-            
-            // Cancel orders that go against direction mode
-            if (strategy.currentEntryState == EntryState.workingOrder && strategy.entryOrder != null &&
-                (strategy.entryOrder.OrderState == OrderState.Working || strategy.entryOrder.OrderState == OrderState.Accepted))
-            {
-                // LongOnly but we have a Short order pending
-                if (strategy.currentTradingMode == TradingMode.LongOnly && strategy.isShortSetup)
-                {
-                    strategy.Log(strategy.Time[0] + " LONGONLY: Cancelling Short entry order");
-                    strategy.CancelOrderWrapper(strategy.entryOrder);
-                    return false;
-                }
-                // ShortOnly but we have a Long order pending
-                if (strategy.currentTradingMode == TradingMode.ShortOnly && !strategy.isShortSetup)
-                {
-                    strategy.Log(strategy.Time[0] + " SHORTONLY: Cancelling Long entry order");
-                    strategy.CancelOrderWrapper(strategy.entryOrder);
-                    return false;
-                }
-            }
-            
-            // Check trading mode before processing new entries
-            if (strategy.currentEntryState == EntryState.Idle)
-            {
-                // If paused, don't look for new setups
-                if (strategy.currentTradingMode == TradingMode.Paused)
-                {
-                    return false;
-                }
-                
-                // Check direction filter for new entries
-                if (strategy.currentTradingMode == TradingMode.LongOnly && strategy.isShortSetup)
-                {
-                    if (strategy.lastFilterReason != "Skipped: Long Only Mode") 
-                    { 
-                        strategy.lastFilterReason = "Skipped: Long Only Mode"; 
-                        strategy.lastFilterTime = DateTime.Now; 
-                    }
-                    return false; // Skip short setups
-                }
-                if (strategy.currentTradingMode == TradingMode.ShortOnly && !strategy.isShortSetup)
-                {
-                    if (strategy.lastFilterReason != "Skipped: Short Only Mode") 
-                    { 
-                        strategy.lastFilterReason = "Skipped: Short Only Mode"; 
-                        strategy.lastFilterTime = DateTime.Now; 
-                    }
-                    return false; // Skip long setups
-                }
-            }
-            
-            return true; // Trading allowed
-        }
-
-        /// <summary>
-        /// Handles VWAP mitigation retry logic
-        /// </summary>
-        /// <returns>true if retry was handled and should return early</returns>
-        public bool HandleVwapMitigationRetry()
-        {
-            // TODO: Extract from ManageEntryA_Plus lines 2793-2850
-            return false;
-        }
-
-        /// <summary>
-        /// Updates anchor if price makes new High (Short) or new Low (Long)
-        /// </summary>
-        public void UpdateAnchorIfNeeded()
-        {
-            // SHORT: Re-anchor if price makes new high
-            if (strategy.isShortSetup && strategy.High[0] >= strategy.setupAnchorPrice + strategy.TickSize)
-            {
-                strategy.setupAnchorPrice = strategy.High[0];
-                
-                // v1.14.56: Only calculate VWAP Adhoc for INTERNAL levels
-                // For EXTERNAL levels (extremes), we use the Global VWAP
-                if (strategy.isInternalLevel)
-                {
-                    // Reset VWAP from new anchor
-                    double price = strategy.Close[0];
-                    if (strategy.VwapMethod == VwapCalculationMode.Typical) 
-                        price = (strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 3.0;
-                    else if (strategy.VwapMethod == VwapCalculationMode.OHLC4) 
-                        price = (strategy.Open[0] + strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 4.0;
-                    
-                    strategy.adhocVolSum = strategy.Volume[0];
-                    strategy.adhocPvSum = strategy.Volume[0] * price;
-                    strategy.adhocLastBar = strategy.CurrentBar;
-                    strategy.adhocLastVol = strategy.Volume[0];
-                    strategy.adhocAnchorBar = strategy.CurrentBar;
-                    
-                    // Reset Visual
-                    strategy.visualAdhocPrevBarVal = price;
-                    strategy.visualAdhocLastVal = price;
-                    strategy.visualAdhocLastBar = -1;
-                }
-                
-                strategy.Log(string.Format("RE-ANCHOR: New High @ {0} (Setup: {1})", strategy.setupAnchorPrice, strategy.setupLevelName));
-            }
-            
-            // LONG: Re-anchor if price makes new low
-            if (!strategy.isShortSetup && strategy.Low[0] <= strategy.setupAnchorPrice - strategy.TickSize)
-            {
-                strategy.setupAnchorPrice = strategy.Low[0];
-                
-                // v1.14.56: Only calculate VWAP Adhoc for INTERNAL levels
-                if (strategy.isInternalLevel)
-                {
-                    // Reset VWAP from new anchor
-                    double price = strategy.Close[0];
-                    if (strategy.VwapMethod == VwapCalculationMode.Typical) 
-                        price = (strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 3.0;
-                    else if (strategy.VwapMethod == VwapCalculationMode.OHLC4) 
-                        price = (strategy.Open[0] + strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 4.0;
-                    
-                    strategy.adhocVolSum = strategy.Volume[0];
-                    strategy.adhocPvSum = strategy.Volume[0] * price;
-                    strategy.adhocLastBar = strategy.CurrentBar;
-                    strategy.adhocLastVol = strategy.Volume[0];
-                    strategy.adhocAnchorBar = strategy.CurrentBar;
-                    
-                    // Reset Visual
-                    strategy.visualAdhocPrevBarVal = price;
-                    strategy.visualAdhocLastVal = price;
-                    strategy.visualAdhocLastBar = -1;
-                }
-                
-                strategy.Log(string.Format("RE-ANCHOR: New Low @ {0} (Setup: {1})", strategy.setupAnchorPrice, strategy.setupLevelName));
-            }
-        }
-
-        /// <summary>
-        /// Handles internal level invalidation when touching external levels
-        /// </summary>
-        /// <returns>true if invalidated and should return early</returns>
-        public bool HandleInternalInvalidation()
-        {
-            // Only check if internal level and waiting for confirmation
-            if (!strategy.isInternalLevel || strategy.currentEntryState != EntryState.WaitingForConfirmation)
                 return false;
-                
-            bool touchedExternal = false;
-            
-            // SHORT internal: Check if touched external High above
-            if (strategy.isShortSetup && strategy.externalLevelAbove > 0)
+
+            // Check LongOnly mode - block Short setups
+            if (strategy.currentTradingMode == TradingMode.LongOnly && strategy.isShortSetup)
             {
-                if (strategy.High[0] >= strategy.externalLevelAbove)
-                {
-                    touchedExternal = true;
-                    strategy.Log(string.Format("INVALIDATED: Touched external {0} @ {1}", strategy.externalLevelAboveName, strategy.externalLevelAbove));
-                }
+                strategy.Log(strategy.Time[0] + " BLOCKED: LongOnly mode active, Short setup rejected");
+                return false;
             }
-            
-            // LONG internal: Check if touched external Low below
-            if (!strategy.isShortSetup && strategy.externalLevelBelow > 0)
+
+            // Check ShortOnly mode - block Long setups
+            if (strategy.currentTradingMode == TradingMode.ShortOnly && !strategy.isShortSetup)
             {
-                if (strategy.Low[0] <= strategy.externalLevelBelow)
-                {
-                    touchedExternal = true;
-                    strategy.Log(string.Format("INVALIDATED: Touched external {0} @ {1}", strategy.externalLevelBelowName, strategy.externalLevelBelow));
-                }
+                strategy.Log(strategy.Time[0] + " BLOCKED: ShortOnly mode active, Long setup rejected");
+                return false;
             }
-            
-            if (touchedExternal)
-            {
-                // Mark bar to prevent re-triggering
-                strategy.lastInvalidationBar = strategy.CurrentBar;
-                
-                // Cancel entry order if exists
-                if (strategy.entryOrder != null && 
-                    (strategy.entryOrder.OrderState == OrderState.Working || strategy.entryOrder.OrderState == OrderState.Accepted))
-                {
-                    strategy.CancelOrderWrapper(strategy.entryOrder);
-                }
-                
-                // Reset to Idle
-                strategy.currentEntryState = EntryState.Idle;
-                strategy.isInternalLevel = false;
-                
-                // AUTO-TRIGGER on external level after invalidation
-                string externalName = strategy.isShortSetup ? strategy.externalLevelAboveName : strategy.externalLevelBelowName;
-                double externalPrice = strategy.isShortSetup ? strategy.externalLevelAbove : strategy.externalLevelBelow;
-                
-                if (externalPrice > 0 && !string.IsNullOrEmpty(externalName))
-                {
-                    strategy.Log(string.Format("AUTO-TRIGGER: Switching to external level {0} @ {1}", externalName, externalPrice));
-                    
-                    // Setup new trigger on external level
-                    if (strategy.isShortSetup)
-                    {
-                        // SHORT on external High
-                        strategy.triggerTag = "TriggerShort_" + strategy.Time[0].Ticks;
-                        strategy.triggerBar = strategy.CurrentBar;
-                        strategy.DrawTriggerLabel(strategy.triggerTag, true, 0, strategy.High[0]);
-                        
-                        strategy.currentEntryState = EntryState.WaitingForConfirmation;
-                        strategy.visualConfirmationDone = false;
-                        strategy.isShortSetup = true;
-                        strategy.setupAnchorPrice = strategy.High[0];
-                        strategy.setupLevelName = externalName;
-                        strategy.setupLevelTime = strategy.Time[0];
-                        strategy.validatedTargetPrice = 0;
-                        strategy.cachedOppositeLevel = null;
-                        strategy.oppositeSearchDone = false;
-                        
-                        strategy.isInternalLevel = false;
-                        
-                        // Reset VWAP
-                        double price = strategy.Close[0];
-                        if (strategy.VwapMethod == VwapCalculationMode.Typical) 
-                            price = (strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 3.0;
-                        else if (strategy.VwapMethod == VwapCalculationMode.OHLC4) 
-                            price = (strategy.Open[0] + strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 4.0;
-                        
-                        strategy.adhocVolSum = strategy.Volume[0];
-                        strategy.adhocPvSum = strategy.Volume[0] * price;
-                        strategy.adhocLastBar = strategy.CurrentBar;
-                        strategy.adhocLastVol = strategy.Volume[0];
-                        strategy.adhocAnchorBar = strategy.CurrentBar;
-                        
-                        strategy.visualAdhocPrevBarVal = price;
-                        strategy.visualAdhocLastVal = price;
-                        strategy.visualAdhocLastBar = -1;
-                    }
-                    else
-                    {
-                        // LONG on external Low
-                        strategy.triggerTag = "TriggerLong_" + strategy.Time[0].Ticks;
-                        strategy.triggerBar = strategy.CurrentBar;
-                        strategy.DrawTriggerLabel(strategy.triggerTag, false, 0, strategy.Low[0]);
-                        
-                        strategy.currentEntryState = EntryState.WaitingForConfirmation;
-                        strategy.visualConfirmationDone = false;
-                        strategy.isShortSetup = false;
-                        strategy.setupAnchorPrice = strategy.Low[0];
-                        strategy.setupLevelName = externalName;
-                        strategy.setupLevelTime = strategy.Time[0];
-                        strategy.validatedTargetPrice = 0;
-                        strategy.cachedOppositeLevel = null;
-                        
-                        strategy.isInternalLevel = false;
-                        
-                        // Reset VWAP
-                        double price = strategy.Close[0];
-                        if (strategy.VwapMethod == VwapCalculationMode.Typical) 
-                            price = (strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 3.0;
-                        else if (strategy.VwapMethod == VwapCalculationMode.OHLC4) 
-                            price = (strategy.Open[0] + strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 4.0;
-                        
-                        strategy.adhocVolSum = strategy.Volume[0];
-                        strategy.adhocPvSum = strategy.Volume[0] * price;
-                        strategy.adhocLastBar = strategy.CurrentBar;
-                        strategy.adhocLastVol = strategy.Volume[0];
-                        strategy.adhocAnchorBar = strategy.CurrentBar;
-                        
-                        strategy.visualAdhocPrevBarVal = price;
-                        strategy.visualAdhocLastVal = price;
-                        strategy.visualAdhocLastBar = -1;
-                    }
-                }
-                
-                return true; // Invalidated
-            }
-            
-            return false;
+
+            return true; // Normal mode or direction matches mode
         }
 
         /// <summary>
@@ -320,6 +82,15 @@ namespace NinjaTrader.NinjaScript.Strategies
             if (strategy.State == State.Realtime && strategy.realtimeStartBar > 0 && strategy.CurrentBar <= strategy.realtimeStartBar)
                 return;
 
+            // v1.14.85: DEEP SCAN LOGIC
+            // Instead of taking the first trigger (which biases towards older levels),
+            // we collect ALL triggers in this bar and select the "Best" one.
+            // "Best" = Most Extreme/Deepest.
+            // For Supports (Longs): The LOWEST Price (Deepest dip).
+            // For Resistances (Shorts): The HIGHEST Price (Highest spike).
+            
+            List<SessionLevel> candidates = new List<SessionLevel>();
+
             foreach (var lvl in strategy.activeLevels)
             {
                 // FILTER: Ignorar niveles AI bloqueados
@@ -332,13 +103,38 @@ namespace NinjaTrader.NinjaScript.Strategies
                 // v1.10.24: Ignore Same-Day Levels
                 // v1.14.49: Fix Same-Day Logic for Globex
                 // Allow trading same-day levels IF the session has already closed.
-                // Block only if date is same AND time is still before session end (or session end is 0)
-                if (lvl.StartTime.Date == strategy.Time[0].Date)
+                // v1.14.95: ROBUST SESSION COMPLETION CHECK (TIMEZONE AWARE)
+                // Critical: Parameter EndTimes are usually NY/Exchange based, but strategy.Time[0] is Chart/Local.
+                // We MUST convert everything to the common Strategy TimeZone (NY) before comparing.
+                
+                if (strategy.nyTimeZone == null || strategy.chartTimeZone == null) continue;
+
+                DateTime chartTime = strategy.Time[0];
+                DateTime currentNyTime = TimeZoneInfo.ConvertTime(chartTime, strategy.chartTimeZone, strategy.nyTimeZone);
+                DateTime startNyTime = TimeZoneInfo.ConvertTime(lvl.StartTime, strategy.chartTimeZone, strategy.nyTimeZone);
+                
+                TimeSpan levelStartTs = startNyTime.TimeOfDay;
+                // lvl.ActualSessionEnd is already parsed from parameters (assumed NY/Exchange Time)
+                TimeSpan levelEndTs = lvl.ActualSessionEnd; 
+                
+                bool isOvernightSession = levelStartTs > levelEndTs;
+
+                if (isOvernightSession)
                 {
-                    // Only block if session hasn't finished yet
-                    // Use ActualSessionEnd (TimeSpan) to check against current TimeOfDay
-                    if (strategy.Time[0].TimeOfDay <= lvl.ActualSessionEnd)
-                         continue;
+                    // Case A: Still on Start Day (e.g. 23:00 >= 18:00) -> BLOCK
+                    if (currentNyTime.Date == startNyTime.Date)
+                        continue;
+
+                    // Case B: Next Day (e.g. 01:00 < 02:00) -> BLOCK
+                    // Only if we are on the immediate next day
+                    if (currentNyTime.Date == startNyTime.Date.AddDays(1) && currentNyTime.TimeOfDay < levelEndTs)
+                        continue;
+                }
+                else
+                {
+                    // Standard Intraday Session
+                    if (currentNyTime.Date == startNyTime.Date && currentNyTime.TimeOfDay < levelEndTs)
+                        continue;
                 }
 
                 // v1.10.25: Check if max retries exceeded
@@ -354,138 +150,320 @@ namespace NinjaTrader.NinjaScript.Strategies
                 if (strategy.skippedLevelsAtStartup.Contains(lvl.Name))
                     continue;
 
-                // If level is mitigated exactly NOW
+                // TRIGGER CONDITION: Mitigated exactly NOW
                 if (lvl.IsMitigated && lvl.MitigationTime == strategy.Time[0])
                 {
-                    // If already waiting, check if different level
-                    if (strategy.currentEntryState == EntryState.WaitingForConfirmation)
-                    {
-                        if (lvl.Name == strategy.setupLevelName)
-                            continue;
-                        else
-                        {
-                            // v1.14.69: DIAGNOSTIC LOG - Capture price delta to detect infinite SWITCH loops
-                            double currentLevelPrice = 0;
-                            var currentLevel = strategy.activeLevels.FirstOrDefault(l => l.Name == strategy.setupLevelName);
-                            if (currentLevel != null) currentLevelPrice = currentLevel.Price;
-                            double delta = Math.Abs(currentLevelPrice - lvl.Price);
-                            strategy.Log($"SWITCH_EVAL: Current={strategy.setupLevelName}@{currentLevelPrice} " +
-                                $"New={lvl.Name}@{lvl.Price} Delta={delta:F5} TickSize={strategy.TickSize}");
-                            
-                            strategy.Log(strategy.Time[0] + " SWITCH: New Trigger on " + lvl.Name + " overrides " + strategy.setupLevelName);
-                        }
-                    }
-                        
-                    // TRIGGER CONFIRMED
-                    if (!lvl.IsResistance)
-                    {
-                        // Long Setup
-                        // v1.14.80: Recycle Tags to prevent Drawing Object Accumulation Leak
-                        // Use a rotating index (0-49) instead of Ticks
-                        strategy.triggerTag = "TriggerLong_" + (strategy.triggerLabelIndex % 50);
-                        strategy.triggerLabelIndex++;
-                        
-                        strategy.triggerBar = strategy.CurrentBar;
-                        strategy.DrawTriggerLabel(strategy.triggerTag, false, 0, strategy.Low[0]);
-                        
-                        strategy.currentEntryState = EntryState.WaitingForConfirmation;
-                        strategy.visualConfirmationDone = false;
-                        strategy.isShortSetup = false;
-                        strategy.setupAnchorPrice = strategy.Low[0];
-                        strategy.setupLevelName = lvl.Name;
-                        strategy.setupLevelTime = lvl.StartTime;
-                        strategy.validatedTargetPrice = 0;
-                        strategy.cachedOppositeLevel = null;
-                        
-                        // Reset retry state
-                        strategy.waitingForVwapMitigation = false;
-                        strategy.currentVwapNumber = 1;
-                        strategy.vwapCandleExtreme = 0;
-                        
-                        lvl.EntryAttempts++;
-                        strategy.Log(string.Format("{0} ENTRY ATTEMPT #{1}/{2} on {3}", strategy.Time[0], lvl.EntryAttempts, strategy.MaxRetriesPerLevel, lvl.Name));
-                        
-                        strategy.DetectInternalLevel(lvl, strategy.activeLevels);
-                        
-                        // RESET ADHOC VWAP
-                        double price = strategy.Close[0];
-                        if (strategy.VwapMethod == VwapCalculationMode.Typical) 
-                            price = (strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 3.0;
-                        else if (strategy.VwapMethod == VwapCalculationMode.OHLC4) 
-                            price = (strategy.Open[0] + strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 4.0;
+                     candidates.Add(lvl);
+                }
+            }
 
-                        strategy.adhocVolSum = strategy.Volume[0];
-                        strategy.adhocPvSum = strategy.Volume[0] * price;
-                        strategy.adhocLastBar = strategy.CurrentBar;
-                        strategy.adhocLastVol = strategy.Volume[0];
-                        strategy.adhocAnchorBar = strategy.CurrentBar;
+            // PROCESSING SELECTION
+            if (candidates.Count > 0)
+            {
+                SessionLevel selectedLevel = null;
 
-                        strategy.visualAdhocPrevBarVal = price;
-                        strategy.visualAdhocLastVal = price;
-                        strategy.visualAdhocLastBar = -1;
-                    }
-                    else 
-                    {
-                        // Short Setup
-                        // v1.14.80: Recycle Tags to prevent Drawing Object Accumulation Leak
-                        strategy.triggerTag = "TriggerShort_" + (strategy.triggerLabelIndex % 50);
-                        strategy.triggerLabelIndex++;
+                var supportCandidates = candidates.Where(l => !l.IsResistance).ToList();
+                var resistanceCandidates = candidates.Where(l => l.IsResistance).ToList();
+                
+                // Prioritize Deepest Level
+                // Support: Lowest Price
+                // Resistance: Highest Price
+                
+                SessionLevel bestSupport = supportCandidates.OrderBy(l => l.Price).FirstOrDefault(); 
+                SessionLevel bestResistance = resistanceCandidates.OrderByDescending(l => l.Price).FirstOrDefault(); 
+                
+                if (bestSupport != null && bestResistance != null)
+                {
+                     // If both types triggered (rare/volatile), pick based on bar direction
+                     if (strategy.Close[0] < strategy.Open[0]) selectedLevel = bestSupport; // Bearish -> Support
+                     else selectedLevel = bestResistance; // Bullish -> Resistance
+                }
+                else if (bestSupport != null) selectedLevel = bestSupport;
+                else if (bestResistance != null) selectedLevel = bestResistance;
+                
+                if (selectedLevel != null)
+                {
+                    ProcessSelectedTrigger(selectedLevel);
+                }
+            }
+        }
 
-                        strategy.triggerBar = strategy.CurrentBar;
-                        strategy.DrawTriggerLabel(strategy.triggerTag, true, 0, strategy.High[0]);
-                        
-                        strategy.currentEntryState = EntryState.WaitingForConfirmation;
-                        strategy.visualConfirmationDone = false;
-                        strategy.isShortSetup = true;
-                        strategy.setupAnchorPrice = strategy.High[0];
-                        strategy.setupLevelName = lvl.Name;
-                        strategy.setupLevelTime = lvl.StartTime;
-                        strategy.validatedTargetPrice = 0;
-                        strategy.cachedOppositeLevel = null;
-                        
-                        // Reset retry state
-                        strategy.waitingForVwapMitigation = false;
-                        strategy.currentVwapNumber = 1;
-                        strategy.vwapCandleExtreme = 0;
-                        
-                        lvl.EntryAttempts++;
-                        strategy.Log(string.Format("{0} ENTRY ATTEMPT #{1}/{2} on {3}", strategy.Time[0], lvl.EntryAttempts, strategy.MaxRetriesPerLevel, lvl.Name));
-                        
-                        strategy.DetectInternalLevel(lvl, strategy.activeLevels);
-                        
-                        // RESET ADHOC VWAP
-                        double price = strategy.Close[0];
-                        if (strategy.VwapMethod == VwapCalculationMode.Typical) 
-                            price = (strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 3.0;
-                        else if (strategy.VwapMethod == VwapCalculationMode.OHLC4) 
-                            price = (strategy.Open[0] + strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 4.0;
-
-                        strategy.adhocVolSum = strategy.Volume[0];
-                        strategy.adhocPvSum = strategy.Volume[0] * price;
-                        strategy.adhocLastBar = strategy.CurrentBar;
-                        strategy.adhocLastVol = strategy.Volume[0];
-                        strategy.adhocAnchorBar = strategy.CurrentBar;
-
-                        strategy.visualAdhocPrevBarVal = price;
-                        strategy.visualAdhocLastVal = price;
-                        strategy.visualAdhocLastBar = -1;
-                    }
+        private void ProcessSelectedTrigger(SessionLevel lvl)
+        {
+            // If already waiting, check if different level (SWITCH Logic)
+            if (strategy.currentEntryState == EntryState.WaitingForConfirmation)
+            {
+                if (lvl.Name == strategy.setupLevelName)
+                    return; // Same level, ignore, keep working on it
+                else
+                {
+                    // SWITCH: Found a "better" (deeper) level or a new level while waiting on another.
+                    double currentLevelPrice = 0;
+                    var currentLevel = strategy.activeLevels.FirstOrDefault(l => l.Name == strategy.setupLevelName);
+                    if (currentLevel != null) currentLevelPrice = currentLevel.Price;
+                    double delta = Math.Abs(currentLevelPrice - lvl.Price);
                     
+                    if (strategy.EnableDebugLogs)
+                        strategy.Log($"SWITCH_EVAL: Current={strategy.setupLevelName}@{currentLevelPrice} " +
+                            $"New={lvl.Name}@{lvl.Price} Delta={delta:F5} TickSize={strategy.TickSize}");
                     
-                    // v1.14.50: Audio Alert
-                    if (strategy.UseAlerts && !string.IsNullOrEmpty(strategy.AlertSoundFile))
-                    {
-                        try 
-                        {
-                            strategy.PlaySound(strategy.AlertSoundFile);
-                        }
-                        catch (Exception ex) 
-                        {
-                            strategy.Log("AUDIO ERROR: " + ex.Message);
-                        }
-                    }
+                    strategy.Log(strategy.Time[0] + " SWITCH: New Trigger on " + lvl.Name + " overrides " + strategy.setupLevelName);
+                }
+            }
+                
+            // TRIGGER CONFIRMED -> Initialize Setup
+            if (!lvl.IsResistance)
+            {
+                // Long Setup
+                // v1.14.80: Recycle Tags to prevent Drawing Object Accumulation Leak
+                strategy.triggerTag = "TriggerLong_" + (strategy.triggerLabelIndex % 50);
+                strategy.triggerLabelIndex++;
+                
+                strategy.triggerBar = strategy.CurrentBar;
+                strategy.DrawTriggerLabel(strategy.triggerTag, false, 0, strategy.Low[0]);
+                
+                strategy.currentEntryState = EntryState.WaitingForConfirmation;
+                strategy.visualConfirmationDone = false;
+                strategy.isShortSetup = false;
+                strategy.setupAnchorPrice = strategy.Low[0];
+                strategy.setupLevelName = lvl.Name;
+                strategy.setupLevelTime = lvl.StartTime;
+                strategy.validatedTargetPrice = 0;
+                strategy.cachedOppositeLevel = null;
+                
+                // Reset retry state
+                strategy.waitingForVwapMitigation = false;
+                strategy.currentVwapNumber = 1;
+                strategy.vwapCandleExtreme = 0;
+                
+                lvl.EntryAttempts++;
+                strategy.Log(string.Format("{0} ENTRY ATTEMPT #{1}/{2} on {3} (Deepest Selection)", strategy.Time[0], lvl.EntryAttempts, strategy.MaxRetriesPerLevel, lvl.Name));
+                
+                strategy.DetectInternalLevel(lvl, strategy.activeLevels);
+                
+                // RESET ADHOC VWAP
+                double price = strategy.Close[0];
+                if (strategy.VwapMethod == VwapCalculationMode.Typical) 
+                    price = (strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 3.0;
+                else if (strategy.VwapMethod == VwapCalculationMode.OHLC4) 
+                    price = (strategy.Open[0] + strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 4.0;
 
-                    break; // Only take one trigger at a time
+                strategy.adhocVolSum = strategy.Volume[0];
+                strategy.adhocPvSum = strategy.Volume[0] * price;
+                strategy.adhocLastBar = strategy.CurrentBar;
+                strategy.adhocLastVol = strategy.Volume[0];
+                strategy.adhocAnchorBar = strategy.CurrentBar;
+
+                strategy.visualAdhocPrevBarVal = price;
+                strategy.visualAdhocLastVal = price;
+                strategy.visualAdhocLastBar = -1;
+            }
+            else 
+            {
+                // Short Setup
+                // v1.14.80: Recycle Tags to prevent Drawing Object Accumulation Leak
+                strategy.triggerTag = "TriggerShort_" + (strategy.triggerLabelIndex % 50);
+                strategy.triggerLabelIndex++;
+
+                strategy.triggerBar = strategy.CurrentBar;
+                strategy.DrawTriggerLabel(strategy.triggerTag, true, 0, strategy.High[0]);
+                
+                strategy.currentEntryState = EntryState.WaitingForConfirmation;
+                strategy.visualConfirmationDone = false;
+                strategy.isShortSetup = true;
+                strategy.setupAnchorPrice = strategy.High[0];
+                strategy.setupLevelName = lvl.Name;
+                strategy.setupLevelTime = lvl.StartTime;
+                strategy.validatedTargetPrice = 0;
+                strategy.cachedOppositeLevel = null;
+                
+                // Reset retry state
+                strategy.waitingForVwapMitigation = false;
+                strategy.currentVwapNumber = 1;
+                strategy.vwapCandleExtreme = 0;
+                
+                lvl.EntryAttempts++;
+                strategy.Log(string.Format("{0} ENTRY ATTEMPT #{1}/{2} on {3} (Deepest Selection)", strategy.Time[0], lvl.EntryAttempts, strategy.MaxRetriesPerLevel, lvl.Name));
+                
+                strategy.DetectInternalLevel(lvl, strategy.activeLevels);
+                
+                // RESET ADHOC VWAP
+                double price = strategy.Close[0];
+                if (strategy.VwapMethod == VwapCalculationMode.Typical) 
+                    price = (strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 3.0;
+                else if (strategy.VwapMethod == VwapCalculationMode.OHLC4) 
+                    price = (strategy.Open[0] + strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 4.0;
+
+                strategy.adhocVolSum = strategy.Volume[0];
+                strategy.adhocPvSum = strategy.Volume[0] * price;
+                strategy.adhocLastBar = strategy.CurrentBar;
+                strategy.adhocLastVol = strategy.Volume[0];
+                strategy.adhocAnchorBar = strategy.CurrentBar;
+
+                strategy.visualAdhocPrevBarVal = price;
+                strategy.visualAdhocLastVal = price;
+                strategy.visualAdhocLastBar = -1;
+            }
+            
+            // v1.14.50: Audio Alert
+            if (strategy.UseAlerts && !string.IsNullOrEmpty(strategy.AlertSoundFile))
+            {
+                try 
+                {
+                    strategy.PlaySound(strategy.AlertSoundFile);
+                }
+                catch (Exception ex) 
+                {
+                    strategy.Log("AUDIO ERROR: " + ex.Message);
+                }
+            }
+        }
+
+        /// <summary>
+        /// v1.14.45: Detects if we are in VWAP Mitigation Retry state
+        /// Returns true if waiting for mitigation (blocks other entry logic)
+        /// </summary>
+        public bool HandleVwapMitigationRetry()
+        {
+            // Return true if we are waiting for VWAP mitigation to complete
+            // This prevents other entry logic from running while we wait
+            return strategy.waitingForVwapMitigation &&
+                   strategy.currentEntryState == EntryState.WaitingForVwapMitigation;
+        }
+
+        /// <summary>
+        /// v1.10.0: Re-anchors the setup when price makes new high/low
+        /// SHORT: Re-anchor if price makes new high
+        /// LONG: Re-anchor if price makes new low
+        /// </summary>
+        public void UpdateAnchorIfNeeded()
+        {
+            if (strategy.currentEntryState != EntryState.WaitingForConfirmation &&
+                strategy.currentEntryState != EntryState.workingOrder)
+                return;
+
+            bool isShortSetup = strategy.isShortSetup;
+            double setupAnchorPrice = strategy.setupAnchorPrice;
+            double TickSize = strategy.TickSize;
+
+            // SHORT: Re-anchor if price makes new high
+            if (isShortSetup && strategy.High[0] >= setupAnchorPrice + TickSize)
+            {
+                strategy.setupAnchorPrice = strategy.High[0];
+
+                // Reset VWAP from new anchor
+                double price = strategy.Close[0];
+                if (strategy.VwapMethod == VwapCalculationMode.Typical)
+                    price = (strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 3.0;
+                else if (strategy.VwapMethod == VwapCalculationMode.OHLC4)
+                    price = (strategy.Open[0] + strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 4.0;
+
+                strategy.adhocVolSum = strategy.Volume[0];
+                strategy.adhocPvSum = strategy.Volume[0] * price;
+                strategy.adhocLastBar = strategy.CurrentBar;
+                strategy.adhocLastVol = strategy.Volume[0];
+                strategy.adhocAnchorBar = strategy.CurrentBar;
+
+                // Reset Visual
+                strategy.visualAdhocPrevBarVal = price;
+                strategy.visualAdhocLastVal = price;
+                strategy.visualAdhocLastBar = -1;
+
+                strategy.Log(string.Format("RE-ANCHOR: New High @ {0} (Setup: {1})", strategy.setupAnchorPrice, strategy.setupLevelName));
+            }
+
+            // LONG: Re-anchor if price makes new low
+            if (!isShortSetup && strategy.Low[0] <= setupAnchorPrice - TickSize)
+            {
+                strategy.setupAnchorPrice = strategy.Low[0];
+
+                // Reset VWAP from new anchor
+                double price = strategy.Close[0];
+                if (strategy.VwapMethod == VwapCalculationMode.Typical)
+                    price = (strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 3.0;
+                else if (strategy.VwapMethod == VwapCalculationMode.OHLC4)
+                    price = (strategy.Open[0] + strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 4.0;
+
+                strategy.adhocVolSum = strategy.Volume[0];
+                strategy.adhocPvSum = strategy.Volume[0] * price;
+                strategy.adhocLastBar = strategy.CurrentBar;
+                strategy.adhocLastVol = strategy.Volume[0];
+                strategy.adhocAnchorBar = strategy.CurrentBar;
+
+                // Reset Visual
+                strategy.visualAdhocPrevBarVal = price;
+                strategy.visualAdhocLastVal = price;
+                strategy.visualAdhocLastBar = -1;
+
+                strategy.Log(string.Format("RE-ANCHOR: New Low @ {0} (Setup: {1})", strategy.setupAnchorPrice, strategy.setupLevelName));
+            }
+        }
+
+        /// <summary>
+        /// v1.10.0: Handles invalidation when internal level touches external level
+        /// If touched, cancels the internal setup and auto-triggers on the external level
+        /// </summary>
+        public void HandleInternalInvalidation()
+        {
+            if (!strategy.isInternalLevel) return;
+            if (strategy.currentEntryState != EntryState.WaitingForConfirmation) return;
+
+            bool touchedExternal = false;
+            bool isShortSetup = strategy.isShortSetup;
+
+            // SHORT internal: Check if touched external High above
+            if (isShortSetup && strategy.externalLevelAbove > 0)
+            {
+                if (strategy.High[0] >= strategy.externalLevelAbove)
+                {
+                    touchedExternal = true;
+                    strategy.Log(string.Format("INVALIDATED: Touched external {0} @ {1}",
+                        strategy.externalLevelAboveName, strategy.externalLevelAbove));
+                }
+            }
+
+            // LONG internal: Check if touched external Low below
+            if (!isShortSetup && strategy.externalLevelBelow > 0)
+            {
+                if (strategy.Low[0] <= strategy.externalLevelBelow)
+                {
+                    touchedExternal = true;
+                    strategy.Log(string.Format("INVALIDATED: Touched external {0} @ {1}",
+                        strategy.externalLevelBelowName, strategy.externalLevelBelow));
+                }
+            }
+
+            if (touchedExternal)
+            {
+                // v1.10.1: Mark bar to prevent re-triggering (infinite loop fix)
+                strategy.lastInvalidationBar = strategy.CurrentBar;
+
+                // Cancel entry order if exists
+                if (strategy.entryOrder != null &&
+                    (strategy.entryOrder.OrderState == OrderState.Working ||
+                     strategy.entryOrder.OrderState == OrderState.Accepted))
+                {
+                    strategy.CancelOrder(strategy.entryOrder);
+                }
+
+                // Reset to Idle
+                strategy.currentEntryState = EntryState.Idle;
+                strategy.isInternalLevel = false;
+
+                // v1.10.2: AUTO-TRIGGER on external level after invalidation
+                string externalName = isShortSetup ? strategy.externalLevelAboveName : strategy.externalLevelBelowName;
+                double externalPrice = isShortSetup ? strategy.externalLevelAbove : strategy.externalLevelBelow;
+
+                if (externalPrice > 0 && !string.IsNullOrEmpty(externalName))
+                {
+                    strategy.Log(string.Format("AUTO-TRIGGER: Switching to external level {0} @ {1}", externalName, externalPrice));
+
+                    // Find the external level in activeLevels
+                    var externalLevel = strategy.activeLevels.FirstOrDefault(l => l.Name == externalName);
+                    if (externalLevel != null)
+                    {
+                        ProcessSelectedTrigger(externalLevel);
+                    }
                 }
             }
         }
@@ -615,9 +593,24 @@ namespace NinjaTrader.NinjaScript.Strategies
 					if (isValidRR)
 					{
 						// CAPTURE TARGET (v1.7.16)
-						double tp2Target = strategy.GetOppositeLevelPrice(setupLevelName, setupLevelTime, setupAnchorPrice, true);
-						if (tp2Target == 0) tp2Target = strategy.GetCurrentLowVWAP();
-						strategy.validatedTargetPrice = tp2Target;
+						// CAPTURE TARGET (v1.7.16)
+						// v1.14.83: FIX - Do NOT lock fallback VWAP into validatedTargetPrice.
+						// If GetOppositeLevelPrice returns 0, we use VWAP for R:R check locally,
+						// but leave validatedTargetPrice as 0 so OrderProtectionManager can try again.
+						double levelPrice = strategy.GetOppositeLevelPrice(setupLevelName, setupLevelTime, setupAnchorPrice, true);
+						double rrTarget = levelPrice;
+						
+						if (rrTarget == 0) 
+						{
+							rrTarget = strategy.GetCurrentLowVWAP();
+							// Do NOT set validatedTargetPrice here. Let it remain 0.
+							strategy.validatedTargetPrice = 0; 
+						}
+						else
+						{
+							// Found a real level - lock it in
+							strategy.validatedTargetPrice = levelPrice;
+						}
 
 						// EXE DEBUG & ROUNDING
 						double limitPrice = strategy.Instrument.MasterInstrument.RoundToTickSize(setupVWAP);
@@ -746,9 +739,22 @@ namespace NinjaTrader.NinjaScript.Strategies
 					if (isValidRR)
 					{
 						// CAPTURE TARGET
-						double tp2Target = strategy.GetOppositeLevelPrice(setupLevelName, setupLevelTime, setupAnchorPrice, false);
-						if (tp2Target == 0) tp2Target = strategy.GetCurrentHighVWAP();
-						strategy.validatedTargetPrice = tp2Target;
+						// CAPTURE TARGET
+						// v1.14.83: FIX - Do NOT lock fallback VWAP into validatedTargetPrice.
+						double levelPrice = strategy.GetOppositeLevelPrice(setupLevelName, setupLevelTime, setupAnchorPrice, false);
+						double rrTarget = levelPrice;
+						
+						if (rrTarget == 0) 
+						{
+							rrTarget = strategy.GetCurrentHighVWAP();
+							// Do NOT set validatedTargetPrice here. Let it remain 0.
+							strategy.validatedTargetPrice = 0; 
+						}
+						else
+						{
+							// Found a real level - lock it in
+							strategy.validatedTargetPrice = levelPrice;
+						}
 
 						// EXE DEBUG & ROUNDING
 						double limitPrice = strategy.Instrument.MasterInstrument.RoundToTickSize(setupVWAP);

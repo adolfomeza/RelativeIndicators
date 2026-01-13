@@ -4,6 +4,177 @@ Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documen
 
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+### Agregado
+- **Módulo SL Adaptativo (Supervivencia):** Reemplazo de la lógica de salida de emergencia. Ahora, si el precio salta el Stop Loss durante la entrada, el sistema adapta el SL a `Precio Actual +/- 4 ticks` para asegurar que la orden sea aceptada por NinjaTrader y la posición siga protegida, en lugar de cerrar o fallar.
+
+## [v1.15.6] - 2026-01-12
+### Corregido
+- **Errores de Compilación en EntryStateMachine:** Completada la implementación de métodos faltantes que causaban errores CS1061 y CS0246.
+  - **Agregado `using NinjaTrader.NinjaScript.Strategies.SessionLevels`**: Solucionó error CS0246 donde no se encontraba el tipo `EntryStateMachine`.
+  - **Implementado `CheckTradingModeGuards()`**: Método que verifica si el trading está permitido según el modo actual (Paused/LongOnly/ShortOnly). Bloquea setups Short en modo LongOnly y viceversa.
+  - **Implementado `HandleVwapMitigationRetry()`**: Detecta si la estrategia está en estado de espera para retry de VWAP después de un SL/BE. Retorna `true` para bloquear otra lógica de entrada mientras espera.
+  - **Implementado `UpdateAnchorIfNeeded()`**: Re-ancla el setup cuando el precio hace nuevo high (SHORT) o nuevo low (LONG). Reinicia el cálculo de VWAP adhoc desde el nuevo anchor.
+  - **Implementado `HandleInternalInvalidation()`**: Maneja la invalidación cuando un nivel interno toca un nivel externo. Cancela el setup interno y auto-dispara el nivel externo. Incluye protección anti-loop.
+
+### Técnico
+- **Refactoring Completado**: Los 4 métodos extraídos durante la Fase 5 de refactoring (v1.14.45) ahora están completamente implementados en `EntryStateMachine.cs`, permitiendo que el código compile correctamente.
+- **Líneas Afectadas**: ~150 líneas de código agregadas a `SessionLevels/EntryStateMachine.cs`.
+
+## [v1.15.4] - 2026-01-12
+### Agregado
+- **Salida de Emergencia (Market Exit):** Implementada protección contra gaps violentos en la entrada. Si al llenarse la orden, el precio ya superó el nivel de Stop Loss, la estrategia cierra la posición al mercado inmediatamente en lugar de intentar colocar un SL inválido.
+
+### Streamlit App (Auditor)
+- **Reversión:** Se eliminó la función "Borrado Selectivo" por inestabilidad. Se restauró la función de "Borrado Total (Backtest)" para limpieza manual.
+
+## [v1.15.3] - 2026-01-12
+### Agregado
+- **Limpieza de Entradas Pendientes:** Nuevo método `CheckPendingEntryCleanup()` cancela órdenes de entrada parcialmente llenadas cuando el precio está a 4 ticks del TP1. Evita "fills zombi" después de que el trade principal cierre.
+
+## [v1.15.2] - 2026-01-12
+### Corregido
+- **Bucle Infinito en Cierre de Sesión:** Corregida condición de carrera crítica a las 18:00. Ahora la estrategia detecta si hay una posición activa y omite la cancelación masiva de órdenes de protección, evitando el conflicto con el Safety Net.
+- **Formato de Logs:**
+    - Se reemplazó la hora del sistema (`DateTime.Now`) por la hora del gráfico (`Time[0]`) para facilitar la depuración exacta vela a vela.
+    - Se añadieron prefijos de contexto (`[REALTIME]`, `[PLAYBACK]`, `[BACKTEST]`) a cada línea de log.
+
+### Agregado
+- **Persistencia de Logs:** Los archivos de log ya no se sobrescriben al reiniciar la estrategia. Ahora se añade un separador visual (`=== NEW SESSION STARTED ===`) y se sigue escribiendo en el mismo archivo.
+- **Separación de Archivos de Log:** Se generan archivos independientes según el modo de ejecución (ej. `MYM_Realtime_20260112.txt` vs `MYM_Playback_20260112.txt`).
+
+## [v1.15.1] - 2026-01-12
+### FIXED
+- **Daily Pending Order Cleanup:** Ahora la estrategia cancela *todas* las órdenes pendientes al cierre de la sesión americana (diario), no solo los viernes. Esto previene que órdenes Limit no tomadas queden colgadas (Orphans) durante la noche.
+- **Zombie Sweep:** Se añadió un bucle de seguridad que escanea la colección interna `Orders` y fuerza la cancelación de cualquier orden "Working" que haya quedado huérfana (sin referencia `entryOrder`), solucionando definitivamente el caso reportado en MNQ/MES.
+
+## [v1.15.0] - 2026-01-12
+### FIXED
+- **Orphan Trade (Race Condition):** Solucionado un error crítico donde la estrategia se reiniciaba a estado `Idle` si recibía un evento `Order Cancelled` (común en fills parciales) antes de que la Posición se actualizara. Ahora verifica `filled == 0` antes de reiniciar.
+- **Log Readability:** Separación visual clara de los trades en el log (`==== TRADE START ====` / `==== TRADE CLOSED ====`) y estandarización de timestamps automáticos en todas las líneas.
+
+## [v1.14.97] - 2026-01-11
+- **FIX: Comisión MyM vs M2K Swap (Definitivo)**
+    - Análisis de PnL muestra que la App estaba sobreestimando MYM y subestimando M2K.
+    - **Cambio**: Se intercambiaron las tasas para reflejar la microestructura real del broker del usuario.
+        - **M2K (Micro Russell)**: Ajustado a **$0.95/lado ($1.90 RT)** (Subida).
+        - **MYM (Micro Dow)**: Ajustado a **$0.90/lado ($1.80 RT)** (Bajada).
+    - Esto eliminará la discrepancia de -$16.50 en MYM y +$18.40 en M2K.
+
+## [v1.14.96] - 2026-01-11
+- **Feature: Análisis de Frescura de Niveles (Data Export)**
+    - Se añadió la columna `LevelAge` (Columna 21) al CSV de exportación de trades.
+    - Calcula la antigüedad del nivel en días al momento de la entrada (0 = Hoy, 1 = Ayer, etc.).
+    - Permite filtrar en la App por "Niveles de Hoy" vs "Niveles Antiguos".
+    - **Header Update**: Se modificó `InitCSV` para incluir el nuevo encabezado.
+
+## [v1.14.95] - 2026-01-11
+- **FIX: Comisión MYM ($1.90 RT)**
+    - Se eliminó "Dead Code" que excluía a MYM de la lógica de comisiones Micro.
+    - Se eliminó la anulación redundante que forzaba $1.80.
+    - Ahora MYM y MNQ usan correctamente $0.95/lado ($1.90 RT).
+- **FIX: Activación Prematura de Niveles (Asia Low)**
+    - Se corrigió un bug donde niveles de sesiones nocturnas (Overnight) se activaban a las 12:01 AM del día siguiente, aunque la sesión siguiera activa.
+    - Nueva lógica `ActiveSessionCheck` bloquea operaciones si la sesión no ha finalizado, manejando correctamente el cruce de medianoche.
+
+## [v1.14.94] - 2026-01-11
+- **v1.14.94**: **Fix Crítico de Doble Salida**. Se implementó `CancelAllProtectionOrders` antes de ejecutar salidas de emergencia (Failsafe por violación de Anchor) o cierres de sesión. Esto evita que el Stop Loss y la orden de salida a mercado se ejecuten simultáneamente (Race Condition entres estrategia y exchange), lo cual causaba posiciones inversas no deseadas (e.g., +42 Longs tras cerrar 28 Shorts).
+    - **Update**: Ajuste de Comisiones Micro Indices Híbrido: **MNQ=$1.90 RT** ($0.95/lado) y **Otros Micros=$1.80 RT** ($0.90/lado) para precisión milimétrica con broker del usuario.
+- **v1.14.93**: **Corrección de Cálculo de PnL en Fills Parciales**. Se actualizó `OnExecutionUpdate` para usar `execution.Price` en lugar de `order.AverageFillPrice` al calcular el PnL y escribir el CSV. Esto elimina la discrepancia de centavos acumulada cuando una orden se llena en múltiples tramos a precios distintos.
+
+## [v1.14.92] - 2026-01-11
+### Fixed Data Gap: Partial Fills (PartFilled) 📉
+- **Problema**: Al comparar con NinjaTrader, faltaban contratos en el CSV si una orden se llenaba en varios tramos (ej: orden de 16 contratos que se llena 4 + 12). La estrategia ignoraba el estado `PartFilled` y solo registraba el `Filled` final.
+- **Solución**: Se actualizó `OnExecutionUpdate` para registrar también eventos `PartFilled`. Ahora el CSV capturará cada fragmento de la ejecución, asegurando que la suma total de contratos y PnL coincida exactamente con NinjaTrader.
+
+## [v1.14.91] - 2026-01-11
+### Fixed Data Inconsistency (App vs Ninja) 📊
+- **Problema**: El reporte en Streamlit mostraba datos inconsistentes o vacíos debido a que la estrategia exportaba 20 columnas (incluyendo Deltas) pero la App solo leía 16, y el archivo CSV no tenía cabecera.
+- **Solución**:
+    1.  **App Updated**: Se actualizó `app.py` para leer las 20 columnas correctamente. Esto arregla la lectura de tus datos actuales.
+    2.  **Strategy InitCSV**: Se implementó `InitCSV` para que los nuevos archivos se creen con una cabecera correcta (`TradeId,Instrument,...`), evitando ambigüedades futuras.
+
+
+
+## [v1.14.90] - 2026-01-10
+### Fixed CRÍTICO: Distribución de Cantidad en Rellenos Parciales (Smart Consumption) 🧠
+- **Problema**: Al entrar con órdenes Limit (que generan muchos rellenos parciales de 1 contrato), la distribución escalonada se rompía ("clumping" al final) y el Stop Loss no aumentaba su tamaño.
+- **Solución**:
+    1.  **Stop Loss Agregado**: Ahora el SL detecta el tamaño *total* de la posición y se actualiza (`ChangeOrder`) automáticamente con cada relleno parcial.
+    2.  **Consumo Inteligente de TP**: En lugar de calcular una "mini distribución" para cada relleno de 1 contrato, ahora calcula el **Plan Maestro** (para el total de contratos) y "consume" solo la rebanada correspondiente al relleno actual.
+- **Resultado**: Curva de distribución perfecta incluso si la entrada se llena en 50 tramos de 1 contrato.
+
+## [v1.14.89] - 2026-01-10
+### Fixed CRÍTICO: Crash por Cantidad Cero y Deadlock 💥
+- **Problema**: La estrategia se desactivaba inmediatamente ("desaparecen los botones") al intentar abrir una operación.
+- **Causa Raíz**: 
+    1. `OrderProtectionManager` intentaba crear un Stop Loss inicial con **Cantidad = 0** (debido a lógica hardcoded en modo escalonado).
+    2. NinjaTrader lanzaba una excepción interna al validar la orden.
+    3. La terminación forzada de la estrategia ocurría mientras se sostenía un `lock` (bloqueo), causando una excepción recursiva (`LockRecursionException`).
+- **Solución**: 
+    - Se agregó validación `if (qty > 0)` antes de enviar cualquier orden de protección.
+    - Se redujo el alcance del bloqueo (`lock`) en `OrderProtectionManager` para que solo cubra la adición a la lista, no la llamada al nucleo de NinjaTrader (`SubmitOrder`).
+    - Se agregaron bloques `try-catch` de seguridad en `OnBarUpdate`, `OnOrderUpdate` y `OnExecutionUpdate`.
+- **Resultado**: Estrategia estable y funcional ("ya cargo").
+
+## [v1.14.88] - 2026-01-10
+### Added Distribución Dinámica de Targets Escalonados 📈
+- **Mejora**: Implementada lógia "Gap-Fill" en modo Scaled.
+- **Detalle**: Ahora el sistema calcula el tamaño de paso dinámicamente para cubrir toda la distancia hasta el VWAP con 20 órdenes, evitando huecos grandes.
+
+## [v1.14.86] - 2026-01-10
+### Fixed CRÍTICO: validatedTargetPrice Nunca Se Asignaba Desde OrderProtectionManager 🔧
+- **Problema**: v1.14.85 no funcionó. `validatedTargetPrice` permanecía en 0 incluso cuando se encontraba el nivel opuesto correcto.
+- **Causa Raíz**: El fix v1.14.83 solo asignaba `validatedTargetPrice` en `EntryStateMachine` durante la confirmación inicial del setup, pero esta asignación no persistía hasta que se creaban las órdenes TP. Cuando `OrderProtectionManager.SubmitProtectionOrders()` creaba TP2, `validatedTargetPrice` seguía en 0, por lo que `ManagePositionExit()` no tenía ningún valor guardado para usar como fallback.
+- **Solución**: Agregado en `OrderProtectionManager.SubmitProtectionOrders()`:
+  ```csharp
+  if (strategy.validatedTargetPrice == 0) 
+      strategy.validatedTargetPrice = myTpPrice; // Save TP2 price first time
+  ```
+  Ahora cuando se crea TP2 por primera vez, su precio se guarda en `validatedTargetPrice` para que `ManagePositionExit()` lo use como fallback.
+- **Resultado**: `ManagePositionExit()` ya no hace fallback a VWAP porque tiene el precio correcto de TP2 guardado.
+- **Archivos**: `OrderProtectionManager.cs` (línea 252)
+
+## [v1.14.85] - 2026-01-10
+### Fixed CRÍTICO: "Ghost ChangeOrder" Moviendo TP2 a Precio Incorrecto 👻
+- **Problema**: TP2 se creaba correctamente en el nivel opuesto (ej. Europe High @ 21143.75) pero inmediatamente se movía al precio de TP1 (VWAP @ 21032.25), consolidando todos los contratos en un solo objetivo.
+- **Causa Raíz**: `ManagePositionExit()` (que actualiza dinámicamente los TP en cada tick) llamaba a `GetOppositeLevelPrice()` y cuando fallaba en encontrar el nivel, hacía fallback a VWAP. Esto generaba un `ChangeOrder()` "fantasma" que sobrescribía el TP2 correcto.
+- **Evidencia (Logs v1.14.84)**:
+  ```
+  TP2 CREATED: TP2_Long_01 @ 21143.75 Qty=1
+  EnsureProtection COMPLETE
+  ORDER_UPDATE_TP: Name='TP2_Long_01' State=ChangeSubmitted Price=21032.25  ← Ghost Change
+  ```
+- **Solución**: Modificado `ManagePositionExit()` para que, si `GetOppositeLevelPrice()` falla, use `validatedTargetPrice` (el target persistido) antes de hacer fallback a VWAP.
+- **Resultado**: TP2 ahora permanece en el nivel correcto durante toda la vida del trade.
+- **Archivos**: `SessionLevelsStrategy.cs` (líneas 3126-3145)
+
+## [v1.14.84] - 2026-01-10
+### Diagnóstico: Logs para Investigar Corrupción de Referencia TP2 🔍
+- **Problema Detectado**: La estrategia encuentra el nivel opuesto correcto (ej. Europe High) pero asigna TODOS los contratos a TP1, dejando TP2 en 0.
+- **Evidencia**: Logs muestran que al intentar actualizar TP2, la referencia (`strategy.tp2Order`) apunta incorrectamente a la orden TP1.
+- **Logs Agregados**:
+    - `ORDER_UPDATE_TP`: Captura nombre exacto, ID, estado, precio y cantidad de cada orden TP cuando se dispara `OnOrderUpdate`.
+    - `TP UPDATE`: Ahora muestra OrderID y Name de la orden antes de modificarla con `ChangeOrder`.
+- **Objetivo**: Identificar si NinjaTrader corrompe las referencias durante `ChangeOrder` o si hay un bug en la lógica de asignación.
+- **Archivos**: `SessionLevelsStrategy.cs`, `OrderProtectionManager.cs`
+
+## [v1.14.83] - 2026-01-10
+### Fixed CRÍTICO: Lógica de Persistencia Bloqueada por Validación R:R 🐛
+- **Problema**: La estrategia ignoraba el nivel de sesión correcto (ej. Asia Low ~21000) y forzaba el uso del VWAP (ej. 21046) como Target 2.
+- **Causa**: La validación inicial de Riesgo/Recompensa (`ValidateRiskReward`) fallaba en encontrar el nivel en milisegundos y usaba un fallback (VWAP). Este fallback se guardaba en `validatedTargetPrice`, impidiendo que la ejecución real reintentara buscar el nivel guardado en disco.
+- **Solución**:
+    - Se modificó `EntryStateMachine.cs` para usar una variable local en la validación R:R.
+    - Si el nivel no se encuentra instantáneamente, `validatedTargetPrice` permanece en 0.
+    - Esto permite que `OrderProtectionManager` use la lógica de reintento y encuentre el nivel correcto cargado desde el XML de Persistencia.
+- **Resultado**: La estrategia ahora respeta los niveles guardados/cargados incluso si hay un ligero retraso en su detección inicial.
+
+## [v1.14.82] - 2026-01-10
+### Agregado
+- **Persistencia de Niveles (`SessionLevelPersistence.cs`)**: Nuevo sistema que guarda los niveles de sesión (Asia/Europe/USA) en archivos XML en la carpeta `Cache`.
+    - Al reiniciar la estrategia, intenta cargar los niveles del archivo en lugar de recalcularlos, solucionando errores de cálculo en días históricos o reinicios.
+    - Guarda automáticamente los niveles cuando se detectan nuevos.
+- **Diagnóstico (`DumpActiveLevels`)**: Herramienta para imprimir en el log todos los niveles activos en memoria, útil para verificar la carga correcta.
+
 ## [v1.14.81] - 2026-01-09
 ### Fixed
 - **Session Reset:** Se añadió mecanismo de auto-curación en `CheckWeekEndReset`. Ahora el reset de sesión ocurre forzosamente si `Position.MarketPosition` es `Flat`, previniendo que la estrategia quede atascada en un ciclo de "SESSION RESET POSTPONED" por estados desincronizados ("Ghost Positions").
@@ -47,7 +218,6 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
     - **Cálculo de Cantidad**: 
         - Modo `% Balance`: `(Balance * %) / Oportunidades`.
         - Modo `Drawdown Allocation`: `(Drawdown / Días) / Oportunidades`.
-
 ## [v1.14.77] - 2026-01-09
 ### FIX: Panel de Información y Cálculo de Riesgo Visual 🐛
 - **Corrección de "Partial Fill"**: Ahora el panel acumula correctamente la cantidad de contratos si la entrada se llena en varios pasos (antes mostraba riesgo de 1 solo contrato).

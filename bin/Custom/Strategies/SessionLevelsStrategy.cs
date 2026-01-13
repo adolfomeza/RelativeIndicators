@@ -21,6 +21,7 @@ using NinjaTrader.Core.FloatingPoint;
 using NinjaTrader.Core; // Added explicit Core usage
 using NinjaTrader.NinjaScript.Indicators;
 using NinjaTrader.NinjaScript.DrawingTools;
+using NinjaTrader.NinjaScript.Strategies.SessionLevels;
 using System.Net;
 using System.Net.Mail;
 using System.IO;
@@ -36,7 +37,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.14.77"; // v1.14.77: UI Risk Panel Fixes
+		private const string StrategyVersion = "v1.15.6"; // v1.15.6: Fixed EntryStateMachine compilation errors
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;
@@ -372,7 +373,11 @@ namespace NinjaTrader.NinjaScript.Strategies
 		
 		public void Log(string message)
 		{
-			if (helpers != null) helpers.Log(message);
+            // v1.15.0: Log Readability - Auto-timestamp (Server Time for consistency)
+            string timestamp = DateTime.Now.ToString("HH:mm:ss.fff");
+            string msgWithTime = string.Format("[{0}] {1}", timestamp, message);
+            
+			if (helpers != null) helpers.Log(msgWithTime);
 		}
 		
 		// Wrappers for OrderProtectionManager (Exposing Protected Methods)
@@ -386,7 +391,49 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 		public void ChangeOrderWrapper(Order order, int quantity, double limitPrice, double stopPrice)
 		{
-			ChangeOrder(order, quantity, limitPrice, stopPrice);
+			try
+			{
+				if (order != null && order.OrderType == OrderType.StopMarket)
+				{
+					// v1.14.98: Validation to prevent "Stop price can't be changed above/below market" crash
+					// Use Bid/Ask for accuracy during Realtime/Playback if available, fallback to Close[0]
+					double currentAsk = 0;
+					double currentBid = 0;
+
+                    // Only try to get Bid/Ask if Realtime or Playback (State check or just catch 0)
+					try { currentAsk = GetCurrentAsk(); currentBid = GetCurrentBid(); } catch {}
+					
+					if (currentAsk == 0) currentAsk = Close[0];
+					if (currentBid == 0) currentBid = Close[0];
+
+					// BUY STOP (Short Protection): Must be ABOVE market (Ask)
+					if (order.OrderAction == OrderAction.BuyToCover || order.OrderAction == OrderAction.Buy)
+					{
+						// Strict check: Must be > Ask
+						if (stopPrice <= currentAsk)
+						{
+							Log(string.Format("CRITICAL: Attempted to set BUY STOP @ {0} which is <= Market/Ask ({1}). Clamping to Ask + 5 ticks.", stopPrice, currentAsk));
+							stopPrice = currentAsk + (5 * TickSize); // Increased buffer to 5 ticks
+						}
+					}
+					// SELL STOP (Long Protection): Must be BELOW market (Bid)
+					else if (order.OrderAction == OrderAction.Sell || order.OrderAction == OrderAction.SellShort)
+					{
+						// Strict check: Must be < Bid
+						if (stopPrice >= currentBid)
+						{
+							Log(string.Format("CRITICAL: Attempted to set SELL STOP @ {0} which is >= Market/Bid ({1}). Clamping to Bid - 5 ticks.", stopPrice, currentBid));
+							stopPrice = currentBid - (5 * TickSize); // Increased buffer to 5 ticks
+						}
+					}
+				}
+				
+				ChangeOrder(order, quantity, limitPrice, stopPrice);
+			}
+			catch (Exception ex)
+			{
+				Log($"ERROR in ChangeOrder: {ex.Message} (Order: {order?.Name} Qty: {quantity} Stop: {stopPrice})");
+			}
 		}
 
 		public void CancelOrderWrapper(Order order)
@@ -556,7 +603,37 @@ namespace NinjaTrader.NinjaScript.Strategies
 			foreach (var lvl in activeLevels)
 			{
 				if (lvl.IsMitigated) continue;
-				if (lvl.StartTime.Date == Time[0].Date) continue;
+				
+				// v1.14.95: ROBUST SESSION COMPLETION CHECK (RESTART LOGIC)
+                // Ensure we don't restart trading on a level that is still forming (Overnight Session)
+                if (nyTimeZone != null && chartTimeZone != null) 
+                {
+                    DateTime chartTime = Time[0];
+                    DateTime currentNyTime = TimeZoneInfo.ConvertTime(chartTime, chartTimeZone, nyTimeZone);
+                    DateTime startNyTime = TimeZoneInfo.ConvertTime(lvl.StartTime, chartTimeZone, nyTimeZone);
+                    
+                    TimeSpan levelStartTs = startNyTime.TimeOfDay;
+                    TimeSpan levelEndTs = lvl.ActualSessionEnd; 
+                    bool isOvernightSession = levelStartTs > levelEndTs;
+
+                    if (isOvernightSession)
+                    {
+                        // Case A: Still on Start Day -> BLOCK
+                        if (currentNyTime.Date == startNyTime.Date) continue;
+                        // Case B: Next Day (Morning) -> BLOCK
+                        if (currentNyTime.Date == startNyTime.Date.AddDays(1) && currentNyTime.TimeOfDay < levelEndTs) continue;
+                    }
+                    else
+                    {
+                        // Intraday -> BLOCK if same day active
+                        if (currentNyTime.Date == startNyTime.Date && currentNyTime.TimeOfDay < levelEndTs) continue;
+                    }
+                }
+                else
+                {
+                    // Fallback (unsafe)
+                    if (lvl.StartTime.Date == Time[0].Date) continue;
+                }
 				
 				bool wasTouched = false;
 				bool priceOnCorrectSide = false;
@@ -615,7 +692,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				
 				// ...
 				Description									= @"Advanced Session Levels Strategy with VWAP and R/R Filters.";
-				Name										= "SessionLevelsStrategy " + StrategyVersion;
+				Name									= "SessionLevelsStrategy v1.15.1";
 				Calculate									= Calculate.OnEachTick;
 				EntriesPerDirection							= 4; // Visual reference (Unmanaged ignores this limit)
 				EntryHandling								= EntryHandling.AllEntries;
@@ -652,17 +729,25 @@ namespace NinjaTrader.NinjaScript.Strategies
 			}
 			else if (State == State.DataLoaded)
 			{
-				// Phase 7: Initialize Helpers FIRST (for Log)
-				helpers = new StrategyHelpers(this);
+				try
+				{
+					// v1.14.89: FIX CRASH - Ensure Locks are Initialized
+					if (scaledOrdersLock == null) scaledOrdersLock = new object();
+				
+					// Phase 7: Initialize Helpers FIRST (for Log)
+					helpers = new StrategyHelpers(this);
 
-				Log("DEBUG: OnStateChange(DataLoaded) IsUnmanaged = " + IsUnmanaged);
-				// Initialize VWAP Calculator Module
-				vwapCalc = new VWAPCalculator(this);
+					Log("DEBUG: OnStateChange(DataLoaded) IsUnmanaged = " + IsUnmanaged);
+					// Initialize VWAP Calculator Module
+					vwapCalc = new VWAPCalculator(this);
 				riskManager = new RiskManager(this); // v1.14.76: Apteros Risk
 				riskManager.InitializeState();
 				sessionManager = new SessionManager(this); // v1.14.45: Fix Initialization
 				protectionManager = new OrderProtectionManager(this);
 				entryMachine = new EntryStateMachine(this); // Entry State Machine
+				
+				// v1.14.78: Initialize Persistence
+				levelPersistence = new SessionLevelPersistence(this);
 				
 				// Initialize Helper Indicators
 				atr = ATR(14); // For Dynamic Spacing
@@ -783,8 +868,16 @@ namespace NinjaTrader.NinjaScript.Strategies
 				{
 					LoadLevels();
 				} 
-				catch(Exception ex) { Print("Warning: Failed to load levels: " + ex.Message); }
+				} 
+				catch(Exception ex) { Log("Warning: Failed to load levels: " + ex.Message); }
 				*/
+				}
+				catch (Exception ex)
+				{
+					// v1.14.89: CATCH CRITICAL STARTUP ERRORS
+					NinjaTrader.Code.Output.Process("CRITICAL STRATEGY ERROR (OnStateChange): " + ex.ToString(), PrintTo.OutputTab1);
+					Log("CRITICAL STRATEGY ERROR: " + ex.ToString());
+				}
 			}
 			else if (State == State.Transition)
 			{
@@ -1249,6 +1342,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 		protected override void OnBarUpdate()
 		{
+			try
+			{
 			// Skip processing for tick data series (BarsInProgress == 1)
 			// Only process main price series to avoid index errors with PlotBrushes
 			if (BarsInProgress != 0)
@@ -1585,6 +1680,19 @@ currentEntryState = EntryState.Idle;
 
 			// 1. Session Logic: Identify/Create Levels (Delegated to SessionManager)
 			if (sessionManager == null) sessionManager = new SessionManager(this);
+            
+            // v1.14.78: PERSISTENCE LOAD
+            // If starting fresh (no levels), try to load from disk FIRST
+            if (activeLevels.Count == 0 && CurrentBar == BarsRequiredToTrade && levelPersistence != null)
+            {
+                var loaded = levelPersistence.LoadLevels();
+                if (loaded != null && loaded.Count > 0)
+                {
+                    activeLevels = loaded;
+                    DumpActiveLevels("Loaded from Disk");
+                    lastLevelCount = activeLevels.Count;
+                }
+            }
 			
 			// v1.14.64: Scan for historical levels from sessions that already ended (once at startup)
 			if (CurrentBar == BarsRequiredToTrade)
@@ -1598,6 +1706,18 @@ currentEntryState = EntryState.Idle;
 			
 			// 2. Manage Extension & Touching (Delegated to SessionManager)
 			sessionManager.ManageLevels(deltaVol);
+            
+            // v1.14.78 PERSISTENCE SAVE
+            // If levels changed (new level added), save to disk
+            if (levelPersistence != null && activeLevels.Count != lastLevelCount)
+            {
+                // Only save if we have levels (don't overwrite with empty list unless intended)
+                if (activeLevels.Count > 0)
+                {
+                    levelPersistence.SaveLevels(activeLevels);
+                    lastLevelCount = activeLevels.Count;
+                }
+            }
 			
 			// 3. Global ETH VWAPs
 			// 3. Global ETH VWAPs (Delegated)
@@ -1617,6 +1737,7 @@ currentEntryState = EntryState.Idle;
 			CheckSafetyNet();
 			CheckHardStop();
 			CheckSessionExit();
+			CheckPendingEntryCleanup(); // v1.15.3: Cancel pending entries near TP1
 
 			// v1.14.76: Apteros Risk Enforcement (Bar Update)
             if (riskManager != null && SelectedRiskModel == RiskModelType.Apteros)
@@ -1667,6 +1788,11 @@ currentEntryState = EntryState.Idle;
 				Print($"CRITICAL_ERROR in OnBarUpdate (Bar {CurrentBar}): {ex.GetType().Name} - {ex.Message}");
 				if (EnableDebugLogs)
 					Log($"CRITICAL STACK: {ex.StackTrace}");
+			}
+			}
+			catch (Exception ex)
+			{
+				NinjaTrader.Code.Output.Process("OUTER CRITICAL_ERROR in OnBarUpdate: " + ex.ToString(), PrintTo.OutputTab1);
 			}
 		}
 
@@ -1824,6 +1950,10 @@ currentEntryState = EntryState.Idle;
 				{
 						Log(Time[0] + " FAILSAFE: Price (High=" + High[0] + ") violated Anchor (" + setupAnchorPrice + "). Forcing ExitShort.");
 						failsafeTriggered = true; // Lock immediately
+						
+						// v1.14.94: RACE CONDITION FIX - Cancel SL/TP before Market Exit
+						if (protectionManager != null) protectionManager.CancelAllProtectionOrders();
+						
 						ClosePositionUnmanaged("Anchor Violation");
 						// Reset handled in OnExecutionUpdate
 						return;
@@ -1836,6 +1966,10 @@ currentEntryState = EntryState.Idle;
 				{
 						Log(Time[0] + " FAILSAFE: Price (Low=" + Low[0] + ") violated Anchor (" + setupAnchorPrice + "). Forcing ExitLong.");
 						failsafeTriggered = true; // Lock immediately
+						
+						// v1.14.94: RACE CONDITION FIX - Cancel SL/TP before Market Exit
+						if (protectionManager != null) protectionManager.CancelAllProtectionOrders();
+						
 						ClosePositionUnmanaged("Anchor Violation");
 						// Reset handled in OnExecutionUpdate
 						return;
@@ -1893,56 +2027,143 @@ currentEntryState = EntryState.Idle;
 					Time[0], actualSessionEnd, nyClose, isEarlyClose, isFriday));
 			}
 			
-	// Trigger logic if Friday OR Early Holiday
-	// v1.14.79: Allow disabling holiday protection (User Request for data mismatch scenarios)
-	if (EnableHolidayProtection && (isFriday || isEarlyClose))
-	{
-		DateTime dynamicCutoff = actualSessionEnd.Subtract(exitBuffer);
-		
-		// Check Window: From Cutoff (End-30s) up to End+5min (Gap/Cleanup)
-		if (Time[0] >= dynamicCutoff && Time[0] <= actualSessionEnd.Add(gapBuffer))
-		{
-			// LOGIC ACTIVATED (Indent matches original block)
-		// 3. Execution Logic - ONLY ON FRIDAYS/HOLIDAYS
-		
-		// A) Close Positions
-		if (Position.MarketPosition != MarketPosition.Flat)
-		{
-			// Only log once per bar to avoid spam
-			if (IsFirstTickOfBar)
-				Log(Time[0] + " SESSION CLOSE PROTECT: Market closing/holiday. Forcing Exit. (Reason: " + (isEarlyClose ? "Holiday" : "Friday") + ")");
-				
-			ClosePositionUnmanaged("Exit on Session Close (" + (isEarlyClose ? "Holiday" : "Friday") + ")");
-		}
-		
-		// B) Cancel Working Orders & Reset State
-		if (currentEntryState != EntryState.Idle)
-		{
-			if (IsFirstTickOfBar)
-				Log(Time[0] + " SESSION CLOSE PROTECT: Cancelling Pending Orders.");
-				
-			// CONSOLIDATED ENTRY
-			if (entryOrder != null && entryOrder.OrderState == OrderState.Working) CancelOrder(entryOrder);
-			// v1.14.80: Cancel MAIN stopOrder (Ghost SL fix)
-			if (stopOrder != null && (stopOrder.OrderState == OrderState.Working || stopOrder.OrderState == OrderState.Accepted)) CancelOrder(stopOrder);
+			// Trigger logic - DAILY CHECK (Previously only Friday/Holiday)
+			// v1.15.1: User Request - Cancel Pending Orders DAILY at Session Close (17:00 NY)
+			// "esa orden si no fue tomada se debe cancelar antes del cierre de amrica"
 			
-			if (stopOrder1 != null && stopOrder1.OrderState == OrderState.Working) CancelOrder(stopOrder1);
-			if (stopOrder2 != null && stopOrder2.OrderState == OrderState.Working) CancelOrder(stopOrder2);
-			if (tp1Order != null && tp1Order.OrderState == OrderState.Working) CancelOrder(tp1Order);
-			if (tp2Order != null && tp2Order.OrderState == OrderState.Working) CancelOrder(tp2Order);
+			DateTime dynamicCutoff = actualSessionEnd.Subtract(exitBuffer);
 			
-			currentEntryState = EntryState.Idle; // Force Idle
-			setupLevelName = "";
+			// Check Window: From Cutoff (End-30s) up to End+5min (Gap/Cleanup)
+			if (Time[0] >= dynamicCutoff && Time[0] <= actualSessionEnd.Add(gapBuffer))
+			{
+				// ---------------------------------------------------------------------
+				// 1. POSITION EXIT (FRIDAY / HOLIDAY ONLY) or explicit ExitOnSessionClose
+				// ---------------------------------------------------------------------
+				// Keep strict Position closing for Weekends/Holidays to avoid gap risk
+				if (EnableHolidayProtection && (isFriday || isEarlyClose))
+				{
+					if (Position.MarketPosition != MarketPosition.Flat)
+					{
+						// Only log once per bar to avoid spam
+						if (IsFirstTickOfBar)
+							Log(Time[0] + " SESSION CLOSE PROTECT: Market closing/holiday. Forcing Exit. (Reason: " + (isEarlyClose ? "Holiday" : (isFriday ? "Friday" : "DailyClose")) + ")");
+						
+						// v1.14.94: RACE CONDITION FIX - Cancel SL/TP before Market Exit (Consistency)
+						if (protectionManager != null) protectionManager.CancelAllProtectionOrders();
+						
+						ClosePositionUnmanaged("Exit on Session Close");
+					}
+				}
+
+				// ---------------------------------------------------------------------
+				// 2. ORDER CLEANUP (DAILY - MANDATORY)
+				// ---------------------------------------------------------------------
+				// Always cancel pending orders at session close to prevent "Orphan Limit" orders overnight.
+				if (currentEntryState != EntryState.Idle || true) // Force check always
+				{
+					if (IsFirstTickOfBar)
+						Log(Time[0] + " DAILY SESSION CLEANUP: Scanning for Pending Orders...");
+						
+					// ALWAYS Cancel Pending ENTRIES (prevent fills during gap)
+					if (entryOrder != null && (entryOrder.OrderState == OrderState.Working || entryOrder.OrderState == OrderState.Accepted))
+					{
+						Log(Time[0] + " DAILY CLEANUP: Cancelling Pending Entry: " + entryOrder.Name);
+						CancelOrder(entryOrder);
+					}
+					
+					// v1.15.2: CRITICAL FIX - Only Cancel Protection/Reset State if FLATTENED
+					// If we are holding a position (Overnight), we MUST KEEP SL/TP active.
+					if (Position.MarketPosition == MarketPosition.Flat)
+					{
+						if (stopOrder != null && (stopOrder.OrderState == OrderState.Working || stopOrder.OrderState == OrderState.Accepted)) CancelOrder(stopOrder);
+						if (stopOrder1 != null && stopOrder1.OrderState == OrderState.Working) CancelOrder(stopOrder1);
+						if (stopOrder2 != null && stopOrder2.OrderState == OrderState.Working) CancelOrder(stopOrder2);
+						if (tp1Order != null && tp1Order.OrderState == OrderState.Working) CancelOrder(tp1Order);
+						if (tp2Order != null && tp2Order.OrderState == OrderState.Working) CancelOrder(tp2Order);
+
+						if (protectionManager != null) protectionManager.CancelAllProtectionOrders();
+						
+						// v1.15.1: ZOMBIE SWEEP - Iterate ALL Strategy Orders to catch lost references
+						lock (Orders)
+						{
+							foreach (Order o in Orders)
+							{
+								if (o != null && (o.OrderState == OrderState.Working || o.OrderState == OrderState.Accepted))
+								{
+									// Since we are FLAT, ANY working order is a zombie/orphan. Kill it.
+									Log(Time[0] + " ZOMBIE SWEEP: Force Cancelling orphaned order: " + o.Name);
+									CancelOrder(o);
+								}
+							}
+						}
+						
+						currentEntryState = EntryState.Idle; // Force Idle only if Flat
+						setupLevelName = "";
+					}
+					else
+					{
+						// Position Active -> Log that we are skipping cleanup to protect position
+						if (IsFirstTickOfBar)
+							Log(Time[0] + " DAILY CLEANUP SKIPPED (Active Position): Preservation Mode.");
+					}
+				}
+			}
 		}
-	}
-}
-}
+
+
 
 
 
 		
 		// Orphan State Tracking
 		private bool orphanHandled = false;
+
+		// -------------------------------------------------------------------------
+		// v1.15.3: PENDING ENTRY CLEANUP - Cancel partial fills near TP1
+		// -------------------------------------------------------------------------
+		private void CheckPendingEntryCleanup()
+		{
+			// Only relevant if we have an active position AND a pending entry order
+			if (Position.MarketPosition == MarketPosition.Flat) return;
+			if (entryOrder == null) return;
+			if (entryOrder.OrderState != OrderState.Working && entryOrder.OrderState != OrderState.Accepted) return;
+			
+			// Get current TP1 price (from working order or cached)
+			double tp1Price = 0;
+			if (tp1Order != null && (tp1Order.OrderState == OrderState.Working || tp1Order.OrderState == OrderState.Accepted))
+			{
+				tp1Price = tp1Order.LimitPrice;
+			}
+			
+			if (tp1Price <= 0) return; // No valid TP1 to reference
+			
+			// Calculate 4-tick buffer
+			double buffer = 4 * TickSize;
+			bool shouldCancel = false;
+			
+			if (Position.MarketPosition == MarketPosition.Short)
+			{
+				// Short: TP1 is below entry. Cancel if price is within 4 ticks of TP1 (price descending)
+				if (Low[0] <= tp1Price + buffer)
+				{
+					shouldCancel = true;
+				}
+			}
+			else if (Position.MarketPosition == MarketPosition.Long)
+			{
+				// Long: TP1 is above entry. Cancel if price is within 4 ticks of TP1 (price ascending)
+				if (High[0] >= tp1Price - buffer)
+				{
+					shouldCancel = true;
+				}
+			}
+			
+			if (shouldCancel)
+			{
+				Log(Time[0] + " ENTRY CLEANUP: Price near TP1. Cancelling pending entry: " + entryOrder.Name + " (Remaining Qty=" + (entryOrder.Quantity - entryOrder.Filled) + ")");
+				try { CancelOrder(entryOrder); } catch {}
+			}
+		}
 
 		private void CheckSafetyNet()
 		{
@@ -2490,6 +2711,42 @@ currentEntryState = EntryState.Idle;
 		
 		return lowestPrice;
 	}
+
+    // v1.14.88: Helper to find Nearest Working Order for Info Panel
+    public double GetDisplayPriceForScaled(List<Order> orders, double currentPrice)
+    {
+        try
+        {
+            lock (scaledOrdersLock)
+            {
+                if (orders == null || orders.Count == 0) return 0;
+                
+                double nearestPrice = 0;
+                double minDistance = double.MaxValue;
+                
+                // Create a copy or iterate safely?
+                // Since we locked, we can iterate.
+                foreach(var o in orders)
+                {
+                    if (o != null && (o.OrderState == OrderState.Working || o.OrderState == OrderState.Accepted || o.OrderState == OrderState.Submitted))
+                    {
+                        double dist = Math.Abs(o.LimitPrice - currentPrice);
+                        if (dist < minDistance)
+                        {
+                            minDistance = dist;
+                            nearestPrice = o.LimitPrice;
+                        }
+                    }
+                }
+                return nearestPrice;
+            }
+        }
+        catch (Exception) 
+        {
+            // Fail silently on UI errors to avoid strategy deactivation
+            return 0; 
+        }
+    }
 	
 	/*
 	private void SubmitProtectionOrders(string direction, bool isTp1, int qty)
@@ -3096,7 +3353,15 @@ currentEntryState = EntryState.Idle;
 					targetGlobalVWAP = GetCurrentLowVWAP(); 
 				// FIX (v1.6.2): Use setupLevelTime to ensure stable target throughout the trade
 				targetZoneOpposite = GetOppositeLevelPrice(setupLevelName, setupLevelTime);
-				if (targetZoneOpposite <= 0) targetZoneOpposite = targetGlobalVWAP; // Fallback
+				
+				// v1.14.85: FIX - Use validatedTargetPrice if available, don't fallback to VWAP
+				if (targetZoneOpposite <= 0)
+				{
+					if (validatedTargetPrice > 0)
+						targetZoneOpposite = validatedTargetPrice; // Use persistent validated target
+					else
+						targetZoneOpposite = targetGlobalVWAP; // Last resort fallback
+				}
 			}
 			else
 			{
@@ -3107,7 +3372,15 @@ currentEntryState = EntryState.Idle;
 					targetGlobalVWAP = GetCurrentHighVWAP(); 
 				// FIX (v1.6.2): Use setupLevelTime here too
 				targetZoneOpposite = GetOppositeLevelPrice(setupLevelName, setupLevelTime);
-				if (targetZoneOpposite <= 0) targetZoneOpposite = targetGlobalVWAP;
+				
+				// v1.14.85: FIX - Use validatedTargetPrice if available, don't fallback to VWAP
+				if (targetZoneOpposite <= 0)
+				{
+					if (validatedTargetPrice > 0)
+						targetZoneOpposite = validatedTargetPrice; // Use persistent validated target
+					else
+						targetZoneOpposite = targetGlobalVWAP; // Last resort fallback
+				}
 			}
 			
 			// Sanity
@@ -3144,6 +3417,8 @@ currentEntryState = EntryState.Idle;
 
 		protected override void OnOrderUpdate(Order order, double limitPrice, double stopPrice, int quantity, int filled, double averageFillPrice, OrderState orderState, DateTime time, ErrorCode error, string nativeError)
 		{
+			try
+			{
 			// 1. Entry Order Tracking
 			if (order.Name.Contains("EntryA+_"))
 			{
@@ -3169,9 +3444,10 @@ currentEntryState = EntryState.Idle;
 						// We must block re-entry for this bar.
 						lastRejectionBar = CurrentBar;
 						
-						// FIX (Zombie Prev): Only reset if we are truly FLAT.
-						// If one split order filled and the other rejected, we are NOT Flat.
-						if (Position.MarketPosition == MarketPosition.Flat)
+						// FIX (Zombie Prev): Only reset if we are truly FLAT and NO FILLS occurred.
+						// If filled > 0, it means we have a partial position even if the rest was cancelled.
+						// "filled" param is cumulative.
+						if (Position.MarketPosition == MarketPosition.Flat && filled == 0)
 						{
 							currentEntryState = EntryState.Idle; // UNSTUCK THE STRATEGY
 							Log(Time[0] + " ENTRY RESET: All entry orders cancelled/rejected and Flat. Resetting to IDLE.");
@@ -3188,30 +3464,52 @@ currentEntryState = EntryState.Idle;
 			}
 			
 			// 2. Generic Reference Updates
-			if (order.Name.Contains("SL_"))
-			{
-				stopOrder = order; // Legacy/Fallback
-				if (order.Name.EndsWith("_1")) stopOrder1 = order;
-				else if (order.Name.EndsWith("_2")) stopOrder2 = order;
-			}
+		if (order.Name.Contains("SL_"))
+		{
+			stopOrder = order; // Legacy/Fallback
+			if (order.Name.EndsWith("_1")) stopOrder1 = order;
+			else if (order.Name.EndsWith("_2")) stopOrder2 = order;
+		}
+		
+		if (order.Name.Contains("TP"))
+		{
+			// v1.14.84: DIAGNOSTIC - Log exact order name to detect reference corruption
+			Log($"ORDER_UPDATE_TP: Name='{order.Name}' State={order.OrderState} Price={order.LimitPrice} Qty={order.Quantity}");
 			
-			if (order.Name.Contains("TP"))
+			if (order.Name.Contains("TP1_")) 
 			{
-				if (order.Name.Contains("TP1_")) tp1Order = order;
-				else if (order.Name.Contains("TP2_")) tp2Order = order;
+				tp1Order = order;
+				Log($"  -> Updated tp1Order reference (ID={order.OrderId})");
 			}
-			
+			else if (order.Name.Contains("TP2_")) 
+			{
+				tp2Order = order;
+				Log($"  -> Updated tp2Order reference (ID={order.OrderId})");
+			}
+			else
+			{
+				Log($"  -> WARNING: TP order name does not contain TP1_ or TP2_!");
+			}
+		}	
 			// TP Orders tracked via SubmitOrder return, but we can capture them here too if needed.
+			}
+			catch (Exception ex)
+			{
+				NinjaTrader.Code.Output.Process("CRITICAL ERROR in OnOrderUpdate: " + ex.ToString(), PrintTo.OutputTab1);
+				Log("CRITICAL ERROR in OnOrderUpdate: " + ex.ToString());
+			}
 		}
 
 		protected override void OnExecutionUpdate(Execution execution, string executionId, double price, int quantity, MarketPosition marketPosition, string orderId, DateTime time)
 		{
+			try
+			{
 			if (execution.Order.OrderState == OrderState.Filled || execution.Order.OrderState == OrderState.PartFilled)
 			{
 				string n = execution.Order.Name;
 				
 				// CONSOLIDATED ROUTING (v1.7.17)
-				if (n.Contains("EntryA+_")) 
+				if (n.Contains("EntryA+_") || n.Contains("EntryAnticipado_")) 
 				{
 					if (currentEntryState == EntryState.workingOrder)
 					{
@@ -3264,21 +3562,35 @@ currentEntryState = EntryState.Idle;
 					}
 						tradeDeltaAtTP1 = 0; // Reset, will be set when TP1 fills
 						
+						// v1.14.81: DIAGNOSTIC LOG to check for Position Lag
+						Log(string.Format("DIAG_EXEC: Name={0} Qty={1} | Position.MP={2} Arg.MP={3} | State={4}", 
+							n, quantity, Position.MarketPosition, marketPosition, currentEntryState));
+						
+                        // v1.15.0: Log Readability Improvement - Trade Header
+                        Log("==========================================================================================");
+                        Log(string.Format("   TRADE START: #{0} | {1} | {2} | Price: {3}", tradeExportId, tradeDirection, Time[0], tradeEntryPrice));
+                        Log("==========================================================================================");
+
 						Log(Time + " CSV EXPORT: Trade #" + tradeExportId + " started - " + tradeDirection + " @ " + tradeEntryPrice);
 					
 					// Ensure Protection Runs based on FILLED QTY
 					// v1.7.17: We pass the filled amount, protection logic distributes it to buckets.
-					if (Position.MarketPosition == MarketPosition.Short)
+					// v1.14.81: Use Arg.MP as fallback if Position.MP is lagging (Flat)
+					if (Position.MarketPosition == MarketPosition.Short || marketPosition == MarketPosition.Short)
 					{
 						// EnsureProtection Delegate (v1.14.39)
 						protectionManager.EnsureProtection("Short", n, quantity, currentVwapNumber, isShortSetup, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTargetPrice);
 						TriggerScreenshot("Entry_Short_" + n, DateTime.Now, executionId);
 					}
-					else if (Position.MarketPosition == MarketPosition.Long)
+					else if (Position.MarketPosition == MarketPosition.Long || marketPosition == MarketPosition.Long)
 					{
 						// EnsureProtection Delegate (v1.14.39)
 						protectionManager.EnsureProtection("Long", n, quantity, currentVwapNumber, isShortSetup, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTargetPrice);
 						TriggerScreenshot("Entry_Long_" + n, DateTime.Now, executionId);
+					}
+					else
+					{
+						Log("DIAG_ERROR: Protection Skipped! P.MP=" + Position.MarketPosition + " A.MP=" + marketPosition);
 					}
 				}
 			}
@@ -3298,6 +3610,11 @@ currentEntryState = EntryState.Idle;
 				// CHECK TP1 -> Move SL to BE (Delegated to OrderProtectionManager v1.14.40)
 				bool isTP1 = (tp1Order != null && execution.Order == tp1Order);
 				if (!isTP1 && execution.Order.Name.StartsWith("TP1_")) isTP1 = true; // Fallback by Name
+				// v1.14.88: Check Scaled Orders List
+				if (!isTP1 && tp1Orders != null)
+                {
+                    lock (scaledOrdersLock) { if (tp1Orders.Contains(execution.Order)) isTP1 = true; }
+                }
 
 				if (isTP1)
 				{
@@ -3320,6 +3637,11 @@ currentEntryState = EntryState.Idle;
 				// CHECK TP2 -> SL should already be at BE (Delegated v1.14.40)
 				bool isTP2 = (tp2Order != null && execution.Order == tp2Order);
 				if (!isTP2 && execution.Order.Name.StartsWith("TP2_")) isTP2 = true;
+				// v1.14.88: Check Scaled Orders List
+				if (!isTP2 && tp2Orders != null)
+                {
+                    lock (scaledOrdersLock) { if (tp2Orders.Contains(execution.Order)) isTP2 = true; }
+                }
 
 				if (isTP2)
 				{
@@ -3338,6 +3660,12 @@ currentEntryState = EntryState.Idle;
 			if (resetNeeded)
 			{
 				Log(Time + " Entry Order Cancelled/Rejected. Resetting to Idle.");
+                
+                // v1.15.0: Log Readability Improvement - Trade Footer (Cancelled)
+                Log("==========================================================================================");
+                Log(string.Format("   TRADE CLOSED (CANCELLED): #{0} | {1} | State: {2}", tradeExportId, Time[0], currentEntryState));
+                Log("==========================================================================================");
+
 				currentEntryState = EntryState.Idle;
 				setupLevelName = "";
 				
@@ -3346,6 +3674,16 @@ currentEntryState = EntryState.Idle;
 				targetOrder = null;
 				tp1Order = null;
 				tp2Order = null; 
+				// v1.14.88: Clear Scaled Lists
+				if (tp1Orders != null || tp2Orders != null)
+                {
+                    lock (scaledOrdersLock)
+                    {
+                        if (tp1Orders != null) tp1Orders.Clear();
+                        if (tp2Orders != null) tp2Orders.Clear();
+                    }
+                }
+				
 				stopOrder = null;
 				
 				// Clear Cache
@@ -3358,9 +3696,12 @@ currentEntryState = EntryState.Idle;
 			// CRITICAL FIX: Only reset if we are truly FLAT. include "Exit on session close"
 			// Also checking if it is an Unmanaged Exit order (SL/TP) OR the System Session Close
 			// v1.13.13 FIX: TP orders are named TP1_ and TP2_, not TP_ - was causing TPs to not export to CSV!
-			bool isExitOrder = (execution.Order.Name.Contains("SL_") || execution.Order.Name.Contains("TP1_") || execution.Order.Name.Contains("TP2_") || execution.Order.Name == "Exit on session close");
+			bool isExitOrder = (execution.Order.Name.Contains("SL_") || execution.Order.Name.Contains("TP1_") || execution.Order.Name.Contains("TP2_") || execution.Order.Name == "Exit on session close" || execution.Order.Name.StartsWith("Exit_"));
 			
-			if (execution.Order.OrderState == OrderState.Filled && isExitOrder)
+			// v1.14.91 FIX: Include PartFilled. 
+			// Previously only checks 'Filled', so if an order fills in chunks (e.g. 4 then 12), the first 4 (PartFilled) were IGNORED and lost.
+			// execution.Quantity is specific to the chunk, so we must record all chunks.
+			if ((execution.Order.OrderState == OrderState.Filled || execution.Order.OrderState == OrderState.PartFilled) && isExitOrder)
 			{
 			// v1.13.3: Export CSV on EACH exit fill (not only when flat)
 				// v1.14.24: Only export in Realtime mode to avoid historical data pollution
@@ -3374,7 +3715,9 @@ currentEntryState = EntryState.Idle;
 				{
 					try
 					{
-						double exitPrice = execution.Order.AverageFillPrice;
+						// v1.14.93 FIX: Use specific execution price, not order average.
+						// AverageFillPrice shifts as order fills, causing PnL drift vs NT.
+						double exitPrice = execution.Price;
 						
 						// Calculate PnL based on direction
 						double pnl = 0;
@@ -3404,36 +3747,69 @@ currentEntryState = EntryState.Idle;
 						double riskReward = (tradeRiskUSD > 0) ? (pnl / tradeRiskUSD) : 0;
 						
 						// Calculate commission based on instrument (2 sides per trade)
-						// NinjaTrader Free Plan All-In Rates
-						// LOGIC: Micros typically start with "M" (MES, MNQ, MCL, MGC, M6E, MBT...)
-						//        Full-size do NOT start with "M" (ES, NQ, CL, GC, 6E, ZS, BTC...)
-						string instName = Instrument.MasterInstrument.Name.ToUpper();
-						bool isMicro = instName.StartsWith("M") && !instName.StartsWith("MY"); // MYM is exception (micro dow)
-						if (instName.StartsWith("MYM") || instName.StartsWith("M2K")) isMicro = true; // Explicitly micro
+						// NinjaTrader All-In Rates (User Verified 2026-01-11)
+						// Logic splits Micros vs Standard, then by Asset Class
 						
-						double commissionPerSide;
-						if (isMicro)
+						string instName = Instrument.MasterInstrument.Name.ToUpper();
+						double commissionPerSide = 0; // Initialize
+						
+						// 1. MICROS
+						if (instName.StartsWith("M")) // Removed MY exclusion to allow MYM
+						// Actually MYM is Micro YM. Logic:
 						{
-							// MICRO CONTRACTS
-							if (instName.Contains("MBT") || instName.Contains("MET")) commissionPerSide = 1.56; // Micro Bitcoin/Ether
-							else if (instName.Contains("MCL") || instName.Contains("MGC") || instName.Contains("MHG")) commissionPerSide = 0.77; // Micro commodities
-							else commissionPerSide = 0.91; // Micro indices (MES, MNQ, M2K, MYM, M6E, etc.)
+						    // Handle specific exceptions where "M" is start but not Micro? No, standard convention is M=Micro.
+						    // Exceptions: MBT (Micro Bitcoin), MET (Micro Ether).
+						    // Asset Classes:
+						    
+						    if (instName.Contains("MBT") || instName.Contains("MET")) 
+						        commissionPerSide = 1.60; // Micro Crypto
+						    else if (instName.StartsWith("MNQ") || instName.StartsWith("M2K"))
+						        commissionPerSide = 0.95; // MNQ & M2K ($1.90 RT - Adjusted based on User PnL)
+						    else if (instName.StartsWith("MES") || instName.StartsWith("MYM"))
+						        commissionPerSide = 0.90; // MES & MYM ($1.80 RT - Adjusted based on User PnL)
+						    else if (instName.StartsWith("MCL") || instName.StartsWith("QM"))
+						        commissionPerSide = 1.10; // Micro Oil/Energy
+						    else if (instName.StartsWith("MGC") || instName.StartsWith("SIL") || instName.StartsWith("MHG"))
+						        commissionPerSide = 1.20; // Micro Metals (Gold, Silver, Copper)
+						    else if (instName.StartsWith("M6"))
+						        commissionPerSide = 1.20; // Micro Currencies (M6E, M6A, etc) - Estimate based on Gold
+						    else
+						        commissionPerSide = 1.20; // Default Micro Fallback
+						}
+						// 2. CRYPTO (Standard)
+						else if (instName.StartsWith("BTC") || instName.StartsWith("ETH"))
+						{
+						    commissionPerSide = 6.00; 
+						}
+						// 3. STANDARD / FULL SIZE
+						else if (instName.StartsWith("ES") || instName.StartsWith("NQ") || instName.StartsWith("YM") || instName.StartsWith("RTY"))
+						{
+						    commissionPerSide = 2.29; // Standard Indices (Keeping existing logic)
+						}
+						else if (instName.StartsWith("CL") || instName.StartsWith("NG") || instName.StartsWith("GC") || instName.StartsWith("SI") || instName.StartsWith("HG"))
+						{
+						    commissionPerSide = 2.40; // Standard Commodities (Estimate)
+						}
+						else if (instName.StartsWith("6"))
+						{
+                            commissionPerSide = 2.50; // Standard Currencies
 						}
 						else
 						{
-							// FULL-SIZE CONTRACTS
-							if (instName.StartsWith("6E") || instName.StartsWith("6J") || instName.StartsWith("6A") || instName.StartsWith("6B")) commissionPerSide = 3.09; // Full currencies
-							else if (instName.StartsWith("ZS") || instName.StartsWith("ZW") || instName.StartsWith("ZC") || instName.StartsWith("ZJ")) commissionPerSide = 2.85; // Full grains
-							else if (instName.StartsWith("CL") || instName.StartsWith("GC") || instName.StartsWith("HG")) commissionPerSide = 2.29; // Full commodities
-							else if (instName.StartsWith("ES") || instName.StartsWith("NQ") || instName.StartsWith("YM") || instName.StartsWith("RTY")) commissionPerSide = 2.29; // Full indices
-							else if (instName.StartsWith("BTC") || instName.StartsWith("ETH")) commissionPerSide = 6.00; // Full crypto
-							else commissionPerSide = 2.50; // Default full-size
+						    commissionPerSide = 2.50; // Generic Default
 						}
+						
+						// Removed redundant MYM override
 						
 						double commission = execution.Quantity * 2 * commissionPerSide; // 2 sides (entry + exit)
 						double netPnl = pnl - commission;
 						
-						string line = string.Format("{0},{1},{2:yyyy-MM-dd HH:mm:ss},{3},{4},{5:yyyy-MM-dd HH:mm:ss},{6},{7},{8:F2},{9:F2},{10:F2},{11:F2},{12:F2},{13},{14},{15:F2},{16:F0},{17},{18:F0},{19:F0}",
+						// v1.14.96: Calculate Level Age (Days between Level Creation and Trade Entry)
+						int levelAgeDays = 0;
+						if (setupLevelTime != DateTime.MinValue)
+							levelAgeDays = (tradeEntryTime.Date - setupLevelTime.Date).Days;
+
+						string line = string.Format("{0},{1},{2:yyyy-MM-dd HH:mm:ss},{3},{4},{5:yyyy-MM-dd HH:mm:ss},{6},{7},{8:F2},{9:F2},{10:F2},{11:F2},{12:F2},{13},{14},{15:F2},{16:F0},{17},{18:F0},{19:F0},{20}",
 							tradeId,
 							Instrument.FullName,
 							tradeEntryTime,
@@ -3453,7 +3829,8 @@ currentEntryState = EntryState.Idle;
 							tradeDeltaAtEntry,      // v1.14.31
 							tradeDeltaDirection,    // v1.14.31
 							tradeSessionDelta,      // v1.14.31
-							tradeDeltaAtTP1         // v1.14.31
+							tradeDeltaAtTP1,        // v1.14.31
+							levelAgeDays            // v1.14.96: Level Age
 						);
 						
 						System.IO.File.AppendAllText(csvExportPath, line + Environment.NewLine);
@@ -3591,6 +3968,12 @@ currentEntryState = EntryState.Idle;
 					Log(Time + " Partial Execution (" + execution.Order.Name + "). Position Active. Qty=" + Position.Quantity);
 				}
 			}
+			}
+			catch (Exception ex)
+			{
+				NinjaTrader.Code.Output.Process("CRITICAL ERROR in OnExecutionUpdate: " + ex.ToString(), PrintTo.OutputTab1);
+				Log("CRITICAL ERROR in OnExecutionUpdate: " + ex.ToString());
+			}
 		}
 
 		[NinjaScriptProperty]
@@ -3682,7 +4065,20 @@ currentEntryState = EntryState.Idle;
 		public double ATRRiskScaleFactor
 		{ get; set; } = 2.0;
 
-		// ===== RISK MODEL SELECTION (v1.14.76) =====
+		// ===== TARGET DISTRIBUTION (v1.14.88) =====
+		public enum TargetDistributionMode
+		{
+			Standard, // 50/50 Split (TP1 VWAP, TP2 Level)
+			Scaled    // Hybrid Scaled Distribution
+		}
+		
+		[NinjaScriptProperty]
+		[Display(Name="Target Distribution", Description="Standard=Fixed Targets, Scaled=R-Based Ladder", Order=5, GroupName="Order Management")]
+		public TargetDistributionMode TargetDistribution { get; set; } = TargetDistributionMode.Standard;
+		
+		// List support for Scaled Targets
+		[XmlIgnore] public List<Order> tp1Orders = new List<Order>();
+		[XmlIgnore] public List<Order> tp2Orders = new List<Order>();
 		
 		[NinjaScriptProperty]
 		[Display(Name="Selected Risk Model", Description="Choose between Standard (Fixed/ATR) or Apteros (Prop Firm Rules)", Order=0, GroupName="Apteros Risk Module")]
@@ -3723,6 +4119,10 @@ currentEntryState = EntryState.Idle;
 		[XmlIgnore] public double activeTp1Price = 0;
 		[XmlIgnore] public double activeTp2Price = 0;
 		
+		// v1.14.88: Original Order Prices for Info Panel Display
+		[XmlIgnore] public double tradeOriginalSlPrice = 0;
+		// v1.14.89: Thread Safety Lock for List Access (UI vs Strategy Thread)
+		[XmlIgnore] public object scaledOrdersLock = new object();
 
 		
 		[NinjaScriptProperty]
@@ -3764,10 +4164,33 @@ currentEntryState = EntryState.Idle;
 
 
 
-		// Fix: Missing InitCSV stub.
+		// Fix: InitCSV to write Header
 		private void InitCSV()
 		{
-			// Safe stub to ensure compilation
+			try
+			{
+				if (!string.IsNullOrEmpty(csvExportPath))
+				{
+					// Ensure directory exists
+					string dir = System.IO.Path.GetDirectoryName(csvExportPath);
+					if (!System.IO.Directory.Exists(dir))
+						System.IO.Directory.CreateDirectory(dir);
+						
+					// If file doesn't exist, write header
+					if (!System.IO.File.Exists(csvExportPath))
+					{
+						// v1.14.90: Header matching 20 columns (including Delta)
+						// v1.14.96: Added LevelAge (Column 21)
+						string header = "TradeId,Instrument,EntryTime,Type,EntryPrice,ExitTime,ExitPrice,Result,GrossPnL,Commission,NetPnL,MAE,MFE,SetupName,Attempt,RiskReward,DeltaEntry,DeltaDir,SessionDelta,DeltaTP1,LevelAge";
+						System.IO.File.WriteAllText(csvExportPath, header + Environment.NewLine);
+						Log("CSV INIT: Created new export file with header at " + csvExportPath);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Log("CSV INIT ERROR: " + ex.Message);
+			}
 		}
 
 		// UNMANAGED HELPER: Close Position Market
@@ -3814,6 +4237,32 @@ currentEntryState = EntryState.Idle;
 		Log(string.Format("AI FILTER: {0} zonas habilitadas: {1}", enabledZonesList.Count, EnabledZonesParam));
 	}
 
+		// v1.14.78: Level Persistence
+	[XmlIgnore] public SessionLevelPersistence levelPersistence;
+	private int lastLevelCount = 0;
+
+	// DIAGNOSTIC DUMP
+	public void DumpActiveLevels(string context)
+	{
+		if (activeLevels == null) return;
+		Log($"---- DUMP LEVELS ({context}) ----");
+		Log($"Total Levels: {activeLevels.Count}");
+		foreach (var lvl in activeLevels)
+		{
+			string startTimeStr = lvl.StartTime.ToString("MM/dd HH:mm");
+			Log($"LVL: Name='{lvl.Name}' Price={lvl.Price:F2} Start={startTimeStr} Tag='{lvl.Tag}'");
+		}
+		Log("--------------------------------");
+	}
+
+    public bool IsZoneEnabled(string zoneName)
+	{
+		// Si no hay lista (null), significa que NO se cargó configuración AI.
+		// En ese caso, por defecto permitimos TODO (retorna true).
+		if (enabledZonesList == null) return true;
+		
+		return enabledZonesList.Contains(zoneName);
+	}
 	public bool IsZoneEnabled(string zoneName, DateTime levelTime)
 	{
 		// 1. Si la lista está vacía = sin filtro de zona (todas habilitadas)
