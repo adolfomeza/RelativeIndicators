@@ -1,9 +1,25 @@
-=== MYM Strategy Log - Started 2026-01-13 09:17:09 ===
+=== MYM Strategy Log - Started 2026-01-13 09:30:53 ===
 
-09:17:09.292 [09:17:09.292] DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
-09:17:09.295 [09:17:09.295] DEBUG_RECONNECT: Total Account.Positions count = 0
-09:17:09.303 [09:17:09.303] 20/1/25 7:01:00 p. m. v1.15.9 RESTART EVAL: Checking for pending orders or valid setup to continue...
-09:17:09.304 [09:17:09.304] 20/1/25 7:01:00 p. m. v1.15.9 RESTART: No valid setup found. Starting fresh.
-09:17:09.307 [09:17:09.307] 20/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-09:17:09.307 [09:17:09.307] 20/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-09:17:09.309 [09:17:09.309] PROTECTION_RESET: Cleared order references for new trade
+09:30:53.803 [09:30:53.803] DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
+09:30:53.805 [09:30:53.805] DEBUG_RECONNECT: Total Account.Positions count = 0
+09:30:53.815 [09:30:53.815] 19/1/25 7:01:00 p. m. v1.15.10 RESTART EVAL: Checking for pending orders or valid setup to continue...
+09:30:53.816 [09:30:53.816] 19/1/25 7:01:00 p. m. v1.15.10 RESTART: No valid setup found. Starting fresh.
+09:30:53.817 [09:30:53.817] 19/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 17/1/25 6:00:00 p. m. NY)
+09:30:53.819 [09:30:53.819] LEVEL SUMMARY (Price=43681):
+09:30:53.819 [09:30:53.819]   Europe Low @ 41968 | Currently ABOVE by 1713 ticks
+09:30:53.821 [09:30:53.821]   USA Low @ 42069 | Currently ABOVE by 1612 ticks
+09:30:53.823 [09:30:53.823]   USA Low @ 42373 | Currently ABOVE by 1308 ticks
+09:30:53.824 [09:30:53.824]   Asia Low @ 42752 | Currently ABOVE by 929 ticks
+09:30:53.825 [09:30:53.825]   Europe Low @ 42762 | Currently ABOVE by 919 ticks
+09:30:53.826 [09:30:53.826]   USA Low @ 43285 | Currently ABOVE by 396 ticks
+09:30:53.830 [09:30:53.830]   Europe Low @ 43286 | Currently ABOVE by 395 ticks
+09:30:53.832 [09:30:53.832]   USA Low @ 43297 | Currently ABOVE by 384 ticks
+09:30:53.833 [09:30:53.833]   Asia Low @ 43315 | Currently ABOVE by 366 ticks
+09:30:53.835 [09:30:53.835]   Europe Low @ 43433 | Currently ABOVE by 248 ticks
+09:30:53.836 [09:30:53.836]   USA High @ 43867 | Currently BELOW by 186 ticks
+09:30:53.838 [09:30:53.838]   USA Low @ 43615 | Currently ABOVE by 66 ticks
+09:30:53.840 [09:30:53.840] 19/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+09:30:53.841 [09:30:53.841] PROTECTION_RESET: Cleared order references for new trade
+09:30:53.843 [09:30:53.843] 19/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+09:30:53.845 [09:30:53.845] 19/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+09:30:53.846 [09:30:53.846] PROTECTION_RESET: Cleared order references for new trade

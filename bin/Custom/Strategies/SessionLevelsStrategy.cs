@@ -37,7 +37,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.15.10"; // v1.15.10: Reverted to ChangeOrder (Cancel+Recreate had timing issues)
+		private const string StrategyVersion = "v1.15.11"; // v1.15.11: Fixed TP allocation bug (forTp2 calculation was missing neededTp2 check)
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;

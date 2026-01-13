@@ -110,14 +110,18 @@ namespace NinjaTrader.NinjaScript.Strategies
 		    // DYNAMIC BUCKET ALLOCATION
 		    int totalPositionQty = Math.Abs(strategy.Position.Quantity);
 		    int totalTp1Target = (totalPositionQty + 1) / 2;
-		    
+		    int totalTp2Target = totalPositionQty - totalTp1Target;
+
 		    int neededTp1 = totalTp1Target - strategy.protectedTp1Qty;
 		    if (neededTp1 < 0) neededTp1 = 0;
-		    
+
+		    int neededTp2 = totalTp2Target - strategy.protectedTp2Qty;
+		    if (neededTp2 < 0) neededTp2 = 0;
+
 		    int forTp1 = Math.Min(neededTp1, filledQty);
-		    int forTp2 = filledQty - forTp1;
-		    
-		    strategy.Log(string.Format("   -> Protection Alloc: Filled={0} | ForTP1={1} (Need:{2}) | ForTP2={3}", filledQty, forTp1, neededTp1, forTp2));
+		    int forTp2 = Math.Min(neededTp2, filledQty - forTp1);
+
+		    strategy.Log(string.Format("   -> Protection Alloc: Filled={0} | ForTP1={1} (Need:{2}) | ForTP2={3} (Need:{4})", filledQty, forTp1, neededTp1, forTp2, neededTp2));
 
 		    if (forTp1 > 0)
 			    SubmitProtectionOrders(direction, true, forTp1, currentVwapNumber, isShortSetup, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTargetPrice);

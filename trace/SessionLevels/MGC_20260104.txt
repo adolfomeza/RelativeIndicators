@@ -1,9 +1,0 @@
-=== MGC Strategy Log - Started 2026-01-04 23:00:20 ===
-
-23:00:20.579 DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
-23:00:20.580 DEBUG_RECONNECT: Total Account.Positions count = 0
-23:00:20.585 4/1/26 11:01:00 p. m. v1.14.32 RESTART EVAL: Checking for pending orders or valid setup to continue...
-23:00:20.585 4/1/26 11:01:00 p. m. v1.14.32 RESTART: No valid setup found. Starting fresh.
-23:22:06.623 DEBUG: OnStateChange(DataLoaded) IsUnmanaged = True
-23:22:06.644 DEBUG_CONTEXT: Account = 'Backtest', Context = 'backtest'
-23:22:06.646 CSV EXPORT: Created C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\TradeExports\backtest\MGC_02-26.csv

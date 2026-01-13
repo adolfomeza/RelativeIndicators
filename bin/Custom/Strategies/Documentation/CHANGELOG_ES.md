@@ -7,6 +7,29 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 ### Agregado
 - **Módulo SL Adaptativo (Supervivencia):** Reemplazo de la lógica de salida de emergencia. Ahora, si el precio salta el Stop Loss durante la entrada, el sistema adapta el SL a `Precio Actual +/- 4 ticks` para asegurar que la orden sea aceptada por NinjaTrader y la posición siga protegida, en lugar de cerrar o fallar.
 
+## [v1.15.11] - 2026-01-13
+### Corregido
+- **Bug Crítico: TP2 con Cantidades Incorrectas (Causa Raíz Identificada)**
+  - **Problema Real**: El problema NO era `ChangeOrder()` ni sincronización de NinjaTrader. Era un bug de lógica en la distribución de contratos entre TP1 y TP2 durante fills parciales.
+  - **Ejemplo del Bug**: MCL entra con 47 contratos. En el último fill parcial (6 contratos), la estrategia calculaba:
+    - TP1 necesita 3 más → Asigna 3 a TP1 ✓
+    - TP2 recibe **los 3 restantes** (6-3=3) ❌
+    - Pero TP2 necesitaba **10 contratos más** (23 total - 13 protegidos)
+    - Resultado: TP2 se queda con 16 contratos en lugar de 23 (faltaban 7)
+  - **Causa Técnica**: La línea `int forTp2 = filledQty - forTp1;` asumía que todo lo que no va a TP1 debe ir a TP2, sin verificar cuántos contratos TP2 realmente necesita.
+  - **Solución**: Agregada validación de `neededTp2` antes de asignar contratos:
+    ```csharp
+    int totalTp2Target = totalPositionQty - totalTp1Target;
+    int neededTp2 = totalTp2Target - strategy.protectedTp2Qty;
+    int forTp2 = Math.Min(neededTp2, filledQty - forTp1);
+    ```
+  - **Resultado**: Ahora TP1 y TP2 siempre mantienen el split 50/50 correcto, sin importar cuántos fills parciales ocurran.
+
+### Técnico
+- Modificado `OrderProtectionManager.cs:110-124` - Agregada verificación de `neededTp2` en lógica de distribución.
+- Mejorado log de distribución para mostrar `(Need:X)` tanto para TP1 como TP2.
+- Esta era la causa raíz real de todos los problemas de cantidades incorrectas en TP2 (MNQ, MGC, MCL).
+
 ## [v1.15.10] - 2026-01-13
 ### Corregido
 - **Revertido Enfoque Cancel+Recreate a ChangeOrder()**
