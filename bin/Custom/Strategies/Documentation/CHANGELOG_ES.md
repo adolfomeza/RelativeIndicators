@@ -7,6 +7,34 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 ### Agregado
 - **Módulo SL Adaptativo (Supervivencia):** Reemplazo de la lógica de salida de emergencia. Ahora, si el precio salta el Stop Loss durante la entrada, el sistema adapta el SL a `Precio Actual +/- 4 ticks` para asegurar que la orden sea aceptada por NinjaTrader y la posición siga protegida, en lugar de cerrar o fallar.
 
+## [v1.15.12] - 2026-01-13
+### Corregido
+- **Bug Crítico: TP2 Faltante Cuando Fill Se Va Completo a TP1**
+  - **Problema de v1.15.11**: El fix anterior resolvió parcialmente el problema, pero introdujo un nuevo bug. Cuando un fill parcial se asignaba completamente a TP1, TP2 no recibía NINGUNA orden.
+  - **Ejemplo del Bug**: MGC entra con 15 contratos. Fill de 8 contratos:
+    - TP1 necesita 8, TP2 necesita 7
+    - forTp1 = Min(8, 8) = 8 ✓
+    - forTp2 = Min(7, 8 - 8) = Min(7, **0**) = **0** ❌
+    - Resultado: TP1 creada con 8, TP2 **no se crea** (faltan 7 contratos sin protección)
+  - **Causa Real**: La lógica solo llamaba `SubmitProtectionOrders()` si `forTp1 > 0` o `forTp2 > 0`, pero cuando todo el fill se asignaba a TP1, `forTp2 = 0` y TP2 nunca se creaba.
+  - **Solución v1.15.12**: Cambio fundamental en la lógica de protección:
+    ```csharp
+    // ANTES (v1.15.11) - Solo creaba TP si el fill asignaba contratos
+    if (forTp1 > 0) SubmitProtectionOrders(..., forTp1, ...);
+    if (forTp2 > 0) SubmitProtectionOrders(..., forTp2, ...);
+
+    // AHORA (v1.15.12) - SIEMPRE crea/actualiza TP si hay contratos que necesitan protección
+    if (neededTp1 > 0) SubmitProtectionOrders(..., neededTp1, ...);
+    if (neededTp2 > 0) SubmitProtectionOrders(..., neededTp2, ...);
+    ```
+  - **Cambio de Paradigma**: `protectedTp1Qty` y `protectedTp2Qty` ahora reflejan el **target total** (lo que DEBE estar protegido), no la suma incremental de fills asignados. Esto asegura que las órdenes TP siempre reflejen la cantidad correcta, independientemente de cómo se distribuyan los fills parciales.
+  - **Resultado**: Ahora SIEMPRE se crean/actualizan ambas órdenes TP cuando hay contratos pendientes de protección, incluso si un fill individual no alcanza para cubrir ambos targets.
+
+### Técnico
+- Modificado `OrderProtectionManager.cs:126-136` - Cambio de lógica de `if (forTpX > 0)` a `if (neededTpX > 0)`.
+- Cambio en actualización de estado: `protectedTp1Qty = totalTp1Target` (antes: `+= forTp1`).
+- Este fix resuelve el caso donde MGC tenía SL=15, TP1=8, pero TP2=0 (faltaban 7 contratos).
+
 ## [v1.15.11] - 2026-01-13
 ### Corregido
 - **Bug Crítico: TP2 con Cantidades Incorrectas (Causa Raíz Identificada)**

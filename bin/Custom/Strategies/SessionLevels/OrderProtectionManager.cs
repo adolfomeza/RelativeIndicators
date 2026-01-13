@@ -123,15 +123,17 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 		    strategy.Log(string.Format("   -> Protection Alloc: Filled={0} | ForTP1={1} (Need:{2}) | ForTP2={3} (Need:{4})", filledQty, forTp1, neededTp1, forTp2, neededTp2));
 
-		    if (forTp1 > 0)
-			    SubmitProtectionOrders(direction, true, forTp1, currentVwapNumber, isShortSetup, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTargetPrice);
-			    
-		    if (forTp2 > 0)
-			    SubmitProtectionOrders(direction, false, forTp2, currentVwapNumber, isShortSetup, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTargetPrice);
-			    
-		    // Update State
-		    strategy.protectedTp1Qty += forTp1;
-		    strategy.protectedTp2Qty += forTp2;
+		    // v1.15.12: ALWAYS submit/update TP orders if needed, regardless of fill allocation
+		    // This ensures that even if a fill goes entirely to TP1, TP2 still gets created/updated
+		    if (neededTp1 > 0)
+			    SubmitProtectionOrders(direction, true, neededTp1, currentVwapNumber, isShortSetup, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTargetPrice);
+
+		    if (neededTp2 > 0)
+			    SubmitProtectionOrders(direction, false, neededTp2, currentVwapNumber, isShortSetup, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTargetPrice);
+
+		    // Update State: protectedQty tracks what SHOULD be protected (total target), not fill allocation
+		    strategy.protectedTp1Qty = totalTp1Target;
+		    strategy.protectedTp2Qty = totalTp2Target;
 		    
 		    // v1.11.14: Mark protection orders as created (This flag seems local to strategy but unused in new logic? Or generic flag?)
             // strategy.protectionOrdersCreated is not directly exposed but it was just a flag.

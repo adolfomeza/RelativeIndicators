@@ -1,422 +1,85 @@
-=== MGC Strategy Log - Started 2026-01-13 09:30:53 ===
+=== MGC Strategy Log - Started 2026-01-13 09:42:52 ===
 
-09:30:53.802 [09:30:53.802] DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
-09:30:53.804 [09:30:53.804] DEBUG_RECONNECT: Total Account.Positions count = 0
-09:30:53.814 [09:30:53.814] 19/1/25 7:01:00 p. m. v1.15.10 RESTART EVAL: Checking for pending orders or valid setup to continue...
-09:30:53.815 [09:30:53.815] 19/1/25 7:01:00 p. m. v1.15.10 RESTART: No valid setup found. Starting fresh.
-09:30:53.816 [09:30:53.816] 19/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 17/1/25 6:00:00 p. m. NY)
-09:30:53.817 [09:30:53.817] LEVEL SUMMARY (Price=2739.9):
-09:30:53.819 [09:30:53.819]   Europe Low @ 2624.6 | Currently ABOVE by 1153 ticks
-09:30:53.819 [09:30:53.819]   USA Low @ 2633 | Currently ABOVE by 1069 ticks
-09:30:53.822 [09:30:53.822]   Asia Low @ 2643.6 | Currently ABOVE by 963 ticks
-09:30:53.824 [09:30:53.823]   Europe Low @ 2651.2 | Currently ABOVE by 887 ticks
-09:30:53.825 [09:30:53.825]   USA Low @ 2653.7 | Currently ABOVE by 862 ticks
-09:30:53.826 [09:30:53.826]   Asia Low @ 2658.2 | Currently ABOVE by 817 ticks
-09:30:53.830 [09:30:53.830]   Europe Low @ 2658.8 | Currently ABOVE by 811 ticks
-09:30:53.832 [09:30:53.832]   USA Low @ 2665.3 | Currently ABOVE by 746 ticks
-09:30:53.833 [09:30:53.833]   Europe Low @ 2671.7 | Currently ABOVE by 682 ticks
-09:30:53.835 [09:30:53.835]   USA Low @ 2672.9 | Currently ABOVE by 670 ticks
-09:30:53.836 [09:30:53.836]   Asia Low @ 2685.4 | Currently ABOVE by 545 ticks
-09:30:53.838 [09:30:53.838]   Europe Low @ 2697.5 | Currently ABOVE by 424 ticks
-09:30:53.840 [09:30:53.840]   USA Low @ 2697.9 | Currently ABOVE by 420 ticks
-09:30:53.842 [09:30:53.842]   Asia Low @ 2720.3 | Currently ABOVE by 196 ticks
-09:30:53.844 [09:30:53.844]   Europe Low @ 2726.3 | Currently ABOVE by 136 ticks
-09:30:53.845 [09:30:53.845]   Europe Low @ 2728.9 | Currently ABOVE by 110 ticks
-09:30:53.846 [09:30:53.846]   USA High @ 2759.1 | Currently BELOW by 192 ticks
-09:30:53.847 [09:30:53.847]   USA Low @ 2733.7 | Currently ABOVE by 62 ticks
-09:30:53.847 [09:30:53.847] 19/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-09:30:53.847 [09:30:53.847] PROTECTION_RESET: Cleared order references for new trade
-09:30:53.848 [09:30:53.848] 19/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-09:30:53.848 [09:30:53.848] 19/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-09:30:53.850 [09:30:53.850] PROTECTION_RESET: Cleared order references for new trade
-09:31:10.361 [09:31:10.361] 19/1/25 7:24:00 p. m. ENTRY ATTEMPT #1/20 on USA Low (Deepest Selection)
-09:31:10.362 [09:31:10.362] EXTERNAL LEVEL: USA Low @ 2733.7 (Protected by: Asia Low @ 2733.6)
-09:31:10.376 [09:31:10.376] RE-ANCHOR: New Low @ 2733.5 (Setup: USA Low)
-09:31:10.386 [09:31:10.386] RE-ANCHOR: New Low @ 2733.3 (Setup: USA Low)
-09:31:10.390 [09:31:10.390] RE-ANCHOR: New Low @ 2733.2 (Setup: USA Low)
-09:31:10.453 [09:31:10.453] RE-ANCHOR: New Low @ 2733.1 (Setup: USA Low)
-09:31:10.458 [09:31:10.458] RE-ANCHOR: New Low @ 2733 (Setup: USA Low)
-09:31:10.461 [09:31:10.461] RE-ANCHOR: New Low @ 2732.9 (Setup: USA Low)
-09:31:10.462 [09:31:10.462] RE-ANCHOR: New Low @ 2732.8 (Setup: USA Low)
-09:31:10.464 [09:31:10.464] RE-ANCHOR: New Low @ 2732.7 (Setup: USA Low)
-09:31:10.466 [09:31:10.466] RE-ANCHOR: New Low @ 2732.6 (Setup: USA Low)
-09:31:10.469 [09:31:10.469] RE-ANCHOR: New Low @ 2732.5 (Setup: USA Low)
-09:31:10.472 [09:31:10.472] RE-ANCHOR: New Low @ 2732.4 (Setup: USA Low)
-09:31:10.474 [09:31:10.474] RE-ANCHOR: New Low @ 2732.3 (Setup: USA Low)
-09:31:10.475 [09:31:10.475] RE-ANCHOR: New Low @ 2732.2 (Setup: USA Low)
-09:31:12.357 [09:31:12.357] RE-ANCHOR: New Low @ 2732 (Setup: USA Low)
-09:31:12.359 [09:31:12.359] RE-ANCHOR: New Low @ 2731.9 (Setup: USA Low)
-09:31:12.361 [09:31:12.361] RE-ANCHOR: New Low @ 2731.8 (Setup: USA Low)
-09:31:12.790 [09:31:12.790] RE-ANCHOR: New Low @ 2731.7 (Setup: USA Low)
-09:31:12.794 [09:31:12.794] RE-ANCHOR: New Low @ 2731.6 (Setup: USA Low)
-09:31:12.849 [09:31:12.849] RE-ANCHOR: New Low @ 2731.5 (Setup: USA Low)
-09:31:12.851 [09:31:12.851] RE-ANCHOR: New Low @ 2731.3 (Setup: USA Low)
-09:31:12.853 [09:31:12.853] RE-ANCHOR: New Low @ 2731.2 (Setup: USA Low)
-09:31:12.854 [09:31:12.854] RE-ANCHOR: New Low @ 2731.1 (Setup: USA Low)
-09:31:12.855 [09:31:12.855] RE-ANCHOR: New Low @ 2731 (Setup: USA Low)
-09:31:12.863 [09:31:12.863] RE-ANCHOR: New Low @ 2730.9 (Setup: USA Low)
-09:31:14.586 [09:31:14.586] 19/1/25 7:33:00 p. m. | SEARCH_OPPOSITE: Looking for 'USA High' from SAME DAY as 'USA Low' (RefDate: 2025-01-17)
-09:31:14.586 [09:31:14.586] R/R REJECTED (Long): Entry=2733.75356125356 SL=2730.8 | TP1(VWAP)=2735.032211101 TP2(Level)=2759.1 | Selected=2735.032211101 | Risk=2.9536 Reward=1.2786 Ratio=0.43 | Reason: R:R 0.43 < Min 1
-09:31:14.586 [09:31:14.586] 19/1/25 7:33:00 p. m. Trade Skipped (Long). Risk: 2.95 Reward: 1.28 Ratio: 0.43
-09:31:14.588 [09:31:14.588] R/R REJECTED (Long): Entry=2733.75356125356 SL=2730.8 | TP1(VWAP)=2735.032211101 TP2(Level)=2759.1 | Selected=2735.032211101 | Risk=2.9536 Reward=1.2786 Ratio=0.43 | Reason: R:R 0.43 < Min 1
-09:31:14.588 [09:31:14.588] 19/1/25 7:33:00 p. m. Trade Skipped (Long). Risk: 2.95 Reward: 1.28 Ratio: 0.43
-09:31:15.531 [09:31:15.531] R/R REJECTED (Long): Entry=2733.98987012987 SL=2730.8 | TP1(VWAP)=2735.07413945278 TP2(Level)=2759.1 | Selected=2735.07413945278 | Risk=3.1899 Reward=1.0843 Ratio=0.34 | Reason: R:R 0.34 < Min 1
-09:31:15.531 [09:31:15.531] 19/1/25 7:34:00 p. m. Trade Skipped (Long). Risk: 3.19 Reward: 1.08 Ratio: 0.34
-09:31:15.531 [09:31:15.531] R/R REJECTED (Long): Entry=2733.98987012987 SL=2730.8 | TP1(VWAP)=2735.07413945278 TP2(Level)=2759.1 | Selected=2735.07413945278 | Risk=3.1899 Reward=1.0843 Ratio=0.34 | Reason: R:R 0.34 < Min 1
-09:31:15.531 [09:31:15.531] 19/1/25 7:34:00 p. m. Trade Skipped (Long). Risk: 3.19 Reward: 1.08 Ratio: 0.34
-09:31:16.467 [09:31:16.467] R/R REJECTED (Long): Entry=2734.15151883353 SL=2730.8 | TP1(VWAP)=2735.10672703752 TP2(Level)=2759.1 | Selected=2735.10672703752 | Risk=3.3515 Reward=0.9552 Ratio=0.29 | Reason: R:R 0.29 < Min 1
-09:31:16.467 [09:31:16.467] 19/1/25 7:35:00 p. m. Trade Skipped (Long). Risk: 3.35 Reward: 0.96 Ratio: 0.29
-09:31:16.467 [09:31:16.467] R/R REJECTED (Long): Entry=2734.15151883353 SL=2730.8 | TP1(VWAP)=2735.10672703752 TP2(Level)=2759.1 | Selected=2735.10672703752 | Risk=3.3515 Reward=0.9552 Ratio=0.29 | Reason: R:R 0.29 < Min 1
-09:31:16.467 [09:31:16.467] 19/1/25 7:35:00 p. m. Trade Skipped (Long). Risk: 3.35 Reward: 0.96 Ratio: 0.29
-09:31:16.879 [09:31:16.879] R/R REJECTED (Long): Entry=2734.21652892562 SL=2730.8 | TP1(VWAP)=2735.12044387537 TP2(Level)=2759.1 | Selected=2735.12044387537 | Risk=3.4165 Reward=0.9039 Ratio=0.26 | Reason: R:R 0.26 < Min 1
-09:31:16.879 [09:31:16.879] 19/1/25 7:36:00 p. m. Trade Skipped (Long). Risk: 3.42 Reward: 0.90 Ratio: 0.26
-09:31:16.880 [09:31:16.880] R/R REJECTED (Long): Entry=2734.21652892562 SL=2730.8 | TP1(VWAP)=2735.12044387537 TP2(Level)=2759.1 | Selected=2735.12044387537 | Risk=3.4165 Reward=0.9039 Ratio=0.26 | Reason: R:R 0.26 < Min 1
-09:31:16.880 [09:31:16.880] 19/1/25 7:36:00 p. m. Trade Skipped (Long). Risk: 3.42 Reward: 0.90 Ratio: 0.26
-09:31:17.436 [09:31:17.436] R/R REJECTED (Long): Entry=2734.26339491916 SL=2730.8 | TP1(VWAP)=2735.13035563082 TP2(Level)=2759.1 | Selected=2735.13035563082 | Risk=3.4634 Reward=0.8670 Ratio=0.25 | Reason: R:R 0.25 < Min 1
-09:31:17.436 [09:31:17.436] 19/1/25 7:37:00 p. m. Trade Skipped (Long). Risk: 3.46 Reward: 0.87 Ratio: 0.25
-09:31:17.436 [09:31:17.436] R/R REJECTED (Long): Entry=2734.26339491916 SL=2730.8 | TP1(VWAP)=2735.13035563082 TP2(Level)=2759.1 | Selected=2735.13035563082 | Risk=3.4634 Reward=0.8670 Ratio=0.25 | Reason: R:R 0.25 < Min 1
-09:31:17.438 [09:31:17.438] 19/1/25 7:37:00 p. m. Trade Skipped (Long). Risk: 3.46 Reward: 0.87 Ratio: 0.25
-09:31:17.733 [09:31:17.733] R/R REJECTED (Long): Entry=2734.33017817372 SL=2730.8 | TP1(VWAP)=2735.14381787803 TP2(Level)=2759.1 | Selected=2735.14381787803 | Risk=3.5302 Reward=0.8136 Ratio=0.23 | Reason: R:R 0.23 < Min 1
-09:31:17.733 [09:31:17.733] 19/1/25 7:38:00 p. m. Trade Skipped (Long). Risk: 3.53 Reward: 0.81 Ratio: 0.23
-09:31:17.734 [09:31:17.734] R/R REJECTED (Long): Entry=2734.33017817372 SL=2730.8 | TP1(VWAP)=2735.14381787803 TP2(Level)=2759.1 | Selected=2735.14381787803 | Risk=3.5302 Reward=0.8136 Ratio=0.23 | Reason: R:R 0.23 < Min 1
-09:31:17.734 [09:31:17.734] 19/1/25 7:38:00 p. m. Trade Skipped (Long). Risk: 3.53 Reward: 0.81 Ratio: 0.23
-09:31:18.091 [09:31:18.091] R/R REJECTED (Long): Entry=2734.40593849416 SL=2730.8 | TP1(VWAP)=2735.15809758098 TP2(Level)=2759.1 | Selected=2735.15809758098 | Risk=3.6059 Reward=0.7522 Ratio=0.21 | Reason: R:R 0.21 < Min 1
-09:31:18.091 [09:31:18.091] 19/1/25 7:39:00 p. m. Trade Skipped (Long). Risk: 3.61 Reward: 0.75 Ratio: 0.21
-09:31:18.092 [09:31:18.092] R/R REJECTED (Long): Entry=2734.40593849416 SL=2730.8 | TP1(VWAP)=2735.15809758098 TP2(Level)=2759.1 | Selected=2735.15809758098 | Risk=3.6059 Reward=0.7522 Ratio=0.21 | Reason: R:R 0.21 < Min 1
-09:31:18.092 [09:31:18.092] 19/1/25 7:39:00 p. m. Trade Skipped (Long). Risk: 3.61 Reward: 0.75 Ratio: 0.21
-09:31:18.433 [09:31:18.433] R/R REJECTED (Long): Entry=2734.75956873315 SL=2730.8 | TP1(VWAP)=2735.25994633959 TP2(Level)=2759.1 | Selected=2735.25994633959 | Risk=3.9596 Reward=0.5004 Ratio=0.13 | Reason: R:R 0.13 < Min 1
-09:31:18.433 [09:31:18.433] 19/1/25 7:40:00 p. m. Trade Skipped (Long). Risk: 3.96 Reward: 0.50 Ratio: 0.13
-09:31:18.433 [09:31:18.433] R/R REJECTED (Long): Entry=2734.75956873315 SL=2730.8 | TP1(VWAP)=2735.25994633959 TP2(Level)=2759.1 | Selected=2735.25994633959 | Risk=3.9596 Reward=0.5004 Ratio=0.13 | Reason: R:R 0.13 < Min 1
-09:31:18.434 [09:31:18.434] 19/1/25 7:40:00 p. m. Trade Skipped (Long). Risk: 3.96 Reward: 0.50 Ratio: 0.13
-09:31:19.237 [09:31:19.237] R/R REJECTED (Long): Entry=2734.82315698179 SL=2730.8 | TP1(VWAP)=2735.28006795017 TP2(Level)=2759.1 | Selected=2735.28006795017 | Risk=4.0232 Reward=0.4569 Ratio=0.11 | Reason: R:R 0.11 < Min 1
-09:31:19.238 [09:31:19.238] 19/1/25 7:41:00 p. m. Trade Skipped (Long). Risk: 4.02 Reward: 0.46 Ratio: 0.11
-09:31:19.238 [09:31:19.238] R/R REJECTED (Long): Entry=2734.82315698179 SL=2730.8 | TP1(VWAP)=2735.28006795017 TP2(Level)=2759.1 | Selected=2735.28006795017 | Risk=4.0232 Reward=0.4569 Ratio=0.11 | Reason: R:R 0.11 < Min 1
-09:31:19.238 [09:31:19.238] 19/1/25 7:41:00 p. m. Trade Skipped (Long). Risk: 4.02 Reward: 0.46 Ratio: 0.11
-09:31:19.716 [09:31:19.716] R/R REJECTED (Long): Entry=2734.88411522633 SL=2730.8 | TP1(VWAP)=2735.29693839912 TP2(Level)=2759.1 | Selected=2735.29693839912 | Risk=4.0841 Reward=0.4128 Ratio=0.10 | Reason: R:R 0.10 < Min 1
-09:31:19.717 [09:31:19.717] 19/1/25 7:42:00 p. m. Trade Skipped (Long). Risk: 4.08 Reward: 0.41 Ratio: 0.10
-09:31:19.717 [09:31:19.717] R/R REJECTED (Long): Entry=2734.88411522633 SL=2730.8 | TP1(VWAP)=2735.29693839912 TP2(Level)=2759.1 | Selected=2735.29693839912 | Risk=4.0841 Reward=0.4128 Ratio=0.10 | Reason: R:R 0.10 < Min 1
-09:31:19.718 [09:31:19.718] 19/1/25 7:42:00 p. m. Trade Skipped (Long). Risk: 4.08 Reward: 0.41 Ratio: 0.10
-09:31:20.223 [09:31:20.223] R/R REJECTED (Long): Entry=2734.91017350157 SL=2730.8 | TP1(VWAP)=2735.30097684515 TP2(Level)=2759.1 | Selected=2735.30097684515 | Risk=4.1102 Reward=0.3908 Ratio=0.10 | Reason: R:R 0.10 < Min 1
-09:31:20.224 [09:31:20.224] 19/1/25 7:43:00 p. m. Trade Skipped (Long). Risk: 4.11 Reward: 0.39 Ratio: 0.10
-09:31:20.224 [09:31:20.224] R/R REJECTED (Long): Entry=2734.91017350157 SL=2730.8 | TP1(VWAP)=2735.30097684515 TP2(Level)=2759.1 | Selected=2735.30097684515 | Risk=4.1102 Reward=0.3908 Ratio=0.10 | Reason: R:R 0.10 < Min 1
-09:31:20.224 [09:31:20.224] 19/1/25 7:43:00 p. m. Trade Skipped (Long). Risk: 4.11 Reward: 0.39 Ratio: 0.10
-09:31:20.817 [09:31:20.817] R/R REJECTED (Long): Entry=2734.93110773899 SL=2730.8 | TP1(VWAP)=2735.30383795309 TP2(Level)=2759.1 | Selected=2735.30383795309 | Risk=4.1311 Reward=0.3727 Ratio=0.09 | Reason: R:R 0.09 < Min 1
-09:31:20.818 [09:31:20.818] 19/1/25 7:44:00 p. m. Trade Skipped (Long). Risk: 4.13 Reward: 0.37 Ratio: 0.09
-09:31:20.818 [09:31:20.818] R/R REJECTED (Long): Entry=2734.93110773899 SL=2730.8 | TP1(VWAP)=2735.30383795309 TP2(Level)=2759.1 | Selected=2735.30383795309 | Risk=4.1311 Reward=0.3727 Ratio=0.09 | Reason: R:R 0.09 < Min 1
-09:31:20.818 [09:31:20.818] 19/1/25 7:44:00 p. m. Trade Skipped (Long). Risk: 4.13 Reward: 0.37 Ratio: 0.09
-09:31:21.032 [09:31:21.032] R/R REJECTED (Long): Entry=2734.9428251121 SL=2730.8 | TP1(VWAP)=2735.30673959069 TP2(Level)=2759.1 | Selected=2735.30673959069 | Risk=4.1428 Reward=0.3639 Ratio=0.09 | Reason: R:R 0.09 < Min 1
-09:31:21.033 [09:31:21.033] 19/1/25 7:45:00 p. m. Trade Skipped (Long). Risk: 4.14 Reward: 0.36 Ratio: 0.09
-09:31:21.033 [09:31:21.033] R/R REJECTED (Long): Entry=2734.9428251121 SL=2730.8 | TP1(VWAP)=2735.30673959069 TP2(Level)=2759.1 | Selected=2735.30673959069 | Risk=4.1428 Reward=0.3639 Ratio=0.09 | Reason: R:R 0.09 < Min 1
-09:31:21.033 [09:31:21.033] 19/1/25 7:45:00 p. m. Trade Skipped (Long). Risk: 4.14 Reward: 0.36 Ratio: 0.09
-09:31:21.596 [09:31:21.596] R/R REJECTED (Long): Entry=2734.95888399412 SL=2730.8 | TP1(VWAP)=2735.31133659902 TP2(Level)=2759.1 | Selected=2735.31133659902 | Risk=4.1589 Reward=0.3525 Ratio=0.08 | Reason: R:R 0.08 < Min 1
-09:31:21.597 [09:31:21.597] 19/1/25 7:46:00 p. m. Trade Skipped (Long). Risk: 4.16 Reward: 0.35 Ratio: 0.08
-09:31:21.597 [09:31:21.597] R/R REJECTED (Long): Entry=2734.95888399412 SL=2730.8 | TP1(VWAP)=2735.31133659902 TP2(Level)=2759.1 | Selected=2735.31133659902 | Risk=4.1589 Reward=0.3525 Ratio=0.08 | Reason: R:R 0.08 < Min 1
-09:31:21.597 [09:31:21.597] 19/1/25 7:46:00 p. m. Trade Skipped (Long). Risk: 4.16 Reward: 0.35 Ratio: 0.08
-09:31:23.305 [09:31:23.305] R/R REJECTED (Long): Entry=2735.03367609254 SL=2730.8 | TP1(VWAP)=2735.32706422019 TP2(Level)=2759.1 | Selected=2735.32706422019 | Risk=4.2337 Reward=0.2934 Ratio=0.07 | Reason: R:R 0.07 < Min 1
-09:31:23.305 [09:31:23.305] 19/1/25 7:49:00 p. m. Trade Skipped (Long). Risk: 4.23 Reward: 0.29 Ratio: 0.07
-09:31:23.306 [09:31:23.306] R/R REJECTED (Long): Entry=2735.03367609254 SL=2730.8 | TP1(VWAP)=2735.32706422019 TP2(Level)=2759.1 | Selected=2735.32706422019 | Risk=4.2337 Reward=0.2934 Ratio=0.07 | Reason: R:R 0.07 < Min 1
-09:31:23.306 [09:31:23.306] 19/1/25 7:49:00 p. m. Trade Skipped (Long). Risk: 4.23 Reward: 0.29 Ratio: 0.07
-09:31:23.751 [09:31:23.751] R/R REJECTED (Long): Entry=2735.0544472681 SL=2730.8 | TP1(VWAP)=2735.33599348534 TP2(Level)=2759.1 | Selected=2735.33599348534 | Risk=4.2544 Reward=0.2815 Ratio=0.07 | Reason: R:R 0.07 < Min 1
-09:31:23.752 [09:31:23.752] 19/1/25 7:50:00 p. m. Trade Skipped (Long). Risk: 4.25 Reward: 0.28 Ratio: 0.07
-09:31:23.753 [09:31:23.753] R/R REJECTED (Long): Entry=2735.0544472681 SL=2730.8 | TP1(VWAP)=2735.33599348534 TP2(Level)=2759.1 | Selected=2735.33599348534 | Risk=4.2544 Reward=0.2815 Ratio=0.07 | Reason: R:R 0.07 < Min 1
-09:31:23.753 [09:31:23.753] 19/1/25 7:50:00 p. m. Trade Skipped (Long). Risk: 4.25 Reward: 0.28 Ratio: 0.07
-09:31:24.181 [09:31:24.181] R/R REJECTED (Long): Entry=2735.09888475836 SL=2730.8 | TP1(VWAP)=2735.3554340836 TP2(Level)=2759.1 | Selected=2735.3554340836 | Risk=4.2989 Reward=0.2565 Ratio=0.06 | Reason: R:R 0.06 < Min 1
-09:31:24.181 [09:31:24.181] 19/1/25 7:51:00 p. m. Trade Skipped (Long). Risk: 4.30 Reward: 0.26 Ratio: 0.06
-09:31:24.182 [09:31:24.182] R/R REJECTED (Long): Entry=2735.09888475836 SL=2730.8 | TP1(VWAP)=2735.3554340836 TP2(Level)=2759.1 | Selected=2735.3554340836 | Risk=4.2989 Reward=0.2565 Ratio=0.06 | Reason: R:R 0.06 < Min 1
-09:31:24.183 [09:31:24.183] 19/1/25 7:51:00 p. m. Trade Skipped (Long). Risk: 4.30 Reward: 0.26 Ratio: 0.06
-09:31:24.532 [09:31:24.532] R/R REJECTED (Long): Entry=2735.12572815533 SL=2730.8 | TP1(VWAP)=2735.3667302799 TP2(Level)=2759.1 | Selected=2735.3667302799 | Risk=4.3257 Reward=0.2410 Ratio=0.06 | Reason: R:R 0.06 < Min 1
-09:31:24.533 [09:31:24.533] 19/1/25 7:52:00 p. m. Trade Skipped (Long). Risk: 4.33 Reward: 0.24 Ratio: 0.06
-09:31:24.533 [09:31:24.533] R/R REJECTED (Long): Entry=2735.12572815533 SL=2730.8 | TP1(VWAP)=2735.3667302799 TP2(Level)=2759.1 | Selected=2735.3667302799 | Risk=4.3257 Reward=0.2410 Ratio=0.06 | Reason: R:R 0.06 < Min 1
-09:31:24.533 [09:31:24.533] 19/1/25 7:52:00 p. m. Trade Skipped (Long). Risk: 4.33 Reward: 0.24 Ratio: 0.06
-09:31:24.988 [09:31:24.988] R/R REJECTED (Long): Entry=2735.14229154168 SL=2730.8 | TP1(VWAP)=2735.37401201391 TP2(Level)=2759.1 | Selected=2735.37401201391 | Risk=4.3423 Reward=0.2317 Ratio=0.05 | Reason: R:R 0.05 < Min 1
-09:31:24.988 [09:31:24.988] 19/1/25 7:53:00 p. m. Trade Skipped (Long). Risk: 4.34 Reward: 0.23 Ratio: 0.05
-09:31:24.993 [09:31:24.993] R/R REJECTED (Long): Entry=2735.14229154168 SL=2730.8 | TP1(VWAP)=2735.37401201391 TP2(Level)=2759.1 | Selected=2735.37401201391 | Risk=4.3423 Reward=0.2317 Ratio=0.05 | Reason: R:R 0.05 < Min 1
-09:31:24.993 [09:31:24.993] 19/1/25 7:53:00 p. m. Trade Skipped (Long). Risk: 4.34 Reward: 0.23 Ratio: 0.05
-09:31:25.282 [09:31:25.282] R/R REJECTED (Long): Entry=2735.15564133016 SL=2730.8 | TP1(VWAP)=2735.3798427673 TP2(Level)=2759.1 | Selected=2735.3798427673 | Risk=4.3556 Reward=0.2242 Ratio=0.05 | Reason: R:R 0.05 < Min 1
-09:31:25.283 [09:31:25.283] 19/1/25 7:54:00 p. m. Trade Skipped (Long). Risk: 4.36 Reward: 0.22 Ratio: 0.05
-09:31:25.283 [09:31:25.283] R/R REJECTED (Long): Entry=2735.15564133016 SL=2730.8 | TP1(VWAP)=2735.3798427673 TP2(Level)=2759.1 | Selected=2735.3798427673 | Risk=4.3556 Reward=0.2242 Ratio=0.05 | Reason: R:R 0.05 < Min 1
-09:31:25.283 [09:31:25.283] 19/1/25 7:54:00 p. m. Trade Skipped (Long). Risk: 4.36 Reward: 0.22 Ratio: 0.05
-09:31:25.561 [09:31:25.561] R/R REJECTED (Long): Entry=2735.18253877081 SL=2730.8 | TP1(VWAP)=2735.39036144579 TP2(Level)=2759.1 | Selected=2735.39036144579 | Risk=4.3825 Reward=0.2078 Ratio=0.05 | Reason: R:R 0.05 < Min 1
-09:31:25.561 [09:31:25.561] 19/1/25 7:55:00 p. m. Trade Skipped (Long). Risk: 4.38 Reward: 0.21 Ratio: 0.05
-09:31:25.565 [09:31:25.565] R/R REJECTED (Long): Entry=2735.18253877081 SL=2730.8 | TP1(VWAP)=2735.39036144579 TP2(Level)=2759.1 | Selected=2735.39036144579 | Risk=4.3825 Reward=0.2078 Ratio=0.05 | Reason: R:R 0.05 < Min 1
-09:31:25.566 [09:31:25.566] 19/1/25 7:55:00 p. m. Trade Skipped (Long). Risk: 4.38 Reward: 0.21 Ratio: 0.05
-09:31:25.840 [09:31:25.840] R/R REJECTED (Long): Entry=2735.1966797974 SL=2730.8 | TP1(VWAP)=2735.39575313169 TP2(Level)=2759.1 | Selected=2735.39575313169 | Risk=4.3967 Reward=0.1991 Ratio=0.05 | Reason: R:R 0.05 < Min 1
-09:31:25.840 [09:31:25.840] 19/1/25 7:56:00 p. m. Trade Skipped (Long). Risk: 4.40 Reward: 0.20 Ratio: 0.05
-09:31:25.840 [09:31:25.840] R/R REJECTED (Long): Entry=2735.1966797974 SL=2730.8 | TP1(VWAP)=2735.39575313169 TP2(Level)=2759.1 | Selected=2735.39575313169 | Risk=4.3967 Reward=0.1991 Ratio=0.05 | Reason: R:R 0.05 < Min 1
-09:31:25.841 [09:31:25.841] 19/1/25 7:56:00 p. m. Trade Skipped (Long). Risk: 4.40 Reward: 0.20 Ratio: 0.05
-09:31:26.159 [09:31:26.159] R/R REJECTED (Long): Entry=2735.2103543743 SL=2730.8 | TP1(VWAP)=2735.40148394913 TP2(Level)=2759.1 | Selected=2735.40148394913 | Risk=4.4104 Reward=0.1911 Ratio=0.04 | Reason: R:R 0.04 < Min 1
-09:31:26.159 [09:31:26.159] 19/1/25 7:57:00 p. m. Trade Skipped (Long). Risk: 4.41 Reward: 0.19 Ratio: 0.04
-09:31:26.160 [09:31:26.160] R/R REJECTED (Long): Entry=2735.2103543743 SL=2730.8 | TP1(VWAP)=2735.40148394913 TP2(Level)=2759.1 | Selected=2735.40148394913 | Risk=4.4104 Reward=0.1911 Ratio=0.04 | Reason: R:R 0.04 < Min 1
-09:31:26.161 [09:31:26.161] 19/1/25 7:57:00 p. m. Trade Skipped (Long). Risk: 4.41 Reward: 0.19 Ratio: 0.04
-09:31:26.398 [09:31:26.398] R/R REJECTED (Long): Entry=2735.21769524849 SL=2730.8 | TP1(VWAP)=2735.40408776677 TP2(Level)=2759.1 | Selected=2735.40408776677 | Risk=4.4177 Reward=0.1864 Ratio=0.04 | Reason: R:R 0.04 < Min 1
-09:31:26.399 [09:31:26.399] 19/1/25 7:58:00 p. m. Trade Skipped (Long). Risk: 4.42 Reward: 0.19 Ratio: 0.04
-09:31:26.399 [09:31:26.399] R/R REJECTED (Long): Entry=2735.21769524849 SL=2730.8 | TP1(VWAP)=2735.40408776677 TP2(Level)=2759.1 | Selected=2735.40408776677 | Risk=4.4177 Reward=0.1864 Ratio=0.04 | Reason: R:R 0.04 < Min 1
-09:31:26.399 [09:31:26.399] 19/1/25 7:58:00 p. m. Trade Skipped (Long). Risk: 4.42 Reward: 0.19 Ratio: 0.04
-09:31:26.925 [09:31:26.925] R/R REJECTED (Long): Entry=2735.22464940668 SL=2730.8 | TP1(VWAP)=2735.40665671643 TP2(Level)=2759.1 | Selected=2735.40665671643 | Risk=4.4246 Reward=0.1820 Ratio=0.04 | Reason: R:R 0.04 < Min 1
-09:31:26.926 [09:31:26.926] 19/1/25 7:59:00 p. m. Trade Skipped (Long). Risk: 4.42 Reward: 0.18 Ratio: 0.04
-09:31:26.926 [09:31:26.926] R/R REJECTED (Long): Entry=2735.22464940668 SL=2730.8 | TP1(VWAP)=2735.40665671643 TP2(Level)=2759.1 | Selected=2735.40665671643 | Risk=4.4246 Reward=0.1820 Ratio=0.04 | Reason: R:R 0.04 < Min 1
-09:31:26.927 [09:31:26.927] 19/1/25 7:59:00 p. m. Trade Skipped (Long). Risk: 4.42 Reward: 0.18 Ratio: 0.04
-09:31:27.314 [09:31:27.314] R/R REJECTED (Long): Entry=2735.23785942491 SL=2730.8 | TP1(VWAP)=2735.41271487849 TP2(Level)=2759.1 | Selected=2735.41271487849 | Risk=4.4379 Reward=0.1749 Ratio=0.04 | Reason: R:R 0.04 < Min 1
-09:31:27.314 [09:31:27.314] 19/1/25 8:00:00 p. m. Trade Skipped (Long). Risk: 4.44 Reward: 0.17 Ratio: 0.04
-09:31:27.315 [09:31:27.315] R/R REJECTED (Long): Entry=2735.23785942491 SL=2730.8 | TP1(VWAP)=2735.41271487849 TP2(Level)=2759.1 | Selected=2735.41271487849 | Risk=4.4379 Reward=0.1749 Ratio=0.04 | Reason: R:R 0.04 < Min 1
-09:31:27.315 [09:31:27.315] 19/1/25 8:00:00 p. m. Trade Skipped (Long). Risk: 4.44 Reward: 0.17 Ratio: 0.04
-09:31:27.836 [09:31:27.836] R/R REJECTED (Long): Entry=2735.24236479321 SL=2730.8 | TP1(VWAP)=2735.4148137197 TP2(Level)=2759.1 | Selected=2735.4148137197 | Risk=4.4424 Reward=0.1724 Ratio=0.04 | Reason: R:R 0.04 < Min 1
-09:31:27.836 [09:31:27.836] 19/1/25 8:01:00 p. m. Trade Skipped (Long). Risk: 4.44 Reward: 0.17 Ratio: 0.04
-09:31:27.837 [09:31:27.837] R/R REJECTED (Long): Entry=2735.24236479321 SL=2730.8 | TP1(VWAP)=2735.4148137197 TP2(Level)=2759.1 | Selected=2735.4148137197 | Risk=4.4424 Reward=0.1724 Ratio=0.04 | Reason: R:R 0.04 < Min 1
-09:31:27.837 [09:31:27.837] 19/1/25 8:01:00 p. m. Trade Skipped (Long). Risk: 4.44 Reward: 0.17 Ratio: 0.04
-09:31:28.694 [09:31:28.694] R/R REJECTED (Long): Entry=2735.25739491437 SL=2730.8 | TP1(VWAP)=2735.42120946539 TP2(Level)=2759.1 | Selected=2735.42120946539 | Risk=4.4574 Reward=0.1638 Ratio=0.04 | Reason: R:R 0.04 < Min 1
-09:31:28.694 [09:31:28.694] 19/1/25 8:02:00 p. m. Trade Skipped (Long). Risk: 4.46 Reward: 0.16 Ratio: 0.04
-09:31:28.694 [09:31:28.694] R/R REJECTED (Long): Entry=2735.25739491437 SL=2730.8 | TP1(VWAP)=2735.42120946539 TP2(Level)=2759.1 | Selected=2735.42120946539 | Risk=4.4574 Reward=0.1638 Ratio=0.04 | Reason: R:R 0.04 < Min 1
-09:31:28.696 [09:31:28.696] 19/1/25 8:02:00 p. m. Trade Skipped (Long). Risk: 4.46 Reward: 0.16 Ratio: 0.04
-09:31:32.812 [09:31:32.812] R/R REJECTED (Long): Entry=2735.2337566571 SL=2730.8 | TP1(VWAP)=2735.38516637035 TP2(Level)=2759.1 | Selected=2735.38516637035 | Risk=4.4338 Reward=0.1514 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-09:31:32.812 [09:31:32.812] 19/1/25 8:12:00 p. m. Trade Skipped (Long). Risk: 4.43 Reward: 0.15 Ratio: 0.03
-09:31:32.812 [09:31:32.812] R/R REJECTED (Long): Entry=2735.2337566571 SL=2730.8 | TP1(VWAP)=2735.38516637035 TP2(Level)=2759.1 | Selected=2735.38516637035 | Risk=4.4338 Reward=0.1514 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-09:31:32.812 [09:31:32.812] 19/1/25 8:12:00 p. m. Trade Skipped (Long). Risk: 4.43 Reward: 0.15 Ratio: 0.03
-09:31:33.313 [09:31:33.313] R/R REJECTED (Long): Entry=2735.25896207584 SL=2730.8 | TP1(VWAP)=2735.39852536867 TP2(Level)=2759.1 | Selected=2735.39852536867 | Risk=4.4590 Reward=0.1396 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-09:31:33.314 [09:31:33.314] 19/1/25 8:14:00 p. m. Trade Skipped (Long). Risk: 4.46 Reward: 0.14 Ratio: 0.03
-09:31:33.315 [09:31:33.315] R/R REJECTED (Long): Entry=2735.25896207584 SL=2730.8 | TP1(VWAP)=2735.39852536867 TP2(Level)=2759.1 | Selected=2735.39852536867 | Risk=4.4590 Reward=0.1396 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-09:31:33.315 [09:31:33.315] 19/1/25 8:14:00 p. m. Trade Skipped (Long). Risk: 4.46 Reward: 0.14 Ratio: 0.03
-09:31:33.877 [09:31:33.877] R/R REJECTED (Long): Entry=2735.28073141957 SL=2730.8 | TP1(VWAP)=2735.41091854421 TP2(Level)=2759.1 | Selected=2735.41091854421 | Risk=4.4807 Reward=0.1302 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-09:31:33.878 [09:31:33.877] 19/1/25 8:15:00 p. m. Trade Skipped (Long). Risk: 4.48 Reward: 0.13 Ratio: 0.03
-09:31:33.878 [09:31:33.878] R/R REJECTED (Long): Entry=2735.28073141957 SL=2730.8 | TP1(VWAP)=2735.41091854421 TP2(Level)=2759.1 | Selected=2735.41091854421 | Risk=4.4807 Reward=0.1302 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-09:31:33.878 [09:31:33.878] 19/1/25 8:15:00 p. m. Trade Skipped (Long). Risk: 4.48 Reward: 0.13 Ratio: 0.03
-09:31:34.353 [09:31:34.353] R/R REJECTED (Long): Entry=2735.32944996179 SL=2730.8 | TP1(VWAP)=2735.43954788528 TP2(Level)=2759.1 | Selected=2735.43954788528 | Risk=4.5294 Reward=0.1101 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:34.353 [09:31:34.353] 19/1/25 8:16:00 p. m. Trade Skipped (Long). Risk: 4.53 Reward: 0.11 Ratio: 0.02
-09:31:34.353 [09:31:34.353] R/R REJECTED (Long): Entry=2735.32944996179 SL=2730.8 | TP1(VWAP)=2735.43954788528 TP2(Level)=2759.1 | Selected=2735.43954788528 | Risk=4.5294 Reward=0.1101 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:34.354 [09:31:34.354] 19/1/25 8:16:00 p. m. Trade Skipped (Long). Risk: 4.53 Reward: 0.11 Ratio: 0.02
-09:31:34.686 [09:31:34.686] R/R REJECTED (Long): Entry=2735.36206378986 SL=2730.8 | TP1(VWAP)=2735.45919250181 TP2(Level)=2759.1 | Selected=2735.45919250181 | Risk=4.5621 Reward=0.0971 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:34.687 [09:31:34.687] 19/1/25 8:17:00 p. m. Trade Skipped (Long). Risk: 4.56 Reward: 0.10 Ratio: 0.02
-09:31:34.687 [09:31:34.687] R/R REJECTED (Long): Entry=2735.36206378986 SL=2730.8 | TP1(VWAP)=2735.45919250181 TP2(Level)=2759.1 | Selected=2735.45919250181 | Risk=4.5621 Reward=0.0971 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:34.688 [09:31:34.688] 19/1/25 8:17:00 p. m. Trade Skipped (Long). Risk: 4.56 Reward: 0.10 Ratio: 0.02
-09:31:35.289 [09:31:35.289] R/R REJECTED (Long): Entry=2735.38080621301 SL=2730.8 | TP1(VWAP)=2735.47035714287 TP2(Level)=2759.1 | Selected=2735.47035714287 | Risk=4.5808 Reward=0.0896 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:35.289 [09:31:35.289] 19/1/25 8:18:00 p. m. Trade Skipped (Long). Risk: 4.58 Reward: 0.09 Ratio: 0.02
-09:31:35.290 [09:31:35.290] R/R REJECTED (Long): Entry=2735.38080621301 SL=2730.8 | TP1(VWAP)=2735.47035714287 TP2(Level)=2759.1 | Selected=2735.47035714287 | Risk=4.5808 Reward=0.0896 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:35.290 [09:31:35.290] 19/1/25 8:18:00 p. m. Trade Skipped (Long). Risk: 4.58 Reward: 0.09 Ratio: 0.02
-09:31:35.549 [09:31:35.549] R/R REJECTED (Long): Entry=2735.38485071875 SL=2730.8 | TP1(VWAP)=2735.47277263009 TP2(Level)=2759.1 | Selected=2735.47277263009 | Risk=4.5849 Reward=0.0879 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:35.549 [09:31:35.549] 19/1/25 8:19:00 p. m. Trade Skipped (Long). Risk: 4.58 Reward: 0.09 Ratio: 0.02
-09:31:35.549 [09:31:35.549] R/R REJECTED (Long): Entry=2735.38485071875 SL=2730.8 | TP1(VWAP)=2735.47277263009 TP2(Level)=2759.1 | Selected=2735.47277263009 | Risk=4.5849 Reward=0.0879 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:35.551 [09:31:35.551] 19/1/25 8:19:00 p. m. Trade Skipped (Long). Risk: 4.58 Reward: 0.09 Ratio: 0.02
-09:31:35.838 [09:31:35.838] R/R REJECTED (Long): Entry=2735.396459854 SL=2730.8 | TP1(VWAP)=2735.47972143533 TP2(Level)=2759.1 | Selected=2735.47972143533 | Risk=4.5965 Reward=0.0833 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:35.839 [09:31:35.839] 19/1/25 8:20:00 p. m. Trade Skipped (Long). Risk: 4.60 Reward: 0.08 Ratio: 0.02
-09:31:35.839 [09:31:35.839] R/R REJECTED (Long): Entry=2735.396459854 SL=2730.8 | TP1(VWAP)=2735.47972143533 TP2(Level)=2759.1 | Selected=2735.47972143533 | Risk=4.5965 Reward=0.0833 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:35.840 [09:31:35.840] 19/1/25 8:20:00 p. m. Trade Skipped (Long). Risk: 4.60 Reward: 0.08 Ratio: 0.02
-09:31:36.155 [09:31:36.155] R/R REJECTED (Long): Entry=2735.4002910149 SL=2730.8 | TP1(VWAP)=2735.48202591285 TP2(Level)=2759.1 | Selected=2735.48202591285 | Risk=4.6003 Reward=0.0817 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:36.155 [09:31:36.155] 19/1/25 8:21:00 p. m. Trade Skipped (Long). Risk: 4.60 Reward: 0.08 Ratio: 0.02
-09:31:36.155 [09:31:36.155] R/R REJECTED (Long): Entry=2735.4002910149 SL=2730.8 | TP1(VWAP)=2735.48202591285 TP2(Level)=2759.1 | Selected=2735.48202591285 | Risk=4.6003 Reward=0.0817 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:36.155 [09:31:36.155] 19/1/25 8:21:00 p. m. Trade Skipped (Long). Risk: 4.60 Reward: 0.08 Ratio: 0.02
-09:31:36.504 [09:31:36.504] R/R REJECTED (Long): Entry=2735.41282327585 SL=2730.8 | TP1(VWAP)=2735.4895093458 TP2(Level)=2759.1 | Selected=2735.4895093458 | Risk=4.6128 Reward=0.0767 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:36.504 [09:31:36.504] 19/1/25 8:22:00 p. m. Trade Skipped (Long). Risk: 4.61 Reward: 0.08 Ratio: 0.02
-09:31:36.504 [09:31:36.504] R/R REJECTED (Long): Entry=2735.41282327585 SL=2730.8 | TP1(VWAP)=2735.4895093458 TP2(Level)=2759.1 | Selected=2735.4895093458 | Risk=4.6128 Reward=0.0767 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:36.504 [09:31:36.504] 19/1/25 8:22:00 p. m. Trade Skipped (Long). Risk: 4.61 Reward: 0.08 Ratio: 0.02
-09:31:36.749 [09:31:36.749] R/R REJECTED (Long): Entry=2735.41977865047 SL=2730.8 | TP1(VWAP)=2735.49373981848 TP2(Level)=2759.1 | Selected=2735.49373981848 | Risk=4.6198 Reward=0.0740 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:36.749 [09:31:36.749] 19/1/25 8:23:00 p. m. Trade Skipped (Long). Risk: 4.62 Reward: 0.07 Ratio: 0.02
-09:31:36.749 [09:31:36.749] R/R REJECTED (Long): Entry=2735.41977865047 SL=2730.8 | TP1(VWAP)=2735.49373981848 TP2(Level)=2759.1 | Selected=2735.49373981848 | Risk=4.6198 Reward=0.0740 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:36.750 [09:31:36.750] 19/1/25 8:23:00 p. m. Trade Skipped (Long). Risk: 4.62 Reward: 0.07 Ratio: 0.02
-09:31:37.040 [09:31:37.040] R/R REJECTED (Long): Entry=2735.42675656493 SL=2730.8 | TP1(VWAP)=2735.4980064905 TP2(Level)=2759.1 | Selected=2735.4980064905 | Risk=4.6268 Reward=0.0712 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:37.040 [09:31:37.040] 19/1/25 8:24:00 p. m. Trade Skipped (Long). Risk: 4.63 Reward: 0.07 Ratio: 0.02
-09:31:37.040 [09:31:37.040] R/R REJECTED (Long): Entry=2735.42675656493 SL=2730.8 | TP1(VWAP)=2735.4980064905 TP2(Level)=2759.1 | Selected=2735.4980064905 | Risk=4.6268 Reward=0.0712 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:37.041 [09:31:37.041] 19/1/25 8:24:00 p. m. Trade Skipped (Long). Risk: 4.63 Reward: 0.07 Ratio: 0.02
-09:31:40.779 [09:31:40.779] R/R REJECTED (Long): Entry=2735.40530945648 SL=2730.8 | TP1(VWAP)=2735.47785851678 TP2(Level)=2759.1 | Selected=2735.47785851678 | Risk=4.6053 Reward=0.0725 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:40.780 [09:31:40.780] 19/1/25 8:37:00 p. m. Trade Skipped (Long). Risk: 4.61 Reward: 0.07 Ratio: 0.02
-09:31:40.780 [09:31:40.780] R/R REJECTED (Long): Entry=2735.40530945648 SL=2730.8 | TP1(VWAP)=2735.47785851678 TP2(Level)=2759.1 | Selected=2735.47785851678 | Risk=4.6053 Reward=0.0725 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:40.781 [09:31:40.781] 19/1/25 8:37:00 p. m. Trade Skipped (Long). Risk: 4.61 Reward: 0.07 Ratio: 0.02
-09:31:41.190 [09:31:41.190] R/R REJECTED (Long): Entry=2735.40879052368 SL=2730.8 | TP1(VWAP)=2735.47984693878 TP2(Level)=2759.1 | Selected=2735.47984693878 | Risk=4.6088 Reward=0.0711 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:41.190 [09:31:41.190] 19/1/25 8:38:00 p. m. Trade Skipped (Long). Risk: 4.61 Reward: 0.07 Ratio: 0.02
-09:31:41.191 [09:31:41.191] R/R REJECTED (Long): Entry=2735.40879052368 SL=2730.8 | TP1(VWAP)=2735.47984693878 TP2(Level)=2759.1 | Selected=2735.47984693878 | Risk=4.6088 Reward=0.0711 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:41.191 [09:31:41.191] 19/1/25 8:38:00 p. m. Trade Skipped (Long). Risk: 4.61 Reward: 0.07 Ratio: 0.02
-09:31:41.455 [09:31:41.455] R/R REJECTED (Long): Entry=2735.41101800123 SL=2730.8 | TP1(VWAP)=2735.48115727004 TP2(Level)=2759.1 | Selected=2735.48115727004 | Risk=4.6110 Reward=0.0701 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:41.455 [09:31:41.455] 19/1/25 8:39:00 p. m. Trade Skipped (Long). Risk: 4.61 Reward: 0.07 Ratio: 0.02
-09:31:41.456 [09:31:41.456] R/R REJECTED (Long): Entry=2735.41101800123 SL=2730.8 | TP1(VWAP)=2735.48115727004 TP2(Level)=2759.1 | Selected=2735.48115727004 | Risk=4.6110 Reward=0.0701 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:31:41.457 [09:31:41.457] 19/1/25 8:39:00 p. m. Trade Skipped (Long). Risk: 4.61 Reward: 0.07 Ratio: 0.02
-09:31:41.731 [09:31:41.731] R/R REJECTED (Long): Entry=2735.4141929499 SL=2730.8 | TP1(VWAP)=2735.48315010572 TP2(Level)=2759.1 | Selected=2735.48315010572 | Risk=4.6142 Reward=0.0690 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:31:41.731 [09:31:41.731] 19/1/25 8:40:00 p. m. Trade Skipped (Long). Risk: 4.61 Reward: 0.07 Ratio: 0.01
-09:31:41.731 [09:31:41.731] R/R REJECTED (Long): Entry=2735.4141929499 SL=2730.8 | TP1(VWAP)=2735.48315010572 TP2(Level)=2759.1 | Selected=2735.48315010572 | Risk=4.6142 Reward=0.0690 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:31:41.731 [09:31:41.731] 19/1/25 8:40:00 p. m. Trade Skipped (Long). Risk: 4.61 Reward: 0.07 Ratio: 0.01
-09:31:41.941 [09:31:41.941] R/R REJECTED (Long): Entry=2735.41975460122 SL=2730.8 | TP1(VWAP)=2735.48658536586 TP2(Level)=2759.1 | Selected=2735.48658536586 | Risk=4.6198 Reward=0.0668 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:31:41.942 [09:31:41.942] 19/1/25 8:41:00 p. m. Trade Skipped (Long). Risk: 4.62 Reward: 0.07 Ratio: 0.01
-09:31:41.942 [09:31:41.942] R/R REJECTED (Long): Entry=2735.41975460122 SL=2730.8 | TP1(VWAP)=2735.48658536586 TP2(Level)=2759.1 | Selected=2735.48658536586 | Risk=4.6198 Reward=0.0668 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:31:41.942 [09:31:41.942] 19/1/25 8:41:00 p. m. Trade Skipped (Long). Risk: 4.62 Reward: 0.07 Ratio: 0.01
-09:31:42.359 [09:31:42.359] R/R REJECTED (Long): Entry=2735.42066646285 SL=2730.8 | TP1(VWAP)=2735.48705684918 TP2(Level)=2759.1 | Selected=2735.48705684918 | Risk=4.6207 Reward=0.0664 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:31:42.360 [09:31:42.360] 19/1/25 8:42:00 p. m. Trade Skipped (Long). Risk: 4.62 Reward: 0.07 Ratio: 0.01
-09:31:42.361 [09:31:42.361] R/R REJECTED (Long): Entry=2735.42066646285 SL=2730.8 | TP1(VWAP)=2735.48705684918 TP2(Level)=2759.1 | Selected=2735.48705684918 | Risk=4.6207 Reward=0.0664 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:31:42.361 [09:31:42.361] 19/1/25 8:42:00 p. m. Trade Skipped (Long). Risk: 4.62 Reward: 0.07 Ratio: 0.01
-09:31:42.771 [09:31:42.771] R/R REJECTED (Long): Entry=2735.42094017093 SL=2730.8 | TP1(VWAP)=2735.48717518861 TP2(Level)=2759.1 | Selected=2735.48717518861 | Risk=4.6209 Reward=0.0662 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:31:42.772 [09:31:42.772] 19/1/25 8:43:00 p. m. Trade Skipped (Long). Risk: 4.62 Reward: 0.07 Ratio: 0.01
-09:31:42.772 [09:31:42.772] R/R REJECTED (Long): Entry=2735.42094017093 SL=2730.8 | TP1(VWAP)=2735.48717518861 TP2(Level)=2759.1 | Selected=2735.48717518861 | Risk=4.6209 Reward=0.0662 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:31:42.773 [09:31:42.773] 19/1/25 8:43:00 p. m. Trade Skipped (Long). Risk: 4.62 Reward: 0.07 Ratio: 0.01
-09:31:45.204 [09:31:45.204] R/R REJECTED (Long): Entry=2735.42023703703 SL=2730.8 | TP1(VWAP)=2735.48534181893 TP2(Level)=2759.1 | Selected=2735.48534181893 | Risk=4.6202 Reward=0.0651 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:31:45.204 [09:31:45.204] 19/1/25 8:50:00 p. m. Trade Skipped (Long). Risk: 4.62 Reward: 0.07 Ratio: 0.01
-09:31:45.204 [09:31:45.204] R/R REJECTED (Long): Entry=2735.42023703703 SL=2730.8 | TP1(VWAP)=2735.48534181893 TP2(Level)=2759.1 | Selected=2735.48534181893 | Risk=4.6202 Reward=0.0651 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:31:45.208 [09:31:45.208] 19/1/25 8:50:00 p. m. Trade Skipped (Long). Risk: 4.62 Reward: 0.07 Ratio: 0.01
-09:31:48.038 [09:31:48.038] R/R REJECTED (Long): Entry=2735.41994998609 SL=2730.8 | TP1(VWAP)=2735.48227674191 TP2(Level)=2759.1 | Selected=2735.48227674191 | Risk=4.6199 Reward=0.0623 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:31:48.039 [09:31:48.039] 19/1/25 8:59:00 p. m. Trade Skipped (Long). Risk: 4.62 Reward: 0.06 Ratio: 0.01
-09:31:48.039 [09:31:48.039] R/R REJECTED (Long): Entry=2735.41994998609 SL=2730.8 | TP1(VWAP)=2735.48227674191 TP2(Level)=2759.1 | Selected=2735.48227674191 | Risk=4.6199 Reward=0.0623 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:31:48.039 [09:31:48.039] 19/1/25 8:59:00 p. m. Trade Skipped (Long). Risk: 4.62 Reward: 0.06 Ratio: 0.01
-09:31:48.283 [09:31:48.283] R/R REJECTED (Long): Entry=2735.42689655171 SL=2730.8 | TP1(VWAP)=2735.48687756298 TP2(Level)=2759.1 | Selected=2735.48687756298 | Risk=4.6269 Reward=0.0600 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:31:48.283 [09:31:48.283] 19/1/25 9:00:00 p. m. Trade Skipped (Long). Risk: 4.63 Reward: 0.06 Ratio: 0.01
-09:31:48.284 [09:31:48.284] R/R REJECTED (Long): Entry=2735.42689655171 SL=2730.8 | TP1(VWAP)=2735.48687756298 TP2(Level)=2759.1 | Selected=2735.48687756298 | Risk=4.6269 Reward=0.0600 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:31:48.284 [09:31:48.284] 19/1/25 9:00:00 p. m. Trade Skipped (Long). Risk: 4.63 Reward: 0.06 Ratio: 0.01
-09:31:48.741 [09:31:48.741] R/R REJECTED (Long): Entry=2735.49598724421 SL=2730.8 | TP1(VWAP)=2735.53474044495 TP2(Level)=2759.1 | Selected=2735.53474044495 | Risk=4.6960 Reward=0.0388 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:31:48.742 [09:31:48.742] 19/1/25 9:01:00 p. m. Trade Skipped (Long). Risk: 4.70 Reward: 0.04 Ratio: 0.01
-09:31:48.742 [09:31:48.742] R/R REJECTED (Long): Entry=2735.49598724421 SL=2730.8 | TP1(VWAP)=2735.53474044495 TP2(Level)=2759.1 | Selected=2735.53474044495 | Risk=4.6960 Reward=0.0388 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:31:48.746 [09:31:48.746] 19/1/25 9:01:00 p. m. Trade Skipped (Long). Risk: 4.70 Reward: 0.04 Ratio: 0.01
-09:32:00.019 [09:32:00.019] R/R REJECTED (Long): Entry=2734.95042211554 SL=2730.8 | TP1(VWAP)=2735.08575029855 TP2(Level)=2759.1 | Selected=2735.08575029855 | Risk=4.1504 Reward=0.1353 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-09:32:00.019 [09:32:00.019] 19/1/25 9:23:00 p. m. Trade Skipped (Long). Risk: 4.15 Reward: 0.14 Ratio: 0.03
-09:32:00.020 [09:32:00.020] R/R REJECTED (Long): Entry=2734.95042211554 SL=2730.8 | TP1(VWAP)=2735.08575029855 TP2(Level)=2759.1 | Selected=2735.08575029855 | Risk=4.1504 Reward=0.1353 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-09:32:00.020 [09:32:00.020] 19/1/25 9:23:00 p. m. Trade Skipped (Long). Risk: 4.15 Reward: 0.14 Ratio: 0.03
-09:32:00.517 [09:32:00.517] R/R REJECTED (Long): Entry=2734.97768219445 SL=2730.8 | TP1(VWAP)=2735.10556353665 TP2(Level)=2759.1 | Selected=2735.10556353665 | Risk=4.1777 Reward=0.1279 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-09:32:00.518 [09:32:00.518] 19/1/25 9:24:00 p. m. Trade Skipped (Long). Risk: 4.18 Reward: 0.13 Ratio: 0.03
-09:32:00.518 [09:32:00.518] R/R REJECTED (Long): Entry=2734.97768219445 SL=2730.8 | TP1(VWAP)=2735.10556353665 TP2(Level)=2759.1 | Selected=2735.10556353665 | Risk=4.1777 Reward=0.1279 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-09:32:00.518 [09:32:00.518] 19/1/25 9:24:00 p. m. Trade Skipped (Long). Risk: 4.18 Reward: 0.13 Ratio: 0.03
-09:32:00.999 [09:32:00.999] R/R REJECTED (Long): Entry=2734.98840766382 SL=2730.8 | TP1(VWAP)=2735.11337744909 TP2(Level)=2759.1 | Selected=2735.11337744909 | Risk=4.1884 Reward=0.1250 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-09:32:01.000 [09:32:01.000] 19/1/25 9:25:00 p. m. Trade Skipped (Long). Risk: 4.19 Reward: 0.12 Ratio: 0.03
-09:32:01.000 [09:32:01.000] R/R REJECTED (Long): Entry=2734.98840766382 SL=2730.8 | TP1(VWAP)=2735.11337744909 TP2(Level)=2759.1 | Selected=2735.11337744909 | Risk=4.1884 Reward=0.1250 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-09:32:01.000 [09:32:01.000] 19/1/25 9:25:00 p. m. Trade Skipped (Long). Risk: 4.19 Reward: 0.12 Ratio: 0.03
-09:32:01.286 [09:32:01.286] R/R REJECTED (Long): Entry=2735.00073097092 SL=2730.8 | TP1(VWAP)=2735.12201823085 TP2(Level)=2759.1 | Selected=2735.12201823085 | Risk=4.2007 Reward=0.1213 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-09:32:01.286 [09:32:01.286] 19/1/25 9:26:00 p. m. Trade Skipped (Long). Risk: 4.20 Reward: 0.12 Ratio: 0.03
-09:32:01.286 [09:32:01.286] R/R REJECTED (Long): Entry=2735.00073097092 SL=2730.8 | TP1(VWAP)=2735.12201823085 TP2(Level)=2759.1 | Selected=2735.12201823085 | Risk=4.2007 Reward=0.1213 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-09:32:01.288 [09:32:01.288] 19/1/25 9:26:00 p. m. Trade Skipped (Long). Risk: 4.20 Reward: 0.12 Ratio: 0.03
-09:32:02.778 [09:32:02.778] R/R REJECTED (Long): Entry=2735.0074900642 SL=2730.8 | TP1(VWAP)=2735.1237621299 TP2(Level)=2759.1 | Selected=2735.1237621299 | Risk=4.2075 Reward=0.1163 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-09:32:02.779 [09:32:02.779] 19/1/25 9:30:00 p. m. Trade Skipped (Long). Risk: 4.21 Reward: 0.12 Ratio: 0.03
-09:32:02.779 [09:32:02.779] R/R REJECTED (Long): Entry=2735.0074900642 SL=2730.8 | TP1(VWAP)=2735.1237621299 TP2(Level)=2759.1 | Selected=2735.1237621299 | Risk=4.2075 Reward=0.1163 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-09:32:02.781 [09:32:02.781] 19/1/25 9:30:00 p. m. Trade Skipped (Long). Risk: 4.21 Reward: 0.12 Ratio: 0.03
-09:32:03.028 [09:32:03.028] R/R REJECTED (Long): Entry=2735.01703288377 SL=2730.8 | TP1(VWAP)=2735.13072266833 TP2(Level)=2759.1 | Selected=2735.13072266833 | Risk=4.2170 Reward=0.1137 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-09:32:03.028 [09:32:03.028] 19/1/25 9:31:00 p. m. Trade Skipped (Long). Risk: 4.22 Reward: 0.11 Ratio: 0.03
-09:32:03.028 [09:32:03.028] R/R REJECTED (Long): Entry=2735.01703288377 SL=2730.8 | TP1(VWAP)=2735.13072266833 TP2(Level)=2759.1 | Selected=2735.13072266833 | Risk=4.2170 Reward=0.1137 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-09:32:03.029 [09:32:03.029] 19/1/25 9:31:00 p. m. Trade Skipped (Long). Risk: 4.22 Reward: 0.11 Ratio: 0.03
-09:32:03.436 [09:32:03.436] R/R REJECTED (Long): Entry=2735.02786638579 SL=2730.8 | TP1(VWAP)=2735.1389093589 TP2(Level)=2759.1 | Selected=2735.1389093589 | Risk=4.2279 Reward=0.1110 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-09:32:03.438 [09:32:03.438] 19/1/25 9:32:00 p. m. Trade Skipped (Long). Risk: 4.23 Reward: 0.11 Ratio: 0.03
-09:32:03.439 [09:32:03.438] R/R REJECTED (Long): Entry=2735.02786638579 SL=2730.8 | TP1(VWAP)=2735.1389093589 TP2(Level)=2759.1 | Selected=2735.1389093589 | Risk=4.2279 Reward=0.1110 Ratio=0.03 | Reason: R:R 0.03 < Min 1
-09:32:03.439 [09:32:03.439] 19/1/25 9:32:00 p. m. Trade Skipped (Long). Risk: 4.23 Reward: 0.11 Ratio: 0.03
-09:32:03.779 [09:32:03.779] R/R REJECTED (Long): Entry=2735.07189109639 SL=2730.8 | TP1(VWAP)=2735.17299481367 TP2(Level)=2759.1 | Selected=2735.17299481367 | Risk=4.2719 Reward=0.1011 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:03.779 [09:32:03.779] 19/1/25 9:33:00 p. m. Trade Skipped (Long). Risk: 4.27 Reward: 0.10 Ratio: 0.02
-09:32:03.780 [09:32:03.780] R/R REJECTED (Long): Entry=2735.07189109639 SL=2730.8 | TP1(VWAP)=2735.17299481367 TP2(Level)=2759.1 | Selected=2735.17299481367 | Risk=4.2719 Reward=0.1011 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:03.780 [09:32:03.780] 19/1/25 9:33:00 p. m. Trade Skipped (Long). Risk: 4.27 Reward: 0.10 Ratio: 0.02
-09:32:04.089 [09:32:04.089] R/R REJECTED (Long): Entry=2735.12515841013 SL=2730.8 | TP1(VWAP)=2735.21503554503 TP2(Level)=2759.1 | Selected=2735.21503554503 | Risk=4.3252 Reward=0.0899 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:04.089 [09:32:04.089] 19/1/25 9:34:00 p. m. Trade Skipped (Long). Risk: 4.33 Reward: 0.09 Ratio: 0.02
-09:32:04.091 [09:32:04.091] R/R REJECTED (Long): Entry=2735.12515841013 SL=2730.8 | TP1(VWAP)=2735.21503554503 TP2(Level)=2759.1 | Selected=2735.21503554503 | Risk=4.3252 Reward=0.0899 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:04.091 [09:32:04.091] 19/1/25 9:34:00 p. m. Trade Skipped (Long). Risk: 4.33 Reward: 0.09 Ratio: 0.02
-09:32:04.708 [09:32:04.708] R/R REJECTED (Long): Entry=2735.14533560864 SL=2730.8 | TP1(VWAP)=2735.23074577862 TP2(Level)=2759.1 | Selected=2735.23074577862 | Risk=4.3453 Reward=0.0854 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:04.712 [09:32:04.712] 19/1/25 9:35:00 p. m. Trade Skipped (Long). Risk: 4.35 Reward: 0.09 Ratio: 0.02
-09:32:04.713 [09:32:04.713] R/R REJECTED (Long): Entry=2735.14533560864 SL=2730.8 | TP1(VWAP)=2735.23074577862 TP2(Level)=2759.1 | Selected=2735.23074577862 | Risk=4.3453 Reward=0.0854 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:04.713 [09:32:04.713] 19/1/25 9:35:00 p. m. Trade Skipped (Long). Risk: 4.35 Reward: 0.09 Ratio: 0.02
-09:32:05.143 [09:32:05.143] R/R REJECTED (Long): Entry=2735.15009906594 SL=2730.8 | TP1(VWAP)=2735.23433777156 TP2(Level)=2759.1 | Selected=2735.23433777156 | Risk=4.3501 Reward=0.0842 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:05.143 [09:32:05.143] 19/1/25 9:36:00 p. m. Trade Skipped (Long). Risk: 4.35 Reward: 0.08 Ratio: 0.02
-09:32:05.144 [09:32:05.144] R/R REJECTED (Long): Entry=2735.15009906594 SL=2730.8 | TP1(VWAP)=2735.23433777156 TP2(Level)=2759.1 | Selected=2735.23433777156 | Risk=4.3501 Reward=0.0842 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:05.144 [09:32:05.144] 19/1/25 9:36:00 p. m. Trade Skipped (Long). Risk: 4.35 Reward: 0.08 Ratio: 0.02
-09:32:05.679 [09:32:05.679] R/R REJECTED (Long): Entry=2735.15993540233 SL=2730.8 | TP1(VWAP)=2735.24192874551 TP2(Level)=2759.1 | Selected=2735.24192874551 | Risk=4.3599 Reward=0.0820 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:05.679 [09:32:05.679] 19/1/25 9:37:00 p. m. Trade Skipped (Long). Risk: 4.36 Reward: 0.08 Ratio: 0.02
-09:32:05.679 [09:32:05.679] R/R REJECTED (Long): Entry=2735.15993540233 SL=2730.8 | TP1(VWAP)=2735.24192874551 TP2(Level)=2759.1 | Selected=2735.24192874551 | Risk=4.3599 Reward=0.0820 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:05.680 [09:32:05.680] 19/1/25 9:37:00 p. m. Trade Skipped (Long). Risk: 4.36 Reward: 0.08 Ratio: 0.02
-09:32:06.021 [09:32:06.021] R/R REJECTED (Long): Entry=2735.16563938083 SL=2730.8 | TP1(VWAP)=2735.24617514712 TP2(Level)=2759.1 | Selected=2735.24617514712 | Risk=4.3656 Reward=0.0805 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:06.022 [09:32:06.022] 19/1/25 9:38:00 p. m. Trade Skipped (Long). Risk: 4.37 Reward: 0.08 Ratio: 0.02
-09:32:06.023 [09:32:06.023] R/R REJECTED (Long): Entry=2735.16563938083 SL=2730.8 | TP1(VWAP)=2735.24617514712 TP2(Level)=2759.1 | Selected=2735.24617514712 | Risk=4.3656 Reward=0.0805 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:06.023 [09:32:06.023] 19/1/25 9:38:00 p. m. Trade Skipped (Long). Risk: 4.37 Reward: 0.08 Ratio: 0.02
-09:32:06.851 [09:32:06.851] R/R REJECTED (Long): Entry=2735.16935683789 SL=2730.8 | TP1(VWAP)=2735.24842982757 TP2(Level)=2759.1 | Selected=2735.24842982757 | Risk=4.3694 Reward=0.0791 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:06.853 [09:32:06.853] 19/1/25 9:40:00 p. m. Trade Skipped (Long). Risk: 4.37 Reward: 0.08 Ratio: 0.02
-09:32:06.853 [09:32:06.853] R/R REJECTED (Long): Entry=2735.16935683789 SL=2730.8 | TP1(VWAP)=2735.24842982757 TP2(Level)=2759.1 | Selected=2735.24842982757 | Risk=4.3694 Reward=0.0791 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:06.853 [09:32:06.853] 19/1/25 9:40:00 p. m. Trade Skipped (Long). Risk: 4.37 Reward: 0.08 Ratio: 0.02
-09:32:09.336 [09:32:09.336] R/R REJECTED (Long): Entry=2735.17329642809 SL=2730.8 | TP1(VWAP)=2735.24888252781 TP2(Level)=2759.1 | Selected=2735.24888252781 | Risk=4.3733 Reward=0.0756 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:09.336 [09:32:09.336] 19/1/25 9:47:00 p. m. Trade Skipped (Long). Risk: 4.37 Reward: 0.08 Ratio: 0.02
-09:32:09.336 [09:32:09.336] R/R REJECTED (Long): Entry=2735.17329642809 SL=2730.8 | TP1(VWAP)=2735.24888252781 TP2(Level)=2759.1 | Selected=2735.24888252781 | Risk=4.3733 Reward=0.0756 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:09.336 [09:32:09.336] 19/1/25 9:47:00 p. m. Trade Skipped (Long). Risk: 4.37 Reward: 0.08 Ratio: 0.02
-09:32:09.668 [09:32:09.668] R/R REJECTED (Long): Entry=2735.17676741129 SL=2730.8 | TP1(VWAP)=2735.25159235669 TP2(Level)=2759.1 | Selected=2735.25159235669 | Risk=4.3768 Reward=0.0748 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:09.669 [09:32:09.669] 19/1/25 9:48:00 p. m. Trade Skipped (Long). Risk: 4.38 Reward: 0.07 Ratio: 0.02
-09:32:09.669 [09:32:09.669] R/R REJECTED (Long): Entry=2735.17676741129 SL=2730.8 | TP1(VWAP)=2735.25159235669 TP2(Level)=2759.1 | Selected=2735.25159235669 | Risk=4.3768 Reward=0.0748 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:09.669 [09:32:09.669] 19/1/25 9:48:00 p. m. Trade Skipped (Long). Risk: 4.38 Reward: 0.07 Ratio: 0.02
-09:32:10.037 [09:32:10.037] R/R REJECTED (Long): Entry=2735.18376929112 SL=2730.8 | TP1(VWAP)=2735.25715379567 TP2(Level)=2759.1 | Selected=2735.25715379567 | Risk=4.3838 Reward=0.0734 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:10.037 [09:32:10.037] 19/1/25 9:49:00 p. m. Trade Skipped (Long). Risk: 4.38 Reward: 0.07 Ratio: 0.02
-09:32:10.038 [09:32:10.038] R/R REJECTED (Long): Entry=2735.18376929112 SL=2730.8 | TP1(VWAP)=2735.25715379567 TP2(Level)=2759.1 | Selected=2735.25715379567 | Risk=4.3838 Reward=0.0734 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:10.038 [09:32:10.038] 19/1/25 9:49:00 p. m. Trade Skipped (Long). Risk: 4.38 Reward: 0.07 Ratio: 0.02
-09:32:10.344 [09:32:10.344] R/R REJECTED (Long): Entry=2735.19256800728 SL=2730.8 | TP1(VWAP)=2735.26422268222 TP2(Level)=2759.1 | Selected=2735.26422268222 | Risk=4.3926 Reward=0.0717 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:10.346 [09:32:10.346] 19/1/25 9:50:00 p. m. Trade Skipped (Long). Risk: 4.39 Reward: 0.07 Ratio: 0.02
-09:32:10.347 [09:32:10.347] R/R REJECTED (Long): Entry=2735.19256800728 SL=2730.8 | TP1(VWAP)=2735.26422268222 TP2(Level)=2759.1 | Selected=2735.26422268222 | Risk=4.3926 Reward=0.0717 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:10.347 [09:32:10.347] 19/1/25 9:50:00 p. m. Trade Skipped (Long). Risk: 4.39 Reward: 0.07 Ratio: 0.02
-09:32:10.683 [09:32:10.683] R/R REJECTED (Long): Entry=2735.20491654806 SL=2730.8 | TP1(VWAP)=2735.27421138212 TP2(Level)=2759.1 | Selected=2735.27421138212 | Risk=4.4049 Reward=0.0693 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:10.683 [09:32:10.683] 19/1/25 9:51:00 p. m. Trade Skipped (Long). Risk: 4.40 Reward: 0.07 Ratio: 0.02
-09:32:10.684 [09:32:10.684] R/R REJECTED (Long): Entry=2735.20491654806 SL=2730.8 | TP1(VWAP)=2735.27421138212 TP2(Level)=2759.1 | Selected=2735.27421138212 | Risk=4.4049 Reward=0.0693 Ratio=0.02 | Reason: R:R 0.02 < Min 1
-09:32:10.684 [09:32:10.684] 19/1/25 9:51:00 p. m. Trade Skipped (Long). Risk: 4.40 Reward: 0.07 Ratio: 0.02
-09:32:11.061 [09:32:11.061] R/R REJECTED (Long): Entry=2735.23195258729 SL=2730.8 | TP1(VWAP)=2735.29605009635 TP2(Level)=2759.1 | Selected=2735.29605009635 | Risk=4.4320 Reward=0.0641 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:11.061 [09:32:11.061] 19/1/25 9:52:00 p. m. Trade Skipped (Long). Risk: 4.43 Reward: 0.06 Ratio: 0.01
-09:32:11.061 [09:32:11.061] R/R REJECTED (Long): Entry=2735.23195258729 SL=2730.8 | TP1(VWAP)=2735.29605009635 TP2(Level)=2759.1 | Selected=2735.29605009635 | Risk=4.4320 Reward=0.0641 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:11.062 [09:32:11.062] 19/1/25 9:52:00 p. m. Trade Skipped (Long). Risk: 4.43 Reward: 0.06 Ratio: 0.01
-09:32:11.476 [09:32:11.476] R/R REJECTED (Long): Entry=2735.24459356798 SL=2730.8 | TP1(VWAP)=2735.30632318502 TP2(Level)=2759.1 | Selected=2735.30632318502 | Risk=4.4446 Reward=0.0617 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:11.476 [09:32:11.476] 19/1/25 9:53:00 p. m. Trade Skipped (Long). Risk: 4.44 Reward: 0.06 Ratio: 0.01
-09:32:11.477 [09:32:11.477] R/R REJECTED (Long): Entry=2735.24459356798 SL=2730.8 | TP1(VWAP)=2735.30632318502 TP2(Level)=2759.1 | Selected=2735.30632318502 | Risk=4.4446 Reward=0.0617 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:11.477 [09:32:11.477] 19/1/25 9:53:00 p. m. Trade Skipped (Long). Risk: 4.44 Reward: 0.06 Ratio: 0.01
-09:32:11.808 [09:32:11.808] R/R REJECTED (Long): Entry=2735.25035326772 SL=2730.8 | TP1(VWAP)=2735.3109849289 TP2(Level)=2759.1 | Selected=2735.3109849289 | Risk=4.4504 Reward=0.0606 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:11.809 [09:32:11.809] 19/1/25 9:54:00 p. m. Trade Skipped (Long). Risk: 4.45 Reward: 0.06 Ratio: 0.01
-09:32:11.810 [09:32:11.810] R/R REJECTED (Long): Entry=2735.25035326772 SL=2730.8 | TP1(VWAP)=2735.3109849289 TP2(Level)=2759.1 | Selected=2735.3109849289 | Risk=4.4504 Reward=0.0606 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:11.810 [09:32:11.810] 19/1/25 9:54:00 p. m. Trade Skipped (Long). Risk: 4.45 Reward: 0.06 Ratio: 0.01
-09:32:12.004 [09:32:12.004] R/R REJECTED (Long): Entry=2735.25728289556 SL=2730.8 | TP1(VWAP)=2735.31661906274 TP2(Level)=2759.1 | Selected=2735.31661906274 | Risk=4.4573 Reward=0.0593 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:12.004 [09:32:12.004] 19/1/25 9:55:00 p. m. Trade Skipped (Long). Risk: 4.46 Reward: 0.06 Ratio: 0.01
-09:32:12.004 [09:32:12.004] R/R REJECTED (Long): Entry=2735.25728289556 SL=2730.8 | TP1(VWAP)=2735.31661906274 TP2(Level)=2759.1 | Selected=2735.31661906274 | Risk=4.4573 Reward=0.0593 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:12.004 [09:32:12.004] 19/1/25 9:55:00 p. m. Trade Skipped (Long). Risk: 4.46 Reward: 0.06 Ratio: 0.01
-09:32:12.344 [09:32:12.344] R/R REJECTED (Long): Entry=2735.27013993003 SL=2730.8 | TP1(VWAP)=2735.32715789475 TP2(Level)=2759.1 | Selected=2735.32715789475 | Risk=4.4701 Reward=0.0570 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:12.344 [09:32:12.344] 19/1/25 9:56:00 p. m. Trade Skipped (Long). Risk: 4.47 Reward: 0.06 Ratio: 0.01
-09:32:12.344 [09:32:12.344] R/R REJECTED (Long): Entry=2735.27013993003 SL=2730.8 | TP1(VWAP)=2735.32715789475 TP2(Level)=2759.1 | Selected=2735.32715789475 | Risk=4.4701 Reward=0.0570 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:12.344 [09:32:12.344] 19/1/25 9:56:00 p. m. Trade Skipped (Long). Risk: 4.47 Reward: 0.06 Ratio: 0.01
-09:32:12.688 [09:32:12.688] R/R REJECTED (Long): Entry=2735.27856876166 SL=2730.8 | TP1(VWAP)=2735.33407827092 TP2(Level)=2759.1 | Selected=2735.33407827092 | Risk=4.4786 Reward=0.0555 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:12.689 [09:32:12.689] 19/1/25 9:57:00 p. m. Trade Skipped (Long). Risk: 4.48 Reward: 0.06 Ratio: 0.01
-09:32:12.689 [09:32:12.689] R/R REJECTED (Long): Entry=2735.27856876166 SL=2730.8 | TP1(VWAP)=2735.33407827092 TP2(Level)=2759.1 | Selected=2735.33407827092 | Risk=4.4786 Reward=0.0555 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:12.689 [09:32:12.689] 19/1/25 9:57:00 p. m. Trade Skipped (Long). Risk: 4.48 Reward: 0.06 Ratio: 0.01
-09:32:13.251 [09:32:13.251] R/R REJECTED (Long): Entry=2735.28860289568 SL=2730.8 | TP1(VWAP)=2735.34227837528 TP2(Level)=2759.1 | Selected=2735.34227837528 | Risk=4.4886 Reward=0.0537 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:13.253 [09:32:13.253] 19/1/25 9:58:00 p. m. Trade Skipped (Long). Risk: 4.49 Reward: 0.05 Ratio: 0.01
-09:32:13.253 [09:32:13.253] R/R REJECTED (Long): Entry=2735.28860289568 SL=2730.8 | TP1(VWAP)=2735.34227837528 TP2(Level)=2759.1 | Selected=2735.34227837528 | Risk=4.4886 Reward=0.0537 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:13.253 [09:32:13.253] 19/1/25 9:58:00 p. m. Trade Skipped (Long). Risk: 4.49 Reward: 0.05 Ratio: 0.01
-09:32:13.696 [09:32:13.696] R/R REJECTED (Long): Entry=2735.30397049784 SL=2730.8 | TP1(VWAP)=2735.3549579483 TP2(Level)=2759.1 | Selected=2735.3549579483 | Risk=4.5040 Reward=0.0510 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:13.697 [09:32:13.697] 19/1/25 9:59:00 p. m. Trade Skipped (Long). Risk: 4.50 Reward: 0.05 Ratio: 0.01
-09:32:13.697 [09:32:13.697] R/R REJECTED (Long): Entry=2735.30397049784 SL=2730.8 | TP1(VWAP)=2735.3549579483 TP2(Level)=2759.1 | Selected=2735.3549579483 | Risk=4.5040 Reward=0.0510 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:13.697 [09:32:13.697] 19/1/25 9:59:00 p. m. Trade Skipped (Long). Risk: 4.50 Reward: 0.05 Ratio: 0.01
-09:32:13.963 [09:32:13.963] R/R REJECTED (Long): Entry=2735.32143816383 SL=2730.8 | TP1(VWAP)=2735.36943326108 TP2(Level)=2759.1 | Selected=2735.36943326108 | Risk=4.5214 Reward=0.0480 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:13.963 [09:32:13.963] 19/1/25 10:00:00 p. m. Trade Skipped (Long). Risk: 4.52 Reward: 0.05 Ratio: 0.01
-09:32:13.963 [09:32:13.963] R/R REJECTED (Long): Entry=2735.32143816383 SL=2730.8 | TP1(VWAP)=2735.36943326108 TP2(Level)=2759.1 | Selected=2735.36943326108 | Risk=4.5214 Reward=0.0480 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:13.964 [09:32:13.964] 19/1/25 10:00:00 p. m. Trade Skipped (Long). Risk: 4.52 Reward: 0.05 Ratio: 0.01
-09:32:14.220 [09:32:14.220] R/R REJECTED (Long): Entry=2735.32756269783 SL=2730.8 | TP1(VWAP)=2735.37450051494 TP2(Level)=2759.1 | Selected=2735.37450051494 | Risk=4.5276 Reward=0.0469 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:14.220 [09:32:14.220] 19/1/25 10:01:00 p. m. Trade Skipped (Long). Risk: 4.53 Reward: 0.05 Ratio: 0.01
-09:32:14.221 [09:32:14.220] R/R REJECTED (Long): Entry=2735.32756269783 SL=2730.8 | TP1(VWAP)=2735.37450051494 TP2(Level)=2759.1 | Selected=2735.37450051494 | Risk=4.5276 Reward=0.0469 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:14.221 [09:32:14.221] 19/1/25 10:01:00 p. m. Trade Skipped (Long). Risk: 4.53 Reward: 0.05 Ratio: 0.01
-09:32:14.586 [09:32:14.586] R/R REJECTED (Long): Entry=2735.34586602293 SL=2730.8 | TP1(VWAP)=2735.38966363358 TP2(Level)=2759.1 | Selected=2735.38966363358 | Risk=4.5459 Reward=0.0438 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:14.586 [09:32:14.586] 19/1/25 10:02:00 p. m. Trade Skipped (Long). Risk: 4.55 Reward: 0.04 Ratio: 0.01
-09:32:14.586 [09:32:14.586] R/R REJECTED (Long): Entry=2735.34586602293 SL=2730.8 | TP1(VWAP)=2735.38966363358 TP2(Level)=2759.1 | Selected=2735.38966363358 | Risk=4.5459 Reward=0.0438 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:14.586 [09:32:14.586] 19/1/25 10:02:00 p. m. Trade Skipped (Long). Risk: 4.55 Reward: 0.04 Ratio: 0.01
-09:32:14.907 [09:32:14.907] R/R REJECTED (Long): Entry=2735.37727218723 SL=2730.8 | TP1(VWAP)=2735.4157469989 TP2(Level)=2759.1 | Selected=2735.4157469989 | Risk=4.5773 Reward=0.0385 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:14.908 [09:32:14.908] 19/1/25 10:03:00 p. m. Trade Skipped (Long). Risk: 4.58 Reward: 0.04 Ratio: 0.01
-09:32:14.908 [09:32:14.908] R/R REJECTED (Long): Entry=2735.37727218723 SL=2730.8 | TP1(VWAP)=2735.4157469989 TP2(Level)=2759.1 | Selected=2735.4157469989 | Risk=4.5773 Reward=0.0385 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:14.908 [09:32:14.908] 19/1/25 10:03:00 p. m. Trade Skipped (Long). Risk: 4.58 Reward: 0.04 Ratio: 0.01
-09:32:15.272 [09:32:15.272] R/R REJECTED (Long): Entry=2735.42921531994 SL=2730.8 | TP1(VWAP)=2735.45940357854 TP2(Level)=2759.1 | Selected=2735.45940357854 | Risk=4.6292 Reward=0.0302 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:15.273 [09:32:15.273] 19/1/25 10:04:00 p. m. Trade Skipped (Long). Risk: 4.63 Reward: 0.03 Ratio: 0.01
-09:32:15.273 [09:32:15.273] R/R REJECTED (Long): Entry=2735.42921531994 SL=2730.8 | TP1(VWAP)=2735.45940357854 TP2(Level)=2759.1 | Selected=2735.45940357854 | Risk=4.6292 Reward=0.0302 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:15.274 [09:32:15.274] 19/1/25 10:04:00 p. m. Trade Skipped (Long). Risk: 4.63 Reward: 0.03 Ratio: 0.01
-09:32:15.534 [09:32:15.534] R/R REJECTED (Long): Entry=2735.45691827534 SL=2730.8 | TP1(VWAP)=2735.48276337835 TP2(Level)=2759.1 | Selected=2735.48276337835 | Risk=4.6569 Reward=0.0258 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:15.535 [09:32:15.535] 19/1/25 10:05:00 p. m. Trade Skipped (Long). Risk: 4.66 Reward: 0.03 Ratio: 0.01
-09:32:15.535 [09:32:15.535] R/R REJECTED (Long): Entry=2735.45691827534 SL=2730.8 | TP1(VWAP)=2735.48276337835 TP2(Level)=2759.1 | Selected=2735.48276337835 | Risk=4.6569 Reward=0.0258 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:15.535 [09:32:15.535] 19/1/25 10:05:00 p. m. Trade Skipped (Long). Risk: 4.66 Reward: 0.03 Ratio: 0.01
-09:32:15.794 [09:32:15.794] R/R REJECTED (Long): Entry=2735.48746849942 SL=2730.8 | TP1(VWAP)=2735.50864463134 TP2(Level)=2759.1 | Selected=2735.50864463134 | Risk=4.6875 Reward=0.0212 Ratio=0.00 | Reason: R:R 0.00 < Min 1
-09:32:15.794 [09:32:15.794] 19/1/25 10:06:00 p. m. Trade Skipped (Long). Risk: 4.69 Reward: 0.02 Ratio: 0.00
-09:32:15.796 [09:32:15.796] R/R REJECTED (Long): Entry=2735.48746849942 SL=2730.8 | TP1(VWAP)=2735.50864463134 TP2(Level)=2759.1 | Selected=2735.50864463134 | Risk=4.6875 Reward=0.0212 Ratio=0.00 | Reason: R:R 0.00 < Min 1
-09:32:15.796 [09:32:15.796] 19/1/25 10:06:00 p. m. Trade Skipped (Long). Risk: 4.69 Reward: 0.02 Ratio: 0.00
-09:32:16.169 [09:32:16.169] R/R REJECTED (Long): Entry=2735.52661007357 SL=2730.8 | TP1(VWAP)=2735.54190301037 TP2(Level)=2759.1 | Selected=2735.54190301037 | Risk=4.7266 Reward=0.0153 Ratio=0.00 | Reason: R:R 0.00 < Min 1
-09:32:16.169 [09:32:16.169] 19/1/25 10:07:00 p. m. Trade Skipped (Long). Risk: 4.73 Reward: 0.02 Ratio: 0.00
-09:32:16.170 [09:32:16.170] R/R REJECTED (Long): Entry=2735.52661007357 SL=2730.8 | TP1(VWAP)=2735.54190301037 TP2(Level)=2759.1 | Selected=2735.54190301037 | Risk=4.7266 Reward=0.0153 Ratio=0.00 | Reason: R:R 0.00 < Min 1
-09:32:16.170 [09:32:16.170] 19/1/25 10:07:00 p. m. Trade Skipped (Long). Risk: 4.73 Reward: 0.02 Ratio: 0.00
-09:32:16.560 [09:32:16.560] R/R REJECTED (Long): Entry=2735.60397721047 SL=2730.8 | TP1(VWAP)=2735.6079544385 TP2(Level)=2759.1 | Selected=2735.6079544385 | Risk=4.8040 Reward=0.0040 Ratio=0.00 | Reason: R:R 0.00 < Min 1
-09:32:16.560 [09:32:16.560] 19/1/25 10:08:00 p. m. Trade Skipped (Long). Risk: 4.80 Reward: 0.00 Ratio: 0.00
-09:32:16.560 [09:32:16.560] R/R REJECTED (Long): Entry=2735.60397721047 SL=2730.8 | TP1(VWAP)=2735.6079544385 TP2(Level)=2759.1 | Selected=2735.6079544385 | Risk=4.8040 Reward=0.0040 Ratio=0.00 | Reason: R:R 0.00 < Min 1
-09:32:16.561 [09:32:16.561] 19/1/25 10:08:00 p. m. Trade Skipped (Long). Risk: 4.80 Reward: 0.00 Ratio: 0.00
-09:32:16.831 [09:32:16.831] R/R REJECTED (Long): Entry=2735.61662131272 SL=2730.8 | TP1(VWAP)=2735.61880557897 TP2(Level)=2759.1 | Selected=2735.61880557897 | Risk=4.8166 Reward=0.0022 Ratio=0.00 | Reason: R:R 0.00 < Min 1
-09:32:16.832 [09:32:16.832] 19/1/25 10:09:00 p. m. Trade Skipped (Long). Risk: 4.82 Reward: 0.00 Ratio: 0.00
-09:32:16.833 [09:32:16.833] R/R REJECTED (Long): Entry=2735.61662131272 SL=2730.8 | TP1(VWAP)=2735.61880557897 TP2(Level)=2759.1 | Selected=2735.61880557897 | Risk=4.8166 Reward=0.0022 Ratio=0.00 | Reason: R:R 0.00 < Min 1
-09:32:16.833 [09:32:16.833] 19/1/25 10:09:00 p. m. Trade Skipped (Long). Risk: 4.82 Reward: 0.00 Ratio: 0.00
-09:32:17.122 [09:32:17.122] 19/1/25 10:10:00 p. m. | EXEC_DEBUG: Submitting Long Limit @ 2735.6 (Raw: 2735.63794551523). Bid=2738.1 Ask=2738.3
-09:32:17.125 [09:32:17.125] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
-09:32:17.125 [09:32:17.125] RISK_DEBUG_ATR: ATR=$8.50 | ScaledRisk=$17.00
-09:32:17.126 [09:32:17.126] RISK_DEBUG_POST: Written=$17.00 | ReadFromFile=$150.00 | Using=$150.00
-09:32:17.126 [09:32:17.126] QTY_DEBUG: Risk=$150.00 | SL_Ticks=48.00 | TickVal=$1.00 | CalcQty=3.13 | MaxQty=100 | MinQty=2
-09:32:17.152 [09:32:17.152] 19/1/25 10:10:00 p. m. Order Submitted (Long). Mode=APlusRetrace Type=Limit Qty=3
-09:32:17.153 [09:32:17.153] R/R REJECTED (Long): Entry=2735.6 SL=2730.8 | TP1(VWAP)=2735.63715107114 TP2(Level)=2759.1 | Selected=2735.63715107114 | Risk=4.8000 Reward=0.0372 Ratio=0.01 | Reason: R:R 0.01 < Min 1
-09:32:17.153 [09:32:17.153] 19/1/25 10:10:00 p. m. R/R Invalidated While Working. Risk: 4.80 Reward: 0.04 Ratio: 0.01 - Cancelling Order
-09:32:17.176 [09:32:17.176] 19/1/25 10:10:00 p. m. ENTRY TERMINATED: EntryA+_Long_01 State: Cancelled Err: NoError
-09:32:17.176 [09:32:17.176] 19/1/25 10:10:00 p. m. ENTRY RESET: All entry orders cancelled/rejected. Resetting to IDLE.
-09:32:17.177 [09:32:17.177] 19/1/25 10:10:00 p. m. ENTRY RESET: All entry orders cancelled/rejected and Flat. Resetting to IDLE.
-09:32:17.177 [09:32:17.177] 19/1/25 10:10:00 p. m. R/R CANCEL -> ENTRO EN ESPERA DE MITIGACION (Virtual SL). Anchor=2730.9
+09:42:52.838 [09:42:52.838] DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
+09:42:52.840 [09:42:52.840] DEBUG_RECONNECT: Total Account.Positions count = 0
+09:42:52.850 [09:42:52.850] 20/1/25 7:01:00 p. m. v1.15.11 RESTART EVAL: Checking for pending orders or valid setup to continue...
+09:42:52.851 [09:42:52.851] 20/1/25 7:01:00 p. m. v1.15.11 RESTART: No valid setup found. Starting fresh.
+09:42:52.851 [09:42:52.851] 20/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+09:42:52.854 [09:42:52.854] 20/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+09:42:52.855 [09:42:52.855] PROTECTION_RESET: Cleared order references for new trade
+09:43:32.138 [09:43:32.138] 20/1/25 8:08:00 p. m. ENTRY ATTEMPT #1/20 on USA High (Deepest Selection)
+09:43:32.140 [09:43:32.140] EXTERNAL LEVEL: USA High @ 2735.4 (Protected by: Europe High @ 2752.4)
+09:43:33.331 [09:43:33.331] RE-ANCHOR: New High @ 2735.6 (Setup: USA High)
+09:43:35.689 [09:43:35.689] RE-ANCHOR: New High @ 2735.7 (Setup: USA High)
+09:43:35.692 [09:43:35.692] RE-ANCHOR: New High @ 2735.8 (Setup: USA High)
+09:43:35.727 [09:43:35.727] RE-ANCHOR: New High @ 2735.9 (Setup: USA High)
+09:43:35.734 [09:43:35.734] RE-ANCHOR: New High @ 2736 (Setup: USA High)
+09:43:35.755 [09:43:35.755] RE-ANCHOR: New High @ 2736.1 (Setup: USA High)
+09:43:35.759 [09:43:35.759] RE-ANCHOR: New High @ 2736.2 (Setup: USA High)
+09:43:37.844 [09:43:37.844] 20/1/25 8:18:00 p. m. | SEARCH_OPPOSITE: Looking for 'USA Low' from SAME DAY as 'USA High' (RefDate: 2025-01-20)
+09:43:37.844 [09:43:37.844] 20/1/25 8:18:00 p. m. | EXEC_DEBUG: Submitting Short Limit @ 2735.4 (Raw: 2735.375). Bid=2734.7 Ask=2734.9
+09:43:37.847 [09:43:37.847] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+09:43:37.848 [09:43:37.848] RISK_DEBUG_ATR: ATR=$5.55 | ScaledRisk=$11.11
+09:43:37.848 [09:43:37.848] RISK_DEBUG_POST: Written=$11.11 | ReadFromFile=$150.00 | Using=$150.00
+09:43:37.849 [09:43:37.849] QTY_DEBUG: Risk=$150.00 | SL_Ticks=9.00 | TickVal=$1.00 | CalcQty=16.67 | MaxQty=100 | MinQty=2
+09:43:37.872 [09:43:37.872] 20/1/25 8:18:00 p. m. Order Submitted (Short). Mode=APlusRetrace Type=Limit Qty=17
+09:43:37.873 [09:43:37.873] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+09:43:37.873 [09:43:37.873] RISK_DEBUG_ATR: ATR=$5.55 | ScaledRisk=$11.11
+09:43:37.874 [09:43:37.874] RISK_DEBUG_POST: Written=$11.11 | ReadFromFile=$150.00 | Using=$150.00
+09:43:37.874 [09:43:37.874] QTY_DEBUG: Risk=$150.00 | SL_Ticks=9.25 | TickVal=$1.00 | CalcQty=16.22 | MaxQty=100 | MinQty=2
+09:43:37.875 [09:43:37.875] 20/1/25 8:18:00 p. m. | DYNAMIC QTY ADJUST: Old=16 New=16 (Stop moved to 2736.30)
+09:43:38.388 [09:43:38.388] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+09:43:38.388 [09:43:38.388] RISK_DEBUG_ATR: ATR=$5.63 | ScaledRisk=$11.25
+09:43:38.388 [09:43:38.388] RISK_DEBUG_POST: Written=$11.25 | ReadFromFile=$150.00 | Using=$150.00
+09:43:38.388 [09:43:38.388] QTY_DEBUG: Risk=$150.00 | SL_Ticks=9.34 | TickVal=$1.00 | CalcQty=16.06 | MaxQty=100 | MinQty=2
+09:43:38.822 [09:43:38.822] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+09:43:38.822 [09:43:38.822] RISK_DEBUG_ATR: ATR=$5.70 | ScaledRisk=$11.39
+09:43:38.823 [09:43:38.823] RISK_DEBUG_POST: Written=$11.39 | ReadFromFile=$150.00 | Using=$150.00
+09:43:38.823 [09:43:38.823] QTY_DEBUG: Risk=$150.00 | SL_Ticks=9.76 | TickVal=$1.00 | CalcQty=15.37 | MaxQty=100 | MinQty=2
+09:43:38.824 [09:43:38.824] 20/1/25 8:18:00 p. m. | DYNAMIC QTY ADJUST: Old=15 New=15 (Stop moved to 2736.30)
+09:43:39.170 [09:43:39.170] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+09:43:39.170 [09:43:39.170] RISK_DEBUG_ATR: ATR=$5.84 | ScaledRisk=$11.68
+09:43:39.171 [09:43:39.171] RISK_DEBUG_POST: Written=$11.68 | ReadFromFile=$150.00 | Using=$150.00
+09:43:39.171 [09:43:39.171] QTY_DEBUG: Risk=$150.00 | SL_Ticks=9.95 | TickVal=$1.00 | CalcQty=15.07 | MaxQty=100 | MinQty=2
+09:43:39.440 [09:43:39.440] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+09:43:39.440 [09:43:39.440] RISK_DEBUG_ATR: ATR=$5.49 | ScaledRisk=$10.99
+09:43:39.440 [09:43:39.440] RISK_DEBUG_POST: Written=$10.99 | ReadFromFile=$150.00 | Using=$150.00
+09:43:39.440 [09:43:39.440] QTY_DEBUG: Risk=$150.00 | SL_Ticks=10.02 | TickVal=$1.00 | CalcQty=14.98 | MaxQty=100 | MinQty=2
+09:43:39.720 [09:43:39.720] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+09:43:39.720 [09:43:39.720] RISK_DEBUG_ATR: ATR=$5.71 | ScaledRisk=$11.42
+09:43:39.722 [09:43:39.722] RISK_DEBUG_POST: Written=$11.42 | ReadFromFile=$150.00 | Using=$150.00
+09:43:39.722 [09:43:39.722] QTY_DEBUG: Risk=$150.00 | SL_Ticks=10.06 | TickVal=$1.00 | CalcQty=14.91 | MaxQty=100 | MinQty=2
+09:43:39.741 [09:43:39.741] NinjaTrader.NinjaScript.TimeSeries Entry Filled (EntryA+_Short_01) Qty=7. State -> PositionActive. TradeOriginalQty=7
+09:43:39.742 [09:43:39.742] 20/1/25 8:19:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+09:43:39.742 [09:43:39.742] PROTECTION_RESET: Cleared order references for new trade
+09:43:39.959 [09:43:39.959] NinjaTrader.NinjaScript.TimeSeries DELTA CAPTURE: Entry Delta=0 Direction=1
+09:43:39.959 [09:43:39.959] DIAG_EXEC: Name=EntryA+_Short_01 Qty=7 | Position.MP=Short Arg.MP=Short | State=PositionActive
+09:43:39.960 [09:43:39.960] ==========================================================================================
+09:43:39.960 [09:43:39.960]    TRADE START: #1 | Short | 20/1/25 8:19:00 p. m. | Price: 2735.3
+09:43:39.960 [09:43:39.960] ==========================================================================================
+09:43:39.960 [09:43:39.960] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Short @ 2735.3
+09:43:39.963 [09:43:39.963] 20/1/25 8:19:00 p. m. PHANTOM PROTECTION BLOCKED: Strategy shows position but Account has 0. Skipping EnsureProtection.
+09:43:39.988 [09:43:39.988] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Short_01) Qty=8. New TradeOriginalQty=15
+09:43:39.988 [09:43:39.988] DIAG_EXEC: Name=EntryA+_Short_01 Qty=8 | Position.MP=Short Arg.MP=Short | State=PositionActive
+09:43:39.988 [09:43:39.988] ==========================================================================================
+09:43:39.990 [09:43:39.990]    TRADE START: #1 | Short | 20/1/25 8:19:00 p. m. | Price: 2735.3
+09:43:39.990 [09:43:39.990] ==========================================================================================
+09:43:39.990 [09:43:39.990] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Short @ 2735.3
+09:43:39.991 [09:43:39.991] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Short FilledQty=8 Position.Qty=15 Position.MarketPosition=Short
+09:43:39.991 [09:43:39.991] 20/1/25 8:19:00 p. m. TRADE VWAP: Initialized (Managed)
+09:43:39.992 [09:43:39.992]    -> Protection Alloc: Filled=8 | ForTP1=8 (Need:8) | ForTP2=0 (Need:7)
+09:43:40.000 [09:43:40.000] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=2733.59933239635 | targetGlobalVWAP=2733.59933239635 | avgEntry=2735.3
+09:43:40.001 [09:43:40.001] 20/1/25 8:19:00 p. m. | SEARCH_OPPOSITE: Looking for 'USA Low' from SAME DAY as 'USA High' (RefDate: 2025-01-20)
+09:43:40.001 [09:43:40.001] FORCE TARGET: Using Validated Price: 2715.4
+09:43:40.001 [09:43:40.001] TP CALC (Short): Entry=2735.3 | GlobalVWAP=2733.59933239635 | ZoneOpp=2715.4 (Val=2715.4) | TP1=2733.59933239635 TP2=2715.4 | Selected=2733.6
+09:43:40.001 [09:43:40.001] SL_CREATE_DEBUG (MGR): Instrument=MGC 02-25 Direction=Short Tag=SL_Short_01 Action=BuyToCover Price=2736.3 Qty=15
+09:43:40.024 [09:43:40.024] SL CREATED: SL_Short_01 @ 2736.3 Qty=15 Risk=$150.00
+09:43:40.038 [09:43:40.038] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Submitted Price=2733.6 Qty=8
+09:43:40.038 [09:43:40.038]   -> Updated tp1Order reference (ID=c7a1f084b2a64790851195a51f3c2a14)
+09:43:40.040 [09:43:40.040] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=2733.6 Qty=8
+09:43:40.040 [09:43:40.040]   -> Updated tp1Order reference (ID=c7a1f084b2a64790851195a51f3c2a14)
+09:43:40.041 [09:43:40.041] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=2733.6 Qty=8
+09:43:40.041 [09:43:40.041]   -> Updated tp1Order reference (ID=c7a1f084b2a64790851195a51f3c2a14)
+09:43:40.041 [09:43:40.041] TP1 CREATED: TP1_Short_01 @ 2733.6 Qty=8
+09:43:40.041 [09:43:40.041] 20/1/25 8:19:00 p. m. EnsureProtection COMPLETE
+09:43:40.049 [09:43:40.049] EXEC_FILL_DEBUG: Order=42413931 Name=EntryA+_Short_01 State=Filled Price=2735.3 | tp1Order=8547154 tp1Name=TP1_Short_01

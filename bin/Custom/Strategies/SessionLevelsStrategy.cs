@@ -37,7 +37,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.15.11"; // v1.15.11: Fixed TP allocation bug (forTp2 calculation was missing neededTp2 check)
+		private const string StrategyVersion = "v1.15.12"; // v1.15.12: Fixed TP creation logic - always create/update TP orders based on total target, not fill allocation
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;
