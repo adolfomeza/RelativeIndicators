@@ -22,6 +22,7 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 ### Técnico
 - Agregado método `CancelAllProtectionOrders()` en `SessionLevels/OrderProtectionManager.cs:552-583`.
 - Agregado método `InheritFromGlobal()` en `SessionLevels/VWAPCalculator.cs:312-331`.
+- Actualizado display de versión en panel de estado (`StrategyHelpers.cs:262`).
 - Ambos métodos incluyen logs diagnósticos detallados.
 
 ## [v1.15.7] - 2026-01-13

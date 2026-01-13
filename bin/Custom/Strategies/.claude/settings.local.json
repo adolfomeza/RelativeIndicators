@@ -3,7 +3,9 @@
     "allow": [
       "Bash(git add:*)",
       "Bash(grep:*)",
-      "Bash(git commit -m \"$\\(cat <<''EOF''\nv1.15.8: Corregidos errores de compilación CS1061\n\nImplementados 2 métodos faltantes:\n- CancelAllProtectionOrders\\(\\) en OrderProtectionManager.cs \\(líneas 552-583\\)\n  Previene condiciones de carrera al cancelar SL/TP antes de salidas de emergencia\n- InheritFromGlobal\\(\\) en VWAPCalculator.cs \\(líneas 312-331\\)\n  Preserva valores de VWAP cuando trade cruza cierre de sesión \\(18:00\\)\n\nActualizado CHANGELOG_ES.md y versión en SessionLevelsStrategy.cs\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nv1.15.8: Corregidos errores de compilación CS1061\n\nImplementados 2 métodos faltantes:\n- CancelAllProtectionOrders\\(\\) en OrderProtectionManager.cs \\(líneas 552-583\\)\n  Previene condiciones de carrera al cancelar SL/TP antes de salidas de emergencia\n- InheritFromGlobal\\(\\) en VWAPCalculator.cs \\(líneas 312-331\\)\n  Preserva valores de VWAP cuando trade cruza cierre de sesión \\(18:00\\)\n\nActualizado CHANGELOG_ES.md y versión en SessionLevelsStrategy.cs\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push:*)",
+      "Bash(git commit:*)"
     ]
   }
 }

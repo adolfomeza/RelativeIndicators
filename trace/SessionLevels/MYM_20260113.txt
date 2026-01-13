@@ -1,0 +1,148 @@
+08:46:32.676 [08:46:32.676] DEBUG: OnStateChange(DataLoaded) IsUnmanaged = True
+08:46:33.149 [08:46:33.149] DEBUG_CONTEXT: Account = 'Playback101', Context = 'playback'
+08:46:33.150 [08:46:33.150] CSV EXPORT: Using existing C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\TradeExports\playback\MYM_03-25.csv
+08:46:33.153 5/1/25 7:01:00 p. m. CONTROL BUTTONS: Initialized (Bottom Right)
+08:46:33.348 [08:46:33.348] 5/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 3/1/25 6:00:00 p. m. NY)
+08:46:33.350 [08:46:33.350] LEVEL SUMMARY: No active levels at week start!
+08:46:33.350 [08:46:33.350] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:46:33.350 [08:46:33.350] PROTECTION_RESET: Cleared order references for new trade
+08:46:33.350 [08:46:33.350] 5/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+08:46:33.352 [08:46:33.352] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:46:33.353 [08:46:33.353] PROTECTION_RESET: Cleared order references for new trade
+08:46:33.601 [08:46:33.601] DEBUG DATE: Time=6/1/25 10:29:00 a. m. ActualSessionEnd=6/1/25 6:00:00 p. m. (NY=6/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+08:46:33.704 [08:46:33.704] 6/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+08:46:33.704 [08:46:33.704] 6/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:46:33.705 [08:46:33.705] PROTECTION_RESET: Cleared order references for new trade
+08:46:33.713 [08:46:33.713] 6/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+08:46:33.713 [08:46:33.713] 6/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
+08:46:33.955 [08:46:33.955] DEBUG DATE: Time=7/1/25 10:29:00 a. m. ActualSessionEnd=7/1/25 6:00:00 p. m. (NY=7/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+08:46:34.150 [08:46:34.150] 7/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+08:46:34.151 [08:46:34.151] 7/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:46:34.151 [08:46:34.151] PROTECTION_RESET: Cleared order references for new trade
+08:46:34.152 [08:46:34.152] 7/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+08:46:34.153 [08:46:34.153] 7/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
+08:46:34.478 [08:46:34.478] DEBUG DATE: Time=8/1/25 10:29:00 a. m. ActualSessionEnd=8/1/25 6:00:00 p. m. (NY=8/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+08:46:34.711 [08:46:34.711] 8/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+08:46:34.716 [08:46:34.716] 8/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:46:34.716 [08:46:34.716] PROTECTION_RESET: Cleared order references for new trade
+08:46:34.717 [08:46:34.717] 8/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+08:46:34.718 [08:46:34.718] 8/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
+08:46:35.159 [08:46:35.159] DEBUG DATE: Time=9/1/25 10:29:00 a. m. ActualSessionEnd=9/1/25 10:30:00 a. m. (NY=9/1/25 9:30:00 a. m.) IsEarlyClose=True IsFriday=False
+08:46:35.162 [08:46:35.162] 9/1/25 10:30:00 a. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+08:46:35.163 [08:46:35.163] 9/1/25 10:30:00 a. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
+08:46:35.164 [08:46:35.164] 9/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+08:46:35.164 [08:46:35.164] 9/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:46:35.164 [08:46:35.164] PROTECTION_RESET: Cleared order references for new trade
+08:46:35.753 [08:46:35.753] DEBUG DATE: Time=10/1/25 10:29:00 a. m. ActualSessionEnd=10/1/25 6:00:00 p. m. (NY=10/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
+08:46:36.139 [08:46:36.139] 10/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+08:46:36.140 [08:46:36.140] 10/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:46:36.140 [08:46:36.140] PROTECTION_RESET: Cleared order references for new trade
+08:46:36.141 [08:46:36.141] 10/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+08:46:36.142 [08:46:36.142] 10/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
+08:46:36.142 [08:46:36.142] 12/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 10/1/25 6:00:00 p. m. NY)
+08:46:36.142 [08:46:36.142] LEVEL SUMMARY (Price=42187):
+08:46:36.142 [08:46:36.142]   USA High @ 43408 | Currently BELOW by 1221 ticks
+08:46:36.143 [08:46:36.143]   USA High @ 43211 | Currently BELOW by 1024 ticks
+08:46:36.143 [08:46:36.143]   Europe High @ 42941 | Currently BELOW by 754 ticks
+08:46:36.143 [08:46:36.143]   USA High @ 42924 | Currently BELOW by 737 ticks
+08:46:36.145 [08:46:36.145]   Asia High @ 42907 | Currently BELOW by 720 ticks
+08:46:36.145 [08:46:36.145]   Europe High @ 42906 | Currently BELOW by 719 ticks
+08:46:36.145 [08:46:36.145]   USA High @ 42677 | Currently BELOW by 490 ticks
+08:46:36.145 [08:46:36.145]   USA Low @ 42088 | Currently ABOVE by 99 ticks
+08:46:36.146 [08:46:36.146] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:46:36.147 [08:46:36.147] PROTECTION_RESET: Cleared order references for new trade
+08:46:36.148 [08:46:36.148] 12/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+08:46:36.148 [08:46:36.148] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:46:36.152 [08:46:36.152] PROTECTION_RESET: Cleared order references for new trade
+08:46:36.792 [08:46:36.792] DEBUG DATE: Time=13/1/25 10:29:00 a. m. ActualSessionEnd=13/1/25 6:00:00 p. m. (NY=13/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+08:46:37.122 [08:46:37.122] 13/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+08:46:37.123 [08:46:37.123] 13/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:46:37.123 [08:46:37.123] PROTECTION_RESET: Cleared order references for new trade
+08:46:37.127 [08:46:37.127] 13/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+08:46:37.128 [08:46:37.128] 13/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
+08:46:37.743 [08:46:37.743] DEBUG DATE: Time=14/1/25 10:29:00 a. m. ActualSessionEnd=14/1/25 6:00:00 p. m. (NY=14/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+08:46:38.122 [08:46:38.122] 14/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+08:46:38.122 [08:46:38.122] 14/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:46:38.123 [08:46:38.123] PROTECTION_RESET: Cleared order references for new trade
+08:46:38.123 [08:46:38.123] 14/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+08:46:38.123 [08:46:38.123] 14/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
+08:46:39.212 [08:46:39.212] DEBUG DATE: Time=15/1/25 10:29:00 a. m. ActualSessionEnd=15/1/25 6:00:00 p. m. (NY=15/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+08:46:39.809 [08:46:39.809] 15/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+08:46:39.809 [08:46:39.809] 15/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:46:39.809 [08:46:39.809] PROTECTION_RESET: Cleared order references for new trade
+08:46:39.815 [08:46:39.815] 15/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+08:46:39.816 [08:46:39.816] 15/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
+08:46:40.874 [08:46:40.874] DEBUG DATE: Time=16/1/25 10:29:00 a. m. ActualSessionEnd=16/1/25 6:00:00 p. m. (NY=16/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+08:46:41.477 [08:46:41.477] 16/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+08:46:41.477 [08:46:41.477] 16/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:46:41.477 [08:46:41.477] PROTECTION_RESET: Cleared order references for new trade
+08:46:41.478 [08:46:41.478] 16/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+08:46:41.478 [08:46:41.478] 16/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
+08:46:42.642 [08:46:42.642] DEBUG DATE: Time=17/1/25 10:29:00 a. m. ActualSessionEnd=17/1/25 6:00:00 p. m. (NY=17/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
+08:46:43.273 [08:46:43.273] 17/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+08:46:43.275 [08:46:43.275] 17/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:46:43.275 [08:46:43.275] PROTECTION_RESET: Cleared order references for new trade
+08:46:43.276 [08:46:43.276] 17/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+08:46:43.277 [08:46:43.277] 17/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
+08:48:17.857 [08:48:17.857] DEBUG: OnStateChange(DataLoaded) IsUnmanaged = True
+08:48:17.860 [08:48:17.860] DEBUG_CONTEXT: Account = 'Playback101', Context = 'playback'
+08:48:17.862 [08:48:17.862] CSV EXPORT: Using existing C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\TradeExports\playback\MYM_03-25.csv
+08:48:17.864 5/1/25 7:01:00 p. m. CONTROL BUTTONS: Initialized (Bottom Right)
+08:48:17.946 [08:48:17.946] 5/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 3/1/25 6:00:00 p. m. NY)
+08:48:17.947 [08:48:17.947] LEVEL SUMMARY: No active levels at week start!
+08:48:17.948 [08:48:17.948] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:48:17.948 [08:48:17.948] PROTECTION_RESET: Cleared order references for new trade
+08:48:17.948 [08:48:17.948] 5/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+08:48:17.949 [08:48:17.949] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:48:17.959 [08:48:17.959] PROTECTION_RESET: Cleared order references for new trade
+08:48:18.174 [08:48:18.174] DEBUG DATE: Time=6/1/25 10:29:00 a. m. ActualSessionEnd=6/1/25 6:00:00 p. m. (NY=6/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+08:48:18.286 [08:48:18.285] 6/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+08:48:18.286 [08:48:18.286] 6/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:48:18.286 [08:48:18.286] PROTECTION_RESET: Cleared order references for new trade
+08:48:18.286 [08:48:18.286] 6/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+08:48:18.287 [08:48:18.287] 6/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
+08:48:18.478 [08:48:18.478] DEBUG DATE: Time=7/1/25 10:29:00 a. m. ActualSessionEnd=7/1/25 6:00:00 p. m. (NY=7/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+08:48:18.681 [08:48:18.681] 7/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+08:48:18.682 [08:48:18.682] 7/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:48:18.682 [08:48:18.682] PROTECTION_RESET: Cleared order references for new trade
+08:48:18.683 [08:48:18.683] 7/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+08:48:18.683 [08:48:18.683] 7/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
+08:48:19.027 [08:48:19.027] DEBUG DATE: Time=8/1/25 10:29:00 a. m. ActualSessionEnd=8/1/25 6:00:00 p. m. (NY=8/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+08:48:19.250 [08:48:19.250] 8/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+08:48:19.251 [08:48:19.251] 8/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:48:19.251 [08:48:19.251] PROTECTION_RESET: Cleared order references for new trade
+08:48:19.252 [08:48:19.252] 8/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+08:48:19.253 [08:48:19.253] 8/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
+08:48:19.705 [08:48:19.705] DEBUG DATE: Time=9/1/25 10:29:00 a. m. ActualSessionEnd=9/1/25 10:30:00 a. m. (NY=9/1/25 9:30:00 a. m.) IsEarlyClose=True IsFriday=False
+08:48:19.707 [08:48:19.707] 9/1/25 10:30:00 a. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+08:48:19.708 [08:48:19.708] 9/1/25 10:30:00 a. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
+08:48:19.708 [08:48:19.708] 9/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+08:48:19.708 [08:48:19.708] 9/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:48:19.709 [08:48:19.709] PROTECTION_RESET: Cleared order references for new trade
+08:48:20.293 [08:48:20.293] DEBUG DATE: Time=10/1/25 10:29:00 a. m. ActualSessionEnd=10/1/25 6:00:00 p. m. (NY=10/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
+08:48:20.668 [08:48:20.668] 10/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+08:48:20.668 [08:48:20.668] 10/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:48:20.669 [08:48:20.669] PROTECTION_RESET: Cleared order references for new trade
+08:48:20.670 [08:48:20.670] 10/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+08:48:20.671 [08:48:20.671] 10/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
+08:48:20.671 [08:48:20.671] 12/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 10/1/25 6:00:00 p. m. NY)
+08:48:20.672 [08:48:20.672] LEVEL SUMMARY (Price=42187):
+08:48:20.672 [08:48:20.672]   USA High @ 43408 | Currently BELOW by 1221 ticks
+08:48:20.672 [08:48:20.672]   USA High @ 43211 | Currently BELOW by 1024 ticks
+08:48:20.672 [08:48:20.672]   Europe High @ 42941 | Currently BELOW by 754 ticks
+08:48:20.683 [08:48:20.683]   USA High @ 42924 | Currently BELOW by 737 ticks
+08:48:20.684 [08:48:20.683]   Asia High @ 42907 | Currently BELOW by 720 ticks
+08:48:20.684 [08:48:20.684]   Europe High @ 42906 | Currently BELOW by 719 ticks
+08:48:20.685 [08:48:20.685]   USA High @ 42677 | Currently BELOW by 490 ticks
+08:48:20.685 [08:48:20.685]   USA Low @ 42088 | Currently ABOVE by 99 ticks
+08:48:20.685 [08:48:20.685] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:48:20.687 [08:48:20.687] PROTECTION_RESET: Cleared order references for new trade
+08:48:20.687 [08:48:20.687] 12/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+08:48:20.687 [08:48:20.687] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:48:20.689 [08:48:20.689] PROTECTION_RESET: Cleared order references for new trade
+08:48:21.247 [08:48:21.247] DEBUG DATE: Time=13/1/25 10:29:00 a. m. ActualSessionEnd=13/1/25 6:00:00 p. m. (NY=13/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+08:48:21.667 [08:48:21.667] 13/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+08:48:21.672 [08:48:21.672] 13/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:48:21.672 [08:48:21.672] PROTECTION_RESET: Cleared order references for new trade
+08:48:21.673 [08:48:21.673] 13/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+08:48:21.673 [08:48:21.673] 13/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
