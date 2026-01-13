@@ -441,3 +441,4 @@
 2026-01-13 08:48:11:142|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378426624'
 2026-01-13 08:48:11:142|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378426623'
 2026-01-13 08:48:11:143|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378426617'
+2026-01-13 08:48:20:662|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378426617' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=False SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes

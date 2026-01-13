@@ -7,6 +7,22 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 ### Agregado
 - **Módulo SL Adaptativo (Supervivencia):** Reemplazo de la lógica de salida de emergencia. Ahora, si el precio salta el Stop Loss durante la entrada, el sistema adapta el SL a `Precio Actual +/- 4 ticks` para asegurar que la orden sea aceptada por NinjaTrader y la posición siga protegida, en lugar de cerrar o fallar.
 
+## [v1.15.9] - 2026-01-13
+### Corregido
+- **Bug Crítico: Órdenes TP con Cantidades Incorrectas en Fills Parciales**
+  - **Problema**: Cuando la entrada se llenaba en múltiples fills parciales (ej. 4+4+1+3=12 contratos), las órdenes TP1/TP2 quedaban con cantidades incorrectas (ej. TP2 con 2 contratos en lugar de 6). NinjaTrader perdía sincronización al llamar `ChangeOrder()` muy rápidamente y creaba órdenes huérfanas con OrderIDs diferentes.
+  - **Solución**: Cambiada la lógica de actualización de órdenes TP de `ChangeOrder()` a **Cancel + Recreate**. Ahora cuando hay que actualizar una orden TP:
+    1. Se cancela la orden existente con `CancelOrderWrapper()`
+    2. Se limpia la referencia (`tp1Order`/`tp2Order` = null)
+    3. Se crea una nueva orden con la cantidad correcta usando `SubmitOrderUnmanagedWrapper()`
+  - **Impacto**: Previene desincronización de NinjaTrader y asegura que siempre haya exactamente 50% en TP1 y 50% en TP2.
+  - **Logs Mejorados**: Ahora se registra el OrderID en cada creación/recreación para facilitar debugging.
+
+### Técnico
+- Modificado `OrderProtectionManager.cs:340-393` - Reemplazada lógica de `ChangeOrder()` por Cancel+Recreate.
+- Agregados logs diagnósticos con OrderID para rastrear órdenes TP.
+- Esta solución es más robusta y evita race conditions en el motor de órdenes de NinjaTrader.
+
 ## [v1.15.8] - 2026-01-13
 ### Corregido
 - **Errores de Compilación CS1061:** Implementados 2 métodos faltantes que causaban errores de compilación.

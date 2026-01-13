@@ -1,148 +1,288 @@
-08:46:32.676 [08:46:32.676] DEBUG: OnStateChange(DataLoaded) IsUnmanaged = True
-08:46:33.149 [08:46:33.149] DEBUG_CONTEXT: Account = 'Playback101', Context = 'playback'
-08:46:33.150 [08:46:33.150] CSV EXPORT: Using existing C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\TradeExports\playback\MYM_03-25.csv
-08:46:33.153 5/1/25 7:01:00 p. m. CONTROL BUTTONS: Initialized (Bottom Right)
-08:46:33.348 [08:46:33.348] 5/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 3/1/25 6:00:00 p. m. NY)
-08:46:33.350 [08:46:33.350] LEVEL SUMMARY: No active levels at week start!
-08:46:33.350 [08:46:33.350] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:33.350 [08:46:33.350] PROTECTION_RESET: Cleared order references for new trade
-08:46:33.350 [08:46:33.350] 5/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:33.352 [08:46:33.352] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:33.353 [08:46:33.353] PROTECTION_RESET: Cleared order references for new trade
-08:46:33.601 [08:46:33.601] DEBUG DATE: Time=6/1/25 10:29:00 a. m. ActualSessionEnd=6/1/25 6:00:00 p. m. (NY=6/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
-08:46:33.704 [08:46:33.704] 6/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:33.704 [08:46:33.704] 6/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:33.705 [08:46:33.705] PROTECTION_RESET: Cleared order references for new trade
-08:46:33.713 [08:46:33.713] 6/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:46:33.713 [08:46:33.713] 6/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:46:33.955 [08:46:33.955] DEBUG DATE: Time=7/1/25 10:29:00 a. m. ActualSessionEnd=7/1/25 6:00:00 p. m. (NY=7/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
-08:46:34.150 [08:46:34.150] 7/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:34.151 [08:46:34.151] 7/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:34.151 [08:46:34.151] PROTECTION_RESET: Cleared order references for new trade
-08:46:34.152 [08:46:34.152] 7/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:46:34.153 [08:46:34.153] 7/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:46:34.478 [08:46:34.478] DEBUG DATE: Time=8/1/25 10:29:00 a. m. ActualSessionEnd=8/1/25 6:00:00 p. m. (NY=8/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
-08:46:34.711 [08:46:34.711] 8/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:34.716 [08:46:34.716] 8/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:34.716 [08:46:34.716] PROTECTION_RESET: Cleared order references for new trade
-08:46:34.717 [08:46:34.717] 8/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:46:34.718 [08:46:34.718] 8/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:46:35.159 [08:46:35.159] DEBUG DATE: Time=9/1/25 10:29:00 a. m. ActualSessionEnd=9/1/25 10:30:00 a. m. (NY=9/1/25 9:30:00 a. m.) IsEarlyClose=True IsFriday=False
-08:46:35.162 [08:46:35.162] 9/1/25 10:30:00 a. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:46:35.163 [08:46:35.163] 9/1/25 10:30:00 a. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:46:35.164 [08:46:35.164] 9/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:35.164 [08:46:35.164] 9/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:35.164 [08:46:35.164] PROTECTION_RESET: Cleared order references for new trade
-08:46:35.753 [08:46:35.753] DEBUG DATE: Time=10/1/25 10:29:00 a. m. ActualSessionEnd=10/1/25 6:00:00 p. m. (NY=10/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
-08:46:36.139 [08:46:36.139] 10/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:36.140 [08:46:36.140] 10/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:36.140 [08:46:36.140] PROTECTION_RESET: Cleared order references for new trade
-08:46:36.141 [08:46:36.141] 10/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:46:36.142 [08:46:36.142] 10/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:46:36.142 [08:46:36.142] 12/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 10/1/25 6:00:00 p. m. NY)
-08:46:36.142 [08:46:36.142] LEVEL SUMMARY (Price=42187):
-08:46:36.142 [08:46:36.142]   USA High @ 43408 | Currently BELOW by 1221 ticks
-08:46:36.143 [08:46:36.143]   USA High @ 43211 | Currently BELOW by 1024 ticks
-08:46:36.143 [08:46:36.143]   Europe High @ 42941 | Currently BELOW by 754 ticks
-08:46:36.143 [08:46:36.143]   USA High @ 42924 | Currently BELOW by 737 ticks
-08:46:36.145 [08:46:36.145]   Asia High @ 42907 | Currently BELOW by 720 ticks
-08:46:36.145 [08:46:36.145]   Europe High @ 42906 | Currently BELOW by 719 ticks
-08:46:36.145 [08:46:36.145]   USA High @ 42677 | Currently BELOW by 490 ticks
-08:46:36.145 [08:46:36.145]   USA Low @ 42088 | Currently ABOVE by 99 ticks
-08:46:36.146 [08:46:36.146] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:36.147 [08:46:36.147] PROTECTION_RESET: Cleared order references for new trade
-08:46:36.148 [08:46:36.148] 12/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:36.148 [08:46:36.148] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:36.152 [08:46:36.152] PROTECTION_RESET: Cleared order references for new trade
-08:46:36.792 [08:46:36.792] DEBUG DATE: Time=13/1/25 10:29:00 a. m. ActualSessionEnd=13/1/25 6:00:00 p. m. (NY=13/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
-08:46:37.122 [08:46:37.122] 13/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:37.123 [08:46:37.123] 13/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:37.123 [08:46:37.123] PROTECTION_RESET: Cleared order references for new trade
-08:46:37.127 [08:46:37.127] 13/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:46:37.128 [08:46:37.128] 13/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:46:37.743 [08:46:37.743] DEBUG DATE: Time=14/1/25 10:29:00 a. m. ActualSessionEnd=14/1/25 6:00:00 p. m. (NY=14/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
-08:46:38.122 [08:46:38.122] 14/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:38.122 [08:46:38.122] 14/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:38.123 [08:46:38.123] PROTECTION_RESET: Cleared order references for new trade
-08:46:38.123 [08:46:38.123] 14/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:46:38.123 [08:46:38.123] 14/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:46:39.212 [08:46:39.212] DEBUG DATE: Time=15/1/25 10:29:00 a. m. ActualSessionEnd=15/1/25 6:00:00 p. m. (NY=15/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
-08:46:39.809 [08:46:39.809] 15/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:39.809 [08:46:39.809] 15/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:39.809 [08:46:39.809] PROTECTION_RESET: Cleared order references for new trade
-08:46:39.815 [08:46:39.815] 15/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:46:39.816 [08:46:39.816] 15/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:46:40.874 [08:46:40.874] DEBUG DATE: Time=16/1/25 10:29:00 a. m. ActualSessionEnd=16/1/25 6:00:00 p. m. (NY=16/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
-08:46:41.477 [08:46:41.477] 16/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:41.477 [08:46:41.477] 16/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:41.477 [08:46:41.477] PROTECTION_RESET: Cleared order references for new trade
-08:46:41.478 [08:46:41.478] 16/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:46:41.478 [08:46:41.478] 16/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:46:42.642 [08:46:42.642] DEBUG DATE: Time=17/1/25 10:29:00 a. m. ActualSessionEnd=17/1/25 6:00:00 p. m. (NY=17/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
-08:46:43.273 [08:46:43.273] 17/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:43.275 [08:46:43.275] 17/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:43.275 [08:46:43.275] PROTECTION_RESET: Cleared order references for new trade
-08:46:43.276 [08:46:43.276] 17/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:46:43.277 [08:46:43.277] 17/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:48:17.857 [08:48:17.857] DEBUG: OnStateChange(DataLoaded) IsUnmanaged = True
-08:48:17.860 [08:48:17.860] DEBUG_CONTEXT: Account = 'Playback101', Context = 'playback'
-08:48:17.862 [08:48:17.862] CSV EXPORT: Using existing C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\TradeExports\playback\MYM_03-25.csv
-08:48:17.864 5/1/25 7:01:00 p. m. CONTROL BUTTONS: Initialized (Bottom Right)
-08:48:17.946 [08:48:17.946] 5/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 3/1/25 6:00:00 p. m. NY)
-08:48:17.947 [08:48:17.947] LEVEL SUMMARY: No active levels at week start!
-08:48:17.948 [08:48:17.948] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:48:17.948 [08:48:17.948] PROTECTION_RESET: Cleared order references for new trade
-08:48:17.948 [08:48:17.948] 5/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:48:17.949 [08:48:17.949] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:48:17.959 [08:48:17.959] PROTECTION_RESET: Cleared order references for new trade
-08:48:18.174 [08:48:18.174] DEBUG DATE: Time=6/1/25 10:29:00 a. m. ActualSessionEnd=6/1/25 6:00:00 p. m. (NY=6/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
-08:48:18.286 [08:48:18.285] 6/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:48:18.286 [08:48:18.286] 6/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:48:18.286 [08:48:18.286] PROTECTION_RESET: Cleared order references for new trade
-08:48:18.286 [08:48:18.286] 6/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:48:18.287 [08:48:18.287] 6/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:48:18.478 [08:48:18.478] DEBUG DATE: Time=7/1/25 10:29:00 a. m. ActualSessionEnd=7/1/25 6:00:00 p. m. (NY=7/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
-08:48:18.681 [08:48:18.681] 7/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:48:18.682 [08:48:18.682] 7/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:48:18.682 [08:48:18.682] PROTECTION_RESET: Cleared order references for new trade
-08:48:18.683 [08:48:18.683] 7/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:48:18.683 [08:48:18.683] 7/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:48:19.027 [08:48:19.027] DEBUG DATE: Time=8/1/25 10:29:00 a. m. ActualSessionEnd=8/1/25 6:00:00 p. m. (NY=8/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
-08:48:19.250 [08:48:19.250] 8/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:48:19.251 [08:48:19.251] 8/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:48:19.251 [08:48:19.251] PROTECTION_RESET: Cleared order references for new trade
-08:48:19.252 [08:48:19.252] 8/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:48:19.253 [08:48:19.253] 8/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:48:19.705 [08:48:19.705] DEBUG DATE: Time=9/1/25 10:29:00 a. m. ActualSessionEnd=9/1/25 10:30:00 a. m. (NY=9/1/25 9:30:00 a. m.) IsEarlyClose=True IsFriday=False
-08:48:19.707 [08:48:19.707] 9/1/25 10:30:00 a. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:48:19.708 [08:48:19.708] 9/1/25 10:30:00 a. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:48:19.708 [08:48:19.708] 9/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:48:19.708 [08:48:19.708] 9/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:48:19.709 [08:48:19.709] PROTECTION_RESET: Cleared order references for new trade
-08:48:20.293 [08:48:20.293] DEBUG DATE: Time=10/1/25 10:29:00 a. m. ActualSessionEnd=10/1/25 6:00:00 p. m. (NY=10/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
-08:48:20.668 [08:48:20.668] 10/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:48:20.668 [08:48:20.668] 10/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:48:20.669 [08:48:20.669] PROTECTION_RESET: Cleared order references for new trade
-08:48:20.670 [08:48:20.670] 10/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:48:20.671 [08:48:20.671] 10/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:48:20.671 [08:48:20.671] 12/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 10/1/25 6:00:00 p. m. NY)
-08:48:20.672 [08:48:20.672] LEVEL SUMMARY (Price=42187):
-08:48:20.672 [08:48:20.672]   USA High @ 43408 | Currently BELOW by 1221 ticks
-08:48:20.672 [08:48:20.672]   USA High @ 43211 | Currently BELOW by 1024 ticks
-08:48:20.672 [08:48:20.672]   Europe High @ 42941 | Currently BELOW by 754 ticks
-08:48:20.683 [08:48:20.683]   USA High @ 42924 | Currently BELOW by 737 ticks
-08:48:20.684 [08:48:20.683]   Asia High @ 42907 | Currently BELOW by 720 ticks
-08:48:20.684 [08:48:20.684]   Europe High @ 42906 | Currently BELOW by 719 ticks
-08:48:20.685 [08:48:20.685]   USA High @ 42677 | Currently BELOW by 490 ticks
-08:48:20.685 [08:48:20.685]   USA Low @ 42088 | Currently ABOVE by 99 ticks
-08:48:20.685 [08:48:20.685] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:48:20.687 [08:48:20.687] PROTECTION_RESET: Cleared order references for new trade
-08:48:20.687 [08:48:20.687] 12/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:48:20.687 [08:48:20.687] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:48:20.689 [08:48:20.689] PROTECTION_RESET: Cleared order references for new trade
-08:48:21.247 [08:48:21.247] DEBUG DATE: Time=13/1/25 10:29:00 a. m. ActualSessionEnd=13/1/25 6:00:00 p. m. (NY=13/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
-08:48:21.667 [08:48:21.667] 13/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:48:21.672 [08:48:21.672] 13/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:48:21.672 [08:48:21.672] PROTECTION_RESET: Cleared order references for new trade
-08:48:21.673 [08:48:21.673] 13/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:48:21.673 [08:48:21.673] 13/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
+=== MYM Strategy Log - Started 2026-01-13 08:48:47 ===
+
+08:48:47.624 [08:48:47.624] DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
+08:48:47.627 [08:48:47.627] DEBUG_RECONNECT: Total Account.Positions count = 0
+08:48:47.635 [08:48:47.635] 19/1/25 7:01:00 p. m. v1.15.8 RESTART EVAL: Checking for pending orders or valid setup to continue...
+08:48:47.636 [08:48:47.636] 19/1/25 7:01:00 p. m. v1.15.8 RESTART: No valid setup found. Starting fresh.
+08:48:47.636 [08:48:47.636] 19/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 17/1/25 6:00:00 p. m. NY)
+08:48:47.637 [08:48:47.637] LEVEL SUMMARY (Price=43681):
+08:48:47.638 [08:48:47.638]   Europe Low @ 41968 | Currently ABOVE by 1713 ticks
+08:48:47.638 [08:48:47.638]   USA Low @ 42069 | Currently ABOVE by 1612 ticks
+08:48:47.639 [08:48:47.639]   USA Low @ 42373 | Currently ABOVE by 1308 ticks
+08:48:47.641 [08:48:47.641]   Asia Low @ 42752 | Currently ABOVE by 929 ticks
+08:48:47.642 [08:48:47.642]   Europe Low @ 42762 | Currently ABOVE by 919 ticks
+08:48:47.644 [08:48:47.644]   USA Low @ 43285 | Currently ABOVE by 396 ticks
+08:48:47.647 [08:48:47.647]   Europe Low @ 43286 | Currently ABOVE by 395 ticks
+08:48:47.648 [08:48:47.648]   USA Low @ 43297 | Currently ABOVE by 384 ticks
+08:48:47.650 [08:48:47.650]   Asia Low @ 43315 | Currently ABOVE by 366 ticks
+08:48:47.652 [08:48:47.652]   Europe Low @ 43433 | Currently ABOVE by 248 ticks
+08:48:47.654 [08:48:47.654]   USA High @ 43867 | Currently BELOW by 186 ticks
+08:48:47.655 [08:48:47.655]   USA Low @ 43615 | Currently ABOVE by 66 ticks
+08:48:47.658 [08:48:47.658] 19/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:48:47.660 [08:48:47.660] PROTECTION_RESET: Cleared order references for new trade
+08:48:47.661 [08:48:47.661] 19/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+08:48:47.663 [08:48:47.663] 19/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:48:47.665 [08:48:47.665] PROTECTION_RESET: Cleared order references for new trade
+08:52:04.165 [08:52:04.165] 20/1/25 4:00:00 a. m. ENTRY ATTEMPT #1/20 on Asia High (Deepest Selection)
+08:52:04.165 [08:52:04.165] EXTERNAL LEVEL: Asia High @ 43755 (Protected by: Europe High @ 43757)
+08:52:04.169 [08:52:04.169] RE-ANCHOR: New High @ 43758 (Setup: Asia High)
+08:52:04.273 [08:52:04.273] RE-ANCHOR: New High @ 43759 (Setup: Asia High)
+08:52:06.151 [08:52:06.151] 20/1/25 4:03:00 a. m. | SEARCH_OPPOSITE: Looking for 'Asia Low' from SAME DAY as 'Asia High' (RefDate: 2025-01-19)
+08:52:06.152 [08:52:06.152] 20/1/25 4:03:00 a. m. | EXEC_DEBUG: Submitting Short Limit @ 43752 (Raw: 43751.7027027027). Bid=43736 Ask=43739
+08:52:06.152 [08:52:06.152] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+08:52:06.152 [08:52:06.152] RISK_DEBUG_ATR: ATR=$2.86 | ScaledRisk=$5.71
+08:52:06.152 [08:52:06.152] RISK_DEBUG_POST: Written=$5.71 | ReadFromFile=$150.00 | Using=$150.00
+08:52:06.152 [08:52:06.152] QTY_DEBUG: Risk=$150.00 | SL_Ticks=8.00 | TickVal=$0.50 | CalcQty=37.50 | MaxQty=100 | MinQty=2
+08:52:06.174 [08:52:06.174] 20/1/25 4:03:00 a. m. Order Submitted (Short). Mode=APlusRetrace Type=Limit Qty=38
+08:52:06.174 [08:52:06.174] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+08:52:06.176 [08:52:06.176] RISK_DEBUG_ATR: ATR=$2.86 | ScaledRisk=$5.71
+08:52:06.176 [08:52:06.176] RISK_DEBUG_POST: Written=$5.71 | ReadFromFile=$150.00 | Using=$150.00
+08:52:06.176 [08:52:06.176] QTY_DEBUG: Risk=$150.00 | SL_Ticks=8.30 | TickVal=$0.50 | CalcQty=36.16 | MaxQty=100 | MinQty=2
+08:52:06.177 [08:52:06.177] 20/1/25 4:03:00 a. m. | DYNAMIC QTY ADJUST: Old=36 New=36 (Stop moved to 43760.00)
+08:52:06.549 [08:52:06.549] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+08:52:06.549 [08:52:06.549] RISK_DEBUG_ATR: ATR=$2.86 | ScaledRisk=$5.71
+08:52:06.550 [08:52:06.550] RISK_DEBUG_POST: Written=$5.71 | ReadFromFile=$150.00 | Using=$150.00
+08:52:06.550 [08:52:06.550] QTY_DEBUG: Risk=$150.00 | SL_Ticks=8.53 | TickVal=$0.50 | CalcQty=35.16 | MaxQty=100 | MinQty=2
+08:52:06.551 [08:52:06.551] 20/1/25 4:03:00 a. m. | DYNAMIC QTY ADJUST: Old=35 New=35 (Stop moved to 43760.00)
+08:52:07.034 [08:52:07.034] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+08:52:07.041 [08:52:07.041] RISK_DEBUG_ATR: ATR=$3.00 | ScaledRisk=$6.00
+08:52:07.042 [08:52:07.042] RISK_DEBUG_POST: Written=$6.00 | ReadFromFile=$150.00 | Using=$150.00
+08:52:07.042 [08:52:07.042] QTY_DEBUG: Risk=$150.00 | SL_Ticks=9.11 | TickVal=$0.50 | CalcQty=32.92 | MaxQty=100 | MinQty=2
+08:52:07.043 [08:52:07.043] 20/1/25 4:03:00 a. m. | DYNAMIC QTY ADJUST: Old=33 New=33 (Stop moved to 43760.00)
+08:52:07.381 [08:52:07.381] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+08:52:07.382 [08:52:07.382] RISK_DEBUG_ATR: ATR=$3.00 | ScaledRisk=$6.00
+08:52:07.382 [08:52:07.382] RISK_DEBUG_POST: Written=$6.00 | ReadFromFile=$150.00 | Using=$150.00
+08:52:07.383 [08:52:07.383] QTY_DEBUG: Risk=$150.00 | SL_Ticks=9.21 | TickVal=$0.50 | CalcQty=32.57 | MaxQty=100 | MinQty=2
+08:52:07.731 [08:52:07.731] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+08:52:07.733 [08:52:07.733] RISK_DEBUG_ATR: ATR=$2.93 | ScaledRisk=$5.86
+08:52:07.733 [08:52:07.733] RISK_DEBUG_POST: Written=$5.86 | ReadFromFile=$150.00 | Using=$150.00
+08:52:07.734 [08:52:07.734] QTY_DEBUG: Risk=$150.00 | SL_Ticks=10.23 | TickVal=$0.50 | CalcQty=29.33 | MaxQty=100 | MinQty=2
+08:52:07.734 [08:52:07.734] 20/1/25 4:04:00 a. m. | DYNAMIC QTY ADJUST: Old=29 New=29 (Stop moved to 43760.00)
+08:52:08.001 [08:52:08.001] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+08:52:08.002 [08:52:08.002] RISK_DEBUG_ATR: ATR=$3.07 | ScaledRisk=$6.14
+08:52:08.002 [08:52:08.002] RISK_DEBUG_POST: Written=$6.14 | ReadFromFile=$150.00 | Using=$150.00
+08:52:08.003 [08:52:08.003] QTY_DEBUG: Risk=$150.00 | SL_Ticks=10.96 | TickVal=$0.50 | CalcQty=27.37 | MaxQty=100 | MinQty=2
+08:52:08.004 [08:52:08.004] 20/1/25 4:04:00 a. m. | DYNAMIC QTY ADJUST: Old=27 New=27 (Stop moved to 43760.00)
+08:52:08.363 [08:52:08.363] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+08:52:08.363 [08:52:08.363] RISK_DEBUG_ATR: ATR=$3.07 | ScaledRisk=$6.14
+08:52:08.363 [08:52:08.363] RISK_DEBUG_POST: Written=$6.14 | ReadFromFile=$150.00 | Using=$150.00
+08:52:08.363 [08:52:08.363] QTY_DEBUG: Risk=$150.00 | SL_Ticks=11.34 | TickVal=$0.50 | CalcQty=26.46 | MaxQty=100 | MinQty=2
+08:52:08.364 [08:52:08.364] 20/1/25 4:04:00 a. m. | DYNAMIC QTY ADJUST: Old=26 New=26 (Stop moved to 43760.00)
+08:52:08.650 [08:52:08.650] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+08:52:08.650 [08:52:08.650] RISK_DEBUG_ATR: ATR=$3.07 | ScaledRisk=$6.14
+08:52:08.650 [08:52:08.650] RISK_DEBUG_POST: Written=$6.14 | ReadFromFile=$150.00 | Using=$150.00
+08:52:08.650 [08:52:08.650] QTY_DEBUG: Risk=$150.00 | SL_Ticks=11.71 | TickVal=$0.50 | CalcQty=25.63 | MaxQty=100 | MinQty=2
+08:52:08.930 [08:52:08.930] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+08:52:08.930 [08:52:08.930] RISK_DEBUG_ATR: ATR=$2.99 | ScaledRisk=$5.98
+08:52:08.930 [08:52:08.930] RISK_DEBUG_POST: Written=$5.98 | ReadFromFile=$150.00 | Using=$150.00
+08:52:08.935 [08:52:08.935] QTY_DEBUG: Risk=$150.00 | SL_Ticks=11.80 | TickVal=$0.50 | CalcQty=25.43 | MaxQty=100 | MinQty=2
+08:52:08.937 [08:52:08.937] 20/1/25 4:05:00 a. m. | DYNAMIC QTY ADJUST: Old=25 New=25 (Stop moved to 43760.00)
+08:52:09.200 [08:52:09.200] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+08:52:09.200 [08:52:09.200] RISK_DEBUG_ATR: ATR=$3.06 | ScaledRisk=$6.13
+08:52:09.201 [08:52:09.201] RISK_DEBUG_POST: Written=$6.13 | ReadFromFile=$150.00 | Using=$150.00
+08:52:09.201 [08:52:09.201] QTY_DEBUG: Risk=$150.00 | SL_Ticks=11.87 | TickVal=$0.50 | CalcQty=25.27 | MaxQty=100 | MinQty=2
+08:52:14.700 [08:52:14.700] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+08:52:14.701 [08:52:14.701] RISK_DEBUG_ATR: ATR=$3.17 | ScaledRisk=$6.34
+08:52:14.701 [08:52:14.701] RISK_DEBUG_POST: Written=$6.34 | ReadFromFile=$150.00 | Using=$150.00
+08:52:14.702 [08:52:14.702] QTY_DEBUG: Risk=$150.00 | SL_Ticks=11.95 | TickVal=$0.50 | CalcQty=25.10 | MaxQty=100 | MinQty=2
+08:52:16.594 [08:52:16.594] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+08:52:16.597 [08:52:16.597] RISK_DEBUG_ATR: ATR=$3.17 | ScaledRisk=$6.34
+08:52:16.597 [08:52:16.597] RISK_DEBUG_POST: Written=$6.34 | ReadFromFile=$150.00 | Using=$150.00
+08:52:16.597 [08:52:16.597] QTY_DEBUG: Risk=$150.00 | SL_Ticks=11.97 | TickVal=$0.50 | CalcQty=25.06 | MaxQty=100 | MinQty=2
+08:52:16.871 [08:52:16.871] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+08:52:16.875 [08:52:16.875] RISK_DEBUG_ATR: ATR=$3.25 | ScaledRisk=$6.51
+08:52:16.876 [08:52:16.876] RISK_DEBUG_POST: Written=$6.51 | ReadFromFile=$150.00 | Using=$150.00
+08:52:16.876 [08:52:16.876] QTY_DEBUG: Risk=$150.00 | SL_Ticks=12.24 | TickVal=$0.50 | CalcQty=24.52 | MaxQty=100 | MinQty=2
+08:52:17.151 [08:52:17.151] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+08:52:17.151 [08:52:17.151] RISK_DEBUG_ATR: ATR=$3.32 | ScaledRisk=$6.65
+08:52:17.152 [08:52:17.152] RISK_DEBUG_POST: Written=$6.65 | ReadFromFile=$150.00 | Using=$150.00
+08:52:17.152 [08:52:17.152] QTY_DEBUG: Risk=$150.00 | SL_Ticks=12.28 | TickVal=$0.50 | CalcQty=24.43 | MaxQty=100 | MinQty=2
+08:52:17.154 [08:52:17.154] 20/1/25 4:06:00 a. m. | DYNAMIC QTY ADJUST: Old=24 New=24 (Stop moved to 43760.00)
+08:52:17.156 [08:52:17.156] NinjaTrader.NinjaScript.TimeSeries Entry Filled (EntryA+_Short_01) Qty=3. State -> PositionActive. TradeOriginalQty=3
+08:52:17.163 [08:52:17.163] 20/1/25 4:06:00 a. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:52:17.163 [08:52:17.163] PROTECTION_RESET: Cleared order references for new trade
+08:52:17.383 [08:52:17.383] NinjaTrader.NinjaScript.TimeSeries DELTA CAPTURE: Entry Delta=0 Direction=1
+08:52:17.384 [08:52:17.384] DIAG_EXEC: Name=EntryA+_Short_01 Qty=3 | Position.MP=Short Arg.MP=Short | State=PositionActive
+08:52:17.384 [08:52:17.384] ==========================================================================================
+08:52:17.384 [08:52:17.384]    TRADE START: #1 | Short | 20/1/25 4:06:00 a. m. | Price: 43748
+08:52:17.384 [08:52:17.384] ==========================================================================================
+08:52:17.385 [08:52:17.385] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Short @ 43748
+08:52:17.385 [08:52:17.385] 20/1/25 4:06:00 a. m. PHANTOM PROTECTION BLOCKED: Strategy shows position but Account has 0. Skipping EnsureProtection.
+08:52:17.388 [08:52:17.388] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Short_01) Qty=8. New TradeOriginalQty=11
+08:52:17.389 [08:52:17.389] DIAG_EXEC: Name=EntryA+_Short_01 Qty=8 | Position.MP=Short Arg.MP=Short | State=PositionActive
+08:52:17.389 [08:52:17.389] ==========================================================================================
+08:52:17.390 [08:52:17.390]    TRADE START: #1 | Short | 20/1/25 4:06:00 a. m. | Price: 43748
+08:52:17.390 [08:52:17.390] ==========================================================================================
+08:52:17.391 [08:52:17.391] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Short @ 43748
+08:52:17.392 [08:52:17.392] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Short FilledQty=8 Position.Qty=11 Position.MarketPosition=Short
+08:52:17.392 [08:52:17.392] 20/1/25 4:06:00 a. m. TRADE VWAP: Initialized (Managed)
+08:52:17.393 [08:52:17.393]    -> Protection Alloc: Filled=8 | ForTP1=6 (Need:6) | ForTP2=2
+08:52:17.393 [08:52:17.393] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=43687.7594363362 | targetGlobalVWAP=43687.7594363362 | avgEntry=43748
+08:52:17.393 [08:52:17.393] 20/1/25 4:06:00 a. m. | SEARCH_OPPOSITE: Looking for 'Asia Low' from SAME DAY as 'Asia High' (RefDate: 2025-01-19)
+08:52:17.394 [08:52:17.394] FORCE TARGET: Using Validated Price: 43625
+08:52:17.394 [08:52:17.394] TP CALC (Short): Entry=43748 | GlobalVWAP=43687.7594363362 | ZoneOpp=43625 (Val=43625) | TP1=43687.7594363362 TP2=43625 | Selected=43688
+08:52:17.394 [08:52:17.394] SL_CREATE_DEBUG (MGR): Instrument=MYM 03-25 Direction=Short Tag=SL_Short_01 Action=BuyToCover Price=43760 Qty=11
+08:52:17.415 [08:52:17.415] SL CREATED: SL_Short_01 @ 43760 Qty=11 Risk=$66.00
+08:52:17.433 [08:52:17.433] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Submitted Price=43688 Qty=6
+08:52:17.433 [08:52:17.433]   -> Updated tp1Order reference (ID=02055fe34a46448e83c20a5ec104fd29)
+08:52:17.434 [08:52:17.434] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=43688 Qty=6
+08:52:17.434 [08:52:17.434]   -> Updated tp1Order reference (ID=02055fe34a46448e83c20a5ec104fd29)
+08:52:17.434 [08:52:17.434] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=43688 Qty=6
+08:52:17.435 [08:52:17.435]   -> Updated tp1Order reference (ID=02055fe34a46448e83c20a5ec104fd29)
+08:52:17.436 [08:52:17.436] TP1 CREATED: TP1_Short_01 @ 43688 Qty=6
+08:52:17.436 [08:52:17.436] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=43687.7594363362 | targetGlobalVWAP=43687.7594363362 | avgEntry=43748
+08:52:17.436 [08:52:17.436] FORCE TARGET: Using Validated Price: 43625
+08:52:17.437 [08:52:17.437] TP CALC (Short): Entry=43748 | GlobalVWAP=43687.7594363362 | ZoneOpp=43625 (Val=43625) | TP1=43687.7594363362 TP2=43625 | Selected=43625
+08:52:17.437 [08:52:17.437] SL SKIPPED: Already created in current entry (duplicate prevention)
+08:52:17.460 [08:52:17.460] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Submitted Price=43625 Qty=2
+08:52:17.460 [08:52:17.460]   -> Updated tp2Order reference (ID=a6d042405fde41709c627de5847fd5aa)
+08:52:17.461 [08:52:17.461] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Accepted Price=43625 Qty=2
+08:52:17.461 [08:52:17.461]   -> Updated tp2Order reference (ID=a6d042405fde41709c627de5847fd5aa)
+08:52:17.462 [08:52:17.462] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Working Price=43625 Qty=2
+08:52:17.462 [08:52:17.462]   -> Updated tp2Order reference (ID=a6d042405fde41709c627de5847fd5aa)
+08:52:17.463 [08:52:17.463] TP2 CREATED: TP2_Short_01 @ 43625 Qty=2
+08:52:17.463 [08:52:17.463] 20/1/25 4:06:00 a. m. EnsureProtection COMPLETE
+08:52:17.467 [08:52:17.467] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Short_01) Qty=9. New TradeOriginalQty=20
+08:52:17.468 [08:52:17.468] DIAG_EXEC: Name=EntryA+_Short_01 Qty=9 | Position.MP=Short Arg.MP=Short | State=PositionActive
+08:52:17.469 [08:52:17.469] ==========================================================================================
+08:52:17.469 [08:52:17.469]    TRADE START: #1 | Short | 20/1/25 4:06:00 a. m. | Price: 43748
+08:52:17.470 [08:52:17.470] ==========================================================================================
+08:52:17.470 [08:52:17.470] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Short @ 43748
+08:52:17.470 [08:52:17.470] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Short FilledQty=9 Position.Qty=20 Position.MarketPosition=Short
+08:52:17.472 [08:52:17.472]    -> Protection Alloc: Filled=9 | ForTP1=4 (Need:4) | ForTP2=5
+08:52:17.472 [08:52:17.472] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=43687.7594363362 | targetGlobalVWAP=43687.7594363362 | avgEntry=43748
+08:52:17.472 [08:52:17.472] FORCE TARGET: Using Validated Price: 43625
+08:52:17.473 [08:52:17.473] TP CALC (Short): Entry=43748 | GlobalVWAP=43687.7594363362 | ZoneOpp=43625 (Val=43625) | TP1=43687.7594363362 TP2=43625 | Selected=43688
+08:52:17.474 [08:52:17.474] SL UPDATE (Partial Fill): Old Qty=11 New Qty=20
+08:52:17.475 [08:52:17.475] TP UPDATE (TP1): Modifying Old Qty=6/Price=43688 -> New Qty=10/Price=43688
+08:52:17.476 [08:52:17.476] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=43688 Qty=6
+08:52:17.476 [08:52:17.476]   -> Updated tp1Order reference (ID=02055fe34a46448e83c20a5ec104fd29)
+08:52:17.477 [08:52:17.477] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=43688 Qty=10
+08:52:17.477 [08:52:17.477]   -> Updated tp1Order reference (ID=02055fe34a46448e83c20a5ec104fd29)
+08:52:17.478 [08:52:17.478] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=43688 Qty=10
+08:52:17.478 [08:52:17.478]   -> Updated tp1Order reference (ID=02055fe34a46448e83c20a5ec104fd29)
+08:52:17.479 [08:52:17.479] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=43688 Qty=10
+08:52:17.480 [08:52:17.480]   -> Updated tp1Order reference (ID=02055fe34a46448e83c20a5ec104fd29)
+08:52:17.480 [08:52:17.480] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=43687.7594363362 | targetGlobalVWAP=43687.7594363362 | avgEntry=43748
+08:52:17.480 [08:52:17.480] FORCE TARGET: Using Validated Price: 43625
+08:52:17.480 [08:52:17.480] TP CALC (Short): Entry=43748 | GlobalVWAP=43687.7594363362 | ZoneOpp=43625 (Val=43625) | TP1=43687.7594363362 TP2=43625 | Selected=43625
+08:52:17.481 [08:52:17.481] SL SKIPPED: Already created in current entry (duplicate prevention)
+08:52:17.481 [08:52:17.481] TP UPDATE (TP2): Modifying Old Qty=2/Price=43625 -> New Qty=7/Price=43625
+08:52:17.481 [08:52:17.481] ORDER_UPDATE_TP: Name='TP2_Short_01' State=ChangePending Price=43625 Qty=2
+08:52:17.483 [08:52:17.483]   -> Updated tp2Order reference (ID=a6d042405fde41709c627de5847fd5aa)
+08:52:17.484 [08:52:17.484] ORDER_UPDATE_TP: Name='TP2_Short_01' State=ChangeSubmitted Price=43625 Qty=7
+08:52:17.484 [08:52:17.484]   -> Updated tp2Order reference (ID=a6d042405fde41709c627de5847fd5aa)
+08:52:17.484 [08:52:17.484] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Accepted Price=43625 Qty=7
+08:52:17.484 [08:52:17.484]   -> Updated tp2Order reference (ID=a6d042405fde41709c627de5847fd5aa)
+08:52:17.486 [08:52:17.486] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Working Price=43625 Qty=7
+08:52:17.486 [08:52:17.486]   -> Updated tp2Order reference (ID=a6d042405fde41709c627de5847fd5aa)
+08:52:17.486 [08:52:17.486] 20/1/25 4:06:00 a. m. EnsureProtection COMPLETE
+08:52:17.488 [08:52:17.488] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Short_01) Qty=2. New TradeOriginalQty=22
+08:52:17.489 [08:52:17.489] DIAG_EXEC: Name=EntryA+_Short_01 Qty=2 | Position.MP=Short Arg.MP=Short | State=PositionActive
+08:52:17.489 [08:52:17.489] ==========================================================================================
+08:52:17.491 [08:52:17.491]    TRADE START: #1 | Short | 20/1/25 4:06:00 a. m. | Price: 43748
+08:52:17.491 [08:52:17.491] ==========================================================================================
+08:52:17.491 [08:52:17.491] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Short @ 43748
+08:52:17.492 [08:52:17.492] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Short FilledQty=2 Position.Qty=22 Position.MarketPosition=Short
+08:52:17.492 [08:52:17.492]    -> Protection Alloc: Filled=2 | ForTP1=1 (Need:1) | ForTP2=1
+08:52:17.493 [08:52:17.493] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=43687.7594363362 | targetGlobalVWAP=43687.7594363362 | avgEntry=43748
+08:52:17.493 [08:52:17.493] FORCE TARGET: Using Validated Price: 43625
+08:52:17.493 [08:52:17.493] TP CALC (Short): Entry=43748 | GlobalVWAP=43687.7594363362 | ZoneOpp=43625 (Val=43625) | TP1=43687.7594363362 TP2=43625 | Selected=43688
+08:52:17.494 [08:52:17.494] SL UPDATE (Partial Fill): Old Qty=20 New Qty=22
+08:52:17.494 [08:52:17.494] TP UPDATE (TP1): Modifying Old Qty=10/Price=43688 -> New Qty=11/Price=43688
+08:52:17.494 [08:52:17.494] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=43688 Qty=10
+08:52:17.496 [08:52:17.496]   -> Updated tp1Order reference (ID=02055fe34a46448e83c20a5ec104fd29)
+08:52:17.497 [08:52:17.497] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=43688 Qty=11
+08:52:17.497 [08:52:17.497]   -> Updated tp1Order reference (ID=02055fe34a46448e83c20a5ec104fd29)
+08:52:17.498 [08:52:17.498] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=43688 Qty=11
+08:52:17.498 [08:52:17.498]   -> Updated tp1Order reference (ID=02055fe34a46448e83c20a5ec104fd29)
+08:52:17.499 [08:52:17.499] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=43688 Qty=11
+08:52:17.499 [08:52:17.499]   -> Updated tp1Order reference (ID=02055fe34a46448e83c20a5ec104fd29)
+08:52:17.499 [08:52:17.499] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=43687.7594363362 | targetGlobalVWAP=43687.7594363362 | avgEntry=43748
+08:52:17.500 [08:52:17.500] FORCE TARGET: Using Validated Price: 43625
+08:52:17.500 [08:52:17.500] TP CALC (Short): Entry=43748 | GlobalVWAP=43687.7594363362 | ZoneOpp=43625 (Val=43625) | TP1=43687.7594363362 TP2=43625 | Selected=43625
+08:52:17.501 [08:52:17.501] SL SKIPPED: Already created in current entry (duplicate prevention)
+08:52:17.501 [08:52:17.501] TP UPDATE (TP2): Modifying Old Qty=7/Price=43625 -> New Qty=8/Price=43625
+08:52:17.501 [08:52:17.501] ORDER_UPDATE_TP: Name='TP2_Short_01' State=ChangePending Price=43625 Qty=7
+08:52:17.502 [08:52:17.502]   -> Updated tp2Order reference (ID=a6d042405fde41709c627de5847fd5aa)
+08:52:17.502 [08:52:17.502] ORDER_UPDATE_TP: Name='TP2_Short_01' State=ChangeSubmitted Price=43625 Qty=8
+08:52:17.502 [08:52:17.502]   -> Updated tp2Order reference (ID=a6d042405fde41709c627de5847fd5aa)
+08:52:17.502 [08:52:17.502] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Accepted Price=43625 Qty=8
+08:52:17.503 [08:52:17.503]   -> Updated tp2Order reference (ID=a6d042405fde41709c627de5847fd5aa)
+08:52:17.503 [08:52:17.503] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Working Price=43625 Qty=8
+08:52:17.504 [08:52:17.504]   -> Updated tp2Order reference (ID=a6d042405fde41709c627de5847fd5aa)
+08:52:17.505 [08:52:17.505] 20/1/25 4:06:00 a. m. EnsureProtection COMPLETE
+08:52:17.506 [08:52:17.506] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Short_01) Qty=1. New TradeOriginalQty=23
+08:52:17.506 [08:52:17.506] DIAG_EXEC: Name=EntryA+_Short_01 Qty=1 | Position.MP=Short Arg.MP=Short | State=PositionActive
+08:52:17.506 [08:52:17.506] ==========================================================================================
+08:52:17.507 [08:52:17.507]    TRADE START: #1 | Short | 20/1/25 4:06:00 a. m. | Price: 43748
+08:52:17.507 [08:52:17.507] ==========================================================================================
+08:52:17.507 [08:52:17.507] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Short @ 43748
+08:52:17.508 [08:52:17.508] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Short FilledQty=1 Position.Qty=23 Position.MarketPosition=Short
+08:52:17.508 [08:52:17.508]    -> Protection Alloc: Filled=1 | ForTP1=1 (Need:1) | ForTP2=0
+08:52:17.509 [08:52:17.509] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=43687.7594363362 | targetGlobalVWAP=43687.7594363362 | avgEntry=43748
+08:52:17.510 [08:52:17.510] FORCE TARGET: Using Validated Price: 43625
+08:52:17.510 [08:52:17.510] TP CALC (Short): Entry=43748 | GlobalVWAP=43687.7594363362 | ZoneOpp=43625 (Val=43625) | TP1=43687.7594363362 TP2=43625 | Selected=43688
+08:52:17.510 [08:52:17.510] SL UPDATE (Partial Fill): Old Qty=22 New Qty=23
+08:52:17.510 [08:52:17.510] TP UPDATE (TP1): Modifying Old Qty=11/Price=43688 -> New Qty=12/Price=43688
+08:52:17.517 [08:52:17.517] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=43688 Qty=11
+08:52:17.517 [08:52:17.517]   -> Updated tp1Order reference (ID=02055fe34a46448e83c20a5ec104fd29)
+08:52:17.518 [08:52:17.518] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=43688 Qty=12
+08:52:17.519 [08:52:17.519]   -> Updated tp1Order reference (ID=02055fe34a46448e83c20a5ec104fd29)
+08:52:17.519 [08:52:17.519] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=43688 Qty=12
+08:52:17.520 [08:52:17.520]   -> Updated tp1Order reference (ID=02055fe34a46448e83c20a5ec104fd29)
+08:52:17.520 [08:52:17.520] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=43688 Qty=12
+08:52:17.520 [08:52:17.520]   -> Updated tp1Order reference (ID=02055fe34a46448e83c20a5ec104fd29)
+08:52:17.522 [08:52:17.522] 20/1/25 4:06:00 a. m. EnsureProtection COMPLETE
+08:52:17.539 [08:52:17.539] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Short_01) Qty=1. New TradeOriginalQty=24
+08:52:17.540 [08:52:17.540] DIAG_EXEC: Name=EntryA+_Short_01 Qty=1 | Position.MP=Short Arg.MP=Short | State=PositionActive
+08:52:17.541 [08:52:17.541] ==========================================================================================
+08:52:17.541 [08:52:17.541]    TRADE START: #1 | Short | 20/1/25 4:06:00 a. m. | Price: 43748
+08:52:17.541 [08:52:17.541] ==========================================================================================
+08:52:17.542 [08:52:17.542] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Short @ 43748
+08:52:17.542 [08:52:17.542] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Short FilledQty=1 Position.Qty=24 Position.MarketPosition=Short
+08:52:17.542 [08:52:17.542]    -> Protection Alloc: Filled=1 | ForTP1=0 (Need:0) | ForTP2=1
+08:52:17.543 [08:52:17.543] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=43687.7594363362 | targetGlobalVWAP=43687.7594363362 | avgEntry=43748
+08:52:17.543 [08:52:17.543] FORCE TARGET: Using Validated Price: 43625
+08:52:17.543 [08:52:17.543] TP CALC (Short): Entry=43748 | GlobalVWAP=43687.7594363362 | ZoneOpp=43625 (Val=43625) | TP1=43687.7594363362 TP2=43625 | Selected=43625
+08:52:17.544 [08:52:17.544] SL UPDATE (Partial Fill): Old Qty=23 New Qty=24
+08:52:17.547 [08:52:17.547] TP UPDATE (TP2): Modifying Old Qty=8/Price=43625 -> New Qty=9/Price=43625
+08:52:17.547 [08:52:17.547] ORDER_UPDATE_TP: Name='TP2_Short_01' State=ChangePending Price=43625 Qty=8
+08:52:17.548 [08:52:17.548]   -> Updated tp2Order reference (ID=a6d042405fde41709c627de5847fd5aa)
+08:52:17.548 [08:52:17.548] ORDER_UPDATE_TP: Name='TP2_Short_01' State=ChangeSubmitted Price=43625 Qty=9
+08:52:17.549 [08:52:17.549]   -> Updated tp2Order reference (ID=a6d042405fde41709c627de5847fd5aa)
+08:52:17.556 [08:52:17.556] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Accepted Price=43625 Qty=9
+08:52:17.556 [08:52:17.556]   -> Updated tp2Order reference (ID=a6d042405fde41709c627de5847fd5aa)
+08:52:17.556 [08:52:17.556] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Working Price=43625 Qty=9
+08:52:17.557 [08:52:17.557]   -> Updated tp2Order reference (ID=a6d042405fde41709c627de5847fd5aa)
+08:52:17.557 [08:52:17.557] 20/1/25 4:06:00 a. m. EnsureProtection COMPLETE
+08:52:17.558 [08:52:17.558] EXEC_FILL_DEBUG: Order=17422124 Name=EntryA+_Short_01 State=Filled Price=43748 | tp1Order=13067854 tp1Name=TP1_Short_01
+08:52:24.352 [08:52:24.352] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=43688 Qty=12
+08:52:24.352 [08:52:24.352]   -> Updated tp1Order reference (ID=02055fe34a46448e83c20a5ec104fd29)
+08:52:24.353 [08:52:24.353] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=43689 Qty=12
+08:52:24.353 [08:52:24.353]   -> Updated tp1Order reference (ID=02055fe34a46448e83c20a5ec104fd29)
+08:52:24.355 [08:52:24.355] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=43689 Qty=12
+08:52:24.355 [08:52:24.355]   -> Updated tp1Order reference (ID=02055fe34a46448e83c20a5ec104fd29)
+08:52:24.356 [08:52:24.356] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=43689 Qty=12
+08:52:24.358 [08:52:24.358]   -> Updated tp1Order reference (ID=02055fe34a46448e83c20a5ec104fd29)
+08:52:25.863 [08:52:25.863] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 closed - SL_Short_01 PnL=-18.00
+08:52:25.864 [08:52:25.864] NinjaTrader.NinjaScript.TimeSeries Partial Execution (SL_Short_01). Position Active. Qty=21
+08:52:25.884 [08:52:25.884] EXEC_FILL_DEBUG: Order=59130 Name=SL_Short_01 State=Filled Price=43760.875 | tp1Order=13067854 tp1Name=TP1_Short_01
+08:52:25.885 [08:52:25.885] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1.2 closed - SL_Short_01 PnL=-136.50
+08:52:25.885 [08:52:25.885] NinjaTrader.NinjaScript.TimeSeries Position Closed (SL_Short_01). Resetting to Idle.
+08:52:25.885 [08:52:25.885] NinjaTrader.NinjaScript.TimeSeries VWAP RETRY: Waiting for price to break 43759.00 for VWAP#2
+08:52:25.886 [08:52:25.886] ORDER_UPDATE_TP: Name='TP1_Short_01' State=CancelPending Price=43689 Qty=12
+08:52:25.886 [08:52:25.886]   -> Updated tp1Order reference (ID=02055fe34a46448e83c20a5ec104fd29)
+08:52:25.888 [08:52:25.888] ORDER_UPDATE_TP: Name='TP1_Short_01' State=CancelSubmitted Price=43689 Qty=12
+08:52:25.888 [08:52:25.888]   -> Updated tp1Order reference (ID=02055fe34a46448e83c20a5ec104fd29)
+08:52:25.918 [08:52:25.918] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Cancelled Price=43689 Qty=12
+08:52:25.918 [08:52:25.918]   -> Updated tp1Order reference (ID=02055fe34a46448e83c20a5ec104fd29)
+08:52:25.918 [08:52:25.918] CLEANUP: Cancelled orphan tp1Order
+08:52:25.919 [08:52:25.919] ORDER_UPDATE_TP: Name='TP2_Short_01' State=CancelPending Price=43625 Qty=9
+08:52:25.919 [08:52:25.919]   -> Updated tp2Order reference (ID=a6d042405fde41709c627de5847fd5aa)
+08:52:25.920 [08:52:25.920] ORDER_UPDATE_TP: Name='TP2_Short_01' State=CancelSubmitted Price=43625 Qty=9
+08:52:25.920 [08:52:25.920]   -> Updated tp2Order reference (ID=a6d042405fde41709c627de5847fd5aa)
+08:52:25.946 [08:52:25.946] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Cancelled Price=43625 Qty=9
+08:52:25.947 [08:52:25.947]   -> Updated tp2Order reference (ID=a6d042405fde41709c627de5847fd5aa)
+08:52:25.948 [08:52:25.948] CLEANUP: Cancelled orphan tp2Order
+08:52:25.949 [08:52:25.949] 13/1/26 8:52:25 a. m. TRADE CLOSED: TR_SHORT at 43748, Exit at 43761, Profit: $-8,40

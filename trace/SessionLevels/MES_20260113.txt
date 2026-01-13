@@ -1,85 +1,119 @@
-08:46:39.132 [08:46:39.130] DEBUG: OnStateChange(DataLoaded) IsUnmanaged = True
-08:46:39.135 [08:46:39.135] DEBUG_CONTEXT: Account = 'Playback101', Context = 'playback'
-08:46:39.191 5/1/25 7:01:00 p. m. CONTROL BUTTONS: Initialized (Bottom Right)
-08:46:39.191 [08:46:39.191] CSV EXPORT: Using existing C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\TradeExports\playback\MES_03-25.csv
-08:46:39.232 [08:46:39.232] 5/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 3/1/25 6:00:00 p. m. NY)
-08:46:39.232 [08:46:39.232] LEVEL SUMMARY: No active levels at week start!
-08:46:39.235 [08:46:39.235] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:39.236 [08:46:39.236] PROTECTION_RESET: Cleared order references for new trade
-08:46:39.236 [08:46:39.236] 5/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:39.236 [08:46:39.236] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:39.237 [08:46:39.237] PROTECTION_RESET: Cleared order references for new trade
-08:46:39.395 [08:46:39.395] DEBUG DATE: Time=6/1/25 10:29:00 a. m. ActualSessionEnd=6/1/25 6:00:00 p. m. (NY=6/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
-08:46:39.573 [08:46:39.573] 6/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:39.574 [08:46:39.574] 6/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:39.574 [08:46:39.574] PROTECTION_RESET: Cleared order references for new trade
-08:46:39.574 [08:46:39.574] 6/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:46:39.575 [08:46:39.575] 6/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:46:39.761 [08:46:39.761] DEBUG DATE: Time=7/1/25 10:29:00 a. m. ActualSessionEnd=7/1/25 6:00:00 p. m. (NY=7/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
-08:46:40.090 [08:46:40.090] 7/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:40.091 [08:46:40.091] 7/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:40.091 [08:46:40.091] PROTECTION_RESET: Cleared order references for new trade
-08:46:40.092 [08:46:40.092] 7/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:46:40.092 [08:46:40.092] 7/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:46:40.467 [08:46:40.467] DEBUG DATE: Time=8/1/25 10:29:00 a. m. ActualSessionEnd=8/1/25 6:00:00 p. m. (NY=8/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
-08:46:40.829 [08:46:40.829] 8/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:40.829 [08:46:40.829] 8/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:40.830 [08:46:40.830] PROTECTION_RESET: Cleared order references for new trade
-08:46:40.832 [08:46:40.832] 8/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:46:40.835 [08:46:40.835] 8/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:46:41.275 [08:46:41.275] DEBUG DATE: Time=9/1/25 10:29:00 a. m. ActualSessionEnd=9/1/25 10:30:00 a. m. (NY=9/1/25 9:30:00 a. m.) IsEarlyClose=True IsFriday=False
-08:46:41.282 [08:46:41.282] 9/1/25 10:30:00 a. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:46:41.282 [08:46:41.282] 9/1/25 10:30:00 a. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:46:41.283 [08:46:41.283] 9/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:41.283 [08:46:41.283] 9/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:41.284 [08:46:41.284] PROTECTION_RESET: Cleared order references for new trade
-08:46:41.906 [08:46:41.906] DEBUG DATE: Time=10/1/25 10:29:00 a. m. ActualSessionEnd=10/1/25 6:00:00 p. m. (NY=10/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
-08:46:42.450 [08:46:42.450] 10/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:42.451 [08:46:42.451] 10/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:42.451 [08:46:42.451] PROTECTION_RESET: Cleared order references for new trade
-08:46:42.452 [08:46:42.452] 10/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:46:42.453 [08:46:42.453] 10/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:46:42.453 [08:46:42.453] 12/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 10/1/25 6:00:00 p. m. NY)
-08:46:42.453 [08:46:42.453] LEVEL SUMMARY (Price=5861):
-08:46:42.454 [08:46:42.454]   USA High @ 6068.25 | Currently BELOW by 829 ticks
-08:46:42.455 [08:46:42.455]   USA High @ 6045.5 | Currently BELOW by 738 ticks
-08:46:42.455 [08:46:42.455]   Europe High @ 5975 | Currently BELOW by 456 ticks
-08:46:42.455 [08:46:42.455]   USA High @ 5971.75 | Currently BELOW by 443 ticks
-08:46:42.456 [08:46:42.456]   Europe High @ 5959.5 | Currently BELOW by 394 ticks
-08:46:42.456 [08:46:42.456]   USA High @ 5921.75 | Currently BELOW by 243 ticks
-08:46:42.457 [08:46:42.457]   USA Low @ 5845 | Currently ABOVE by 64 ticks
-08:46:42.457 [08:46:42.457] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:42.461 [08:46:42.461] PROTECTION_RESET: Cleared order references for new trade
-08:46:42.461 [08:46:42.461] 12/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:42.461 [08:46:42.461] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:42.462 [08:46:42.462] PROTECTION_RESET: Cleared order references for new trade
-08:46:43.209 [08:46:43.209] DEBUG DATE: Time=13/1/25 10:29:00 a. m. ActualSessionEnd=13/1/25 6:00:00 p. m. (NY=13/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
-08:46:43.583 [08:46:43.583] 13/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:43.583 [08:46:43.583] 13/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:43.584 [08:46:43.584] PROTECTION_RESET: Cleared order references for new trade
-08:46:43.585 [08:46:43.585] 13/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:46:43.585 [08:46:43.585] 13/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:46:44.079 [08:46:44.079] DEBUG DATE: Time=14/1/25 10:29:00 a. m. ActualSessionEnd=14/1/25 6:00:00 p. m. (NY=14/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
-08:46:44.421 [08:46:44.421] 14/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:44.422 [08:46:44.422] 14/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:44.423 [08:46:44.423] PROTECTION_RESET: Cleared order references for new trade
-08:46:44.423 [08:46:44.423] 14/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:46:44.423 [08:46:44.423] 14/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:46:44.959 [08:46:44.959] DEBUG DATE: Time=15/1/25 10:29:00 a. m. ActualSessionEnd=15/1/25 6:00:00 p. m. (NY=15/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
-08:46:45.331 [08:46:45.331] 15/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:45.332 [08:46:45.332] 15/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:45.332 [08:46:45.332] PROTECTION_RESET: Cleared order references for new trade
-08:46:45.334 [08:46:45.334] 15/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:46:45.335 [08:46:45.335] 15/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:46:45.960 [08:46:45.960] DEBUG DATE: Time=16/1/25 10:29:00 a. m. ActualSessionEnd=16/1/25 6:00:00 p. m. (NY=16/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
-08:46:46.383 [08:46:46.383] 16/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:46.383 [08:46:46.383] 16/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:46.383 [08:46:46.383] PROTECTION_RESET: Cleared order references for new trade
-08:46:46.384 [08:46:46.384] 16/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:46:46.385 [08:46:46.385] 16/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
-08:46:47.132 [08:46:47.132] DEBUG DATE: Time=17/1/25 10:29:00 a. m. ActualSessionEnd=17/1/25 6:00:00 p. m. (NY=17/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
-08:46:47.581 [08:46:47.581] 17/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
-08:46:47.582 [08:46:47.582] 17/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
-08:46:47.583 [08:46:47.583] PROTECTION_RESET: Cleared order references for new trade
-08:46:47.584 [08:46:47.584] 17/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
-08:46:47.585 [08:46:47.585] 17/1/25 6:00:00 p. m. CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions
+=== MES Strategy Log - Started 2026-01-13 08:48:47 ===
+
+08:48:47.624 [08:48:47.624] DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
+08:48:47.627 [08:48:47.627] DEBUG_RECONNECT: Total Account.Positions count = 0
+08:48:47.637 [08:48:47.637] 19/1/25 7:01:00 p. m. v1.15.8 RESTART EVAL: Checking for pending orders or valid setup to continue...
+08:48:47.637 [08:48:47.637] 19/1/25 7:01:00 p. m. v1.15.8 RESTART: No valid setup found. Starting fresh.
+08:48:47.638 [08:48:47.638] 19/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 17/1/25 6:00:00 p. m. NY)
+08:48:47.638 [08:48:47.638] LEVEL SUMMARY (Price=6032.5):
+08:48:47.639 [08:48:47.639]   USA High @ 6068.25 | Currently BELOW by 143 ticks
+08:48:47.641 [08:48:47.641]   Europe Low @ 5809 | Currently ABOVE by 894 ticks
+08:48:47.642 [08:48:47.642]   USA Low @ 5813 | Currently ABOVE by 878 ticks
+08:48:47.644 [08:48:47.644]   USA Low @ 5842.25 | Currently ABOVE by 761 ticks
+08:48:47.647 [08:48:47.647]   Europe Low @ 5879.5 | Currently ABOVE by 612 ticks
+08:48:47.648 [08:48:47.648]   USA Low @ 5952.5 | Currently ABOVE by 320 ticks
+08:48:47.650 [08:48:47.650]   USA Low @ 5962 | Currently ABOVE by 282 ticks
+08:48:47.652 [08:48:47.652]   Asia Low @ 5968 | Currently ABOVE by 258 ticks
+08:48:47.654 [08:48:47.654]   Europe Low @ 5982.75 | Currently ABOVE by 199 ticks
+08:48:47.655 [08:48:47.655]   USA High @ 6051.75 | Currently BELOW by 77 ticks
+08:48:47.657 [08:48:47.657]   USA Low @ 6012.75 | Currently ABOVE by 79 ticks
+08:48:47.659 [08:48:47.659] 19/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:48:47.661 [08:48:47.661] PROTECTION_RESET: Cleared order references for new trade
+08:48:47.663 [08:48:47.663] 19/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+08:48:47.665 [08:48:47.665] 19/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:48:47.667 [08:48:47.667] PROTECTION_RESET: Cleared order references for new trade
+08:52:21.997 [08:52:21.997] 20/1/25 4:06:00 a. m. ENTRY ATTEMPT #1/20 on Asia High (Deepest Selection)
+08:52:21.997 [08:52:21.997] EXTERNAL LEVEL: Asia High @ 6041.75 (Protected by: Europe High @ 6042)
+08:52:22.136 [08:52:22.136] RE-ANCHOR: New High @ 6042.25 (Setup: Asia High)
+08:52:22.217 [08:52:22.217] RE-ANCHOR: New High @ 6042.5 (Setup: Asia High)
+08:52:22.322 [08:52:22.322] RE-ANCHOR: New High @ 6042.75 (Setup: Asia High)
+08:52:22.402 [08:52:22.402] RE-ANCHOR: New High @ 6043 (Setup: Asia High)
+08:52:23.356 [08:52:23.356] RE-ANCHOR: New High @ 6043.25 (Setup: Asia High)
+08:52:23.366 [08:52:23.366] RE-ANCHOR: New High @ 6043.5 (Setup: Asia High)
+08:52:32.832 [08:52:32.832] 20/1/25 4:15:00 a. m. | SEARCH_OPPOSITE: Looking for 'Asia Low' from SAME DAY as 'Asia High' (RefDate: 2025-01-19)
+08:52:32.832 [08:52:32.832] 20/1/25 4:15:00 a. m. | EXEC_DEBUG: Submitting Short Limit @ 6042.5 (Raw: 6042.50568181818). Bid=6041 Ask=6041.5
+08:52:32.833 [08:52:32.833] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+08:52:32.833 [08:52:32.833] RISK_DEBUG_ATR: ATR=$5.18 | ScaledRisk=$10.36
+08:52:32.834 [08:52:32.834] RISK_DEBUG_POST: Written=$10.36 | ReadFromFile=$150.00 | Using=$150.00
+08:52:32.834 [08:52:32.834] QTY_DEBUG: Risk=$150.00 | SL_Ticks=5.00 | TickVal=$1.25 | CalcQty=24.00 | MaxQty=100 | MinQty=2
+08:52:32.860 [08:52:32.860] 20/1/25 4:15:00 a. m. Order Submitted (Short). Mode=APlusRetrace Type=Limit Qty=24
+08:52:32.860 [08:52:32.860] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+08:52:32.861 [08:52:32.861] RISK_DEBUG_ATR: ATR=$5.18 | ScaledRisk=$10.36
+08:52:32.862 [08:52:32.862] RISK_DEBUG_POST: Written=$10.36 | ReadFromFile=$150.00 | Using=$150.00
+08:52:32.862 [08:52:32.862] QTY_DEBUG: Risk=$150.00 | SL_Ticks=4.98 | TickVal=$1.25 | CalcQty=24.11 | MaxQty=100 | MinQty=2
+08:52:33.158 [08:52:33.158] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+08:52:33.158 [08:52:33.158] RISK_DEBUG_ATR: ATR=$5.36 | ScaledRisk=$10.71
+08:52:33.159 [08:52:33.159] RISK_DEBUG_POST: Written=$10.71 | ReadFromFile=$150.00 | Using=$150.00
+08:52:33.159 [08:52:33.159] QTY_DEBUG: Risk=$150.00 | SL_Ticks=5.08 | TickVal=$1.25 | CalcQty=23.61 | MaxQty=100 | MinQty=2
+08:52:36.797 [08:52:36.797] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+08:52:36.797 [08:52:36.797] RISK_DEBUG_ATR: ATR=$5.45 | ScaledRisk=$10.89
+08:52:36.797 [08:52:36.797] RISK_DEBUG_POST: Written=$10.89 | ReadFromFile=$150.00 | Using=$150.00
+08:52:36.799 [08:52:36.799] QTY_DEBUG: Risk=$150.00 | SL_Ticks=5.17 | TickVal=$1.25 | CalcQty=23.23 | MaxQty=100 | MinQty=2
+08:52:36.800 [08:52:36.800] 20/1/25 4:15:00 a. m. | DYNAMIC QTY ADJUST: Old=23 New=23 (Stop moved to 6043.75)
+08:52:38.182 [08:52:38.182] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+08:52:38.182 [08:52:38.182] RISK_DEBUG_ATR: ATR=$5.45 | ScaledRisk=$10.89
+08:52:38.182 [08:52:38.182] RISK_DEBUG_POST: Written=$10.89 | ReadFromFile=$150.00 | Using=$150.00
+08:52:38.183 [08:52:38.183] QTY_DEBUG: Risk=$150.00 | SL_Ticks=5.19 | TickVal=$1.25 | CalcQty=23.13 | MaxQty=100 | MinQty=2
+08:52:38.519 [08:52:38.519] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+08:52:38.520 [08:52:38.520] RISK_DEBUG_ATR: ATR=$5.24 | ScaledRisk=$10.47
+08:52:38.520 [08:52:38.520] RISK_DEBUG_POST: Written=$10.47 | ReadFromFile=$150.00 | Using=$150.00
+08:52:38.520 [08:52:38.520] QTY_DEBUG: Risk=$150.00 | SL_Ticks=5.25 | TickVal=$1.25 | CalcQty=22.87 | MaxQty=100 | MinQty=2
+08:52:38.774 [08:52:38.774] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+08:52:38.775 [08:52:38.775] RISK_DEBUG_ATR: ATR=$5.59 | ScaledRisk=$11.19
+08:52:38.775 [08:52:38.775] RISK_DEBUG_POST: Written=$11.19 | ReadFromFile=$150.00 | Using=$150.00
+08:52:38.776 [08:52:38.776] QTY_DEBUG: Risk=$150.00 | SL_Ticks=5.61 | TickVal=$1.25 | CalcQty=21.38 | MaxQty=100 | MinQty=2
+08:52:38.777 [08:52:38.777] 20/1/25 4:16:00 a. m. | DYNAMIC QTY ADJUST: Old=21 New=21 (Stop moved to 6043.75)
+08:52:39.029 [08:52:39.029] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+08:52:39.031 [08:52:39.031] RISK_DEBUG_ATR: ATR=$5.68 | ScaledRisk=$11.37
+08:52:39.032 [08:52:39.032] RISK_DEBUG_POST: Written=$11.37 | ReadFromFile=$150.00 | Using=$150.00
+08:52:39.032 [08:52:39.032] QTY_DEBUG: Risk=$150.00 | SL_Ticks=5.77 | TickVal=$1.25 | CalcQty=20.80 | MaxQty=100 | MinQty=2
+09:00:10.893 [09:00:10.893] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+09:00:10.894 [09:00:10.894] RISK_DEBUG_ATR: ATR=$5.37 | ScaledRisk=$10.73
+09:00:10.894 [09:00:10.894] RISK_DEBUG_POST: Written=$10.73 | ReadFromFile=$150.00 | Using=$150.00
+09:00:10.894 [09:00:10.894] QTY_DEBUG: Risk=$150.00 | SL_Ticks=5.89 | TickVal=$1.25 | CalcQty=20.37 | MaxQty=100 | MinQty=2
+09:00:10.896 [09:00:10.896] 20/1/25 4:17:00 a. m. | DYNAMIC QTY ADJUST: Old=20 New=20 (Stop moved to 6043.75)
+09:00:11.154 [09:00:11.154] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+09:00:11.154 [09:00:11.154] RISK_DEBUG_ATR: ATR=$5.54 | ScaledRisk=$11.09
+09:00:11.155 [09:00:11.155] RISK_DEBUG_POST: Written=$11.09 | ReadFromFile=$150.00 | Using=$150.00
+09:00:11.156 [09:00:11.156] QTY_DEBUG: Risk=$150.00 | SL_Ticks=6.09 | TickVal=$1.25 | CalcQty=19.69 | MaxQty=100 | MinQty=2
+09:00:11.421 [09:00:11.421] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+09:00:11.421 [09:00:11.421] RISK_DEBUG_ATR: ATR=$5.63 | ScaledRisk=$11.27
+09:00:11.423 [09:00:11.423] RISK_DEBUG_POST: Written=$11.27 | ReadFromFile=$150.00 | Using=$150.00
+09:00:11.423 [09:00:11.423] QTY_DEBUG: Risk=$150.00 | SL_Ticks=6.18 | TickVal=$1.25 | CalcQty=19.40 | MaxQty=100 | MinQty=2
+09:00:11.425 [09:00:11.425] 20/1/25 4:17:00 a. m. | DYNAMIC QTY ADJUST: Old=19 New=19 (Stop moved to 6043.75)
+09:00:11.806 [09:00:11.806] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+09:00:11.807 [09:00:11.807] RISK_DEBUG_ATR: ATR=$5.81 | ScaledRisk=$11.62
+09:00:11.807 [09:00:11.807] RISK_DEBUG_POST: Written=$11.62 | ReadFromFile=$150.00 | Using=$150.00
+09:00:11.807 [09:00:11.807] QTY_DEBUG: Risk=$150.00 | SL_Ticks=6.80 | TickVal=$1.25 | CalcQty=17.65 | MaxQty=100 | MinQty=2
+09:00:11.808 [09:00:11.808] 20/1/25 4:17:00 a. m. | DYNAMIC QTY ADJUST: Old=18 New=18 (Stop moved to 6043.75)
+09:00:12.100 [09:00:12.100] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+09:00:12.100 [09:00:12.100] RISK_DEBUG_ATR: ATR=$5.90 | ScaledRisk=$11.80
+09:00:12.101 [09:00:12.101] RISK_DEBUG_POST: Written=$11.80 | ReadFromFile=$150.00 | Using=$150.00
+09:00:12.101 [09:00:12.101] QTY_DEBUG: Risk=$150.00 | SL_Ticks=6.86 | TickVal=$1.25 | CalcQty=17.49 | MaxQty=100 | MinQty=2
+09:00:12.102 [09:00:12.102] 20/1/25 4:17:00 a. m. | DYNAMIC QTY ADJUST: Old=17 New=17 (Stop moved to 6043.75)
+09:00:12.361 [09:00:12.361] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+09:00:12.361 [09:00:12.361] RISK_DEBUG_ATR: ATR=$6.17 | ScaledRisk=$12.34
+09:00:12.363 [09:00:12.363] RISK_DEBUG_POST: Written=$12.34 | ReadFromFile=$150.00 | Using=$150.00
+09:00:12.363 [09:00:12.363] QTY_DEBUG: Risk=$150.00 | SL_Ticks=7.40 | TickVal=$1.25 | CalcQty=16.21 | MaxQty=100 | MinQty=2
+09:00:12.370 [09:00:12.370] 20/1/25 4:17:00 a. m. | DYNAMIC QTY ADJUST: Old=16 New=16 (Stop moved to 6043.75)
+09:00:12.613 [09:00:12.613] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+09:00:12.615 [09:00:12.615] RISK_DEBUG_ATR: ATR=$6.17 | ScaledRisk=$12.34
+09:00:12.616 [09:00:12.616] RISK_DEBUG_POST: Written=$12.34 | ReadFromFile=$150.00 | Using=$150.00
+09:00:12.616 [09:00:12.616] QTY_DEBUG: Risk=$150.00 | SL_Ticks=7.51 | TickVal=$1.25 | CalcQty=15.97 | MaxQty=100 | MinQty=2
+09:00:12.882 [09:00:12.882] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+09:00:12.882 [09:00:12.882] RISK_DEBUG_ATR: ATR=$5.91 | ScaledRisk=$11.81
+09:00:12.882 [09:00:12.882] RISK_DEBUG_POST: Written=$11.81 | ReadFromFile=$150.00 | Using=$150.00
+09:00:12.882 [09:00:12.882] QTY_DEBUG: Risk=$150.00 | SL_Ticks=8.28 | TickVal=$1.25 | CalcQty=14.48 | MaxQty=100 | MinQty=2
+09:00:12.888 [09:00:12.888] 20/1/25 4:18:00 a. m. | DYNAMIC QTY ADJUST: Old=14 New=14 (Stop moved to 6043.75)
+09:00:13.181 [09:00:13.181] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+09:00:13.182 [09:00:13.182] RISK_DEBUG_ATR: ATR=$5.91 | ScaledRisk=$11.81
+09:00:13.183 [09:00:13.183] RISK_DEBUG_POST: Written=$11.81 | ReadFromFile=$150.00 | Using=$150.00
+09:00:13.183 [09:00:13.183] QTY_DEBUG: Risk=$150.00 | SL_Ticks=8.29 | TickVal=$1.25 | CalcQty=14.47 | MaxQty=100 | MinQty=2
+09:00:13.434 [09:00:13.434] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+09:00:13.434 [09:00:13.434] RISK_DEBUG_ATR: ATR=$5.74 | ScaledRisk=$11.48
+09:00:13.439 [09:00:13.439] RISK_DEBUG_POST: Written=$11.48 | ReadFromFile=$150.00 | Using=$150.00
+09:00:13.439 [09:00:13.439] QTY_DEBUG: Risk=$150.00 | SL_Ticks=8.44 | TickVal=$1.25 | CalcQty=14.21 | MaxQty=100 | MinQty=2
+09:00:13.707 [09:00:13.707] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+09:00:13.709 [09:00:13.709] RISK_DEBUG_ATR: ATR=$6.10 | ScaledRisk=$12.20
+09:00:13.709 [09:00:13.709] RISK_DEBUG_POST: Written=$12.20 | ReadFromFile=$150.00 | Using=$150.00
+09:00:13.709 [09:00:13.709] QTY_DEBUG: Risk=$150.00 | SL_Ticks=8.63 | TickVal=$1.25 | CalcQty=13.91 | MaxQty=100 | MinQty=2
