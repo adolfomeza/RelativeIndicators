@@ -339,39 +339,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 			    if (tpAlreadyActive)
 			    {
-                    // v1.15.9: CANCEL + RECREATE instead of ChangeOrder to prevent NinjaTrader sync issues
-                    // When ChangeOrder is called rapidly during partial fills, NinjaTrader can lose sync
-                    // and create orphan orders with incorrect quantities
+                    // v1.15.10: ALWAYS USE CHANGEORDER - It's more reliable than Cancel+Recreate
+                    // The issue was not ChangeOrder itself, but OnOrderUpdate not updating references properly
                     if (currentTP.Quantity != tpQty || Math.Abs(currentTP.LimitPrice - myTpPrice) > double.Epsilon)
                     {
-				        strategy.Log(string.Format("TP CANCEL+RECREATE ({0}): Old Qty={1}/Price={2} -> New Qty={3}/Price={4}",
-					        myTpTag, currentTP.Quantity, currentTP.LimitPrice, tpQty, myTpPrice));
+				        strategy.Log(string.Format("TP UPDATE ({0}): Old Qty={1}/Price={2} -> New Qty={3}/Price={4} (ID={5})",
+					        myTpTag, currentTP.Quantity, currentTP.LimitPrice, tpQty, myTpPrice, currentTP.Id));
 
-                        // CANCEL existing order first
-                        if (currentTP.OrderState == OrderState.Working || currentTP.OrderState == OrderState.Accepted)
-                        {
-                            strategy.CancelOrderWrapper(currentTP);
-                            strategy.Log(string.Format("TP CANCELLED: {0} (ID={1})", currentTP.Name, currentTP.Id));
-                        }
-
-                        // Clear reference
-                        if (isTp1) strategy.tp1Order = null;
-                        else strategy.tp2Order = null;
-
-                        // RECREATE with new quantity
-                        string tpBase = direction == "Short" ?
-                            (isTp1 ? "TP1_Short" : "TP2_Short") :
-                            (isTp1 ? "TP1_Long" : "TP2_Long");
-                        string tpTag = string.Format("{0}_{1:D2}", tpBase, currentVwapNumber);
-                        OrderAction tpAction = direction == "Short" ? OrderAction.BuyToCover : OrderAction.Sell;
-
-                        if (isTp1) {
-                            strategy.tp1Order = strategy.SubmitOrderUnmanagedWrapper(0, tpAction, OrderType.Limit, tpQty, myTpPrice, 0, "", tpTag);
-                            strategy.Log(string.Format("TP1 RECREATED: {0} @ {1} Qty={2} (ID={3})", tpTag, myTpPrice, tpQty, strategy.tp1Order != null ? strategy.tp1Order.Id : "null"));
-                        } else {
-                            strategy.tp2Order = strategy.SubmitOrderUnmanagedWrapper(0, tpAction, OrderType.Limit, tpQty, myTpPrice, 0, "", tpTag);
-                            strategy.Log(string.Format("TP2 RECREATED: {0} @ {1} Qty={2} (ID={3})", tpTag, myTpPrice, tpQty, strategy.tp2Order != null ? strategy.tp2Order.Id : "null"));
-                        }
+                        strategy.ChangeOrderWrapper(currentTP, tpQty, myTpPrice, 0);
                     }
 			    }
 			    else

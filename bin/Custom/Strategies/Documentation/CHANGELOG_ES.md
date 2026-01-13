@@ -7,6 +7,19 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 ### Agregado
 - **Módulo SL Adaptativo (Supervivencia):** Reemplazo de la lógica de salida de emergencia. Ahora, si el precio salta el Stop Loss durante la entrada, el sistema adapta el SL a `Precio Actual +/- 4 ticks` para asegurar que la orden sea aceptada por NinjaTrader y la posición siga protegida, en lugar de cerrar o fallar.
 
+## [v1.15.10] - 2026-01-13
+### Corregido
+- **Revertido Enfoque Cancel+Recreate a ChangeOrder()**
+  - **Problema Descubierto**: El enfoque Cancel+Recreate de v1.15.9 causaba que las órdenes TP2 desaparecieran completamente (ej. MGC con 15 contratos: SL=15, TP1=8, TP2=ausente). Esto ocurría porque si NinjaTrader no había terminado de procesar la cancelación cuando intentábamos recrear la orden, la nueva orden fallaba y retornaba null.
+  - **Causa Raíz Real**: El problema no es `ChangeOrder()` en sí, sino probablemente cómo `OnOrderUpdate()` actualiza (o no actualiza) las referencias de orden (`tp1Order`/`tp2Order`) cuando los OrderIDs cambian.
+  - **Solución**: Revertido a usar `ChangeOrder()` pero con logging mejorado que incluye OrderID para diagnosticar problemas de sincronización de referencias.
+  - **Próximos Pasos**: Investigar `OnOrderUpdate()` para asegurar que las referencias de orden se actualicen correctamente cuando el estado de orden cambia.
+
+### Técnico
+- Revertido `OrderProtectionManager.cs:340-351` de Cancel+Recreate a `ChangeOrder()`.
+- Agregado OrderID a logs de actualización de TP para facilitar diagnóstico de problemas de sincronización.
+- Este es un enfoque más seguro que Cancel+Recreate, que tenía dependencias de timing frágiles.
+
 ## [v1.15.9] - 2026-01-13
 ### Corregido
 - **Bug Crítico: Órdenes TP con Cantidades Incorrectas en Fills Parciales**
