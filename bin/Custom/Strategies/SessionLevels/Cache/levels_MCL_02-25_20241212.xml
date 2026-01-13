@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfSessionLevel xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SessionLevel>
+    <Name>Asia High</Name>
+    <Price>69.61</Price>
+    <StartTime>2024-12-12T19:00:00</StartTime>
+    <EndTime>2024-12-12T19:02:00</EndTime>
+    <ActualSessionEnd>PT3H</ActualSessionEnd>
+    <MitigationTime>0001-01-01T00:00:00</MitigationTime>
+    <IsResistance>true</IsResistance>
+    <IsMitigated>false</IsMitigated>
+    <Tag>Asia_High_638696232000000000</Tag>
+    <VolSum>16</VolSum>
+    <PvSum>1113.6</PvSum>
+    <JustReset>true</JustReset>
+    <EntryAttempts>0</EntryAttempts>
+  </SessionLevel>
+  <SessionLevel>
+    <Name>Asia Low</Name>
+    <Price>69.58</Price>
+    <StartTime>2024-12-12T19:00:00</StartTime>
+    <EndTime>2024-12-12T19:02:00</EndTime>
+    <ActualSessionEnd>PT3H</ActualSessionEnd>
+    <MitigationTime>0001-01-01T00:00:00</MitigationTime>
+    <IsResistance>false</IsResistance>
+    <IsMitigated>false</IsMitigated>
+    <Tag>Asia_Low_638696232000000000</Tag>
+    <VolSum>16</VolSum>
+    <PvSum>1113.6</PvSum>
+    <JustReset>true</JustReset>
+    <EntryAttempts>0</EntryAttempts>
+  </SessionLevel>
+</ArrayOfSessionLevel>

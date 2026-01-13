@@ -1,0 +1,656 @@
+
+==================================================================
+=== NEW SESSION STARTED: [Playback] - 13/1/26 7:58:09 a. m. ===
+==================================================================
+07:58:09.059 [PLAYBACK] [MNQ] [07:58:09.059] DEBUG: OnStateChange(DataLoaded) IsUnmanaged = True
+07:58:09.074 [PLAYBACK] [MNQ] [07:58:09.074] DEBUG_CONTEXT: Account = 'Playback101', Context = 'playback'
+07:58:09.075 [PLAYBACK] [MNQ] [07:58:09.075] CSV EXPORT: Using existing C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\TradeExports\playback\MNQ_03-25.csv
+07:58:09.075 [PLAYBACK] [MNQ] 5/1/25 7:01:00 p. m. CONTROL BUTTONS: Initialized (Bottom Right)
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:09.101] 5/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 3/1/25 6:00:00 p. m. NY)
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:09.102] LEVEL SUMMARY: No active levels at week start!
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:09.103] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:09.103] PROTECTION_RESET: Cleared order references for new trade
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:09.104] 5/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:09.105] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:09.105] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MNQ] [07:58:09.227] DEBUG DATE: Time=6/1/25 10:29:00 a. m. ActualSessionEnd=6/1/25 6:00:00 p. m. (NY=6/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:09.470] 6/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:09.470] 6/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:09.470] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:09.472] 6/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:09.472] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [07:58:09.631] DEBUG DATE: Time=7/1/25 10:29:00 a. m. ActualSessionEnd=7/1/25 6:00:00 p. m. (NY=7/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:09.998] 7/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:09.998] 7/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:09.999] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:09.999] 7/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:09.999] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [07:58:10.293] DEBUG DATE: Time=8/1/25 10:29:00 a. m. ActualSessionEnd=8/1/25 6:00:00 p. m. (NY=8/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:10.644] 8/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:10.645] 8/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:10.645] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:10.646] 8/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:10.646] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [07:58:10.969] DEBUG DATE: Time=9/1/25 10:29:00 a. m. ActualSessionEnd=9/1/25 10:30:00 a. m. (NY=9/1/25 9:30:00 a. m.) IsEarlyClose=True IsFriday=False
+10:30:00.000 [PLAYBACK] [MNQ] [07:58:10.970] 9/1/25 10:30:00 a. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+10:30:00.000 [PLAYBACK] [MNQ] [07:58:10.972] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:10.972] 9/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:10.973] 9/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:10.973] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MNQ] [07:58:11.409] DEBUG DATE: Time=10/1/25 10:29:00 a. m. ActualSessionEnd=10/1/25 6:00:00 p. m. (NY=10/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:11.904] 10/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:11.905] 10/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:11.907] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:11.908] 10/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:11.908] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:11.909] 12/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 10/1/25 6:00:00 p. m. NY)
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:11.909] LEVEL SUMMARY (Price=20992.25):
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:11.909]   USA High @ 21897 | Currently BELOW by 3619 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:11.909]   USA High @ 21806.25 | Currently BELOW by 3256 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:11.911]   Europe High @ 21448.25 | Currently BELOW by 1824 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:11.911]   USA High @ 21431.5 | Currently BELOW by 1757 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:11.912]   Europe High @ 21372.5 | Currently BELOW by 1521 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:11.912]   USA High @ 21197.25 | Currently BELOW by 820 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:11.912]   USA Low @ 20874.75 | Currently ABOVE by 470 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:11.913] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:11.913] PROTECTION_RESET: Cleared order references for new trade
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:11.913] 12/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:11.914] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [07:58:11.914] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MNQ] [07:58:12.442] DEBUG DATE: Time=13/1/25 10:29:00 a. m. ActualSessionEnd=13/1/25 6:00:00 p. m. (NY=13/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:12.920] 13/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:12.920] 13/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:12.922] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:12.922] 13/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:12.923] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [07:58:13.423] DEBUG DATE: Time=14/1/25 10:29:00 a. m. ActualSessionEnd=14/1/25 6:00:00 p. m. (NY=14/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:13.858] 14/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:13.859] 14/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:13.860] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:13.861] 14/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:13.861] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [07:58:14.383] DEBUG DATE: Time=15/1/25 10:29:00 a. m. ActualSessionEnd=15/1/25 6:00:00 p. m. (NY=15/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:14.913] 15/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:14.915] 15/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:14.915] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:14.916] 15/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:14.917] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [07:58:15.881] DEBUG DATE: Time=16/1/25 10:29:00 a. m. ActualSessionEnd=16/1/25 6:00:00 p. m. (NY=16/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:16.440] 16/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:16.440] 16/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:16.440] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:16.443] 16/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:16.443] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [07:58:17.205] DEBUG DATE: Time=17/1/25 10:29:00 a. m. ActualSessionEnd=17/1/25 6:00:00 p. m. (NY=17/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:17.752] 17/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:17.753] 17/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:17.753] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:17.756] 17/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [07:58:17.756] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+
+==================================================================
+=== NEW SESSION STARTED: [Playback] - 13/1/26 7:59:07 a. m. ===
+==================================================================
+19:01:00.000 [PLAYBACK] [MNQ] [07:59:07.347] DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
+19:01:00.000 [PLAYBACK] [MNQ] [07:59:07.347] DEBUG_RECONNECT: Total Account.Positions count = 0
+19:01:00.000 [PLAYBACK] [MNQ] [07:59:07.352] 19/1/25 7:01:00 p. m. v1.15.6 RESTART EVAL: Checking for pending orders or valid setup to continue...
+19:01:00.000 [PLAYBACK] [MNQ] [07:59:07.353] 19/1/25 7:01:00 p. m. v1.15.6 RESTART: No valid setup found. Starting fresh.
+19:01:00.000 [PLAYBACK] [MNQ] [07:59:07.353] 19/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 17/1/25 6:00:00 p. m. NY)
+19:01:00.000 [PLAYBACK] [MNQ] [07:59:07.353] LEVEL SUMMARY (Price=21601):
+19:01:00.000 [PLAYBACK] [MNQ] [07:59:07.353]   USA High @ 21897 | Currently BELOW by 1184 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [07:59:07.354]   USA High @ 21806.25 | Currently BELOW by 821 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [07:59:07.354]   Europe Low @ 20693.5 | Currently ABOVE by 3630 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [07:59:07.355]   USA Low @ 20701.5 | Currently ABOVE by 3598 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [07:59:07.355]   USA Low @ 20773.25 | Currently ABOVE by 3311 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [07:59:07.356]   Europe Low @ 20908.75 | Currently ABOVE by 2769 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [07:59:07.356]   USA Low @ 21171.75 | Currently ABOVE by 1717 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [07:59:07.356]   Asia Low @ 21208.75 | Currently ABOVE by 1569 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [07:59:07.356]   Europe High @ 21680 | Currently BELOW by 316 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [07:59:07.357]   Europe Low @ 21271.5 | Currently ABOVE by 1318 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [07:59:07.357]   USA High @ 21672.5 | Currently BELOW by 286 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [07:59:07.357]   USA Low @ 21481 | Currently ABOVE by 480 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [07:59:07.358] 19/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [07:59:07.358] PROTECTION_RESET: Cleared order references for new trade
+19:01:00.000 [PLAYBACK] [MNQ] [07:59:07.359] 19/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MNQ] [07:59:07.359] 19/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [07:59:07.360] PROTECTION_RESET: Cleared order references for new trade
+
+==================================================================
+=== NEW SESSION STARTED: [Playback] - 13/1/26 8:17:48 a. m. ===
+==================================================================
+08:17:48.081 [PLAYBACK] [MNQ] [08:17:48.081] DEBUG: OnStateChange(DataLoaded) IsUnmanaged = True
+08:17:48.087 [PLAYBACK] [MNQ] [08:17:48.087] DEBUG_CONTEXT: Account = 'Playback101', Context = 'playback'
+08:17:48.088 [PLAYBACK] [MNQ] [08:17:48.088] CSV EXPORT: Using existing C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\TradeExports\playback\MNQ_03-25.csv
+08:17:48.089 [PLAYBACK] [MNQ] 5/1/25 7:01:00 p. m. CONTROL BUTTONS: Initialized (Bottom Right)
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:48.109] 5/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 3/1/25 6:00:00 p. m. NY)
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:48.109] LEVEL SUMMARY: No active levels at week start!
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:48.109] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:48.110] PROTECTION_RESET: Cleared order references for new trade
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:48.110] 5/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:48.111] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:48.112] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MNQ] [08:17:48.222] DEBUG DATE: Time=6/1/25 10:29:00 a. m. ActualSessionEnd=6/1/25 6:00:00 p. m. (NY=6/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:48.439] 6/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:48.440] 6/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:48.440] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:48.440] 6/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:48.440] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [08:17:48.572] DEBUG DATE: Time=7/1/25 10:29:00 a. m. ActualSessionEnd=7/1/25 6:00:00 p. m. (NY=7/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:48.912] 7/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:48.913] 7/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:48.913] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:48.913] 7/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:48.914] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [08:17:49.185] DEBUG DATE: Time=8/1/25 10:29:00 a. m. ActualSessionEnd=8/1/25 6:00:00 p. m. (NY=8/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:49.539] 8/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:49.542] 8/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:49.542] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:49.543] 8/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:49.544] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [08:17:49.845] DEBUG DATE: Time=9/1/25 10:29:00 a. m. ActualSessionEnd=9/1/25 10:30:00 a. m. (NY=9/1/25 9:30:00 a. m.) IsEarlyClose=True IsFriday=False
+10:30:00.000 [PLAYBACK] [MNQ] [08:17:49.848] 9/1/25 10:30:00 a. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+10:30:00.000 [PLAYBACK] [MNQ] [08:17:49.849] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:49.849] 9/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:49.849] 9/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:49.849] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MNQ] [08:17:50.291] DEBUG DATE: Time=10/1/25 10:29:00 a. m. ActualSessionEnd=10/1/25 6:00:00 p. m. (NY=10/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:50.733] 10/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:50.734] 10/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:50.734] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:50.735] 10/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:50.735] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:50.736] 12/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 10/1/25 6:00:00 p. m. NY)
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:50.736] LEVEL SUMMARY (Price=20992.25):
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:50.736]   USA High @ 21897 | Currently BELOW by 3619 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:50.736]   USA High @ 21806.25 | Currently BELOW by 3256 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:50.737]   Europe High @ 21448.25 | Currently BELOW by 1824 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:50.737]   USA High @ 21431.5 | Currently BELOW by 1757 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:50.737]   Europe High @ 21372.5 | Currently BELOW by 1521 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:50.737]   USA High @ 21197.25 | Currently BELOW by 820 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:50.739]   USA Low @ 20874.75 | Currently ABOVE by 470 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:50.739] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:50.739] PROTECTION_RESET: Cleared order references for new trade
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:50.740] 12/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:50.740] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [08:17:50.740] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MNQ] [08:17:51.135] DEBUG DATE: Time=13/1/25 10:29:00 a. m. ActualSessionEnd=13/1/25 6:00:00 p. m. (NY=13/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:51.478] 13/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:51.479] 13/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:51.479] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:51.479] 13/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:51.479] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [08:17:51.900] DEBUG DATE: Time=14/1/25 10:29:00 a. m. ActualSessionEnd=14/1/25 6:00:00 p. m. (NY=14/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:52.283] 14/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:52.284] 14/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:52.284] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:52.285] 14/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:52.285] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [08:17:52.748] DEBUG DATE: Time=15/1/25 10:29:00 a. m. ActualSessionEnd=15/1/25 6:00:00 p. m. (NY=15/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:53.129] 15/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:53.129] 15/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:53.129] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:53.131] 15/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:53.131] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [08:17:53.681] DEBUG DATE: Time=16/1/25 10:29:00 a. m. ActualSessionEnd=16/1/25 6:00:00 p. m. (NY=16/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:54.118] 16/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:54.119] 16/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:54.119] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:54.120] 16/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:54.121] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [08:17:54.694] DEBUG DATE: Time=17/1/25 10:29:00 a. m. ActualSessionEnd=17/1/25 6:00:00 p. m. (NY=17/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:55.108] 17/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:55.108] 17/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:55.109] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:55.110] 17/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:17:55.110] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+
+==================================================================
+=== NEW SESSION STARTED: [Playback] - 13/1/26 8:19:06 a. m. ===
+==================================================================
+08:19:06.532 [PLAYBACK] [MNQ] [08:19:06.532] DEBUG: OnStateChange(DataLoaded) IsUnmanaged = True
+08:19:06.534 [PLAYBACK] [MNQ] [08:19:06.534] DEBUG_CONTEXT: Account = 'Playback101', Context = 'playback'
+08:19:06.534 [PLAYBACK] [MNQ] [08:19:06.534] CSV EXPORT: Using existing C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\TradeExports\playback\MNQ_03-25.csv
+08:19:06.534 [PLAYBACK] [MNQ] 5/1/25 7:01:00 p. m. CONTROL BUTTONS: Initialized (Bottom Right)
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:06.551] 5/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 3/1/25 6:00:00 p. m. NY)
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:06.551] LEVEL SUMMARY: No active levels at week start!
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:06.552] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:06.552] PROTECTION_RESET: Cleared order references for new trade
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:06.553] 5/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:06.553] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:06.553] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MNQ] [08:19:06.658] DEBUG DATE: Time=6/1/25 10:29:00 a. m. ActualSessionEnd=6/1/25 6:00:00 p. m. (NY=6/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:06.877] 6/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:06.877] 6/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:06.879] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:06.881] 6/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:06.881] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [08:19:07.015] DEBUG DATE: Time=7/1/25 10:29:00 a. m. ActualSessionEnd=7/1/25 6:00:00 p. m. (NY=7/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:07.331] 7/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:07.331] 7/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:07.332] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:07.333] 7/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:07.333] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [08:19:07.585] DEBUG DATE: Time=8/1/25 10:29:00 a. m. ActualSessionEnd=8/1/25 6:00:00 p. m. (NY=8/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:07.922] 8/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:07.923] 8/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:07.923] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:07.923] 8/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:07.924] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [08:19:08.216] DEBUG DATE: Time=9/1/25 10:29:00 a. m. ActualSessionEnd=9/1/25 10:30:00 a. m. (NY=9/1/25 9:30:00 a. m.) IsEarlyClose=True IsFriday=False
+10:30:00.000 [PLAYBACK] [MNQ] [08:19:08.217] 9/1/25 10:30:00 a. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+10:30:00.000 [PLAYBACK] [MNQ] [08:19:08.217] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:08.219] 9/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:08.219] 9/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:08.219] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MNQ] [08:19:08.629] DEBUG DATE: Time=10/1/25 10:29:00 a. m. ActualSessionEnd=10/1/25 6:00:00 p. m. (NY=10/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:09.053] 10/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:09.054] 10/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:09.054] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:09.055] 10/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:09.055] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:09.056] 12/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 10/1/25 6:00:00 p. m. NY)
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:09.056] LEVEL SUMMARY (Price=20992.25):
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:09.056]   USA High @ 21897 | Currently BELOW by 3619 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:09.056]   USA High @ 21806.25 | Currently BELOW by 3256 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:09.058]   Europe High @ 21448.25 | Currently BELOW by 1824 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:09.058]   USA High @ 21431.5 | Currently BELOW by 1757 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:09.058]   Europe High @ 21372.5 | Currently BELOW by 1521 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:09.058]   USA High @ 21197.25 | Currently BELOW by 820 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:09.058]   USA Low @ 20874.75 | Currently ABOVE by 470 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:09.059] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:09.059] PROTECTION_RESET: Cleared order references for new trade
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:09.059] 12/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:09.060] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:09.060] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MNQ] [08:19:09.447] DEBUG DATE: Time=13/1/25 10:29:00 a. m. ActualSessionEnd=13/1/25 6:00:00 p. m. (NY=13/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:09.794] 13/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:09.795] 13/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:09.795] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:09.796] 13/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:09.796] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [08:19:10.218] DEBUG DATE: Time=14/1/25 10:29:00 a. m. ActualSessionEnd=14/1/25 6:00:00 p. m. (NY=14/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:10.599] 14/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:10.599] 14/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:10.599] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:10.600] 14/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:10.600] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [08:19:11.055] DEBUG DATE: Time=15/1/25 10:29:00 a. m. ActualSessionEnd=15/1/25 6:00:00 p. m. (NY=15/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:11.434] 15/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:11.435] 15/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:11.435] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:11.435] 15/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:11.436] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [08:19:11.977] DEBUG DATE: Time=16/1/25 10:29:00 a. m. ActualSessionEnd=16/1/25 6:00:00 p. m. (NY=16/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:12.407] 16/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:12.408] 16/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:12.409] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:12.411] 16/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:12.411] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [08:19:12.994] DEBUG DATE: Time=17/1/25 10:29:00 a. m. ActualSessionEnd=17/1/25 6:00:00 p. m. (NY=17/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:13.414] 17/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:13.414] 17/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:13.414] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:13.415] 17/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:19:13.416] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+
+==================================================================
+=== NEW SESSION STARTED: [Playback] - 13/1/26 8:19:17 a. m. ===
+==================================================================
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:17.649] DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:17.650] DEBUG_RECONNECT: Total Account.Positions count = 0
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:17.657] 19/1/25 7:01:00 p. m. v1.15.6 RESTART EVAL: Checking for pending orders or valid setup to continue...
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:17.660] 19/1/25 7:01:00 p. m. v1.15.6 RESTART: No valid setup found. Starting fresh.
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:17.662] 19/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 17/1/25 6:00:00 p. m. NY)
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:17.662] LEVEL SUMMARY (Price=21601):
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:17.664]   USA High @ 21897 | Currently BELOW by 1184 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:17.665]   USA High @ 21806.25 | Currently BELOW by 821 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:17.667]   Europe Low @ 20693.5 | Currently ABOVE by 3630 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:17.669]   USA Low @ 20701.5 | Currently ABOVE by 3598 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:17.670]   USA Low @ 20773.25 | Currently ABOVE by 3311 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:17.672]   Europe Low @ 20908.75 | Currently ABOVE by 2769 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:17.672]   USA Low @ 21171.75 | Currently ABOVE by 1717 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:17.675]   Asia Low @ 21208.75 | Currently ABOVE by 1569 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:17.677]   Europe High @ 21680 | Currently BELOW by 316 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:17.679]   Europe Low @ 21271.5 | Currently ABOVE by 1318 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:17.679]   USA High @ 21672.5 | Currently BELOW by 286 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:17.681]   USA Low @ 21481 | Currently ABOVE by 480 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:17.684] 19/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:17.685] PROTECTION_RESET: Cleared order references for new trade
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:17.686] 19/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:17.687] 19/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [08:19:17.687] PROTECTION_RESET: Cleared order references for new trade
+04:06:00.000 [PLAYBACK] [MNQ] [08:24:54.223] 20/1/25 4:06:00 a. m. ENTRY ATTEMPT #1/20 on Asia High (Deepest Selection)
+04:06:00.000 [PLAYBACK] [MNQ] [08:24:54.223] EXTERNAL LEVEL (Previous Day): Asia High @ 21631.25 (Date: 01/19)
+04:06:00.000 [PLAYBACK] [MNQ] [08:24:54.231] RE-ANCHOR: New High @ 21631.75 (Setup: Asia High)
+04:06:00.000 [PLAYBACK] [MNQ] [08:24:54.236] RE-ANCHOR: New High @ 21632 (Setup: Asia High)
+04:06:00.000 [PLAYBACK] [MNQ] [08:24:54.248] RE-ANCHOR: New High @ 21632.25 (Setup: Asia High)
+04:06:00.000 [PLAYBACK] [MNQ] [08:24:54.256] RE-ANCHOR: New High @ 21632.5 (Setup: Asia High)
+04:06:00.000 [PLAYBACK] [MNQ] [08:24:54.286] RE-ANCHOR: New High @ 21632.75 (Setup: Asia High)
+04:06:00.000 [PLAYBACK] [MNQ] [08:24:54.289] RE-ANCHOR: New High @ 21633 (Setup: Asia High)
+04:06:00.000 [PLAYBACK] [MNQ] [08:24:54.345] RE-ANCHOR: New High @ 21633.25 (Setup: Asia High)
+04:06:00.000 [PLAYBACK] [MNQ] [08:24:54.350] RE-ANCHOR: New High @ 21633.5 (Setup: Asia High)
+04:07:00.000 [PLAYBACK] [MNQ] [08:24:54.403] RE-ANCHOR: New High @ 21633.75 (Setup: Asia High)
+04:07:00.000 [PLAYBACK] [MNQ] [08:24:54.409] RE-ANCHOR: New High @ 21634 (Setup: Asia High)
+04:07:00.000 [PLAYBACK] [MNQ] [08:24:54.413] RE-ANCHOR: New High @ 21634.25 (Setup: Asia High)
+04:07:00.000 [PLAYBACK] [MNQ] [08:24:54.417] RE-ANCHOR: New High @ 21634.5 (Setup: Asia High)
+04:07:00.000 [PLAYBACK] [MNQ] [08:24:54.418] RE-ANCHOR: New High @ 21634.75 (Setup: Asia High)
+04:07:00.000 [PLAYBACK] [MNQ] [08:24:54.434] RE-ANCHOR: New High @ 21635 (Setup: Asia High)
+04:07:00.000 [PLAYBACK] [MNQ] [08:24:54.461] RE-ANCHOR: New High @ 21635.25 (Setup: Asia High)
+04:07:00.000 [PLAYBACK] [MNQ] [08:24:54.467] RE-ANCHOR: New High @ 21635.5 (Setup: Asia High)
+04:07:00.000 [PLAYBACK] [MNQ] [08:24:54.471] RE-ANCHOR: New High @ 21635.75 (Setup: Asia High)
+04:07:00.000 [PLAYBACK] [MNQ] [08:24:54.621] RE-ANCHOR: New High @ 21636 (Setup: Asia High)
+04:07:00.000 [PLAYBACK] [MNQ] [08:24:54.673] RE-ANCHOR: New High @ 21636.25 (Setup: Asia High)
+04:07:00.000 [PLAYBACK] [MNQ] [08:24:54.727] RE-ANCHOR: New High @ 21636.5 (Setup: Asia High)
+04:07:00.000 [PLAYBACK] [MNQ] [08:24:54.730] RE-ANCHOR: New High @ 21636.75 (Setup: Asia High)
+04:07:00.000 [PLAYBACK] [MNQ] [08:24:54.768] RE-ANCHOR: New High @ 21637 (Setup: Asia High)
+04:07:00.000 [PLAYBACK] [MNQ] [08:24:55.117] RE-ANCHOR: New High @ 21637.25 (Setup: Asia High)
+04:07:00.000 [PLAYBACK] [MNQ] [08:24:55.123] RE-ANCHOR: New High @ 21637.5 (Setup: Asia High)
+04:08:00.000 [PLAYBACK] [MNQ] [08:24:56.422] RE-ANCHOR: New High @ 21637.75 (Setup: Asia High)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:02.535] 20/1/25 4:15:00 a. m. | SEARCH_OPPOSITE: Looking for 'Asia Low' from SAME DAY as 'Asia High' (RefDate: 2025-01-19)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:02.535] 20/1/25 4:15:00 a. m. | EXEC_DEBUG: Submitting Short Limit @ 21632 (Raw: 21631.9479367528). Bid=21625.5 Ask=21626
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:02.536] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:02.536] RISK_DEBUG_ATR: ATR=$11.53 | ScaledRisk=$23.05
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:02.536] RISK_DEBUG_POST: Written=$23.05 | ReadFromFile=$150.00 | Using=$150.00
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:02.537] QTY_DEBUG: Risk=$150.00 | SL_Ticks=24.00 | TickVal=$0.50 | CalcQty=12.50 | MaxQty=100 | MinQty=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:02.557] 20/1/25 4:15:00 a. m. Order Submitted (Short). Mode=APlusRetrace Type=Limit Qty=12
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:02.557] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:02.557] RISK_DEBUG_ATR: ATR=$11.53 | ScaledRisk=$23.05
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:02.557] RISK_DEBUG_POST: Written=$23.05 | ReadFromFile=$150.00 | Using=$150.00
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:02.557] QTY_DEBUG: Risk=$150.00 | SL_Ticks=24.21 | TickVal=$0.50 | CalcQty=12.39 | MaxQty=100 | MinQty=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:02.871] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:02.871] RISK_DEBUG_ATR: ATR=$11.60 | ScaledRisk=$23.20
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:02.872] RISK_DEBUG_POST: Written=$23.20 | ReadFromFile=$150.00 | Using=$150.00
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:02.873] QTY_DEBUG: Risk=$150.00 | SL_Ticks=24.28 | TickVal=$0.50 | CalcQty=12.36 | MaxQty=100 | MinQty=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:03.123] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:03.123] RISK_DEBUG_ATR: ATR=$11.96 | ScaledRisk=$23.91
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:03.124] RISK_DEBUG_POST: Written=$23.91 | ReadFromFile=$150.00 | Using=$150.00
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:03.124] QTY_DEBUG: Risk=$150.00 | SL_Ticks=24.98 | TickVal=$0.50 | CalcQty=12.01 | MaxQty=100 | MinQty=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:03.384] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:03.385] RISK_DEBUG_ATR: ATR=$12.13 | ScaledRisk=$24.27
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:03.385] RISK_DEBUG_POST: Written=$24.27 | ReadFromFile=$150.00 | Using=$150.00
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:03.385] QTY_DEBUG: Risk=$150.00 | SL_Ticks=25.45 | TickVal=$0.50 | CalcQty=11.79 | MaxQty=100 | MinQty=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:03.637] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:03.637] RISK_DEBUG_ATR: ATR=$12.31 | ScaledRisk=$24.63
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:03.637] RISK_DEBUG_POST: Written=$24.63 | ReadFromFile=$150.00 | Using=$150.00
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:03.637] QTY_DEBUG: Risk=$150.00 | SL_Ticks=25.57 | TickVal=$0.50 | CalcQty=11.73 | MaxQty=100 | MinQty=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:03.888] RISK_DEBUG_PRE: UseATR=True | InitialRisk=$150.00 | ATRFactor=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:03.888] RISK_DEBUG_ATR: ATR=$12.31 | ScaledRisk=$24.63
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:03.888] RISK_DEBUG_POST: Written=$24.63 | ReadFromFile=$150.00 | Using=$150.00
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:03.888] QTY_DEBUG: Risk=$150.00 | SL_Ticks=25.61 | TickVal=$0.50 | CalcQty=11.71 | MaxQty=100 | MinQty=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:03.959] NinjaTrader.NinjaScript.TimeSeries Entry Filled (EntryA+_Short_01) Qty=4. State -> PositionActive. TradeOriginalQty=4
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:03.960] 20/1/25 4:15:00 a. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:03.960] PROTECTION_RESET: Cleared order references for new trade
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:06.954] NinjaTrader.NinjaScript.TimeSeries DELTA CAPTURE: Entry Delta=0 Direction=1
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:06.955] DIAG_EXEC: Name=EntryA+_Short_01 Qty=4 | Position.MP=Short Arg.MP=Short | State=PositionActive
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:06.955] ==========================================================================================
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:06.955]    TRADE START: #1 | Short | 20/1/25 4:15:00 a. m. | Price: 21631.75
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:06.955] ==========================================================================================
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:06.956] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Short @ 21631.75
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:06.956] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Short FilledQty=4 Position.Qty=4 Position.MarketPosition=Short
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:06.956] 20/1/25 4:15:00 a. m. TRADE VWAP: Initialized (Managed)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:06.956]    -> Protection Alloc: Filled=4 | ForTP1=2 (Need:2) | ForTP2=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:06.956] TP_DIAG (Short): IsTradeVwapExtended=False | GetCurrentLowVWAP=21571.5435366295 | targetGlobalVWAP=21571.5435366295 | avgEntry=21631.75
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:06.957] 20/1/25 4:15:00 a. m. | SEARCH_OPPOSITE: Looking for 'Asia Low' from SAME DAY as 'Asia High' (RefDate: 2025-01-19)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:06.957] FORCE TARGET: Using Validated Price: 21527.25
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:06.957] TP CALC: TP1 (VWAP/Dynamic) -> Price=21571.5 (Est. PnL=$241)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:06.958] SL_CREATE_DEBUG (MGR): Instrument=MNQ 03-25 Direction=Short Tag=SL_Short_01 Action=BuyToCover Price=21638 Qty=4
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:06.978] SL CREATED: SL_Short_01 @ 21638 Qty=4 Risk=$50.00
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:06.978] TP1_PRE_CREATE: existingOrder=null protectedQty=0 ForQty=2 SlCreatedThisEntry=True
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.002] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Submitted Price=21571.5 Qty=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.002]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.003] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21571.5 Qty=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.003]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.004] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21571.5 Qty=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.004]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.004] TP1 CREATED: TP1_Short_01 @ 21571.5 Qty=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.004] TP_DIAG (Short): IsTradeVwapExtended=False | GetCurrentLowVWAP=21571.5435366295 | targetGlobalVWAP=21571.5435366295 | avgEntry=21631.75
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.004] FORCE TARGET: Using Validated Price: 21527.25
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.006] TP CALC: TP2 (Level/Static) -> Price=21527.25 (Est. PnL=$418)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.006] SL SKIPPED: Already created in current entry (duplicate prevention)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.006] TP2_PRE_CREATE: existingOrder=null protectedQty=0 ForQty=2 SlCreatedThisEntry=True
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.034] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Submitted Price=21527.25 Qty=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.034]   -> Updated tp2Order reference (ID=ad740f316d2249cea582502b14a37956)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.034] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Accepted Price=21527.25 Qty=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.035]   -> Updated tp2Order reference (ID=ad740f316d2249cea582502b14a37956)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.035] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Working Price=21527.25 Qty=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.036]   -> Updated tp2Order reference (ID=ad740f316d2249cea582502b14a37956)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.037] TP2 CREATED: TP2_Short_01 @ 21527.25 Qty=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.037] 20/1/25 4:15:00 a. m. EnsureProtection COMPLETE
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.037] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Short_01) Qty=4. New TradeOriginalQty=8
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.039] DIAG_EXEC: Name=EntryA+_Short_01 Qty=4 | Position.MP=Short Arg.MP=Short | State=PositionActive
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.039] ==========================================================================================
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.039]    TRADE START: #1 | Short | 20/1/25 4:15:00 a. m. | Price: 21631.75
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.040] ==========================================================================================
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.040] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Short @ 21631.75
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.041] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Short FilledQty=4 Position.Qty=8 Position.MarketPosition=Short
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.041]    -> Protection Alloc: Filled=4 | ForTP1=2 (Need:2) | ForTP2=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.041] TP_DIAG (Short): IsTradeVwapExtended=False | GetCurrentLowVWAP=21571.5435366295 | targetGlobalVWAP=21571.5435366295 | avgEntry=21631.75
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.041] FORCE TARGET: Using Validated Price: 21527.25
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.041] TP CALC: TP1 (VWAP/Dynamic) -> Price=21571.5 (Est. PnL=$241)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.043] SL UPDATE (Partial Fill): Old Qty=4 New Qty=8
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.044] TP UPDATE (TP1): Attempting to modify OrderID=c35d6fb7386a45ba8c54037b6add924c Name='TP1_Short_01' Old Qty=2/Price=21571.5 -> New Qty=4/Price=21571.5
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.044] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21571.5 Qty=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.044]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.045] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21571.5 Qty=4
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.045]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.045] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21571.5 Qty=4
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.047]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.047] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21571.5 Qty=4
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.048]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.048] TP_DIAG (Short): IsTradeVwapExtended=False | GetCurrentLowVWAP=21571.5435366295 | targetGlobalVWAP=21571.5435366295 | avgEntry=21631.75
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.049] FORCE TARGET: Using Validated Price: 21527.25
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.049] TP CALC: TP2 (Level/Static) -> Price=21527.25 (Est. PnL=$418)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.049] SL SKIPPED: Already created in current entry (duplicate prevention)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.050] TP UPDATE (TP2): Attempting to modify OrderID=ad740f316d2249cea582502b14a37956 Name='TP2_Short_01' Old Qty=2/Price=21527.25 -> New Qty=4/Price=21527.25
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.050] ORDER_UPDATE_TP: Name='TP2_Short_01' State=ChangePending Price=21527.25 Qty=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.050]   -> Updated tp2Order reference (ID=ad740f316d2249cea582502b14a37956)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.052] ORDER_UPDATE_TP: Name='TP2_Short_01' State=ChangeSubmitted Price=21527.25 Qty=4
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.052]   -> Updated tp2Order reference (ID=ad740f316d2249cea582502b14a37956)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.053] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Accepted Price=21527.25 Qty=4
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.053]   -> Updated tp2Order reference (ID=ad740f316d2249cea582502b14a37956)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.053] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Working Price=21527.25 Qty=4
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.054]   -> Updated tp2Order reference (ID=ad740f316d2249cea582502b14a37956)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.054] 20/1/25 4:15:00 a. m. EnsureProtection COMPLETE
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.059] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Short_01) Qty=1. New TradeOriginalQty=9
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.059] DIAG_EXEC: Name=EntryA+_Short_01 Qty=1 | Position.MP=Short Arg.MP=Short | State=PositionActive
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.060] ==========================================================================================
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.061]    TRADE START: #1 | Short | 20/1/25 4:15:00 a. m. | Price: 21631.75
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.061] ==========================================================================================
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.061] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Short @ 21631.75
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.062] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Short FilledQty=1 Position.Qty=9 Position.MarketPosition=Short
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.062]    -> Protection Alloc: Filled=1 | ForTP1=1 (Need:1) | ForTP2=0
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.063] TP_DIAG (Short): IsTradeVwapExtended=False | GetCurrentLowVWAP=21571.5435366295 | targetGlobalVWAP=21571.5435366295 | avgEntry=21631.75
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.063] FORCE TARGET: Using Validated Price: 21527.25
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.063] TP CALC: TP1 (VWAP/Dynamic) -> Price=21571.5 (Est. PnL=$121)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.063] SL UPDATE (Partial Fill): Old Qty=8 New Qty=9
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.065] TP UPDATE (TP1): Attempting to modify OrderID=c35d6fb7386a45ba8c54037b6add924c Name='TP1_Short_01' Old Qty=4/Price=21571.5 -> New Qty=5/Price=21571.5
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.066] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21571.5 Qty=4
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.066]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.067] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21571.5 Qty=5
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.067]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.067] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21571.5 Qty=5
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.068]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.069] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21571.5 Qty=5
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.069]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.069] 20/1/25 4:15:00 a. m. EnsureProtection COMPLETE
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.096] NinjaTrader.NinjaScript.TimeSeries Entry Partial Fill (EntryA+_Short_01) Qty=3. New TradeOriginalQty=12
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.096] DIAG_EXEC: Name=EntryA+_Short_01 Qty=3 | Position.MP=Short Arg.MP=Short | State=PositionActive
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.097] ==========================================================================================
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.097]    TRADE START: #1 | Short | 20/1/25 4:15:00 a. m. | Price: 21631.75
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.098] ==========================================================================================
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.098] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Short @ 21631.75
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.099] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Short FilledQty=3 Position.Qty=12 Position.MarketPosition=Short
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.099]    -> Protection Alloc: Filled=3 | ForTP1=1 (Need:1) | ForTP2=2
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.100] TP_DIAG (Short): IsTradeVwapExtended=False | GetCurrentLowVWAP=21571.5435366295 | targetGlobalVWAP=21571.5435366295 | avgEntry=21631.75
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.100] FORCE TARGET: Using Validated Price: 21527.25
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.100] TP CALC: TP1 (VWAP/Dynamic) -> Price=21571.5 (Est. PnL=$121)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.100] SL UPDATE (Partial Fill): Old Qty=9 New Qty=12
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.100] TP UPDATE (TP1): Attempting to modify OrderID=c35d6fb7386a45ba8c54037b6add924c Name='TP1_Short_01' Old Qty=5/Price=21571.5 -> New Qty=6/Price=21571.5
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.102] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21571.5 Qty=5
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.102]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.103] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21571.5 Qty=6
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.103]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.103] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21571.5 Qty=6
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.104]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.104] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21571.5 Qty=6
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.104]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.106] TP_DIAG (Short): IsTradeVwapExtended=False | GetCurrentLowVWAP=21571.5435366295 | targetGlobalVWAP=21571.5435366295 | avgEntry=21631.75
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.106] FORCE TARGET: Using Validated Price: 21527.25
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.106] TP CALC: TP2 (Level/Static) -> Price=21527.25 (Est. PnL=$418)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.106] SL SKIPPED: Already created in current entry (duplicate prevention)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.107] TP UPDATE (TP2): Attempting to modify OrderID=ad740f316d2249cea582502b14a37956 Name='TP2_Short_01' Old Qty=4/Price=21527.25 -> New Qty=6/Price=21527.25
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.107] ORDER_UPDATE_TP: Name='TP2_Short_01' State=ChangePending Price=21527.25 Qty=4
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.107]   -> Updated tp2Order reference (ID=ad740f316d2249cea582502b14a37956)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.108] ORDER_UPDATE_TP: Name='TP2_Short_01' State=ChangeSubmitted Price=21527.25 Qty=6
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.108]   -> Updated tp2Order reference (ID=ad740f316d2249cea582502b14a37956)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.110] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Accepted Price=21527.25 Qty=6
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.110]   -> Updated tp2Order reference (ID=ad740f316d2249cea582502b14a37956)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.110] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Working Price=21527.25 Qty=6
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.110]   -> Updated tp2Order reference (ID=ad740f316d2249cea582502b14a37956)
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.110] 20/1/25 4:15:00 a. m. EnsureProtection COMPLETE
+04:15:00.000 [PLAYBACK] [MNQ] [08:25:07.112] EXEC_FILL_DEBUG: Order=39993852 Name=EntryA+_Short_01 State=Filled Price=21631.75 | tp1Order=43231532 tp1Name=TP1_Short_01
+04:16:00.000 [PLAYBACK] [MNQ] [08:25:10.087] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21571.5 Qty=6
+04:16:00.000 [PLAYBACK] [MNQ] [08:25:10.087]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:16:00.000 [PLAYBACK] [MNQ] [08:25:10.087] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21571.75 Qty=6
+04:16:00.000 [PLAYBACK] [MNQ] [08:25:10.089]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:16:00.000 [PLAYBACK] [MNQ] [08:25:10.089] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21571.75 Qty=6
+04:16:00.000 [PLAYBACK] [MNQ] [08:25:10.089]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:16:00.000 [PLAYBACK] [MNQ] [08:25:10.089] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21571.75 Qty=6
+04:16:00.000 [PLAYBACK] [MNQ] [08:25:10.090]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:17:00.000 [PLAYBACK] [MNQ] [08:25:12.239] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21571.75 Qty=6
+04:17:00.000 [PLAYBACK] [MNQ] [08:25:12.239]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:17:00.000 [PLAYBACK] [MNQ] [08:25:12.240] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21572 Qty=6
+04:17:00.000 [PLAYBACK] [MNQ] [08:25:12.240]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:17:00.000 [PLAYBACK] [MNQ] [08:25:12.241] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21572 Qty=6
+04:17:00.000 [PLAYBACK] [MNQ] [08:25:12.241]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:17:00.000 [PLAYBACK] [MNQ] [08:25:12.241] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21572 Qty=6
+04:17:00.000 [PLAYBACK] [MNQ] [08:25:12.242]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:18:00.000 [PLAYBACK] [MNQ] [08:25:14.066] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21572 Qty=6
+04:18:00.000 [PLAYBACK] [MNQ] [08:25:14.066]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:18:00.000 [PLAYBACK] [MNQ] [08:25:14.066] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21572.25 Qty=6
+04:18:00.000 [PLAYBACK] [MNQ] [08:25:14.067]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:18:00.000 [PLAYBACK] [MNQ] [08:25:14.067] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21572.25 Qty=6
+04:18:00.000 [PLAYBACK] [MNQ] [08:25:14.068]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:18:00.000 [PLAYBACK] [MNQ] [08:25:14.068] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21572.25 Qty=6
+04:18:00.000 [PLAYBACK] [MNQ] [08:25:14.069]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:19:00.000 [PLAYBACK] [MNQ] [08:25:16.028] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21572.25 Qty=6
+04:19:00.000 [PLAYBACK] [MNQ] [08:25:16.028]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:19:00.000 [PLAYBACK] [MNQ] [08:25:16.029] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21572.5 Qty=6
+04:19:00.000 [PLAYBACK] [MNQ] [08:25:16.030]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:19:00.000 [PLAYBACK] [MNQ] [08:25:16.031] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21572.5 Qty=6
+04:19:00.000 [PLAYBACK] [MNQ] [08:25:16.031]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:19:00.000 [PLAYBACK] [MNQ] [08:25:16.031] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21572.5 Qty=6
+04:19:00.000 [PLAYBACK] [MNQ] [08:25:16.032]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:21:00.000 [PLAYBACK] [MNQ] [08:25:17.332] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21572.5 Qty=6
+04:21:00.000 [PLAYBACK] [MNQ] [08:25:17.332]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:21:00.000 [PLAYBACK] [MNQ] [08:25:17.332] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21572.75 Qty=6
+04:21:00.000 [PLAYBACK] [MNQ] [08:25:17.334]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:21:00.000 [PLAYBACK] [MNQ] [08:25:17.334] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21572.75 Qty=6
+04:21:00.000 [PLAYBACK] [MNQ] [08:25:17.335]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:21:00.000 [PLAYBACK] [MNQ] [08:25:17.335] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21572.75 Qty=6
+04:21:00.000 [PLAYBACK] [MNQ] [08:25:17.336]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:23:00.000 [PLAYBACK] [MNQ] [08:25:19.028] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21572.75 Qty=6
+04:23:00.000 [PLAYBACK] [MNQ] [08:25:19.029]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:23:00.000 [PLAYBACK] [MNQ] [08:25:19.030] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21573 Qty=6
+04:23:00.000 [PLAYBACK] [MNQ] [08:25:19.030]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:23:00.000 [PLAYBACK] [MNQ] [08:25:19.031] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21573 Qty=6
+04:23:00.000 [PLAYBACK] [MNQ] [08:25:19.031]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:23:00.000 [PLAYBACK] [MNQ] [08:25:19.032] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21573 Qty=6
+04:23:00.000 [PLAYBACK] [MNQ] [08:25:19.032]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:25:00.000 [PLAYBACK] [MNQ] [08:25:20.313] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangePending Price=21573 Qty=6
+04:25:00.000 [PLAYBACK] [MNQ] [08:25:20.313]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:25:00.000 [PLAYBACK] [MNQ] [08:25:20.314] ORDER_UPDATE_TP: Name='TP1_Short_01' State=ChangeSubmitted Price=21573.25 Qty=6
+04:25:00.000 [PLAYBACK] [MNQ] [08:25:20.315]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:25:00.000 [PLAYBACK] [MNQ] [08:25:20.316] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=21573.25 Qty=6
+04:25:00.000 [PLAYBACK] [MNQ] [08:25:20.316]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+04:25:00.000 [PLAYBACK] [MNQ] [08:25:20.317] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=21573.25 Qty=6
+04:25:00.000 [PLAYBACK] [MNQ] [08:25:20.317]   -> Updated tp1Order reference (ID=c35d6fb7386a45ba8c54037b6add924c)
+
+==================================================================
+=== NEW SESSION STARTED: [Playback] - 13/1/26 8:38:33 a. m. ===
+==================================================================
+08:38:33.056 [PLAYBACK] [MNQ] [08:38:33.056] DEBUG: OnStateChange(DataLoaded) IsUnmanaged = True
+08:38:33.080 [PLAYBACK] [MNQ] [08:38:33.080] DEBUG_CONTEXT: Account = 'Playback101', Context = 'playback'
+08:38:33.081 [PLAYBACK] [MNQ] [08:38:33.081] CSV EXPORT: Using existing C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\TradeExports\playback\MNQ_03-25.csv
+08:38:33.081 [PLAYBACK] [MNQ] 5/1/25 7:01:00 p. m. CONTROL BUTTONS: Initialized (Bottom Right)
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:33.106] 5/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 3/1/25 6:00:00 p. m. NY)
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:33.106] LEVEL SUMMARY: No active levels at week start!
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:33.107] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:33.107] PROTECTION_RESET: Cleared order references for new trade
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:33.107] 5/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:33.107] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:33.108] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MNQ] [08:38:33.226] DEBUG DATE: Time=6/1/25 10:29:00 a. m. ActualSessionEnd=6/1/25 6:00:00 p. m. (NY=6/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:33.454] 6/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:33.454] 6/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:33.454] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:33.455] 6/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:33.455] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [08:38:33.589] DEBUG DATE: Time=7/1/25 10:29:00 a. m. ActualSessionEnd=7/1/25 6:00:00 p. m. (NY=7/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:33.910] 7/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:33.912] 7/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:33.912] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:33.912] 7/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:33.913] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [08:38:34.164] DEBUG DATE: Time=8/1/25 10:29:00 a. m. ActualSessionEnd=8/1/25 6:00:00 p. m. (NY=8/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:34.486] 8/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:34.487] 8/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:34.488] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:34.488] 8/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:34.489] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [08:38:34.766] DEBUG DATE: Time=9/1/25 10:29:00 a. m. ActualSessionEnd=9/1/25 10:30:00 a. m. (NY=9/1/25 9:30:00 a. m.) IsEarlyClose=True IsFriday=False
+10:30:00.000 [PLAYBACK] [MNQ] [08:38:34.768] 9/1/25 10:30:00 a. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+10:30:00.000 [PLAYBACK] [MNQ] [08:38:34.768] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:34.768] 9/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:34.769] 9/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:34.770] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MNQ] [08:38:35.180] DEBUG DATE: Time=10/1/25 10:29:00 a. m. ActualSessionEnd=10/1/25 6:00:00 p. m. (NY=10/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:35.571] 10/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:35.571] 10/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:35.572] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:35.572] 10/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:35.573] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:35.573] 12/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 10/1/25 6:00:00 p. m. NY)
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:35.573] LEVEL SUMMARY (Price=20992.25):
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:35.574]   USA High @ 21897 | Currently BELOW by 3619 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:35.574]   USA High @ 21806.25 | Currently BELOW by 3256 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:35.574]   Europe High @ 21448.25 | Currently BELOW by 1824 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:35.575]   USA High @ 21431.5 | Currently BELOW by 1757 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:35.576]   Europe High @ 21372.5 | Currently BELOW by 1521 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:35.576]   USA High @ 21197.25 | Currently BELOW by 820 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:35.576]   USA Low @ 20874.75 | Currently ABOVE by 470 ticks
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:35.577] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:35.577] PROTECTION_RESET: Cleared order references for new trade
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:35.577] 12/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:35.578] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MNQ] [08:38:35.578] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MNQ] [08:38:35.957] DEBUG DATE: Time=13/1/25 10:29:00 a. m. ActualSessionEnd=13/1/25 6:00:00 p. m. (NY=13/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:36.306] 13/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:36.307] 13/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:36.307] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:36.307] 13/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:36.307] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [08:38:36.718] DEBUG DATE: Time=14/1/25 10:29:00 a. m. ActualSessionEnd=14/1/25 6:00:00 p. m. (NY=14/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:37.108] 14/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:37.109] 14/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:37.109] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:37.110] 14/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:37.110] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [08:38:37.578] DEBUG DATE: Time=15/1/25 10:29:00 a. m. ActualSessionEnd=15/1/25 6:00:00 p. m. (NY=15/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:37.961] 15/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:37.961] 15/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:37.963] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:37.964] 15/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:37.964] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [08:38:38.556] DEBUG DATE: Time=16/1/25 10:29:00 a. m. ActualSessionEnd=16/1/25 6:00:00 p. m. (NY=16/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:38.972] 16/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:38.973] 16/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:38.973] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:38.974] 16/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:38.974] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MNQ] [08:38:39.554] DEBUG DATE: Time=17/1/25 10:29:00 a. m. ActualSessionEnd=17/1/25 6:00:00 p. m. (NY=17/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:39.993] 17/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:39.994] 17/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:39.994] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:39.994] 17/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MNQ] [08:38:39.994] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)

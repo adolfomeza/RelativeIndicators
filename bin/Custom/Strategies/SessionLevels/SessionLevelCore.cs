@@ -34,6 +34,19 @@ namespace NinjaTrader.NinjaScript.Strategies
 
     public enum EntryState { Idle, WaitingForConfirmation, WaitingForVwapMitigation, workingOrder, PositionActive }
 
+    // v1.14.73: Entry Mode Selection
+    public enum EntryMode
+    {
+        APlusRetrace,  // Original A+ method: Wait for VWAP pullback
+        Anticipado     // Anticipated: Enter immediately on confirmation candle close
+    }
+
+    public enum AnticipatedOrderType
+    {
+        Market,  // Market order
+        Limit    // Limit order at close price
+    }
+
     // Level Persistence
     public class SessionLevel
     {

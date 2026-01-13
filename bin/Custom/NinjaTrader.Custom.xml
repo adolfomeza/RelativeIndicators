@@ -5856,48 +5856,62 @@
             Reads the maximum risk from the shared file to prevent over-leveraging across instruments.
             </summary>
         </member>
-        <member name="M:NinjaTrader.NinjaScript.Strategies.EntryStateMachine.CheckTradingModeGuards">
+        <member name="T:NinjaTrader.NinjaScript.Strategies.SessionLevels.EntryStateMachine">
             <summary>
-            Checks trading mode guards (Paused, LongOnly, ShortOnly)
-            </summary>
-            <returns>true if trading is allowed, false if should skip</returns>
-        </member>
-        <member name="M:NinjaTrader.NinjaScript.Strategies.EntryStateMachine.HandleVwapMitigationRetry">
-            <summary>
-            Handles VWAP mitigation retry logic
-            </summary>
-            <returns>true if retry was handled and should return early</returns>
-        </member>
-        <member name="M:NinjaTrader.NinjaScript.Strategies.EntryStateMachine.UpdateAnchorIfNeeded">
-            <summary>
-            Updates anchor if price makes new High (Short) or new Low (Long)
+            Handles the core entry logic state machine:
+            Idle -> ScanForTriggers -> WaitingForConfirmation -> OrderSubmitted -> PositionActive
             </summary>
         </member>
-        <member name="M:NinjaTrader.NinjaScript.Strategies.EntryStateMachine.HandleInternalInvalidation">
+        <member name="M:NinjaTrader.NinjaScript.Strategies.SessionLevels.EntryStateMachine.CheckTradingModeGuards">
             <summary>
-            Handles internal level invalidation when touching external levels
+            Checks if trading is allowed based on current trading mode (Paused/LongOnly/ShortOnly)
+            Returns true if trading is allowed, false otherwise
             </summary>
-            <returns>true if invalidated and should return early</returns>
         </member>
-        <member name="M:NinjaTrader.NinjaScript.Strategies.EntryStateMachine.ScanForTriggers">
+        <member name="M:NinjaTrader.NinjaScript.Strategies.SessionLevels.EntryStateMachine.ScanForTriggers">
             <summary>
             Scans active levels for Short/Long triggers
             </summary>
         </member>
-        <member name="M:NinjaTrader.NinjaScript.Strategies.EntryStateMachine.HandleVwapMitigationWait">
+        <member name="M:NinjaTrader.NinjaScript.Strategies.SessionLevels.EntryStateMachine.HandleVwapMitigationRetry">
+            <summary>
+            v1.14.45: Detects if we are in VWAP Mitigation Retry state
+            Returns true if waiting for mitigation (blocks other entry logic)
+            </summary>
+        </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.SessionLevels.EntryStateMachine.UpdateAnchorIfNeeded">
+            <summary>
+            v1.10.0: Re-anchors the setup when price makes new high/low
+            SHORT: Re-anchor if price makes new high
+            LONG: Re-anchor if price makes new low
+            </summary>
+        </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.SessionLevels.EntryStateMachine.HandleInternalInvalidation">
+            <summary>
+            v1.10.0: Handles invalidation when internal level touches external level
+            If touched, cancels the internal setup and auto-triggers on the external level
+            </summary>
+        </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.SessionLevels.EntryStateMachine.HandleVwapMitigationWait">
             <summary>
             v1.14.54: Handles VWAP Retry logic when waiting for price to break the extreme
             after a trade closes with SL/BE
             </summary>
         </member>
-        <member name="M:NinjaTrader.NinjaScript.Strategies.EntryStateMachine.HandleConfirmation">
+        <member name="M:NinjaTrader.NinjaScript.Strategies.SessionLevels.EntryStateMachine.HandleConfirmation">
             <summary>
             Handles confirmation logic after trigger detected
             </summary>
         </member>
-        <member name="M:NinjaTrader.NinjaScript.Strategies.EntryStateMachine.HandleWorkingOrder">
+        <member name="M:NinjaTrader.NinjaScript.Strategies.SessionLevels.EntryStateMachine.HandleWorkingOrder">
             <summary>
             Handles active working order (trailing, R/R validation, qty adjustment)
+            </summary>
+        </member>
+        <member name="T:NinjaTrader.NinjaScript.Strategies.SessionLevelPersistence">
+            <summary>
+            Helper class to persist session levels to file.
+            Solves the issue of levels being recalculated incorrectly on strategy restart.
             </summary>
         </member>
         <member name="T:NinjaTrader.NinjaScript.Strategies.SessionManager">
@@ -5911,9 +5925,21 @@
             Check if we're in a specific session and create/update levels accordingly
             </summary>
         </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.SessionManager.ScanHistoricalLevels">
+            <summary>
+            v1.14.64: Scan historical bars to create levels for sessions that already ended
+            Called once at startup to retroactively create missing session levels
+            </summary>
+        </member>
         <member name="M:NinjaTrader.NinjaScript.Strategies.SessionManager.ManageLevels(System.Double)">
             <summary>
             Manage level VWAP accumulation, mitigation detection, and drawing
+            </summary>
+        </member>
+        <member name="T:NinjaTrader.NinjaScript.Strategies.PriceQtyPair">
+            <summary>
+            v1.14.88: TargetDistributor - Handles mathematical distribution of targets
+            Logic: Hybrid Scaled Distribution (Front-Loaded R-Multiples)
             </summary>
         </member>
         <member name="M:NinjaTrader.NinjaScript.Optimizers.DefaultOptimizer.Iterate(System.Int32)">

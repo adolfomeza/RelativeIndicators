@@ -1,0 +1,25 @@
+******************* Session Start (Version 8.1.6.2) *******************
+2026-01-07 05:31:51:045 ERROR: There are no email share services defined. You need to define one and set "Default" to true for email to work.
+2026-01-07 05:31:51:078 System.ArgumentNullException: Value cannot be null.
+Parameter name: uriString
+   at System.Uri..ctor(String uriString)
+   at NinjaTrader.Core.UriConverter.ConvertUri(String uriToConvert, Boolean isDev, Boolean isBeta)
+2026-01-07 05:32:00:211 Cbi.Globals.MachineId: True/True 280CB754932A645C8D63C782E8605C43
+2026-01-07 05:32:00:232 NinjaTrader.Gui.LoginInternal user='joelbencomo' mode='Simulation'
+2026-01-07 05:32:00:612 ERROR: There was an error on initializing instrumentation: Object reference not set to an instance of an object.
+2026-01-07 05:32:00:612 Core.Instrumentation.ActivitySource: enabled=False randomPercent=-1 enabledSessionsPercent=100 chartMs=250 enabledTypes=''
+2026-01-07 05:32:00:701 (Simulation) NinjaTrader.Core.Authentication.GetAccessToken1 exp='Invalid URI: The format of the URI could not be determined.'
+2026-01-07 05:32:00:702 NinjaTrader.Core.Authentication.Authenticate: error on connect: Invalid URI: The format of the URI could not be determined.
+2026-01-07 05:32:49:702 NinjaTrader.Gui.LoginInternal user='joelbencomo' mode='Simulation'
+2026-01-07 05:32:51:725 (Simulation) NinjaTrader.Core.Authentication.GetAccessToken1 exp='Invalid URI: The format of the URI could not be determined.'
+2026-01-07 05:32:51:725 NinjaTrader.Core.Authentication.Authenticate: error on connect: Invalid URI: The format of the URI could not be determined.
+2026-01-07 05:32:51:755 NinjaTrader.Gui.LoginInternal user='joelbencomo' mode='Simulation'
+2026-01-07 05:32:51:755 (Simulation) NinjaTrader.Core.Authentication.GetAccessToken1 exp='Invalid URI: The format of the URI could not be determined.'
+2026-01-07 05:32:51:755 NinjaTrader.Core.Authentication.Authenticate: error on connect: Invalid URI: The format of the URI could not be determined.
+2026-01-07 05:32:51:763 NinjaTrader.Gui.LoginInternal user='joelbencomo' mode='Simulation'
+2026-01-07 05:32:51:763 (Simulation) NinjaTrader.Core.Authentication.GetAccessToken1 exp='Invalid URI: The format of the URI could not be determined.'
+2026-01-07 05:32:51:763 NinjaTrader.Core.Authentication.Authenticate: error on connect: Invalid URI: The format of the URI could not be determined.
+2026-01-07 05:33:26:909 NinjaTrader.Gui.LoginInternal user='joelbencomo' mode='Simulation'
+2026-01-07 05:33:26:910 (Simulation) NinjaTrader.Core.Authentication.GetAccessToken1 exp='Invalid URI: The format of the URI could not be determined.'
+2026-01-07 05:33:26:910 NinjaTrader.Core.Authentication.Authenticate: error on connect: Invalid URI: The format of the URI could not be determined.
+2026-01-07 06:44:33:239 PrimaryMonitorWPFDPIScale=1.00

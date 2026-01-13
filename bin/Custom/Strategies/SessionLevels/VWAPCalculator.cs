@@ -308,5 +308,26 @@ namespace NinjaTrader.NinjaScript.Strategies
                 TradeVWAP.PvSum = EthHighVWAP.PvSum;
             }
         }
+
+        // v1.14.74: Inherit accumulated values from Global VWAP when trade crosses 18:00
+        // This preserves the TP1 target calculation when Global VWAP resets at session close
+        public void InheritFromGlobal(bool isShort)
+        {
+            if (isShort)
+            {
+                // Short trade uses Low VWAP
+                TradeVWAP.VolSum = EthLowVWAP.VolSum;
+                TradeVWAP.PvSum = EthLowVWAP.PvSum;
+                strategy.Log(strategy.Time[0] + " INHERIT_GLOBAL: Trade VWAP inherited from Low VWAP (VolSum=" + TradeVWAP.VolSum + " Value=" + TradeVWAP.CurrentValue + ")");
+            }
+            else
+            {
+                // Long trade uses High VWAP
+                TradeVWAP.VolSum = EthHighVWAP.VolSum;
+                TradeVWAP.PvSum = EthHighVWAP.PvSum;
+                strategy.Log(strategy.Time[0] + " INHERIT_GLOBAL: Trade VWAP inherited from High VWAP (VolSum=" + TradeVWAP.VolSum + " Value=" + TradeVWAP.CurrentValue + ")");
+            }
+            isPostSessionExtension = true; // Mark as extended session mode
+        }
     }
 }

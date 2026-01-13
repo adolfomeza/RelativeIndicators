@@ -548,5 +548,38 @@ namespace NinjaTrader.NinjaScript.Strategies
         {
             strategy.Log(strategy.Time[0] + " TP2 Filled. SL already at BE (if TP1 filled first).");
         }
+
+        // v1.14.94: Cancel All Protection Orders - Used before emergency exits to prevent race conditions
+        public void CancelAllProtectionOrders()
+        {
+            strategy.Log(strategy.Time[0] + " CANCEL_ALL_PROTECTION: Cancelling all SL/TP orders to prevent race conditions");
+
+            // Cancel Stop Loss
+            if (strategy.stopOrder != null &&
+                (strategy.stopOrder.OrderState == OrderState.Working ||
+                 strategy.stopOrder.OrderState == OrderState.Accepted))
+            {
+                strategy.CancelOrderWrapper(strategy.stopOrder);
+                strategy.Log("CANCEL_ALL: Cancelled SL order - " + strategy.stopOrder.Name);
+            }
+
+            // Cancel Take Profit 1
+            if (strategy.tp1Order != null &&
+                (strategy.tp1Order.OrderState == OrderState.Working ||
+                 strategy.tp1Order.OrderState == OrderState.Accepted))
+            {
+                strategy.CancelOrderWrapper(strategy.tp1Order);
+                strategy.Log("CANCEL_ALL: Cancelled TP1 order - " + strategy.tp1Order.Name);
+            }
+
+            // Cancel Take Profit 2
+            if (strategy.tp2Order != null &&
+                (strategy.tp2Order.OrderState == OrderState.Working ||
+                 strategy.tp2Order.OrderState == OrderState.Accepted))
+            {
+                strategy.CancelOrderWrapper(strategy.tp2Order);
+                strategy.Log("CANCEL_ALL: Cancelled TP2 order - " + strategy.tp2Order.Name);
+            }
+        }
     }
 }

@@ -1,0 +1,24 @@
+2026-01-06 00:05:47:160 Finalizing addon 'NinjaTrader.NinjaScript.AddOns.NewsUpdate'
+2026-01-06 00:05:47:286 Shutting down NinjaTrader
+2026-01-06 00:05:47:287 Shutting down instrument management
+2026-01-06 00:05:47:287 Shutting down instrument threads
+2026-01-06 00:05:47:296 Shutting down recorder
+2026-01-06 00:05:47:299 Shutting down file type watcher
+2026-01-06 00:05:47:299 Shutting down ATI server
+2026-01-06 00:05:47:300 Shutting down auto trade component
+2026-01-06 00:05:47:302 Shutting down SMTP server
+2026-01-06 00:05:47:322 Shutting down adapter server
+2026-01-06 00:05:47:335 Shutting down server(s)
+2026-01-06 00:05:47:338 Shutting down mail thread
+2026-01-06 00:05:47:338 Shutting down sound thread
+2026-01-06 00:05:47:338 Shutting down timer
+2026-01-06 00:05:47:338 Shutting down alerts timer
+2026-01-06 00:05:47:338 Shutting down message timer
+2026-01-06 00:05:47:338 Shutting down db
+2026-01-06 00:05:47:339 Flushing DB thread
+2026-01-06 00:05:47:416 Shutting down bars dictionary
+2026-01-06 00:05:47:420 Shutting down user entitlement threads
+2026-01-06 00:05:47:441 Shutting down logs
+2026-01-06 00:05:47:452 Shutting down bars types
+2026-01-06 00:05:47:453 Shutting down UI threads
+2026-01-06 00:05:47:463 ************************ Session End ************************

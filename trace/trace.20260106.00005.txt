@@ -1,0 +1,902 @@
+******************* Session Start (Version 8.1.6.2) *******************
+2026-01-06 22:52:56:210 Cbi.Globals.MachineId: True/True 280CB754932A645C8D63C782E8605C43
+2026-01-06 22:52:56:212 NinjaTrader.Gui.LoginInternal user='joelbencomo' mode='Simulation'
+2026-01-06 22:52:56:403 Core.Instrumentation.ActivitySource: enabled=True randomPercent=23.91949 enabledSessionsPercent=100 chartMs=250 enabledTypes='ChartPerformance Application NinjaScript Adapter Login '
+2026-01-06 22:52:56:482 Core.Instrumentation.LogActivity: activityType=Login errorCode=NoError errorMessage=''
+2026-01-06 22:52:57:156 (Simulation) NinjaTrader.Core.Authentication.GetAccessToken6
+2026-01-06 22:52:57:162 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.8469311' renewSecs='2399.92346555'
+2026-01-06 22:52:57:883 Cbi.UserEntitlement.VerifyAsync.0 apiUrl='https://live.tradovateapi.com'
+2026-01-06 22:52:58:321 Cbi.UserEntitlement.VerifyAsync.98: Evaluation expiration=2026-12-31, Evaluation expiration=2026-12-31
+2026-01-06 22:52:58:742 PrimaryMonitorWPFDPIScale=1.00
+2026-01-06 22:52:59:109 Cbi.UserEntitlement.VerifyAsync.99: subscription=Free licensedProviders='Playback Simulator NinjaTrader NinjaTrader Continuum NinjaTrader FXCM IQFeed E-Signal External FOREX.com Interactive Brokers Barchart.com Kinetick FXCM Coinbase cTrader Schwab Rithmic for NinjaTrader Brokerage Custom0 Custom2 Custom3 Custom4 Custom6 Custom7 Custom8 Custom9 Custom10 Provider13 Custom14 Provider26 Custom15 Custom16 Custom17 Custom18 Custom19 Custom20 Custom21 Custom22 Custom23 Custom24 Custom25 Custom26 Custom27 Custom28 Custom29 Custom30 Custom31 Custom32 Custom33 Custom34 Custom35 Custom36 Custom37 Custom38 Custom39 Custom40'
+2026-01-06 22:52:59:168 InstallDir='C:\Program Files\NinjaTrader 8\'
+2026-01-06 22:52:59:168 UserDataDir='C:\Users\prueba\Documents\NinjaTrader 8\'
+2026-01-06 22:52:59:168 MachineID='280CB754932A645C8D63C782E8605C43'
+2026-01-06 22:52:59:168 OS='Microsoft Windows NT 10.0.26200.0'/'Win32NT'
+2026-01-06 22:52:59:168 OSLanguage='en-US'
+2026-01-06 22:52:59:168 OSEnvironment='64bit'
+2026-01-06 22:52:59:168 Processors=12
+2026-01-06 22:52:59:168 ThreadPool: minWorkerThreads=12 maxWorkerThreads=32767 minCompletionPortThreads=12 maxCompletionPortThreads=1000
+2026-01-06 22:53:00:206 ProcessorSpeed=2.6 GHz
+2026-01-06 22:53:00:206 PhysicalMemory=24576 MB
+2026-01-06 22:53:02:384 DisplayAdapters=2/NVIDIA GeForce GTX 1650|Intel(R) UHD Graphics
+2026-01-06 22:53:02:384 Monitors=2/1920x1080|1920x1080
+2026-01-06 22:53:02:384 .NET/CLR Version='4.8'/64bit
+2026-01-06 22:53:02:385 SQLiteVersion='1.0.116.0'
+2026-01-06 22:53:02:385 ApplicationTimezone=EST +1 hour(s)
+2026-01-06 22:53:02:385 ApplicationTimezone=UTC -4 hour(s)
+2026-01-06 22:53:02:385 LocalTimezone=EST +1 hour(s)
+2026-01-06 22:53:02:385 LocalTimezone=UTC -4 hour(s)
+2026-01-06 22:53:02:553 DirectXRenderingHW
+2026-01-06 22:53:02:553 Copying custom assemblies...
+2026-01-06 22:53:02:565 Loading custom assemblies...
+2026-01-06 22:53:02:565 Loading C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\NinjaTrader.Custom.dll...
+2026-01-06 22:53:02:766 Loading C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\NinjaTrader.Vendor.dll...
+2026-01-06 22:53:02:783 Deleting temporary files...
+2026-01-06 22:53:03:047 Copying db and restoring templates...
+2026-01-06 22:53:03:055 Loading third party assemblies...
+2026-01-06 22:53:07:007 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\AddonSuiteManager.Addon.Standalone.dll...
+2026-01-06 22:53:07:792 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\ASCENDO_NewsEvents.dll...
+2026-01-06 22:53:08:652 Cbi.VendorLicense.Verify.1: trying 'https://license.ninjatrader.com/vendorlicensenew/ASCENDO/IndicatorNewsEvents/2/R-280CB754932A645C8D63C782E8605C43.xml' ...
+2026-01-06 22:53:08:814 Cbi.VendorLicense.Verify.1: good
+2026-01-06 22:53:08:827 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\ReplayDataPlusManager.Addon.Standalone.dll...
+2026-01-06 22:53:09:556 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\WindowsInput.dll...
+2026-01-06 22:53:09:557 Initializing database...
+2026-01-06 22:53:09:557 Loading master instruments...
+2026-01-06 22:53:09:672 (Db) Cbi.DB.get_Current.CreateConnection.Start
+2026-01-06 22:53:09:674 (Db) Cbi.DB: connectionString='Data Source="C:\Users\prueba\Documents\NinjaTrader 8\db\NinjaTrader.sqlite";Version=3;Synchronous=Full;Journal Mode=Off;Pooling=True;Max Pool Size=100;foreign keys=true;'
+2026-01-06 22:53:10:073 (Db) Cbi.DB.get_Current.CreateConnection.End
+2026-01-06 22:53:10:135 Loading instruments...
+2026-01-06 22:53:10:355 Loading accounts...
+2026-01-06 22:53:10:416 Loading users...
+2026-01-06 22:53:10:447 Downloading server info...
+2026-01-06 22:53:10:447 Starting instrument management...
+2026-01-06 22:53:10:471 Starting timer...
+2026-01-06 22:53:10:471 Creating file type watcher...
+2026-01-06 22:53:10:471 Setting ATI...
+2026-01-06 22:53:10:493 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-06 22:53:10:501 Connecting ATI server...
+2026-01-06 22:53:10:502 Server.AtiServer.Connect0
+2026-01-06 22:53:10:502 Starting adapter server...
+2026-01-06 22:53:10:506 Server.AtiServer.Connect1: Port='36973'
+2026-01-06 22:53:10:506 Server.AtiServer.Connect2
+2026-01-06 22:53:10:529 Starting bars dictionary...
+2026-01-06 22:53:10:530 Starting recorder...
+2026-01-06 22:53:10:534 Starting server(s)...
+2026-01-06 22:53:10:568 Core.Globals.ApplicationStart.Commission: minVersion=1 maxVersion=3150
+2026-01-06 22:53:10:568 Core.Globals.ApplicationStart.InstrumentList: minVersion=-475 maxVersion=475
+2026-01-06 22:53:10:568 Core.Globals.ApplicationStart.MasterInstrument: minVersion=-9897 maxVersion=9897
+2026-01-06 22:53:10:568 Core.Globals.ApplicationStart.Risk: minVersion=1 maxVersion=14226
+2026-01-06 22:53:10:568 Core.Globals.ApplicationStart.TradingHours: minVersion=1 maxVersion=5111
+2026-01-06 22:53:10:626 Required resource key 'FxPro.DowntickForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxPro.ButtonBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxPro.PnLBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxPro.BuyButtonsBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxPro.SellButtonsBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxPro.UptickForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxPro.ActionButtonsBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxPro.UptickBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxPro.PositionQtyShortBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxPro.TextBoxBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxPro.PositionQtyLongBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxPro.DowntickBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxPro.ButtonForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ConditionForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MAGridForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MAGridLines' is missing.
+2026-01-06 22:53:10:626 Required resource key 'LabelRowForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MAGridTotalRowBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ConditionBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'RowChangeHighlightBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'LabelRowBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'RowChangeHighlightForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartControl.ChartBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartControl.VolumetricText' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartControl.GridLineHPen' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartControl.DropHighlight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartControl.CrosshairPen' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartControl.PanelSplitterPen' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartControl.DownBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartTrader.ActionButtonsBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartControl.SelectedMarkerBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartTrader.SellButtonsBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartControl.CrosshairLabelBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartControl.Stroke2' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartControl.TimeHighBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartControl.AxisPen' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartControl.DataBoxPanelLabelBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartControl.GridLineVPen' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartControl.DataBoxForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartControl.DataBoxItemLabelBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartTrader.BuyButtonsBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartControl.DataBoxBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartControl.ChartText' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartControl.Stroke' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartTrader.ButtonBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartControl.InactivePriceMarkersBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ChartControl.UpBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'DisconnectedBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxBoardPnLZeroBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'HeightTableHeader' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontControlFamily' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontMenuTopStyle' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ExcessInitialMarginHighlight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontHeaderLevel2Weight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxBoardPositionFlatBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'LogonSocialButtonPressedBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontTableBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'SystemCloseStops' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxBoardInstrumentSelectorForegroundSelected' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ListBoxItemForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'BorderNormalTabBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'SystemButtonsBackgroundPressed' is missing.
+2026-01-06 22:53:10:626 Required resource key 'WindowButtonsInactive' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontControlBrushReverse' is missing.
+2026-01-06 22:53:10:626 Required resource key 'BorderMainWindowBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ToolTipMaxWidth' is missing.
+2026-01-06 22:53:10:626 Required resource key 'SoSignifierBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TreeItemSelectedBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'SizeWindowControl' is missing.
+2026-01-06 22:53:10:626 Required resource key 'LogonSocialButtonIsOverBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontMenuTopFamily' is missing.
+2026-01-06 22:53:10:626 Required resource key 'SliderBorderBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontModalHeight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'PaddingGroup' is missing.
+2026-01-06 22:53:10:626 Required resource key 'NegativeApAreaBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontNormalTabHoverFamily' is missing.
+2026-01-06 22:53:10:626 Required resource key 'NinjaScriptEditorIdentifierForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'brushOrderWorking' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ScrollBarForeAdornerHover' is missing.
+2026-01-06 22:53:10:626 Required resource key 'LogonButtonIsPressedBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontHeaderLevel3Family' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ScrollBarArrowBackgroundPressed' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ButtonBackgroundBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontSelectionBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ButtonDisabledForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ColorTextHighlight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TradePerformanceFiltersBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TabControlItemMinWidth' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxBoardCloseButtonFillBrushPressed' is missing.
+2026-01-06 22:53:10:626 Required resource key 'LogonIncorrectLoginBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontHeaderLevel3Weight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'brushOrderAccepted' is missing.
+2026-01-06 22:53:10:626 Required resource key 'AlignmentLabel' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ApMarkerBorderBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'DelayedDataInstrumentForegroundBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'WorkspaceInactiveFill' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TextBoxDisabledForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'OptimizationGraphGradientColor5' is missing.
+2026-01-06 22:53:10:626 Required resource key 'OptimizationGraphGradientColor6' is missing.
+2026-01-06 22:53:10:626 Required resource key 'BorderTextHighlightThickness' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MarginActiveTab' is missing.
+2026-01-06 22:53:10:626 Required resource key 'PositiveApAreaBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'RadioButtonStops' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontMainNavigationFamily' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ButtonTextColorNormal' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MenuHilightBackgroundBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'BorderTextHighlightBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontLabelBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ApOptimizationScatterFill' is missing.
+2026-01-06 22:53:10:626 Required resource key 'SubPipSizeMedium' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontHeaderLevel1Weight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontToolTipFamily' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontMenuTopHeight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'BorderMainWindowThickness' is missing.
+2026-01-06 22:53:10:626 Required resource key 'BackgroundModalOverlayToolTipStrokeBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'SystemCloseBackgroundNormal' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontModalTitleWeight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'SubPipSizeLarge' is missing.
+2026-01-06 22:53:10:626 Required resource key 'NinjaScriptEditorCompilerErrorForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TradingModeIsPressedBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MarketWatchTileFontSizeExtraSmall' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxBoardInstrumentSelectorBorderSelected' is missing.
+2026-01-06 22:53:10:626 Required resource key 'BorderThinThickness' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ScrollBarTrackBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontMainNavigationBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'HoverDropShadow' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ButtonDisabledBorder' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ButtonDisabledBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'SliderBackgroundBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'brushOrderPendingChange' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontModalTitleMargin' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MarginButtonLeft' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ParetoSelectedDataPointBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ScrollBarThumbBorderHover' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontNormalTabHoverWeight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ScrollBarThumbBorder' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontHeaderLevel4Family' is missing.
+2026-01-06 22:53:10:626 Required resource key 'RadioButtonCheckMark' is missing.
+2026-01-06 22:53:10:626 Required resource key 'CheckBoxBackgroundStops' is missing.
+2026-01-06 22:53:10:626 Required resource key 'NinjaScriptEditorErrorGridBackgroundOtherTab' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontDailyChangedHeight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MarketWatchTileWidthExtraSmall' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ScrollThumbBackStopsHover' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxBoardCloseButtonBorderBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ConnectionLostOrderBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ConnectionLostOrderStops' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontListFamily' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TabControlConnectionStatusMargin' is missing.
+2026-01-06 22:53:10:626 Required resource key 'IconModalSilhouette' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ConnectingBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontHeaderLevel3Brush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontToolTipStyle' is missing.
+2026-01-06 22:53:10:626 Required resource key 'SystemButtonsBorder' is missing.
+2026-01-06 22:53:10:626 Required resource key 'NinjaScriptEditorIndentationLineForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'RadioButtonBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontToolTipHeight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'LogonFontFamily' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontActionWeight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'NinjaScriptEditorKeywordForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'PositiveApMarkerBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MarginNormalTab' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxBoardPnLProfitBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontTitleBlockFamily' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MenuIconDisabledForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontModalTitleFamily' is missing.
+2026-01-06 22:53:10:626 Required resource key 'LinkAllOrangeBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ButtonBorderStops' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MarginConnectionIcon' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MarginMainNavigationIcon' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontMenuStyle' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MarketWatchTileHeightSmall' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontNormalTabHoverHeight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ScrollBarCaratPressed' is missing.
+2026-01-06 22:53:10:626 Required resource key 'SliderForegroundBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ComboBoxBackgroundBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'InstrumentSelectorPopupForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontModalLinkBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'LogonButtonIsOverBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'SelectedApAreaBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontHeaderLevel1Style' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontListStyle' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ScrollBarThumbBorderPressed' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontTableHeight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ListBoxDisabledBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'NinjaScriptEditorBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TabNormalBorder' is missing.
+2026-01-06 22:53:10:626 Required resource key 'QuantitySelectorDropShadow' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ConnectedBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'NinjaScriptEditorStringForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ScrollBarCaratHover' is missing.
+2026-01-06 22:53:10:626 Required resource key 'OptimizationGraphGridLinesColor' is missing.
+2026-01-06 22:53:10:626 Required resource key 'PositiveApMarkerColor' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontModalStyle' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ScrollBarArrowDisabled' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TabControlCloseButtonContentSize' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TextBoxDisabledBorder' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ListBoxBorderBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ScrollBarArrowBackgroundNormal' is missing.
+2026-01-06 22:53:10:626 Required resource key 'brushStrategyWaitForFlat' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontButtonBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ScrollBarDisabledBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'customColorPickerList' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontModalTitleStyle' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxBoardActionButtonFillBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontButtonStyle' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ScrollBarCaratNormal' is missing.
+2026-01-06 22:53:10:626 Required resource key 'OptimizationGraphScatterBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'NinjaScriptEditorErrorGridBackgroundSelectedTab' is missing.
+2026-01-06 22:53:10:626 Required resource key 'LogonButtonBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'NinjaTraderLogoKoreaBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontModalTitleHeight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'SystemCloseBackgroundPressed' is missing.
+2026-01-06 22:53:10:626 Required resource key 'GridEntireBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxBoardPositionBorderBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TextBoxErrorBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'OptimizationGraphGradientColor4' is missing.
+2026-01-06 22:53:10:626 Required resource key 'LargePositionHighlight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'AlignmentButtonText' is missing.
+2026-01-06 22:53:10:626 Required resource key 'NTGridCellPadding' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MarginBaseNegative' is missing.
+2026-01-06 22:53:10:626 Required resource key 'NinjaScriptEditorCaretBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontMenuTopWeight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MenuRibbonBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TextHighlightBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MenuShadowBottom' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TabBlendingColor' is missing.
+2026-01-06 22:53:10:626 Required resource key 'NegativeApAreaStroke' is missing.
+2026-01-06 22:53:10:626 Required resource key 'brushDailyLossLimitSeventyFive' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MarketWatchTileHeightExtraLarge' is missing.
+2026-01-06 22:53:10:626 Required resource key 'LogonInputBorderBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontMenuWeight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'GridHeaderHighlight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TileWidthLarge' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontButtonWeight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TabHeaderShadowBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MarginWindowControl' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontActionStyle' is missing.
+2026-01-06 22:53:10:626 Required resource key 'HeightSmallControl' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontControlHeight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontControlBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'NinjaScriptEditorCollapsibleRegionBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'BackgroundTableHeaderVertical' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TabItemPrintBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'DepthChart.TextForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ListBoxDisabledBorder' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ScrollThumbBackStops' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ConnectingStops' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontActionBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TabItemNormalBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'GridRowBackgroundPrinting' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxBoardSpreadBackgroundBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontActionFamily' is missing.
+2026-01-06 22:53:10:626 Required resource key 'DepthChart.AxisBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontMenuHeight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontHeaderLevel1Family' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontNormalTabHoverStyle' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ScrollBarVerticalForePressed' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxBoardClosePositionForegroundBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ScrollBarArrowBackgroundDisabled' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxBoardBidAskBarBackgroundBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'PaddingColumn' is missing.
+2026-01-06 22:53:10:626 Required resource key 'BorderNormalTabThickness' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontGetConnectedLargeHeight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'WindowBottomGradientStopColor' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ApAxisLinesPen' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontModalWeight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'WorkspaceActiveFill' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontTableWeight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MenuShadowTop' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TabControlBorderBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TradingModePlaybackBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'NinjaScriptEditorErrorDotBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontMainNavigationStyle' is missing.
+2026-01-06 22:53:10:626 Required resource key 'InnerBorderStops' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontModalFamily' is missing.
+2026-01-06 22:53:10:626 Required resource key 'brushDailyLossLimitDefault' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ButtonBorderBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'CheckBoxDisabledForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ScrollBarArrowNormal' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MarketWatchTileFontSizeMedium' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontTableMargin' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FavoritesBorderBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MarketWatchTileWidthExtraLarge' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MarketWatchTileWidthMedium' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ListBoxDisabledForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ScrollBarHorizontalForeHover' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxBoardCloseButtonFillBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ScrollBarArrowPressed' is missing.
+2026-01-06 22:53:10:626 Required resource key 'HotKeyEditorMargin' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TabControlItemFontSizeSelected' is missing.
+2026-01-06 22:53:10:626 Required resource key 'brushOrderPartFilled' is missing.
+2026-01-06 22:53:10:626 Required resource key 'LinkAllGreenBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontHeaderLevel1Brush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TileHeightSmall' is missing.
+2026-01-06 22:53:10:626 Required resource key 'brushOrderInitialized' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ToolTipDividerBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ScrollBarForeAdornerDisabled' is missing.
+2026-01-06 22:53:10:626 Required resource key 'DelayedDataInstrumentBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TileWidthMedium' is missing.
+2026-01-06 22:53:10:626 Required resource key 'BackgroundTableHeader' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontHeaderLevel2Height' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontNormalTabWeight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MarketWatchTileWidthSmall' is missing.
+2026-01-06 22:53:10:626 Required resource key 'PaddingTab' is missing.
+2026-01-06 22:53:10:626 Required resource key 'brushOrderPendingCancel' is missing.
+2026-01-06 22:53:10:626 Required resource key 'LogonIncorrectLoginButtonBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TileHeightMedium' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ScrollBarHorizontalForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TextBoxDisabledBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'NinjaScriptEditorCommentForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FxBoardInstrumentSelectorForeground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'PropertiesSlimText' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ScrollBarHorizontalForePressed' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontActiveTabFamily' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontGetConnectedSmallHeight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ConnectionLostPriceBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontLabelStyle' is missing.
+2026-01-06 22:53:10:626 Required resource key 'NinjaScriptEditorLineNumbersBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ConnectionBorderBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'SystemMenuBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontPipStyle' is missing.
+2026-01-06 22:53:10:626 Required resource key 'IconModalButton' is missing.
+2026-01-06 22:53:10:626 Required resource key 'XamNumericEditorBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'CheckBoxBackgroundBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontTitleBlockWeight' is missing.
+2026-01-06 22:53:10:626 Required resource key 'MarketWatchTileFontSizeSmall' is missing.
+2026-01-06 22:53:10:626 Required resource key 'CheckBoxDisabledBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'ComboBoxItemHoverBackground' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontModalMargin' is missing.
+2026-01-06 22:53:10:626 Required resource key 'FontTitleBlockBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'BorderThinBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'TileHeightLarge' is missing.
+2026-01-06 22:53:10:626 Required resource key 'LoginBackgroundBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'NegativeApAreaColor' is missing.
+2026-01-06 22:53:10:626 Required resource key 'PositionLongQuantityBrush' is missing.
+2026-01-06 22:53:10:626 Required resource key 'DropShadowModalWindow' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FxBoardBidAskBarForegroundBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'NinjaScriptEditorWarningDotBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'PropertyGridSeparatorLineFill' is missing.
+2026-01-06 22:53:10:628 Required resource key 'CryptocurrencyTrailingZeroForeground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ComboBoxDisabledBackground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'StrategyAnalyzerNegativeValueBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ConnectedStops' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ComboBoxItemForeground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ColorDisabledBorder' is missing.
+2026-01-06 22:53:10:628 Required resource key 'BrowserChartBackground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'BackgroundCaptionBar' is missing.
+2026-01-06 22:53:10:628 Required resource key 'NTScrollWidth' is missing.
+2026-01-06 22:53:10:628 Required resource key 'brushStrategyActive' is missing.
+2026-01-06 22:53:10:628 Required resource key 'brushButtonSpinnersBackground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ParetoPinnedDataPointBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'NinjaScriptEditorFontSelectionBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'NinjaScriptEditorLineNumbersForeground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'SystemButtonsBackgroundNormal' is missing.
+2026-01-06 22:53:10:628 Required resource key 'GridRowForeground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'HdmAddRowBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'LogonFontHeightSmall' is missing.
+2026-01-06 22:53:10:628 Required resource key 'BackgroundTitleBlock' is missing.
+2026-01-06 22:53:10:628 Required resource key 'BackgroundModalOverlayToolTip' is missing.
+2026-01-06 22:53:10:628 Required resource key 'TabControlSelectedItemHeightIncrease' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontModalLinkFamily' is missing.
+2026-01-06 22:53:10:628 Required resource key 'PropertiesDisabledText' is missing.
+2026-01-06 22:53:10:628 Required resource key 'TreeViewFontIconSize' is missing.
+2026-01-06 22:53:10:628 Required resource key 'SubMenuBackground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'MarketWatchTileFontSizeLarge' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FxBoardPositionLongBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'HdmEditRowBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ScrollThumbBackStopsPressed' is missing.
+2026-01-06 22:53:10:628 Required resource key 'TradingModeIsOverBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'NTFontSizeBiggest' is missing.
+2026-01-06 22:53:10:628 Required resource key 'BackgroundModalOverlay' is missing.
+2026-01-06 22:53:10:628 Required resource key 'TabBackground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ScrollBarTrackPressed' is missing.
+2026-01-06 22:53:10:628 Required resource key 'LogonFontButtonBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontModalBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'BackgroundTextInput' is missing.
+2026-01-06 22:53:10:628 Required resource key 'brushDailyLossLimitNinety' is missing.
+2026-01-06 22:53:10:628 Required resource key 'HeightControl' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FxBoardSpreadForegroundBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontControlWeight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontNormalTabStyle' is missing.
+2026-01-06 22:53:10:628 Required resource key 'MarginButtonTop' is missing.
+2026-01-06 22:53:10:628 Required resource key 'LogonFontSecondaryBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'MarginMainNavigation' is missing.
+2026-01-06 22:53:10:628 Required resource key 'NegativeApMarkerBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ListBoxItemHoverBackground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'BackgroundNormalTab' is missing.
+2026-01-06 22:53:10:628 Required resource key 'PositionShortQuantityBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'PositiveApAreaStroke' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ScrollBarArrowHover' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontButtonHeight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'AlignmentGrid' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontNormalTabFamily' is missing.
+2026-01-06 22:53:10:628 Required resource key 'NinjaScriptEditorSyntaxErrorForeground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontToolTipTitleHeight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FxBoardPositionForegroundBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ComboBoxDisabledBorder' is missing.
+2026-01-06 22:53:10:628 Required resource key 'MarketWatchTileFontSizeExtraLarge' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ScrollButtonsLeftBorder' is missing.
+2026-01-06 22:53:10:628 Required resource key 'MenuSeparator' is missing.
+2026-01-06 22:53:10:628 Required resource key 'LogonBorderBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'TextDropShadow' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FxBoardInstrumentSelectorBackground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'PositiveApAreaColor' is missing.
+2026-01-06 22:53:10:628 Required resource key 'TabControlCloseButtonSize' is missing.
+2026-01-06 22:53:10:628 Required resource key 'AlignmentLabelText' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontHeaderLevel4Height' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ShadowBottomStops' is missing.
+2026-01-06 22:53:10:628 Required resource key 'DelayedDataInstrumentBackgroundPressedBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontActiveTabHeight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'brushStrategyNotSynced' is missing.
+2026-01-06 22:53:10:628 Required resource key 'LogonFontMainInvertBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontHeaderLevel4Margin' is missing.
+2026-01-06 22:53:10:628 Required resource key 'DisconnectedStops' is missing.
+2026-01-06 22:53:10:628 Required resource key 'MenuHilightBorderBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'brushOrderTriggerPending' is missing.
+2026-01-06 22:53:10:628 Required resource key 'BackgroundMainWindow' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontMenuHighlightedBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'LogonFontSubBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'GridLabelBackgroundPrinting' is missing.
+2026-01-06 22:53:10:628 Required resource key 'LogonLinkBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontHeaderLevel4Style' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontActionHeight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'PnLBackground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'RadioButtonDisabledBackground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'LogonIncorrectLoginBackground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'BackgroundCaptionBarInactive' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontPipWeight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'RadioButtonDisabledForeground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'NinjaTraderLogoCaptionBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'SubPipMinWidthMedium' is missing.
+2026-01-06 22:53:10:628 Required resource key 'MarketWatchTileHeightMedium' is missing.
+2026-01-06 22:53:10:628 Required resource key 'MenuBorderBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'BaseBorderStops' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontListMargin' is missing.
+2026-01-06 22:53:10:628 Required resource key 'OptimizationGraphGradientColor1' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontMainNavigationWeight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'LogonInputBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ToolTipDividerHeight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontModalTitleBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'LogonEmptyUsernameBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontPipFamily' is missing.
+2026-01-06 22:53:10:628 Required resource key 'TabItemNormalForeground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontModalLinkWeight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'NegativeApMarkerColor' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontMenuBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ComboBoxDropDownBackBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'TradePerformanceFiltersBackground3' is missing.
+2026-01-06 22:53:10:628 Required resource key 'PositionTextBlockLossBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'LinkPressedBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FxBoardPositionBarBackgroundBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'DropShadowTitleBlock' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontActionMargin' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ConnectionLostPriceStops' is missing.
+2026-01-06 22:53:10:628 Required resource key 'BackgroundModalWindow' is missing.
+2026-01-06 22:53:10:628 Required resource key 'PaddingTextInputVertical' is missing.
+2026-01-06 22:53:10:628 Required resource key 'HdmDeleteRowBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'TabItemButton' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ButtonBackgroundStop1' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ButtonBackgroundStop2' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontHeaderLevel4Weight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontModalLinkStyle' is missing.
+2026-01-06 22:53:10:628 Required resource key 'LogonFontMainBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'TreeViewDisabledForeground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontPipBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontToolTipTitleWeight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'TreeViewDisabledSelectedForeground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ScrollBarForeAdornerPressed' is missing.
+2026-01-06 22:53:10:628 Required resource key 'LogonFontHeightMedium2' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontHeaderLevel3Margin' is missing.
+2026-01-06 22:53:10:628 Required resource key 'BackgroundTableSolidBottom' is missing.
+2026-01-06 22:53:10:628 Required resource key 'LogonSocialButtonBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ColorTabItemShadow' is missing.
+2026-01-06 22:53:10:628 Required resource key 'TabItemSelectedForeground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontHeaderLevel2Brush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ListBoxBackgroundBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'MarketWatchTileWidthLarge' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ParetoDataPointBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'MarginBase' is missing.
+2026-01-06 22:53:10:628 Required resource key 'SliderTicksBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontListHeight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontHeaderLevel3Height' is missing.
+2026-01-06 22:53:10:628 Required resource key 'TabItemButtonPressed' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontHeaderLevel3Style' is missing.
+2026-01-06 22:53:10:628 Required resource key 'TradingModeIsPressedForeground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontActiveTabWeight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontLabelFamily' is missing.
+2026-01-06 22:53:10:628 Required resource key 'NinjaScriptEditorNumberForeground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ColorDisabledBackground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontHeaderLevel2Family' is missing.
+2026-01-06 22:53:10:628 Required resource key 'SubPipMinWidthLarge' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ButtonBackgroundStops' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ColumnBaseBarColor' is missing.
+2026-01-06 22:53:10:628 Required resource key 'MarginFontList' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ColumnBaseAltBarColor' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontNormalTabBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'GridRowHighlight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'LongBackground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'DelayedDataInstrumentForegroundPressedBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'TabControlItemFontSizeUnselected' is missing.
+2026-01-06 22:53:10:628 Required resource key 'RadioButtonDisabledBorder' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ShadowTopStops' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontHeaderLevel2Style' is missing.
+2026-01-06 22:53:10:628 Required resource key 'TabActiveBorder' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontLabelHeight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FlatBackground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'MarketWatchTileHeightLarge' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontTitleBlockHeight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ExcessIntradayMarginHighlight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontControlStyle' is missing.
+2026-01-06 22:53:10:628 Required resource key 'InstrumentSelectorPopupBackground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ScrollBarTrackHover' is missing.
+2026-01-06 22:53:10:628 Required resource key 'TabItemHotForeground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'NinjaScriptOutputSearchHighlight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'SubPipSizeSmall' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontToolTipWeight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'PaddingColumn2' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ItemHoverStops' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ButtonBackgroundPressedBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'MenuItemDisabledForeground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ScrollBarVerticalForeHover' is missing.
+2026-01-06 22:53:10:628 Required resource key 'TradePerformanceFiltersBackground2' is missing.
+2026-01-06 22:53:10:628 Required resource key 'TabControlCloseButtonPadding' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontHeaderLevel1Height' is missing.
+2026-01-06 22:53:10:628 Required resource key 'LogonPasswordActiveBorder' is missing.
+2026-01-06 22:53:10:628 Required resource key 'OptimizationGraphGradientColor2' is missing.
+2026-01-06 22:53:10:628 Required resource key 'SizeLinkControlMenu' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontMenuTopBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ColorTextNormal' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontButtonFamily' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FocusedBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ComboBoxDisabledForeground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'LogonFontWeightSimExpired' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontToolTipTitleFamily' is missing.
+2026-01-06 22:53:10:628 Required resource key 'TabControlItemMarginBase' is missing.
+2026-01-06 22:53:10:628 Required resource key 'SystemMinMaxStops' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ToolTipDropShadowEffect' is missing.
+2026-01-06 22:53:10:628 Required resource key 'DelayedDataInstrumentBackgroundBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FxBoardInstrumentSelectorBackgroundSelected' is missing.
+2026-01-06 22:53:10:628 Required resource key 'NinjaTraderLogoWordmarkBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'OcoSignifierBackground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'LinkAllRedBackground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'BackgroundTextHighlight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'NinjaScriptEditorPlainTextForeground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'Alt1ApGridBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'LogonFontHeightMedium1' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ScrollBarVerticalForeground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontModalLinkMargin' is missing.
+2026-01-06 22:53:10:628 Required resource key 'PositionTextBlockProfitBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'Alt2ApGridBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontTableFamily' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontTableStyle' is missing.
+2026-01-06 22:53:10:628 Required resource key 'LogonLinkHoverBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'SubPipMinWidthSmall' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontLabelWeight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'SysMenuBackStops' is missing.
+2026-01-06 22:53:10:628 Required resource key 'LogonFontHeightLarge' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontToolTipTitleStyle' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ComboBoxItemHoverBorder' is missing.
+2026-01-06 22:53:10:628 Required resource key 'WorkspaceStroke' is missing.
+2026-01-06 22:53:10:628 Required resource key 'MarketWatchTileHeightExtraSmall' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontModalLinkHeight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'brushOrderPendingSubmit' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ScrollBarCaratDisabled' is missing.
+2026-01-06 22:53:10:628 Required resource key 'PaddingButton' is missing.
+2026-01-06 22:53:10:628 Required resource key 'XamNumericEditorBackgroundFocused' is missing.
+2026-01-06 22:53:10:628 Required resource key 'PositionTextBlockBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FxBoardSpreadBorderBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FxBoardPnLLossBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontMainNavigationHeight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontNormalTabHeight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontListWeight' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontActiveTabStyle' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FlashingCaptionBar' is missing.
+2026-01-06 22:53:10:628 Required resource key 'TextBoxErrorBorder' is missing.
+2026-01-06 22:53:10:628 Required resource key 'BackgroundActiveTab' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontNormalTabHoverBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ListBoxItemHoverBorder' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ShortBackground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ColorItemHoverBorder' is missing.
+2026-01-06 22:53:10:628 Required resource key 'BackgroundModalOverlayToolTipStrokeThickness' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontHeaderLevel4Brush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'PropertiesFatText' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ScrollBarForeAdorner' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ParetoDataPointHoverBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'PaddingTableHeader' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontActiveTabBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'OptimizationGraphGradientColor3' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ScrollBarArrowBackgroundHover' is missing.
+2026-01-06 22:53:10:628 Required resource key 'brushDailyLossLimitFifty' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FxBoardInstrumentSelectorBorder' is missing.
+2026-01-06 22:53:10:628 Required resource key 'SystemCloseBorder' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontListBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'SystemButtonsForeground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'GridRowBackground' is missing.
+2026-01-06 22:53:10:628 Required resource key 'ApGridLinesPen' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontToolTipBrush' is missing.
+2026-01-06 22:53:10:628 Required resource key 'FontMenuFamily' is missing.
+2026-01-06 22:53:10:628 Required resource key 'CheckBoxDisabledBorder' is missing.
+2026-01-06 22:53:10:629 Required resource key 'MarginControl' is missing.
+2026-01-06 22:53:10:629 Required resource key 'TileWidthSmall' is missing.
+2026-01-06 22:53:10:629 Required resource key 'FontTitleBlockStyle' is missing.
+2026-01-06 22:53:10:629 Required resource key 'ExcessPositionMarginHighlight' is missing.
+2026-01-06 22:53:10:629 Required resource key 'ColorDisabledForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'FontToolTipTitleBrush' is missing.
+2026-01-06 22:53:10:629 Required resource key 'MenuRibbonWidth' is missing.
+2026-01-06 22:53:10:629 Required resource key 'FxBoardPositionShortBrush' is missing.
+2026-01-06 22:53:10:629 Required resource key 'TabControlConnectionStatusSize' is missing.
+2026-01-06 22:53:10:629 Required resource key 'SizeLinkControlItem' is missing.
+2026-01-06 22:53:10:629 Required resource key 'DataSeries.PositionPenLoser' is missing.
+2026-01-06 22:53:10:629 Required resource key 'DataSeries.PriceMarkerBrush' is missing.
+2026-01-06 22:53:10:629 Required resource key 'DataSeries.TradingHoursPen' is missing.
+2026-01-06 22:53:10:629 Required resource key 'DataSeries.LongExecutionBrush' is missing.
+2026-01-06 22:53:10:629 Required resource key 'DataSeries.PositionPenWinner' is missing.
+2026-01-06 22:53:10:629 Required resource key 'DataSeries.ShortExecutionBrush' is missing.
+2026-01-06 22:53:10:629 Required resource key 'immutableBrushBidPriceForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'TriggerPendingOrderStateFillBrush' is missing.
+2026-01-06 22:53:10:629 Required resource key 'colorProfitTarget' is missing.
+2026-01-06 22:53:10:629 Required resource key 'holdDropShadowOpacity' is missing.
+2026-01-06 22:53:10:629 Required resource key 'brushEntryPriceBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'SuperDom.SellButtonsBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'immutableBrushDailyLowPriceBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'brushPriceColumnForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'brushBidPriceAlternateForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'immutableBrushLastTradeBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'immutableBrushEntryPriceBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'colorOrderTypeMarketIfTouched' is missing.
+2026-01-06 22:53:10:629 Required resource key 'immutableBrushBuyColumnBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'immutableBrushAskPriceForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'SuperDom.BuyButtonsBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'colorOrderTypeStopMarket' is missing.
+2026-01-06 22:53:10:629 Required resource key 'brushDailyLowPriceBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'colorOrderDropShadow' is missing.
+2026-01-06 22:53:10:629 Required resource key 'immutableBrushPriceColumnBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'immutableBrushVolumeColumnForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'immutableBrushSellColumnBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'brushSellColumnForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'brushVolumeColumnBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'colorOrderTypeLimit' is missing.
+2026-01-06 22:53:10:629 Required resource key 'brushSellColumnBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'brushDailyHighPriceBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'immutableBrushBidPriceAlternateForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'brushVolumeColumnForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'colorStopLoss' is missing.
+2026-01-06 22:53:10:629 Required resource key 'ModifierFlagBackgroundStops' is missing.
+2026-01-06 22:53:10:629 Required resource key 'brushBuyColumnForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'brushBuyColumnBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'immutableBrushSellColumnForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'brushPriceColumnBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'immutableBrushAskPriceAlternateForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'holdDropShadowRadius' is missing.
+2026-01-06 22:53:10:629 Required resource key 'SuperDom.ButtonBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'immutableBrushBuyColumnForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'brushAskPriceAlternateForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'immutableBrushDailyHighPriceBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'immutableBrushVolumeColumnBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'immutableBrushHighlightBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'brushAskPriceForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'ModifierFlagBackgroundBrush' is missing.
+2026-01-06 22:53:10:629 Required resource key 'PendingOrderStateFillBrush' is missing.
+2026-01-06 22:53:10:629 Required resource key 'colorOrderStateTriggerPending' is missing.
+2026-01-06 22:53:10:629 Required resource key 'ModifierFlagForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'brushHoldOutline' is missing.
+2026-01-06 22:53:10:629 Required resource key 'SuperDom.ActionButtonsBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'brushHighlightBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'immutableBrushPriceColumnForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'brushBidPriceForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'brushLastTradeBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'colorOrderTypeStopLimit' is missing.
+2026-01-06 22:53:10:629 Required resource key 'AtmHeaderTextBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'InstrumentTextForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'InstrumentTextBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'AtmHeaderBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'OrderTicket.ButtonBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'OrderTicket.BuyButtonsBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'OrderTicket.SellButtonsBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'BasicEntry.TextBoxBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'BasicEntry.SellButtonsBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'BasicEntry.DowntickBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'BasicEntry.PnLBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'BasicEntry.ButtonBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'BasicEntry.PositionQtyLongBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'BasicEntry.ActionButtonsBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'BasicEntry.UptickBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'BasicEntry.UptickForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'BasicEntry.BuyButtonsBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'BasicEntry.PositionQtyShortBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'BasicEntry.DowntickForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'Level2.DowntickForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'Level2.L9Background' is missing.
+2026-01-06 22:53:10:629 Required resource key 'Level2.L7Background' is missing.
+2026-01-06 22:53:10:629 Required resource key 'Level2.MarketMakersBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'Level2.L5Background' is missing.
+2026-01-06 22:53:10:629 Required resource key 'Level2.L6Background' is missing.
+2026-01-06 22:53:10:629 Required resource key 'Level2.UptickForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'Level2.L4Background' is missing.
+2026-01-06 22:53:10:629 Required resource key 'Level2.UptickBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'Level2.DowntickBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'Level2.L10Background' is missing.
+2026-01-06 22:53:10:629 Required resource key 'Level2.L8Background' is missing.
+2026-01-06 22:53:10:629 Required resource key 'Level2.TextForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'Level2.L3Background' is missing.
+2026-01-06 22:53:10:629 Required resource key 'Level2.L1Background' is missing.
+2026-01-06 22:53:10:629 Required resource key 'Level2.L2Background' is missing.
+2026-01-06 22:53:10:629 Required resource key 'Level2.MarketMakersForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'BorderWizardOuter' is missing.
+2026-01-06 22:53:10:629 Required resource key 'BorderWizardInner' is missing.
+2026-01-06 22:53:10:629 Required resource key 'BackgroundWizard' is missing.
+2026-01-06 22:53:10:629 Required resource key 'TimeAndSales.AskForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'TimeAndSales.AboveAskForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'TimeAndSales.BelowBidForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'TimeAndSales.BelowBidBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'TimeAndSales.AskBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'TimeAndSales.AtBidBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'TimeAndSales.BlockAlertForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'TimeAndSales.BidForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'TimeAndSales.BetweenBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'TimeAndSales.AtAskForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'TimeAndSales.AtAskBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'TimeAndSales.DailyHighForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'TimeAndSales.DailyLowForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'TimeAndSales.BetweenForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'TimeAndSales.AboveAskBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'TimeAndSales.AtBidForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'TimeAndSales.MainBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'TimeAndSales.BidBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'OptionChain.ItmLinePen' is missing.
+2026-01-06 22:53:10:629 Required resource key 'OptionChain.StrikeBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'OptionChain.HoverBrush' is missing.
+2026-01-06 22:53:10:629 Required resource key 'OptionChain.SelectionBrush' is missing.
+2026-01-06 22:53:10:629 Required resource key 'OptionChain.MaxVolumeBrush' is missing.
+2026-01-06 22:53:10:629 Required resource key 'OptionChain.OtmForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'OptionChain.StrikeForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'OptionChain.MinVolumeBrush' is missing.
+2026-01-06 22:53:10:629 Required resource key 'OptionChain.ItmLineBrush' is missing.
+2026-01-06 22:53:10:629 Required resource key 'OptionChain.PriceMarkerBrush' is missing.
+2026-01-06 22:53:10:629 Required resource key 'OptionChain.OtmBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'OptionChain.StrikeLadderPen' is missing.
+2026-01-06 22:53:10:629 Required resource key 'OptionChain.ItmForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'OptionChain.ItmBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'FxBoard.ButtonBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'FxBoard.UptickForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'FxBoard.DowntickBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'FxBoard.UptickBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'FxBoard.DowntickForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'FxBoard.ButtonForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'AlertBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'AlertForeground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'LogGrid.WarningBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'LogGrid.ErrorBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'LogGrid.InformationBackground' is missing.
+2026-01-06 22:53:10:629 Required resource key 'LogGrid.AlertBackground' is missing.
+2026-01-06 22:53:10:745 ChartHotKeys: Alerts='' DisableAllAlerts='' EnableAllAlerts='' DataSeries='Ctrl+F' Indicators='Ctrl+I' Strategies='Ctrl+S' Properties='Ctrl+T' CrosshairPointer='Ctrl+R' CrosshairLocal='Ctrl+Q' CrosshairGlobal='Ctrl+G' CrosshairGlobal2='Ctrl+N' CrosshairLock='Ctrl+L' AutoScaleAndReturn='' CyclePlotExecutions='Ctrl+E' ReloadHistoricalData='Ctrl+Shift+R' ReloadNinjaScript='F5' SaveChartImage='Alt+S' ShowDataBox='Ctrl+D' ShowChartTrader='' ShowChartTraderHidden='' ShowIndicators='' ShowScrollBar='' SnapModeBar='Ctrl+Shift+F3' SnapModeBarTick='Ctrl+Shift+F4' SnapModeBarObject='' SnapModeDisabled='Ctrl+Shift+F5' SnapModeTick='Ctrl+Shift+F6' StayInDrawMode='Ctrl+Shift+F2' ZoomIn='Ctrl+Alt+Z' ZoomOut='Ctrl+Alt+O' BarSpacingPlus='Ctrl+Down' BarSpacingMinus='Ctrl+Up' BarWidthPlus='Alt+Down' BarWidthMinus='Alt+Up' Arc='Ctrl+F7' AndrewsPitchfork='Ctrl+F8' ArrowDown='Alt+F3' ArrowLine='Ctrl+F2' ArrowUp='Alt+F2' Diamond='Alt+F5' Dot='Alt+F6' Ellipse='Ctrl+F11' ExtendedLine='F4' FibonacciCircle='F11' FibonacciExtension='F9' FibonacciRetracement='F8' FibonacciTimeExtension='F10' GannFan='Ctrl+F9' HorizontalLine='F6' Line='F2' Path='' Polygon='' VolumeProfile='' VWAP='' Ray='F3' Rectangle='Ctrl+F12' RegressionChannel='Ctrl+F9' HideDrawingObjects='' RemoveDrawingObjects='Ctrl+Shift+F7' RegionHighlightX='Shift+F1' RegionHighlightY='Shift+F2' RiskReward='Ctrl+F4' Ruler='Ctrl+F3' Square='Alt+F7' Text='F12' TimeCycles='' TrendChannel='Ctrl+2' Triangle='Ctrl+F6' TriangleDown='Alt+F9' TriangleUp='Alt+F8' VerticalLine='F7'
+2026-01-06 22:53:10:747 GlobalHotKeys: CloseWorkspace='' NextWorkspace='Shift+F3' PreviousWorkspace='' SaveWorkspace='' SaveAllWorkspaces='' NewAccountData='' NewTradePerformance='' NewAlertsLog='' NewBasicEntry='' NewChart='' NewFxBoard='' NewFxPro='' NewHotListAnalyzer='' NewLevel2='' NewMarketAnalyzer='' NewMarketWatch='' NewNews='' NewNinjaScriptEditor='' NewNinjaScriptOutput='' NewOrderTicket='' NewStrategyAnalyzer='' NewDynamicDom='' NewStaticDom='' NewTimeAndSales='' CancelAllOrders='' FlattenEverything='' OpenInstrumentManager='' OpenInstrumentList='' OpenDatabase='' OpenHotKeyManager='' OpenHistoricalData='' OpenCommission='' OpenRisk='' OpenTradingHoursManager='' OpenRemoveNinjaScript='' CloseOtherTabs='' CloseTab='' DuplicateInNewTab='' DuplicateInNewWindow='' Export='' Find='Ctrl+F' MoveToNewWindow='' Print='Ctrl+P' Replace='Ctrl+H' Share='Ctrl+Shift+S' LoadTemplate='' SaveTemplate='' SaveTemplateAsDefault=''
+2026-01-06 22:53:10:754 MarketAnalyzerHotKeys: AddBlankRow='' AddLabelRow='' Columns='' Alerts='' EnableAllAlerts='' DisableAllAlerts='' AutoSort='' RowFilter='' ReloadHistorical='Ctrl+Shift+R' ReloadNinjaScript='F5'
+2026-01-06 22:53:10:754 NinjaScriptEditorHotKeys: InsertCodeSnippet='F2' FindNext='F3' Compile='F5' GoToLine='Ctrl+G' CommentSelection='Ctrl+K' InlineSyntaxChecking='Ctrl+Alt+S' CollapseToDefinitions='' ExpandAllOutlining='' StartOutlining='' StopOutlining='' HideSelection='' StopHidingSelection='' ToggleAllOutlining='' ToggleOutlining='' Save='Ctrl+S' Undo='Ctrl+Z' Redo='Ctrl+Y'
+2026-01-06 22:53:10:755 OrderEntryHotKeys: BuyAsk='' BuyBid='' BuyMarket='' SellAsk='' SellBid='' SellMarket='' BreakevenAtmStrategy='' BreakevenPosition='' CancelLastOrder='' CloseAtmStrategy='' ClosePosition='' DecreaseLastOrderPrice='' IncreaseLastOrderPrice='' ModifyLastOrder2Fill='' Reverse='' OcoOrder='' SimulatedOrder=''
+2026-01-06 22:53:10:756 SuperDomHotKeys: Center='' Columns='' Indicators='' ReloadAllHistoricalData='Ctrl+Shift+R' ReloadNinjaScript='F5'
+2026-01-06 22:53:10:756 OrderEntryHotKeys=disabled
+2026-01-06 22:53:10:757 AutoClose=disabled
+2026-01-06 22:53:11:263 Core.Instrumentation.LogActivity: activityType=Application errorCode=NoError errorMessage=''
+2026-01-06 22:53:11:651 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=9 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=263 TradingHours=0
+2026-01-06 22:53:13:227 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.01ms InstrumentLists=0.45ms MasterInstruments=0.10ms Messages=0.47ms Risks=0.19ms RolloverCollection=1573.83ms TradingHours=0.12ms
+2026-01-06 22:53:13:227 Starting server message polling timer with interval 3600 seconds...
+2026-01-06 22:53:18:984 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:19:313 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:19:507 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:19:679 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:19:889 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:20:068 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:20:239 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:20:433 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:20:613 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:20:846 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:21:022 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:21:187 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:21:335 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:21:463 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:21:602 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:21:739 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:21:892 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:22:023 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:22:159 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:22:295 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:24:452 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:25:917 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:26:076 Core.Instrumentation.LogActivity: activityType=NinjaScript errorCode=NoError errorMessage=''
+2026-01-06 22:53:26:494 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:27:068 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:27:578 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:28:057 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:28:603 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:29:132 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:29:677 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:30:534 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:31:011 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:31:539 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:32:022 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:32:528 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:33:017 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:33:539 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:34:037 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:34:539 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:35:040 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:35:537 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-06 22:53:38:881 20 Chart Chart1Tab1 1 Ser 3 Ind 1 DrawObj Chart2Tab1 1 Ser 4 Ind 1 DrawObj Chart3Tab1 1 Ser 3 Ind 1 DrawObj Chart4Tab1 1 Ser 3 Ind 0 DrawObj Chart5Tab1 1 Ser 3 Ind 1 DrawObj Chart6Tab1 1 Ser 3 Ind 1 DrawObj Chart7Tab1 1 Ser 3 Ind 1 DrawObj Chart8Tab1 1 Ser 3 Ind 1 DrawObj Chart9Tab1 1 Ser 3 Ind 1 DrawObj Chart10Tab1 1 Ser 3 Ind 1 DrawObj Chart11Tab1 1 Ser 3 Ind 1 DrawObj Chart12Tab1 1 Ser 3 Ind 1 DrawObj Chart13Tab1 1 Ser 3 Ind 1 DrawObj Chart14Tab1 1 Ser 3 Ind 1 DrawObj Chart15Tab1 1 Ser 3 Ind 0 DrawObj Chart16Tab1 1 Ser 3 Ind 1 DrawObj Chart17Tab1 1 Ser 3 Ind 1 DrawObj Chart18Tab1 1 Ser 3 Ind 1 DrawObj Chart19Tab1 1 Ser 3 Ind 1 DrawObj Chart20Tab1 1 Ser 3 Ind 1 DrawObj 
+2026-01-06 22:54:00:584 Finalizing addon 'AddonSuiteManager.Addon.Standalone.AddonSuiteManager'
+2026-01-06 22:54:00:584 Finalizing addon 'NinjaTrader.NinjaScript.AddOns.NewsUpdate'
+2026-01-06 22:54:00:585 Finalizing addon 'ReplayDataPlus.Addon.Standalone.ReplayDataPlusManager'
+2026-01-06 22:54:00:710 Shutting down NinjaTrader
+2026-01-06 22:54:00:710 Shutting down instrument management
+2026-01-06 22:54:00:711 Shutting down instrument threads
+2026-01-06 22:54:00:742 Shutting down recorder
+2026-01-06 22:54:00:746 Shutting down file type watcher
+2026-01-06 22:54:00:746 Shutting down ATI server
+2026-01-06 22:54:00:759 Shutting down auto trade component
+2026-01-06 22:54:00:760 Shutting down SMTP server
+2026-01-06 22:54:00:782 Shutting down adapter server
+2026-01-06 22:54:00:797 Shutting down server(s)
+2026-01-06 22:54:00:801 Shutting down mail thread
+2026-01-06 22:54:00:801 Shutting down sound thread
+2026-01-06 22:54:00:801 Shutting down timer
+2026-01-06 22:54:00:801 Shutting down alerts timer
+2026-01-06 22:54:00:801 Shutting down message timer
+2026-01-06 22:54:00:801 Shutting down db
+2026-01-06 22:54:00:802 Flushing DB thread
+2026-01-06 22:54:00:888 Shutting down bars dictionary
+2026-01-06 22:54:00:902 Shutting down user entitlement threads
+2026-01-06 22:54:00:923 Shutting down logs
+2026-01-06 22:54:00:934 Shutting down bars types
+2026-01-06 22:54:00:935 Shutting down UI threads
+2026-01-06 22:54:00:968 ************************ Session End ************************

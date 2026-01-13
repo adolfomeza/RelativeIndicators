@@ -37,7 +37,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.15.7"; // v1.15.7: Show level attempt counter in status panel
+		private const string StrategyVersion = "v1.15.8"; // v1.15.8: Fixed CS1061 errors (CancelAllProtectionOrders + InheritFromGlobal)
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;

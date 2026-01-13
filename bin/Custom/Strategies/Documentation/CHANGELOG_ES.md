@@ -7,6 +7,23 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 ### Agregado
 - **Módulo SL Adaptativo (Supervivencia):** Reemplazo de la lógica de salida de emergencia. Ahora, si el precio salta el Stop Loss durante la entrada, el sistema adapta el SL a `Precio Actual +/- 4 ticks` para asegurar que la orden sea aceptada por NinjaTrader y la posición siga protegida, en lugar de cerrar o fallar.
 
+## [v1.15.8] - 2026-01-13
+### Corregido
+- **Errores de Compilación CS1061:** Implementados 2 métodos faltantes que causaban errores de compilación.
+  - **`CancelAllProtectionOrders()`** en `OrderProtectionManager.cs`:
+    - **Ubicación**: Llamado en `SessionLevelsStrategy.cs` líneas 1955, 1971, 2052, 2084
+    - **Propósito**: Cancela todas las órdenes de protección (SL, TP1, TP2) antes de ejecutar salidas de emergencia para prevenir condiciones de carrera que podrían causar posiciones inversas.
+    - **Lógica**: Verifica estado de cada orden (Working/Accepted) antes de cancelar usando `CancelOrderWrapper()`.
+  - **`InheritFromGlobal()`** en `VWAPCalculator.cs`:
+    - **Ubicación**: Llamado en `SessionLevelsStrategy.cs` línea 1331
+    - **Propósito**: Preserva los valores acumulados del Global VWAP cuando un trade activo cruza las 18:00 (cierre de sesión). Evita perder el cálculo de TP1 cuando el Global VWAP se resetea.
+    - **Lógica**: Copia `VolSum` y `PvSum` del Global VWAP (High o Low según el setup) al Trade VWAP y activa el modo de extensión post-sesión.
+
+### Técnico
+- Agregado método `CancelAllProtectionOrders()` en `SessionLevels/OrderProtectionManager.cs:552-583`.
+- Agregado método `InheritFromGlobal()` en `SessionLevels/VWAPCalculator.cs:312-331`.
+- Ambos métodos incluyen logs diagnósticos detallados.
+
 ## [v1.15.7] - 2026-01-13
 ### Agregado
 - **Panel de Estado: Contador de Intentos por Nivel**: Ahora el panel muestra dos contadores separados:

@@ -1,0 +1,1631 @@
+******************* Session Start (Version 8.1.6.2) *******************
+2026-01-04 22:45:08:158 ERROR: There are no email share services defined. You need to define one and set "Default" to true for email to work.
+2026-01-04 22:45:08:488 System.ArgumentNullException: Value cannot be null.
+Parameter name: uriString
+   at System.Uri..ctor(String uriString)
+   at NinjaTrader.Core.UriConverter.ConvertUri(String uriToConvert, Boolean isDev, Boolean isBeta)
+2026-01-04 22:45:18:730 Cbi.Globals.MachineId: True/True 280CB754932A645C8D63C782E8605C43
+2026-01-04 22:45:18:731 NinjaTrader.Gui.LoginInternal user='joelbencomo' mode='Simulation'
+2026-01-04 22:45:18:759 ERROR: There was an error on initializing instrumentation: Object reference not set to an instance of an object.
+2026-01-04 22:45:18:760 Core.Instrumentation.ActivitySource: enabled=False randomPercent=-1 enabledSessionsPercent=100 chartMs=250 enabledTypes=''
+2026-01-04 22:45:18:862 (Simulation) NinjaTrader.Core.Authentication.GetAccessToken1 exp='Invalid URI: The format of the URI could not be determined.'
+2026-01-04 22:45:18:863 NinjaTrader.Core.Authentication.Authenticate: error on connect: Invalid URI: The format of the URI could not be determined.
+2026-01-04 22:45:37:824 NinjaTrader.Gui.LoginInternal user='joelbencomo' mode='Simulation'
+2026-01-04 22:45:38:557 NinjaTrader.Core.Authentication.Authenticate: error on connect: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-01-04 22:45:41:248 NinjaTrader.Gui.LoginInternal user='joelbencomo' mode='Simulation'
+2026-01-04 22:45:41:488 NinjaTrader.Core.Authentication.Authenticate: error on connect: Incorrect username or password. Please try again, noting that passwords are case-sensitive.
+2026-01-04 22:45:46:214 NinjaTrader.Gui.LoginInternal user='joelbencomo' mode='Simulation'
+2026-01-04 22:45:46:560 (Simulation) NinjaTrader.Core.Authentication.GetAccessToken6
+2026-01-04 22:45:46:564 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.8919091' renewSecs='2399.94595455'
+2026-01-04 22:45:47:314 Cbi.UserEntitlement.VerifyAsync.0 apiUrl='https://live.tradovateapi.com'
+2026-01-04 22:45:47:775 Cbi.UserEntitlement.VerifyAsync.98: Evaluation expiration=2026-12-31, Evaluation expiration=2026-12-31
+2026-01-04 22:45:48:217 PrimaryMonitorWPFDPIScale=1.00
+2026-01-04 22:45:48:473 Cbi.UserEntitlement.VerifyAsync.99: subscription=Free licensedProviders='Playback Simulator NinjaTrader NinjaTrader Continuum NinjaTrader FXCM IQFeed E-Signal External FOREX.com Interactive Brokers Barchart.com Kinetick FXCM Coinbase cTrader Schwab Rithmic for NinjaTrader Brokerage Custom0 Custom2 Custom3 Custom4 Custom6 Custom7 Custom8 Custom9 Custom10 Provider13 Custom14 Provider26 Custom15 Custom16 Custom17 Custom18 Custom19 Custom20 Custom21 Custom22 Custom23 Custom24 Custom25 Custom26 Custom27 Custom28 Custom29 Custom30 Custom31 Custom32 Custom33 Custom34 Custom35 Custom36 Custom37 Custom38 Custom39 Custom40'
+2026-01-04 22:45:48:531 InstallDir='C:\Program Files\NinjaTrader 8\'
+2026-01-04 22:45:48:531 UserDataDir='C:\Users\prueba\Documents\NinjaTrader 8\'
+2026-01-04 22:45:48:531 MachineID='280CB754932A645C8D63C782E8605C43'
+2026-01-04 22:45:48:531 OS='Microsoft Windows NT 10.0.26200.0'/'Win32NT'
+2026-01-04 22:45:48:531 OSLanguage='en-US'
+2026-01-04 22:45:48:531 OSEnvironment='64bit'
+2026-01-04 22:45:48:531 Processors=12
+2026-01-04 22:45:48:531 ThreadPool: minWorkerThreads=12 maxWorkerThreads=32767 minCompletionPortThreads=12 maxCompletionPortThreads=1000
+2026-01-04 22:45:49:600 ProcessorSpeed=2.6 GHz
+2026-01-04 22:45:49:600 PhysicalMemory=24576 MB
+2026-01-04 22:45:51:605 DisplayAdapters=2/NVIDIA GeForce GTX 1650|Intel(R) UHD Graphics
+2026-01-04 22:45:51:605 Monitors=2/1920x1080|1920x1080
+2026-01-04 22:45:51:605 .NET/CLR Version='4.8'/64bit
+2026-01-04 22:45:51:606 SQLiteVersion='1.0.116.0'
+2026-01-04 22:45:51:606 ApplicationTimezone=EST +1 hour(s)
+2026-01-04 22:45:51:606 ApplicationTimezone=UTC -4 hour(s)
+2026-01-04 22:45:51:606 LocalTimezone=EST +1 hour(s)
+2026-01-04 22:45:51:606 LocalTimezone=UTC -4 hour(s)
+2026-01-04 22:45:51:777 DirectXRenderingHW
+2026-01-04 22:45:51:777 Copying custom assemblies...
+2026-01-04 22:45:51:788 Loading custom assemblies...
+2026-01-04 22:45:51:789 Loading C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\NinjaTrader.Custom.dll...
+2026-01-04 22:45:52:006 Loading C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\NinjaTrader.Vendor.dll...
+2026-01-04 22:45:52:017 Deleting temporary files...
+2026-01-04 22:45:52:304 Copying db and restoring templates...
+2026-01-04 22:45:52:313 Loading third party assemblies...
+2026-01-04 22:45:52:340 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\ASCENDO_NewsEvents.dll...
+2026-01-04 22:45:53:297 Cbi.VendorLicense.Verify.1: trying 'https://license.ninjatrader.com/vendorlicensenew/ASCENDO/IndicatorNewsEvents/2/R-280CB754932A645C8D63C782E8605C43.xml' ...
+2026-01-04 22:45:53:485 Cbi.VendorLicense.Verify.1: good
+2026-01-04 22:45:53:498 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\WindowsInput.dll...
+2026-01-04 22:45:53:499 Initializing database...
+2026-01-04 22:45:53:499 Loading master instruments...
+2026-01-04 22:45:53:648 (Db) Cbi.DB.get_Current.CreateConnection.Start
+2026-01-04 22:45:53:650 (Db) Cbi.DB: connectionString='Data Source="C:\Users\prueba\Documents\NinjaTrader 8\db\NinjaTrader.sqlite";Version=3;Synchronous=Full;Journal Mode=Off;Pooling=True;Max Pool Size=100;foreign keys=true;'
+2026-01-04 22:45:54:101 (Db) Cbi.DB.get_Current.CreateConnection.End
+2026-01-04 22:45:54:183 Loading instruments...
+2026-01-04 22:45:54:426 Loading accounts...
+2026-01-04 22:45:54:494 Loading users...
+2026-01-04 22:45:54:512 Downloading server info...
+2026-01-04 22:45:54:512 Starting instrument management...
+2026-01-04 22:45:54:529 Starting timer...
+2026-01-04 22:45:54:529 Creating file type watcher...
+2026-01-04 22:45:54:529 Setting ATI...
+2026-01-04 22:45:54:543 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-04 22:45:54:547 Connecting ATI server...
+2026-01-04 22:45:54:548 Server.AtiServer.Connect0
+2026-01-04 22:45:54:548 Starting adapter server...
+2026-01-04 22:45:54:550 Server.AtiServer.Connect1: Port='36973'
+2026-01-04 22:45:54:550 Server.AtiServer.Connect2
+2026-01-04 22:45:54:566 Starting bars dictionary...
+2026-01-04 22:45:54:567 Starting recorder...
+2026-01-04 22:45:54:569 Starting server(s)...
+2026-01-04 22:45:54:599 Core.Globals.ApplicationStart.Commission: minVersion=1 maxVersion=3150
+2026-01-04 22:45:54:599 Core.Globals.ApplicationStart.InstrumentList: minVersion=-475 maxVersion=475
+2026-01-04 22:45:54:599 Core.Globals.ApplicationStart.MasterInstrument: minVersion=-9897 maxVersion=9897
+2026-01-04 22:45:54:599 Core.Globals.ApplicationStart.Risk: minVersion=1 maxVersion=14172
+2026-01-04 22:45:54:599 Core.Globals.ApplicationStart.TradingHours: minVersion=1 maxVersion=5111
+2026-01-04 22:45:54:761 ChartHotKeys: Alerts='' DisableAllAlerts='' EnableAllAlerts='' DataSeries='Ctrl+F' Indicators='Ctrl+I' Strategies='Ctrl+S' Properties='Ctrl+T' CrosshairPointer='Ctrl+R' CrosshairLocal='Ctrl+Q' CrosshairGlobal='Ctrl+G' CrosshairGlobal2='Ctrl+N' CrosshairLock='Ctrl+L' AutoScaleAndReturn='' CyclePlotExecutions='Ctrl+E' ReloadHistoricalData='Ctrl+Shift+R' ReloadNinjaScript='F5' SaveChartImage='Alt+S' ShowDataBox='Ctrl+D' ShowChartTrader='' ShowChartTraderHidden='' ShowIndicators='' ShowScrollBar='' SnapModeBar='Ctrl+Shift+F3' SnapModeBarTick='Ctrl+Shift+F4' SnapModeBarObject='' SnapModeDisabled='Ctrl+Shift+F5' SnapModeTick='Ctrl+Shift+F6' StayInDrawMode='Ctrl+Shift+F2' ZoomIn='Ctrl+Alt+Z' ZoomOut='Ctrl+Alt+O' BarSpacingPlus='Ctrl+Down' BarSpacingMinus='Ctrl+Up' BarWidthPlus='Alt+Down' BarWidthMinus='Alt+Up' Arc='Ctrl+F7' AndrewsPitchfork='Ctrl+F8' ArrowDown='Alt+F3' ArrowLine='Ctrl+F2' ArrowUp='Alt+F2' Diamond='Alt+F5' Dot='Alt+F6' Ellipse='Ctrl+F11' ExtendedLine='F4' FibonacciCircle='F11' FibonacciExtension='F9' FibonacciRetracement='F8' FibonacciTimeExtension='F10' GannFan='Ctrl+F9' HorizontalLine='F6' Line='F2' Path='' Polygon='' VolumeProfile='' VWAP='' Ray='F3' Rectangle='Ctrl+F12' RegressionChannel='Ctrl+F9' HideDrawingObjects='' RemoveDrawingObjects='Ctrl+Shift+F7' RegionHighlightX='Shift+F1' RegionHighlightY='Shift+F2' RiskReward='Ctrl+F4' Ruler='Ctrl+F3' Square='Alt+F7' Text='F12' TimeCycles='' TrendChannel='Ctrl+2' Triangle='Ctrl+F6' TriangleDown='Alt+F9' TriangleUp='Alt+F8' VerticalLine='F7'
+2026-01-04 22:45:54:764 GlobalHotKeys: CloseWorkspace='' NextWorkspace='Shift+F3' PreviousWorkspace='' SaveWorkspace='' SaveAllWorkspaces='' NewAccountData='' NewTradePerformance='' NewAlertsLog='' NewBasicEntry='' NewChart='' NewFxBoard='' NewFxPro='' NewHotListAnalyzer='' NewLevel2='' NewMarketAnalyzer='' NewMarketWatch='' NewNews='' NewNinjaScriptEditor='' NewNinjaScriptOutput='' NewOrderTicket='' NewStrategyAnalyzer='' NewDynamicDom='' NewStaticDom='' NewTimeAndSales='' CancelAllOrders='' FlattenEverything='' OpenInstrumentManager='' OpenInstrumentList='' OpenDatabase='' OpenHotKeyManager='' OpenHistoricalData='' OpenCommission='' OpenRisk='' OpenTradingHoursManager='' OpenRemoveNinjaScript='' CloseOtherTabs='' CloseTab='' DuplicateInNewTab='' DuplicateInNewWindow='' Export='' Find='Ctrl+F' MoveToNewWindow='' Print='Ctrl+P' Replace='Ctrl+H' Share='Ctrl+Shift+S' LoadTemplate='' SaveTemplate='' SaveTemplateAsDefault=''
+2026-01-04 22:45:54:770 MarketAnalyzerHotKeys: AddBlankRow='' AddLabelRow='' Columns='' Alerts='' EnableAllAlerts='' DisableAllAlerts='' AutoSort='' RowFilter='' ReloadHistorical='Ctrl+Shift+R' ReloadNinjaScript='F5'
+2026-01-04 22:45:54:772 NinjaScriptEditorHotKeys: InsertCodeSnippet='F2' FindNext='F3' Compile='F5' GoToLine='Ctrl+G' CommentSelection='Ctrl+K' InlineSyntaxChecking='Ctrl+Alt+S' CollapseToDefinitions='' ExpandAllOutlining='' StartOutlining='' StopOutlining='' HideSelection='' StopHidingSelection='' ToggleAllOutlining='' ToggleOutlining='' Save='Ctrl+S' Undo='Ctrl+Z' Redo='Ctrl+Y'
+2026-01-04 22:45:54:773 OrderEntryHotKeys: BuyAsk='' BuyBid='' BuyMarket='' SellAsk='' SellBid='' SellMarket='' BreakevenAtmStrategy='' BreakevenPosition='' CancelLastOrder='' CloseAtmStrategy='' ClosePosition='' DecreaseLastOrderPrice='' IncreaseLastOrderPrice='' ModifyLastOrder2Fill='' Reverse='' OcoOrder='' SimulatedOrder=''
+2026-01-04 22:45:54:774 SuperDomHotKeys: Center='' Columns='' Indicators='' ReloadAllHistoricalData='Ctrl+Shift+R' ReloadNinjaScript='F5'
+2026-01-04 22:45:54:774 OrderEntryHotKeys=disabled
+2026-01-04 22:45:54:775 AutoClose=disabled
+2026-01-04 22:45:55:668 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=9 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=263 TradingHours=0
+2026-01-04 22:45:57:081 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.01ms InstrumentLists=0.51ms MasterInstruments=0.10ms Messages=0.35ms Risks=0.12ms RolloverCollection=1411.67ms TradingHours=0.10ms
+2026-01-04 22:45:57:082 Starting server message polling timer with interval 3600 seconds...
+2026-01-04 22:46:08:987 SQLite error (17): statement aborts at 50: [SELECT Id,Account,BarIndex,Commission,Exchange,ExecutionId,Fee,Instrument,IsEntry,IsEntryStrategy,IsExit,IsExitStrategy,LotSize,MarketPosition,MaxPrice,MinPrice,Name,OrderId,Position,P
+2026-01-04 22:46:21:470 12 Chart Chart1Tab1 1 Ser 3 Ind 1 DrawObj Chart2Tab1 1 Ser 3 Ind 1 DrawObj Chart3Tab1 1 Ser 3 Ind 2 DrawObj Chart4Tab1 1 Ser 3 Ind 1 DrawObj Chart5Tab1 1 Ser 4 Ind 1 DrawObj Chart6Tab1 1 Ser 4 Ind 1 DrawObj Chart7Tab1 1 Ser 3 Ind 0 DrawObj Chart8Tab1 1 Ser 3 Ind 1 DrawObj Chart9Tab1 1 Ser 3 Ind 1 DrawObj Chart10Tab1 1 Ser 3 Ind 1 DrawObj Chart11Tab1 1 Ser 3 Ind 1 DrawObj Chart12Tab1 1 Ser 3 Ind 1 DrawObj 
+2026-01-04 22:46:35:593 (Simulation) Gui.ControlCenter.OnConnect
+2026-01-04 22:46:35:674 (Simulation) Cbi.Connection.Connect0: status=Disconnected assembly=8.1.6.2 date=2026-01-04 runAsProcess=False
+2026-01-04 22:46:35:687 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2026-01-04 22:46:35:690 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2026-01-04 22:46:35:700 (Simulation) Cbi.Connection.Connect1
+2026-01-04 22:46:35:712 (Simulation) Cbi.Connection.Connect2
+2026-01-04 22:46:35:712 (Simulation) Cbi.Connection.Connect3
+2026-01-04 22:46:35:719 (Simulation) Cbi.Connection.CreateAccount: account='Sim101' displayName='Sim101' fcm='' denomination=UsDollar forexLotSize=10000
+2026-01-04 22:46:35:724 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connecting previousStatus=Disconnected message=''
+2026-01-04 22:46:35:726 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2026-01-04 22:46:35:727 (Simulation) Cbi.Account.OnConnectionStatus.PositionExecutions: account='Sim101'
+2026-01-04 22:46:35:727 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connecting priceStatus=Connecting
+2026-01-04 22:46:35:739 (Simulation) Cbi.Connection.Connect4
+2026-01-04 22:46:35:881 (Simulation) Cbi.Connection.Connect5
+2026-01-04 22:46:35:885 (Simulation) Tradovate.Adapter.Connect: user='joelbencomo' accountType='Simulation' useLocalOcoSimulation=True
+2026-01-04 22:46:35:912 (Simulation) Cbi.Connection.Connect9 ok
+2026-01-04 22:46:36:379 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=True foundConnected=False
+2026-01-04 22:46:36:391 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connecting
+2026-01-04 22:46:36:407 (Simulation) Tradovate.Adapter.StartTradeWebSocket
+2026-01-04 22:46:36:625 (Simulation) Tradovate.Adapter.StartTradeWebSocket1
+2026-01-04 22:46:36:625 (Simulation) Tradovate.Adapter.StartWebSocketTradeSendWorker
+2026-01-04 22:46:36:626 (Simulation) Tradovate.Adapter.StartWebSocketTradeReceiveWorker
+2026-01-04 22:46:36:631 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage
+2026-01-04 22:46:37:023 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-04 22:46:37:366 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-04 22:46:37:367 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-04 22:46:37:367 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-04 22:46:37:374 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-04 22:46:38:503 (Simulation) Cbi.Connection.CreateAccount: account='DEMO619219' displayName='DEMO' fcm='' denomination=UsDollar forexLotSize=1
+2026-01-04 22:46:38:503 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connecting previousStatus=Disconnected message=''
+2026-01-04 22:46:38:503 (Simulation) Cbi.Account.OnConnectionStatus.PositionExecutions: account='DEMO619219'
+2026-01-04 22:46:38:514 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=CashValue currency=UsDollar value=*****
+2026-01-04 22:46:38:514 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-04 22:46:38:514 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-04 22:46:38:516 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=InitialMargin currency=UsDollar value=*****
+2026-01-04 22:46:38:516 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=IntradayMargin currency=UsDollar value=*****
+2026-01-04 22:46:38:539 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669073_1' account='DEMO619219' instrument='MGC 02-26' exchange=Globex price=4376.2 quantity=2 marketPosition=Short operation=Add orderID='356274669073' isSod=False time='2026-01-04 19:20:09' statementDate='1800-01-01'
+2026-01-04 22:46:38:551 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669332_1' account='DEMO619219' instrument='ZS 03-26' exchange=Globex price=1050 quantity=3 marketPosition=Short operation=Add orderID='356274669332' isSod=False time='2026-01-04 21:15:52' statementDate='1800-01-01'
+2026-01-04 22:46:38:552 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669283_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=93540 quantity=7 marketPosition=Long operation=Add orderID='356274669283' isSod=False time='2026-01-04 21:14:11' statementDate='1800-01-01'
+2026-01-04 22:46:38:553 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669400_1' account='DEMO619219' instrument='ZS 03-26' exchange=Globex price=1050.5 quantity=3 marketPosition=Long operation=Add orderID='356274669400' isSod=False time='2026-01-04 21:18:26' statementDate='1800-01-01'
+2026-01-04 22:46:38:556 (Simulation) Cbi.Account.OnAddTrade: entryId='356274669332_1' exitId='356274669400_1' profitCurrencyBeforeCommissionAndFees=-75
+2026-01-04 22:46:38:556 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669443_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=93435 quantity=7 marketPosition=Short operation=Add orderID='356274669443' isSod=False time='2026-01-04 21:19:57' statementDate='1800-01-01'
+2026-01-04 22:46:38:556 (Simulation) Cbi.Account.OnAddTrade: entryId='356274669283_1' exitId='356274669443_1' profitCurrencyBeforeCommissionAndFees=-73.5
+2026-01-04 22:46:38:561 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669607_1' account='DEMO619219' instrument='MHG 03-26' exchange=Globex price=5.812 quantity=2 marketPosition=Short operation=Add orderID='356274669607' isSod=False time='2026-01-04 21:36:00' statementDate='1800-01-01'
+2026-01-04 22:46:38:561 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669607_2' account='DEMO619219' instrument='MHG 03-26' exchange=Globex price=5.812 quantity=2 marketPosition=Short operation=Add orderID='356274669607' isSod=False time='2026-01-04 21:36:00' statementDate='1800-01-01'
+2026-01-04 22:46:38:562 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669607_3' account='DEMO619219' instrument='MHG 03-26' exchange=Globex price=5.8125 quantity=1 marketPosition=Short operation=Add orderID='356274669607' isSod=False time='2026-01-04 21:36:00' statementDate='1800-01-01'
+2026-01-04 22:46:38:562 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669216_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=93395 quantity=1 marketPosition=Short operation=Add orderID='356274669216' isSod=False time='2026-01-04 21:12:54' statementDate='1800-01-01'
+2026-01-04 22:46:38:563 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669216_2' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=93395 quantity=6 marketPosition=Short operation=Add orderID='356274669216' isSod=False time='2026-01-04 21:13:01' statementDate='1800-01-01'
+2026-01-04 22:46:38:563 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669384_1' account='DEMO619219' instrument='MHG 03-26' exchange=Globex price=5.8005 quantity=1 marketPosition=Long operation=Add orderID='356274669384' isSod=False time='2026-01-04 21:25:03' statementDate='1800-01-01'
+2026-01-04 22:46:38:563 (Simulation) Cbi.Account.OnAddTrade: entryId='356274669607_1' exitId='356274669384_1' profitCurrencyBeforeCommissionAndFees=28.7499999999996
+2026-01-04 22:46:38:564 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669384_2' account='DEMO619219' instrument='MHG 03-26' exchange=Globex price=5.802 quantity=1 marketPosition=Long operation=Add orderID='356274669384' isSod=False time='2026-01-04 21:25:03' statementDate='1800-01-01'
+2026-01-04 22:46:38:564 (Simulation) Cbi.Account.OnAddTrade: entryId='356274669607_1' exitId='356274669384_2' profitCurrencyBeforeCommissionAndFees=25.0000000000017
+2026-01-04 22:46:38:564 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669624_1' account='DEMO619219' instrument='MHG 03-26' exchange=Globex price=5.82 quantity=2 marketPosition=Long operation=Add orderID='356274669624' isSod=False time='2026-01-04 21:36:55' statementDate='1800-01-01'
+2026-01-04 22:46:38:564 (Simulation) Cbi.Account.OnAddTrade: entryId='356274669607_2' exitId='356274669624_1' profitCurrencyBeforeCommissionAndFees=-40
+2026-01-04 22:46:38:564 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669207_1' account='DEMO619219' instrument='MGC 02-26' exchange=Globex price=4417.6 quantity=2 marketPosition=Short operation=Add orderID='356274669207' isSod=False time='2026-01-04 21:12:00' statementDate='1800-01-01'
+2026-01-04 22:46:38:565 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669113_1' account='DEMO619219' instrument='MGC 02-26' exchange=Globex price=4371 quantity=1 marketPosition=Long operation=Add orderID='356274669113' isSod=False time='2026-01-04 19:31:16' statementDate='1800-01-01'
+2026-01-04 22:46:38:565 (Simulation) Cbi.Account.OnAddTrade: entryId='356274669073_1' exitId='356274669113_1' profitCurrencyBeforeCommissionAndFees=51.9999999999982
+2026-01-04 22:46:38:565 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669472_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=93590 quantity=7 marketPosition=Long operation=Add orderID='356274669472' isSod=False time='2026-01-04 21:30:24' statementDate='1800-01-01'
+2026-01-04 22:46:38:565 (Simulation) Cbi.Account.OnAddTrade: entryId='356274669216_1' exitId='356274669472_1' profitCurrencyBeforeCommissionAndFees=-19.5
+2026-01-04 22:46:38:565 (Simulation) Cbi.Account.OnAddTrade: entryId='356274669216_2' exitId='356274669472_1' profitCurrencyBeforeCommissionAndFees=-117
+2026-01-04 22:46:38:565 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669675_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=93795 quantity=5 marketPosition=Short operation=Add orderID='356274669675' isSod=False time='2026-01-04 21:42:08' statementDate='1800-01-01'
+2026-01-04 22:46:38:565 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669646_1' account='DEMO619219' instrument='MHG 03-26' exchange=Globex price=5.821 quantity=3 marketPosition=Long operation=Add orderID='356274669646' isSod=False time='2026-01-04 21:36:59' statementDate='1800-01-01'
+2026-01-04 22:46:38:565 (Simulation) Cbi.Account.OnAddTrade: entryId='356274669607_3' exitId='356274669646_1' profitCurrencyBeforeCommissionAndFees=-21.2499999999993
+2026-01-04 22:46:38:565 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669505_1' account='DEMO619219' instrument='ZS 03-26' exchange=Globex price=1051.5 quantity=4 marketPosition=Short operation=Add orderID='356274669505' isSod=False time='2026-01-04 21:23:13' statementDate='1800-01-01'
+2026-01-04 22:46:38:565 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669108_1' account='DEMO619219' instrument='MGC 02-26' exchange=Globex price=4376.3 quantity=1 marketPosition=Long operation=Add orderID='356274669108' isSod=False time='2026-01-04 19:47:31' statementDate='1800-01-01'
+2026-01-04 22:46:38:565 (Simulation) Cbi.Account.OnAddTrade: entryId='356274669073_1' exitId='356274669108_1' profitCurrencyBeforeCommissionAndFees=-1.00000000000364
+2026-01-04 22:46:38:565 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669168_1' account='DEMO619219' instrument='MHG 03-26' exchange=Globex price=5.7785 quantity=2 marketPosition=Short operation=Add orderID='356274669168' isSod=False time='2026-01-04 21:15:47' statementDate='1800-01-01'
+2026-01-04 22:46:38:565 (Simulation) Cbi.Account.OnAddTrade: entryId='356274669646_1' exitId='356274669168_1' profitCurrencyBeforeCommissionAndFees=-212.499999999998
+2026-01-04 22:46:38:568 (Simulation) Cbi.Account.PositionUpdateCallback: instrument='MGC 02-26' account='DEMO619219' avgPrice=4417.6 quantity=2 marketPosition=Short operation=Add
+2026-01-04 22:46:38:569 (Simulation) Cbi.Account.PositionUpdateCallback: instrument='MBT 01-26' account='DEMO619219' avgPrice=93795 quantity=5 marketPosition=Short operation=Add
+2026-01-04 22:46:38:570 (Simulation) Cbi.Account.PositionUpdateCallback: instrument='ZS 03-26' account='DEMO619219' avgPrice=1051.5 quantity=4 marketPosition=Short operation=Add
+2026-01-04 22:46:38:572 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc0
+2026-01-04 22:46:38:577 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2026-01-04 22:46:38:605 (Simulation) Cbi.Account.CreateOrder: orderId='356274669622' account='DEMO619219' name='' orderState=Cancelled instrument='MHG 03-26' orderAction=Buy orderType='Limit' limitPrice=5.7615 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3072 time='2026-01-04 21:36:00' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:606 (Simulation) Cbi.Account.CreateOrder: orderId='356274669389' account='DEMO619219' name='' orderState=Cancelled instrument='MHG 03-26' orderAction=Buy orderType='Limit' limitPrice=5.6925 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3073 time='2026-01-04 21:15:47' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:606 (Simulation) Cbi.Account.CreateOrder: orderId='356274669073' account='DEMO619219' name='' orderState=Filled instrument='MGC 02-26' orderAction=Sell orderType='Limit' limitPrice=4376.2 stopPrice=0 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=4376.2 onBehalfOf='' id=3074 time='2026-01-04 19:19:00' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:808 (Simulation) Cbi.Account.CreateOrder: orderId='356274669802' account='DEMO619219' name='' orderState=Cancelled instrument='6E 03-26' orderAction=Buy orderType='Limit' limitPrice=1.17335 stopPrice=0 quantity=4 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3075 time='2026-01-04 22:10:11' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:808 (Simulation) Cbi.Account.CreateOrder: orderId='356274669332' account='DEMO619219' name='' orderState=Filled instrument='ZS 03-26' orderAction=Sell orderType='Limit' limitPrice=1050 stopPrice=0 quantity=3 tif=Gtc oco='' filled=3 averageFillPrice=1050 onBehalfOf='' id=3076 time='2026-01-04 21:14:00' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:819 (Simulation) Cbi.Account.CreateOrder: orderId='356274669111' account='DEMO619219' name='' orderState=Cancelled instrument='MGC 02-26' orderAction=Buy orderType='Limit' limitPrice=4319.5 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3077 time='2026-01-04 19:20:09' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:819 (Simulation) Cbi.Account.CreateOrder: orderId='356274669475' account='DEMO619219' name='' orderState=Cancelled instrument='MBT 01-26' orderAction=Buy orderType='Limit' limitPrice=92570 stopPrice=0 quantity=4 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3078 time='2026-01-04 21:19:57' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:819 (Simulation) Cbi.Account.CreateOrder: orderId='356274669519' account='DEMO619219' name='' orderState=Working instrument='ZS 03-26' orderAction=Buy orderType='Limit' limitPrice=1038 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3079 time='2026-01-04 21:23:13' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:829 (Simulation) Cbi.Account.CreateOrder: orderId='356274669283' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=93535 quantity=7 tif=Gtc oco='' filled=7 averageFillPrice=93540 onBehalfOf='' id=3080 time='2026-01-04 21:12:54' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:840 (Simulation) Cbi.Account.CreateOrder: orderId='356274669400' account='DEMO619219' name='' orderState=Filled instrument='ZS 03-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=1050.5 quantity=3 tif=Gtc oco='' filled=3 averageFillPrice=1050.5 onBehalfOf='' id=3081 time='2026-01-04 21:15:52' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:851 (Simulation) Cbi.Account.CreateOrder: orderId='356274669693' account='DEMO619219' name='' orderState=Working instrument='MBT 01-26' orderAction=Buy orderType='Limit' limitPrice=92280 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3082 time='2026-01-04 21:42:08' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:864 (Simulation) Cbi.Account.CreateOrder: orderId='356274669477' account='DEMO619219' name='' orderState=Cancelled instrument='MBT 01-26' orderAction=Buy orderType='Limit' limitPrice=90140 stopPrice=0 quantity=3 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3083 time='2026-01-04 21:19:57' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:864 (Simulation) Cbi.Account.CreateOrder: orderId='356274669443' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Limit' limitPrice=93435 stopPrice=0 quantity=7 tif=Gtc oco='' filled=7 averageFillPrice=93435 onBehalfOf='' id=3084 time='2026-01-04 21:19:08' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:877 (Simulation) Cbi.Account.CreateOrder: orderId='356274669222' account='DEMO619219' name='' orderState=Working instrument='MGC 02-26' orderAction=Buy orderType='Limit' limitPrice=4397.1 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3085 time='2026-01-04 21:12:00' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:887 (Simulation) Cbi.Account.CreateOrder: orderId='356274669607' account='DEMO619219' name='' orderState=Filled instrument='MHG 03-26' orderAction=Sell orderType='Limit' limitPrice=5.812 stopPrice=0 quantity=5 tif=Gtc oco='' filled=5 averageFillPrice=5.8121 onBehalfOf='' id=3086 time='2026-01-04 21:36:00' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:900 (Simulation) Cbi.Account.CreateOrder: orderId='356274669404' account='DEMO619219' name='' orderState=Cancelled instrument='ZS 03-26' orderAction=Buy orderType='Limit' limitPrice=1048 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3087 time='2026-01-04 21:15:52' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:900 (Simulation) Cbi.Account.CreateOrder: orderId='356274669688' account='DEMO619219' name='' orderState=Working instrument='MBT 01-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=93975 quantity=5 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3088 time='2026-01-04 21:42:08' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:910 (Simulation) Cbi.Account.CreateOrder: orderId='356274669216' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Limit' limitPrice=93395 stopPrice=0 quantity=7 tif=Gtc oco='' filled=7 averageFillPrice=93395 onBehalfOf='' id=3089 time='2026-01-04 21:12:00' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:923 (Simulation) Cbi.Account.CreateOrder: orderId='356274669219' account='DEMO619219' name='' orderState=Working instrument='MGC 02-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=4431 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3090 time='2026-01-04 21:12:00' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:936 (Simulation) Cbi.Account.CreateOrder: orderId='356274669384' account='DEMO619219' name='' orderState=Filled instrument='MHG 03-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=5.8005 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=5.80125 onBehalfOf='' id=3091 time='2026-01-04 21:15:47' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:946 (Simulation) Cbi.Account.CreateOrder: orderId='356274669387' account='DEMO619219' name='' orderState=Cancelled instrument='MHG 03-26' orderAction=Buy orderType='Limit' limitPrice=5.7545 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3092 time='2026-01-04 21:15:47' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:946 (Simulation) Cbi.Account.CreateOrder: orderId='356274669624' account='DEMO619219' name='' orderState=Filled instrument='MHG 03-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=5.82 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=5.82 onBehalfOf='' id=3093 time='2026-01-04 21:36:00' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:958 (Simulation) Cbi.Account.CreateOrder: orderId='356274669207' account='DEMO619219' name='' orderState=Filled instrument='MGC 02-26' orderAction=Sell orderType='Limit' limitPrice=4417.6 stopPrice=0 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=4417.6 onBehalfOf='' id=3094 time='2026-01-04 21:12:00' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:967 (Simulation) Cbi.Account.CreateOrder: orderId='356274669113' account='DEMO619219' name='' orderState=Filled instrument='MGC 02-26' orderAction=Buy orderType='Limit' limitPrice=4371.3 stopPrice=0 quantity=1 tif=Gtc oco='' filled=1 averageFillPrice=4371 onBehalfOf='' id=3095 time='2026-01-04 19:20:09' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:977 (Simulation) Cbi.Account.CreateOrder: orderId='356274669637' account='DEMO619219' name='' orderState=Cancelled instrument='MHG 03-26' orderAction=Buy orderType='Limit' limitPrice=5.7615 stopPrice=0 quantity=3 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3096 time='2026-01-04 21:36:00' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:977 (Simulation) Cbi.Account.CreateOrder: orderId='356274669304' account='DEMO619219' name='' orderState=Cancelled instrument='MBT 01-26' orderAction=Buy orderType='Limit' limitPrice=92460 stopPrice=0 quantity=4 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3097 time='2026-01-04 21:13:01' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:977 (Simulation) Cbi.Account.CreateOrder: orderId='356274669472' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=93585 quantity=7 tif=Gtc oco='' filled=7 averageFillPrice=93590 onBehalfOf='' id=3098 time='2026-01-04 21:19:57' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:987 (Simulation) Cbi.Account.CreateOrder: orderId='356274669675' account='DEMO619219' name='' orderState=Filled instrument='MBT 01-26' orderAction=Sell orderType='Limit' limitPrice=93795 stopPrice=0 quantity=5 tif=Gtc oco='' filled=5 averageFillPrice=93795 onBehalfOf='' id=3099 time='2026-01-04 21:41:00' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:38:999 (Simulation) Cbi.Account.CreateOrder: orderId='356274669646' account='DEMO619219' name='' orderState=Filled instrument='MHG 03-26' orderAction=Buy orderType='Market' limitPrice=0 stopPrice=0 quantity=3 tif=Gtc oco='' filled=3 averageFillPrice=5.821 onBehalfOf='' id=3100 time='2026-01-04 21:36:59' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:39:011 (Simulation) Cbi.Account.CreateOrder: orderId='356274669505' account='DEMO619219' name='' orderState=Filled instrument='ZS 03-26' orderAction=Sell orderType='Limit' limitPrice=1051.5 stopPrice=0 quantity=4 tif=Gtc oco='' filled=4 averageFillPrice=1051.5 onBehalfOf='' id=3101 time='2026-01-04 21:23:07' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:39:020 (Simulation) Cbi.Account.CreateOrder: orderId='356274669306' account='DEMO619219' name='' orderState=Cancelled instrument='MBT 01-26' orderAction=Buy orderType='Limit' limitPrice=90140 stopPrice=0 quantity=3 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3102 time='2026-01-04 21:13:01' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:39:020 (Simulation) Cbi.Account.CreateOrder: orderId='356274669402' account='DEMO619219' name='' orderState=Cancelled instrument='ZS 03-26' orderAction=Buy orderType='Limit' limitPrice=1038 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3103 time='2026-01-04 21:15:52' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:39:020 (Simulation) Cbi.Account.CreateOrder: orderId='356274669631' account='DEMO619219' name='' orderState=Cancelled instrument='MHG 03-26' orderAction=Buy orderType='Limit' limitPrice=5.7615 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3104 time='2026-01-04 21:36:00' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:39:020 (Simulation) Cbi.Account.CreateOrder: orderId='356274669626' account='DEMO619219' name='' orderState=Cancelled instrument='MHG 03-26' orderAction=Buy orderType='Limit' limitPrice=5.6925 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3105 time='2026-01-04 21:36:00' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:39:020 (Simulation) Cbi.Account.CreateOrder: orderId='356274669224' account='DEMO619219' name='' orderState=Working instrument='MGC 02-26' orderAction=Buy orderType='Limit' limitPrice=4373.5 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3106 time='2026-01-04 21:12:00' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:39:034 (Simulation) Cbi.Account.CreateOrder: orderId='356274669517' account='DEMO619219' name='' orderState=Working instrument='ZS 03-26' orderAction=Buy orderType='Limit' limitPrice=1049.5 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3107 time='2026-01-04 21:23:13' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:39:044 (Simulation) Cbi.Account.CreateOrder: orderId='356274669108' account='DEMO619219' name='' orderState=Filled instrument='MGC 02-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=4376.2 quantity=1 tif=Gtc oco='' filled=1 averageFillPrice=4376.3 onBehalfOf='' id=3108 time='2026-01-04 19:20:09' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:39:056 (Simulation) Cbi.Account.CreateOrder: orderId='356274669514' account='DEMO619219' name='' orderState=Working instrument='ZS 03-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=1052 quantity=4 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3109 time='2026-01-04 21:23:13' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:39:066 (Simulation) Cbi.Account.CreateOrder: orderId='356274669633' account='DEMO619219' name='' orderState=Cancelled instrument='MHG 03-26' orderAction=Buy orderType='Limit' limitPrice=5.6925 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3110 time='2026-01-04 21:36:00' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:39:066 (Simulation) Cbi.Account.CreateOrder: orderId='356274669691' account='DEMO619219' name='' orderState=Working instrument='MBT 01-26' orderAction=Buy orderType='Limit' limitPrice=92820 stopPrice=0 quantity=3 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3111 time='2026-01-04 21:42:08' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:39:079 (Simulation) Cbi.Account.CreateOrder: orderId='356274669286' account='DEMO619219' name='' orderState=Cancelled instrument='MBT 01-26' orderAction=Buy orderType='Limit' limitPrice=92450 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3112 time='2026-01-04 21:12:54' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:39:079 (Simulation) Cbi.Account.CreateOrder: orderId='356274669168' account='DEMO619219' name='' orderState=Filled instrument='MHG 03-26' orderAction=Sell orderType='Limit' limitPrice=5.7785 stopPrice=0 quantity=2 tif=Gtc oco='' filled=2 averageFillPrice=5.7785 onBehalfOf='' id=3113 time='2026-01-04 21:11:01' gtd='2099-12-01' statementDate='2099-12-01' id=-1 comment=''
+2026-01-04 22:46:39:093 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2026-01-04 22:46:39:093 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connected previousStatus=Connecting message=''
+2026-01-04 22:46:39:094 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connected previousStatus=Connecting message=''
+2026-01-04 22:46:39:120 (Simulation) Cbi.Account.Restore.Start: account='Sim101' fcm=''
+2026-01-04 22:46:39:123 (Simulation) Cbi.Account.Restore.Start: account='DEMO619219' fcm=''
+2026-01-04 22:46:39:151 (Simulation) Cbi.Account.Restore.End: account='Sim101' fcm=''
+2026-01-04 22:46:39:269 (Simulation) Cbi.Account.Restore.End: account='DEMO619219' fcm=''
+2026-01-04 22:46:39:272 (Simulation) Core.Connection.Statistics: connectAttempts=1/3390.8ms
+2026-01-04 22:46:39:272 (Simulation) Cbi.Connection.ConnectionStatusCallback: autoClosePositionTime='12/17/2025 00:00:00' autoClosePosition=False
+2026-01-04 22:46:39:273 Server.HdsClient.Connect: type=HDS server='hds-us-nt-014.ninjatrader.com' port=31655 system='' useSsl=True
+2026-01-04 22:46:39:284 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2026-01-04 22:46:39:300 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2026-01-04 22:46:39:300 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2026-01-04 22:46:39:490 (Simulation) Tradovate.Adapter.QueryNotificationsAsync0
+2026-01-04 22:46:39:511 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-04 22:46:39:511 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2026-01-04 22:46:39:574 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='4/1/26 12:00:00 a. m.' to='4/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:39:574 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-26' from='4/1/26 12:00:00 a. m.' to='4/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:39:576 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='4/1/26 12:00:00 a. m.' to='4/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:39:581 (Simulation) QueryNotificationResponse Live
+2026-01-04 22:46:39:584 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-24' from='13/12/24 12:00:00 a. m.' to='13/12/24 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:39:584 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 01-26' from='19/12/25 12:00:00 a. m.' to='19/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:39:584 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 01-26' from='4/1/26 12:00:00 a. m.' to='4/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:39:584 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='4/1/26 12:00:00 a. m.' to='4/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:39:584 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='4/1/26 12:00:00 a. m.' to='4/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:39:584 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 02-26' from='4/1/26 12:00:00 a. m.' to='4/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:39:584 Cbi.Instrument.RequestBars (to Provider): instrument='MES 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:39:584 Cbi.Instrument.RequestBars (to Provider): instrument='6E 12-25' from='11/12/25 12:00:00 a. m.' to='11/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:39:584 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='4/1/26 12:00:00 a. m.' to='4/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:39:584 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:39:584 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:39:584 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 03-26' from='4/1/26 12:00:00 a. m.' to='4/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:39:585 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='4/1/26 12:00:00 a. m.' to='4/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:39:585 Cbi.Instrument.RequestBars (to Provider): instrument='6E 03-26' from='4/1/26 12:00:00 a. m.' to='4/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:39:600 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:39:972 (Simulation) QueryNotificationResponse Demo
+2026-01-04 22:46:41:275 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=GrossRealizedProfitLoss currency=UsDollar value=*****
+2026-01-04 22:46:41:276 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='Sim101' accountItem=CashValue currency=UsDollar value=*****
+2026-01-04 22:46:41:276 (Simulation) Cbi.Account.OnTimerTick.Simulator.Roll: account='Sim101' fcm='' fcmDate='2026-01-04'
+2026-01-04 22:46:42:943 Cbi.Instrument.RequestBars (to Provider): instrument='ZW 03-26' from='4/1/26 12:00:00 a. m.' to='4/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:42:943 Cbi.Instrument.RequestBars (to Provider): instrument='MES 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:42:990 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:43:007 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:43:007 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='4/1/26 12:00:00 a. m.' to='4/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:43:007 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 01-26' from='19/12/25 12:00:00 a. m.' to='19/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:43:021 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-24' from='13/12/24 12:00:00 a. m.' to='13/12/24 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:43:021 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='4/1/26 12:00:00 a. m.' to='4/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:43:037 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='12/12/25 12:00:00 a. m.' to='12/12/25 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:43:193 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 01-26' from='4/1/26 12:00:00 a. m.' to='4/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:44:932 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 02-26' from='4/1/26 12:00:00 a. m.' to='4/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:44:959 Cbi.Instrument.RequestBars (to Provider): instrument='6E 03-26' from='4/1/26 12:00:00 a. m.' to='4/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:45:103 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 03-26' from='4/1/26 12:00:00 a. m.' to='4/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:45:116 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='4/1/26 12:00:00 a. m.' to='4/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:45:116 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='4/1/26 12:00:00 a. m.' to='4/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:45:248 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='4/1/26 12:00:00 a. m.' to='4/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:46:45:773 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='4/1/26 12:00:00 a. m.' to='4/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-04 22:47:01:642 (Simulation) Cbi.Position.Close0: instrument='ZS 03-26' account='DEMO619219' currentQuantity=-4 signalName='Close'
+2026-01-04 22:47:01:644 (Simulation) Cbi.Position.Close.Cancel1: realOrderState=Working orderId='356274669519' account='DEMO619219' name='TP2_Short_02' orderState=Working instrument='ZS 03-26' orderAction=Buy orderType='Limit' limitPrice=1038 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3058 time='2026-01-04 21:23:13' gtd='2099-12-01' statementDate='2099-12-01'
+2026-01-04 22:47:01:644 (Simulation) Cbi.Position.Close.Cancel1: realOrderState=Working orderId='356274669517' account='DEMO619219' name='TP1_Short_02' orderState=Working instrument='ZS 03-26' orderAction=Buy orderType='Limit' limitPrice=1049.5 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3057 time='2026-01-04 21:23:13' gtd='2099-12-01' statementDate='2099-12-01'
+2026-01-04 22:47:01:644 (Simulation) Cbi.Position.Close.Cancel1: realOrderState=Working orderId='356274669514' account='DEMO619219' name='SL_Short_02' orderState=Working instrument='ZS 03-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=1052 quantity=4 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3056 time='2026-01-04 21:23:13' gtd='2099-12-01' statementDate='2099-12-01'
+2026-01-04 22:47:01:650 (Simulation) Cbi.Account.Cancel0: realOrderState=Working orderId='356274669519' account='DEMO619219' name='TP2_Short_02' orderState=Working instrument='ZS 03-26' orderAction=Buy orderType='Limit' limitPrice=1038 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3058 time='2026-01-04 21:23:13' gtd='2099-12-01' statementDate='2099-12-01'
+2026-01-04 22:47:01:661 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=CancelPending orderId='356274669519' account='DEMO619219' name='TP2_Short_02' orderState=CancelPending instrument='ZS 03-26' orderAction=Buy limitPrice=1038 stopPrice=0 quantity=2 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 22:47:01' statementDate='2026-01-04' error=NoError comment='' nr=4
+2026-01-04 22:47:01:671 (Simulation) Cbi.Account.Cancel1: realOrderState=CancelPending orderId='356274669519' account='DEMO619219' name='TP2_Short_02' orderState=CancelPending instrument='ZS 03-26' orderAction=Buy orderType='Limit' limitPrice=1038 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3058 time='2026-01-04 22:47:01' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:47:01:671 (Simulation) Cbi.Account.Cancel0: realOrderState=Working orderId='356274669517' account='DEMO619219' name='TP1_Short_02' orderState=CancelPending instrument='ZS 03-26' orderAction=Buy orderType='Limit' limitPrice=1049.5 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3057 time='2026-01-04 22:47:01' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:47:01:671 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=CancelPending orderId='356274669517' account='DEMO619219' name='TP1_Short_02' orderState=CancelPending instrument='ZS 03-26' orderAction=Buy limitPrice=1049.5 stopPrice=0 quantity=2 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 22:47:01' statementDate='2026-01-04' error=NoError comment='' nr=20
+2026-01-04 22:47:01:671 (Simulation) Cbi.Account.Cancel1: realOrderState=CancelPending orderId='356274669517' account='DEMO619219' name='TP1_Short_02' orderState=CancelPending instrument='ZS 03-26' orderAction=Buy orderType='Limit' limitPrice=1049.5 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3057 time='2026-01-04 22:47:01' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:47:01:671 (Simulation) Cbi.Account.Cancel0: realOrderState=Working orderId='356274669514' account='DEMO619219' name='SL_Short_02' orderState=CancelPending instrument='ZS 03-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=1052 quantity=4 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3056 time='2026-01-04 22:47:01' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:47:01:671 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=CancelPending orderId='356274669514' account='DEMO619219' name='SL_Short_02' orderState=CancelPending instrument='ZS 03-26' orderAction=Buy limitPrice=0 stopPrice=1052 quantity=4 orderType='Stop Market' filled=0 averageFillPrice=0 time='2026-01-04 22:47:01' statementDate='2026-01-04' error=NoError comment='' nr=-1
+2026-01-04 22:47:01:671 (Simulation) Cbi.Account.Cancel1: realOrderState=CancelPending orderId='356274669514' account='DEMO619219' name='SL_Short_02' orderState=CancelPending instrument='ZS 03-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=1052 quantity=4 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3056 time='2026-01-04 22:47:01' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:47:01:673 (Simulation) Tradovate.Adapter.Cancel0: count=3
+2026-01-04 22:47:01:673 (Simulation) Tradovate.Adapter.Cancel1: orderId='356274669519' account='DEMO619219' name='TP2_Short_02' orderState=CancelPending instrument='ZS 03-26' orderAction=Buy orderType='Limit' limitPrice=1038 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3058 time='2026-01-04 22:47:01' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:47:01:687 (Simulation) Tradovate.Adapter.Cancel1: orderId='356274669517' account='DEMO619219' name='TP1_Short_02' orderState=CancelPending instrument='ZS 03-26' orderAction=Buy orderType='Limit' limitPrice=1049.5 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3057 time='2026-01-04 22:47:01' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:47:01:687 (Simulation) Tradovate.Adapter.Cancel1: orderId='356274669514' account='DEMO619219' name='SL_Short_02' orderState=CancelPending instrument='ZS 03-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=1052 quantity=4 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3056 time='2026-01-04 22:47:01' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:47:01:789 (Simulation) Tradovate.Adapter.TradeMessageReceive3 UNEXPECTED status='200' data='{
+  "commandId": 356274669860
+}'
+2026-01-04 22:47:01:844 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669860,
+  "orderId": 356274669519,
+  "timestamp": "2026-01-05T02:47:01.734Z",
+  "commandType": "Cancel",
+  "commandStatus": "Pending",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:47:01:911 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669861,
+  "commandId": 356274669860,
+  "timestamp": "2026-01-05T02:47:01.734Z",
+  "commandStatus": "AtExecution"
+}'
+2026-01-04 22:47:01:947 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669860,
+  "orderId": 356274669519,
+  "timestamp": "2026-01-05T02:47:01.734Z",
+  "commandType": "Cancel",
+  "commandStatus": "AtExecution",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:47:01:947 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=CancelSubmitted orderId='356274669519' account='DEMO619219' name='TP2_Short_02' orderState=CancelSubmitted instrument='ZS 03-26' orderAction=Buy limitPrice=1038 stopPrice=0 quantity=2 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 22:47:01' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:47:01:947 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Cancelled orderId='356274669519' account='DEMO619219' name='TP2_Short_02' orderState=Cancelled instrument='ZS 03-26' orderAction=Buy limitPrice=1038 stopPrice=0 quantity=2 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 22:47:01' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:47:01:960 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669862,
+  "commandId": 356274669519,
+  "timestamp": "2026-01-05T02:47:01.734Z",
+  "commandStatus": "ExecutionStopped"
+}'
+2026-01-04 22:47:01:961 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669519,
+  "orderId": 356274669519,
+  "timestamp": "2026-01-05T01:23:13.735Z",
+  "clOrdId": "9d4584f667c74c39ad0956bdd623655e",
+  "commandType": "New",
+  "commandStatus": "ExecutionStopped",
+  "senderId": 619219,
+  "userSessionId": 1724455716,
+  "isAutomated": true
+}'
+2026-01-04 22:47:01:987 (Simulation) Tradovate.Adapter.ProcessExecutionReportEntity data='{
+  "id": 356274669861,
+  "commandId": 356274669860,
+  "name": "0.27296439774180953",
+  "accountId": 1931663,
+  "contractId": 3658936,
+  "timestamp": "2026-01-05T02:47:01.734Z",
+  "orderId": 356274669519,
+  "execType": "Canceled",
+  "ordStatus": "Canceled",
+  "action": "Buy",
+  "externalClOrdId": "0.8745252353726446"
+}'
+2026-01-04 22:47:02:081 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274669519,
+  "accountId": 1931663,
+  "contractId": 3658936,
+  "timestamp": "2026-01-05T01:23:13.735Z",
+  "action": "Buy",
+  "ordStatus": "Canceled",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2026-01-04 22:47:02:081 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Cancelled orderId='356274669519' account='DEMO619219' name='TP2_Short_02' orderState=Cancelled instrument='ZS 03-26' orderAction=Buy limitPrice=1038 stopPrice=0 quantity=2 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 21:23:13' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:47:02:096 (Simulation) Tradovate.Adapter.TradeMessageReceive3 UNEXPECTED status='200' data='{
+  "commandId": 356274669864
+}'
+2026-01-04 22:47:02:096 (Simulation) Tradovate.Adapter.TradeMessageReceive3 UNEXPECTED status='200' data='{
+  "commandId": 356274669863
+}'
+2026-01-04 22:47:02:096 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669863,
+  "orderId": 356274669514,
+  "timestamp": "2026-01-05T02:47:01.792Z",
+  "commandType": "Cancel",
+  "commandStatus": "Pending",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:47:02:096 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669864,
+  "orderId": 356274669517,
+  "timestamp": "2026-01-05T02:47:01.792Z",
+  "commandType": "Cancel",
+  "commandStatus": "Pending",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:47:02:096 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669865,
+  "commandId": 356274669863,
+  "timestamp": "2026-01-05T02:47:01.792Z",
+  "commandStatus": "AtExecution"
+}'
+2026-01-04 22:47:02:096 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669863,
+  "orderId": 356274669514,
+  "timestamp": "2026-01-05T02:47:01.792Z",
+  "commandType": "Cancel",
+  "commandStatus": "AtExecution",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:47:02:096 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=CancelSubmitted orderId='356274669514' account='DEMO619219' name='SL_Short_02' orderState=CancelSubmitted instrument='ZS 03-26' orderAction=Buy limitPrice=0 stopPrice=1052 quantity=4 orderType='Stop Market' filled=0 averageFillPrice=0 time='2026-01-04 22:47:01' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:47:02:096 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Cancelled orderId='356274669514' account='DEMO619219' name='SL_Short_02' orderState=Cancelled instrument='ZS 03-26' orderAction=Buy limitPrice=0 stopPrice=1052 quantity=4 orderType='Stop Market' filled=0 averageFillPrice=0 time='2026-01-04 22:47:01' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:47:02:111 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669866,
+  "commandId": 356274669514,
+  "timestamp": "2026-01-05T02:47:01.792Z",
+  "commandStatus": "ExecutionStopped"
+}'
+2026-01-04 22:47:02:111 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669514,
+  "orderId": 356274669514,
+  "timestamp": "2026-01-05T01:23:13.676Z",
+  "clOrdId": "345cb7bb6bfa4b36ae551e0902fc67c9",
+  "commandType": "New",
+  "commandStatus": "ExecutionStopped",
+  "senderId": 619219,
+  "userSessionId": 1724455716,
+  "isAutomated": true
+}'
+2026-01-04 22:47:02:111 (Simulation) Tradovate.Adapter.ProcessExecutionReportEntity data='{
+  "id": 356274669865,
+  "commandId": 356274669863,
+  "name": "0.1307562083789851",
+  "accountId": 1931663,
+  "contractId": 3658936,
+  "timestamp": "2026-01-05T02:47:01.792Z",
+  "orderId": 356274669514,
+  "execType": "Canceled",
+  "ordStatus": "Canceled",
+  "action": "Buy",
+  "externalClOrdId": "0.7773333816647748"
+}'
+2026-01-04 22:47:02:111 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274669514,
+  "accountId": 1931663,
+  "contractId": 3658936,
+  "timestamp": "2026-01-05T01:23:13.676Z",
+  "action": "Buy",
+  "ordStatus": "Canceled",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2026-01-04 22:47:02:111 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Cancelled orderId='356274669514' account='DEMO619219' name='SL_Short_02' orderState=Cancelled instrument='ZS 03-26' orderAction=Buy limitPrice=0 stopPrice=1052 quantity=4 orderType='Stop Market' filled=0 averageFillPrice=0 time='2026-01-04 21:23:13' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:47:02:121 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669867,
+  "commandId": 356274669864,
+  "timestamp": "2026-01-05T02:47:01.792Z",
+  "commandStatus": "AtExecution"
+}'
+2026-01-04 22:47:02:121 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669864,
+  "orderId": 356274669517,
+  "timestamp": "2026-01-05T02:47:01.792Z",
+  "commandType": "Cancel",
+  "commandStatus": "AtExecution",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:47:02:121 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=CancelSubmitted orderId='356274669517' account='DEMO619219' name='TP1_Short_02' orderState=CancelSubmitted instrument='ZS 03-26' orderAction=Buy limitPrice=1049.5 stopPrice=0 quantity=2 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 22:47:01' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:47:02:121 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Cancelled orderId='356274669517' account='DEMO619219' name='TP1_Short_02' orderState=Cancelled instrument='ZS 03-26' orderAction=Buy limitPrice=1049.5 stopPrice=0 quantity=2 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 22:47:01' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:47:02:138 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669868,
+  "commandId": 356274669836,
+  "timestamp": "2026-01-05T02:47:01.792Z",
+  "commandStatus": "ExecutionStopped"
+}'
+2026-01-04 22:47:02:138 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669836,
+  "orderId": 356274669517,
+  "timestamp": "2026-01-05T02:29:59.284Z",
+  "commandType": "Modify",
+  "commandStatus": "ExecutionStopped",
+  "senderId": 619219,
+  "userSessionId": 1724455716
+}'
+2026-01-04 22:47:02:138 (Simulation) Tradovate.Adapter.ProcessExecutionReportEntity data='{
+  "id": 356274669867,
+  "commandId": 356274669864,
+  "name": "0.06420623135532025",
+  "accountId": 1931663,
+  "contractId": 3658936,
+  "timestamp": "2026-01-05T02:47:01.792Z",
+  "orderId": 356274669517,
+  "execType": "Canceled",
+  "ordStatus": "Canceled",
+  "action": "Buy",
+  "externalClOrdId": "1.3246340894015924"
+}'
+2026-01-04 22:47:02:138 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274669517,
+  "accountId": 1931663,
+  "contractId": 3658936,
+  "timestamp": "2026-01-05T01:23:13.735Z",
+  "action": "Buy",
+  "ordStatus": "Canceled",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2026-01-04 22:47:02:138 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Cancelled orderId='356274669517' account='DEMO619219' name='TP1_Short_02' orderState=Cancelled instrument='ZS 03-26' orderAction=Buy limitPrice=1049.5 stopPrice=0 quantity=2 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 21:23:13' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:47:02:139 (Simulation) Cbi.Position.Close2: instrument='ZS 03-26' account='DEMO619219' currentQuantity=-4
+2026-01-04 22:47:02:139 (Simulation) Cbi.Account.CreateOrder: orderId='88ec691019f54a58b4a2f1f934ac8b4a' account='DEMO619219' name='Close' orderState=Initialized instrument='ZS 03-26' orderAction=BuyToCover orderType='Market' limitPrice=0 stopPrice=0 quantity=4 tif=Day oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3114 time='2026-01-04 22:47:02' gtd='2099-12-01' statementDate='2026-01-04' id=-1 comment=''
+2026-01-04 22:47:02:153 (Simulation) Cbi.Account.Submit0: realOrderState=Initialized isPendingSubmit=False orderId='88ec691019f54a58b4a2f1f934ac8b4a' account='DEMO619219' name='Close' orderState=Initialized instrument='ZS 03-26' orderAction=BuyToCover orderType='Market' limitPrice=0 stopPrice=0 quantity=4 tif=Day oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3114 time='2026-01-04 22:47:02' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:47:02:154 (Simulation) Cbi.Account.Submit1: realOrderState=Initialized orderId='88ec691019f54a58b4a2f1f934ac8b4a' account='DEMO619219' name='Close' orderState=Initialized instrument='ZS 03-26' orderAction=BuyToCover orderType='Market' limitPrice=0 stopPrice=0 quantity=4 tif=Day oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3114 time='2026-01-04 22:47:02' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:47:02:174 (Simulation) Tradovate.Adapter.Submit0: count=1
+2026-01-04 22:47:02:174 (Simulation) Tradovate.Adapter.Submit1: orderId='88ec691019f54a58b4a2f1f934ac8b4a' account='DEMO619219' name='Close' orderState=Initialized instrument='ZS 03-26' orderAction=BuyToCover orderType='Market' limitPrice=0 stopPrice=0 quantity=4 tif=Day oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3114 time='2026-01-04 22:47:02' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:47:02:404 (Simulation) Tradovate.Adapter.TradeMessageReceive3 status='200' data='{
+  "orderId": 356274669869
+}'
+2026-01-04 22:47:02:411 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274669869,
+  "accountId": 1931663,
+  "contractId": 3658936,
+  "timestamp": "2026-01-05T02:47:02.357Z",
+  "action": "Buy",
+  "ordStatus": "PendingNew",
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2026-01-04 22:47:02:411 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669869,
+  "orderId": 356274669869,
+  "timestamp": "2026-01-05T02:47:02.357Z",
+  "clOrdId": "88ec691019f54a58b4a2f1f934ac8b4a",
+  "commandType": "New",
+  "commandStatus": "Pending",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:47:02:411 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Submitted oldOrderId='88ec691019f54a58b4a2f1f934ac8b4a' orderId='356274669869' account='DEMO619219' name='Close' orderState=Submitted instrument='ZS 03-26' orderAction=BuyToCover limitPrice=0 stopPrice=0 quantity=4 orderType='Market' filled=0 averageFillPrice=0 time='2026-01-04 22:47:02' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:47:02:428 (Simulation) Tradovate.Adapter.ProcessOrderVersionEntity data='{
+  "id": 356274669869,
+  "orderId": 356274669869,
+  "orderQty": 4,
+  "orderType": "Market",
+  "timeInForce": "Day"
+}'
+2026-01-04 22:47:02:469 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669870,
+  "commandId": 356274669869,
+  "timestamp": "2026-01-05T02:47:02.359Z",
+  "commandStatus": "RiskPassed"
+}'
+2026-01-04 22:47:02:469 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669869,
+  "orderId": 356274669869,
+  "timestamp": "2026-01-05T02:47:02.357Z",
+  "clOrdId": "88ec691019f54a58b4a2f1f934ac8b4a",
+  "commandType": "New",
+  "commandStatus": "RiskPassed",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:47:02:469 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274669869,
+  "accountId": 1931663,
+  "contractId": 3658936,
+  "timestamp": "2026-01-05T02:47:02.357Z",
+  "action": "Buy",
+  "ordStatus": "PendingNew",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2026-01-04 22:47:02:469 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669871,
+  "commandId": 356274669869,
+  "timestamp": "2026-01-05T02:47:02.359Z",
+  "commandStatus": "AtExecution"
+}'
+2026-01-04 22:47:02:469 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Accepted orderId='356274669869' account='DEMO619219' name='Close' orderState=Accepted instrument='ZS 03-26' orderAction=BuyToCover limitPrice=0 stopPrice=0 quantity=4 orderType='Market' filled=0 averageFillPrice=0 time='2026-01-04 22:47:02' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:47:02:469 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Working orderId='356274669869' account='DEMO619219' name='Close' orderState=Working instrument='ZS 03-26' orderAction=BuyToCover limitPrice=0 stopPrice=0 quantity=4 orderType='Market' filled=0 averageFillPrice=0 time='2026-01-04 22:47:02' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:47:02:469 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669869,
+  "orderId": 356274669869,
+  "timestamp": "2026-01-05T02:47:02.357Z",
+  "clOrdId": "88ec691019f54a58b4a2f1f934ac8b4a",
+  "commandType": "New",
+  "commandStatus": "AtExecution",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:47:02:469 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274669869,
+  "accountId": 1931663,
+  "contractId": 3658936,
+  "timestamp": "2026-01-05T02:47:02.357Z",
+  "action": "Buy",
+  "ordStatus": "Working",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2026-01-04 22:47:02:469 (Simulation) Tradovate.Adapter.ProcessExecutionReportEntity data='{
+  "id": 356274669871,
+  "commandId": 356274669869,
+  "name": "0.37223164713047846",
+  "accountId": 1931663,
+  "contractId": 3658936,
+  "timestamp": "2026-01-05T02:47:02.359Z",
+  "orderId": 356274669869,
+  "execType": "New",
+  "ordStatus": "Working",
+  "action": "Buy",
+  "externalClOrdId": "0.5003628562398864"
+}'
+2026-01-04 22:47:02:469 (Simulation) Tradovate.Adapter.ProcessExecutionReportEntity data='{
+  "id": 356274669872,
+  "commandId": 356274669869,
+  "name": "356274669869_1",
+  "accountId": 1931663,
+  "contractId": 3658936,
+  "timestamp": "2026-01-05T02:47:02.359Z",
+  "orderId": 356274669869,
+  "execType": "Trade",
+  "ordStatus": "Filled",
+  "action": "Buy",
+  "cumQty": 4,
+  "avgPx": 1051.75,
+  "lastQty": 4,
+  "lastPx": 1051.75,
+  "externalClOrdId": "0.5003628562398864"
+}'
+2026-01-04 22:47:02:511 (Simulation) Tradovate.Adapter.ProcessFillEntity data='{
+  "id": 356274669872,
+  "orderId": 356274669869,
+  "contractId": 3658936,
+  "timestamp": "2026-01-05T02:47:02.359Z",
+  "tradeDate": {
+    "year": 2026,
+    "month": 1,
+    "day": 5
+  },
+  "action": "Buy",
+  "qty": 4,
+  "price": 1051.75,
+  "active": true,
+  "finallyPaired": 0,
+  "external": false
+}'
+2026-01-04 22:47:02:589 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Filled orderId='356274669869' account='DEMO619219' name='Close' orderState=Filled instrument='ZS 03-26' orderAction=BuyToCover limitPrice=0 stopPrice=0 quantity=4 orderType='Market' filled=4 averageFillPrice=1051.75 time='2026-01-04 22:47:02' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:47:02:600 (Simulation) Cbi.Account.OrderUpdateCallback.PositionClose1: orderId='356274669869' account='DEMO619219' name='Close' orderState=Filled instrument='ZS 03-26' orderAction=BuyToCover limitPrice=0 stopPrice=0 quantity=4 orderType='Market' filled=4 averageFillPrice=1051.75 time='2026-01-04 22:47:02' statementDate='1800-01-01' error=NoError comment='' nr=4
+2026-01-04 22:47:02:602 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669869_1' account='DEMO619219' instrument='ZS 03-26' exchange=Globex price=1051.75 quantity=4 marketPosition=Long operation=Add orderID='356274669869' isSod=False time='2026-01-04 22:47:02' statementDate='1800-01-01'
+2026-01-04 22:47:02:602 (Simulation) Cbi.Account.ExecutionUpdateCallback.PositionClose: currentQuantity=0
+2026-01-04 22:47:02:604 (Simulation) Cbi.Account.OnAddTrade: entryId='356274669505_1' exitId='356274669869_1' profitCurrencyBeforeCommissionAndFees=-50
+2026-01-04 22:47:02:671 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=CashValue currency=UsDollar value=*****
+2026-01-04 22:47:02:671 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-04 22:47:02:671 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-04 22:47:02:671 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=CashValue currency=UsDollar value=*****
+2026-01-04 22:47:02:671 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-04 22:47:02:671 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-04 22:47:02:672 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=CashValue currency=UsDollar value=*****
+2026-01-04 22:47:02:672 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-04 22:47:02:672 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-04 22:47:02:672 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=CashValue currency=UsDollar value=*****
+2026-01-04 22:47:02:672 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-04 22:47:02:672 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-04 22:47:02:677 (Simulation) Tradovate.Adapter.ProcessPositionLogEntity data='{
+  "id": 356274669878,
+  "accountId": 1931663,
+  "contractId": 3658936,
+  "timestamp": "2026-01-05T02:47:02.359Z",
+  "tradeDate": {
+    "year": 2026,
+    "month": 1,
+    "day": 5
+  },
+  "netPos": 0,
+  "bought": 7,
+  "boughtValue": 7358.5,
+  "sold": 7,
+  "soldValue": 7356.0,
+  "archived": false,
+  "positionChangeType": "Trade",
+  "fillId": 356274669872
+}'
+2026-01-04 22:47:02:763 (Simulation) Cbi.Account.PositionUpdateCallback: instrument='ZS 03-26' account='DEMO619219' avgPrice=0 quantity=0 marketPosition=Flat operation=Remove
+2026-01-04 22:47:02:763 (Simulation) Cbi.Account.PositionUpdateCallback.PositionClose1: instrument='ZS 03-26' account='DEMO619219' avgPrice=0 quantity=0 marketPosition=Flat operation=Remove
+2026-01-04 22:47:02:763 (Simulation) Cbi.Account.PositionUpdateCallback.PositionClose2
+2026-01-04 22:47:02:775 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=CashValue currency=UsDollar value=*****
+2026-01-04 22:47:02:775 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-04 22:47:02:775 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-04 22:47:02:775 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274669869,
+  "accountId": 1931663,
+  "contractId": 3658936,
+  "timestamp": "2026-01-05T02:47:02.357Z",
+  "action": "Buy",
+  "ordStatus": "Filled",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2026-01-04 22:47:02:874 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=InitialMargin currency=UsDollar value=*****
+2026-01-04 22:47:02:874 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=IntradayMargin currency=UsDollar value=*****
+2026-01-04 22:47:02:918 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=GrossRealizedProfitLoss currency=UsDollar value=*****
+2026-01-04 22:47:23:932 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='4/12/25 12:00:00 a. m.' to='2/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-04 22:47:25:054 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 01-26' from='19/12/25 3:00:00 p. m.' to='19/12/25 11:59:59 p. m.' period='1 Tick'
+2026-01-04 22:47:26:006 Cbi.Instrument.RequestBars (to Provider): instrument='ZS 03-26' from='4/1/26 10:00:00 p. m.' to='4/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-04 22:47:26:960 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='4/1/26 12:00:00 a. m.' to='4/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-04 22:47:34:355 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='4/1/26 10:00:00 p. m.' to='4/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-04 22:47:35:053 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 01-26' from='4/1/26 10:00:00 p. m.' to='4/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-04 22:54:34:082 (Simulation) Cbi.Position.Close0: instrument='MBT 01-26' account='DEMO619219' currentQuantity=-5 signalName='Close'
+2026-01-04 22:54:34:126 (Simulation) Cbi.Position.Close.Cancel1: realOrderState=Working orderId='356274669693' account='DEMO619219' name='TP2_Short_01' orderState=CancelPending instrument='MBT 01-26' orderAction=Buy orderType='Limit' limitPrice=92280 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3070 time='2026-01-04 22:54:34' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:34:126 (Simulation) Cbi.Position.Close.Cancel1: realOrderState=Working orderId='356274669688' account='DEMO619219' name='SL_Short_01' orderState=CancelPending instrument='MBT 01-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=93975 quantity=5 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3068 time='2026-01-04 22:54:34' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:34:126 (Simulation) Cbi.Position.Close.Cancel1: realOrderState=Working orderId='356274669691' account='DEMO619219' name='TP1_Short_01' orderState=CancelPending instrument='MBT 01-26' orderAction=Buy orderType='Limit' limitPrice=92820 stopPrice=0 quantity=3 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3069 time='2026-01-04 22:54:34' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:34:126 (Simulation) Cbi.Account.Cancel0: realOrderState=Working orderId='356274669693' account='DEMO619219' name='TP2_Short_01' orderState=CancelPending instrument='MBT 01-26' orderAction=Buy orderType='Limit' limitPrice=92280 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3070 time='2026-01-04 22:54:34' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:34:126 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=CancelPending orderId='356274669693' account='DEMO619219' name='TP2_Short_01' orderState=CancelPending instrument='MBT 01-26' orderAction=Buy limitPrice=92280 stopPrice=0 quantity=2 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 22:54:34' statementDate='2026-01-04' error=NoError comment='' nr=-1
+2026-01-04 22:54:34:126 (Simulation) Cbi.Account.Cancel1: realOrderState=CancelPending orderId='356274669693' account='DEMO619219' name='TP2_Short_01' orderState=CancelPending instrument='MBT 01-26' orderAction=Buy orderType='Limit' limitPrice=92280 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3070 time='2026-01-04 22:54:34' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:34:126 (Simulation) Cbi.Account.Cancel0: realOrderState=Working orderId='356274669688' account='DEMO619219' name='SL_Short_01' orderState=CancelPending instrument='MBT 01-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=93975 quantity=5 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3068 time='2026-01-04 22:54:34' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:34:126 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=CancelPending orderId='356274669688' account='DEMO619219' name='SL_Short_01' orderState=CancelPending instrument='MBT 01-26' orderAction=Buy limitPrice=0 stopPrice=93975 quantity=5 orderType='Stop Market' filled=0 averageFillPrice=0 time='2026-01-04 22:54:34' statementDate='2026-01-04' error=NoError comment='' nr=-1
+2026-01-04 22:54:34:126 (Simulation) Cbi.Account.Cancel1: realOrderState=CancelPending orderId='356274669688' account='DEMO619219' name='SL_Short_01' orderState=CancelPending instrument='MBT 01-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=93975 quantity=5 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3068 time='2026-01-04 22:54:34' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:34:126 (Simulation) Cbi.Account.Cancel0: realOrderState=Working orderId='356274669691' account='DEMO619219' name='TP1_Short_01' orderState=CancelPending instrument='MBT 01-26' orderAction=Buy orderType='Limit' limitPrice=92820 stopPrice=0 quantity=3 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3069 time='2026-01-04 22:54:34' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:34:127 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=CancelPending orderId='356274669691' account='DEMO619219' name='TP1_Short_01' orderState=CancelPending instrument='MBT 01-26' orderAction=Buy limitPrice=92820 stopPrice=0 quantity=3 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 22:54:34' statementDate='2026-01-04' error=NoError comment='' nr=-1
+2026-01-04 22:54:34:127 (Simulation) Cbi.Account.Cancel1: realOrderState=CancelPending orderId='356274669691' account='DEMO619219' name='TP1_Short_01' orderState=CancelPending instrument='MBT 01-26' orderAction=Buy orderType='Limit' limitPrice=92820 stopPrice=0 quantity=3 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3069 time='2026-01-04 22:54:34' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:34:127 (Simulation) Tradovate.Adapter.Cancel0: count=3
+2026-01-04 22:54:34:127 (Simulation) Tradovate.Adapter.Cancel1: orderId='356274669693' account='DEMO619219' name='TP2_Short_01' orderState=CancelPending instrument='MBT 01-26' orderAction=Buy orderType='Limit' limitPrice=92280 stopPrice=0 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3070 time='2026-01-04 22:54:34' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:34:127 (Simulation) Tradovate.Adapter.Cancel1: orderId='356274669688' account='DEMO619219' name='SL_Short_01' orderState=CancelPending instrument='MBT 01-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=93975 quantity=5 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3068 time='2026-01-04 22:54:34' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:34:127 (Simulation) Tradovate.Adapter.Cancel1: orderId='356274669691' account='DEMO619219' name='TP1_Short_01' orderState=CancelPending instrument='MBT 01-26' orderAction=Buy orderType='Limit' limitPrice=92820 stopPrice=0 quantity=3 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3069 time='2026-01-04 22:54:34' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:34:215 (Simulation) Tradovate.Adapter.TradeMessageReceive3 UNEXPECTED status='200' data='{
+  "commandId": 356274669880
+}'
+2026-01-04 22:54:34:217 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669880,
+  "orderId": 356274669693,
+  "timestamp": "2026-01-05T02:54:34.173Z",
+  "commandType": "Cancel",
+  "commandStatus": "Pending",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:54:34:217 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669881,
+  "commandId": 356274669880,
+  "timestamp": "2026-01-05T02:54:34.173Z",
+  "commandStatus": "AtExecution"
+}'
+2026-01-04 22:54:34:217 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669880,
+  "orderId": 356274669693,
+  "timestamp": "2026-01-05T02:54:34.173Z",
+  "commandType": "Cancel",
+  "commandStatus": "AtExecution",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:54:34:217 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=CancelSubmitted orderId='356274669693' account='DEMO619219' name='TP2_Short_01' orderState=CancelSubmitted instrument='MBT 01-26' orderAction=Buy limitPrice=92280 stopPrice=0 quantity=2 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 22:54:34' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:34:217 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Cancelled orderId='356274669693' account='DEMO619219' name='TP2_Short_01' orderState=Cancelled instrument='MBT 01-26' orderAction=Buy limitPrice=92280 stopPrice=0 quantity=2 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 22:54:34' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:34:247 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669882,
+  "commandId": 356274669693,
+  "timestamp": "2026-01-05T02:54:34.174Z",
+  "commandStatus": "ExecutionStopped"
+}'
+2026-01-04 22:54:34:247 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669693,
+  "orderId": 356274669693,
+  "timestamp": "2026-01-05T01:42:08.581Z",
+  "clOrdId": "8d0dd97b7ff24420bc788709d77bd519",
+  "commandType": "New",
+  "commandStatus": "ExecutionStopped",
+  "senderId": 619219,
+  "userSessionId": 1724455716,
+  "isAutomated": true
+}'
+2026-01-04 22:54:34:247 (Simulation) Tradovate.Adapter.ProcessExecutionReportEntity data='{
+  "id": 356274669881,
+  "commandId": 356274669880,
+  "name": "0.047583802616798274",
+  "accountId": 1931663,
+  "contractId": 4421996,
+  "timestamp": "2026-01-05T02:54:34.173Z",
+  "orderId": 356274669693,
+  "execType": "Canceled",
+  "ordStatus": "Canceled",
+  "action": "Buy",
+  "externalClOrdId": "1.7523716342013516"
+}'
+2026-01-04 22:54:34:247 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274669693,
+  "accountId": 1931663,
+  "contractId": 4421996,
+  "timestamp": "2026-01-05T01:42:08.581Z",
+  "action": "Buy",
+  "ordStatus": "Canceled",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2026-01-04 22:54:34:247 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Cancelled orderId='356274669693' account='DEMO619219' name='TP2_Short_01' orderState=Cancelled instrument='MBT 01-26' orderAction=Buy limitPrice=92280 stopPrice=0 quantity=2 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 21:42:08' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:34:283 (Simulation) Tradovate.Adapter.TradeMessageReceive3 UNEXPECTED status='200' data='{
+  "commandId": 356274669884
+}'
+2026-01-04 22:54:34:283 (Simulation) Tradovate.Adapter.TradeMessageReceive3 UNEXPECTED status='200' data='{
+  "commandId": 356274669883
+}'
+2026-01-04 22:54:34:283 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669883,
+  "orderId": 356274669691,
+  "timestamp": "2026-01-05T02:54:34.236Z",
+  "commandType": "Cancel",
+  "commandStatus": "Pending",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:54:34:283 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669884,
+  "orderId": 356274669688,
+  "timestamp": "2026-01-05T02:54:34.236Z",
+  "commandType": "Cancel",
+  "commandStatus": "Pending",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:54:34:283 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669885,
+  "commandId": 356274669883,
+  "timestamp": "2026-01-05T02:54:34.236Z",
+  "commandStatus": "AtExecution"
+}'
+2026-01-04 22:54:34:283 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669883,
+  "orderId": 356274669691,
+  "timestamp": "2026-01-05T02:54:34.236Z",
+  "commandType": "Cancel",
+  "commandStatus": "AtExecution",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:54:34:283 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=CancelSubmitted orderId='356274669691' account='DEMO619219' name='TP1_Short_01' orderState=CancelSubmitted instrument='MBT 01-26' orderAction=Buy limitPrice=92820 stopPrice=0 quantity=3 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 22:54:34' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:34:285 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Cancelled orderId='356274669691' account='DEMO619219' name='TP1_Short_01' orderState=Cancelled instrument='MBT 01-26' orderAction=Buy limitPrice=92820 stopPrice=0 quantity=3 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 22:54:34' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:34:303 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669886,
+  "commandId": 356274669856,
+  "timestamp": "2026-01-05T02:54:34.237Z",
+  "commandStatus": "ExecutionStopped"
+}'
+2026-01-04 22:54:34:303 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669856,
+  "orderId": 356274669691,
+  "timestamp": "2026-01-05T02:40:53.613Z",
+  "commandType": "Modify",
+  "commandStatus": "ExecutionStopped",
+  "senderId": 619219,
+  "userSessionId": 1724455716
+}'
+2026-01-04 22:54:34:303 (Simulation) Tradovate.Adapter.ProcessExecutionReportEntity data='{
+  "id": 356274669885,
+  "commandId": 356274669883,
+  "name": "0.06274410999535156",
+  "accountId": 1931663,
+  "contractId": 4421996,
+  "timestamp": "2026-01-05T02:54:34.236Z",
+  "orderId": 356274669691,
+  "execType": "Canceled",
+  "ordStatus": "Canceled",
+  "action": "Buy",
+  "externalClOrdId": "1.6674515842208946"
+}'
+2026-01-04 22:54:34:303 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274669691,
+  "accountId": 1931663,
+  "contractId": 4421996,
+  "timestamp": "2026-01-05T01:42:08.581Z",
+  "action": "Buy",
+  "ordStatus": "Canceled",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2026-01-04 22:54:34:303 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Cancelled orderId='356274669691' account='DEMO619219' name='TP1_Short_01' orderState=Cancelled instrument='MBT 01-26' orderAction=Buy limitPrice=92820 stopPrice=0 quantity=3 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 21:42:08' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:34:322 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669887,
+  "commandId": 356274669884,
+  "timestamp": "2026-01-05T02:54:34.237Z",
+  "commandStatus": "AtExecution"
+}'
+2026-01-04 22:54:34:322 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669884,
+  "orderId": 356274669688,
+  "timestamp": "2026-01-05T02:54:34.236Z",
+  "commandType": "Cancel",
+  "commandStatus": "AtExecution",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:54:34:322 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=CancelSubmitted orderId='356274669688' account='DEMO619219' name='SL_Short_01' orderState=CancelSubmitted instrument='MBT 01-26' orderAction=Buy limitPrice=0 stopPrice=93975 quantity=5 orderType='Stop Market' filled=0 averageFillPrice=0 time='2026-01-04 22:54:34' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:34:322 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Cancelled orderId='356274669688' account='DEMO619219' name='SL_Short_01' orderState=Cancelled instrument='MBT 01-26' orderAction=Buy limitPrice=0 stopPrice=93975 quantity=5 orderType='Stop Market' filled=0 averageFillPrice=0 time='2026-01-04 22:54:34' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:34:336 (Simulation) Cbi.Position.Close2: instrument='MBT 01-26' account='DEMO619219' currentQuantity=-5
+2026-01-04 22:54:34:336 (Simulation) Cbi.Account.CreateOrder: orderId='a4ec5b7a55ee4fb8b0f43e9f176f4b03' account='DEMO619219' name='Close' orderState=Initialized instrument='MBT 01-26' orderAction=BuyToCover orderType='Market' limitPrice=0 stopPrice=0 quantity=5 tif=Day oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3115 time='2026-01-04 22:54:34' gtd='2099-12-01' statementDate='2026-01-04' id=-1 comment=''
+2026-01-04 22:54:34:336 (Simulation) Cbi.Account.Submit0: realOrderState=Initialized isPendingSubmit=False orderId='a4ec5b7a55ee4fb8b0f43e9f176f4b03' account='DEMO619219' name='Close' orderState=Initialized instrument='MBT 01-26' orderAction=BuyToCover orderType='Market' limitPrice=0 stopPrice=0 quantity=5 tif=Day oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3115 time='2026-01-04 22:54:34' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:34:336 (Simulation) Cbi.Account.Submit1: realOrderState=Initialized orderId='a4ec5b7a55ee4fb8b0f43e9f176f4b03' account='DEMO619219' name='Close' orderState=Initialized instrument='MBT 01-26' orderAction=BuyToCover orderType='Market' limitPrice=0 stopPrice=0 quantity=5 tif=Day oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3115 time='2026-01-04 22:54:34' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:34:337 (Simulation) Tradovate.Adapter.Submit0: count=1
+2026-01-04 22:54:34:337 (Simulation) Tradovate.Adapter.Submit1: orderId='a4ec5b7a55ee4fb8b0f43e9f176f4b03' account='DEMO619219' name='Close' orderState=Initialized instrument='MBT 01-26' orderAction=BuyToCover orderType='Market' limitPrice=0 stopPrice=0 quantity=5 tif=Day oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3115 time='2026-01-04 22:54:34' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:34:351 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669888,
+  "commandId": 356274669688,
+  "timestamp": "2026-01-05T02:54:34.237Z",
+  "commandStatus": "ExecutionStopped"
+}'
+2026-01-04 22:54:34:351 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669688,
+  "orderId": 356274669688,
+  "timestamp": "2026-01-05T01:42:08.523Z",
+  "clOrdId": "33b0ec02f250413d879472489ed6aa16",
+  "commandType": "New",
+  "commandStatus": "ExecutionStopped",
+  "senderId": 619219,
+  "userSessionId": 1724455716,
+  "isAutomated": true
+}'
+2026-01-04 22:54:34:351 (Simulation) Tradovate.Adapter.ProcessExecutionReportEntity data='{
+  "id": 356274669887,
+  "commandId": 356274669884,
+  "name": "0.15515943489009087",
+  "accountId": 1931663,
+  "contractId": 4421996,
+  "timestamp": "2026-01-05T02:54:34.236Z",
+  "orderId": 356274669688,
+  "execType": "Canceled",
+  "ordStatus": "Canceled",
+  "action": "Buy",
+  "externalClOrdId": "0.820671299376451"
+}'
+2026-01-04 22:54:34:351 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274669688,
+  "accountId": 1931663,
+  "contractId": 4421996,
+  "timestamp": "2026-01-05T01:42:08.523Z",
+  "action": "Buy",
+  "ordStatus": "Canceled",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2026-01-04 22:54:34:351 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Cancelled orderId='356274669688' account='DEMO619219' name='SL_Short_01' orderState=Cancelled instrument='MBT 01-26' orderAction=Buy limitPrice=0 stopPrice=93975 quantity=5 orderType='Stop Market' filled=0 averageFillPrice=0 time='2026-01-04 21:42:08' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:34:432 (Simulation) Tradovate.Adapter.TradeMessageReceive3 status='200' data='{
+  "orderId": 356274669889
+}'
+2026-01-04 22:54:34:432 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274669889,
+  "accountId": 1931663,
+  "contractId": 4421996,
+  "timestamp": "2026-01-05T02:54:34.383Z",
+  "action": "Buy",
+  "ordStatus": "PendingNew",
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2026-01-04 22:54:34:432 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669889,
+  "orderId": 356274669889,
+  "timestamp": "2026-01-05T02:54:34.383Z",
+  "clOrdId": "a4ec5b7a55ee4fb8b0f43e9f176f4b03",
+  "commandType": "New",
+  "commandStatus": "Pending",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:54:34:432 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Submitted oldOrderId='a4ec5b7a55ee4fb8b0f43e9f176f4b03' orderId='356274669889' account='DEMO619219' name='Close' orderState=Submitted instrument='MBT 01-26' orderAction=BuyToCover limitPrice=0 stopPrice=0 quantity=5 orderType='Market' filled=0 averageFillPrice=0 time='2026-01-04 22:54:34' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:34:454 (Simulation) Tradovate.Adapter.ProcessOrderVersionEntity data='{
+  "id": 356274669889,
+  "orderId": 356274669889,
+  "orderQty": 5,
+  "orderType": "Market",
+  "timeInForce": "Day"
+}'
+2026-01-04 22:54:34:454 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669890,
+  "commandId": 356274669889,
+  "timestamp": "2026-01-05T02:54:34.385Z",
+  "commandStatus": "RiskPassed"
+}'
+2026-01-04 22:54:34:454 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669889,
+  "orderId": 356274669889,
+  "timestamp": "2026-01-05T02:54:34.383Z",
+  "clOrdId": "a4ec5b7a55ee4fb8b0f43e9f176f4b03",
+  "commandType": "New",
+  "commandStatus": "RiskPassed",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:54:34:454 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274669889,
+  "accountId": 1931663,
+  "contractId": 4421996,
+  "timestamp": "2026-01-05T02:54:34.383Z",
+  "action": "Buy",
+  "ordStatus": "PendingNew",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2026-01-04 22:54:34:454 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669891,
+  "commandId": 356274669889,
+  "timestamp": "2026-01-05T02:54:34.385Z",
+  "commandStatus": "AtExecution"
+}'
+2026-01-04 22:54:34:454 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Accepted orderId='356274669889' account='DEMO619219' name='Close' orderState=Accepted instrument='MBT 01-26' orderAction=BuyToCover limitPrice=0 stopPrice=0 quantity=5 orderType='Market' filled=0 averageFillPrice=0 time='2026-01-04 22:54:34' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:34:454 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Working orderId='356274669889' account='DEMO619219' name='Close' orderState=Working instrument='MBT 01-26' orderAction=BuyToCover limitPrice=0 stopPrice=0 quantity=5 orderType='Market' filled=0 averageFillPrice=0 time='2026-01-04 22:54:34' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:34:454 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669889,
+  "orderId": 356274669889,
+  "timestamp": "2026-01-05T02:54:34.383Z",
+  "clOrdId": "a4ec5b7a55ee4fb8b0f43e9f176f4b03",
+  "commandType": "New",
+  "commandStatus": "AtExecution",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:54:34:454 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274669889,
+  "accountId": 1931663,
+  "contractId": 4421996,
+  "timestamp": "2026-01-05T02:54:34.383Z",
+  "action": "Buy",
+  "ordStatus": "Working",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2026-01-04 22:54:34:454 (Simulation) Tradovate.Adapter.ProcessExecutionReportEntity data='{
+  "id": 356274669891,
+  "commandId": 356274669889,
+  "name": "1.1773549640474004",
+  "accountId": 1931663,
+  "contractId": 4421996,
+  "timestamp": "2026-01-05T02:54:34.385Z",
+  "orderId": 356274669889,
+  "execType": "New",
+  "ordStatus": "Working",
+  "action": "Buy",
+  "externalClOrdId": "0.249888227649851"
+}'
+2026-01-04 22:54:34:455 (Simulation) Tradovate.Adapter.ProcessExecutionReportEntity data='{
+  "id": 356274669892,
+  "commandId": 356274669889,
+  "name": "356274669889_1",
+  "accountId": 1931663,
+  "contractId": 4421996,
+  "timestamp": "2026-01-05T02:54:34.385Z",
+  "orderId": 356274669889,
+  "execType": "Trade",
+  "ordStatus": "Filled",
+  "action": "Buy",
+  "cumQty": 5,
+  "avgPx": 93590.0,
+  "lastQty": 5,
+  "lastPx": 93590.0,
+  "externalClOrdId": "0.249888227649851"
+}'
+2026-01-04 22:54:34:455 (Simulation) Tradovate.Adapter.ProcessFillEntity data='{
+  "id": 356274669892,
+  "orderId": 356274669889,
+  "contractId": 4421996,
+  "timestamp": "2026-01-05T02:54:34.385Z",
+  "tradeDate": {
+    "year": 2026,
+    "month": 1,
+    "day": 5
+  },
+  "action": "Buy",
+  "qty": 5,
+  "price": 93590.0,
+  "active": true,
+  "finallyPaired": 0,
+  "external": false
+}'
+2026-01-04 22:54:34:455 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Filled orderId='356274669889' account='DEMO619219' name='Close' orderState=Filled instrument='MBT 01-26' orderAction=BuyToCover limitPrice=0 stopPrice=0 quantity=5 orderType='Market' filled=5 averageFillPrice=93590 time='2026-01-04 22:54:34' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:34:474 (Simulation) Cbi.Account.OrderUpdateCallback.PositionClose1: orderId='356274669889' account='DEMO619219' name='Close' orderState=Filled instrument='MBT 01-26' orderAction=BuyToCover limitPrice=0 stopPrice=0 quantity=5 orderType='Market' filled=5 averageFillPrice=93590 time='2026-01-04 22:54:34' statementDate='1800-01-01' error=NoError comment='' nr=4
+2026-01-04 22:54:34:474 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669889_1' account='DEMO619219' instrument='MBT 01-26' exchange=Globex price=93590 quantity=5 marketPosition=Long operation=Add orderID='356274669889' isSod=False time='2026-01-04 22:54:34' statementDate='1800-01-01'
+2026-01-04 22:54:34:474 (Simulation) Cbi.Account.ExecutionUpdateCallback.PositionClose: currentQuantity=0
+2026-01-04 22:54:34:474 (Simulation) Cbi.Account.OnAddTrade: entryId='356274669675_1' exitId='356274669889_1' profitCurrencyBeforeCommissionAndFees=102.5
+2026-01-04 22:54:34:474 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=CashValue currency=UsDollar value=*****
+2026-01-04 22:54:34:475 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-04 22:54:34:475 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-04 22:54:34:475 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=CashValue currency=UsDollar value=*****
+2026-01-04 22:54:34:475 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-04 22:54:34:475 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-04 22:54:34:475 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=CashValue currency=UsDollar value=*****
+2026-01-04 22:54:34:475 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-04 22:54:34:475 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-04 22:54:34:475 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=CashValue currency=UsDollar value=*****
+2026-01-04 22:54:34:475 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-04 22:54:34:475 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-04 22:54:34:475 (Simulation) Tradovate.Adapter.ProcessPositionLogEntity data='{
+  "id": 356274669898,
+  "accountId": 1931663,
+  "contractId": 4421996,
+  "timestamp": "2026-01-05T02:54:34.385Z",
+  "tradeDate": {
+    "year": 2026,
+    "month": 1,
+    "day": 5
+  },
+  "netPos": 0,
+  "bought": 19,
+  "boughtValue": 1777860.0,
+  "sold": 19,
+  "soldValue": 1776785.0,
+  "archived": false,
+  "positionChangeType": "Trade",
+  "fillId": 356274669892
+}'
+2026-01-04 22:54:34:475 (Simulation) Cbi.Account.PositionUpdateCallback: instrument='MBT 01-26' account='DEMO619219' avgPrice=0 quantity=0 marketPosition=Flat operation=Remove
+2026-01-04 22:54:34:475 (Simulation) Cbi.Account.PositionUpdateCallback.PositionClose1: instrument='MBT 01-26' account='DEMO619219' avgPrice=0 quantity=0 marketPosition=Flat operation=Remove
+2026-01-04 22:54:34:475 (Simulation) Cbi.Account.PositionUpdateCallback.PositionClose2
+2026-01-04 22:54:34:486 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=CashValue currency=UsDollar value=*****
+2026-01-04 22:54:34:486 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-04 22:54:34:486 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-04 22:54:34:486 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274669889,
+  "accountId": 1931663,
+  "contractId": 4421996,
+  "timestamp": "2026-01-05T02:54:34.383Z",
+  "action": "Buy",
+  "ordStatus": "Filled",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2026-01-04 22:54:34:637 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=GrossRealizedProfitLoss currency=UsDollar value=*****
+2026-01-04 22:54:35:236 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=InitialMargin currency=UsDollar value=*****
+2026-01-04 22:54:35:236 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=IntradayMargin currency=UsDollar value=*****
+2026-01-04 22:54:37:488 (Simulation) Cbi.Position.Close0: instrument='MGC 02-26' account='DEMO619219' currentQuantity=-2 signalName='Close'
+2026-01-04 22:54:37:504 (Simulation) Cbi.Position.Close.Cancel1: realOrderState=Working orderId='356274669222' account='DEMO619219' name='TP1_Short_01' orderState=CancelPending instrument='MGC 02-26' orderAction=Buy orderType='Limit' limitPrice=4397.1 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3038 time='2026-01-04 22:54:37' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:37:504 (Simulation) Cbi.Position.Close.Cancel1: realOrderState=Working orderId='356274669219' account='DEMO619219' name='SL_Short_01' orderState=CancelPending instrument='MGC 02-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=4431 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3037 time='2026-01-04 22:54:37' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:37:504 (Simulation) Cbi.Position.Close.Cancel1: realOrderState=Working orderId='356274669224' account='DEMO619219' name='TP2_Short_01' orderState=CancelPending instrument='MGC 02-26' orderAction=Buy orderType='Limit' limitPrice=4373.5 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3039 time='2026-01-04 22:54:37' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:37:504 (Simulation) Cbi.Account.Cancel0: realOrderState=Working orderId='356274669222' account='DEMO619219' name='TP1_Short_01' orderState=CancelPending instrument='MGC 02-26' orderAction=Buy orderType='Limit' limitPrice=4397.1 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3038 time='2026-01-04 22:54:37' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:37:504 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=CancelPending orderId='356274669222' account='DEMO619219' name='TP1_Short_01' orderState=CancelPending instrument='MGC 02-26' orderAction=Buy limitPrice=4397.1 stopPrice=0 quantity=1 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 22:54:37' statementDate='2026-01-04' error=NoError comment='' nr=-1
+2026-01-04 22:54:37:504 (Simulation) Cbi.Account.Cancel1: realOrderState=CancelPending orderId='356274669222' account='DEMO619219' name='TP1_Short_01' orderState=CancelPending instrument='MGC 02-26' orderAction=Buy orderType='Limit' limitPrice=4397.1 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3038 time='2026-01-04 22:54:37' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:37:504 (Simulation) Cbi.Account.Cancel0: realOrderState=Working orderId='356274669219' account='DEMO619219' name='SL_Short_01' orderState=CancelPending instrument='MGC 02-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=4431 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3037 time='2026-01-04 22:54:37' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:37:504 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=CancelPending orderId='356274669219' account='DEMO619219' name='SL_Short_01' orderState=CancelPending instrument='MGC 02-26' orderAction=Buy limitPrice=0 stopPrice=4431 quantity=2 orderType='Stop Market' filled=0 averageFillPrice=0 time='2026-01-04 22:54:37' statementDate='2026-01-04' error=NoError comment='' nr=-1
+2026-01-04 22:54:37:504 (Simulation) Cbi.Account.Cancel1: realOrderState=CancelPending orderId='356274669219' account='DEMO619219' name='SL_Short_01' orderState=CancelPending instrument='MGC 02-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=4431 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3037 time='2026-01-04 22:54:37' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:37:504 (Simulation) Cbi.Account.Cancel0: realOrderState=Working orderId='356274669224' account='DEMO619219' name='TP2_Short_01' orderState=CancelPending instrument='MGC 02-26' orderAction=Buy orderType='Limit' limitPrice=4373.5 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3039 time='2026-01-04 22:54:37' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:37:504 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=CancelPending orderId='356274669224' account='DEMO619219' name='TP2_Short_01' orderState=CancelPending instrument='MGC 02-26' orderAction=Buy limitPrice=4373.5 stopPrice=0 quantity=1 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 22:54:37' statementDate='2026-01-04' error=NoError comment='' nr=-1
+2026-01-04 22:54:37:504 (Simulation) Cbi.Account.Cancel1: realOrderState=CancelPending orderId='356274669224' account='DEMO619219' name='TP2_Short_01' orderState=CancelPending instrument='MGC 02-26' orderAction=Buy orderType='Limit' limitPrice=4373.5 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3039 time='2026-01-04 22:54:37' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:37:504 (Simulation) Tradovate.Adapter.Cancel0: count=3
+2026-01-04 22:54:37:504 (Simulation) Tradovate.Adapter.Cancel1: orderId='356274669222' account='DEMO619219' name='TP1_Short_01' orderState=CancelPending instrument='MGC 02-26' orderAction=Buy orderType='Limit' limitPrice=4397.1 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3038 time='2026-01-04 22:54:37' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:37:505 (Simulation) Tradovate.Adapter.Cancel1: orderId='356274669219' account='DEMO619219' name='SL_Short_01' orderState=CancelPending instrument='MGC 02-26' orderAction=Buy orderType='Stop Market' limitPrice=0 stopPrice=4431 quantity=2 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3037 time='2026-01-04 22:54:37' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:37:505 (Simulation) Tradovate.Adapter.Cancel1: orderId='356274669224' account='DEMO619219' name='TP2_Short_01' orderState=CancelPending instrument='MGC 02-26' orderAction=Buy orderType='Limit' limitPrice=4373.5 stopPrice=0 quantity=1 tif=Gtc oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3039 time='2026-01-04 22:54:37' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:37:595 (Simulation) Tradovate.Adapter.TradeMessageReceive3 UNEXPECTED status='200' data='{
+  "commandId": 356274669900
+}'
+2026-01-04 22:54:37:595 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669900,
+  "orderId": 356274669222,
+  "timestamp": "2026-01-05T02:54:37.552Z",
+  "commandType": "Cancel",
+  "commandStatus": "Pending",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:54:37:595 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669901,
+  "commandId": 356274669900,
+  "timestamp": "2026-01-05T02:54:37.553Z",
+  "commandStatus": "AtExecution"
+}'
+2026-01-04 22:54:37:595 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669900,
+  "orderId": 356274669222,
+  "timestamp": "2026-01-05T02:54:37.552Z",
+  "commandType": "Cancel",
+  "commandStatus": "AtExecution",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:54:37:595 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=CancelSubmitted orderId='356274669222' account='DEMO619219' name='TP1_Short_01' orderState=CancelSubmitted instrument='MGC 02-26' orderAction=Buy limitPrice=4397.1 stopPrice=0 quantity=1 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 22:54:37' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:37:595 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Cancelled orderId='356274669222' account='DEMO619219' name='TP1_Short_01' orderState=Cancelled instrument='MGC 02-26' orderAction=Buy limitPrice=4397.1 stopPrice=0 quantity=1 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 22:54:37' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:37:619 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669902,
+  "commandId": 356274669848,
+  "timestamp": "2026-01-05T02:54:37.553Z",
+  "commandStatus": "ExecutionStopped"
+}'
+2026-01-04 22:54:37:619 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669848,
+  "orderId": 356274669222,
+  "timestamp": "2026-01-05T02:35:11.337Z",
+  "commandType": "Modify",
+  "commandStatus": "ExecutionStopped",
+  "senderId": 619219,
+  "userSessionId": 1724455716
+}'
+2026-01-04 22:54:37:619 (Simulation) Tradovate.Adapter.ProcessExecutionReportEntity data='{
+  "id": 356274669901,
+  "commandId": 356274669900,
+  "name": "1.730942046585029",
+  "accountId": 1931663,
+  "contractId": 3830086,
+  "timestamp": "2026-01-05T02:54:37.552Z",
+  "orderId": 356274669222,
+  "execType": "Canceled",
+  "ordStatus": "Canceled",
+  "action": "Buy",
+  "externalClOrdId": "0.8486225057389923"
+}'
+2026-01-04 22:54:37:619 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274669222,
+  "accountId": 1931663,
+  "contractId": 3830086,
+  "timestamp": "2026-01-05T01:12:00.977Z",
+  "action": "Buy",
+  "ordStatus": "Canceled",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2026-01-04 22:54:37:619 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Cancelled orderId='356274669222' account='DEMO619219' name='TP1_Short_01' orderState=Cancelled instrument='MGC 02-26' orderAction=Buy limitPrice=4397.1 stopPrice=0 quantity=1 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 21:12:00' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:37:658 (Simulation) Tradovate.Adapter.TradeMessageReceive3 UNEXPECTED status='200' data='{
+  "commandId": 356274669904
+}'
+2026-01-04 22:54:37:658 (Simulation) Tradovate.Adapter.TradeMessageReceive3 UNEXPECTED status='200' data='{
+  "commandId": 356274669903
+}'
+2026-01-04 22:54:37:658 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669903,
+  "orderId": 356274669224,
+  "timestamp": "2026-01-05T02:54:37.613Z",
+  "commandType": "Cancel",
+  "commandStatus": "Pending",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:54:37:658 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669904,
+  "orderId": 356274669219,
+  "timestamp": "2026-01-05T02:54:37.613Z",
+  "commandType": "Cancel",
+  "commandStatus": "Pending",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:54:37:658 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669905,
+  "commandId": 356274669903,
+  "timestamp": "2026-01-05T02:54:37.614Z",
+  "commandStatus": "AtExecution"
+}'
+2026-01-04 22:54:37:658 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669903,
+  "orderId": 356274669224,
+  "timestamp": "2026-01-05T02:54:37.613Z",
+  "commandType": "Cancel",
+  "commandStatus": "AtExecution",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:54:37:658 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=CancelSubmitted orderId='356274669224' account='DEMO619219' name='TP2_Short_01' orderState=CancelSubmitted instrument='MGC 02-26' orderAction=Buy limitPrice=4373.5 stopPrice=0 quantity=1 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 22:54:37' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:37:658 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Cancelled orderId='356274669224' account='DEMO619219' name='TP2_Short_01' orderState=Cancelled instrument='MGC 02-26' orderAction=Buy limitPrice=4373.5 stopPrice=0 quantity=1 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 22:54:37' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:37:679 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669906,
+  "commandId": 356274669224,
+  "timestamp": "2026-01-05T02:54:37.614Z",
+  "commandStatus": "ExecutionStopped"
+}'
+2026-01-04 22:54:37:679 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669224,
+  "orderId": 356274669224,
+  "timestamp": "2026-01-05T01:12:00.977Z",
+  "clOrdId": "9844dac3f20549afabc578636ae1a6a2",
+  "commandType": "New",
+  "commandStatus": "ExecutionStopped",
+  "senderId": 619219,
+  "userSessionId": 1724455716,
+  "isAutomated": true
+}'
+2026-01-04 22:54:37:679 (Simulation) Tradovate.Adapter.ProcessExecutionReportEntity data='{
+  "id": 356274669905,
+  "commandId": 356274669903,
+  "name": "0.8490009944205409",
+  "accountId": 1931663,
+  "contractId": 3830086,
+  "timestamp": "2026-01-05T02:54:37.613Z",
+  "orderId": 356274669224,
+  "execType": "Canceled",
+  "ordStatus": "Canceled",
+  "action": "Buy",
+  "externalClOrdId": "0.3490681426967705"
+}'
+2026-01-04 22:54:37:679 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274669224,
+  "accountId": 1931663,
+  "contractId": 3830086,
+  "timestamp": "2026-01-05T01:12:00.977Z",
+  "action": "Buy",
+  "ordStatus": "Canceled",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2026-01-04 22:54:37:679 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Cancelled orderId='356274669224' account='DEMO619219' name='TP2_Short_01' orderState=Cancelled instrument='MGC 02-26' orderAction=Buy limitPrice=4373.5 stopPrice=0 quantity=1 orderType='Limit' filled=0 averageFillPrice=0 time='2026-01-04 21:12:00' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:37:700 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669907,
+  "commandId": 356274669904,
+  "timestamp": "2026-01-05T02:54:37.614Z",
+  "commandStatus": "AtExecution"
+}'
+2026-01-04 22:54:37:700 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669904,
+  "orderId": 356274669219,
+  "timestamp": "2026-01-05T02:54:37.613Z",
+  "commandType": "Cancel",
+  "commandStatus": "AtExecution",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:54:37:700 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=CancelSubmitted orderId='356274669219' account='DEMO619219' name='SL_Short_01' orderState=CancelSubmitted instrument='MGC 02-26' orderAction=Buy limitPrice=0 stopPrice=4431 quantity=2 orderType='Stop Market' filled=0 averageFillPrice=0 time='2026-01-04 22:54:37' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:37:700 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Cancelled orderId='356274669219' account='DEMO619219' name='SL_Short_01' orderState=Cancelled instrument='MGC 02-26' orderAction=Buy limitPrice=0 stopPrice=4431 quantity=2 orderType='Stop Market' filled=0 averageFillPrice=0 time='2026-01-04 22:54:37' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:37:720 (Simulation) Cbi.Position.Close2: instrument='MGC 02-26' account='DEMO619219' currentQuantity=-2
+2026-01-04 22:54:37:720 (Simulation) Cbi.Account.CreateOrder: orderId='924c762c14cf4867861cda1a54a42c91' account='DEMO619219' name='Close' orderState=Initialized instrument='MGC 02-26' orderAction=BuyToCover orderType='Market' limitPrice=0 stopPrice=0 quantity=2 tif=Day oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3116 time='2026-01-04 22:54:37' gtd='2099-12-01' statementDate='2026-01-04' id=-1 comment=''
+2026-01-04 22:54:37:720 (Simulation) Cbi.Account.Submit0: realOrderState=Initialized isPendingSubmit=False orderId='924c762c14cf4867861cda1a54a42c91' account='DEMO619219' name='Close' orderState=Initialized instrument='MGC 02-26' orderAction=BuyToCover orderType='Market' limitPrice=0 stopPrice=0 quantity=2 tif=Day oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3116 time='2026-01-04 22:54:37' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:37:720 (Simulation) Cbi.Account.Submit1: realOrderState=Initialized orderId='924c762c14cf4867861cda1a54a42c91' account='DEMO619219' name='Close' orderState=Initialized instrument='MGC 02-26' orderAction=BuyToCover orderType='Market' limitPrice=0 stopPrice=0 quantity=2 tif=Day oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3116 time='2026-01-04 22:54:37' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:37:723 (Simulation) Tradovate.Adapter.Submit0: count=1
+2026-01-04 22:54:37:723 (Simulation) Tradovate.Adapter.Submit1: orderId='924c762c14cf4867861cda1a54a42c91' account='DEMO619219' name='Close' orderState=Initialized instrument='MGC 02-26' orderAction=BuyToCover orderType='Market' limitPrice=0 stopPrice=0 quantity=2 tif=Day oco='' filled=0 averageFillPrice=0 onBehalfOf='' id=3116 time='2026-01-04 22:54:37' gtd='2099-12-01' statementDate='2026-01-04'
+2026-01-04 22:54:37:723 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669908,
+  "commandId": 356274669219,
+  "timestamp": "2026-01-05T02:54:37.614Z",
+  "commandStatus": "ExecutionStopped"
+}'
+2026-01-04 22:54:37:723 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669219,
+  "orderId": 356274669219,
+  "timestamp": "2026-01-05T01:12:00.913Z",
+  "clOrdId": "5e533ce5d56a4b9eb36689ef50719bfa",
+  "commandType": "New",
+  "commandStatus": "ExecutionStopped",
+  "senderId": 619219,
+  "userSessionId": 1724455716,
+  "isAutomated": true
+}'
+2026-01-04 22:54:37:723 (Simulation) Tradovate.Adapter.ProcessExecutionReportEntity data='{
+  "id": 356274669907,
+  "commandId": 356274669904,
+  "name": "0.5055434614673012",
+  "accountId": 1931663,
+  "contractId": 3830086,
+  "timestamp": "2026-01-05T02:54:37.614Z",
+  "orderId": 356274669219,
+  "execType": "Canceled",
+  "ordStatus": "Canceled",
+  "action": "Buy",
+  "externalClOrdId": "0.6801532421231935"
+}'
+2026-01-04 22:54:37:723 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274669219,
+  "accountId": 1931663,
+  "contractId": 3830086,
+  "timestamp": "2026-01-05T01:12:00.913Z",
+  "action": "Buy",
+  "ordStatus": "Canceled",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2026-01-04 22:54:37:723 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Cancelled orderId='356274669219' account='DEMO619219' name='SL_Short_01' orderState=Cancelled instrument='MGC 02-26' orderAction=Buy limitPrice=0 stopPrice=4431 quantity=2 orderType='Stop Market' filled=0 averageFillPrice=0 time='2026-01-04 21:12:00' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:37:814 (Simulation) Tradovate.Adapter.TradeMessageReceive3 status='200' data='{
+  "orderId": 356274669909
+}'
+2026-01-04 22:54:37:815 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274669909,
+  "accountId": 1931663,
+  "contractId": 3830086,
+  "timestamp": "2026-01-05T02:54:37.769Z",
+  "action": "Buy",
+  "ordStatus": "PendingNew",
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2026-01-04 22:54:37:815 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669909,
+  "orderId": 356274669909,
+  "timestamp": "2026-01-05T02:54:37.769Z",
+  "clOrdId": "924c762c14cf4867861cda1a54a42c91",
+  "commandType": "New",
+  "commandStatus": "Pending",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:54:37:815 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Submitted oldOrderId='924c762c14cf4867861cda1a54a42c91' orderId='356274669909' account='DEMO619219' name='Close' orderState=Submitted instrument='MGC 02-26' orderAction=BuyToCover limitPrice=0 stopPrice=0 quantity=2 orderType='Market' filled=0 averageFillPrice=0 time='2026-01-04 22:54:37' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:37:838 (Simulation) Tradovate.Adapter.ProcessOrderVersionEntity data='{
+  "id": 356274669909,
+  "orderId": 356274669909,
+  "orderQty": 2,
+  "orderType": "Market",
+  "timeInForce": "Day"
+}'
+2026-01-04 22:54:37:838 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669910,
+  "commandId": 356274669909,
+  "timestamp": "2026-01-05T02:54:37.771Z",
+  "commandStatus": "RiskPassed"
+}'
+2026-01-04 22:54:37:838 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669909,
+  "orderId": 356274669909,
+  "timestamp": "2026-01-05T02:54:37.769Z",
+  "clOrdId": "924c762c14cf4867861cda1a54a42c91",
+  "commandType": "New",
+  "commandStatus": "RiskPassed",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:54:37:839 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274669909,
+  "accountId": 1931663,
+  "contractId": 3830086,
+  "timestamp": "2026-01-05T02:54:37.769Z",
+  "action": "Buy",
+  "ordStatus": "PendingNew",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2026-01-04 22:54:37:839 (Simulation) Tradovate.Adapter.ProcessCommandReportEntity data='{
+  "id": 356274669911,
+  "commandId": 356274669909,
+  "timestamp": "2026-01-05T02:54:37.771Z",
+  "commandStatus": "AtExecution"
+}'
+2026-01-04 22:54:37:839 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Accepted orderId='356274669909' account='DEMO619219' name='Close' orderState=Accepted instrument='MGC 02-26' orderAction=BuyToCover limitPrice=0 stopPrice=0 quantity=2 orderType='Market' filled=0 averageFillPrice=0 time='2026-01-04 22:54:37' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:37:839 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Working orderId='356274669909' account='DEMO619219' name='Close' orderState=Working instrument='MGC 02-26' orderAction=BuyToCover limitPrice=0 stopPrice=0 quantity=2 orderType='Market' filled=0 averageFillPrice=0 time='2026-01-04 22:54:37' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:37:839 (Simulation) Tradovate.Adapter.ProcessCommandEntity data='{
+  "id": 356274669909,
+  "orderId": 356274669909,
+  "timestamp": "2026-01-05T02:54:37.769Z",
+  "clOrdId": "924c762c14cf4867861cda1a54a42c91",
+  "commandType": "New",
+  "commandStatus": "AtExecution",
+  "senderId": 619219,
+  "userSessionId": 1724842412
+}'
+2026-01-04 22:54:37:839 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274669909,
+  "accountId": 1931663,
+  "contractId": 3830086,
+  "timestamp": "2026-01-05T02:54:37.769Z",
+  "action": "Buy",
+  "ordStatus": "Working",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2026-01-04 22:54:37:839 (Simulation) Tradovate.Adapter.ProcessExecutionReportEntity data='{
+  "id": 356274669911,
+  "commandId": 356274669909,
+  "name": "1.331116269952792",
+  "accountId": 1931663,
+  "contractId": 3830086,
+  "timestamp": "2026-01-05T02:54:37.771Z",
+  "orderId": 356274669909,
+  "execType": "New",
+  "ordStatus": "Working",
+  "action": "Buy",
+  "externalClOrdId": "1.470811033588577"
+}'
+2026-01-04 22:54:37:839 (Simulation) Tradovate.Adapter.ProcessExecutionReportEntity data='{
+  "id": 356274669912,
+  "commandId": 356274669909,
+  "name": "356274669909_1",
+  "accountId": 1931663,
+  "contractId": 3830086,
+  "timestamp": "2026-01-05T02:54:37.771Z",
+  "orderId": 356274669909,
+  "execType": "Trade",
+  "ordStatus": "Filled",
+  "action": "Buy",
+  "cumQty": 2,
+  "avgPx": 4417.3,
+  "lastQty": 2,
+  "lastPx": 4417.3,
+  "externalClOrdId": "1.470811033588577"
+}'
+2026-01-04 22:54:37:839 (Simulation) Tradovate.Adapter.ProcessFillEntity data='{
+  "id": 356274669912,
+  "orderId": 356274669909,
+  "contractId": 3830086,
+  "timestamp": "2026-01-05T02:54:37.771Z",
+  "tradeDate": {
+    "year": 2026,
+    "month": 1,
+    "day": 5
+  },
+  "action": "Buy",
+  "qty": 2,
+  "price": 4417.3,
+  "active": true,
+  "finallyPaired": 0,
+  "external": false
+}'
+2026-01-04 22:54:37:840 (Simulation) Cbi.Account.OrderUpdateCallback: realOrderState=Filled orderId='356274669909' account='DEMO619219' name='Close' orderState=Filled instrument='MGC 02-26' orderAction=BuyToCover limitPrice=0 stopPrice=0 quantity=2 orderType='Market' filled=2 averageFillPrice=4417.3 time='2026-01-04 22:54:37' statementDate='1800-01-01' error=NoError comment='' nr=-1
+2026-01-04 22:54:37:863 (Simulation) Cbi.Account.OrderUpdateCallback.PositionClose1: orderId='356274669909' account='DEMO619219' name='Close' orderState=Filled instrument='MGC 02-26' orderAction=BuyToCover limitPrice=0 stopPrice=0 quantity=2 orderType='Market' filled=2 averageFillPrice=4417.3 time='2026-01-04 22:54:37' statementDate='1800-01-01' error=NoError comment='' nr=4
+2026-01-04 22:54:37:863 (Simulation) Cbi.Account.ExecutionUpdateCallback: executionId='356274669909_1' account='DEMO619219' instrument='MGC 02-26' exchange=Globex price=4417.3 quantity=2 marketPosition=Long operation=Add orderID='356274669909' isSod=False time='2026-01-04 22:54:37' statementDate='1800-01-01'
+2026-01-04 22:54:37:863 (Simulation) Cbi.Account.ExecutionUpdateCallback.PositionClose: currentQuantity=0
+2026-01-04 22:54:37:863 (Simulation) Cbi.Account.OnAddTrade: entryId='356274669207_1' exitId='356274669909_1' profitCurrencyBeforeCommissionAndFees=6.00000000000364
+2026-01-04 22:54:37:863 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=CashValue currency=UsDollar value=*****
+2026-01-04 22:54:37:863 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-04 22:54:37:863 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-04 22:54:37:863 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=CashValue currency=UsDollar value=*****
+2026-01-04 22:54:37:863 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-04 22:54:37:863 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-04 22:54:37:863 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=CashValue currency=UsDollar value=*****
+2026-01-04 22:54:37:863 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-04 22:54:37:863 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-04 22:54:37:863 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=CashValue currency=UsDollar value=*****
+2026-01-04 22:54:37:863 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-04 22:54:37:863 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-04 22:54:37:864 (Simulation) Tradovate.Adapter.ProcessPositionLogEntity data='{
+  "id": 356274669918,
+  "accountId": 1931663,
+  "contractId": 3830086,
+  "timestamp": "2026-01-05T02:54:37.771Z",
+  "tradeDate": {
+    "year": 2026,
+    "month": 1,
+    "day": 5
+  },
+  "netPos": 0,
+  "bought": 4,
+  "boughtValue": 17581.9,
+  "sold": 4,
+  "soldValue": 17587.6,
+  "archived": false,
+  "positionChangeType": "Trade",
+  "fillId": 356274669912
+}'
+2026-01-04 22:54:37:864 (Simulation) Cbi.Account.PositionUpdateCallback: instrument='MGC 02-26' account='DEMO619219' avgPrice=0 quantity=0 marketPosition=Flat operation=Remove
+2026-01-04 22:54:37:864 (Simulation) Cbi.Account.PositionUpdateCallback.PositionClose1: instrument='MGC 02-26' account='DEMO619219' avgPrice=0 quantity=0 marketPosition=Flat operation=Remove
+2026-01-04 22:54:37:864 (Simulation) Cbi.Account.PositionUpdateCallback.PositionClose2
+2026-01-04 22:54:37:871 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=CashValue currency=UsDollar value=*****
+2026-01-04 22:54:37:871 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-04 22:54:37:871 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-04 22:54:37:871 (Simulation) Tradovate.Adapter.ProcessOrderEntity data='{
+  "id": 356274669909,
+  "accountId": 1931663,
+  "contractId": 3830086,
+  "timestamp": "2026-01-05T02:54:37.769Z",
+  "action": "Buy",
+  "ordStatus": "Filled",
+  "executionProviderId": 1,
+  "archived": false,
+  "external": false,
+  "admin": false
+}'
+2026-01-04 22:54:38:615 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=InitialMargin currency=UsDollar value=*****
+2026-01-04 22:54:38:615 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=IntradayMargin currency=UsDollar value=*****
+2026-01-04 22:54:38:696 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=GrossRealizedProfitLoss currency=UsDollar value=*****
+2026-01-04 22:54:56:492 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='4/1/26 10:00:00 p. m.' to='4/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-04 22:58:39:415 *************** unhandled exception trapped ***************
+2026-01-04 22:58:39:415 Cuota insuficiente para procesar este comando
+2026-01-04 22:58:39:415 System.ComponentModel.Win32Exception (0x80004005): Cuota insuficiente para procesar este comando
+   at System.Windows.Interop.HwndTarget.UpdateWindowSettings(Boolean enableRenderTarget, Nullable`1 channelSet)
+   at System.Windows.Interop.HwndTarget.UpdateWindowPos(IntPtr lParam)
+   at System.Windows.Interop.HwndTarget.HandleMessage(WindowMessage msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Interop.HwndSource.HwndTargetFilterMessage(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndWrapper.WndProc(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndSubclass.DispatcherCallbackOperation(Object o)
+   at System.Windows.Threading.ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
+   at System.Windows.Threading.ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
+2026-01-04 22:58:39:416 ERROR: There are no email share services defined. You need to define one and set "Default" to true for email to work.
+2026-01-04 22:58:43:680 *************** unhandled exception trapped ***************
+2026-01-04 22:58:43:680 Cuota insuficiente para procesar este comando
+2026-01-04 22:58:43:680 System.ComponentModel.Win32Exception (0x80004005): Cuota insuficiente para procesar este comando
+   at System.Windows.Interop.HwndTarget.UpdateWindowSettings(Boolean enableRenderTarget, Nullable`1 channelSet)
+   at System.Windows.Interop.HwndTarget.UpdateWindowPos(IntPtr lParam)
+   at System.Windows.Interop.HwndTarget.HandleMessage(WindowMessage msg, IntPtr wparam, IntPtr lparam)
+   at System.Windows.Interop.HwndSource.HwndTargetFilterMessage(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndWrapper.WndProc(IntPtr hwnd, Int32 msg, IntPtr wParam, IntPtr lParam, Boolean& handled)
+   at MS.Win32.HwndSubclass.DispatcherCallbackOperation(Object o)
+   at System.Windows.Threading.ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
+   at System.Windows.Threading.ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
+2026-01-04 22:58:43:680 ERROR: There are no email share services defined. You need to define one and set "Default" to true for email to work.
+2026-01-04 22:58:44:690 Finalizing addon 'NinjaTrader.NinjaScript.AddOns.NewsUpdate'
+2026-01-04 22:58:44:837 Shutting down NinjaTrader
+2026-01-04 22:58:44:837 Disconnecting 'Simulation'
+2026-01-04 22:58:44:841 (Simulation) Cbi.Connection.Disconnect
+2026-01-04 22:58:44:846 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Disconnecting priceStatus=Disconnecting previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError=''
+2026-01-04 22:58:44:846 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Disconnecting previousStatus=Connected message=''
+2026-01-04 22:58:44:848 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Disconnecting previousStatus=Connected message=''
+2026-01-04 22:58:44:849 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close1
+2026-01-04 22:58:44:866 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close3
+2026-01-04 22:58:44:885 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close4
+2026-01-04 22:58:44:886 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close5
+2026-01-04 22:58:44:886 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close6a
+2026-01-04 22:58:44:887 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close7
+2026-01-04 22:58:44:887 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close8
+2026-01-04 22:58:44:922 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2026-01-04 22:58:45:448 (Simulation) Tradovate.Adapter.DisposeTrade0
+2026-01-04 22:58:46:461 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Disconnected priceStatus=Disconnected previousStatus=Disconnecting previousPriceStatus=Disconnecting errorCode=NoError nativeError=''
+2026-01-04 22:58:46:461 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Disconnected previousStatus=Disconnecting message=''
+2026-01-04 22:58:46:461 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Disconnected previousStatus=Disconnecting message=''
+2026-01-04 22:58:46:463 Flushing DB thread
+2026-01-04 22:58:46:465 Shutting down instrument management
+2026-01-04 22:58:46:466 Shutting down instrument threads
+2026-01-04 22:58:46:474 Shutting down recorder
+2026-01-04 22:58:46:478 Shutting down file type watcher
+2026-01-04 22:58:46:478 Shutting down ATI server
+2026-01-04 22:58:46:500 Shutting down auto trade component
+2026-01-04 22:58:46:501 Shutting down SMTP server
+2026-01-04 22:58:46:512 Shutting down adapter server
+2026-01-04 22:58:46:526 Shutting down server(s)
+2026-01-04 22:58:46:529 Shutting down mail thread
+2026-01-04 22:58:46:539 Shutting down sound thread
+2026-01-04 22:58:46:539 Shutting down timer
+2026-01-04 22:58:46:539 Shutting down alerts timer
+2026-01-04 22:58:46:539 Shutting down message timer
+2026-01-04 22:58:46:539 Shutting down db
+2026-01-04 22:58:46:539 Flushing DB thread
+2026-01-04 22:58:46:624 Shutting down bars dictionary
+2026-01-04 22:58:46:635 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2026-01-04 22:58:46:650 Shutting down user entitlement threads
+2026-01-04 22:58:46:674 Shutting down logs
+2026-01-04 22:58:46:685 Shutting down bars types
+2026-01-04 22:58:46:687 Shutting down UI threads
+2026-01-04 22:58:46:712 ************************ Session End ************************

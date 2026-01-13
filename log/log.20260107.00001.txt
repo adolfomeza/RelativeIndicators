@@ -1,0 +1,4 @@
+2026-01-07 05:31:28:173|2|4|Session Break (Version 8.1.6.2)
+2026-01-07 05:31:50:618|0|4|Unable to load server side config file: Se excedió el tiempo de espera de la operación
+2026-01-07 05:31:51:043|3|4|There are no email share services defined. You need to define one and set "Default" to true for email to work.
+2026-01-07 05:32:00:612|3|4|There was an error on initializing instrumentation: Object reference not set to an instance of an object.

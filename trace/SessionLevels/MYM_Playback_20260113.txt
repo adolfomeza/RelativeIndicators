@@ -1,0 +1,479 @@
+
+==================================================================
+=== NEW SESSION STARTED: [Playback] - 13/1/26 7:57:56 a. m. ===
+==================================================================
+07:57:56.286 [PLAYBACK] [MYM] [07:57:56.286] DEBUG: OnStateChange(DataLoaded) IsUnmanaged = True
+07:57:56.293 [PLAYBACK] [MYM] [07:57:56.293] DEBUG_CONTEXT: Account = 'Playback101', Context = 'playback'
+07:57:56.544 [PLAYBACK] [MYM] [07:57:56.544] CSV EXPORT: Created C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\TradeExports\playback\MYM_03-26.csv
+07:57:56.544 [PLAYBACK] [MYM] 5/1/25 7:01:00 p. m. CONTROL BUTTONS: Initialized (Bottom Right)
+19:01:00.000 [PLAYBACK] [MYM] [07:57:56.610] 5/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 3/1/25 6:00:00 p. m. NY)
+19:01:00.000 [PLAYBACK] [MYM] [07:57:56.611] LEVEL SUMMARY: No active levels at week start!
+19:01:00.000 [PLAYBACK] [MYM] [07:57:56.611] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [07:57:56.611] PROTECTION_RESET: Cleared order references for new trade
+19:01:00.000 [PLAYBACK] [MYM] [07:57:56.612] 5/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MYM] [07:57:56.616] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [07:57:56.616] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MYM] [07:57:56.762] DEBUG DATE: Time=6/1/25 10:29:00 a. m. ActualSessionEnd=6/1/25 6:00:00 p. m. (NY=6/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [07:57:56.879] 6/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [07:57:56.879] 6/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [07:57:56.880] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [07:57:56.880] 6/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [07:57:56.881] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [07:57:57.112] DEBUG DATE: Time=7/1/25 10:29:00 a. m. ActualSessionEnd=7/1/25 6:00:00 p. m. (NY=7/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [07:57:57.294] 7/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [07:57:57.295] 7/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [07:57:57.295] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [07:57:57.299] 7/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [07:57:57.301] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [07:57:57.621] DEBUG DATE: Time=8/1/25 10:29:00 a. m. ActualSessionEnd=8/1/25 6:00:00 p. m. (NY=8/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [07:57:57.820] 8/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [07:57:57.820] 8/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [07:57:57.822] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [07:57:57.823] 8/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [07:57:57.823] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [07:57:58.207] DEBUG DATE: Time=9/1/25 10:29:00 a. m. ActualSessionEnd=9/1/25 10:30:00 a. m. (NY=9/1/25 9:30:00 a. m.) IsEarlyClose=True IsFriday=False
+10:30:00.000 [PLAYBACK] [MYM] [07:57:58.210] 9/1/25 10:30:00 a. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+10:30:00.000 [PLAYBACK] [MYM] [07:57:58.210] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+19:01:00.000 [PLAYBACK] [MYM] [07:57:58.211] 9/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MYM] [07:57:58.211] 9/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [07:57:58.211] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MYM] [07:57:58.648] DEBUG DATE: Time=10/1/25 10:29:00 a. m. ActualSessionEnd=10/1/25 6:00:00 p. m. (NY=10/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
+18:00:00.000 [PLAYBACK] [MYM] [07:57:58.943] 10/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [07:57:58.943] 10/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [07:57:58.944] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [07:57:58.949] 10/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [07:57:58.949] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+19:01:00.000 [PLAYBACK] [MYM] [07:57:58.950] 12/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 10/1/25 6:00:00 p. m. NY)
+19:01:00.000 [PLAYBACK] [MYM] [07:57:58.950] LEVEL SUMMARY (Price=43561):
+19:01:00.000 [PLAYBACK] [MYM] [07:57:58.950]   USA High @ 44782 | Currently BELOW by 1221 ticks
+19:01:00.000 [PLAYBACK] [MYM] [07:57:58.951]   USA High @ 44585 | Currently BELOW by 1024 ticks
+19:01:00.000 [PLAYBACK] [MYM] [07:57:58.952]   Europe High @ 44315 | Currently BELOW by 754 ticks
+19:01:00.000 [PLAYBACK] [MYM] [07:57:58.952]   USA High @ 44298 | Currently BELOW by 737 ticks
+19:01:00.000 [PLAYBACK] [MYM] [07:57:58.952]   Asia High @ 44281 | Currently BELOW by 720 ticks
+19:01:00.000 [PLAYBACK] [MYM] [07:57:58.953]   Europe High @ 44280 | Currently BELOW by 719 ticks
+19:01:00.000 [PLAYBACK] [MYM] [07:57:58.953]   USA High @ 44051 | Currently BELOW by 490 ticks
+19:01:00.000 [PLAYBACK] [MYM] [07:57:58.953]   USA Low @ 43462 | Currently ABOVE by 99 ticks
+19:01:00.000 [PLAYBACK] [MYM] [07:57:58.954] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [07:57:58.954] PROTECTION_RESET: Cleared order references for new trade
+19:01:00.000 [PLAYBACK] [MYM] [07:57:58.954] 12/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MYM] [07:57:58.955] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [07:57:58.955] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MYM] [07:57:59.543] DEBUG DATE: Time=13/1/25 10:29:00 a. m. ActualSessionEnd=13/1/25 6:00:00 p. m. (NY=13/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [07:57:59.957] 13/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [07:57:59.958] 13/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [07:57:59.958] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [07:57:59.959] 13/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [07:57:59.959] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [07:58:00.714] DEBUG DATE: Time=14/1/25 10:29:00 a. m. ActualSessionEnd=14/1/25 6:00:00 p. m. (NY=14/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [07:58:01.169] 14/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [07:58:01.169] 14/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [07:58:01.169] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [07:58:01.170] 14/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [07:58:01.170] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [07:58:02.036] DEBUG DATE: Time=15/1/25 10:29:00 a. m. ActualSessionEnd=15/1/25 6:00:00 p. m. (NY=15/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [07:58:02.574] 15/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [07:58:02.574] 15/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [07:58:02.576] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [07:58:02.577] 15/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [07:58:02.578] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [07:58:03.777] DEBUG DATE: Time=16/1/25 10:29:00 a. m. ActualSessionEnd=16/1/25 6:00:00 p. m. (NY=16/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [07:58:04.437] 16/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [07:58:04.438] 16/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [07:58:04.438] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [07:58:04.440] 16/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [07:58:04.440] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [07:58:05.515] DEBUG DATE: Time=17/1/25 10:29:00 a. m. ActualSessionEnd=17/1/25 6:00:00 p. m. (NY=17/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
+18:00:00.000 [PLAYBACK] [MYM] [07:58:06.402] 17/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [07:58:06.402] 17/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [07:58:06.402] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [07:58:06.403] 17/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [07:58:06.403] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+
+==================================================================
+=== NEW SESSION STARTED: [Playback] - 13/1/26 8:17:37 a. m. ===
+==================================================================
+08:17:37.672 [PLAYBACK] [MYM] [08:17:37.672] DEBUG: OnStateChange(DataLoaded) IsUnmanaged = True
+08:17:37.674 [PLAYBACK] [MYM] [08:17:37.674] DEBUG_CONTEXT: Account = 'Playback101', Context = 'playback'
+08:17:37.674 [PLAYBACK] [MYM] [08:17:37.674] CSV EXPORT: Using existing C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\TradeExports\playback\MYM_03-26.csv
+08:17:37.675 [PLAYBACK] [MYM] 5/1/25 7:01:00 p. m. CONTROL BUTTONS: Initialized (Bottom Right)
+19:01:00.000 [PLAYBACK] [MYM] [08:17:37.950] 5/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 3/1/25 6:00:00 p. m. NY)
+19:01:00.000 [PLAYBACK] [MYM] [08:17:37.950] LEVEL SUMMARY: No active levels at week start!
+19:01:00.000 [PLAYBACK] [MYM] [08:17:37.952] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [08:17:37.952] PROTECTION_RESET: Cleared order references for new trade
+19:01:00.000 [PLAYBACK] [MYM] [08:17:37.969] 5/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MYM] [08:17:37.969] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [08:17:37.970] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MYM] [08:17:38.081] DEBUG DATE: Time=6/1/25 10:29:00 a. m. ActualSessionEnd=6/1/25 6:00:00 p. m. (NY=6/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:17:38.202] 6/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:17:38.202] 6/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:17:38.203] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:17:38.204] 6/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:17:38.204] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:17:38.389] DEBUG DATE: Time=7/1/25 10:29:00 a. m. ActualSessionEnd=7/1/25 6:00:00 p. m. (NY=7/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:17:38.553] 7/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:17:38.553] 7/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:17:38.554] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:17:38.554] 7/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:17:38.554] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:17:38.870] DEBUG DATE: Time=8/1/25 10:29:00 a. m. ActualSessionEnd=8/1/25 6:00:00 p. m. (NY=8/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:17:39.056] 8/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:17:39.057] 8/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:17:39.057] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:17:39.057] 8/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:17:39.058] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:17:39.387] DEBUG DATE: Time=9/1/25 10:29:00 a. m. ActualSessionEnd=9/1/25 10:30:00 a. m. (NY=9/1/25 9:30:00 a. m.) IsEarlyClose=True IsFriday=False
+10:30:00.000 [PLAYBACK] [MYM] [08:17:39.389] 9/1/25 10:30:00 a. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+10:30:00.000 [PLAYBACK] [MYM] [08:17:39.391] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+19:01:00.000 [PLAYBACK] [MYM] [08:17:39.391] 9/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MYM] [08:17:39.391] 9/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [08:17:39.392] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MYM] [08:17:39.799] DEBUG DATE: Time=10/1/25 10:29:00 a. m. ActualSessionEnd=10/1/25 6:00:00 p. m. (NY=10/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
+18:00:00.000 [PLAYBACK] [MYM] [08:17:40.086] 10/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:17:40.087] 10/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:17:40.087] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:17:40.087] 10/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:17:40.087] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+19:01:00.000 [PLAYBACK] [MYM] [08:17:40.088] 12/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 10/1/25 6:00:00 p. m. NY)
+19:01:00.000 [PLAYBACK] [MYM] [08:17:40.089] LEVEL SUMMARY (Price=43561):
+19:01:00.000 [PLAYBACK] [MYM] [08:17:40.089]   USA High @ 44782 | Currently BELOW by 1221 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:17:40.090]   USA High @ 44585 | Currently BELOW by 1024 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:17:40.090]   Europe High @ 44315 | Currently BELOW by 754 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:17:40.091]   USA High @ 44298 | Currently BELOW by 737 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:17:40.092]   Asia High @ 44281 | Currently BELOW by 720 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:17:40.092]   Europe High @ 44280 | Currently BELOW by 719 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:17:40.093]   USA High @ 44051 | Currently BELOW by 490 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:17:40.093]   USA Low @ 43462 | Currently ABOVE by 99 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:17:40.094] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [08:17:40.094] PROTECTION_RESET: Cleared order references for new trade
+19:01:00.000 [PLAYBACK] [MYM] [08:17:40.095] 12/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MYM] [08:17:40.095] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [08:17:40.097] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MYM] [08:17:40.617] DEBUG DATE: Time=13/1/25 10:29:00 a. m. ActualSessionEnd=13/1/25 6:00:00 p. m. (NY=13/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:17:40.912] 13/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:17:40.912] 13/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:17:40.912] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:17:40.913] 13/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:17:40.914] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:17:41.462] DEBUG DATE: Time=14/1/25 10:29:00 a. m. ActualSessionEnd=14/1/25 6:00:00 p. m. (NY=14/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:17:41.789] 14/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:17:41.791] 14/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:17:41.791] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:17:41.792] 14/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:17:41.793] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:17:42.432] DEBUG DATE: Time=15/1/25 10:29:00 a. m. ActualSessionEnd=15/1/25 6:00:00 p. m. (NY=15/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:17:42.835] 15/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:17:42.835] 15/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:17:42.835] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:17:42.837] 15/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:17:42.837] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:17:43.987] DEBUG DATE: Time=16/1/25 10:29:00 a. m. ActualSessionEnd=16/1/25 6:00:00 p. m. (NY=16/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:17:44.494] 16/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:17:44.495] 16/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:17:44.495] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:17:44.500] 16/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:17:44.500] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:17:45.496] DEBUG DATE: Time=17/1/25 10:29:00 a. m. ActualSessionEnd=17/1/25 6:00:00 p. m. (NY=17/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
+18:00:00.000 [PLAYBACK] [MYM] [08:17:45.965] 17/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:17:45.966] 17/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:17:45.966] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:17:45.967] 17/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:17:45.967] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+
+==================================================================
+=== NEW SESSION STARTED: [Playback] - 13/1/26 8:18:56 a. m. ===
+==================================================================
+08:18:56.526 [PLAYBACK] [MYM] [08:18:56.526] DEBUG: OnStateChange(DataLoaded) IsUnmanaged = True
+08:18:56.528 [PLAYBACK] [MYM] [08:18:56.528] DEBUG_CONTEXT: Account = 'Playback101', Context = 'playback'
+08:18:56.529 [PLAYBACK] [MYM] [08:18:56.529] CSV EXPORT: Using existing C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\TradeExports\playback\MYM_03-26.csv
+08:18:56.529 [PLAYBACK] [MYM] 5/1/25 7:01:00 p. m. CONTROL BUTTONS: Initialized (Bottom Right)
+19:01:00.000 [PLAYBACK] [MYM] [08:18:56.602] 5/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 3/1/25 6:00:00 p. m. NY)
+19:01:00.000 [PLAYBACK] [MYM] [08:18:56.602] LEVEL SUMMARY: No active levels at week start!
+19:01:00.000 [PLAYBACK] [MYM] [08:18:56.603] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [08:18:56.604] PROTECTION_RESET: Cleared order references for new trade
+19:01:00.000 [PLAYBACK] [MYM] [08:18:56.604] 5/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MYM] [08:18:56.605] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [08:18:56.606] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MYM] [08:18:56.720] DEBUG DATE: Time=6/1/25 10:29:00 a. m. ActualSessionEnd=6/1/25 6:00:00 p. m. (NY=6/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:18:56.802] 6/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:18:56.803] 6/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:18:56.803] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:18:56.804] 6/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:18:56.804] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:18:57.003] DEBUG DATE: Time=7/1/25 10:29:00 a. m. ActualSessionEnd=7/1/25 6:00:00 p. m. (NY=7/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:18:57.159] 7/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:18:57.160] 7/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:18:57.160] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:18:57.161] 7/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:18:57.161] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:18:57.490] DEBUG DATE: Time=8/1/25 10:29:00 a. m. ActualSessionEnd=8/1/25 6:00:00 p. m. (NY=8/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:18:57.709] 8/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:18:57.712] 8/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:18:57.712] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:18:57.713] 8/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:18:57.713] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:18:58.128] DEBUG DATE: Time=9/1/25 10:29:00 a. m. ActualSessionEnd=9/1/25 10:30:00 a. m. (NY=9/1/25 9:30:00 a. m.) IsEarlyClose=True IsFriday=False
+10:30:00.000 [PLAYBACK] [MYM] [08:18:58.134] 9/1/25 10:30:00 a. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+10:30:00.000 [PLAYBACK] [MYM] [08:18:58.135] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+19:01:00.000 [PLAYBACK] [MYM] [08:18:58.135] 9/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MYM] [08:18:58.135] 9/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [08:18:58.136] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MYM] [08:18:58.649] DEBUG DATE: Time=10/1/25 10:29:00 a. m. ActualSessionEnd=10/1/25 6:00:00 p. m. (NY=10/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
+18:00:00.000 [PLAYBACK] [MYM] [08:18:58.952] 10/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:18:58.952] 10/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:18:58.952] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:18:58.953] 10/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:18:58.953] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+19:01:00.000 [PLAYBACK] [MYM] [08:18:58.954] 12/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 10/1/25 6:00:00 p. m. NY)
+19:01:00.000 [PLAYBACK] [MYM] [08:18:58.954] LEVEL SUMMARY (Price=43561):
+19:01:00.000 [PLAYBACK] [MYM] [08:18:58.954]   USA High @ 44782 | Currently BELOW by 1221 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:18:58.955]   USA High @ 44585 | Currently BELOW by 1024 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:18:58.955]   Europe High @ 44315 | Currently BELOW by 754 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:18:58.956]   USA High @ 44298 | Currently BELOW by 737 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:18:58.956]   Asia High @ 44281 | Currently BELOW by 720 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:18:58.956]   Europe High @ 44280 | Currently BELOW by 719 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:18:58.960]   USA High @ 44051 | Currently BELOW by 490 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:18:58.961]   USA Low @ 43462 | Currently ABOVE by 99 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:18:58.962] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [08:18:58.962] PROTECTION_RESET: Cleared order references for new trade
+19:01:00.000 [PLAYBACK] [MYM] [08:18:58.962] 12/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MYM] [08:18:58.963] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [08:18:58.963] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MYM] [08:18:59.444] DEBUG DATE: Time=13/1/25 10:29:00 a. m. ActualSessionEnd=13/1/25 6:00:00 p. m. (NY=13/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:18:59.727] 13/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:18:59.727] 13/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:18:59.727] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:18:59.728] 13/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:18:59.729] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:19:00.302] DEBUG DATE: Time=14/1/25 10:29:00 a. m. ActualSessionEnd=14/1/25 6:00:00 p. m. (NY=14/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:19:00.658] 14/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:19:00.658] 14/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:19:00.658] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:19:00.659] 14/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:19:00.660] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:19:01.786] DEBUG DATE: Time=15/1/25 10:29:00 a. m. ActualSessionEnd=15/1/25 6:00:00 p. m. (NY=15/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:19:02.277] 15/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:19:02.280] 15/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:19:02.280] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:19:02.281] 15/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:19:02.281] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:19:03.205] DEBUG DATE: Time=16/1/25 10:29:00 a. m. ActualSessionEnd=16/1/25 6:00:00 p. m. (NY=16/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:19:03.698] 16/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:19:03.699] 16/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:19:03.699] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:19:03.700] 16/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:19:03.701] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:19:04.733] DEBUG DATE: Time=17/1/25 10:29:00 a. m. ActualSessionEnd=17/1/25 6:00:00 p. m. (NY=17/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
+18:00:00.000 [PLAYBACK] [MYM] [08:19:05.261] 17/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:19:05.262] 17/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:19:05.262] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:19:05.263] 17/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:19:05.263] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+
+==================================================================
+=== NEW SESSION STARTED: [Playback] - 13/1/26 8:20:46 a. m. ===
+==================================================================
+08:20:46.006 [PLAYBACK] [MYM] [08:20:46.006] DEBUG: OnStateChange(DataLoaded) IsUnmanaged = True
+08:20:46.014 [PLAYBACK] [MYM] [08:20:46.014] DEBUG_CONTEXT: Account = 'Playback101', Context = 'playback'
+08:20:46.014 [PLAYBACK] [MYM] [08:20:46.014] CSV EXPORT: Using existing C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\TradeExports\playback\MYM_03-25.csv
+08:20:46.015 [PLAYBACK] [MYM] 5/1/25 7:01:00 p. m. CONTROL BUTTONS: Initialized (Bottom Right)
+19:01:00.000 [PLAYBACK] [MYM] [08:20:46.086] 5/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 3/1/25 6:00:00 p. m. NY)
+19:01:00.000 [PLAYBACK] [MYM] [08:20:46.086] LEVEL SUMMARY: No active levels at week start!
+19:01:00.000 [PLAYBACK] [MYM] [08:20:46.086] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [08:20:46.086] PROTECTION_RESET: Cleared order references for new trade
+19:01:00.000 [PLAYBACK] [MYM] [08:20:46.086] 5/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MYM] [08:20:46.088] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [08:20:46.088] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MYM] [08:20:46.141] DEBUG DATE: Time=6/1/25 10:29:00 a. m. ActualSessionEnd=6/1/25 6:00:00 p. m. (NY=6/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:20:46.192] 6/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:20:46.192] 6/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:20:46.192] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:20:46.192] 6/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:20:46.193] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:20:46.282] DEBUG DATE: Time=7/1/25 10:29:00 a. m. ActualSessionEnd=7/1/25 6:00:00 p. m. (NY=7/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:20:46.382] 7/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:20:46.383] 7/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:20:46.384] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:20:46.384] 7/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:20:46.384] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:20:46.530] DEBUG DATE: Time=8/1/25 10:29:00 a. m. ActualSessionEnd=8/1/25 6:00:00 p. m. (NY=8/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:20:46.630] 8/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:20:46.630] 8/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:20:46.631] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:20:46.631] 8/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:20:46.631] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:20:46.817] DEBUG DATE: Time=9/1/25 10:29:00 a. m. ActualSessionEnd=9/1/25 10:30:00 a. m. (NY=9/1/25 9:30:00 a. m.) IsEarlyClose=True IsFriday=False
+10:30:00.000 [PLAYBACK] [MYM] [08:20:46.819] 9/1/25 10:30:00 a. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+10:30:00.000 [PLAYBACK] [MYM] [08:20:46.819] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+19:01:00.000 [PLAYBACK] [MYM] [08:20:46.820] 9/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MYM] [08:20:46.820] 9/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [08:20:46.821] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MYM] [08:20:47.060] DEBUG DATE: Time=10/1/25 10:29:00 a. m. ActualSessionEnd=10/1/25 6:00:00 p. m. (NY=10/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
+18:00:00.000 [PLAYBACK] [MYM] [08:20:47.219] 10/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:20:47.220] 10/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:20:47.220] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:20:47.221] 10/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:20:47.221] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+19:01:00.000 [PLAYBACK] [MYM] [08:20:47.222] 12/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 10/1/25 6:00:00 p. m. NY)
+19:01:00.000 [PLAYBACK] [MYM] [08:20:47.222] LEVEL SUMMARY (Price=42187):
+19:01:00.000 [PLAYBACK] [MYM] [08:20:47.222]   USA High @ 43408 | Currently BELOW by 1221 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:20:47.222]   USA High @ 43211 | Currently BELOW by 1024 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:20:47.223]   Europe High @ 42941 | Currently BELOW by 754 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:20:47.223]   USA High @ 42924 | Currently BELOW by 737 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:20:47.223]   Asia High @ 42907 | Currently BELOW by 720 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:20:47.223]   Europe High @ 42906 | Currently BELOW by 719 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:20:47.223]   USA High @ 42677 | Currently BELOW by 490 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:20:47.225]   USA Low @ 42088 | Currently ABOVE by 99 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:20:47.225] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [08:20:47.225] PROTECTION_RESET: Cleared order references for new trade
+19:01:00.000 [PLAYBACK] [MYM] [08:20:47.225] 12/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MYM] [08:20:47.225] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [08:20:47.226] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MYM] [08:20:47.510] DEBUG DATE: Time=13/1/25 10:29:00 a. m. ActualSessionEnd=13/1/25 6:00:00 p. m. (NY=13/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:20:47.677] 13/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:20:47.678] 13/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:20:47.679] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:20:47.680] 13/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:20:47.680] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:20:48.023] DEBUG DATE: Time=14/1/25 10:29:00 a. m. ActualSessionEnd=14/1/25 6:00:00 p. m. (NY=14/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:20:48.219] 14/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:20:48.220] 14/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:20:48.221] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:20:48.221] 14/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:20:48.221] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:20:48.609] DEBUG DATE: Time=15/1/25 10:29:00 a. m. ActualSessionEnd=15/1/25 6:00:00 p. m. (NY=15/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:20:48.839] 15/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:20:48.840] 15/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:20:48.840] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:20:48.841] 15/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:20:48.841] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:20:49.314] DEBUG DATE: Time=16/1/25 10:29:00 a. m. ActualSessionEnd=16/1/25 6:00:00 p. m. (NY=16/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:20:49.579] 16/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:20:49.579] 16/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:20:49.580] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:20:49.580] 16/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:20:49.581] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:20:50.091] DEBUG DATE: Time=17/1/25 10:29:00 a. m. ActualSessionEnd=17/1/25 6:00:00 p. m. (NY=17/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
+18:00:00.000 [PLAYBACK] [MYM] [08:20:50.367] 17/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:20:50.367] 17/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:20:50.367] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:20:50.369] 17/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:20:50.369] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+19:01:00.000 [PLAYBACK] [MYM] [08:20:50.369] 19/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 17/1/25 6:00:00 p. m. NY)
+19:01:00.000 [PLAYBACK] [MYM] [08:20:50.370] LEVEL SUMMARY (Price=43704):
+19:01:00.000 [PLAYBACK] [MYM] [08:20:50.371]   Europe Low @ 41968 | Currently ABOVE by 1736 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:20:50.371]   USA Low @ 42069 | Currently ABOVE by 1635 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:20:50.371]   USA Low @ 42373 | Currently ABOVE by 1331 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:20:50.371]   Asia Low @ 42752 | Currently ABOVE by 952 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:20:50.372]   Europe Low @ 42762 | Currently ABOVE by 942 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:20:50.372]   USA Low @ 43285 | Currently ABOVE by 419 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:20:50.372]   Europe Low @ 43286 | Currently ABOVE by 418 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:20:50.372]   USA Low @ 43297 | Currently ABOVE by 407 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:20:50.373]   Asia Low @ 43315 | Currently ABOVE by 389 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:20:50.373]   Europe Low @ 43433 | Currently ABOVE by 271 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:20:50.373]   USA High @ 43867 | Currently BELOW by 163 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:20:50.373]   USA Low @ 43615 | Currently ABOVE by 89 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:20:50.373] 19/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [08:20:50.375] PROTECTION_RESET: Cleared order references for new trade
+19:01:00.000 [PLAYBACK] [MYM] [08:20:50.375] 19/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MYM] [08:20:50.375] 19/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [08:20:50.375] PROTECTION_RESET: Cleared order references for new trade
+
+==================================================================
+=== NEW SESSION STARTED: [Playback] - 13/1/26 8:20:55 a. m. ===
+==================================================================
+19:01:00.000 [PLAYBACK] [MYM] [08:20:55.123] DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
+19:01:00.000 [PLAYBACK] [MYM] [08:20:55.123] DEBUG_RECONNECT: Total Account.Positions count = 0
+19:01:00.000 [PLAYBACK] [MYM] [08:20:55.123] 19/1/25 7:01:00 p. m. v1.15.6 RESTART EVAL: Checking for pending orders or valid setup to continue...
+19:01:00.000 [PLAYBACK] [MYM] [08:20:55.123] 19/1/25 7:01:00 p. m. v1.15.6 RESTART: No valid setup found. Starting fresh.
+19:01:00.000 [PLAYBACK] [MYM] [08:20:55.139] 19/1/25 7:01:00 p. m. STARTUP: Level 'Asia High' is already being touched - will be skipped.
+19:01:00.000 [PLAYBACK] [MYM] [08:20:55.140] 19/1/25 7:01:00 p. m. STARTUP: Level 'Asia Low' is already being touched - will be skipped.
+
+==================================================================
+=== NEW SESSION STARTED: [Playback] - 13/1/26 8:38:22 a. m. ===
+==================================================================
+08:38:22.661 [PLAYBACK] [MYM] [08:38:22.661] DEBUG: OnStateChange(DataLoaded) IsUnmanaged = True
+08:38:22.662 [PLAYBACK] [MYM] [08:38:22.662] DEBUG_CONTEXT: Account = 'Playback101', Context = 'playback'
+08:38:22.663 [PLAYBACK] [MYM] [08:38:22.663] CSV EXPORT: Using existing C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\TradeExports\playback\MYM_03-25.csv
+08:38:22.944 [PLAYBACK] [MYM] 5/1/25 7:01:00 p. m. CONTROL BUTTONS: Initialized (Bottom Right)
+19:01:00.000 [PLAYBACK] [MYM] [08:38:22.993] 5/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 3/1/25 6:00:00 p. m. NY)
+19:01:00.000 [PLAYBACK] [MYM] [08:38:22.994] LEVEL SUMMARY: No active levels at week start!
+19:01:00.000 [PLAYBACK] [MYM] [08:38:23.007] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [08:38:23.007] PROTECTION_RESET: Cleared order references for new trade
+19:01:00.000 [PLAYBACK] [MYM] [08:38:23.009] 5/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MYM] [08:38:23.010] 5/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [08:38:23.010] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MYM] [08:38:23.133] DEBUG DATE: Time=6/1/25 10:29:00 a. m. ActualSessionEnd=6/1/25 6:00:00 p. m. (NY=6/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:38:23.226] 6/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:38:23.228] 6/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:38:23.229] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:38:23.229] 6/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:38:23.230] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:38:23.414] DEBUG DATE: Time=7/1/25 10:29:00 a. m. ActualSessionEnd=7/1/25 6:00:00 p. m. (NY=7/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:38:23.577] 7/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:38:23.577] 7/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:38:23.577] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:38:23.578] 7/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:38:23.579] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:38:23.880] DEBUG DATE: Time=8/1/25 10:29:00 a. m. ActualSessionEnd=8/1/25 6:00:00 p. m. (NY=8/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:38:24.126] 8/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:38:24.126] 8/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:38:24.126] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:38:24.127] 8/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:38:24.127] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:38:24.537] DEBUG DATE: Time=9/1/25 10:29:00 a. m. ActualSessionEnd=9/1/25 10:30:00 a. m. (NY=9/1/25 9:30:00 a. m.) IsEarlyClose=True IsFriday=False
+10:30:00.000 [PLAYBACK] [MYM] [08:38:24.540] 9/1/25 10:30:00 a. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+10:30:00.000 [PLAYBACK] [MYM] [08:38:24.540] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+19:01:00.000 [PLAYBACK] [MYM] [08:38:24.540] 9/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MYM] [08:38:24.540] 9/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [08:38:24.540] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MYM] [08:38:25.075] DEBUG DATE: Time=10/1/25 10:29:00 a. m. ActualSessionEnd=10/1/25 6:00:00 p. m. (NY=10/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
+18:00:00.000 [PLAYBACK] [MYM] [08:38:25.373] 10/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:38:25.374] 10/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:38:25.374] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:38:25.377] 10/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:38:25.378] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+19:01:00.000 [PLAYBACK] [MYM] [08:38:25.378] 12/1/25 7:01:00 p. m. WEEK RESET - State cleared for new trading week (Last Friday 6pm: 10/1/25 6:00:00 p. m. NY)
+19:01:00.000 [PLAYBACK] [MYM] [08:38:25.380] LEVEL SUMMARY (Price=42187):
+19:01:00.000 [PLAYBACK] [MYM] [08:38:25.380]   USA High @ 43408 | Currently BELOW by 1221 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:38:25.381]   USA High @ 43211 | Currently BELOW by 1024 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:38:25.381]   Europe High @ 42941 | Currently BELOW by 754 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:38:25.381]   USA High @ 42924 | Currently BELOW by 737 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:38:25.383]   Asia High @ 42907 | Currently BELOW by 720 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:38:25.384]   Europe High @ 42906 | Currently BELOW by 719 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:38:25.384]   USA High @ 42677 | Currently BELOW by 490 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:38:25.385]   USA Low @ 42088 | Currently ABOVE by 99 ticks
+19:01:00.000 [PLAYBACK] [MYM] [08:38:25.385] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [08:38:25.385] PROTECTION_RESET: Cleared order references for new trade
+19:01:00.000 [PLAYBACK] [MYM] [08:38:25.387] 12/1/25 7:01:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+19:01:00.000 [PLAYBACK] [MYM] [08:38:25.388] 12/1/25 7:01:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+19:01:00.000 [PLAYBACK] [MYM] [08:38:25.388] PROTECTION_RESET: Cleared order references for new trade
+10:29:00.000 [PLAYBACK] [MYM] [08:38:25.880] DEBUG DATE: Time=13/1/25 10:29:00 a. m. ActualSessionEnd=13/1/25 6:00:00 p. m. (NY=13/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:38:26.158] 13/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:38:26.158] 13/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:38:26.159] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:38:26.162] 13/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:38:26.162] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:38:26.714] DEBUG DATE: Time=14/1/25 10:29:00 a. m. ActualSessionEnd=14/1/25 6:00:00 p. m. (NY=14/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:38:27.040] 14/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:38:27.040] 14/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:38:27.041] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:38:27.042] 14/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:38:27.042] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:38:28.092] DEBUG DATE: Time=15/1/25 10:29:00 a. m. ActualSessionEnd=15/1/25 6:00:00 p. m. (NY=15/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:38:28.543] 15/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:38:28.544] 15/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:38:28.544] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:38:28.546] 15/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:38:28.546] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:38:29.466] DEBUG DATE: Time=16/1/25 10:29:00 a. m. ActualSessionEnd=16/1/25 6:00:00 p. m. (NY=16/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=False
+18:00:00.000 [PLAYBACK] [MYM] [08:38:29.982] 16/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:38:29.982] 16/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:38:29.983] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:38:29.989] 16/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:38:29.990] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)
+10:29:00.000 [PLAYBACK] [MYM] [08:38:30.976] DEBUG DATE: Time=17/1/25 10:29:00 a. m. ActualSessionEnd=17/1/25 6:00:00 p. m. (NY=17/1/25 5:00:00 p. m.) IsEarlyClose=False IsFriday=True
+18:00:00.000 [PLAYBACK] [MYM] [08:38:31.560] 17/1/25 6:00:00 p. m. SESSION RESET: Asia Open (18:00). Clearing previous session state.
+18:00:00.000 [PLAYBACK] [MYM] [08:38:31.560] 17/1/25 6:00:00 p. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+18:00:00.000 [PLAYBACK] [MYM] [08:38:31.560] PROTECTION_RESET: Cleared order references for new trade
+18:00:00.000 [PLAYBACK] [MYM] [08:38:31.560] 17/1/25 6:00:00 p. m. DAILY SESSION CLEANUP: Scanning for Pending Orders...
+18:00:00.000 [PLAYBACK] [MYM] [08:38:31.562] PROTECTION_MANAGER: CancelAllProtectionOrders CALLED (Failsafe/Emergency)

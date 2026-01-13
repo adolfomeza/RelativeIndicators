@@ -1,0 +1,12 @@
+2026-01-05 22:37:52:703|2|4|Session Break (Version 8.1.6.2)
+2026-01-05 22:38:22:089|1|4|Global simulation mode disabled
+2026-01-05 22:38:23:731|1|4|Vendor assembly 'ASCENDO_NewsEvents' version='3.0.0.0' loaded.
+2026-01-05 22:38:23:731|1|4|Vendor assembly 'WindowsInput' version='1.0.4.0' loaded.
+2026-01-05 22:38:24:606|1|2|Using IS (is-us-nt-005.ninjatrader.com/31658)
+2026-01-05 22:38:24:611|1|4|Automated trading disabled
+2026-01-05 22:38:24:809|1|32|Order entry hot keys disabled
+2026-01-05 22:38:24:810|1|4|Auto close enabled=False
+2026-01-05 22:38:29:170|1|4|Restoring workspace 'Relative Trading Software'...
+2026-01-05 22:38:58:302|1|4|Restoring workspace 'Relative Vwaps'...
+2026-01-05 22:53:14:916|1|4|Workspace Relative Trading Software saved
+2026-01-05 22:53:15:240|1|4|Workspace Relative Vwaps saved

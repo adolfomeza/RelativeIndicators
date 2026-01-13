@@ -1,0 +1,13 @@
+2026-01-06 22:55:16:966|2|4|Session Break (Version 8.1.6.2)
+2026-01-06 22:55:29:792|1|4|Global simulation mode disabled
+2026-01-06 22:55:30:783|1|4|Vendor assembly 'AddonSuiteManager.Addon.Standalone' version='1.0.0.1' loaded.
+2026-01-06 22:55:31:814|1|4|Vendor assembly 'ASCENDO_NewsEvents' version='3.0.0.0' loaded.
+2026-01-06 22:55:32:411|1|4|Vendor assembly 'ReplayDataPlusManager.Addon.Standalone' version='1.0.0.1' loaded.
+2026-01-06 22:55:32:411|1|4|Vendor assembly 'WindowsInput' version='1.0.4.0' loaded.
+2026-01-06 22:55:33:324|1|2|Using IS (is-us-nt-005.ninjatrader.com/31658)
+2026-01-06 22:55:33:330|1|4|Automated trading disabled
+2026-01-06 22:55:33:548|1|32|Order entry hot keys disabled
+2026-01-06 22:55:33:550|1|4|Auto close enabled=False
+2026-01-06 22:55:36:054|3|4|AddOn 'NewsUpdate': Error on calling 'OnStateChange' method: System.Net.WebException: The remote server returned an error: (429) Too Many Requests.    at System.Net.WebClient.DownloadFile(Uri address, String fileName)    at NinjaTrader.NinjaScript.AddOns.NewsUpdate.GetLatestFiles()    at NinjaTrader.NinjaScript.AddOns.NewsUpdate.OnStateChange()    at NinjaTrader.NinjaScript.AddOnBase.SetState(State state)
+2026-01-06 22:55:36:268|1|4|Restoring workspace 'Relative Trading Software'...
+2026-01-06 22:56:19:164|1|4|Workspace Relative Trading Software not saved
