@@ -533,8 +533,9 @@ def analyze_r_ladder(df, max_r=20):
     df_copy = df.copy()
     df_copy = df_copy.dropna(subset=['MAE', 'MFE'])
 
-    # Convertir MAE a valores absolutos (puede ser negativo en el CSV)
+    # Convertir MAE y MFE a valores absolutos (pueden ser negativos en el CSV)
     df_copy['MAE'] = df_copy['MAE'].abs()
+    df_copy['MFE'] = df_copy['MFE'].abs()
     df_copy = df_copy[df_copy['MAE'] > 0]  # Evitar división por cero
 
     if len(df_copy) == 0:
@@ -718,15 +719,16 @@ def analyze_scaling_out(df, r_df, position_sizes=[3, 5, 10, 20]):
     # Preparar datos
     df_copy = df.copy()
     df_copy = df_copy.dropna(subset=['MAE', 'MFE'])
-    
-    # Convertir MAE a valores absolutos (puede ser negativo en el CSV)
+
+    # Convertir MAE y MFE a valores absolutos (pueden ser negativos en el CSV)
     df_copy['MAE'] = df_copy['MAE'].abs()
+    df_copy['MFE'] = df_copy['MFE'].abs()
     df_copy = df_copy[df_copy['MAE'] > 0]
-    
+
     if len(df_copy) == 0:
         section += "⚠️ No hay datos válidos.\n\n"
         return section, None
-    
+
     df_copy['MFE_R'] = df_copy['MFE'] / df_copy['MAE']
     avg_risk = df_copy['MAE'].mean()
     total_trades = len(df_copy)
