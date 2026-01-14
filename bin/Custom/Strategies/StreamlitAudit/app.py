@@ -1031,7 +1031,11 @@ def load_and_process_data(target_path, license_tier='Free (Default)'):
         
         # Sort by Time to ensure ranking works even if CSV is mixed
         df = df.sort_values(by=['EntryTime', 'Instrument'])
-        
+
+        # v1.15.21: Validate DataFrame is not empty after cleaning
+        if df.empty or len(df) == 0:
+            return None
+
         # --- SESSION AGGRESSOR LOGIC ---
         # Identify "Who" (Time Session) is breaking the level
         # v2.2.2: DST-aware for USA session (9:30 summer, 10:30 winter)
