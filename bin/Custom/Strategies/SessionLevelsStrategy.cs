@@ -4092,13 +4092,13 @@ currentEntryState = EntryState.Idle;
 
 		[NinjaScriptProperty]
 		[Range(0.001, 100.0)]
-		[Display(Name="Risk Percentage (%)", Order=4.1, GroupName="Order Management", Description="Percentage of account to risk per trade in Standard model (0.06 = 0.06%)")]
+		[Display(Name="Risk Percentage (%)", Order=41, GroupName="Order Management", Description="Percentage of account to risk per trade in Standard model (0.06 = 0.06%)")]
 		public double RiskPercentage
 		{ get; set; } = 0.06;
 
 		[NinjaScriptProperty]
 		[Range(1000, double.MaxValue)]
-		[Display(Name="Starting Capital (USD)", Order=4.2, GroupName="Order Management", Description="Reference capital for risk calculation (actual account value used in real-time)")]
+		[Display(Name="Starting Capital (USD)", Order=42, GroupName="Order Management", Description="Reference capital for risk calculation (actual account value used in real-time)")]
 		public double StartingCapital
 		{ get; set; } = 250000.0;
 
