@@ -2437,11 +2437,13 @@ currentEntryState = EntryState.Idle;
 
 			// v1.15.23: CRITICAL FIX - Enforce minimum SL distance to prevent absurd quantities
 			// When SL is too close (e.g., 1 tick after VWAP retry), quantity becomes dangerously high
-			const double MIN_SL_TICKS = 5.0;
-			if (riskInTicks < MIN_SL_TICKS)
+			// Use USD-based minimum instead of fixed ticks to adapt to all instruments
+			const double MIN_SL_USD = 25.0;
+			double riskInUSD = riskInTicks * tickValue;
+			if (riskInUSD < MIN_SL_USD)
 			{
-				Log(string.Format("{0} DYNAMIC SIZING WARNING: SL too close ({1:F2} ticks < {2} min). Entry={3:F2} SL={4:F2} - Using MinQuantity to avoid excessive position size",
-					Time[0], riskInTicks, MIN_SL_TICKS, entryPrice, stopPrice));
+				Log(string.Format("{0} DYNAMIC SIZING WARNING: SL too close (${1:F2} < ${2} min). Entry={3:F2} SL={4:F2} - Using MinQuantity to avoid excessive position size",
+					Time[0], riskInUSD, MIN_SL_USD, entryPrice, stopPrice));
 				return MinQuantity;
 			}
 
