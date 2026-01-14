@@ -903,10 +903,11 @@ def load_and_process_data(target_path, license_tier='Free (Default)'):
             col_names_legacy = ['ID','Instrument','EntryTime','Type','EntryPrice','ExitTime','ExitPrice','Result','PnL','SetupName','MAE','MFE','Account']
             
             if has_header:
-                df_temp = pd.read_csv(filepath, on_bad_lines='skip', engine='python')
+                # v1.15.22: Force index_col=False to prevent pandas from using ID column as index
+                df_temp = pd.read_csv(filepath, on_bad_lines='skip', engine='python', index_col=False)
             else:
                 # Try new format first based on column count
-                df_temp = pd.read_csv(filepath, names=col_names_new, header=None, on_bad_lines='skip', engine='python')
+                df_temp = pd.read_csv(filepath, names=col_names_new, header=None, on_bad_lines='skip', engine='python', index_col=False)
                 
             # Sanitize headers
             df_temp.columns = df_temp.columns.str.strip()
