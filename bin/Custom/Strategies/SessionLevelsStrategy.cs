@@ -37,7 +37,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.15.21"; // v1.15.21: Fixed SL quantity not updating after TP1 when breakeven is disabled
+		private const string StrategyVersion = "v1.15.23"; // v1.15.23: Fixed absurd position size when SL is too close after VWAP retry
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;
@@ -2430,11 +2430,21 @@ currentEntryState = EntryState.Idle;
 			// Validación: evitar división por cero
 			if (riskInTicks <= 0 || tickValue <= 0)
 			{
-				Log(string.Format("{0} DYNAMIC SIZING ERROR: Invalid risk calculation. RiskTicks={1:F2} TickValue=${2:F4} - Using MinQuantity", 
+				Log(string.Format("{0} DYNAMIC SIZING ERROR: Invalid risk calculation. RiskTicks={1:F2} TickValue=${2:F4} - Using MinQuantity",
 					Time[0], riskInTicks, tickValue));
 				return MinQuantity;
 			}
-			
+
+			// v1.15.23: CRITICAL FIX - Enforce minimum SL distance to prevent absurd quantities
+			// When SL is too close (e.g., 1 tick after VWAP retry), quantity becomes dangerously high
+			const double MIN_SL_TICKS = 5.0;
+			if (riskInTicks < MIN_SL_TICKS)
+			{
+				Log(string.Format("{0} DYNAMIC SIZING WARNING: SL too close ({1:F2} ticks < {2} min). Entry={3:F2} SL={4:F2} - Using MinQuantity to avoid excessive position size",
+					Time[0], riskInTicks, MIN_SL_TICKS, entryPrice, stopPrice));
+				return MinQuantity;
+			}
+
 			// v1.14.76: Risk Model Selection
 			double effectiveRisk = RiskPerTradeUSD; // Default
 
