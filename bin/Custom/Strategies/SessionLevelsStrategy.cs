@@ -37,7 +37,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.15.30"; // v1.15.30: Fix TP2 to use current trading day, not setup level's trading day
+		private const string StrategyVersion = "v1.15.31"; // v1.15.31: Persist TP2 price to prevent VWAP fallback after entry fill
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;
@@ -2924,6 +2924,14 @@ currentEntryState = EntryState.Idle;
 		
 		if (targetGlobalVWAP <= 0) targetGlobalVWAP = avgEntry;
 		if (targetZoneOpposite <= 0) targetZoneOpposite = avgEntry;
+
+		// v1.15.31: Persist targetZoneOpposite to validatedTp2Price so ManagePositionExit() uses the correct value
+		// This prevents TP2 from being changed to VWAP after entry fills
+		if (targetZoneOpposite > 0 && validatedTp2Price <= 0)
+		{
+			validatedTp2Price = targetZoneOpposite;
+			Log("TP2_PERSIST: Saved validatedTp2Price=" + validatedTp2Price);
+		}
 
 		// FIXED ASSIGNMENT (v1.7.21): TP1=VWAP (dinámico), TP2=Nivel (fijo)
 	// v1.10.27: TP2 reverted to opposite level (was Daily Extreme in v1.10.0)

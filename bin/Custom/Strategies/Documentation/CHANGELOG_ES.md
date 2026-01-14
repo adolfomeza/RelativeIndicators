@@ -7,6 +7,27 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 ### Agregado
 - **Módulo SL Adaptativo (Supervivencia):** Reemplazo de la lógica de salida de emergencia. Ahora, si el precio salta el Stop Loss durante la entrada, el sistema adapta el SL a `Precio Actual +/- 4 ticks` para asegurar que la orden sea aceptada por NinjaTrader y la posición siga protegida, en lugar de cerrar o fallar.
 
+## [v1.15.31] - 2026-01-14
+### Corregido
+- **Bug: TP2 se Cambiaba a VWAP Después del Fill de Entrada**
+  - **Problema**: Después de que la orden de entrada se llenaba, `ManagePositionExit()` cambiaba el precio del TP2 al VWAP en lugar de mantenerlo en el nivel opuesto
+    - Ejemplo MCL 6/1/25 4:26am: Entrada Long @ 73.64
+      - TP2 creado correctamente: Asia High @ 74.39
+      - Segundos después: TP2 cambiado a 73.83 (VWAP) - INCORRECTO
+      - El 50% de la posición quedó con TP2 = VWAP en lugar del nivel opuesto
+  - **Causa Raíz**: `validatedTp2Price` no se persistía después de calcular el nivel opuesto en `EnsureProtection()`
+    - Cuando `ManagePositionExit()` llamaba a `GetOppositeLevelPrice()`, si no encontraba nivel (porque `cachedOppositeLevel` fue limpiado), caía al fallback VWAP
+    - El fallback revisaba `validatedTp2Price`, pero este era 0 porque nunca se guardó
+  - **Solución v1.15.31**:
+    - Después de calcular `targetZoneOpposite` en `EnsureProtection()`, se guarda en `validatedTp2Price`
+    - Esto asegura que `ManagePositionExit()` use el valor correcto del nivel opuesto
+    - El TP2 ahora mantiene su precio original (nivel opuesto) durante toda la vida del trade
+
+### Técnico
+- Modificado `SessionLevelsStrategy.cs:2928-2934` - Persiste `targetZoneOpposite` en `validatedTp2Price`
+- Actualizado `SessionLevelsStrategy.cs:40` - Versión a v1.15.31
+- Actualizado `StrategyHelpers.cs:262` - Versión a v1.15.31
+
 ## [v1.15.30] - 2026-01-14
 ### Corregido
 - **Bug CRÍTICO: TP2 Usaba Trading Day del Nivel de Setup en lugar del Trading Day Actual**
