@@ -508,45 +508,48 @@ def compile_action_plan(df):
 def analyze_r_ladder(df, max_r=20):
     """
     Analiza cuántos trades alcanzaron cada nivel R (1R, 2R, ..., max_r R).
-    
+
     Args:
         df: DataFrame con columnas 'MAE', 'MFE', 'PnL', 'Direction'
         max_r: Nivel máximo de R a analizar (default: 20)
-    
+
     Returns:
         tuple: (section_text: str, r_df: DataFrame or None)
     """
+    # v1.15.21: Ensure max_r is integer
+    max_r = int(max_r)
+
     section = "=" * 80 + "\n"
     section += "7. ANÁLISIS MFE R-LADDER (1R → 20R)\n"
     section += "=" * 80 + "\n\n"
-    
+
     # Validar que tenemos los datos necesarios
     if 'MAE' not in df.columns or 'MFE' not in df.columns:
         section += "⚠️ ADVERTENCIA: No se encontraron columnas MAE/MFE en el CSV.\n"
         section += "   Ejecuta un backtest reciente para generar estos datos.\n\n"
         return section, None
-    
+
     # Filtrar datos válidos
     df_copy = df.copy()
     df_copy = df_copy.dropna(subset=['MAE', 'MFE'])
-    
+
     # Convertir MAE a valores absolutos (puede ser negativo en el CSV)
     df_copy['MAE'] = df_copy['MAE'].abs()
     df_copy = df_copy[df_copy['MAE'] > 0]  # Evitar división por cero
-    
+
     if len(df_copy) == 0:
         section += "⚠️ No hay datos válidos para análisis (MAE = 0 o NaN).\n\n"
         return section, None
-    
+
     # Calcular MFE en términos de R
     # R = MFE / MAE (cuántas veces el riesgo inicial capturamos como ganancia)
     df_copy['MFE_R'] = df_copy['MFE'] / df_copy['MAE']
-    
+
     # Crear tabla de análisis
     r_data = []
     total_trades = len(df_copy)
     avg_risk = df_copy['MAE'].mean()
-    
+
     for r_level in range(1, max_r + 1):
         # Trades que alcanzaron este nivel R
         reached = df_copy[df_copy['MFE_R'] >= r_level]
@@ -738,6 +741,9 @@ def analyze_scaling_out(df, r_df, position_sizes=[3, 5, 10, 20]):
     results = []
     
     for n_contracts in position_sizes:
+        # v1.15.21: Ensure n_contracts is integer to avoid 'float' object cannot be interpreted as an integer error
+        n_contracts = int(n_contracts)
+
         # Determinar en qué niveles R salir
         if n_contracts <= 20:
             # Distribuir uniformemente: 1 contrato cada (20/n_contracts) niveles R
@@ -748,7 +754,7 @@ def analyze_scaling_out(df, r_df, position_sizes=[3, 5, 10, 20]):
             exit_levels = list(range(1, 21))
             # Distribuir excedente proporcionalmente
             contracts_per_level = [1] * 20
-            remaining = n_contracts - 20
+            remaining = int(n_contracts - 20)  # v1.15.21: Ensure remaining is integer
             for i in range(remaining):
                 contracts_per_level[i % 20] += 1
         
@@ -848,7 +854,8 @@ def analyze_scaling_out(df, r_df, position_sizes=[3, 5, 10, 20]):
         n_best = int(best['Strategy'].split()[0])
         if n_best <= 20:
             step = 20 / n_best
-            levels = [int((i + 1) * step) for i in range(n_best)]
+            # v1.15.21: Ensure n_best is integer for range()
+            levels = [int((i + 1) * step) for i in range(int(n_best))]
             section += f"   📋 Niveles de Salida Sugeridos:\n"
             for i, level in enumerate(levels, 1):
                 section += f"      TP{i}: {level}R (1 contrato)\n"
