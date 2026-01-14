@@ -259,7 +259,7 @@ namespace NinjaTrader.NinjaScript.Strategies
             }
 
             string text = string.Format("Ver: {0}\nState: {1}\nLevel: {2}{3}\nPosition: {4}\nPnL: {5} | Risk: {6:C0} (Min: {7:C0}){8}",
-                "v1.15.25", // Hardcoded version updated
+                "v1.15.30", // Hardcoded version updated
                 stateDisplay,
                 levelInfo,
                 retryInfo,

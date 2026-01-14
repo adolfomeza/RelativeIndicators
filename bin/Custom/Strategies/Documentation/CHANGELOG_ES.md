@@ -7,6 +7,148 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 ### Agregado
 - **Módulo SL Adaptativo (Supervivencia):** Reemplazo de la lógica de salida de emergencia. Ahora, si el precio salta el Stop Loss durante la entrada, el sistema adapta el SL a `Precio Actual +/- 4 ticks` para asegurar que la orden sea aceptada por NinjaTrader y la posición siga protegida, en lugar de cerrar o fallar.
 
+## [v1.15.30] - 2026-01-14
+### Corregido
+- **Bug CRÍTICO: TP2 Usaba Trading Day del Nivel de Setup en lugar del Trading Day Actual**
+  - **Problema**: Cuando el trade entraba en un nivel antiguo (ej. USA Low del 10/01), el TP2 se calculaba buscando niveles opuestos del mismo trading day que el nivel de setup (10/01), ignorando niveles más recientes del trading day actual
+    - Ejemplo M2K 12/1/25 10:54pm: Entrada Long en USA Low @ 2180
+      - USA Low tenía Session Start: 2025-01-10 10:30 (Trading Day = 10 de enero)
+      - TP2 incorrecto: Europe High @ 2252.8 (del 10/01) - nivel muy lejano (+72.8 puntos)
+      - TP2 correcto: Asia High @ 2199.5 (del 12/01 19:00, Trading Day = 13 de enero) - nivel alcanzable (+19.5 puntos)
+      - El trade entró el 12/01 a las 22:54 (Trading Day = 13 de enero)
+  - **Causa Raíz**: En `GetOppositeLevelPrice()` se usaba `GetTradingDay(setupLevel.StartTime)` para determinar qué niveles considerar
+    - Esto hacía que buscara niveles del trading day del nivel de setup (viejo)
+    - En lugar de buscar niveles del trading day cuando se ejecuta el trade (actual)
+  - **Solución v1.15.30**:
+    - Cambió `GetTradingDay(setupLevel.StartTime)` → `GetTradingDay(strategy.Time[0])`
+    - Ahora busca niveles opuestos del **trading day actual** (cuando se ejecuta el trade)
+    - Esto asegura que se use el Asia High @ 2199.5 del 12/01 (Trading Day 13) en lugar del Europe High @ 2252.8 del 10/01
+
+### Técnico
+- Modificado `OrderProtectionManager.cs:562-567` - Usa `strategy.Time[0]` para calcular trading day actual
+- Modificado `OrderProtectionManager.cs:571-573` - Compara contra `currentTradingDay` en lugar de `setupTradingDay`
+- Modificado `OrderProtectionManager.cs:517-519` - Log actualizado para mostrar trading day actual
+- Modificado `OrderProtectionManager.cs:610-615` - Log simplificado de selección de TP2
+- Actualizado `SessionLevelsStrategy.cs:40` - Versión a v1.15.30
+- Actualizado `StrategyHelpers.cs:262` - Versión a v1.15.30
+
+## [v1.15.29] - 2026-01-14
+### Corregido
+- **MEJORA v1.15.28: Abandono Inmediato en R:R Inválido (Sin Contador)**
+  - **Cambio**: Eliminado el contador de rechazos. Ahora abandona el setup **inmediatamente** cuando R:R < 1.0
+  - **Razón del Cambio**:
+    - Si el R:R es inválido (< 1.0), significa que el precio ya se alejó demasiado del VWAP
+    - El R:R solo puede **empeorar** a partir de ese punto (el precio se aleja más o el VWAP se mueve)
+    - No tiene sentido darle "5 oportunidades" a algo que ya está roto
+    - Cada barra perdida evaluando R:R malo = oportunidad perdida en otros niveles
+  - **Lógica v1.15.29**:
+    - R:R < 1.0 detectado → Abandonar setup INMEDIATAMENTE
+    - Volver a IDLE → Buscar otros niveles con mejor R:R
+    - Sin contador, sin esperas, sin segundas oportunidades
+  - **Beneficio**: Maximiza tiempo disponible para buscar setups rentables
+
+### Técnico
+- Eliminado `SessionLevelsStrategy.cs:207-209` - Variables del contador (ya no se necesitan)
+- Modificado `EntryStateMachine.cs:709-720` - Abandono inmediato en R:R inválido (Short)
+- Modificado `EntryStateMachine.cs:866-877` - Abandono inmediato en R:R inválido (Long)
+- Eliminado `EntryStateMachine.cs:212` - Reset de contador en SWITCH (ya no necesario)
+- Eliminado `EntryStateMachine.cs:454` - Reset de contador en invalidación (ya no necesario)
+- Eliminado `EntryStateMachine.cs:679+843` - Reset de contador en orden exitosa (ya no necesario)
+- Actualizado `SessionLevelsStrategy.cs:40` - Versión a v1.15.29
+- Actualizado `StrategyHelpers.cs:262` - Versión a v1.15.29
+
+## [v1.15.28] - 2026-01-14 [OBSOLETO - Ver v1.15.29]
+### Corregido
+- **Bug CRÍTICO: Estrategia Bloqueada en Setup con R:R Inválido**
+  - **Problema**: La estrategia quedaba atrapada evaluando el mismo nivel repetidamente con R:R inválido, sin poder buscar mejores oportunidades
+    - Ejemplo MYM 6/1/25: Trigger en Europe High @ 43245 a las 9:52am
+      - 32 rechazos consecutivos por R:R malo (0.21-0.44, todos < 1.0)
+      - El precio subió agresivamente (RE-ANCHOR de 43245 a 43346)
+      - TP1 (VWAP) se mantuvo cerca (~43127), pero SL subió con el precio
+      - R:R empeoró progresivamente: 0.44 → 0.24 → 0.21
+      - La estrategia se quedó bloqueada desde 9:52am hasta 10:42am sin poder buscar otros niveles
+  - **Causa Raíz**: La lógica de confirmación seguía evaluando el mismo setup barra tras barra aunque el R:R empeoraba
+    - El filtro R:R rechazaba la entrada cada vez (correcto)
+    - Pero la estrategia no abandonaba el setup para buscar mejores opciones (incorrecto)
+    - El flag `lastRejectionBar` impedía escanear nuevos niveles en la misma barra donde hubo rechazo
+    - **Resultado**: Oportunidades perdidas porque no buscaba otros niveles mejores
+  - **Solución v1.15.28**:
+    - Implementado contador `consecutiveRRRejections` que rastrea rechazos consecutivos
+    - Después de 5 rechazos consecutivos, la estrategia abandona el setup automáticamente
+    - Al abandonar, vuelve a estado IDLE para buscar otros niveles con mejor R:R
+    - El contador se resetea cuando:
+      - Se submite una orden exitosamente (R:R fue bueno)
+      - Se cambia de setup (SWITCH a otro nivel)
+      - Se invalida el setup por otros motivos
+    - **Lógica**: Si el R:R es inválido y empeora, no tiene sentido seguir evaluando - hay que buscar mejor oportunidad
+
+### Técnico
+- Agregado `SessionLevelsStrategy.cs:207-208` - Variables `consecutiveRRRejections` y `MAX_RR_REJECTIONS = 5`
+- Modificado `EntryStateMachine.cs:703-723` - Incrementar contador y abandonar setup tras 5 rechazos (Short)
+- Modificado `EntryStateMachine.cs:865-885` - Incrementar contador y abandonar setup tras 5 rechazos (Long)
+- Modificado `EntryStateMachine.cs:679+841` - Resetear contador en orden exitosa
+- Modificado `EntryStateMachine.cs:212` - Resetear contador en SWITCH de setup
+- Modificado `EntryStateMachine.cs:456` - Resetear contador en invalidación externa
+- Actualizado `SessionLevelsStrategy.cs:40` - Versión a v1.15.28
+- Actualizado `StrategyHelpers.cs:262` - Versión a v1.15.28
+
+## [v1.15.27] - 2026-01-14
+### Corregido
+- **Bug CRÍTICO: TP2 No Usaba USA High Como Máximo del Día**
+  - **Problema**: Cuando entraba en Asia Low después de las 5pm, TP2 se colocaba en Asia High del mismo timestamp de sesión, en lugar del USA High (máximo del día de trading)
+    - Ejemplo MYM 6/1/25 4:55pm: Entrada Long en Asia Low @ 42930
+      - TP2 incorrecto: Asia High @ 43051 (nivel opuesto de misma sesión)
+      - TP2 correcto: USA High @ 43157 (máximo del día de trading)
+      - Resultado: Se perdía 106 puntos de ganancia potencial (43157 - 43051 = 106)
+  - **Causa Raíz**: La lógica de "mismo día" comparaba `sessionTicks` (timestamp de inicio de sesión) en lugar del día de trading real
+    - Asia Low que empieza 5/1 @ 7pm (timestamp 638716968000000000)
+    - USA High que empieza 6/1 @ 10:30am (timestamp 638717526000000000)
+    - La comparación por timestamp los marcaba como "días diferentes", pero ambos pertenecen al mismo día de trading (6 de enero)
+  - **Solución v1.15.27**:
+    - Implementada función `GetTradingDay()` que calcula el día de trading correcto:
+      - Si sesión empieza después de las 6pm (18:00) → Pertenece al día SIGUIENTE
+      - Si sesión empieza antes de las 6pm → Pertenece al día ACTUAL
+    - Ejemplo: Asia Low 5/1 @ 7pm → Trading Day = 6/1 (día siguiente)
+    - Ahora la búsqueda del nivel opuesto más extremo compara por trading day en lugar de session timestamp
+    - **Resultado**: Para Longs, TP2 ahora se coloca correctamente en USA High (máximo del día de trading)
+
+### Técnico
+- Modificado `OrderProtectionManager.cs:554-570` - Comparación por trading day en lugar de session ticks
+- Agregado `OrderProtectionManager.cs:610-625` - Función `GetTradingDay()` para calcular día de trading
+- Modificado `OrderProtectionManager.cs:517` - Log actualizado para mostrar "SAME TRADING DAY"
+- Modificado `OrderProtectionManager.cs:601-603` - Log actualizado para "same trading day"
+- Agregado `OrderProtectionManager.cs:606-611` - Log cuando USA High es seleccionado como TP2
+- Actualizado `SessionLevelsStrategy.cs:40` - Versión a v1.15.27
+- Actualizado `StrategyHelpers.cs:262` - Versión a v1.15.27
+
+## [v1.15.26] - 2026-01-14
+### Corregido
+- **Bug CRÍTICO: TP2 Cambiaba al Mismo Precio de TP1 Durante Fills Parciales**
+  - **Problema**: Durante fills parciales, TP2 se actualizaba al mismo precio que TP1, causando que todos los contratos salieran en TP1
+    - Ejemplo MCL 6/1/25 4:26am: Entrada con 15 contratos
+      - TP2 inicial: 74.39 (nivel opuesto correcto)
+      - Después de fill parcial: TP2 cambió a 73.83 (mismo que TP1)
+      - Resultado: Los 15 contratos salieron en TP1, ninguno llegó a TP2
+  - **Causa Raíz**: En `OrderProtectionManager.cs:141-144`, ambas llamadas a `SubmitProtectionOrders` usaban el mismo parámetro `validatedTargetPrice`
+    - TP1 debería usar precio de VWAP
+    - TP2 debería usar precio de nivel opuesto
+    - Ambos recibían el mismo valor, causando que TP2 se actualizara al precio de TP1
+  - **Solución v1.15.26**:
+    - Dividido `validatedTargetPrice` en dos parámetros separados: `validatedTp1Price` y `validatedTp2Price`
+    - Modificada la firma de `EnsureProtection()` para recibir ambos precios
+    - Actualizada `SubmitProtectionOrders()` para recibir el precio correcto según el nivel (TP1 o TP2)
+    - Ahora TP1 y TP2 mantienen sus precios independientes durante fills parciales
+
+### Técnico
+- Modificado `OrderProtectionManager.cs:67-69` - Firma de `EnsureProtection()` ahora recibe validatedTp1Price y validatedTp2Price
+- Modificado `OrderProtectionManager.cs:137-145` - Pasa precios separados a TP1 y TP2
+- Modificado `SessionLevelsStrategy.cs:88-89` - Dividido validatedTargetPrice en dos variables
+- Modificado `SessionLevelsStrategy.cs:2335-2340` - Actualizado llamadas Emergency Protection
+- Modificado `SessionLevelsStrategy.cs:3644-3650` - Actualizado llamadas normales a EnsureProtection
+- Modificado `SessionLevelsStrategy.cs:1287-1288, 4024-4025` - Reset de ambas variables
+- Actualizado `SessionLevelsStrategy.cs:40` - Versión a v1.15.26
+- Actualizado `StrategyHelpers.cs:262` - Versión a v1.15.26
+
 ## [v1.15.24] - 2026-01-13
 ### Agregado
 - **Cálculo Dinámico de Riesgo en Modelo Standard**

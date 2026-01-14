@@ -37,7 +37,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.15.25"; // v1.15.25: Display SL warning in status panel when MinQty used due to close SL
+		private const string StrategyVersion = "v1.15.30"; // v1.15.30: Fix TP2 to use current trading day, not setup level's trading day
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;
@@ -85,7 +85,9 @@ namespace NinjaTrader.NinjaScript.Strategies
         [XmlIgnore] public NinjaTrader.NinjaScript.Indicators.ATR atr;
 		
 		// Persistence for EnsureProtection
-		[XmlIgnore] public double validatedTargetPrice = 0;
+		// v1.15.26: Split into separate TP1 and TP2 prices to fix MCL bug
+		[XmlIgnore] public double validatedTp1Price = 0;
+		[XmlIgnore] public double validatedTp2Price = 0;
 
         // Helper Methods for Stacking
         private double GetStackedHighY(double desiredY, double heightBuffer)
@@ -201,6 +203,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 		[XmlIgnore] public bool waitingForVwapMitigation = false;  // Are we waiting for price to break?
 		[XmlIgnore] public int currentVwapNumber = 1;              // Which VWAP# (1, 2, 3...)
 		private int vwapTouchBar = -1;                  // Bar where VWAP was touched
+
+		// v1.15.29: R:R immediate abandonment (removed counter - abandons immediately on invalid R:R)
 
 		private bool enableDebugLogs = false; // Default false for performance
 		private bool enableHolidayProtection = true; // v1.14.79: Default true
@@ -1282,7 +1286,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 				setupLevelName = "";
 				setupLevelTime = DateTime.MinValue;
 				setupAnchorPrice = 0;
-				validatedTargetPrice = 0;
+				validatedTp1Price = 0; // v1.15.26: Split from validatedTargetPrice
+				validatedTp2Price = 0; // v1.15.26: Split from validatedTargetPrice
 				cachedOppositeLevel = null;
 				oppositeSearchDone = false; // v1.14.32: Reset search flag
 				isInternalLevel = false;
@@ -2326,15 +2331,16 @@ currentEntryState = EntryState.Idle;
 				
 				// Force Place Stops if missing
 				// Use "Emergency" signal tag for safety net adoption
+				// v1.15.26: Pass separate TP1 and TP2 prices
 				if (Position.MarketPosition == MarketPosition.Short)
 				{
 					// EnsureProtection Delegate
-					protectionManager.EnsureProtection("Short", "Emergency_Short_1", Position.Quantity, currentVwapNumber, true, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTargetPrice);
+					protectionManager.EnsureProtection("Short", "Emergency_Short_1", Position.Quantity, currentVwapNumber, true, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTp1Price, validatedTp2Price);
 				}
 				else if (Position.MarketPosition == MarketPosition.Long)
 				{
 					// EnsureProtection Delegate
-					protectionManager.EnsureProtection("Long", "Emergency_Long_1", Position.Quantity, currentVwapNumber, false, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTargetPrice);
+					protectionManager.EnsureProtection("Long", "Emergency_Long_1", Position.Quantity, currentVwapNumber, false, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTp1Price, validatedTp2Price);
 				}
 			}
 			
@@ -2871,10 +2877,11 @@ currentEntryState = EntryState.Idle;
 			if (cachedOppositeLevel != null) targetZoneOpposite = cachedOppositeLevel.Price;
 			else targetZoneOpposite = GetOppositeLevelPrice(setupLevelName, setupLevelTime);
 
-			if (validatedTargetPrice > 0) 
+			// v1.15.26: Use validatedTp2Price (opposite level price for TP2)
+			if (validatedTp2Price > 0)
 			{
-				targetZoneOpposite = validatedTargetPrice;
-				Log("FORCE TARGET: Using Validated Price: " + validatedTargetPrice);
+				targetZoneOpposite = validatedTp2Price;
+				Log("FORCE TARGET: Using Validated TP2 Price: " + validatedTp2Price);
 			}
 
 			if (targetZoneOpposite >= avgEntry) targetZoneOpposite = 0; // Invalid Short Target (must be below)
@@ -2901,10 +2908,11 @@ currentEntryState = EntryState.Idle;
 			if (cachedOppositeLevel != null) targetZoneOpposite = cachedOppositeLevel.Price;
 			else targetZoneOpposite = GetOppositeLevelPrice(setupLevelName, setupLevelTime);
 			
-			if (validatedTargetPrice > 0) 
+			// v1.15.26: Use validatedTp2Price (opposite level price for TP2)
+			if (validatedTp2Price > 0)
 			{
-				targetZoneOpposite = validatedTargetPrice;
-				Log("FORCE TARGET: Using Validated Price: " + validatedTargetPrice);
+				targetZoneOpposite = validatedTp2Price;
+				Log("FORCE TARGET: Using Validated TP2 Price: " + validatedTp2Price);
 			}
 
 			if (targetZoneOpposite <= avgEntry) targetZoneOpposite = 0; // Invalid Long Target
@@ -2938,8 +2946,9 @@ currentEntryState = EntryState.Idle;
 		else { activeTp2Price = myTpPrice; tradeOriginalTp2Price = myTpPrice; } 
 
 		// DEBUG TARGETS
-		Log(string.Format("TP CALC ({0}): Entry={1} | GlobalVWAP={2} | ZoneOpp={3} (Val={4}) | TP1={5} TP2={6} | Selected={7}",
-			direction, avgEntry, targetGlobalVWAP, targetZoneOpposite, validatedTargetPrice, tp1Price, tp2Price, myTpPrice));
+		// v1.15.26: Show both validated prices for debugging
+		Log(string.Format("TP CALC ({0}): Entry={1} | GlobalVWAP={2} | ZoneOpp={3} (ValTP1={4} ValTP2={5}) | TP1={6} TP2={7} | Selected={8}",
+			direction, avgEntry, targetGlobalVWAP, targetZoneOpposite, validatedTp1Price, validatedTp2Price, tp1Price, tp2Price, myTpPrice));
 
 		// v1.9.0: SINGLE-SL CREATION/UPDATE
 		try
@@ -3412,11 +3421,12 @@ currentEntryState = EntryState.Idle;
 				// FIX (v1.6.2): Use setupLevelTime to ensure stable target throughout the trade
 				targetZoneOpposite = GetOppositeLevelPrice(setupLevelName, setupLevelTime);
 				
-				// v1.14.85: FIX - Use validatedTargetPrice if available, don't fallback to VWAP
+				// v1.14.85: FIX - Use validatedTp2Price if available, don't fallback to VWAP
+				// v1.15.26: Use validatedTp2Price (opposite level price for TP2)
 				if (targetZoneOpposite <= 0)
 				{
-					if (validatedTargetPrice > 0)
-						targetZoneOpposite = validatedTargetPrice; // Use persistent validated target
+					if (validatedTp2Price > 0)
+						targetZoneOpposite = validatedTp2Price; // Use persistent validated target for TP2
 					else
 						targetZoneOpposite = targetGlobalVWAP; // Last resort fallback
 				}
@@ -3431,11 +3441,12 @@ currentEntryState = EntryState.Idle;
 				// FIX (v1.6.2): Use setupLevelTime here too
 				targetZoneOpposite = GetOppositeLevelPrice(setupLevelName, setupLevelTime);
 				
-				// v1.14.85: FIX - Use validatedTargetPrice if available, don't fallback to VWAP
+				// v1.14.85: FIX - Use validatedTp2Price if available, don't fallback to VWAP
+				// v1.15.26: Use validatedTp2Price (opposite level price for TP2)
 				if (targetZoneOpposite <= 0)
 				{
-					if (validatedTargetPrice > 0)
-						targetZoneOpposite = validatedTargetPrice; // Use persistent validated target
+					if (validatedTp2Price > 0)
+						targetZoneOpposite = validatedTp2Price; // Use persistent validated target for TP2
 					else
 						targetZoneOpposite = targetGlobalVWAP; // Last resort fallback
 				}
@@ -3634,16 +3645,17 @@ currentEntryState = EntryState.Idle;
 					// Ensure Protection Runs based on FILLED QTY
 					// v1.7.17: We pass the filled amount, protection logic distributes it to buckets.
 					// v1.14.81: Use Arg.MP as fallback if Position.MP is lagging (Flat)
+					// v1.15.26: Pass separate TP1 and TP2 prices to fix MCL bug
 					if (Position.MarketPosition == MarketPosition.Short || marketPosition == MarketPosition.Short)
 					{
 						// EnsureProtection Delegate (v1.14.39)
-						protectionManager.EnsureProtection("Short", n, quantity, currentVwapNumber, isShortSetup, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTargetPrice);
+						protectionManager.EnsureProtection("Short", n, quantity, currentVwapNumber, isShortSetup, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTp1Price, validatedTp2Price);
 						TriggerScreenshot("Entry_Short_" + n, DateTime.Now, executionId);
 					}
 					else if (Position.MarketPosition == MarketPosition.Long || marketPosition == MarketPosition.Long)
 					{
 						// EnsureProtection Delegate (v1.14.39)
-						protectionManager.EnsureProtection("Long", n, quantity, currentVwapNumber, isShortSetup, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTargetPrice);
+						protectionManager.EnsureProtection("Long", n, quantity, currentVwapNumber, isShortSetup, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTp1Price, validatedTp2Price);
 						TriggerScreenshot("Entry_Long_" + n, DateTime.Now, executionId);
 					}
 					else
@@ -4019,7 +4031,8 @@ currentEntryState = EntryState.Idle;
 					// FIXED (v1.7.3): Clear Cache on Successful Exit too!
 					cachedOppositeLevel = null;
 					oppositeSearchDone = false; // v1.14.32
-					validatedTargetPrice = 0; // v1.7.17 FIX: Ensure stale target cleared
+					validatedTp1Price = 0; // v1.15.26: Split from validatedTargetPrice
+					validatedTp2Price = 0; // v1.15.26: Split from validatedTargetPrice
 				}
 				else
 				{

@@ -64,9 +64,10 @@ namespace NinjaTrader.NinjaScript.Strategies
         // =============================================================================
 
     	// REFACTORED EnsureProtection (v1.7.17) - Consolidated Split Handling
-	    public void EnsureProtection(string direction, string entrySignalName, int filledQty, 
-                                     int currentVwapNumber, bool isShortSetup, string setupLevelName, 
-                                     DateTime setupLevelTime, double setupAnchorPrice, double validatedTargetPrice)
+	    // v1.15.26: Modified to accept separate TP1 and TP2 prices to fix MCL bug where both TPs had same price
+	    public void EnsureProtection(string direction, string entrySignalName, int filledQty,
+                                     int currentVwapNumber, bool isShortSetup, string setupLevelName,
+                                     DateTime setupLevelTime, double setupAnchorPrice, double validatedTp1Price, double validatedTp2Price)
 	    {
 		    // v1.15.14: PHANTOM POSITION CHECK - Modified to handle replay sync delays
 		    // During replay, Account.Positions may not sync instantly with Position.Quantity
@@ -135,13 +136,15 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 		    strategy.Log(string.Format("   -> Protection Alloc: Filled={0} | ForTP1={1} (Need:{2}) | ForTP2={3} (Need:{4})", filledQty, forTp1, neededTp1, forTp2, neededTp2));
 
-		    // v1.15.12: ALWAYS submit/update TP orders if needed, regardless of fill allocation
-		    // This ensures that even if a fill goes entirely to TP1, TP2 still gets created/updated
+		    // v1.15.26: CRITICAL FIX - Pass separate prices for TP1 and TP2
+		    // BUG: Previously both calls used same validatedTargetPrice, causing TP2 to change to TP1's price
+		    // Example: MCL Jan 6 2025 4:26am - TP2 changed from 74.39 to 73.83 (TP1's price)
+		    // FIX: Pass validatedTp1Price to TP1 and validatedTp2Price to TP2
 		    if (neededTp1 > 0)
-			    SubmitProtectionOrders(direction, true, neededTp1, currentVwapNumber, isShortSetup, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTargetPrice);
+			    SubmitProtectionOrders(direction, true, neededTp1, currentVwapNumber, isShortSetup, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTp1Price);
 
 		    if (neededTp2 > 0)
-			    SubmitProtectionOrders(direction, false, neededTp2, currentVwapNumber, isShortSetup, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTargetPrice);
+			    SubmitProtectionOrders(direction, false, neededTp2, currentVwapNumber, isShortSetup, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTp2Price);
 
 		    // Update State: protectedQty tracks what SHOULD be protected (total target), not fill allocation
 		    strategy.protectedTp1Qty = totalTp1Target;
@@ -155,8 +158,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 	    }
 
         private void SubmitProtectionOrders(string direction, bool isTp1, int qty,
-                                            int currentVwapNumber, bool isShortSetup, string setupLevelName, 
-                                            DateTime setupLevelTime, double setupAnchorPrice, double validatedTargetPrice)
+                                            int currentVwapNumber, bool isShortSetup, string setupLevelName,
+                                            DateTime setupLevelTime, double setupAnchorPrice, double validatedTpPrice)
 	    {
 		    // Recover orphan orders logic omitted/simplified (Strategy should handle this in adoption, or we assume sync)
             // Implementation focus: Calculation and Submission
@@ -202,10 +205,11 @@ namespace NinjaTrader.NinjaScript.Strategies
                     if (found == null) oppositeSearchDone = true;
                 }
 
-			    if (validatedTargetPrice > 0) 
+			    // v1.15.26: Use validatedTpPrice (will be TP1 or TP2 price depending on isTp1)
+			    if (validatedTpPrice > 0)
 			    {
-				    targetZoneOpposite = validatedTargetPrice;
-				    strategy.Log("FORCE TARGET: Using Validated Price: " + validatedTargetPrice);
+				    targetZoneOpposite = validatedTpPrice;
+				    strategy.Log("FORCE TARGET: Using Validated TP Price: " + validatedTpPrice);
 			    }
 
 			    if (targetZoneOpposite >= avgEntry) targetZoneOpposite = 0; 
@@ -234,10 +238,11 @@ namespace NinjaTrader.NinjaScript.Strategies
                     if (found == null) oppositeSearchDone = true;
                 }
 			    
-			    if (validatedTargetPrice > 0) 
+			    // v1.15.26: Use validatedTpPrice (will be TP1 or TP2 price depending on isTp1)
+			    if (validatedTpPrice > 0)
 			    {
-				    targetZoneOpposite = validatedTargetPrice;
-				    strategy.Log("FORCE TARGET: Using Validated Price: " + validatedTargetPrice);
+				    targetZoneOpposite = validatedTpPrice;
+				    strategy.Log("FORCE TARGET: Using Validated TP Price: " + validatedTpPrice);
 			    }
 
 			    if (targetZoneOpposite <= avgEntry) targetZoneOpposite = 0; 
@@ -279,8 +284,9 @@ namespace NinjaTrader.NinjaScript.Strategies
             } 
 
 		    // DEBUG TARGETS
-		    strategy.Log(string.Format("TP CALC ({0}): Entry={1} | GlobalVWAP={2} | ZoneOpp={3} (Val={4}) | TP1={5} TP2={6} | Selected={7}",
-			    direction, avgEntry, targetGlobalVWAP, targetZoneOpposite, validatedTargetPrice, tp1Price, tp2Price, myTpPrice));
+		    // v1.15.26: Show validatedTpPrice (will be TP1 or TP2 depending on which is being created)
+		    strategy.Log(string.Format("TP CALC ({0}): Entry={1} | GlobalVWAP={2} | ZoneOpp={3} (ValTP={4}) | TP1={5} TP2={6} | Selected={7}",
+			    direction, avgEntry, targetGlobalVWAP, targetZoneOpposite, validatedTpPrice, tp1Price, tp2Price, myTpPrice));
 
 		    // v1.9.0: SINGLE-SL CREATION/UPDATE
 		    try
@@ -508,7 +514,9 @@ namespace NinjaTrader.NinjaScript.Strategies
             }
             else return 0;
 
-            if (strategy.EnableDebugLogs) strategy.Log(string.Format("{0} | SEARCH_OPPOSITE: Looking for '{1}' from SAME DAY as '{2}' (RefDate: {3:yyyy-MM-dd})", strategy.Time[0], oppName, name, refTime.Date));
+            // v1.15.28: Log will show CURRENT trading day (Time[0]), not setup level's session start
+            if (strategy.EnableDebugLogs) strategy.Log(string.Format("{0} | SEARCH_OPPOSITE: Looking for '{1}' on CURRENT Trading Day {2:yyyy-MM-dd} (Setup: {3}, Session Start: {4:yyyy-MM-dd HH:mm})",
+                strategy.Time[0], oppName, GetTradingDay(strategy.Time[0]), name, refTime));
 
             SessionLevel foundLvl = null;
             string setupSessionTicks = "";
@@ -545,23 +553,27 @@ namespace NinjaTrader.NinjaScript.Strategies
                 }
             }
 
-            // v1.15.17: Now find the MOST EXTREME opposite level from SAME DAY (maximize TP2)
+            // v1.15.17: Now find the MOST EXTREME opposite level from SAME TRADING DAY (maximize TP2)
             // For High: find highest price | For Low: find lowest price
-            // Only consider levels from the SAME DAY (matching setupSessionTicks)
+            // v1.15.27: CRITICAL FIX - Compare by TRADING DAY instead of session timestamp
+            // Trading Day Logic: Sessions starting after 6pm (18:00) belong to NEXT day's trading session
+            // Example: Asia Low starting Jan 5 @ 7pm belongs to Jan 6 trading day
             SessionLevel mostExtremeLevel = sameDayLevel; // Start with same-day level
+
+            // v1.15.28: FIX - Use CURRENT TIME (Time[0]) to calculate trading day, not setup level's StartTime
+            // This ensures we find opposite levels from the CURRENT trading session, not from when the setup level was created
+            // Example: If USA Low was created on Jan 10, but trade enters on Jan 12 at 10:54pm (Trading Day = Jan 13),
+            //          we should look for opposite levels from Trading Day Jan 13 (like Asia High @ 2199.5),
+            //          not from Trading Day Jan 10 (like Europe High @ 2252.8)
+            DateTime currentTradingDay = GetTradingDay(strategy.Time[0]);
 
             foreach(var l in activeLevels)
             {
-                // Check if this level is from the SAME DAY
-                bool sameDay = false;
-                if (!string.IsNullOrEmpty(setupSessionTicks) && !string.IsNullOrEmpty(l.Tag))
-                {
-                    string[] candidateTagParts = l.Tag.Split('_');
-                    string candidateTicks = candidateTagParts.Length >= 3 ? candidateTagParts[candidateTagParts.Length - 1] : "";
-                    sameDay = (candidateTicks == setupSessionTicks);
-                }
+                // v1.15.28: Check if this level is from the SAME TRADING DAY as current time
+                DateTime candidateTradingDay = GetTradingDay(l.StartTime);
+                bool sameDay = (candidateTradingDay.Date == currentTradingDay.Date);
 
-                if (!sameDay) continue; // Skip levels from other days
+                if (!sameDay) continue; // Skip levels from other trading days
 
                 // Check if this is an opposite type level (High vs Low)
                 bool isOppositeType = false;
@@ -589,17 +601,41 @@ namespace NinjaTrader.NinjaScript.Strategies
                 }
             }
 
-            // v1.15.17: Log if we selected a more extreme level than same-session opposite
+            // v1.15.17/v1.15.27: Log if we selected a more extreme level than same-session opposite
             if (mostExtremeLevel != null && sameDayLevel != null && mostExtremeLevel != sameDayLevel)
             {
-                strategy.Log(string.Format("TP2_MAXIMIZE: Using {0} @ {1} instead of {2} @ {3} (more extreme on same day)",
+                strategy.Log(string.Format("TP2_MAXIMIZE: Using {0} @ {1} instead of {2} @ {3} (more extreme on same trading day)",
                     mostExtremeLevel.Name, mostExtremeLevel.Price, sameDayLevel.Name, sameDayLevel.Price));
+            }
+
+            // v1.15.28: Log when opposite level is selected for TP2
+            if (mostExtremeLevel != null)
+            {
+                strategy.Log(string.Format("TP2_SELECTED: {0} @ {1} for setup {2} on trading day {3:yyyy-MM-dd}",
+                    mostExtremeLevel.Name, mostExtremeLevel.Price, setupLevel.Name, currentTradingDay));
             }
 
             foundLevel = mostExtremeLevel;
             return mostExtremeLevel != null ? mostExtremeLevel.Price : 0;
         }
-        
+
+        // v1.15.27: Helper function to calculate trading day from session start time
+        // Sessions starting after 6pm (18:00) belong to NEXT day's trading session
+        // Example: Asia starting Jan 5 @ 7pm (19:00) → Trading Day = Jan 6
+        //          USA starting Jan 6 @ 10:30am → Trading Day = Jan 6
+        private DateTime GetTradingDay(DateTime sessionStartTime)
+        {
+            // If session starts after 6pm (18:00), it belongs to next day's trading
+            if (sessionStartTime.Hour >= 18)
+            {
+                return sessionStartTime.Date.AddDays(1);
+            }
+            else
+            {
+                return sessionStartTime.Date;
+            }
+        }
+
         // v1.14.40: Handle TP1 Fill - Move SL to Breakeven
         public void HandleTP1Fill()
         {
