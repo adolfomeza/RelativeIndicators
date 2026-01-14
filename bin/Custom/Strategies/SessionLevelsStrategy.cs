@@ -37,7 +37,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.15.24"; // v1.15.24: Dynamic risk calculation as 0.1% of current capital in Standard model
+		private const string StrategyVersion = "v1.15.25"; // v1.15.25: Display SL warning in status panel when MinQty used due to close SL
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;
@@ -2450,6 +2450,11 @@ currentEntryState = EntryState.Idle;
 					double minRiskInUSD = minRiskInTicks * tickValue;
 					Log(string.Format("{0} DYNAMIC SIZING WARNING: SL too close ({1:F2} ticks < {2:F2} min [{3}% ATR]). Risk=${4:F2} < ${5:F2} min. Entry={6:F2} SL={7:F2} - Using MinQuantity",
 						Time[0], riskInTicks, minRiskInTicks, (MIN_ATR_PERCENTAGE * 100), riskInUSD, minRiskInUSD, entryPrice, stopPrice));
+
+					// v1.15.25: Display warning in status panel
+					lastFilterReason = "⚠️ SL Muy Cercano - MinQty";
+					lastFilterTime = DateTime.Now;
+
 					return MinQuantity;
 				}
 			}
