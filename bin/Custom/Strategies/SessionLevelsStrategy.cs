@@ -2462,9 +2462,9 @@ currentEntryState = EntryState.Idle;
 				// --- STANDARD MODEL (Legacy + ATR) ---
 
 				// v1.15.24: Dynamic risk based on current account value percentage
-				// Calculate risk as 0.1% of current capital instead of fixed amount
+				// Calculate risk as 0.06% of current capital instead of fixed amount
 				double currentCapital = Account.Get(AccountItem.CashValue, Currency.UsDollar);
-				const double RISK_PERCENTAGE = 0.001; // 0.1% = 0.001
+				const double RISK_PERCENTAGE = 0.0006; // 0.06% = 0.0006 ($250K = $150)
 				effectiveRisk = currentCapital * RISK_PERCENTAGE;
 
 				// Ensure minimum risk of $5
