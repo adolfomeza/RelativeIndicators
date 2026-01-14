@@ -2437,14 +2437,21 @@ currentEntryState = EntryState.Idle;
 
 			// v1.15.23: CRITICAL FIX - Enforce minimum SL distance to prevent absurd quantities
 			// When SL is too close (e.g., 1 tick after VWAP retry), quantity becomes dangerously high
-			// Use USD-based minimum instead of fixed ticks to adapt to all instruments
-			const double MIN_SL_USD = 25.0;
-			double riskInUSD = riskInTicks * tickValue;
-			if (riskInUSD < MIN_SL_USD)
+			// Use ATR-based minimum to adapt to each instrument's volatility
+			if (atr != null && atr[0] > 0)
 			{
-				Log(string.Format("{0} DYNAMIC SIZING WARNING: SL too close (${1:F2} < ${2} min). Entry={3:F2} SL={4:F2} - Using MinQuantity to avoid excessive position size",
-					Time[0], riskInUSD, MIN_SL_USD, entryPrice, stopPrice));
-				return MinQuantity;
+				const double MIN_ATR_PERCENTAGE = 0.30; // 30% of ATR minimum
+				double minRiskInPrice = atr[0] * MIN_ATR_PERCENTAGE;
+				double minRiskInTicks = minRiskInPrice / TickSize;
+
+				if (riskInTicks < minRiskInTicks)
+				{
+					double riskInUSD = riskInTicks * tickValue;
+					double minRiskInUSD = minRiskInTicks * tickValue;
+					Log(string.Format("{0} DYNAMIC SIZING WARNING: SL too close ({1:F2} ticks < {2:F2} min [{3}% ATR]). Risk=${4:F2} < ${5:F2} min. Entry={6:F2} SL={7:F2} - Using MinQuantity",
+						Time[0], riskInTicks, minRiskInTicks, (MIN_ATR_PERCENTAGE * 100), riskInUSD, minRiskInUSD, entryPrice, stopPrice));
+					return MinQuantity;
+				}
 			}
 
 			// v1.14.76: Risk Model Selection
