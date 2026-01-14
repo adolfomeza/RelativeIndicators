@@ -1,4 +1,1 @@
 ID,Instrument,EntryTime,Type,EntryPrice,ExitTime,ExitPrice,Result,PnL,Commission,NetPnL,MAE,MFE,Setup,Attempt,RiskReward,DeltaAtEntry,DeltaDirection,SessionDelta,DeltaAtTP1
-1,MES 03-25,2025-01-20 04:38:02,Short,6038.25,2025-01-20 08:14:12,6032.5,TP1_Short_01,86.25,5.40,80.85,-68.75,143.75,Asia High,1,0.63,0,1,0,0,1
-1.2,MES 03-25,2025-01-20 04:38:02,Short,6038.25,2025-01-20 09:30:03,6020.25,TP2_Short_01,180.00,3.60,176.40,-68.75,182.50,Asia High,1,1.31,0,1,0,0,1
-2,MES 03-25,2025-01-20 10:20:33,Short,6054.75,2025-01-20 10:21:37,6060.5,SL_Short_01,-143.75,9.00,-152.75,-143.75,6.25,USA High,1,-5.00,0,1,0,0,3

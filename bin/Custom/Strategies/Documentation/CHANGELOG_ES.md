@@ -7,6 +7,27 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 ### Agregado
 - **Módulo SL Adaptativo (Supervivencia):** Reemplazo de la lógica de salida de emergencia. Ahora, si el precio salta el Stop Loss durante la entrada, el sistema adapta el SL a `Precio Actual +/- 4 ticks` para asegurar que la orden sea aceptada por NinjaTrader y la posición siga protegida, en lugar de cerrar o fallar.
 
+## [v1.15.20] - 2026-01-13
+### Corregido
+- **Bug: Contador de Intentos Incorrecto en CSV y Plots**
+  - **Problema**: El CSV mostraba el contador de "Attempt" incorrecto cuando la estrategia cambiaba de nivel. Por ejemplo:
+    - Asia Low: Intento #1 (5:11 AM), Intento #2 (5:44 AM), Intento #3 (6:04 AM) ✓ Correcto
+    - USA Low: Mostraba "Intento #4" cuando debería mostrar "Intento #1" ✗ Incorrecto
+  - **Causa Raíz**: El campo `tradeAttemptNumber` del CSV usaba `currentVwapNumber` (contador de VWAP retries dentro del mismo nivel) en lugar de `currentLevelAttempts` (contador de intentos por nivel específico).
+  - **Impacto**: Imposible analizar en Streamlit qué intento de cada nivel (1-20) da mejores resultados, que es crítico para optimizar la estrategia.
+  - **Solución v1.15.20**: Cambiado `tradeAttemptNumber = currentVwapNumber` → `tradeAttemptNumber = currentLevelAttempts`
+  - **Resultado**: Ahora cada nivel resetea su contador correctamente:
+    - Asia Low: Attempts 1, 2, 3...
+    - USA Low: Attempts 1, 2, 3... (resetea cuando cambia de nivel)
+    - Permite análisis correcto en Streamlit por intento de nivel (ej: "Solo entrar en Intento #6 de cada nivel")
+  - **Archivos Modificados**:
+    - `SessionLevelsStrategy.cs:3556` - Cambio de currentVwapNumber a currentLevelAttempts
+
+### Técnico
+- Modificado `SessionLevelsStrategy.cs:3556` - CSV export ahora usa currentLevelAttempts.
+- Actualizado `SessionLevelsStrategy.cs:40` - Versión a v1.15.20.
+- Actualizado `StrategyHelpers.cs:262` - Display de versión a v1.15.20.
+
 ## [v1.15.19] - 2026-01-13
 ### Corregido
 - **Bug: Órdenes de Mercado con Precio Incorrecto (Slippage Excesivo)**

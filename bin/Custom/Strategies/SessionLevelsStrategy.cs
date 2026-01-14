@@ -37,7 +37,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.15.19"; // v1.15.19: Fixed market order slippage by using Bid/Ask + buffer as limit price
+		private const string StrategyVersion = "v1.15.20"; // v1.15.20: Fixed attempt counter in CSV to use level attempts instead of VWAP retries
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;
@@ -3553,7 +3553,7 @@ currentEntryState = EntryState.Idle;
 						tradeEntryTime = time;
 							tradeDirection = Position.MarketPosition == MarketPosition.Long ? "Long" : "Short";
 						tradeSetupName = setupLevelName;
-						tradeAttemptNumber = currentVwapNumber; // v1.13.11: Save attempt number for CSV
+						tradeAttemptNumber = currentLevelAttempts; // v1.15.20: Use level attempts instead of VWAP retries
 						tradeMAE = 0;
 						tradeMFE = 0;
 						isTrackingTrade = true; // Flag to track MAE/MFE
