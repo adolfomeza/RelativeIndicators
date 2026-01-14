@@ -2462,10 +2462,10 @@ currentEntryState = EntryState.Idle;
 				// --- STANDARD MODEL (Legacy + ATR) ---
 
 				// v1.15.24: Dynamic risk based on current account value percentage
-				// Calculate risk as 0.06% of current capital instead of fixed amount
+				// Calculate risk as percentage of current capital instead of fixed amount
 				double currentCapital = Account.Get(AccountItem.CashValue, Currency.UsDollar);
-				const double RISK_PERCENTAGE = 0.0006; // 0.06% = 0.0006 ($250K = $150)
-				effectiveRisk = currentCapital * RISK_PERCENTAGE;
+				double riskPercentageDecimal = RiskPercentage / 100.0; // Convert 0.06% to 0.0006
+				effectiveRisk = currentCapital * riskPercentageDecimal;
 
 				// Ensure minimum risk of $5
 				if (effectiveRisk < 5.0) effectiveRisk = 5.0;
@@ -2473,7 +2473,7 @@ currentEntryState = EntryState.Idle;
 				// DEBUG: Log initial state
                 if (EnableDebugLogs)
 				    Log(string.Format("RISK_DEBUG_PRE: Capital=${0:F2} | RiskPct={1}% | CalcRisk=${2:F2} | UseATR={3} | ATRFactor={4}",
-					    currentCapital, (RISK_PERCENTAGE * 100), effectiveRisk, UseATRScaling, ATRRiskScaleFactor));
+					    currentCapital, RiskPercentage, effectiveRisk, UseATRScaling, ATRRiskScaleFactor));
 				
 				if (UseATRScaling && atr != null && atr[0] > 0)
 				{
@@ -4086,10 +4086,22 @@ currentEntryState = EntryState.Idle;
 		
 		[NinjaScriptProperty]
 		[Range(1, double.MaxValue)]
-		[Display(Name="Risk Per Trade (USD)", Order=4, GroupName="Order Management")]
+		[Display(Name="Risk Per Trade (USD)", Order=4, GroupName="Order Management", Description="Fixed risk amount (only used in Apteros model, ignored in Standard)")]
 		public double RiskPerTradeUSD
 		{ get; set; } = 50.0;
-		
+
+		[NinjaScriptProperty]
+		[Range(0.001, 100.0)]
+		[Display(Name="Risk Percentage (%)", Order=4.1, GroupName="Order Management", Description="Percentage of account to risk per trade in Standard model (0.06 = 0.06%)")]
+		public double RiskPercentage
+		{ get; set; } = 0.06;
+
+		[NinjaScriptProperty]
+		[Range(1000, double.MaxValue)]
+		[Display(Name="Starting Capital (USD)", Order=4.2, GroupName="Order Management", Description="Reference capital for risk calculation (actual account value used in real-time)")]
+		public double StartingCapital
+		{ get; set; } = 250000.0;
+
 		[NinjaScriptProperty]
 		[Range(1, int.MaxValue)]
 		[Display(Name="Min Quantity", Order=5, GroupName="Order Management")]
