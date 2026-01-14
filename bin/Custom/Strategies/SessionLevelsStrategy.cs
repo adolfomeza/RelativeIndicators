@@ -37,7 +37,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.15.20"; // v1.15.20: Fixed attempt counter in CSV to use level attempts instead of VWAP retries
+		private const string StrategyVersion = "v1.15.21"; // v1.15.21: Fixed SL quantity not updating after TP1 when breakeven is disabled
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;

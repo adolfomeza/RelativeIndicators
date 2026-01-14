@@ -7,6 +7,28 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 ### Agregado
 - **Módulo SL Adaptativo (Supervivencia):** Reemplazo de la lógica de salida de emergencia. Ahora, si el precio salta el Stop Loss durante la entrada, el sistema adapta el SL a `Precio Actual +/- 4 ticks` para asegurar que la orden sea aceptada por NinjaTrader y la posición siga protegida, en lugar de cerrar o fallar.
 
+## [v1.15.21] - 2026-01-13
+### Corregido
+- **Bug CRÍTICO: SL No Actualiza Cantidad Después de TP1 Cuando Breakeven Está Deshabilitado**
+  - **Problema**: Después de que TP1 se ejecuta parcialmente, el Stop Loss NO actualizaba su cantidad a los contratos restantes cuando `EnableBreakeven = false`. Ejemplo reportado:
+    - Entrada: 7 contratos @ 76.98
+    - TP1 ejecutado: 4 contratos @ 77.21 (quedaron 3 contratos)
+    - SL visible en chart: **7 contratos** ✗ Incorrecto (debería mostrar 3)
+    - TP2 visible en chart: 3 contratos ✓ Correcto
+  - **Causa Raíz**: El método `HandleTP1Fill()` en OrderProtectionManager verificaba si breakeven estaba habilitado y hacía `return` inmediatamente sin actualizar la cantidad del SL (líneas 607-611). Esto dejaba el SL con la cantidad original en lugar de ajustarlo a la posición restante.
+  - **Riesgo**: Si el SL se ejecutaba con 7 contratos pero solo quedaban 3 en la posición, causaría errores de ejecución o reversión de posición no deseada.
+  - **Solución v1.15.21**: Modificado `HandleTP1Fill()` para **SIEMPRE actualizar la cantidad del SL** después de TP1, independientemente del estado de breakeven:
+    - Si `EnableBreakeven = false`: Actualiza cantidad del SL manteniendo el precio original del SL
+    - Si `EnableBreakeven = true`: Actualiza cantidad Y mueve precio a breakeven (comportamiento original)
+  - **Resultado**: Ahora el SL siempre refleja la cantidad correcta de contratos restantes después de TP1, protegiendo la posición adecuadamente.
+  - **Archivos Modificados**:
+    - `OrderProtectionManager.cs:604-636` - HandleTP1Fill() refactorizado para separar actualización de cantidad vs movimiento de precio
+
+### Técnico
+- Modificado `OrderProtectionManager.cs:604-636` - HandleTP1Fill() ahora actualiza cantidad siempre.
+- Actualizado `SessionLevelsStrategy.cs:40` - Versión a v1.15.21.
+- Actualizado `StrategyHelpers.cs:262` - Display de versión a v1.15.21.
+
 ## [v1.15.20] - 2026-01-13
 ### Corregido
 - **Bug: Contador de Intentos Incorrecto en CSV y Plots**

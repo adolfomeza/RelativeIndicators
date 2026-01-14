@@ -1,3 +1,0 @@
-ID,Instrument,EntryTime,Type,EntryPrice,ExitTime,ExitPrice,Result,PnL,Commission,NetPnL,MAE,MFE,Setup,Attempt,RiskReward,DeltaAtEntry,DeltaDirection,SessionDelta,DeltaAtTP1
-1,MYM 03-25,2025-01-20 20:56:11,Long,43672,2025-01-20 20:57:35,43646,SL_Long_01,-26.00,3.60,-29.60,-143.00,154.00,USA Low,1,-2.00,0,1,0,0,0
-1.2,MYM 03-25,2025-01-20 20:56:11,Long,43672,2025-01-20 20:57:35,43645,SL_Long_01,-121.50,16.20,-137.70,-143.00,154.00,USA Low,1,-9.35,0,1,0,0,0

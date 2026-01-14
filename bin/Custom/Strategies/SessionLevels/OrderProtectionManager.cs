@@ -603,25 +603,28 @@ namespace NinjaTrader.NinjaScript.Strategies
         // v1.14.40: Handle TP1 Fill - Move SL to Breakeven
         public void HandleTP1Fill()
         {
-            // v1.15.18: Check if breakeven is enabled
-            if (!strategy.EnableBreakeven)
-            {
-                strategy.Log(strategy.Time[0] + " BE DISABLED: TP1 filled but breakeven move is disabled in settings");
-                return;
-            }
+            // v1.15.21: ALWAYS update SL quantity after TP1, even if BE is disabled
+            // Only skip moving price to breakeven if disabled
 
-            strategy.Log(strategy.Time[0] + " BE LOGIC: TP1 Filled. Moving SL to BE.");
-
-            // Move single SL to breakeven
-            if (strategy.stopOrder != null && strategy.entryOrder != null)
+            if (strategy.stopOrder != null)
             {
                 int remainingQty = Math.Abs(strategy.Position.Quantity);
 
                 // Guard against Qty=0 (position already fully closed by TP1)
                 if (remainingQty > 0)
                 {
-                    strategy.Log(strategy.Time[0] + " BE ACTION: Moving SL (" + strategy.stopOrder.Name + ") to " + strategy.entryOrder.AverageFillPrice + " Qty=" + remainingQty);
-                    strategy.ChangeOrderWrapper(strategy.stopOrder, remainingQty, 0, strategy.entryOrder.AverageFillPrice);
+                    if (!strategy.EnableBreakeven)
+                    {
+                        // v1.15.21: Breakeven disabled - Update quantity only, keep original SL price
+                        strategy.Log(strategy.Time[0] + " SL QTY UPDATE: TP1 filled, updating SL (" + strategy.stopOrder.Name + ") Qty to " + remainingQty + " (BE disabled, keeping original SL price)");
+                        strategy.ChangeOrderWrapper(strategy.stopOrder, remainingQty, 0, strategy.stopOrder.StopPrice);
+                    }
+                    else
+                    {
+                        // v1.15.21: Breakeven enabled - Update quantity AND move to breakeven price
+                        strategy.Log(strategy.Time[0] + " BE ACTION: Moving SL (" + strategy.stopOrder.Name + ") to BE @ " + strategy.entryOrder.AverageFillPrice + " Qty=" + remainingQty);
+                        strategy.ChangeOrderWrapper(strategy.stopOrder, remainingQty, 0, strategy.entryOrder.AverageFillPrice);
+                    }
                 }
                 else
                 {
