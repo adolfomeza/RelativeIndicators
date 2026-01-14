@@ -1286,13 +1286,15 @@ qp_source = st.query_params.get("src", "backtest")
 idx_source = {"backtest": 0, "playback": 1, "DEMO": 2}.get(qp_source, 0)
 
 def on_src_change():
-    val = st.session_state.data_source_persist
-    source_map = {
-        "📊 Backtest (Strategy Analyzer)": "backtest",
-        "⏪ Playback (Market Replay)": "playback",
-        "📁 DEMO": "DEMO"
-    }
-    st.query_params["src"] = source_map.get(val, "backtest")
+    # v1.15.21: Check if key exists before accessing to prevent AttributeError on first run
+    if "data_source_persist" in st.session_state:
+        val = st.session_state.data_source_persist
+        source_map = {
+            "📊 Backtest (Strategy Analyzer)": "backtest",
+            "⏪ Playback (Market Replay)": "playback",
+            "📁 DEMO": "DEMO"
+        }
+        st.query_params["src"] = source_map.get(val, "backtest")
 
 data_source = st.sidebar.radio(
     "Fuente de Datos", 
