@@ -37,7 +37,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.15.23"; // v1.15.23: Fixed absurd position size when SL is too close after VWAP retry
+		private const string StrategyVersion = "v1.15.24"; // v1.15.24: Dynamic risk calculation as 0.1% of current capital in Standard model
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;
@@ -2460,11 +2460,20 @@ currentEntryState = EntryState.Idle;
 			if (SelectedRiskModel == RiskModelType.Standard)
 			{
 				// --- STANDARD MODEL (Legacy + ATR) ---
-				
+
+				// v1.15.24: Dynamic risk based on current account value percentage
+				// Calculate risk as 0.1% of current capital instead of fixed amount
+				double currentCapital = Account.Get(AccountItem.CashValue, Currency.UsDollar);
+				const double RISK_PERCENTAGE = 0.001; // 0.1% = 0.001
+				effectiveRisk = currentCapital * RISK_PERCENTAGE;
+
+				// Ensure minimum risk of $5
+				if (effectiveRisk < 5.0) effectiveRisk = 5.0;
+
 				// DEBUG: Log initial state
                 if (EnableDebugLogs)
-				    Log(string.Format("RISK_DEBUG_PRE: UseATR={0} | InitialRisk=${1:F2} | ATRFactor={2}", 
-					    UseATRScaling, effectiveRisk, ATRRiskScaleFactor));
+				    Log(string.Format("RISK_DEBUG_PRE: Capital=${0:F2} | RiskPct={1}% | CalcRisk=${2:F2} | UseATR={3} | ATRFactor={4}",
+					    currentCapital, (RISK_PERCENTAGE * 100), effectiveRisk, UseATRScaling, ATRRiskScaleFactor));
 				
 				if (UseATRScaling && atr != null && atr[0] > 0)
 				{
