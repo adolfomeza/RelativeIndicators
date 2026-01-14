@@ -1526,8 +1526,59 @@ tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10 = st.tabs([
 ])
 
 with tab1:
+    # v1.15.22: Interactive Filters above charts
+    st.markdown("### 🎛️ Filtros Interactivos")
+
+    # Get unique values for filters
+    all_setups = sorted(df_raw['SetupName'].unique())
+    all_instruments = sorted(df_raw['Instrument'].unique())
+    all_attempts = sorted(df_raw['Attempt'].unique())
+
+    # Create filter columns
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.markdown("**Niveles**")
+        selected_setups = st.multiselect(
+            "Selecciona niveles:",
+            options=all_setups,
+            default=all_setups,
+            key="filter_setups"
+        )
+
+    with col2:
+        st.markdown("**Instrumentos**")
+        selected_instruments = st.multiselect(
+            "Selecciona instrumentos:",
+            options=all_instruments,
+            default=all_instruments,
+            key="filter_instruments"
+        )
+
+    with col3:
+        st.markdown("**Intentos**")
+        selected_attempts = st.multiselect(
+            "Selecciona intentos:",
+            options=all_attempts,
+            default=all_attempts,
+            key="filter_attempts"
+        )
+
+    # Apply filters to df
+    df_filtered = df.copy()
+    if selected_setups:
+        df_filtered = df_filtered[df_filtered['SetupName'].isin(selected_setups)]
+    if selected_instruments:
+        df_filtered = df_filtered[df_filtered['Instrument'].isin(selected_instruments)]
+    if selected_attempts:
+        df_filtered = df_filtered[df_filtered['Attempt'].isin(selected_attempts)]
+
+    # Update df for the rest of tab1
+    df = df_filtered.copy()
+
+    st.markdown("---")
     st.markdown("### Curva de Equidad (Por Ejecución)")
-    
+
     # v1.14.32: Chart Type Selector
     chart_type = st.radio(
         "Tipo de Gráfico",
