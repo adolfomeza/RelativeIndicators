@@ -7,6 +7,77 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 ### Agregado
 - **Módulo SL Adaptativo (Supervivencia):** Reemplazo de la lógica de salida de emergencia. Ahora, si el precio salta el Stop Loss durante la entrada, el sistema adapta el SL a `Precio Actual +/- 4 ticks` para asegurar que la orden sea aceptada por NinjaTrader y la posición siga protegida, en lugar de cerrar o fallar.
 
+## [v1.15.24] - 2026-01-13
+### Agregado
+- **Cálculo Dinámico de Riesgo en Modelo Standard**
+  - Ahora el riesgo se calcula como **porcentaje del capital actual** en lugar de un monto fijo
+  - Nueva propiedad configurable: **Risk Percentage (%)** - Default: 0.06%
+  - Nueva propiedad configurable: **Starting Capital (USD)** - Default: $250,000 (referencia)
+  - El cálculo usa el capital real de la cuenta en tiempo real: `Risk = Account.CashValue × (RiskPercentage / 100)`
+  - Ejemplo con 0.06%:
+    - Capital $250,000 → Riesgo $150 por trade
+    - Capital $240,000 → Riesgo $144 por trade
+    - Capital $200,000 → Riesgo $120 por trade
+  - **Protección Automática contra Drawdowns**: A medida que el capital disminuye, el tamaño de posición se reduce proporcionalmente
+  - Mínimo de $5 para evitar micro-posiciones
+  - Usuario puede ajustar el porcentaje desde las propiedades sin recompilar
+
+### Técnico
+- Agregado `SessionLevelsStrategy.cs:4095-4097` - Propiedad RiskPercentage con rango 0.001% a 100%
+- Agregado `SessionLevelsStrategy.cs:4101-4103` - Propiedad StartingCapital con rango $1,000 a infinito
+- Modificado `SessionLevelsStrategy.cs:2464-2476` - Cálculo dinámico de riesgo en modelo Standard
+- Actualizado `SessionLevelsStrategy.cs:40` - Versión a v1.15.24
+
+## [v1.15.23] - 2026-01-13
+### Corregido
+- **Bug CRÍTICO: Tamaño de Posición Absurdo Cuando SL Muy Cercano**
+  - **Problema**: Después de un VWAP retry, si el precio quedaba muy cerca del nivel, el SL podía estar a solo 1 tick de distancia. Esto causaba cantidades absurdas:
+    - Ejemplo M2K: `Qty = $150 / (1 tick × $0.05) = 300 contratos` (debería ser ~23)
+    - Causaba crash de la estrategia con error de índice fuera de rango
+    - Riesgo de pérdida catastrófica si se ejecutaba la orden
+  - **Solución v1.15.23**: Implementado **validación de SL mínimo basada en ATR**
+    - Mínimo: 30% del ATR del instrumento
+    - Si SL < 30% ATR → Usa MinQuantity en lugar de cantidad calculada
+    - Ejemplos con ATR típicos:
+      - M2K (ATR ~3.0): Mínimo = 0.9 puntos = 9 ticks
+      - MES (ATR ~15.0): Mínimo = 4.5 puntos = 18 ticks
+      - MGC (ATR ~10.0): Mínimo = 3.0 puntos = 30 ticks
+      - MNQ (ATR ~60.0): Mínimo = 18.0 puntos = 72 ticks
+  - **Prevención**: La estrategia ya no toma trades con riesgo/recompensa insuficiente cuando la entrada está demasiado cerca del nivel después de un retry
+
+### Técnico
+- Agregado `SessionLevelsStrategy.cs:2438-2455` - Validación de SL mínimo basada en ATR (30%)
+- Actualizado `SessionLevelsStrategy.cs:40` - Versión a v1.15.23
+
+## [v1.15.22] - 2026-01-13
+### Agregado
+- **Filtros Interactivos en Tab 1 de Streamlit**
+  - Agregados filtros multiselect en 3 columnas arriba de las gráficas:
+    - **Niveles**: Filtra por Asia Low, Europe Low, USA Low, etc.
+    - **Instrumentos**: Filtra por MES, MNQ, MGC, MCL, M2K, MYM
+    - **Intentos**: Filtra por número de intento (1, 2, 3, etc.)
+  - Por defecto todos están seleccionados
+  - Los filtros se aplican a todas las visualizaciones del Tab 1
+  - Permite análisis granular sin usar el sidebar
+
+### Corregido
+- **Bug: Error de Alineación de Columnas en CSV**
+  - **Problema**: Pandas interpretaba la columna "ID" como índice automáticamente, causando que todas las columnas se desplazaran una posición a la izquierda
+  - **Síntoma**: Columna "MFE" contenía strings ("USA Low") en lugar de números, causando error: `'float' object cannot be interpreted as an integer`
+  - **Solución v1.15.22**: Agregado `index_col=False` en `pd.read_csv()` para forzar que pandas NO use ninguna columna como índice
+  - **Resultado**: Columnas ahora se alinean correctamente con los valores
+
+- **Bug: MFE No Se Convertía a Valor Absoluto**
+  - **Problema**: Solo MAE se convertía con `.abs()`, pero MFE también puede tener valores negativos en el CSV
+  - **Solución**: Agregado `df_copy['MFE'] = df_copy['MFE'].abs()` en funciones de análisis
+  - **Impacto**: Previene errores en cálculos de `MFE_R = MFE / MAE`
+
+### Técnico
+- Modificado `StreamlitAudit/app.py:537-538` - Agregada conversión abs() para MFE en analyze_r_ladder()
+- Modificado `StreamlitAudit/app.py:724-725` - Agregada conversión abs() para MFE en analyze_scaling_out()
+- Modificado `StreamlitAudit/app.py:906-910` - Agregado index_col=False en pd.read_csv()
+- Agregado `StreamlitAudit/app.py:1529-1578` - Filtros interactivos en Tab 1
+
 ## [v1.15.21] - 2026-01-13
 ### Corregido
 - **Bug CRÍTICO: SL No Actualiza Cantidad Después de TP1 Cuando Breakeven Está Deshabilitado**
