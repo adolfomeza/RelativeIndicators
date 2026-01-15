@@ -276,11 +276,19 @@ namespace NinjaTrader.NinjaScript.Strategies
                 // TP1 is Dynamic (VWAP), so we WANT it to update in the panel to show current potential
                 strategy.tradeOriginalTp1Price = myTpPrice; 
             } 
-		    else 
-            { 
-                strategy.activeTp2Price = myTpPrice; 
+		    else
+            {
+                strategy.activeTp2Price = myTpPrice;
                 // TP2 is Static (Zone), but moves to BE. We LOCK it to show the initial Target/Risk in panel.
-                if (strategy.tradeOriginalTp2Price == 0) strategy.tradeOriginalTp2Price = myTpPrice; 
+                if (strategy.tradeOriginalTp2Price == 0) strategy.tradeOriginalTp2Price = myTpPrice;
+
+                // v1.15.32: CRITICAL FIX - Persist TP2 price back to strategy so ManagePositionExit() uses it
+                // Without this, ManagePositionExit() sees validatedTp2Price=0 and falls back to VWAP
+                if (strategy.validatedTp2Price <= 0)
+                {
+                    strategy.validatedTp2Price = myTpPrice;
+                    strategy.Log("TP2_PERSIST: Saved validatedTp2Price=" + myTpPrice + " to strategy");
+                }
             } 
 
 		    // DEBUG TARGETS
