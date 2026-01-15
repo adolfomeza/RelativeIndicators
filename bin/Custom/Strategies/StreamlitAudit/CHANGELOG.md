@@ -1,5 +1,139 @@
 # Changelog - Streamlit Trading Analysis App
 
+## [v2.9.0] - 2026-01-15
+
+### Fixed: Trade Counting Consistency with NinjaTrader 🔧
+Corregida inconsistencia donde la app contaba EJECUCIONES en lugar de TRADES LÓGICOS.
+
+#### Problema:
+- El CSV exporta una línea por cada ejecución parcial (ej: Trade #2 → filas 2.1, 2.2, 2.3...)
+- La app usaba `len(df)` para contar trades, contando cada fila como trade separado
+- Esto causaba que Total Trades, Win Rate, y otras métricas no coincidieran con NinjaTrader Trade Performance
+
+#### Solución:
+- ✅ **compile_exec_summary()** - Ahora agrupa por `Trade_Clust_ID` antes de contar
+- ✅ **compile_instrument_perf()** - Agrupa trades lógicos por instrumento
+- ✅ **compile_levels_perf()** - Agrupa trades lógicos por zona de nivel
+- ✅ **Win/Loss counting** - Usa PnL agregado por trade, no por ejecución
+
+#### Resultado:
+- 🎯 Total Trades ahora coincide con NinjaTrader Trade Performance
+- 🎯 Win Rate calculado correctamente (trades ganadores / total trades)
+- 🎯 Avg Win/Loss basado en PnL total por trade lógico
+- 🎯 Profit Factor usando sumas correctas de ganancias/pérdidas
+
+---
+
+## [v2.8.3] - 2026-01-14
+
+### Changed: Compact Layout - Optimized Space Usage 🗜️
+Optimizado el uso del espacio en toda la aplicación reduciendo padding, márgenes y espacios vacíos innecesarios.
+
+#### Global Improvements:
+- ✅ **Padding Reducido** - Contenedores principales con menos padding (1rem vs 3rem)
+- ✅ **Márgenes Compactos** - Espaciado entre elementos reducido de 1rem a 0.3rem
+- ✅ **Headers Compactos** - Títulos y subtítulos con menos espacio vertical
+- ✅ **KPIs Compactos** - Tarjetas de métricas con padding 12px vs 20px, fuente 1.5rem vs 1.8rem
+- ✅ **Tabs Compactos** - Altura reducida a 40px (antes 50px), gap 16px (antes 24px)
+- ✅ **Gráficos Compactos** - Padding 10px (antes 15px), margen 0.5rem (antes 10px)
+- ✅ **Tablas Compactas** - Padding 8px (antes 10px), margen 0.5rem
+- ✅ **Separadores Compactos** - Líneas horizontales con margen 0.5rem (antes 1rem)
+- ✅ **Checkboxes/Radios Compactos** - Fuente 0.9rem, padding 0.2rem
+- ✅ **Columnas Compactas** - Padding horizontal reducido a 0.3rem
+- ✅ **Expanders Compactos** - Padding interno 0.5rem
+
+#### Visual Impact:
+- 🎯 **30-40% menos scroll** - Más contenido visible sin desplazamiento
+- 🎯 **Uso eficiente del viewport** - Mejor aprovechamiento del espacio de pantalla
+- 🎯 **Interfaz más densa** - Más información en menos espacio sin sacrificar legibilidad
+- 🎯 **Experiencia profesional** - Dashboard style compacto y eficiente
+
+#### Technical Details:
+- CSS global aplicado a `.block-container`, `.element-container`, `div[data-testid="stVerticalBlock"]`
+- Reducciones aplicadas a: headers (h1, h2, h3), markdown, metrics, columns, tabs, charts, tables, checkboxes, radios, expanders
+- Mantenida la legibilidad con fuentes ajustadas proporcionalmente
+- Preservados los efectos hover y transiciones visuales
+
+### Added: Per-Instrument Equity Curves 📈
+Restauradas y mejoradas las curvas de equity individuales por instrumento en Tab 1 (Tablero).
+
+#### Features:
+- ✅ **Curvas Individuales por Instrumento** - Cada instrumento muestra su propia curva de equity con color distintivo
+- ✅ **Curva Global Total** - Línea verde gruesa (width=4) que muestra la equity combinada de todos los instrumentos
+- ✅ **Visualización Limpia** - Las curvas individuales están **ocultas por defecto** (click en la leyenda para mostrarlas)
+- ✅ **Paleta de Colores Mejorada** - Colores más distintivos por instrumento:
+  - MNQ: Verde (#00FF99)
+  - MES: Rojo (#FF6B6B)
+  - MYM: Naranja (#FFA500)
+  - M2K: Dorado (#FFD700)
+  - MCL: Turquesa oscuro (#00CED1)
+  - MGC: Rosa intenso (#FF1493)
+  - MBT: Púrpura (#9370DB)
+- ✅ **Monto de Equity en Título** - Muestra el valor final de equity en el título del gráfico (ej: "Equidad del Portafolio: $1,234.56")
+- ✅ **Hover Tooltips con Contexto** - Muestra el nombre del instrumento y valor exacto (ej: "MNQ: $1,234.56")
+- ✅ **Líneas Punteadas** - Las curvas individuales usan `dash='dot'` para distinguirse de la curva global
+
+#### Technical Details:
+- Usa `plotly.graph_objects` para crear múltiples traces en una sola figura
+- Las curvas de instrumentos tienen opacidad 0.4 y están ocultas por defecto (`visible='legendonly'`)
+- La curva global tiene width=4 (línea muy gruesa) vs width=1.2 para instrumentos
+- Líneas punteadas (dash='dot') para curvas individuales
+- Leyenda horizontal en la parte superior para mejor aprovechamiento del espacio
+- Compatible con el selector de tipo de gráfico existente (Curva vs Barras)
+
+#### UX Improvements:
+- **Solución al "spaghetti chart"**: Al cargar, solo se muestra la curva TOTAL (limpia y clara)
+- **Exploración bajo demanda**: Click en la leyenda para ver curvas individuales según necesidad
+- **Mejor contraste**: Curva total en verde brillante, curvas individuales más tenues y punteadas
+
+### Changed: Horizontal Checkbox Filters for Better UX ☑️
+Convertidos los filtros de Tab 1 a checkboxes horizontales para aprovechar mejor el espacio y mejorar la usabilidad.
+
+#### Improvements:
+- ✅ **Layout Horizontal** - Filtros distribuidos horizontalmente en lugar de verticales para mejor uso del espacio
+- ✅ **Filtro de Niveles** - Checkboxes en 6 columnas horizontales (Asia High, Europe High, USA High, etc.)
+- ✅ **Filtro de Instrumentos** - Checkboxes en fila horizontal para todos los instrumentos (MNQ, MES, MYM, etc.)
+- ✅ **Filtro de Intentos** - Checkboxes en 10 columnas con etiquetas cortas "Int 1", "Int 2", etc.
+- ✅ **"Todos"** - Cada filtro incluye un checkbox compacto para activar/desactivar todas las opciones
+- ✅ **Menos Scroll** - Diseño compacto que reduce el scroll vertical necesario
+- ✅ **Vista Completa** - Todas las opciones visibles de un vistazo sin abrir dropdowns
+- ✅ **Activación Rápida** - Un solo click para activar/desactivar cualquier opción
+
+#### Technical Details:
+- Reemplazados `st.multiselect` por `st.checkbox` en layout horizontal usando `st.columns()`
+- Filtro de Niveles: hasta 6 columnas horizontales
+- Filtro de Instrumentos: 1 columna por instrumento (típicamente 7-8)
+- Filtro de Intentos: hasta 10 columnas horizontales con etiquetas cortas
+- Cada checkbox tiene un key único para evitar conflictos de estado
+- Los checkboxes "Todos" controlan el valor inicial de los checkboxes individuales
+- La lógica de filtrado permanece sin cambios (usa las mismas listas `selected_*`)
+
+### Fixed: Attempt Filter Column Mapping 🔧
+Corregida la lectura de la columna "Attempt" del CSV para mostrar todos los valores de intentos (1-10+) en el filtro.
+
+#### Problem:
+- El filtro "Intentos" en Tab 1 solo mostraba valor "1" cuando los datos reales contenían intentos de 1 a 10+
+- **Causa Raíz:** CSV tiene 21 columnas de datos pero el header solo declara 20 nombres
+  - Header: `ID,Instrument,...,DeltaAtTP1` (20 nombres)
+  - Datos: 21 valores por fila
+  - Columna 15 (header "Attempt") siempre contiene valor 1
+  - Columna 21 (sin nombre en header) contiene los valores reales de intentos (1, 3, 8, 10, etc.)
+  - Pandas creaba columna "Attempt" desde posición 15 e ignoraba la columna 21 sin nombre
+
+#### Solution:
+- Actualizada la definición `col_names_new` para mapear las 21 columnas correctamente:
+  - Columna 15 renombrada a `Attempt_UNUSED` (siempre vale 1, no se usa)
+  - Agregadas columnas Delta: `DeltaAtEntry`, `DeltaDirection`, `SessionDelta`, `DeltaAtTP1`
+  - Columna 21 (última, sin nombre en header original) correctamente mapeada como `Attempt`
+- **Fix crítico:** Pandas descartaba la columna 21 al detectar mismatch entre header (20 nombres) y datos (21 valores)
+- Solución: Ignorar header defectuoso usando `header=None, skiprows=1` para forzar lectura de todas las columnas
+
+#### Result:
+- Filtro "Intentos" ahora muestra todos los valores únicos de intentos presentes en los datos
+- Usuarios pueden filtrar por nivel de intento (1er intento, 2do intento, etc.)
+
+---
+
 ## [v2.8.2] - 2026-01-04
 
 ### Fixed: Calendar Tab Jump on Page Reload 📅

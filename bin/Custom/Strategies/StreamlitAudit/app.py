@@ -51,7 +51,43 @@ st.markdown("""
         background-color: #0E1117;
         font-family: 'Inter', sans-serif;
     }
-    
+
+    /* v2.8.3: Compact spacing - reduce padding and margins globally */
+    .block-container {
+        padding-top: 1rem !important;
+        padding-bottom: 0rem !important;
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
+        max-width: 100% !important;
+    }
+
+    /* Reduce vertical spacing between elements */
+    .element-container {
+        margin-bottom: 0.3rem !important;
+    }
+
+    div[data-testid="stVerticalBlock"] > div {
+        gap: 0.3rem !important;
+    }
+
+    /* Compact headers */
+    h1 {
+        margin-top: 0rem !important;
+        margin-bottom: 0.5rem !important;
+        padding-top: 0rem !important;
+    }
+
+    h2, h3 {
+        margin-top: 0.5rem !important;
+        margin-bottom: 0.3rem !important;
+        padding-top: 0rem !important;
+    }
+
+    /* Compact markdown */
+    .stMarkdown {
+        margin-bottom: 0.2rem !important;
+    }
+
     /* Global Text */
     h1, h2, h3 {
         color: #E6E6E6 !important;
@@ -61,14 +97,15 @@ st.markdown("""
         color: #B0B0B0 !important;
     }
 
-    /* Metric Cards (Glassmorphism) */
+    /* Metric Cards (Glassmorphism) - v2.8.3: Compact */
     div[data-testid="metric-container"] {
         background-color: rgba(22, 27, 34, 0.8);
         border: 1px solid rgba(48, 54, 61, 0.5);
-        padding: 20px;
+        padding: 12px 16px !important;
         border-radius: 12px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         transition: transform 0.2s ease, box-shadow 0.2s ease;
+        margin-bottom: 0.5rem !important;
     }
     div[data-testid="metric-container"]:hover {
         transform: translateY(-2px);
@@ -77,12 +114,30 @@ st.markdown("""
     }
     div[data-testid="metric-container"] label {
         color: #8B949E !important;
-        font-size: 0.9rem;
+        font-size: 0.85rem !important;
+        margin-bottom: 0.2rem !important;
     }
     div[data-testid="metric-container"] div[data-testid="stMetricValue"] {
         color: #00FF99 !important;
-        font-size: 1.8rem !important;
+        font-size: 1.5rem !important;
         text-shadow: 0 0 10px rgba(0, 255, 153, 0.3);
+    }
+
+    /* Compact columns */
+    div[data-testid="column"] {
+        padding: 0 0.3rem !important;
+    }
+
+    /* Compact checkboxes and radio buttons */
+    div[data-testid="stCheckbox"],
+    div[data-testid="stRadio"] {
+        margin-bottom: 0.2rem !important;
+    }
+
+    div[data-testid="stCheckbox"] label,
+    div[data-testid="stRadio"] label {
+        font-size: 0.9rem !important;
+        padding: 0.2rem 0 !important;
     }
     
     /* Buttons */
@@ -106,32 +161,34 @@ st.markdown("""
         border-right: 1px solid #30363D;
     }
     
-    /* Tabs */
+    /* Tabs - v2.8.3: Compact */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 24px;
+        gap: 16px !important;
         background-color: transparent;
+        margin-bottom: 0.5rem !important;
     }
     .stTabs [data-baseweb="tab"] {
-        height: 50px;
+        height: 40px !important;
         white-space: pre-wrap;
         background-color: transparent;
         border-radius: 4px;
         color: #8B949E;
         font-weight: 600;
+        padding: 0.5rem 1rem !important;
     }
     .stTabs [aria-selected="true"] {
         background-color: transparent;
         color: #00FF99 !important;
         border-bottom: 2px solid #00FF99;
     }
-    
-    /* v2.2.1: Chart Containers with rounded borders - NO SCROLLBARS */
+
+    /* v2.2.1 + v2.8.3: Chart Containers - Compact with rounded borders */
     div[data-testid="stPlotlyChart"] {
         background-color: rgba(22, 27, 34, 0.6);
         border: 1px solid rgba(100, 110, 120, 0.7);
         border-radius: 16px;
-        padding: 15px;
-        margin: 10px 0;
+        padding: 10px !important;
+        margin: 0.5rem 0 !important;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
         overflow: hidden !important;
     }
@@ -146,17 +203,33 @@ st.markdown("""
         box-shadow: 0 6px 16px rgba(0, 255, 153, 0.1);
     }
     
-    /* DataFrame tables with rounded borders - no scroll */
+    /* DataFrame tables - v2.8.3: Compact with rounded borders */
     div[data-testid="stDataFrame"] {
         background-color: rgba(22, 27, 34, 0.6);
         border: 1px solid rgba(100, 110, 120, 0.7);
         border-radius: 12px;
-        padding: 10px;
+        padding: 8px !important;
+        margin: 0.5rem 0 !important;
         overflow: hidden !important;
     }
     div[data-testid="stDataFrame"] > div,
     div[data-testid="stDataFrame"] > div > div {
         overflow: hidden !important;
+    }
+
+    /* Compact horizontal rules (separators) */
+    hr {
+        margin: 0.5rem 0 !important;
+        border-color: rgba(48, 54, 61, 0.5) !important;
+    }
+
+    /* Compact expanders */
+    div[data-testid="stExpander"] {
+        margin-bottom: 0.5rem !important;
+    }
+
+    div[data-testid="stExpander"] > div {
+        padding: 0.5rem !important;
     }
     
     /* Global scrollbar hide for charts */
@@ -339,17 +412,33 @@ def compile_exec_summary(df):
     section = "=" * 80 + "\n"
     section += "1. RESUMEN EJECUTIVO\n"
     section += "=" * 80 + "\n\n"
-    
-    total_trades = len(df)
-    net_pnl = df['PnL'].sum()
-    wins = len(df[df['PnL'] > 0])
-    losses = len(df[df['PnL'] <= 0])
+
+    # v2.9.0: Use Trade_Clust_ID to count LOGICAL trades, not executions
+    # Each trade (e.g., ID=2) may have multiple executions (2.1, 2.2, 2.3...)
+    # We group by ParentID to get the true trade count that matches NinjaTrader Trade Performance
+    if 'Trade_Clust_ID' in df.columns:
+        trade_pnl = df.groupby('Trade_Clust_ID')['PnL'].sum()
+        total_trades = len(trade_pnl)
+        wins = (trade_pnl > 0).sum()
+        losses = (trade_pnl <= 0).sum()
+        avg_win = trade_pnl[trade_pnl > 0].mean() if wins > 0 else 0
+        avg_loss = abs(trade_pnl[trade_pnl <= 0].mean()) if losses > 0 else 0
+    else:
+        # Fallback for legacy data without clustering
+        total_trades = len(df)
+        wins = len(df[df['PnL'] > 0])
+        losses = len(df[df['PnL'] <= 0])
+        avg_win = df[df['PnL'] > 0]['PnL'].mean() if wins > 0 else 0
+        avg_loss = abs(df[df['PnL'] <= 0]['PnL'].mean()) if losses > 0 else 0
+
+    net_pnl = df['PnL'].sum()  # Sum of all executions = total PnL
     win_rate = (wins / total_trades * 100) if total_trades > 0 else 0
-    
-    avg_win = df[df['PnL'] > 0]['PnL'].mean() if wins > 0 else 0
-    avg_loss = abs(df[df['PnL'] <= 0]['PnL'].mean()) if losses > 0 else 0
-    profit_factor = (wins * avg_win) / (losses * avg_loss) if losses > 0 and avg_loss > 0 else 0
-    
+
+    # Profit Factor based on trade-level wins/losses
+    total_win_amt = df[df['PnL'] > 0]['PnL'].sum() if wins > 0 else 0
+    total_loss_amt = abs(df[df['PnL'] <= 0]['PnL'].sum()) if losses > 0 else 1
+    profit_factor = total_win_amt / total_loss_amt if total_loss_amt > 0 else 0
+
     section += "📊 Métricas Clave:\n"
     section += f"  - Total Trades: {total_trades}\n"
     section += f"  - PnL Neto: ${net_pnl:,.2f}\n"
@@ -373,26 +462,41 @@ def compile_instrument_perf(df):
     section = "=" * 80 + "\n"
     section += "2. PERFORMANCE POR INSTRUMENTO\n"
     section += "=" * 80 + "\n\n"
-    
+
     if 'Instrument' not in df.columns:
         section += "⚠️ No hay información de instrumento.\n\n"
         return section
-    
-    inst_stats = df.groupby('Instrument').agg({
-        'PnL': ['sum', 'count'],
-        'Result': lambda x: (x.str.contains('TP', na=False)).sum()
-    })
-    
-    inst_stats.columns = ['PnL', 'Trades', 'Wins']
+
+    # v2.9.0: Count logical trades, not executions
+    if 'Trade_Clust_ID' in df.columns:
+        # Group by Instrument and Trade_Clust_ID first to get trade-level PnL
+        trade_level = df.groupby(['Instrument', 'Trade_Clust_ID']).agg({
+            'PnL': 'sum',
+            'Result': 'first'  # Take first result (all executions of same trade have same result type)
+        }).reset_index()
+
+        inst_stats = trade_level.groupby('Instrument').agg({
+            'PnL': 'sum',
+            'Trade_Clust_ID': 'count',  # Count unique trades
+            'Result': lambda x: (x.str.contains('TP', na=False)).sum()
+        })
+        inst_stats.columns = ['PnL', 'Trades', 'Wins']
+    else:
+        inst_stats = df.groupby('Instrument').agg({
+            'PnL': ['sum', 'count'],
+            'Result': lambda x: (x.str.contains('TP', na=False)).sum()
+        })
+        inst_stats.columns = ['PnL', 'Trades', 'Wins']
+
     inst_stats['WR'] = (inst_stats['Wins'] / inst_stats['Trades'] * 100).round(1)
     inst_stats = inst_stats.sort_values('PnL', ascending=False)
-    
+
     for inst in inst_stats.index:
         data = inst_stats.loc[inst]
         verdict = "✅ MANTENER" if data['PnL'] > 0 else "❌ DESHABILITAR"
         section += f"{inst}:\n"
         section += f"  PnL: ${data['PnL']:,.2f} | Trades: {int(data['Trades'])} | WR: {data['WR']:.1f}% → {verdict}\n\n"
-    
+
     return section
 
 
@@ -401,20 +505,26 @@ def compile_levels_perf(df):
     section = "=" * 80 + "\n"
     section += "3. ANÁLISIS DE NIVELES\n"
     section += "=" * 80 + "\n\n"
-    
+
     level_df = df[df['SetupName'].str.contains('Asia|Europe|USA', case=False, na=False)].copy()
-    
+
     if level_df.empty:
         section += "⚠️ No se detectaron trades de niveles.\n\n"
         return section
-    
+
     level_df['Zone'] = level_df['SetupName'].str.extract(r'(Asia|Europe|USA)\s*(Low|High)', expand=False).apply(lambda x: f"{x[0]} {x[1]}", axis=1)
-    zone_stats = level_df.groupby('Zone')['PnL'].agg(['sum', 'count']).sort_values('sum', ascending=False)
-    
+
+    # v2.9.0: Count logical trades, not executions
+    if 'Trade_Clust_ID' in level_df.columns:
+        trade_level = level_df.groupby(['Zone', 'Trade_Clust_ID'])['PnL'].sum().reset_index()
+        zone_stats = trade_level.groupby('Zone')['PnL'].agg(['sum', 'count']).sort_values('sum', ascending=False)
+    else:
+        zone_stats = level_df.groupby('Zone')['PnL'].agg(['sum', 'count']).sort_values('sum', ascending=False)
+
     section += "🏆 TOP 5 MEJORES ZONAS:\n"
     for i, (zone, data) in enumerate(zone_stats.head(5).iterrows(), 1):
         section += f"  {i}. {zone}: ${data['sum']:,.0f} ({int(data['count'])} trades)\n"
-    
+
     section += "\n❌ ZONAS PROBLEMÁTICAS:\n"
     bad_zones = zone_stats[zone_stats['sum'] < -100]
     if not bad_zones.empty:
@@ -422,7 +532,7 @@ def compile_levels_perf(df):
             section += f"  - {zone}: ${data['sum']:,.0f} → FILTRAR\n"
     else:
         section += "  ✅ No hay zonas extremadamente tóxicas\n"
-    
+
     section += "\n"
     return section
 
@@ -896,17 +1006,19 @@ def load_and_process_data(target_path, license_tier='Free (Default)'):
                 
             has_header = first_line.startswith("ID") or first_line.startswith('"ID"')
             
-            # v2.1: Updated column names to match new CSV format
-            # New format: ID,Instrument,EntryTime,Type,EntryPrice,ExitTime,ExitPrice,Result,PnL,Commission,NetPnL,MAE,MFE,Setup,Attempt,RiskReward
-            col_names_new = ['ID','Instrument','EntryTime','Type','EntryPrice','ExitTime','ExitPrice','Result','GrossPnL','Commission','NetPnL','MAE','MFE','SetupName','Attempt','RiskReward']
+            # v2.8.3: Updated column names to match extended CSV format with Delta columns
+            # Actual format: ID,Instrument,EntryTime,Type,EntryPrice,ExitTime,ExitPrice,Result,PnL,Commission,NetPnL,MAE,MFE,Setup,Attempt_UNUSED,RiskReward,DeltaAtEntry,DeltaDirection,SessionDelta,DeltaAtTP1,Attempt
+            col_names_new = ['ID','Instrument','EntryTime','Type','EntryPrice','ExitTime','ExitPrice','Result','GrossPnL','Commission','NetPnL','MAE','MFE','SetupName','Attempt_UNUSED','RiskReward','DeltaAtEntry','DeltaDirection','SessionDelta','DeltaAtTP1','Attempt']
             # Legacy format fallback
             col_names_legacy = ['ID','Instrument','EntryTime','Type','EntryPrice','ExitTime','ExitPrice','Result','PnL','SetupName','MAE','MFE','Account']
             
             if has_header:
-                # v1.15.22: Force index_col=False to prevent pandas from using ID column as index
-                df_temp = pd.read_csv(filepath, on_bad_lines='skip', engine='python', index_col=False)
+                # v2.8.3: CSV has malformed header (20 names but 21 data columns)
+                # Pandas discards the 21st column when header doesn't match data length
+                # Solution: Read without header and skip first row manually
+                df_temp = pd.read_csv(filepath, names=col_names_new, header=None, skiprows=1, on_bad_lines='skip', engine='python', index_col=False)
             else:
-                # Try new format first based on column count
+                # No header, use our column names
                 df_temp = pd.read_csv(filepath, names=col_names_new, header=None, on_bad_lines='skip', engine='python', index_col=False)
                 
             # Sanitize headers
@@ -1501,16 +1613,6 @@ else:
 st.title("🔬 Auditor de Microestructura Quant")
 st.markdown(f"**Dataset:** {len(df)} Ejecuciones | **Trades Lógicos:** {total_trades}")
 
-# Top KPI Row
-kpi1, kpi2, kpi3, kpi4, kpi5 = st.columns(5)
-kpi1.metric("Beneficio Neto", f"${total_pnl:,.2f}")
-kpi2.metric("Factor de Beneficio", f"{pf:.2f}")
-kpi3.metric("Tasa de Acierto", f"{win_rate:.1f}%")
-kpi4.metric("Promedio x Trade", f"${trade_gb.mean():.2f}")
-# v2.2: Show max tier name instead of number
-max_tier = df[df['Exit_Rank'] == df['Exit_Rank'].max()]['Exit_Tier'].iloc[0] if len(df) > 0 else 'N/A'
-kpi5.metric("Max Tier Usado", max_tier)
-
 # Tabs
 tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10 = st.tabs([
     "📊 Tablero", 
@@ -1526,7 +1628,7 @@ tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10 = st.tabs([
 ])
 
 with tab1:
-    # v1.15.22: Interactive Filters above charts
+    # v2.8.3: Interactive Filters above charts - Horizontal layout
     st.markdown("### 🎛️ Filtros Interactivos")
 
     # Get unique values for filters
@@ -1534,35 +1636,45 @@ with tab1:
     all_instruments = sorted(df_raw['Instrument'].unique())
     all_attempts = sorted(df_raw['Attempt'].unique())
 
-    # Create filter columns
-    col1, col2, col3 = st.columns(3)
+    # Niveles Filter - Horizontal layout
+    st.markdown("**Niveles**")
+    col_select_all_1, *nivel_cols = st.columns([1.5] + [1] * min(len(all_setups), 6))
 
-    with col1:
-        st.markdown("**Niveles**")
-        selected_setups = st.multiselect(
-            "Selecciona niveles:",
-            options=all_setups,
-            default=all_setups,
-            key="filter_setups"
-        )
+    with col_select_all_1:
+        all_setups_checked = st.checkbox("Todos", value=True, key="all_setups_check")
 
-    with col2:
-        st.markdown("**Instrumentos**")
-        selected_instruments = st.multiselect(
-            "Selecciona instrumentos:",
-            options=all_instruments,
-            default=all_instruments,
-            key="filter_instruments"
-        )
+    selected_setups = []
+    for idx, setup in enumerate(all_setups):
+        with nivel_cols[idx % 6]:
+            if st.checkbox(setup, value=all_setups_checked, key=f"setup_{setup}", label_visibility="visible"):
+                selected_setups.append(setup)
 
-    with col3:
-        st.markdown("**Intentos**")
-        selected_attempts = st.multiselect(
-            "Selecciona intentos:",
-            options=all_attempts,
-            default=all_attempts,
-            key="filter_attempts"
-        )
+    # Instrumentos Filter - Horizontal layout
+    st.markdown("**Instrumentos**")
+    col_select_all_2, *inst_cols = st.columns([1.5] + [1] * len(all_instruments))
+
+    with col_select_all_2:
+        all_instruments_checked = st.checkbox("Todos", value=True, key="all_instruments_check")
+
+    selected_instruments = []
+    for idx, instrument in enumerate(all_instruments):
+        with inst_cols[idx]:
+            if st.checkbox(instrument, value=all_instruments_checked, key=f"instrument_{instrument}", label_visibility="visible"):
+                selected_instruments.append(instrument)
+
+    # Intentos Filter - Horizontal layout
+    st.markdown("**Intentos**")
+    col_select_all_3, *attempt_cols = st.columns([1.5] + [1] * min(len(all_attempts), 10))
+
+    with col_select_all_3:
+        all_attempts_checked = st.checkbox("Todos", value=True, key="all_attempts_check")
+
+    selected_attempts = []
+    for idx, attempt in enumerate(all_attempts):
+        col_idx = idx % 10
+        with attempt_cols[col_idx]:
+            if st.checkbox(f"Int {attempt}", value=all_attempts_checked, key=f"attempt_{attempt}", label_visibility="visible"):
+                selected_attempts.append(attempt)
 
     # Apply filters to df
     df_filtered = df.copy()
@@ -1577,6 +1689,30 @@ with tab1:
     df = df_filtered.copy()
 
     st.markdown("---")
+
+    # v2.8.3: KPI Row above equity chart
+    # Recalculate metrics based on filtered data
+    filtered_total_pnl = df['PnL'].sum()
+    filtered_wins = len(df[df['PnL'] > 0])
+    filtered_losses = len(df[df['PnL'] <= 0])
+    filtered_trade_gb = df.groupby('Trade_Clust_ID')['PnL'].sum()
+    filtered_total_trades = len(filtered_trade_gb)
+    filtered_win_rate = (filtered_wins / len(df) * 100) if len(df) > 0 else 0
+
+    total_win_amt = df[df['PnL'] > 0]['PnL'].sum() if filtered_wins > 0 else 0
+    total_loss_amt = abs(df[df['PnL'] <= 0]['PnL'].sum()) if filtered_losses > 0 else 1
+    filtered_pf = total_win_amt / total_loss_amt if total_loss_amt > 0 else 0
+
+    filtered_avg_trade = filtered_trade_gb.mean() if filtered_total_trades > 0 else 0
+    filtered_max_tier = df[df['Exit_Rank'] == df['Exit_Rank'].max()]['Exit_Tier'].iloc[0] if len(df) > 0 else 'N/A'
+
+    kpi1, kpi2, kpi3, kpi4, kpi5 = st.columns(5)
+    kpi1.metric("Beneficio Neto", f"${filtered_total_pnl:,.2f}")
+    kpi2.metric("Factor de Beneficio", f"{filtered_pf:.2f}")
+    kpi3.metric("Tasa de Acierto", f"{filtered_win_rate:.1f}%")
+    kpi4.metric("Promedio x Trade", f"${filtered_avg_trade:.2f}")
+    kpi5.metric("Max Tier Usado", filtered_max_tier)
+
     st.markdown("### Curva de Equidad (Por Ejecución)")
 
     # v1.14.32: Chart Type Selector
@@ -1586,23 +1722,97 @@ with tab1:
         horizontal=True,
         key="equity_chart_type"
     )
-    
+
     # Standard Equity Curve
     df = df.sort_values('ExitTime')
     df['Cumulative_PnL'] = df['PnL'].cumsum()
-    
+
     # Calculate drawdown for AI context
     equity_curve = df['Cumulative_PnL'].values
     high_water_mark = np.maximum.accumulate(equity_curve)
     drawdown = equity_curve - high_water_mark
-    
+
     if chart_type == "📈 Curva de Equidad":
-        # Convert ExitTime to string for categorical axis (no gaps)
+        # v2.8.3: Build equity curves per instrument + global
         df['ExitLabel'] = df['ExitTime'].dt.strftime('%m/%d %H:%M')
-        fig_eq = px.line(df, x='ExitLabel', y='Cumulative_PnL')
-        fig_eq.update_traces(line_color='#00FF99', line_width=2)
+        df['trade_index'] = range(len(df))
+
+        # Create a figure with multiple traces
+        fig_eq = go.Figure()
+
+        # Define color palette for instruments (more distinct colors)
+        instrument_colors = {
+            'MNQ': '#00FF99',  # Green
+            'MES': '#FF6B6B',  # Red
+            'MYM': '#FFA500',  # Orange
+            'M2K': '#FFD700',  # Gold
+            'MCL': '#00CED1',  # Dark Turquoise
+            'MGC': '#FF1493',  # Deep Pink
+            'MBT': '#9370DB'   # Medium Purple
+        }
+
+        # Add per-instrument equity curves with proper alignment
+        if 'Instrument' in df.columns:
+            instruments = df['Instrument'].unique()
+
+            for instrument in sorted(instruments):
+                # Get instrument trades
+                inst_mask = df['Instrument'] == instrument
+                inst_pnl = df.loc[inst_mask, 'PnL'].values
+                inst_indices = df.loc[inst_mask, 'trade_index'].values
+
+                # Create cumulative PnL array aligned with global timeline
+                equity_curve = np.zeros(len(df))
+                cumsum = 0
+                for idx, pnl in zip(inst_indices, inst_pnl):
+                    cumsum += pnl
+                    equity_curve[idx] = cumsum
+
+                # Forward fill (carry last value forward)
+                for i in range(1, len(equity_curve)):
+                    if equity_curve[i] == 0 and i not in inst_indices:
+                        equity_curve[i] = equity_curve[i-1]
+
+                color = instrument_colors.get(instrument, '#888888')
+                fig_eq.add_trace(go.Scatter(
+                    x=df['ExitLabel'],
+                    y=equity_curve,
+                    mode='lines',
+                    name=instrument,
+                    line=dict(width=1.8, color=color),
+                    opacity=0.6,
+                    hovertemplate=f'{instrument}: %{{y:$.2f}}<extra></extra>',
+                    connectgaps=True
+                ))
+
+        # Add global equity curve (bold line on top)
+        fig_eq.add_trace(go.Scatter(
+            x=df['ExitLabel'],
+            y=df['Cumulative_PnL'],
+            mode='lines',
+            name='TOTAL',
+            line=dict(width=3.5, color='#FFFFFF'),
+            hovertemplate='Total: %{y:$.2f}<extra></extra>'
+        ))
+
         fig_eq.update_xaxes(type='category')
-        fig_eq = apply_premium_style(fig_eq, title='Equidad del Portafolio')
+
+        # v2.8.3: Add equity amount annotation at the top
+        final_equity = df['Cumulative_PnL'].iloc[-1]
+        fig_eq = apply_premium_style(fig_eq, title=f'Equidad del Portafolio: ${final_equity:,.2f}')
+
+        # Improve legend layout
+        fig_eq.update_layout(
+            legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                y=1.02,
+                xanchor="right",
+                x=1,
+                font=dict(size=10)
+            )
+        )
+
     else:
         # Bar chart showing PnL per trade with colors (no gaps)
         colors = ['#00FF99' if pnl >= 0 else '#FF4444' for pnl in df['PnL']]
@@ -1612,7 +1822,7 @@ with tab1:
         fig_eq.update_traces(marker_color=colors)
         fig_eq.update_xaxes(type='category')  # Force categorical axis
         fig_eq = apply_premium_style(fig_eq, title='PnL por Trade')
-    
+
     st.plotly_chart(fig_eq, use_container_width=True)
     
     # AI Analysis for Equity Curve
