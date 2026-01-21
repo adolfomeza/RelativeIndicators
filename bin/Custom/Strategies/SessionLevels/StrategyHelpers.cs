@@ -67,8 +67,14 @@ namespace NinjaTrader.NinjaScript.Strategies
                 
                 lock (logFileLock)
                 {
+                    // v1.15.36: Show both PC time and Chart time for playback analysis
+                    string pcTime = DateTime.Now.ToString("HH:mm:ss.fff");
+                    string chartTime = (strategy.CurrentBar >= 0 && strategy.Time != null && strategy.Time.Count > 0) 
+                        ? strategy.Time[0].ToString("HH:mm:ss.fff") 
+                        : pcTime;
+                    
                     System.IO.File.AppendAllText(logFilePath, 
-                        string.Format("{0:HH:mm:ss.fff} {1}\r\n", DateTime.Now, message));
+                        string.Format("{0} [{1}] {2}\r\n", pcTime, chartTime, message));
                 }
             }
             catch { } // Silently ignore file errors
@@ -134,6 +140,7 @@ namespace NinjaTrader.NinjaScript.Strategies
             double minRiskUSD = strategy.StopLossTicks * strategy.MinQuantity * minTickValue;
 
             // Level Info
+            string versionStr = "v1.15.53";
             string levelInfo = "-";
             if (!string.IsNullOrEmpty(strategy.setupLevelName) && strategy.setupLevelTime != DateTime.MinValue)
             {
@@ -258,8 +265,19 @@ namespace NinjaTrader.NinjaScript.Strategies
                     positionDisplay = "Flat (NinjaTrader shows phantom)";
             }
 
-            string text = string.Format("Ver: {0}\nState: {1}\nLevel: {2}{3}\nPosition: {4}\nPnL: {5} | Risk: {6:C0} (Min: {7:C0}){8}",
-                "v1.15.32", // Hardcoded version updated
+            // v1.15.44: Ignored Entry Display (Permanent - No Time Limit)
+            string ignoredEntryLine = "";
+            if (!string.IsNullOrEmpty(strategy.lastIgnoredLevel))
+            {
+                ignoredEntryLine = string.Format("\nÚlt. Ignorada: {0:HH:mm} {1} {2} - {3}",
+                    strategy.lastFilterTime,
+                    strategy.lastIgnoredDirection,
+                    strategy.lastIgnoredLevel,
+                    strategy.lastFilterReason);
+            }
+
+            string text = string.Format("Ver: {0}\nState: {1}\nLevel: {2}{3}\nPosition: {4}\nPnL: {5} | Risk: {6:C0} (Min: {7:C0}){8}{9}",
+                "v1.15.53", // v1.15.53: Fix Double Counting of Entry Attempts
                 stateDisplay,
                 levelInfo,
                 retryInfo,
@@ -267,7 +285,8 @@ namespace NinjaTrader.NinjaScript.Strategies
                 sessionPnL.ToString("C"),
                 globalRiskDisplay,
                 minRiskUSD,
-                orderInfo);
+                orderInfo,
+                ignoredEntryLine);
                 
             Draw.TextFixed(strategy, "InfoPanel", text, TextPosition.TopRight, Brushes.White, new SimpleFont("Arial", 12), Brushes.Black, Brushes.Black, 50);
             

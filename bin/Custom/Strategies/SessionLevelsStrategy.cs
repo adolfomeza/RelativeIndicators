@@ -34,10 +34,19 @@ namespace NinjaTrader.NinjaScript.Strategies
 	// Trading Mode Control
 
 
-	
+
+        // v1.15.40: Exit Strategy Type
+        public enum ExitStrategyType
+        {
+            Standard, // TP1 (VWAP) + TP2 (Zone)
+            Ladder    // 1R, 2R, 3R...
+        }
+		
+	[Gui.CategoryOrder("Parameters", 1)]
+	[Gui.CategoryOrder("Risk Management", 2)]
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.15.31"; // v1.15.31: Persist TP2 price to prevent VWAP fallback after entry fill
+		private const string StrategyVersion = "v1.15.53"; // v1.15.53: Fix Double Counting of Entry Attempts
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;
@@ -48,6 +57,11 @@ namespace NinjaTrader.NinjaScript.Strategies
 		// v1.14.29: Visual Filter Feedback
 		[XmlIgnore] public string lastFilterReason = "";
 		[XmlIgnore] public DateTime lastFilterTime = DateTime.MinValue;
+		
+		// v1.15.44: Ignored Entry Tracking
+		[XmlIgnore] public string lastIgnoredDirection = "";  // LONG/SHORT
+		[XmlIgnore] public string lastIgnoredLevel = "";      // Nombre del nivel
+		[XmlIgnore] public double lastIgnoredPrice = 0;       // Precio del setup
 		
 		// =========================================================
 		// TRADE ANALYZER EXPORT
@@ -61,6 +75,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private int tradeExportId = 0;         // Auto-incrementing ID for CSV
 		private int tradeExitFillsCount = 0;   // v1.13.4: Count exit fills for split IDs
 		private int tradeAttemptNumber = 0;    // v1.13.11: VWAP attempt number for analysis
+		private HashSet<string> processedOrderIds = new HashSet<string>(); // v1.15.53: Prevent double counting
 		[XmlIgnore] public double tradeRiskUSD = 0;       // v1.13.12: Original risk in USD for R:R calculation
 		private string csvExportPath = "";
 		private bool isTrackingTrade = false;  // Flag to track MAE/MFE
@@ -73,8 +88,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	private double tradeSessionDelta = 0;      // Session cumulative delta at entry
 	private double tradeDeltaAtTP1 = 0;        // Delta when TP1 filled
 
-	// v1.14.23: AI Filters
-	private List<string> enabledZonesList;
+
 
 		// Version Control
         // V_STACK: Stacking Logic Variables
@@ -209,6 +223,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private bool enableDebugLogs = false; // Default false for performance
 		private bool enableHolidayProtection = true; // v1.14.79: Default true
 		private bool isLagPaused = false; // v1.14.36: Auto-pause when lag > 60s
+		private bool playbackStartupDone = false; // v1.15.46: Ensure playback starts clean
 
 		[NinjaScriptProperty]
 		[Display(Name="Enable Holiday Protection", Description="If true, exits early on holidays/early closes. Disable if using bad backtest data.", Order=59, GroupName="General")]
@@ -236,6 +251,11 @@ namespace NinjaTrader.NinjaScript.Strategies
 		[NinjaScriptProperty]
 		[Display(Name="Allow Backtest", Description="Enable order execution in Strategy Analyzer. Keep OFF for live/demo accounts.", Order=63, GroupName="General")]
 		public bool AllowBacktest { get; set; } = false;
+
+        // v2.21: Critical Alert Email
+        [NinjaScriptProperty]
+        [Display(Name="Alert Email", Description="Email to send critical alerts to (Crash/Disconnect).", Order=65, GroupName="General")]
+        public string EmailToAlert { get; set; } = "adolfo.meza.r@gmail.com";
 
 
 
@@ -342,7 +362,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private Brush confirmationCandleColor = Brushes.Yellow;
 		[NinjaScriptProperty]
 		[XmlIgnore]
-		[Display(Name="Confirmation Candle Color", Description="Color for the confirmation candle body.", Order=81, GroupName="Trigger Labels")]
+		[Display(Name="Confirmation Candle Color", Description="SessionLevels v1.15.48 | Entry: Anchor + FTC + Confirmation. Color for the confirmation candle body.", Order=81, GroupName="Trigger Labels")]
 		public Brush ConfirmationCandleColor
 		{
 			get { return confirmationCandleColor; }
@@ -378,11 +398,34 @@ namespace NinjaTrader.NinjaScript.Strategies
 		
 		public void Log(string message)
 		{
-            // v1.15.0: Log Readability - Auto-timestamp (Server Time for consistency)
-            string timestamp = DateTime.Now.ToString("HH:mm:ss.fff");
-            string msgWithTime = string.Format("[{0}] {1}", timestamp, message);
-            
-			if (helpers != null) helpers.Log(msgWithTime);
+            // v1.15.36: Timestamps are added by StrategyHelpers.Log() (PC Time + Chart Time)
+            // Don't add timestamp here to avoid duplication
+			if (helpers != null) helpers.Log(message);
+		}
+		
+		// v1.15.44: Track Ignored Entries for Panel Display
+		/// <summary>
+		/// Records an entry that was ignored by filters for display in the state panel.
+		/// Sends email alert if enabled.
+		/// </summary>
+		public void TrackIgnoredEntry(string direction, string levelName, double price, string reason)
+		{
+			lastIgnoredDirection = direction;
+			lastIgnoredLevel = levelName;
+			lastIgnoredPrice = price;
+			lastFilterReason = reason;
+			lastFilterTime = DateTime.Now;
+			
+			// Send email alert for ignored entry
+			string details = string.Format(
+				"Dirección: {0}\n" +
+				"Nivel: {1} @ {2:F2}\n" +
+				"Razón: {3}",
+				direction, levelName, price, reason);
+			SendCriticalAlert("ENTRADA IGNORADA", details);
+			
+			Log(string.Format("{0} IGNORED ENTRY: {1} {2} @ {3:F2} - {4}", 
+				Time[0], direction, levelName, price, reason));
 		}
 		
 		// Wrappers for OrderProtectionManager (Exposing Protected Methods)
@@ -487,6 +530,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 				isLagAlertActive = true;
 				Log(string.Format("{0} LAG ALERT: Chart excess lag {1:F2}s > {2}s threshold - ORDERS BLOCKED", 
 					Time[0], actualExcessLag, MaxChartLagSeconds));
+				
+				// v1.15.38: Send email alert for significant lag
+				SendCriticalAlert("LAG DETECTED", string.Format("Chart lag {0:F1}s exceeds {1}s threshold. Orders blocked.", actualExcessLag, MaxChartLagSeconds));
+				
 				return false; // Not safe to trade
 			}
 			
@@ -697,7 +744,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				
 				// ...
 				Description									= @"Advanced Session Levels Strategy with VWAP and R/R Filters.";
-				Name									= "SessionLevelsStrategy v1.15.1";
+				Name									= "SessionLevelsStrategy " + StrategyVersion;
 				Calculate									= Calculate.OnEachTick;
 				EntriesPerDirection							= 4; // Visual reference (Unmanaged ignores this limit)
 				EntryHandling								= EntryHandling.AllEntries;
@@ -738,6 +785,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				{
 					// v1.14.89: FIX CRASH - Ensure Locks are Initialized
 					if (scaledOrdersLock == null) scaledOrdersLock = new object();
+					processedOrderIds = new HashSet<string>(); // v1.15.53: Initialize cache
 				
 					// Phase 7: Initialize Helpers FIRST (for Log)
 					helpers = new StrategyHelpers(this);
@@ -752,7 +800,15 @@ namespace NinjaTrader.NinjaScript.Strategies
 				entryMachine = new EntryStateMachine(this); // Entry State Machine
 				
 				// v1.14.78: Initialize Persistence
-				levelPersistence = new SessionLevelPersistence(this);
+			levelPersistence = new SessionLevelPersistence(this);
+			
+			// v1.15.48: CRITICAL FIX - Clear persistence cache in Playback/Backtest
+			// Delete old XML files that have stale EntryAttempts values
+			if (State != State.Realtime)
+			{
+				levelPersistence.ClearCache();
+				Log("[PLAYBACK] State.DataLoaded - Persistence cache cleared for clean testing");
+			}
 				
 				// Initialize Helper Indicators
 				atr = ATR(14); // For Dynamic Spacing
@@ -762,7 +818,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 				{
 					// Use default parameters - RelativeDelta calculates on tick data
 					relativeDelta = RelativeDelta(
-						Brushes.RoyalBlue, Brushes.White, Brushes.Silver, 1, // Colors
+						Brushes.RoyalBlue, Brushes.White, Brushes.Silver, 1, Brushes.White, 2, // Colors
 						0, 3, false, // MinSize, DaysToLoad, ShowDivs
 						Brushes.RoyalBlue, 10, 0, 50, // HorizontalLine params
 						true, true, Brushes.Gray, 100, true, Brushes.Gray, 1, 100, // Line2500 params
@@ -1227,23 +1283,36 @@ namespace NinjaTrader.NinjaScript.Strategies
 			
 			// Calculate this week's Friday 6pm
 			int daysToFriday = ((int)DayOfWeek.Friday - (int)nyTime.DayOfWeek + 7) % 7;
+			
+			// Determine the target Friday based on current time
+			DateTime targetFriday;
+			
 			if (daysToFriday == 0 && nyTime.TimeOfDay >= TimeSpan.Parse("18:00"))
-				daysToFriday = 0; // Already past this Friday 6pm
+			{
+				// It is Friday evening/night -> The reset point is TODAY at 18:00
+				targetFriday = nyTime.Date;
+			}
 			else if (daysToFriday == 0)
-				daysToFriday = 7; // Before Friday 6pm, use last Friday
-			
-			DateTime lastFriday6pm = nyTime.Date.AddDays(-((7 - daysToFriday) % 7)).Date.Add(TimeSpan.Parse("18:00"));
-			
-			// Adjust: If we're on Friday after 6pm, lastFriday6pm is TODAY
-			if (nyTime.DayOfWeek == DayOfWeek.Friday && nyTime.TimeOfDay >= TimeSpan.Parse("18:00"))
-				lastFriday6pm = nyTime.Date.Add(TimeSpan.Parse("18:00"));
-			// If Saturday/Sunday, last Friday was recent
-			else if (nyTime.DayOfWeek == DayOfWeek.Saturday)
-				lastFriday6pm = nyTime.Date.AddDays(-1).Add(TimeSpan.Parse("18:00"));
-			else if (nyTime.DayOfWeek == DayOfWeek.Sunday)
-				lastFriday6pm = nyTime.Date.AddDays(-2).Add(TimeSpan.Parse("18:00"));
+			{
+				// It is Friday morning (before 18:00) -> The reset point was LAST Friday (7 days ago)
+				targetFriday = nyTime.Date.AddDays(-7);
+			}
 			else
-				lastFriday6pm = nyTime.Date.AddDays(-((int)nyTime.DayOfWeek + 2)).Add(TimeSpan.Parse("18:00"));
+			{
+				// It is another day (Sat-Thu) -> Calculate the previous Friday
+				// Example: Saturday (daysToFriday=6) -> Last Friday was in 6 days. Last Friday was 1 day ago.
+				// If Monday (1), next Friday is in 4 days. Last Friday was 3 days ago.
+				// The formula used previously was confusing. Let's simplify.
+				
+				// Standard "Find Previous Friday" logic:
+				// Subtract days until we hit Friday.
+				int daysSinceFriday = ((int)nyTime.DayOfWeek - (int)DayOfWeek.Friday + 7) % 7;
+				if (daysSinceFriday == 0) daysSinceFriday = 7; // Should be covered above but safety check
+				
+				targetFriday = nyTime.Date.AddDays(-daysSinceFriday);
+			}
+
+			DateTime lastFriday6pm = targetFriday.Add(TimeSpan.Parse("18:00"));
 			
 			// Convert to chart timezone for comparison
 			DateTime lastFriday6pmChart = TimeZoneInfo.ConvertTime(lastFriday6pm, nyTimeZone, chartTimeZone);
@@ -1354,6 +1423,41 @@ namespace NinjaTrader.NinjaScript.Strategies
 			// Only process main price series to avoid index errors with PlotBrushes
 			if (BarsInProgress != 0)
 				return;
+
+            // v1.15.46: PLAYBACK CLEAN STARTUP
+            // Detecting first tick of "Realtime" (Playback Start)
+            // If there is a lingering historical position from a previous run, KILL IT.
+            if (State == State.Realtime && Connection.PlaybackConnection != null)
+            {
+                // We need a flag to ensure this only runs ONCE per playback session start
+                if (!playbackStartupDone)
+                {
+                    playbackStartupDone = true;
+                    
+                    if (Position.MarketPosition != MarketPosition.Flat)
+                    {
+                        Log(Time[0] + " PLAYBACK STARTUP: Detected Lingering Historical Position. FORCING FLAT.");
+                        if (Position.MarketPosition == MarketPosition.Long)
+                            SubmitOrderUnmanaged(0, OrderAction.Sell, OrderType.Market, Position.Quantity, 0, 0, "", "ForceFlat_Playback");
+                        else if (Position.MarketPosition == MarketPosition.Short)
+                            SubmitOrderUnmanaged(0, OrderAction.BuyToCover, OrderType.Market, Position.Quantity, 0, 0, "", "ForceFlat_Playback");
+                        
+                        // Reset Internal State
+                        currentEntryState = EntryState.Idle;
+                        setupLevelName = "";
+						setupAnchorPrice = 0;
+                        isTrackingTrade = false;
+                        
+                        // Clean Orders
+                        if (entryOrder != null) CancelOrder(entryOrder);
+                        if (stopOrder != null) CancelOrder(stopOrder);
+                        if (tp1Order != null) CancelOrder(tp1Order);
+                        if (tp2Order != null) CancelOrder(tp2Order);
+						
+						return; // Skip this tick to ensure clean slate
+                    }
+                }
+            }
 			
 			// DIAGNOSTIC HEARTBEAT REMOVED
 		
@@ -1385,7 +1489,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 					if (!isLagPaused)
 					{
 						isLagPaused = true;
-						Log("LAG_PAUSE: Lag > 60s detected (" + lagSeconds.ToString("F0") + "s). Pausing until connection normalizes.");
+						string msg = "LAG_PAUSE: Lag > 60s detected (" + lagSeconds.ToString("F0") + "s). Pausing until connection normalizes.";
+						Log(msg);
+						Alert("LagDetected", Priority.High, msg, NinjaTrader.Core.Globals.InstallDir + @"\sounds\Alert1.wav", 10, Brushes.Red, Brushes.White);
 					}
 					return; // Skip all calculations until lag normalizes
 				}
@@ -1711,7 +1817,8 @@ currentEntryState = EntryState.Idle;
             
             // v1.14.78: PERSISTENCE LOAD
             // If starting fresh (no levels), try to load from disk FIRST
-            if (activeLevels.Count == 0 && CurrentBar == BarsRequiredToTrade && levelPersistence != null)
+            // v1.15.49: FIX - Only load persistence in Realtime. Playback/Backtest should start fresh.
+            if (State == State.Realtime && activeLevels.Count == 0 && CurrentBar == BarsRequiredToTrade && levelPersistence != null)
             {
                 var loaded = levelPersistence.LoadLevels();
                 if (loaded != null && loaded.Count > 0)
@@ -1726,6 +1833,18 @@ currentEntryState = EntryState.Idle;
 			if (CurrentBar == BarsRequiredToTrade)
 			{
 				sessionManager.ScanHistoricalLevels();
+				
+				// v1.15.48: FIX - Reset EntryAttempts to 0 in Playback/Backtest mode
+				// In Playback, we want a clean slate - counter should start at 0 for all levels
+				if (State != State.Realtime)
+				{
+					foreach (var lvl in activeLevels)
+					{
+						Log(string.Format("[PLAYBACK] BEFORE RESET: {0} EntryAttempts={1}", lvl.Name, lvl.EntryAttempts));
+						lvl.EntryAttempts = 0;
+					}
+					Log("[PLAYBACK] Reset all EntryAttempts to 0 for clean testing");
+				}
 			}
 			
 			sessionManager.CheckSession("Asia", tsAsiaStart, tsAsiaEnd, Brushes.White, deltaVol);
@@ -1813,14 +1932,21 @@ currentEntryState = EntryState.Idle;
 			catch (Exception ex)
 			{
 				// Force Print even if debug disabled to catch Critical Runtime Errors
-				Print($"CRITICAL_ERROR in OnBarUpdate (Bar {CurrentBar}): {ex.GetType().Name} - {ex.Message}");
+				string crashMsg = $"CRITICAL_ERROR in OnBarUpdate (Bar {CurrentBar}): {ex.GetType().Name} - {ex.Message}";
+				Print(crashMsg);
 				if (EnableDebugLogs)
 					Log($"CRITICAL STACK: {ex.StackTrace}");
+                    
+                // v2.21: Email Alert
+                SendCriticalEmail("Strategy Crashed (Inner)", crashMsg + "\nStack: " + ex.StackTrace);
 			}
 			}
 			catch (Exception ex)
 			{
 				NinjaTrader.Code.Output.Process("OUTER CRITICAL_ERROR in OnBarUpdate: " + ex.ToString(), PrintTo.OutputTab1);
+                // v2.21: Email Alert
+                SendCriticalEmail("Strategy Crashed (Outer)", "Outer Exception: " + ex.ToString());
+                throw; // Rethrow to ensure NT handles the stop
 			}
 		}
 
@@ -1881,6 +2007,9 @@ currentEntryState = EntryState.Idle;
 		[XmlIgnore] public string triggerTag = "";
 		[XmlIgnore] public int triggerBar = 0;
         [XmlIgnore] public int triggerLabelIndex = 0; // v1.14.80: For Recycling Labels
+
+        // v1.15.40: Ladder Exit Model State
+        [XmlIgnore] public List<Order> ladderOrders = new List<Order>();
 		
 		// -------------------------------------------------------------------------
 		// GLOBAL ETH SESSION VWAP LOGIC
@@ -1900,8 +2029,16 @@ currentEntryState = EntryState.Idle;
 		[Display(Name = "Enable Email Alerts", Description = "Send screenshot via email (Requires SMTP settings)", GroupName = "8. Email Alerts", Order = 1)]
 		public bool EnableEmailAlerts { get; set; } = false;
 
+        [NinjaScriptProperty]
+        [Display(Name = "Risk Model", Description = "Standard (Legacy) or Optimization (Fixed Contracts)", GroupName = "2. Risk Management", Order = 0)]
+        public RiskModelType SelectedRiskModel { get; set; } = RiskModelType.Standard;
+
+        [NinjaScriptProperty]
+        [Display(Name = "Exit Strategy", Description = "Standard (VWAP+Zone) or Ladder (1R, 2R...)", GroupName = "2. Risk Management", Order = 1)]
+        public ExitStrategyType ExitStrategy { get; set; } = ExitStrategyType.Standard;
+
 		[NinjaScriptProperty]
-		[Display(Name = "To Address", Description = "Recipient address", GroupName = "8. Email Alerts", Order = 2)]
+		[Display(Name = "Email To", Description = "Destination email address", GroupName = "8. Email Alerts", Order = 2)]
 		public string EmailTo { get; set; } = "user@example.com";
 
 		[NinjaScriptProperty]
@@ -1952,6 +2089,22 @@ currentEntryState = EntryState.Idle;
 				adhocPvSum = vwapCalc.AdhocPvSum;
 			}
 		} 
+
+		public void ResetAdhocVWAP(double vol, double price, int bar)
+		{
+			if (vwapCalc != null)
+			{
+				vwapCalc.ResetAdhoc(vol, price, bar);
+				// Sync local variables to match calculator state immediately
+				adhocVolSum = vwapCalc.AdhocVolSum;
+				adhocPvSum = vwapCalc.AdhocPvSum;
+				adhocLastVol = vol;
+				adhocLastBar = bar;
+				adhocAnchorBar = bar;
+				visualAdhocPrevBarVal = price;
+				visualAdhocLastVal = price;
+			}
+		}
 		
 		private int highAnchorBar = 0;
 		private int lowAnchorBar = 0;
@@ -2066,24 +2219,24 @@ currentEntryState = EntryState.Idle;
 			if (Time[0] >= dynamicCutoff && Time[0] <= actualSessionEnd.Add(gapBuffer))
 			{
 				// ---------------------------------------------------------------------
-				// 1. POSITION EXIT (FRIDAY / HOLIDAY ONLY) or explicit ExitOnSessionClose
-				// ---------------------------------------------------------------------
-				// Keep strict Position closing for Weekends/Holidays to avoid gap risk
-				if (EnableHolidayProtection && (isFriday || isEarlyClose))
+			// 1. POSITION EXIT (FRIDAY / HOLIDAY) - Always protect against weekend gaps
+			// ---------------------------------------------------------------------
+			// v1.15.52: FIX - Restored EnableHolidayProtection check
+			// Friday forces exit (Weekend Gap), but Holiday exit is now optional based on parameter
+			if (isFriday || (isEarlyClose && EnableHolidayProtection))
+			{
+				if (Position.MarketPosition != MarketPosition.Flat)
 				{
-					if (Position.MarketPosition != MarketPosition.Flat)
-					{
-						// Only log once per bar to avoid spam
-						if (IsFirstTickOfBar)
-							Log(Time[0] + " SESSION CLOSE PROTECT: Market closing/holiday. Forcing Exit. (Reason: " + (isEarlyClose ? "Holiday" : (isFriday ? "Friday" : "DailyClose")) + ")");
-						
-						// v1.14.94: RACE CONDITION FIX - Cancel SL/TP before Market Exit (Consistency)
-						if (protectionManager != null) protectionManager.CancelAllProtectionOrders();
-						
-						ClosePositionUnmanaged("Exit on Session Close");
-					}
+					// Only log once per bar to avoid spam
+					if (IsFirstTickOfBar)
+						Log(Time[0] + " SESSION CLOSE PROTECT: Market closing/holiday. Forcing Exit. (Reason: " + (isEarlyClose ? "Holiday" : "Friday") + ")");
+					
+					// v1.14.94: RACE CONDITION FIX - Cancel SL/TP before Market Exit (Consistency)
+					if (protectionManager != null) protectionManager.CancelAllProtectionOrders();
+					
+					ClosePositionUnmanaged("Exit on Session Close");
 				}
-
+			}
 				// ---------------------------------------------------------------------
 				// 2. ORDER CLEANUP (DAILY - MANDATORY)
 				// ---------------------------------------------------------------------
@@ -2392,7 +2545,26 @@ currentEntryState = EntryState.Idle;
 				stopOrder2 = null;
 				tp1Order = null;
 				tp2Order = null;
+
+                // v1.15.42: Cleanup Adhoc Lines on Reset
+                ClearAdhocVisuals();
 			}
+		}
+		
+		// v1.15.42: Cleanup Method for Adhoc Lines (Visual Leak Fix)
+		public void ClearAdhocVisuals()
+		{
+			// Iterate from anchor to current and remove all segments
+			// We add a buffer (+5) to catch any edge cases
+			if (adhocAnchorBar > 0)
+			{
+				for (int i = adhocAnchorBar; i <= CurrentBar + 5; i++)
+				{
+					RemoveDrawObject("AdhocLine_" + i);
+				}
+			}
+			// Reset tracking
+			visualAdhocLastBar = -1;
 		}
 		
 		private void DrawStatePanel()
@@ -2467,6 +2639,14 @@ currentEntryState = EntryState.Idle;
 
 			// v1.14.76: Risk Model Selection
 			double effectiveRisk = RiskPerTradeUSD; // Default
+
+            // v1.15.40: Ladder Exit Model
+            if (ExitStrategy == ExitStrategyType.Ladder)
+            {
+                // Ladder logic doesn't change RISK calculation (Entry - SL), 
+                // but it changes how TPs are placed (1R, 2R, etc).
+                // Risk calculation remains standard.
+            }
 
 			if (SelectedRiskModel == RiskModelType.Standard)
 			{
@@ -2614,10 +2794,13 @@ currentEntryState = EntryState.Idle;
 					
 					// Draw Line from PrevBarVal (Start of this bar logic) to CurrentVal (v)
 					// Only draw if we have a valid previous point (not just started)
-					if (visualAdhocLastBar != -1 && visualAdhocPrevBarVal > 0)
+					if (visualAdhocLastBar != -1 && visualAdhocPrevBarVal > TickSize && v > TickSize)
 					{
 						string lineTag = "AdhocLine_" + CurrentBar;
-						Draw.Line(this, lineTag, false, 1, visualAdhocPrevBarVal, 0, v, Brushes.White, DashStyleHelper.Solid, 1);
+                        
+                        // Sanity Check: Prevent drawing if values are absurdly high (Infinity Lines)
+                        if (visualAdhocPrevBarVal < 1000000 && v < 1000000)
+						    Draw.Line(this, lineTag, false, 1, visualAdhocPrevBarVal, 0, v, Brushes.White, DashStyleHelper.Solid, 1);
 					}
 					
 					// REMOVED TEXT LABEL AS REQUESTED
@@ -3238,7 +3421,10 @@ currentEntryState = EntryState.Idle;
                if (!riskManager.CheckRiskState(SelectedRiskModel, Account.Get(AccountItem.CashValue, Currency.UsDollar), ApterosDailyLossPercent, ApterosMaxTrailingDrawdown))
                {
                    if (marketPosition != MarketPosition.Flat)
+                   {
+                       SendCriticalAlert("APTEROS RISK LIMIT", string.Format("Daily loss limit reached. Position closed. DailyLoss%={0}, MaxDD={1}", ApterosDailyLossPercent, ApterosMaxTrailingDrawdown));
                        ClosePositionUnmanaged("Apteros Risk Limit Hit (Intra-bar)");
+                   }
                }
             }
 
@@ -3253,6 +3439,7 @@ currentEntryState = EntryState.Idle;
 					// "RealTimeTrades" only updates on close. So the last one IS the one we just closed.
 					LogTrade(lastTrade);
 				}
+				
 			}
 		}
 
@@ -3288,6 +3475,163 @@ currentEntryState = EntryState.Idle;
 								smtp.Send(mail);
 							}
 							Log("Email Sent to " + EmailTo);
+						}
+					}
+					catch (Exception ex)
+					{
+						Print("Email Failed: " + ex.Message);
+					}
+				});
+			}
+			catch (Exception ex) { Print("Email Setup Failed: " + ex.Message); }
+		}
+
+		// =========================================================
+		// v1.15.38: ENHANCED EMAIL NOTIFICATIONS
+		// =========================================================
+		
+		/// <summary>
+		/// Sends a detailed email when a trade entry is filled (once per trade, ignores partial fills)
+		/// </summary>
+		private void SendTradeEntryEmail()
+		{
+			if (!EnableEmailAlerts || emailSentOnEntry) return;
+			// Safety: Block in Playback or non-Realtime
+			if (State != State.Realtime || Connection.PlaybackConnection != null) return;
+			
+			emailSentOnEntry = true;
+			
+			string direction = isShortSetup ? "SHORT" : "LONG";
+			int qty = tradeOriginalQty > 0 ? tradeOriginalQty : Math.Abs(Position.Quantity);
+			double tickValue = Instrument.MasterInstrument.PointValue * TickSize;
+			double riskUSD = Math.Abs(tradeEntryPrice - setupAnchorPrice) / TickSize * tickValue * qty;
+			
+			string subject = string.Format("ENTRY: {0} {1} x{2}", Instrument.FullName, direction, qty);
+			string body = string.Format(
+				"=== TRADE ENTRY ===\n" +
+				"Instrumento: {0}\n" +
+				"Dirección: {1}\n" +
+				"Contratos: {2}\n" +
+				"Precio Entrada: {3}\n" +
+				"Nivel: {4}\n" +
+				"Risk: ${5:F2}\n" +
+				"SL: {6}\n" +
+				"TP1: {7}\n" +
+				"TP2: {8}\n" +
+				"Hora: {9}",
+				Instrument.FullName,
+				direction,
+				qty,
+				tradeEntryPrice,
+				setupLevelName,
+				riskUSD,
+				setupAnchorPrice,
+				validatedTp1Price > 0 ? validatedTp1Price.ToString("F2") : "VWAP",
+				validatedTp2Price > 0 ? validatedTp2Price.ToString("F2") : "Opposite Level",
+				DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+			
+			SendEmailText(subject, body);
+			Log("EMAIL SENT: " + subject);
+		}
+		
+		/// <summary>
+		/// Sends a detailed email when a trade exits (with PnL details)
+		/// </summary>
+		private void SendTradeExitEmail(double grossPnL, double commission, string exitReason)
+		{
+			if (!EnableEmailAlerts || emailSentOnExit) return;
+			// Safety: Block in Playback or non-Realtime
+			if (State != State.Realtime || Connection.PlaybackConnection != null) return;
+			
+			emailSentOnExit = true;
+			
+			double netPnL = grossPnL - commission;
+			string result = netPnL >= 0 ? "WIN" : "LOSS";
+			TimeSpan duration = DateTime.Now - tradeEntryTime;
+			
+			string subject = string.Format("EXIT ({0}): {1} ${2:F2}", result, Instrument.FullName, netPnL);
+			string body = string.Format(
+				"=== TRADE EXIT ===\n" +
+				"Instrumento: {0}\n" +
+				"Resultado: {1}\n" +
+				"Razón: {2}\n" +
+				"PnL Bruto: ${3:F2}\n" +
+				"Comisión: ${4:F2}\n" +
+				"PnL Neto: ${5:F2}\n" +
+				"MAE: ${6:F2}\n" +
+				"MFE: ${7:F2}\n" +
+				"Duración: {8}\n" +
+				"Hora: {9}",
+				Instrument.FullName,
+				result,
+				exitReason,
+				grossPnL,
+				commission,
+				netPnL,
+				tradeMAE,
+				tradeMFE,
+				duration.ToString(@"hh\:mm\:ss"),
+				DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+			
+			SendEmailText(subject, body);
+			Log("EMAIL SENT: " + subject);
+		}
+		
+		/// <summary>
+		/// Sends an email for critical/emergency events
+		/// </summary>
+		private void SendCriticalAlert(string eventType, string details)
+		{
+			if (!EnableEmailAlerts) return;
+			// Allow Playback for testing, but block historical backtests
+			if (State != State.Realtime && Connection.PlaybackConnection == null) return;
+			
+			string prefix = (Connection.PlaybackConnection != null) ? "[PLAYBACK] " : "";
+			string subject = string.Format("{0}⚠️ CRITICAL: {1} - {2}", prefix, eventType, Instrument.FullName);
+			string body = string.Format(
+				"=== CRITICAL ALERT ===\n" +
+				"Evento: {0}\n" +
+				"Instrumento: {1}\n" +
+				"Detalles: {2}\n" +
+				"Hora: {3}\n" +
+				"==================\n" +
+				"Revisa NinjaTrader inmediatamente.",
+				eventType,
+				Instrument.FullName,
+				details,
+				DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
+			
+			SendEmailText(subject, body);
+			Log("CRITICAL EMAIL SENT: " + subject);
+		}
+		
+		/// <summary>
+		/// Sends a plain text email (no attachment)
+		/// </summary>
+		private void SendEmailText(string subject, string body)
+		{
+			try 
+			{
+				if (string.IsNullOrEmpty(EmailHost) || string.IsNullOrEmpty(EmailUsername) || string.IsNullOrEmpty(EmailPassword))
+					return;
+
+				Task.Run(() => 
+				{
+					try 
+					{
+						using (MailMessage mail = new MailMessage())
+						{
+							mail.From = new MailAddress(EmailFrom);
+							mail.To.Add(EmailTo);
+							mail.Subject = subject;
+							mail.Body = body;
+							
+							using (SmtpClient smtp = new SmtpClient(EmailHost, EmailPort))
+							{
+								smtp.Credentials = new NetworkCredential(EmailUsername, EmailPassword);
+								smtp.EnableSsl = true;
+								smtp.Send(mail);
+							}
 						}
 					}
 					catch (Exception ex)
@@ -3507,6 +3851,12 @@ currentEntryState = EntryState.Idle;
 				{
 					Log(Time[0] + " ENTRY TERMINATED: " + order.Name + " State: " + orderState + " Err: " + error);
 					
+					// v1.15.38: Send critical alert for order rejection
+					if (orderState == OrderState.Rejected)
+					{
+						SendCriticalAlert("ORDER REJECTED", string.Format("Order {0} rejected. Error: {1}. NativeError: {2}", order.Name, error, nativeError));
+					}
+					
 					// Force check: Is it dead?
 					// Use 'entryOrder'
 					bool anyWorking = false;
@@ -3605,10 +3955,48 @@ currentEntryState = EntryState.Idle;
 						tradeEntryTime = time;
 							tradeDirection = Position.MarketPosition == MarketPosition.Long ? "Long" : "Short";
 						tradeSetupName = setupLevelName;
-						tradeAttemptNumber = currentLevelAttempts; // v1.15.20: Use level attempts instead of VWAP retries
+					
+			// v1.15.50: FIX - Increment EntryAttempts ONLY on actual trade fill (not on VWAP retry trigger)
+			// This fixes the bug where levels showed "20/20 retries exhausted" after only 2 real trades
+			// v1.15.51: FIX - Match by BOTH Name AND StartTime to find the correct level instance
+			// (There can be multiple "Asia High" levels from different days)
+			var activeLevel = activeLevels.FirstOrDefault(l => l.Name == setupLevelName && l.StartTime == setupLevelTime);
+			if (activeLevel == null)
+			{
+				// Fallback: try by name only (backwards compatibility)
+				activeLevel = activeLevels.FirstOrDefault(l => l.Name == setupLevelName);
+				Log(string.Format("TRADE FILL WARNING: Level {0} not found by StartTime {1}, using fallback", setupLevelName, setupLevelTime));
+			}
+			if (activeLevel != null)
+			{
+				// v1.15.53: FIX - Prevent double counting on partial fills or state resets
+				string oid = execution.Order.OrderId;
+				if (!processedOrderIds.Contains(oid))
+				{
+					processedOrderIds.Add(oid);
+					
+					activeLevel.EntryAttempts++;
+					currentLevelAttempts = activeLevel.EntryAttempts;
+					Log(string.Format("TRADE FILL: {0} (Start: {1}) EntryAttempts incremented to {2}/{3} (OID: {4})",
+						setupLevelName, activeLevel.StartTime, activeLevel.EntryAttempts, MaxRetriesPerLevel, oid));
+				}
+				else
+				{
+					Log(string.Format("TRADE FILL IGNORED: {0} (OID: {1}) already counted. Current Attempts: {2}/{3}", 
+						setupLevelName, oid, activeLevel.EntryAttempts, MaxRetriesPerLevel));
+				}
+			}
+
+			// v1.15.48: Use currentVwapNumber which matches order suffix (EntryA+_Long_01, _02, etc)
+			tradeAttemptNumber = currentVwapNumber;
+			Log(string.Format("TRADE ATTEMPT: {0} Attempt #{1}/{2}", setupLevelName, currentVwapNumber, MaxRetriesPerLevel));
 						tradeMAE = 0;
 						tradeMFE = 0;
 						isTrackingTrade = true; // Flag to track MAE/MFE
+						
+						// v1.15.38: Reset email flags for new trade
+						emailSentOnEntry = false;
+						emailSentOnExit = false;
 						
 						// v1.14.31: Capture Delta values at entry for quantitative analysis
 						if (relativeDelta != null && CurrentBar > 0)
@@ -3642,13 +4030,12 @@ currentEntryState = EntryState.Idle;
 						// v1.14.81: DIAGNOSTIC LOG to check for Position Lag
 						Log(string.Format("DIAG_EXEC: Name={0} Qty={1} | Position.MP={2} Arg.MP={3} | State={4}", 
 							n, quantity, Position.MarketPosition, marketPosition, currentEntryState));
-						
-                        // v1.15.0: Log Readability Improvement - Trade Header
-                        Log("==========================================================================================");
-                        Log(string.Format("   TRADE START: #{0} | {1} | {2} | Price: {3}", tradeExportId, tradeDirection, Time[0], tradeEntryPrice));
-                        Log("==========================================================================================");
+					
+                        // v1.15.36: Section header moved to trigger (EntryStateMachine)
+                        // Just log the fill event here
+                        Log(string.Format("   FILL: Trade #{0} | {1} @ {2} | Qty={3}", tradeExportId, tradeDirection, tradeEntryPrice, quantity));
 
-						Log(Time + " CSV EXPORT: Trade #" + tradeExportId + " started - " + tradeDirection + " @ " + tradeEntryPrice);
+					Log(Time + " CSV EXPORT: Trade #" + tradeExportId + " started - " + tradeDirection + " @ " + tradeEntryPrice);
 					
 					// Ensure Protection Runs based on FILLED QTY
 					// v1.7.17: We pass the filled amount, protection logic distributes it to buckets.
@@ -3659,6 +4046,7 @@ currentEntryState = EntryState.Idle;
 						// EnsureProtection Delegate (v1.14.39)
 						protectionManager.EnsureProtection("Short", n, quantity, currentVwapNumber, isShortSetup, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTp1Price, validatedTp2Price);
 						TriggerScreenshot("Entry_Short_" + n, DateTime.Now, executionId);
+						SendTradeEntryEmail(); // v1.15.38: Enhanced email notification
 					}
 					else if (Position.MarketPosition == MarketPosition.Long || marketPosition == MarketPosition.Long)
 					{
@@ -3671,9 +4059,30 @@ currentEntryState = EntryState.Idle;
 						Log("DIAG_ERROR: Protection Skipped! P.MP=" + Position.MarketPosition + " A.MP=" + marketPosition);
 					}
 				}
+				else
+				{
+					// EXIT EXECUTION (TP1, Ladder, etc.)
+					Log(Time + " Exit Execution (" + execution.Order.Name + "). Qty=" + quantity);
+
+					// v1.15.40: Ladder Exit - Handle 1R Fill (Step 1) to trigger Breakeven
+					if (execution.Order.Name.Contains("LadderTP_"))
+					{
+						// Tag format: LadderTP_{step}_{vwapNum} -> e.g. LadderTP_1_1
+						Log(Time + " LADDER EXECUTION: " + execution.Order.Name + " Qty=" + quantity);
+						
+						// ALL Steps triggers SL Quantity Reduction (Smart Logic in HandleTP1Fill handles lag)
+						// Step 1 also ensures BE (handled inside)
+						if (protectionManager != null) protectionManager.HandleTP1Fill(quantity);
+					}
+
+					// Standard TP1 Fill (Fallback if not handled elsewhere)
+					if (execution.Order.Name.Contains("TP1_"))
+					{
+							// Ensure BE logic runs
+							if (protectionManager != null) protectionManager.HandleTP1Fill(quantity);
+					}
+				}
 			}
-			
-			// BREAKEVEN LOGIC DEBUGGING
 			if (execution.Order != null && execution.Order.OrderState == OrderState.Filled)
 			{
 				// v1.14.57: DIAGNOSTIC LOG for TP1 detection
@@ -3709,7 +4118,7 @@ currentEntryState = EntryState.Idle;
 					
 					// v1.14.40: Delegate BE handling to OrderProtectionManager
 					if (protectionManager != null)
-						protectionManager.HandleTP1Fill();
+						protectionManager.HandleTP1Fill(quantity);
 				}
 
 				// CHECK TP2 -> SL should already be at BE (Delegated v1.14.40)
@@ -3810,11 +4219,14 @@ currentEntryState = EntryState.Idle;
 						tradeExitFillsCount++;
 						
 						// Use fill counter for unique IDs: 1.1, 1.2, etc (handles TP1, TP2, and multiple 'Exit on session close')
+						// v1.15.38: Use Date-Prefixed ID (yyyyMMdd_ID) to prevent collisions in cumulative backtests
+						string baseTradeId = tradeEntryTime.ToString("yyyyMMdd") + "_" + tradeExportId;
 						string tradeId;
+						
 						if (tradeExitFillsCount == 1 && execution.Quantity >= 2)
-							tradeId = tradeExportId.ToString(); // First fill of whole position (both contracts closed together)
+							tradeId = baseTradeId; // First fill of whole position
 						else
-							tradeId = tradeExportId + "." + tradeExitFillsCount; // Partial fill: 1.1, 1.2, etc
+							tradeId = baseTradeId + "." + tradeExitFillsCount; // Partial fill: 20250105_1.1
 						
 						// Format CSV line - Ensure all values are valid
 						string safeSetupName = string.IsNullOrEmpty(tradeSetupName) ? "" : tradeSetupName.Replace(",", ";");
@@ -3828,58 +4240,15 @@ currentEntryState = EntryState.Idle;
 						// NinjaTrader All-In Rates (User Verified 2026-01-11)
 						// Logic splits Micros vs Standard, then by Asset Class
 						
-						string instName = Instrument.MasterInstrument.Name.ToUpper();
-						double commissionPerSide = 0; // Initialize
-						
-						// 1. MICROS
-						if (instName.StartsWith("M")) // Removed MY exclusion to allow MYM
-						// Actually MYM is Micro YM. Logic:
-						{
-						    // Handle specific exceptions where "M" is start but not Micro? No, standard convention is M=Micro.
-						    // Exceptions: MBT (Micro Bitcoin), MET (Micro Ether).
-						    // Asset Classes:
-						    
-						    if (instName.Contains("MBT") || instName.Contains("MET")) 
-						        commissionPerSide = 1.60; // Micro Crypto
-						    else if (instName.StartsWith("MNQ") || instName.StartsWith("M2K"))
-						        commissionPerSide = 0.95; // MNQ & M2K ($1.90 RT - Adjusted based on User PnL)
-						    else if (instName.StartsWith("MES") || instName.StartsWith("MYM"))
-						        commissionPerSide = 0.90; // MES & MYM ($1.80 RT - Adjusted based on User PnL)
-						    else if (instName.StartsWith("MCL") || instName.StartsWith("QM"))
-						        commissionPerSide = 1.10; // Micro Oil/Energy
-						    else if (instName.StartsWith("MGC") || instName.StartsWith("SIL") || instName.StartsWith("MHG"))
-						        commissionPerSide = 1.20; // Micro Metals (Gold, Silver, Copper)
-						    else if (instName.StartsWith("M6"))
-						        commissionPerSide = 1.20; // Micro Currencies (M6E, M6A, etc) - Estimate based on Gold
-						    else
-						        commissionPerSide = 1.20; // Default Micro Fallback
-						}
-						// 2. CRYPTO (Standard)
-						else if (instName.StartsWith("BTC") || instName.StartsWith("ETH"))
-						{
-						    commissionPerSide = 6.00; 
-						}
-						// 3. STANDARD / FULL SIZE
-						else if (instName.StartsWith("ES") || instName.StartsWith("NQ") || instName.StartsWith("YM") || instName.StartsWith("RTY"))
-						{
-						    commissionPerSide = 2.29; // Standard Indices (Keeping existing logic)
-						}
-						else if (instName.StartsWith("CL") || instName.StartsWith("NG") || instName.StartsWith("GC") || instName.StartsWith("SI") || instName.StartsWith("HG"))
-						{
-						    commissionPerSide = 2.40; // Standard Commodities (Estimate)
-						}
-						else if (instName.StartsWith("6"))
-						{
-                            commissionPerSide = 2.50; // Standard Currencies
-						}
-						else
-						{
-						    commissionPerSide = 2.50; // Generic Default
-						}
-						
-						// Removed redundant MYM override
-						
-						double commission = execution.Quantity * 2 * commissionPerSide; // 2 sides (entry + exit)
+						// v1.15.47: STRICT COMMISSION LOGIC
+						// User Request: Do NOT assume values. Use only what NT reports.
+                        double commission = 0;
+                        if (execution.Commission > 0)
+                        {
+                            commission = execution.Commission * 2; // Entry + Exit assumption
+                        }
+						// If 0, we behave strictly: 0 commission.
+                        
 						double netPnl = pnl - commission;
 						
 						// v1.14.96: Calculate Level Age (Days between Level Creation and Trade Entry)
@@ -3887,7 +4256,13 @@ currentEntryState = EntryState.Idle;
 						if (setupLevelTime != DateTime.MinValue)
 							levelAgeDays = (tradeEntryTime.Date - setupLevelTime.Date).Days;
 
-						string line = string.Format("{0},{1},{2:yyyy-MM-dd HH:mm:ss},{3},{4},{5:yyyy-MM-dd HH:mm:ss},{6},{7},{8:F2},{9:F2},{10:F2},{11:F2},{12:F2},{13},{14},{15:F2},{16:F0},{17},{18:F0},{19:F0},{20}",
+						// v1.15.33: Added Quantity (column 22) to match NT Trade Performance exactly
+						// v1.15.38: Added ExecutionId (Column 23)
+                        // v1.15.43: Added EntryMode, ExitStrategy, RiskModel (Columns 24-26)
+                        string riskModelStr = UseDynamicSizing ? "Dynamic" : "Fixed";
+                        if (UseDynamicSizing && UseATRScaling) riskModelStr += "_ATR";
+                        
+						string line = string.Format("{0},{1},{2:yyyy-MM-dd HH:mm:ss},{3},{4},{5:yyyy-MM-dd HH:mm:ss},{6},{7},{8:F2},{9:F2},{10:F2},{11:F2},{12:F2},{13},{14},{15:F2},{16:F0},{17},{18:F0},{19:F0},{20},{21},{22},{23},{24},{25}",
 							tradeId,
 							Instrument.FullName,
 							tradeEntryTime,
@@ -3908,7 +4283,12 @@ currentEntryState = EntryState.Idle;
 							tradeDeltaDirection,    // v1.14.31
 							tradeSessionDelta,      // v1.14.31
 							tradeDeltaAtTP1,        // v1.14.31
-							levelAgeDays            // v1.14.96: Level Age
+							levelAgeDays,           // v1.14.96: Level Age
+							execution.Quantity,     // v1.15.33: Quantity
+							execution.ExecutionId,   // v1.15.38: ExecutionId
+                            SelectedEntryMode.ToString(), // {23}
+                            TargetDistribution.ToString(), // {24}
+                            riskModelStr            // {25}
 						);
 						
 						System.IO.File.AppendAllText(csvExportPath, line + Environment.NewLine);
@@ -3927,6 +4307,24 @@ currentEntryState = EntryState.Idle;
 					Log(Time + " Position Closed (" + execution.Order.Name + "). Resetting to Idle.");
 					lastPositionCloseTime = DateTime.Now; // v1.11.19: Prevent orphan false positives
 					TriggerScreenshot("Exit_" + execution.Order.Name, DateTime.Now, executionId);
+					
+					// v1.15.38: Send exit email with PnL details
+					{
+						double tickValue = Instrument.MasterInstrument.PointValue * TickSize;
+						double grossPnL = 0;
+						double commission = 0;
+						string exitReason = isSLClose ? "Stop Loss" : (execution.Order.Name.Contains("TP1") ? "TP1" : (execution.Order.Name.Contains("TP2") ? "TP2" : "Manual/Other"));
+						
+						// Calculate PnL from entry/exit prices
+						if (tradeEntryPrice > 0)
+						{
+							double priceDiff = tradeDirection == "Long" ? (price - tradeEntryPrice) : (tradeEntryPrice - price);
+							grossPnL = priceDiff / TickSize * tickValue * tradeOriginalQty;
+							// Estimate commission (use common rates)
+							commission = tradeOriginalQty * 2 * 1.20; // $1.20 per side per contract (MicroCom)
+						}
+						SendTradeExitEmail(grossPnL, commission, exitReason);
+					}
 					
 					isTrackingTrade = false;
 					
@@ -4003,7 +4401,7 @@ currentEntryState = EntryState.Idle;
 						if (o.Instrument.FullName == Instrument.FullName && 
 							(o.OrderState == OrderState.Working || o.OrderState == OrderState.Accepted))
 						{
-							if (o.Name.StartsWith("TP1_") || o.Name.StartsWith("TP2_") || o.Name.StartsWith("SL_"))
+							if (o.Name.StartsWith("TP1_") || o.Name.StartsWith("TP2_") || o.Name.StartsWith("SL_") || o.Name.StartsWith("LadderTP_"))
 							{
 								try 
 								{ 
@@ -4045,6 +4443,8 @@ currentEntryState = EntryState.Idle;
 				else
 				{
 					Log(Time + " Partial Execution (" + execution.Order.Name + "). Position Active. Qty=" + Position.Quantity);
+
+						Log(Time + " Partial Execution (" + execution.Order.Name + "). Position Active. Qty=" + Position.Quantity);
 				}
 			}
 			}
@@ -4171,11 +4571,10 @@ currentEntryState = EntryState.Idle;
 		[XmlIgnore] public List<Order> tp1Orders = new List<Order>();
 		[XmlIgnore] public List<Order> tp2Orders = new List<Order>();
 		
-		[NinjaScriptProperty]
-		[Display(Name="Selected Risk Model", Description="Choose between Standard (Fixed/ATR) or Apteros (Prop Firm Rules)", Order=0, GroupName="Apteros Risk Module")]
-		public RiskModelType SelectedRiskModel
-		{ get; set; } = RiskModelType.Standard;
+
 		
+
+
 		[NinjaScriptProperty]
 		[Display(Name="Daily Loss % Limit", Description="Daily Loss Limit as % of previous EOD Balance (Default 2.5%)", Order=1, GroupName="Apteros Risk Module")]
 		public double ApterosDailyLossPercent
@@ -4202,7 +4601,322 @@ currentEntryState = EntryState.Idle;
 		[Display(Name="Allocation Days", Description="Days to allocate the Max Drawdown over (e.g. 20 days)", Order=5, GroupName="Apteros Risk Module")]
 		public int ApterosAllocationDays
 		{ get; set; } = 20;
+
+        // ===== AI AUTO-CONFIGURATION (v1.15.43) =====
+        [NinjaScriptProperty]
+        [Display(Name = "Auto Load AI Config", Description = "Automatically load settings from AI generated config file", Order = 1, GroupName = "AI Integrations")]
+        public bool AutoLoadAIConfig
+        { get; set; } = false;
+
+        [NinjaScriptProperty]
+        [Display(Name = "AI Config Path", Description = "Path to the ai_config.json file", Order = 2, GroupName = "AI Integrations")]
+        public string AIConfigPath
+        { get; set; } = @"C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Strategies\StreamlitAudit\ai_config.json";
+
+        [NinjaScriptProperty]
+        [Range(0, 3650)]
+        [Display(Name = "Max Level Age (Days)", Description = "Maximum age in days for a level to be traded (0 = Unlimited)", Order = 3, GroupName = "AI Integrations")]
+        public int MaxLevelAgeDays
+        { get; set; } = 0;
+
+        // v2.12: Expanded AI Config Fields
+        public int MinAttemptStart { get; set; } = 1;
+        
+        [XmlIgnore]
+        public List<string> AllowedDirections { get; set; } = new List<string> { "Long", "Short" };
+        
+        // v2.17: New Filters
+        [XmlIgnore] public List<int> EnabledHours = new List<int>(); 
+        [XmlIgnore] public List<string> EnabledDays = new List<string>();
+        [XmlIgnore] public List<string> EnabledInstruments = new List<string>();
+
+	// ===== AI FILTERS (v1.15.43 - Consolidated) =====
+	private string _enabledZonesParam = string.Empty;
+    
+    [NinjaScriptProperty]
+	[Display(Name="Enabled Zones (CSV)", 
+	         Description="Lista de zonas habilitadas separadas por coma. Vacío = todas habilitadas. Ej: 'Asia High, USA Low'. (Se llena auto si AutoLoadAI está activo)", 
+	         GroupName="2. AI Filters", 
+	         Order=1)]
+	public string EnabledZonesParam 
+    { 
+        get { return _enabledZonesParam ?? string.Empty; } 
+        set { _enabledZonesParam = value; } 
+    }
+	
+	private List<string> enabledZonesList = new List<string>();
+	
+	private void ParseEnabledZones()
+	{
+		enabledZonesList = new List<string>();
+        
+        // v2.17: Initialize new filters safely
+        if (EnabledHours == null) EnabledHours = new List<int>();
+        if (EnabledDays == null) EnabledDays = new List<string>();
+        if (EnabledInstruments == null) EnabledInstruments = new List<string>();
+
+		if (string.IsNullOrWhiteSpace(EnabledZonesParam)) return;
 		
+		string[] zones = EnabledZonesParam.Split(new char[] { ',', '\"', '[', ']', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+		foreach (string z in zones)
+		{
+			if (!string.IsNullOrWhiteSpace(z))
+				enabledZonesList.Add(z.Trim());
+		}
+		// Only log if strategy is fully initialized
+		if (State >= State.Configure)
+		{
+			Log("AI CONFIG: Activas " + enabledZonesList.Count + " zonas: " + string.Join(", ", enabledZonesList));
+		}
+	}
+	
+	// Helper to check if a zone is enabled (Simple)
+	public bool IsZoneEnabled(string zoneName)
+	{
+		if (enabledZonesList == null || enabledZonesList.Count == 0) return true; // Default: Enable All
+		foreach(string zone in enabledZonesList)
+		{
+			 if (zoneName.Contains(zone)) return true;
+		}
+		return false;
+	}
+	
+	// Helper to check if a zone is enabled (With Age, Attempt, and Direction Check)
+	public bool IsZoneEnabled(string zoneName, DateTime levelTime)
+	{
+		// 1. Zone Name Check
+		if (!IsZoneEnabled(zoneName)) return false;
+		
+		// 2. Age Check
+		if (MaxLevelAgeDays > 0)
+		{
+			TimeSpan age = DateTime.Now - levelTime;
+			if (age.TotalDays > MaxLevelAgeDays) return false;
+		}
+		
+		// v2.12: Advanced Checks (Attempt & Direction)
+		// We need to look up the level object to know its state (Resistance/Attempts)
+		// This avoids modifying EntryStateMachine.cs signature
+		var lvl = activeLevels.FirstOrDefault(l => l.Name == zoneName && l.StartTime == levelTime);
+		if (lvl != null)
+		{
+			// 3. Direction Check
+			bool isShort = lvl.IsResistance;
+			string requiredDir = isShort ? "Short" : "Long";
+			
+			// AllowedDirections might be null if not initialized, default to allow
+			if (AllowedDirections != null && AllowedDirections.Count > 0)
+			{
+				bool dirAllowed = false;
+				foreach(var dir in AllowedDirections)
+				{
+					if (string.Equals(dir, requiredDir, StringComparison.OrdinalIgnoreCase))
+					{
+						dirAllowed = true;
+						break;
+					}
+				}
+				if (!dirAllowed) return false;
+			}
+			
+			// 4. Attempt Check (Min Start)
+			// lvl.EntryAttempts is how many have been DONE.
+			// Current attempt will be lvl.EntryAttempts + 1
+			// 4. Attempt Check (Min Start)
+			// lvl.EntryAttempts is how many have been DONE.
+			// Current attempt will be lvl.EntryAttempts + 1
+			if ((lvl.EntryAttempts + 1) < MinAttemptStart) return false;
+		}
+
+        // 5. Global Time Filter (Hours)
+        if (EnabledHours != null && EnabledHours.Count > 0)
+        {
+            // If list is not empty, current hour MUST be in it
+            if (!EnabledHours.Contains(Time[0].Hour)) return false;
+        }
+
+        // 6. Global Day Filter
+        if (EnabledDays != null && EnabledDays.Count > 0)
+        {
+            // If list is not empty, current day MUST be in it
+            if (!EnabledDays.Contains(Time[0].DayOfWeek.ToString())) return false;
+        }
+
+        // 7. Global Instrument Filter (Safety Pattern)
+        // If config says "Only Valid for NQ, ES" and we are on "GC", we block.
+        if (EnabledInstruments != null && EnabledInstruments.Count > 0)
+        {
+             // Check if Current Instrument Name (or Master) is in the list
+             // We check both FullName and MasterInstrument.Name for flexibility
+             string name = Instrument.FullName;
+             string master = Instrument.MasterInstrument.Name;
+             
+             bool allowed = false;
+             foreach(string valid in EnabledInstruments)
+             {
+                 if (name.Contains(valid) || master.Contains(valid)) 
+                 {
+                     allowed = true;
+                     break;
+                 }
+             }
+             if (!allowed) return false;
+        }
+		
+		return true;
+	}
+
+	private void LoadAIConfig()
+	{
+        // Reset lists on reload to avoid stale data
+        EnabledHours = new List<int>();
+        EnabledDays = new List<string>();
+        EnabledInstruments = new List<string>();
+
+		if (!AutoLoadAIConfig || string.IsNullOrEmpty(AIConfigPath) || !System.IO.File.Exists(AIConfigPath))
+			return;
+
+		try
+		{
+			string json = System.IO.File.ReadAllText(AIConfigPath);
+			Log("AI CONFIG: Leyendo " + AIConfigPath);
+
+			// Parse Max Age
+			if (json.Contains("\"max_age\":"))
+			{
+				string agePart = json.Substring(json.IndexOf("\"max_age\":") + 10);
+				agePart = agePart.Substring(0, agePart.IndexOfAny(new char[] { ',', '}' }));
+				int age = 0;
+				if (int.TryParse(agePart.Trim(), out age))
+				{
+					MaxLevelAgeDays = age;
+					Log("AI CONFIG: Loaded MaxLevelAgeDays = " + MaxLevelAgeDays);
+				}
+			}
+
+			// Parse Max Retries
+			if (json.Contains("\"max_retries\":"))
+			{
+				string retryPart = json.Substring(json.IndexOf("\"max_retries\":") + 14);
+				retryPart = retryPart.Substring(0, retryPart.IndexOfAny(new char[] { ',', '}' }));
+				int retries = 1;
+				if (int.TryParse(retryPart.Trim(), out retries))
+				{
+					MaxRetriesPerLevel = retries;
+					Log("AI CONFIG: Loaded MaxRetriesPerLevel = " + MaxRetriesPerLevel);
+				}
+			}
+
+            // v2.12: Parse Min Attempt
+			if (json.Contains("\"min_attempt\":"))
+			{
+				string minPart = json.Substring(json.IndexOf("\"min_attempt\":") + 14);
+				minPart = minPart.Substring(0, minPart.IndexOfAny(new char[] { ',', '}' }));
+				int minAtt = 1;
+				if (int.TryParse(minPart.Trim(), out minAtt))
+				{
+					MinAttemptStart = minAtt;
+					Log("AI CONFIG: Loaded MinAttemptStart = " + MinAttemptStart);
+				}
+			}
+            
+            // v2.12: Parse Allowed Directions
+             if (json.Contains("\"allowed_directions\":"))
+            {
+                int start = json.IndexOf("\"allowed_directions\":") + 21;
+                int end = json.IndexOf("]", start);
+                if (start > 0 && end > start)
+                {
+                    string listContent = json.Substring(start, end - start);
+                    string[] dirs = listContent.Split(new char[] { ',', '\"', '[', ']', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+					
+                    AllowedDirections = new List<string>();
+                    foreach (string d in dirs) if (!string.IsNullOrWhiteSpace(d)) AllowedDirections.Add(d.Trim());
+					
+                    Log("AI CONFIG: AllowedDirections = " + string.Join(", ", AllowedDirections));
+                }
+            }
+
+            // Parse Enabled Zones -> Set to Property -> Parse to List
+             if (json.Contains("\"enabled_zones\":"))
+            {
+                int start = json.IndexOf("\"enabled_zones\":") + 16;
+                int end = json.IndexOf("]", start);
+                if (start > 0 && end > start)
+                {
+                    string listContent = json.Substring(start, end - start);
+                    string[] zones = listContent.Split(new char[] { ',', '\"', '[', ']', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+					
+					// Reconstruct into clean CSV string for UI Property
+                    List<string> cleanList = new List<string>();
+                    foreach (string z in zones) if (!string.IsNullOrWhiteSpace(z)) cleanList.Add(z.Trim());
+					
+					EnabledZonesParam = string.Join(", ", cleanList);
+				}
+            }
+
+            // v2.17: Parse Enabled Hours (Manual JSON Parser)
+             if (json.Contains("\"enabled_hours\":"))
+            {
+                int start = json.IndexOf("\"enabled_hours\":") + 16;
+                int end = json.IndexOf("]", start);
+                if (start > 0 && end > start)
+                {
+                    string listContent = json.Substring(start, end - start);
+                    string[] hours = listContent.Split(new char[] { ',', '\"', '[', ']', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                    
+                    EnabledHours = new List<int>();
+                    foreach (string h in hours) 
+                    {
+                        int hVal;
+                        if (int.TryParse(h.Trim(), out hVal)) EnabledHours.Add(hVal);
+                    }
+                    Log("AI CONFIG: EnabledHours = " + string.Join(", ", EnabledHours));
+                }
+            }
+
+            // v2.17: Parse Enabled Days (Manual JSON Parser)
+             if (json.Contains("\"enabled_days\":"))
+            {
+                int start = json.IndexOf("\"enabled_days\":") + 15;
+                int end = json.IndexOf("]", start);
+                if (start > 0 && end > start)
+                {
+                    string listContent = json.Substring(start, end - start);
+                    string[] days = listContent.Split(new char[] { ',', '\"', '[', ']', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                    
+                    EnabledDays = new List<string>();
+                    foreach (string d in days) if (!string.IsNullOrWhiteSpace(d)) EnabledDays.Add(d.Trim());
+                    
+                    Log("AI CONFIG: EnabledDays = " + string.Join(", ", EnabledDays));
+                }
+            }
+
+            // v2.17: Parse Enabled Instruments (Manual JSON Parser)
+             if (json.Contains("\"enabled_instruments\":"))
+            {
+                int start = json.IndexOf("\"enabled_instruments\":") + 22;
+                int end = json.IndexOf("]", start);
+                if (start > 0 && end > start)
+                {
+                    string listContent = json.Substring(start, end - start);
+                    string[] insts = listContent.Split(new char[] { ',', '\"', '[', ']', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                    
+                    EnabledInstruments = new List<string>();
+                    foreach (string i in insts) if (!string.IsNullOrWhiteSpace(i)) EnabledInstruments.Add(i.Trim());
+                    
+                    Log("AI CONFIG: EnabledInstruments = " + string.Join(", ", EnabledInstruments));
+                }
+            }
+			
+			// Refresh Internal List
+			ParseEnabledZones();
+		}
+		catch (Exception ex)
+		{
+			Log("AI CONFIG ERROR: " + ex.Message);
+		}
+	}
 		[XmlIgnore]
 		public RiskManager riskManager;
 		
@@ -4226,34 +4940,13 @@ currentEntryState = EntryState.Idle;
 		// USAEndTime moved to public section (line 177)
 		
 
-	// ===== AI FILTERS (v1.14.23) =====
-	// NOTA: Estos parámetros están DESACTIVADOS por defecto (valores vacíos/0)
-	// Solo activar si el Reporte Ejecutivo de Streamlit recomienda filtrar zonas tóxicas
-	
-	[Display(Name="Enabled Zones (CSV)", 
-	         Description="Lista de zonas habilitadas separadas por coma. Vacío = todas habilitadas. Ej: 'Asia High, USA Low'", 
-	         GroupName="2. AI Filters", 
-	         Order=1)]
-	public string EnabledZonesParam { get; set; }
-	
-	[Range(0, 365)]
-	[Display(Name="Max Level Age (Days)", 
-	         Description="Edad máxima de niveles en días. 0 = sin límite de edad.", 
-	         GroupName="2. AI Filters", 
-	         Order=2)]
-	public int MaxLevelAgeDays { get; set; }
-	
-	[NinjaScriptProperty]
-	[Display(Name="Auto Load AI Config", Description="Cargar configuración automáticamente desde archivo JSON", GroupName="2. AI Filters", Order=3)]
-	public bool AutoLoadAIConfig { get; set; }
-
-	[NinjaScriptProperty]
-	[Display(Name="AI Config Path", Description="Ruta al archivo de configuración generado por IA", GroupName="2. AI Filters", Order=4)]
-	public string AIConfigPath { get; set; } = string.Empty;
+	// ===== AI FILTERS (Legacy Block Removed - Replaced by New Auto Config Logic) =====
 
 
 
-
+		// v1.15.38: Anti-duplication flags for email alerts
+		private bool emailSentOnEntry = false;
+		private bool emailSentOnExit = false;
 
 		// Fix: InitCSV to write Header
 		private void InitCSV()
@@ -4272,7 +4965,10 @@ currentEntryState = EntryState.Idle;
 					{
 						// v1.14.90: Header matching 20 columns (including Delta)
 						// v1.14.96: Added LevelAge (Column 21)
-						string header = "TradeId,Instrument,EntryTime,Type,EntryPrice,ExitTime,ExitPrice,Result,GrossPnL,Commission,NetPnL,MAE,MFE,SetupName,Attempt,RiskReward,DeltaEntry,DeltaDir,SessionDelta,DeltaTP1,LevelAge";
+						// v1.15.33: Added Quantity (Column 22) for accurate PnL calculation matching NT Trade Performance
+						// v1.15.38: Added ExecutionId (Column 23) for robust deduplication
+                        // v1.15.43: Added EntryMode, ExitStrategy, RiskModel (Columns 24-26) to sync with Streamlit App
+						string header = "TradeId,Instrument,EntryTime,Type,EntryPrice,ExitTime,ExitPrice,Result,GrossPnL,Commission,NetPnL,MAE,MFE,SetupName,Attempt,RiskReward,DeltaEntry,DeltaDir,SessionDelta,DeltaTP1,LevelAge,Quantity,ExecutionId,EntryMode,ExitStrategy,RiskModel";
 						System.IO.File.WriteAllText(csvExportPath, header + Environment.NewLine);
 						Log("CSV INIT: Created new export file with header at " + csvExportPath);
 					}
@@ -4312,33 +5008,14 @@ currentEntryState = EntryState.Idle;
 				SubmitOrderUnmanaged(0, OrderAction.BuyToCover, OrderType.Market, Position.Quantity, limitPrice, 0, "", "Exit_Short_Market");
 			}
 
-			// Cancel any working entry orders to be safe
+			// v1.15.38: Send critical alert for emergency close
+			SendCriticalAlert("EMERGENCY CLOSE", reason);
+
 			// Cancel any working entry orders to be safe
 			if (entryOrder != null && entryOrder.OrderState == OrderState.Working) CancelOrder(entryOrder);
 		}
 
-	// =========================================================
-	// v1.14.23: AI FILTER HELPERS
-	// =========================================================
-	private void ParseEnabledZones()
-	{
-		enabledZonesList = new List<string>();
-		
-		if (string.IsNullOrWhiteSpace(EnabledZonesParam))
-		{
-			// Vacío = todas las zonas habilitadas (sin filtro)
-			return;
-		}
-		
-		// Parsear CSV
-		string[] zones = EnabledZonesParam.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-		foreach (string zone in zones)
-		{
-			enabledZonesList.Add(zone.Trim());
-		}
-		
-		Log(string.Format("AI FILTER: {0} zonas habilitadas: {1}", enabledZonesList.Count, EnabledZonesParam));
-	}
+	// (AI Filter Helpers refactored to top of file)
 
 		// v1.14.78: Level Persistence
 	[XmlIgnore] public SessionLevelPersistence levelPersistence;
@@ -4358,120 +5035,48 @@ currentEntryState = EntryState.Idle;
 		Log("--------------------------------");
 	}
 
-    public bool IsZoneEnabled(string zoneName)
-	{
-		// Si no hay lista (null), significa que NO se cargó configuración AI.
-		// En ese caso, por defecto permitimos TODO (retorna true).
-		if (enabledZonesList == null) return true;
-		
-		return enabledZonesList.Contains(zoneName);
-	}
-	public bool IsZoneEnabled(string zoneName, DateTime levelTime)
-	{
-		// 1. Si la lista está vacía = sin filtro de zona (todas habilitadas)
-		if (enabledZonesList == null || enabledZonesList.Count == 0)
-		{
-			// No hay filtro activo, continuar con verificación de edad
-		}
-		else
-		{
-			// Verificar si la zona está en la lista permitida
-			bool zoneAllowed = false;
-			foreach (string allowedZone in enabledZonesList)
-			{
-				if (zoneName.IndexOf(allowedZone, StringComparison.OrdinalIgnoreCase) >= 0)
-				{
-					zoneAllowed = true;
-					break;
-				}
-			}
-			
-			if (!zoneAllowed)
-			{
-				return false; // Zona bloqueada
-			}
-		}
-		
-		// 2. Verificar edad del nivel
-		if (MaxLevelAgeDays > 0)
-		{
-			TimeSpan age = DateTime.Now - levelTime;
-			if (age.TotalDays > MaxLevelAgeDays)
-			{
-				return false; // Nivel demasiado viejo
-			}
-		}
-		
-		// Pasó todos los filtros (o no hay filtros activos)
-		return true;
-	}
 
-	private void LoadAIConfig()
+
+
+	// =========================================================
+	// CRITICAL ALERTS (v2.21)
+	// =========================================================
+	public void SendCriticalEmail(string subject, string body)
 	{
-		if (!AutoLoadAIConfig) return;
+		if (string.IsNullOrEmpty(EmailToAlert) || EmailToAlert.Contains("ejemplo")) return;
 		
-		// Default path if empty
-		string path = AIConfigPath;
-		if (string.IsNullOrEmpty(path))
-		{
-			// Try to auto-detect based on Streamlit default
-			string docs = NinjaTrader.Core.Globals.UserDataDir.TrimEnd(System.IO.Path.DirectorySeparatorChar);
-			path = System.IO.Path.Combine(docs, "bin", "Custom", "Strategies", "StreamlitAudit", "ai_config.json");
-		}
-
-		if (!File.Exists(path))
-		{
-			Log("AI CONFIG: Archivo no encontrado en " + path);
-			return;
-		}
-
+		// Allow Playback for testing, but block historical backtests
+		if (State != State.Realtime && Connection.PlaybackConnection == null) return;
+		
+		if (Connection.PlaybackConnection != null) subject = "[PLAYBACK] " + subject;
+		
 		try 
 		{
-			string json = File.ReadAllText(path);
-			Log("AI CONFIG: Leyendo configuración...");
-			
-			// Simple Manual Parsing (Lightweight)
-			// Enabled Zones
-			if (json.Contains("enabled_zones"))
-			{
-				int start = json.IndexOf("[", json.IndexOf("enabled_zones"));
-				int end = json.IndexOf("]", start);
-				if (start > 0 && end > start)
-				{
-					string arrayContent = json.Substring(start + 1, end - start - 1);
-					var zones = arrayContent.Split(new[] { ',', '"', ' ', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-					
-					// Reconstruct CSV for parameter
-					List<string> cleanZones = new List<string>();
-					foreach(var z in zones) cleanZones.Add(z.Trim());
-					
-					EnabledZonesParam = string.Join(", ", cleanZones);
-					Log("AI CONFIG: Zonas actualizadas -> " + EnabledZonesParam);
-				}
-			}
-			
-			// Max Age
-			if (json.Contains("max_age"))
-			{
-				// Extract number after "max_age":
-				string part = json.Substring(json.IndexOf("max_age") + 7);
-				string numStr = new string(part.Where(c => char.IsDigit(c)).ToArray()); // Extract digits
-				if (int.TryParse(numStr, out int age))
-				{
-					MaxLevelAgeDays = age;
-					Log("AI CONFIG: Max Age actualizado -> " + age);
-				}
-			}
-			
-			// Re-parse internal list
-			ParseEnabledZones();
+			// Context Info
+			string fullBody = body + "\n\n" +
+				"Instrument: " + (Instrument != null ? Instrument.FullName : "N/A") + "\n" +
+				"Time: " + DateTime.Now.ToString() + "\n" +
+				"Strategy Version: " + StrategyVersion + "\n" +
+				"Account: " + (Account != null ? Account.Name : "N/A");
+				
+			SendMail(EmailToAlert, "CRITICAL ALERT: " + subject, fullBody);
+			Print("CRITICAL EMAIL SENT to " + EmailToAlert);
 		}
 		catch (Exception ex)
 		{
-			Log($"AI CONFIG ERROR: {ex.Message}");
+			Print("FAILED TO SEND EMAIL: " + ex.Message);
 		}
 	}
 
+	protected override void OnConnectionStatusUpdate(ConnectionStatusEventArgs connectionStatusUpdate)
+	{
+		if (connectionStatusUpdate.Status == ConnectionStatus.ConnectionLost)
+		{
+			string msg = "Connection Lost at " + DateTime.Now.ToString();
+			Print(msg);
+			SendCriticalEmail("Connection Lost", "The strategy connection was lost. Price data may be interrupted.");
+		}
+	}
 
 	} // End of SessionLevelsStrategy class
 

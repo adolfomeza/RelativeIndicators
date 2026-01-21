@@ -1,11 +1,413 @@
-# Registro de Cambios (Changelog)
+# Changelog - SessionLevelsStrategy
 
-Todos los cambios notables en el proyecto `SessionLevelsStrategy` serán documentados en este archivo.
+Todas las mejoras, correcciones y cambios notables de este proyecto serán documentados en este archivo.
 
-El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
+y este proyecto sigue [Semantic Versioning](https://semver.org/lang/es/).
 
+---
+
+## [v1.15.53] - 2026-01-21
+
+### 🐛 Fixed
+
+**1. Bug Crítico: Contador de Intentos Agota Niveles por Doble Conteo (Partial Fills)**
+
+- **Problema**: El contador de intentos (`EntryAttempts`) llegaba a 20/20 prematuramente, bloqueando trades válidos.
+- **Causa Raíz**: El método `OnExecutionUpdate` incrementaba el contador cada vez que recibía una actualización de orden "Filled" o "PartFilled". Si una orden tenía múltiples fills parciales (o NinjaTrader enviaba múltiples actualizaciones), el contador se incrementaba múltiples veces para *el mismo trade*.
+- **Solución v1.15.53**: Implementado mecanismo de protección contra duplicados.
+  - Se rastrean los `OrderId` ya procesados en un HashSet.
+  - El contador solo se incrementa la *primera vez* que se procesa un OrderId específico.
+  - Actualizaciones subsecuentes (fills parciales del mismo order) son ignoradas para efectos del contador.
+- **Impacto**: 
+  - ✅ Precisión absoluta en el conteo de trades (1 Orden = 1 Intento).
+  - ✅ Elimina el riesgo de agotamiento prematuro de niveles por fills fragmentados.
+- **Archivos Modificados**:
+  - `SessionLevelsStrategy.cs`: Agregado `processedOrderIds` y check en `OnExecutionUpdate`.
+
+## [v1.15.52] - 2026-01-21
+
+### 🐛 Fixed
+
+**1. Bug: Cierre Forzado en Holidays Ignoraba Parámetro de Usuario**
+
+- **Problema**: La estrategia cerraba posiciones automáticamente en días de "Cierre Temprano" (Holidays) incluso si el usuario había desmarcado la casilla `Enable Holiday Protection`.
+- **Causa Raíz**: En `v1.15.49` se eliminó accidentalmente la verificación de este parámetro en el método `CheckSessionExit`, haciendo que la detección de `isEarlyClose` forzara el cierre incondicionalmente.
+- **Solución v1.15.52**: Restaurada la lógica condicional.
+  - **Viernes**: El cierre sigue siendo mandatorio (Weekend Gap Protection).
+  - **Holiday/Early Close**: El cierre ahora obedece estrictamente al parámetro `EnableHolidayProtection`. Si está desactivado, la estrategia NO cerrará la posición.
+
+- **Archivos Modificados**:
+  - `SessionLevelsStrategy.cs`: Restaurada condición `&& EnableHolidayProtection` en lógica de cierre.
+
+## [v1.15.50] - 2026-01-21
+
+### 🐛 Fixed
+
+**1. Bug Crítico: Contador de Intentos Agota Niveles Prematuramente (20/20)**
+
+- **Problema**: Los niveles mostraban "SCAN IGNORE: Max Retries Reached (20/20)" después de solo 2 trades reales ejecutados.
+  - Ejemplo: Europa High mostraba 20/20 intentos agotados cuando solo hubo 2 trades reales en ese nivel.
+  - Esto impedía que la estrategia entrara en niveles válidos.
+
+- **Causa Raíz**: El contador `EntryAttempts` se incrementaba en cada **VWAP retry trigger** (cuando el precio rompía el ancla), NO cuando el trade realmente se ejecutaba.
+  - Ubicación del bug: `EntryStateMachine.cs:537` - `currentLevel.EntryAttempts++`
+  - El fix de v1.15.48 removió el incremento del trigger path (líneas 259, 314) pero **olvidó remover** el del VWAP retry path (línea 537).
+  - El incremento en `OnExecutionUpdate` **nunca se implementó** a pesar de estar documentado en el changelog.
+
+- **Solución v1.15.50**:
+  1. **Removido** el incremento incorrecto en `EntryStateMachine.cs:537` (VWAP retry path)
+  2. **Agregado** el incremento correcto en `SessionLevelsStrategy.cs:OnExecutionUpdate` - Solo cuando el trade fill realmente ocurre
+
+  ```csharp
+  // ANTES (Bug en EntryStateMachine.cs - VWAP retry)
+  if (priceBreaksExtreme)
+  {
+      currentLevel.EntryAttempts++; // ❌ Incrementaba en cada break de VWAP
+  }
+
+  // DESPUÉS (Fix en OnExecutionUpdate - trade fill)
+  var activeLevel = activeLevels.FirstOrDefault(l => l.Name == setupLevelName);
+  if (activeLevel != null)
+  {
+      activeLevel.EntryAttempts++; // ✅ Solo incrementa cuando el trade se llena
+  }
+  ```
+
+- **Impacto**:
+  - ✅ El contador ahora refleja trades ejecutados reales, no toques de VWAP
+  - ✅ Los niveles ya no se "agotan" prematuramente
+  - ✅ La estrategia puede entrar en niveles válidos que antes bloqueaba
+
+- **Archivos Modificados**:
+  - `EntryStateMachine.cs:533-540`: Removido bloque de incremento en VWAP retry
+  - `SessionLevelsStrategy.cs:3956-3964`: Agregado incremento en OnExecutionUpdate
+  - `StrategyHelpers.cs:143,280`: Actualizada versión a v1.15.50
+
+---
+
+## [v1.15.49] - 2026-01-20
+
+### 🐛 Fixed
+
+**1. Posiciones No Se Cierran el Viernes (Bug Crítico)**
+
+- **Problema**: Las posiciones abiertas no se cerraban automáticamente al final de la sesión del viernes, dejando operaciones expuestas al gap del fin de semana.
+  
+- **Causa Raíz**: La lógica de cierre (línea 2222) tenía una referencia a `EnableHolidayProtection`, una variable que **no estaba definida**, causando que la condición nunca se cumpliera.
+
+  ```csharp
+  // ANTES (Bug)
+  if (EnableHolidayProtection && (isFriday || isEarlyClose))
+  ```
+
+- **Solución v1.15.49**: Removida la variable indefinida. Ahora siempre cierra posiciones en viernes y early closes (holidays).
+
+  ```csharp
+  // DESPUÉS (Fix)
+  if (isFriday || isEarlyClose)
+  ```
+
+- **Impacto**: 
+  - ✅ Posiciones se cierran automáticamente antes del cierre de sesión del viernes
+  - ✅ Protección contra gaps de fin de semana
+  - ✅ También funciona para holidays con early close
+
+- **Archivos Modificados**:
+  - `SessionLevelsStrategy.cs` línea 2222: Removida condición `EnableHolidayProtection &&`
+  
+---
+
+## [v1.15.48] - 2026-01-20
 ### Agregado
 - **Módulo SL Adaptativo (Supervivencia):** Reemplazo de la lógica de salida de emergencia. Ahora, si el precio salta el Stop Loss durante la entrada, el sistema adapta el SL a `Precio Actual +/- 4 ticks` para asegurar que la orden sea aceptada por NinjaTrader y la posición siga protegida, en lugar de cerrar o fallar.
+
+## [v1.15.48] - 2026-01-19
+### Corregido
+- **Bug: Contador de Intentos Exporta Valor Global en Lugar del Valor por Nivel**
+  - **Problema**: El CSV de exportación mostraba el valor de `currentLevelAttempts` (variable cacheada) en lugar del valor real de `SessionLevel.EntryAttempts` del nivel específico.
+    - Ejemplo: Trade ganador en Asia High mostraba "intento #18" cuando era realmente el intento #2 de ese nivel específico.
+    - La app Streamlit y análisis AI mostraban datos incorrectos sobre qué intentos eran más rentables por nivel.
+  - **Causa Raíz**: En `OnExecutionUpdate`, el código asignaba `tradeAttemptNumber = currentLevelAttempts` sin verificar que este valor correspondiera al nivel correcto.
+    - `currentLevelAttempts` se actualizaba cada vez que se triggeaba cualquier nivel.
+    - Si había trades intermedios en otros niveles (USA High, Europe High), el contador se incrementaba globalmente.
+    - El valor exportado al CSV no reflejaba el contador específico del nivel del trade (`lvl.EntryAttempts`).
+  - **Impacto**:
+    - Análisis AI de rentabilidad por "intento de nivel" era completamente erróneo
+    - No se podía determinar si el intento #2 de Asia High era más rentable que el intento #5
+    - Datos históricos en CSV no reflejan la realidad de la estrategia
+  - **Solución v1.15.48**: 
+    - Modificado `SessionLevelsStrategy.cs:3934-3944` para leer directamente del objeto `SessionLevel`:
+    ```csharp
+  // v1.15.48: FIX - Use currentVwapNumber which matches order suffix
+  // This is the same counter used for order names (EntryA+_Long_01, _02, etc.)
+  tradeAttemptNumber = currentVwapNumber;
+  Log(string.Format("TRADE ATTEMPT: {0} Attempt #{1}/{2}", 
+      setupLevelName, currentVwapNumber, MaxRetriesPerLevel));
+    ```
+
+- **Simplificación**: En lugar de gestionar `EntryAttempts` de forma compleja, ahora se usa directamente `currentVwapNumber`, que es el mismo contador que ya funciona correctamente para nombres de órdenes.
+- **Impacto**: CSV ahora muestra `intento #1` para el primer trade, `#2` para el segundo, etc., coincidiendo exactamente con el sufijo de la orden (EntryA+_Long_01, EntryA+_Long_02, etc.).specífico
+    - Usa `currentLevelAttempts` solo como fallback si el nivel no se encuentra
+  - **Resultado**: El CSV ahora exporta el contador de intentos correcto por nivel, permitiendo análisis preciso de rentabilidad por intento.
+
+- **Bug: Contador de Intentos Se Incrementaba en Trigger en Lugar de en Trade**
+  - **Problema**: El contador `EntryAttempts` se incrementaba cada vez que se tocaba el nivel (trigger), NO cuando realmente se ejecutaba un trade.
+    - Ejemplo: Nivel tocado 3 veces (rechazado por filtros) → Primer trade mostraba "intento #3" en lugar de "intento #1"
+    - No tenía sentido contar touches que no resultaron en trades
+  - **Causa Raíz**: El código incrementaba `lvl.EntryAttempts++` en `ProcessSelectedTrigger` (EntryStateMachine.cs líneas 259 y 314)
+  - **Solución v1.15.48**: 
+    - **Removido** `lvl.EntryAttempts++` de `EntryStateMachine.cs:259 y 314` (trigger paths)
+    - **Agregado** `activeLevel.EntryAttempts++` en `SessionLevelsStrategy.cs:3940` (trade execution path)
+    - Ahora el contador se incrementa SOLO cuando el trade fill realmente ocurre
+  - **Resultado**: Primer trade = intento #1, segundo trade en el mismo nivel = intento #2, etc. El contador ahora refleja trades ejecutados, no touches del nivel.
+
+- **Bug: Playback Cargaba Contadores de Intentos de Sesiones Anteriores**  
+  - **Problema**: Al ejecutar Playback múltiples veces, el primer trade mostraba "intento #8" en lugar de "intento #1".
+    - Los valores de `EntryAttempts` se persistían en archivos XML entre sesiones de Playback
+    - Aunque v1.15.49 bloqueó LoadLevels en Playback, los niveles escaneados del historial mantenían valores antiguos
+  - **Causa Raíz**: No había lógica para resetear `EntryAttempts` explícitamente en Playback/Backtest
+  - **Solución v1.15.48**:
+    ```csharp
+    // After ScanHistoricalLevels, in Playback/Backtest only:
+    if (State != State.Realtime) {
+        foreach (var lvl in activeLevels) {
+            lvl.EntryAttempts = 0;  // Clean slate for testing
+        }
+    }
+    ```
+  - **Resultado**: Playback siempre empieza con contadores en 0, permitiendo pruebas repetibles y consistentes.
+
+### Técnico
+- Modificado `SessionLevelsStrategy.cs:3934-3944` - Incrementa y lee EntryAttempts directamente de SessionLevel object en fill time
+- Modificado `EntryStateMachine.cs:254-267, 309-322` - Removido incremento de contador en trigger (Long y Short paths)
+- Modificado `SessionLevelsStrategy.cs:1820-1834` - Agregado reset de EntryAttempts en Playback/Backtest startup
+- Actualizado `StrategyHelpers.cs:279` - Versión a v1.15.48
+
+## [v1.15.49] - 2026-01-19
+### Corregido
+- **Bug: Contador de Intentos Persistente en Playback (20 Intentos Agotados)**
+  - **Problema**: Al reiniciar o reactivar Playback, la estrategia cargaba el estado de los niveles (incluyendo el contador de intentos ya agotados) desde el archivo de persistencia del disco, impidiendo volver a operar.
+  - **Solución**: Se restringió la carga de persistencia (`LoadLevels`) para que SOLO ocurra en modo `Realtime`.
+    - En `Playback` y `Backtest`, la estrategia siempre iniciará con un estado limpio (0 intentos).
+    - En `Realtime`, sigue recuperando el estado previo en caso de reinicio/crash.
+
+## [v1.15.48] - 2026-01-19
+### Corregido
+- **Bug Crítico: Cancelación Prematura de Stop Loss (Lag Protection Guard)**
+  - **Problema**: En Playback o alta latencia, la lógica de detección de lag ("LAG DETECTED") a veces se disparaba erróneamente por doble ejecución (Race Condition entre `OnExecutionUpdate` y `OnOrderUpdate`), reduciendo el Stop Loss a 0 y cancelándolo prematuramente mientras aún quedaban contratos abiertos para TP2.
+  - **Solución**: Implementado `Safety Guard` en `OrderProtectionManager.HandleTP1Fill`.
+    - Ahora, antes de reducir el SL, se verifica la cantidad del `tp2Order` activo.
+    - Se prohíbe estrictamente que la cantidad del SL baje de la cantidad requerida para el TP2.
+    - Si la lógica de lag calcula 0 pero hay TP2 de 2 contratos, el SL se fuerza a 2 contratos.
+    - Esto mantiene la seguridad contra lag pero previene la cancelación accidental "zombie".
+
+## [v1.15.47] - 2026-01-19
+### Corregido
+- **Discrepancia PnL / Comisiones en Playback**
+  - **Problema**: La estrategia usaba una lógica híbrida que intentaba estimar comisiones si NinjaTrader reportaba 0, causando discrepancias de centavos (o dólares) en reportes externos.
+  - **Solución**: Se implementó **Lógica Estricta de Comisiones**.
+    - La estrategia ahora exporta EXACTAMENTE lo que reporta `execution.Commission * 2`.
+    - Si NinjaTrader reporta 0 (común en Playback sin configurar), se exporta 0.
+    - Se eliminó cualquier cálculo/estimación manual ("Hardcoded Rates").
+    - **Resultado**: Coincidencia exacta de centavos con el reporte "Trade Performance" de NinjaTrader.
+
+## [v1.15.45] - 2026-01-19
+### Agregado
+- **Alertas Críticas por Email**
+  - Nuevo parámetro `EmailToAlert` para notificaciones de emergencia.
+  - Envía email automático si la estrategia crashea (`OnBarUpdate`) o pierde conexión.
+  - Incluye Stack Trace completo para facilitar debugging remoto.
+
+## [v1.15.42] - 2026-01-18
+### Corregido
+- **Bug Visual: Acumulación de Líneas "AdhocLine" (Fuga de Memoria Visual)**
+  - **Problema**: El gráfico acumulaba miles de segmentos de línea blanca etiquetados "AdhocLine_XXX", creando bloques sólidos blancos y posible degradación de rendimiento.
+  - **Causa Raíz**: La lógica de visualización del setup `Wait` dibujaba un nuevo segmento cada barra pero nunca eliminaba los segmentos antiguos al terminar el setup o re-anclar.
+  - **Solución**: Se implementó una rutina de limpieza automática (`ClearAdhocVisuals`) que elimina todas las líneas "AdhocLine" tan pronto como el setup finaliza (Idle), se invalida, o se re-inicia (nuevo trigger/re-anchor).
+  - **Resultado**: El gráfico se mantiene limpio, mostrando solo la curva VWAP del setup activo actual.
+- **Bug Visual: Líneas Verticales al Infinito**
+  - **Problema**: Ocasionalmente se dibujaban líneas verticales extendiéndose fuera del gráfico.
+  - **Causa**: Coordenadas inválidas (0 o valores extremos) pasadas a `Draw.Line`.
+  - **Solución**: Agregado Sanity Check que bloquea el dibujado si las coordenadas son absurdas (< TickSize o > 1,000,000).
+
+## [v1.15.43] - 2026-01-18
+### Agregado
+- **Integración IA (Configuración Automática)**
+  - Implementado `AutoLoadAIConfig` para leer configuración desde `ai_config.json`.
+  - Soporte para carga dinámica de:
+    - `EnabledZones`: Lista de zonas permitidas.
+    - `MaxLevelAgeDays`: Edad máxima de los niveles.
+    - `MaxRetriesPerLevel`: Cantidad máxima de intentos.
+- **Consistencia de Datos (CSV)**
+  - Agregadas nuevas columnas al export: `EntryMode`, `ExitStrategy`, `RiskModel`.
+  - Permite a la App de Auditoría diferenciar entre estrategias Standard vs Ladder y Fixed vs Dynamic.
+
+## [v1.15.42] - 2026-01-18
+### Corregido
+- **Bug CRÍTICO: Ladder Exit SL Reduction (Steps > 1)**
+  - **Problema**: La reducción de SL solo funcionaba para el primer escalón (TP1). Los escalones posteriores (TP2, TP3...) no reducían el SL, dejando la posición desprotegida o con tamaño incorrecto.
+  - **Causa Raíz**: 
+    1. La lógica de detección de "Salida" estaba anidada incorrectamente dentro del bloque de "Entrada" en `OnExecutionUpdate`.
+    2. El filtro de verificación exigía el tag `_1_` (Step 1) para disparar la reducción.
+  - **Solución**: 
+    1. Se movió la lógica de salida a un bloque `else` independiente.
+    2. Se eliminó la restricción `_1_`, permitiendo que CUALQUIER fill de `LadderTP` dispare la reducción de SL proporcional.
+    3. Probado y verificado escalabilidad con hasta 10 contratos.
+
+- **Corregido: Errores de Compilación y Duplicados**
+  - Eliminada definición duplicada de propiedad `Quantity` en `SessionLevelsStrategy.cs`.
+  - Corregido error de sintaxis (llave extra `}`) en `OrderProtectionManager.cs`.
+
+## [v1.15.40] - 2026-01-18
+### Agregado
+- **Modelo de Salida en Escalera (Ladder Exit)**
+  - Introduce un nuevo modo de gestión de salidas seleccionable por parámetro: `ExitStrategyType`.
+  - **Modo Standard (Original)**: Mantiene el comportamiento actual (TP1 en VWAP, TP2 en Nivel Opuesto).
+  - **Modo Ladder (Nuevo)**:
+    - Escala las salidas secuencialmente basadas en múltiplos de R (Riesgo Inicial).
+    - Ejemplo para 3 contratos: Target 1 @ 1R, Target 2 @ 2R, Target 3 @ 3R.
+    - **Gestión de Stop Loss**: Al llenarse el primer Target (1R), el Stop Loss restante se mueve automáticamente a Breakeven.
+  - **Implementación Técnica**:
+    - `OrderProtectionManager.EnsureLadderProtection`: Calcula y coloca órdenes Limit individuales para cada contrato.
+    - `SessionLevelsStrategy.OnExecutionUpdate`: Detecta fills de `LadderTP` para disparar el movimiento a Breakeven.
+
+### Corregido
+- **Bug VWAP (04:27 AM - 6 Mayo)**: Se corrigió un error donde el calculador de VWAP no se reseteaba correctamente al cambiar de nivel, acumulando volumen erróneo y generando valores de VWAP imposibles.
+  - Solución: Se fuerza el reset del `VWAPCalculator` (`ResetAdhocVWAP`) cada vez que la `EntryStateMachine` cambia de nivel objetivo.
+
+### Técnico
+- Nuevo Enum `ExitStrategyType` { Standard, Ladder }.
+- Nuevo Parámetro `ExitStrategy` en la sección Order Management.
+- Nueva clase de gestión interna `ladderOrders` para rastrear múltiples órdenes de salida.
+
+## [v1.15.38] - 2026-01-16
+### Agregado
+- **Sistema de Alertas de Email Mejoradas**
+  - **Email de Entrada (SendTradeEntryEmail)**: Envía email detallado al ejecutarse una entrada con: Instrumento, Dirección, Contratos, Precio, Nivel, Risk, TP/SL
+  - **Email de Salida (SendTradeExitEmail)**: Envía email al cerrar posición con: Resultado (Win/Loss), PnL Bruto/Neto, Comisión, MAE, MFE, Duración
+  - **Alertas Críticas (SendCriticalAlert)**: Envía email inmediato para eventos críticos:
+    - Chart Lag > threshold (órdenes bloqueadas)
+    - Apteros Risk Limit Hit (cierre forzado por riesgo)
+    - Emergency Close (cierre de emergencia)
+    - Order Rejected (orden rechazada por broker)
+  - **Anti-Duplicación**: Flags `emailSentOnEntry` y `emailSentOnExit` previenen emails duplicados por fills parciales
+  - **Solo Realtime**: Los emails solo se envían en modo Realtime, no en Playback/Backtest
+
+### Corregido
+- **Fix Crítico Viernes**: Corregida lógica de `CheckWeekEndReset` en `SessionLevelsStrategy.cs`. Anteriormente, si la estrategia corría un viernes por la mañana, calculaba erróneamente el reseteo semanal como "hoy a las 18:00", causando un reseteo prematuro de niveles y bloqueando operaciones todo el día.
+
+### Técnico
+- Agregado `SessionLevelsStrategy.cs:3322-3363` - `SendTradeEntryEmail()` con formato detallado
+- Agregado `SessionLevelsStrategy.cs:3365-3405` - `SendTradeExitEmail()` con cálculo de PnL
+- Agregado `SessionLevelsStrategy.cs:3407-3431` - `SendCriticalAlert()` para eventos de emergencia
+- Agregado `SessionLevelsStrategy.cs:3433-3469` - `SendEmailText()` helper sin attachment
+- Agregado `SessionLevelsStrategy.cs:4470-4471` - Flags de anti-duplicación
+- Modificado `SessionLevelsStrategy.cs:486-492` - Alert email en CheckChartLag
+- Modificado `SessionLevelsStrategy.cs:3253-3261` - Alert email en Apteros Risk Limit
+- Modificado `SessionLevelsStrategy.cs:3682-3692` - Alert email en Order Rejection
+- Modificado `SessionLevelsStrategy.cs:4103-4125` - Exit email al cerrar posición
+- Modificado `SessionLevelsStrategy.cs:4527-4532` - Alert email en ClosePositionUnmanaged
+- Modificado `SessionLevelsStrategy.cs:3778-3783` - Reset de flags en nueva entrada
+
+
+## [v1.15.37] - 2026-01-15
+### Corregido
+- **Bug: Contador de Intentos (Attempt) No Incrementaba en Reintentos VWAP**
+  - **Problema**: Cuando el precio rompía el VWAP para reintentar una entrada (`HandleVwapMitigationWait`), el contador `EntryAttempts` no se incrementaba. Esto causaba que múltiples intentos aparecieran como "Attempt 1".
+  - **Solución**: Se agregó `lvl.EntryAttempts++` dentro de la lógica de reintento en `EntryStateMachine.cs`. Ahora los reintentos se reflejan correctamente (Attempt 2, 3...) en logs y CSV.
+
+### Agregado
+- **Exportación de Antigüedad del Nivel (Level Age)**
+  - Se incluye la columna `LevelAge` en el CSV de exportación de trades.
+  - Permite análisis de rentabilidad basado en la "frescura" del nivel (0 días vs días anteriores).
+
+### Técnico
+- Modificado `EntryStateMachine.cs:514-520` - Incremento de contador en reintento.
+- Actualizado `SessionLevelsStrategy.cs:40` - Versión a v1.15.37.
+- Actualizado `StrategyHelpers.cs:262` - Versión a v1.15.37.
+
+## [v1.15.36] - 2026-01-15
+### Mejorado
+- **Logging Timestamps**: Los logs ahora muestran dos timestamps claramente separados
+  - **PC Time**: Hora del computador (útil para correlacionar con eventos externos)
+  - **Chart Time**: Hora del chart/playback (hora real del mercado)
+  - Formato: `13:52:15.123 [17:25:30.456] Message` (PC Time [Chart Time] Message)
+  - Facilita análisis de playback donde Chart Time es diferente a PC Time actual
+
+- **Sección de Trade desde Trigger**: Separador de logs ahora inicia cuando se **toca el nivel** en lugar de cuando se llena la orden
+  - **Antes**: `TRADE START` aparecía cuando orden entraba
+  - **Ahora**: `TRIGGER` aparece cuando nivel es mitigado
+  - Permite analizar TODO el flujo del trade: trigger → re-anchors → fill → protection → close
+  - Formato nuevo:
+    ```
+    ==================================================================
+       TRIGGER: USA Low @ 21186.5 | Attempt #1/20 (Deepest Selection)
+    ==================================================================
+    ```
+
+### Técnico
+- Modificado `StrategyHelpers.cs:71` - Timestamp dual (PC + Chart)
+- Modificado `SessionLevelsStrategy.cs:382` - Comentario actualizado
+- Modificado `EntryStateMachine.cs:241,290` - Separador movido a trigger
+- Modificado `SessionLevelsStrategy.cs:3648` - Eliminado separador duplicado en fill
+- Actualizado `SessionLevelsStrategy.cs:40` - Versión a v1.15.36
+
+## [v1.15.35] - 2026-01-15
+### Revertido
+- **v1.15.34 Export Híbrido** - Revertido enfoque de `SystemPerformance.AllTrades` porque agrega ejecuciones en lugar de mostrarlas individualmente
+  - `SystemPerformance.AllTrades` devuelve trades agregados (1 objeto = todo el trade)
+  - NT Trade Performance exporta ejecuciones individuales (cada partial fill)
+  - Restaurado export original en `OnExecutionUpdate` que SÍ captura cada partial fill correctamente
+
+### Corregido - App Streamlit
+- **Comisiones Incorrectas en Tabla**: `calculate_commission()` no multiplicaba por `Quantity`
+  - Ahora: `return rate * 2 * quantity` (RT × Quantity)
+  - MGC: 2 contratos → $4.80 ✅, 9 contratos → $21.60 ✅
+- **Tarifas MicroCom**: Actualizadas de $0.77 a $1.20 por lado (matching con estrategia C#)
+- **Checkboxes No Sincronizados**: Checkbox "Todos" no actualizaba checkboxes individuales
+  - Implementado `session_state` para sincronizar en Niveles, Instrumentos, e Intentos
+
+### Agregado - App Streamlit
+- **Tabla de Datos Raw**: Checkbox "🔍 Mostrar Tabla de Datos Raw" en sidebar
+  - Muestra primeras 50 ejecuciones con todas las columnas (Commission, Quantity, EntryTime, ExitTime, etc.)
+  - Métricas de resumen: Total Registros, Total Commission, Gross PnL
+  - Útil para debugging y verificación de valores
+
+### Técnico
+- Eliminado `SessionLevelCore.cs:109-122` - Clase TradeMetadata (revertido)
+- Eliminado `SessionLevelsStrategy.cs:76` - Dictionary cache (revertido)
+- Eliminado `SessionLevelsStrategy.cs:4311-4410` - Método ExportTradesFromSystemPerformance() (revertido)
+- Eliminado `SessionLevelsStrategy.cs:3260-3263` - Trigger en OnPositionUpdate (revertido)
+- Eliminado `SessionLevelsStrategy.cs:3637-3655` - Captura de metadatos para cache (revertido)
+- Actualizado `SessionLevelsStrategy.cs:40` - Versión a v1.15.35
+- Actualizado `StrategyHelpers.cs:262` - Versión a v1.15.35
+- Modificado `app.py:1179` - calculate_commission ahora multiplica por Quantity
+- Modificado `app.py:25,33` - Tarifas MicroCom actualizadas a 1.20
+- Agregado `app.py:1404` - Checkbox para mostrar tabla raw
+- Agregado `app.py:1589-1600` - Display de tabla de datos raw
+- Agregado `app.py:1730,1745,1778` - Sincronización de checkboxes con session_state
+
+## [v1.15.33] - 2026-01-15
+### Agregado
+- **Columna Quantity en CSV Export para Matching Exacto con NT**
+  - **Objetivo**: Garantizar que los resultados de la app Streamlit coincidan EXACTAMENTE con NinjaTrader Trade Performance
+  - **Cambios en CSV Export**:
+    - Agregada columna "Quantity" en posición 22 del header (después de LevelAge)
+    - Export incluye `execution.Quantity` para cada ejecución
+    - Permite cálculo preciso de PnL tomando en cuenta cantidad de contratos en cada fill
+  - **Cambios en Streamlit App**:
+    - Actualizada lista de nombres de columnas para incluir 'Quantity'
+    - Agregada validación de columna con valor por defecto de 1
+    - App ahora reconoce y procesa correctamente la columna Quantity
+  - **Requisito Crítico**: Este es un producto comercial - no puede haber inconsistencias entre resultados de la app y NinjaTrader
+  
+### Técnico
+- Modificado `SessionLevelsStrategy.cs:4276` - Header de CSV incluye "Quantity"
+- Modificado `SessionLevelsStrategy.cs:3890-3914` - Export line incluye `execution.Quantity`
+- Modificado `StreamlitAudit/app.py:1072` - Columna 'Quantity' agregada a col_names_new
+- Modificado `StreamlitAudit/app.py:1114-1120` - Validación de columna Quantity con default=1
+- Actualizado `StrategyHelpers.cs:262` - Versión a v1.15.33
 
 ## [v1.15.32] - 2026-01-14
 ### Corregido
@@ -278,9 +680,11 @@ El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/
 - Actualizado `SessionLevelsStrategy.cs:40` - Versión a v1.15.21.
 - Actualizado `StrategyHelpers.cs:262` - Display de versión a v1.15.21.
 
-## [v1.15.20] - 2026-01-13
-### Corregido
-- **Bug: Contador de Intentos Incorrecto en CSV y Plots**
+## [v1.15.48] - 2026-01-20
+
+### 🐛 Fixed
+
+**1. CSV Export - Contador de Intentos Simplificado y Corregido** en CSV y Plots**
   - **Problema**: El CSV mostraba el contador de "Attempt" incorrecto cuando la estrategia cambiaba de nivel. Por ejemplo:
     - Asia Low: Intento #1 (5:11 AM), Intento #2 (5:44 AM), Intento #3 (6:04 AM) ✓ Correcto
     - USA Low: Mostraba "Intento #4" cuando debería mostrar "Intento #1" ✗ Incorrecto
