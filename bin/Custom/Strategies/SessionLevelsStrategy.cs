@@ -46,7 +46,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	[Gui.CategoryOrder("Risk Management", 2)]
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.15.53"; // v1.15.53: Fix Double Counting of Entry Attempts
+		private const string StrategyVersion = "v1.15.58"; // v1.15.58: Fix Delta Persistence (SessionLevelData)
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;
@@ -82,11 +82,21 @@ namespace NinjaTrader.NinjaScript.Strategies
 		private bool slOrderCreatedThisEntry = false; // v1.13.5: Prevent duplicate SL creation
 
 	// v1.14.31: Delta Integration for quantitative analysis
-	private NinjaTrader.NinjaScript.Indicators.RelativeIndicators.RelativeDelta relativeDelta;
+	[XmlIgnore] public NinjaTrader.NinjaScript.Indicators.RelativeIndicators.RelativeDelta relativeDelta;
 	private double tradeDeltaAtEntry = 0;      // Delta when entry filled
 	private int tradeDeltaDirection = 0;       // 1=aligned, -1=opposed, 0=neutral
 	private double tradeSessionDelta = 0;      // Session cumulative delta at entry
 	private double tradeDeltaAtTP1 = 0;        // Delta when TP1 filled
+
+    // v1.15.54: Scoring Persistence
+    private double tradeDeltaPush = 0;
+    private double tradeDeltaFormation = 0;
+    private double tradeDeltaDespegue = 0;
+    private double tradeScoreTotal = 0;
+    private double tradeScoreF1 = 0;
+    private double tradeScoreF2 = 0;
+    private double tradeScoreF3 = 0;
+    private double tradeScoreF4 = 0;
 
 
 
@@ -197,6 +207,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 		
 		[XmlIgnore] public List<SessionLevel> activeLevels = new List<SessionLevel>();
 	[XmlIgnore] public Dictionary<string, int> levelEntryAttempts = new Dictionary<string, int>(); // v1.15.15: Persistent counter
+		[XmlIgnore] private HashSet<string> activeAdhocTags = new HashSet<string>(); // v1.15.55: Robust tracking for cleanup
 		// v1.14.42: Public property for SessionManager access
 		public string USAEndTime => "18:00:00"; // USA session close time
 		
@@ -256,6 +267,16 @@ namespace NinjaTrader.NinjaScript.Strategies
         [NinjaScriptProperty]
         [Display(Name="Alert Email", Description="Email to send critical alerts to (Crash/Disconnect).", Order=65, GroupName="General")]
         public string EmailToAlert { get; set; } = "adolfo.meza.r@gmail.com";
+
+        // v1.15.54: Delta Scoring Parameters
+        [NinjaScriptProperty]
+        [Display(Name = "Use Delta Filter", Description = "Filter entries based on Delta Score.", Order = 100, GroupName = "Order Flow")]
+        public bool UseDeltaFilter { get; set; } = true;
+
+        [NinjaScriptProperty]
+        [Display(Name = "Min Delta Score", Description = "Minimum score (0-100) to take a trade.", Order = 101, GroupName = "Order Flow")]
+        [Range(0, 100)]
+        public int MinDeltaScore { get; set; } = 40;
 
 
 
@@ -886,7 +907,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 					if (!System.IO.File.Exists(csvExportPath))
 					{
 						// Added Delta columns for quantitative analysis
-						string header = "ID,Instrument,EntryTime,Type,EntryPrice,ExitTime,ExitPrice,Result,PnL,Commission,NetPnL,MAE,MFE,Setup,Attempt,RiskReward,DeltaAtEntry,DeltaDirection,SessionDelta,DeltaAtTP1";
+						// Added Delta columns for quantitative analysis
+						string header = "ID,Instrument,EntryTime,Type,EntryPrice,ExitTime,ExitPrice,Result,PnL,Commission,NetPnL,MAE,MFE,Setup,Attempt,RiskReward,DeltaAtEntry,DeltaDirection,SessionDelta,DeltaAtTP1,LevelAge,Quantity,ExecutionId,EntryMode,ExitStrategy,RiskModel,DeltaPush,DeltaFormation,DeltaDespegue,DeltaScore,Phase1,Phase2,Phase3,Phase4";
 						System.IO.File.WriteAllText(csvExportPath, header + Environment.NewLine);
 						Log("CSV EXPORT: Created " + csvExportPath);
 					}
@@ -1115,7 +1137,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 					IsMitigated = level.IsMitigated,
 					VolSum = level.VolSum,
 					PvSum = level.PvSum,
-					Tag = level.Tag
+					Tag = level.Tag,
+					
+					// v1.15.54: Delta Persistence
+					DeltaAtFormation = level.DeltaAtFormation,
+					DeltaHigh = level.DeltaHigh,
+					DeltaLow = level.DeltaLow,
+					DeltaAtSwingStart = level.DeltaAtSwingStart,
+					AbsorptionDetected = level.AbsorptionDetected
 				});
 			}
 
@@ -1199,7 +1228,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 							Tag = d.Tag,
 							VolSum = d.VolSum,
 							PvSum = d.PvSum,
-							JustReset = false
+							JustReset = false,
+							
+							// v1.15.54: Delta Persistence
+							DeltaAtFormation = d.DeltaAtFormation,
+							DeltaHigh = d.DeltaHigh,
+							DeltaLow = d.DeltaLow,
+							DeltaAtSwingStart = d.DeltaAtSwingStart,
+							AbsorptionDetected = d.AbsorptionDetected
 						};
 						
 						// Check Staleness Gap (STRICT)
@@ -1441,6 +1477,9 @@ namespace NinjaTrader.NinjaScript.Strategies
                             SubmitOrderUnmanaged(0, OrderAction.Sell, OrderType.Market, Position.Quantity, 0, 0, "", "ForceFlat_Playback");
                         else if (Position.MarketPosition == MarketPosition.Short)
                             SubmitOrderUnmanaged(0, OrderAction.BuyToCover, OrderType.Market, Position.Quantity, 0, 0, "", "ForceFlat_Playback");
+                        
+                        // v1.15.58: Force Historical Scan to capture Delta for past sessions
+                        if (sessionManager != null) sessionManager.ScanHistoricalLevels();
                         
                         // Reset Internal State
                         currentEntryState = EntryState.Idle;
@@ -2077,14 +2116,17 @@ currentEntryState = EntryState.Idle;
 			// v1.14.45: Delegate to VWAPCalculator Module
 			if (vwapCalc != null)
 			{
-				vwapCalc.UpdateAdhocVWAP(0, CurrentBar, High, Low, Close, Open, Volume);
+				// v1.15.56: FIX - REMOVED redundant Call (Already called in OnBarUpdate)
+				// vwapCalc.UpdateAdhocVWAP(0, CurrentBar, High, Low, Close, Open, Volume);
 				
-				// Sync local visual variables for drawing (Backwards Compatibility for now)
-				visualAdhocPrevBarVal = vwapCalc.VisualAdhocPrevBarVal;
-				visualAdhocLastVal = vwapCalc.VisualAdhocLastVal;
-				visualAdhocLastBar = vwapCalc.AdhocAnchorBar; // This might need refinement, visual tracking logic
+				// v1.15.56: FIX - REMOVED Visual State Overwrites
+				// These overrides were corrupting the drawing logic in ManageEntryA_Plus
+				// specifically visualAdhocLastBar = AdhocAnchorBar forced 'New Bar' detection every tick.
+				// visualAdhocPrevBarVal = vwapCalc.VisualAdhocPrevBarVal;
+				// visualAdhocLastVal = vwapCalc.VisualAdhocLastVal;
+				// visualAdhocLastBar = vwapCalc.AdhocAnchorBar; 
 				
-				// Important: Retrieve calculated values for local usage
+				// Important: Retrieve calculated values for local usage (just for reference/logging)
 				adhocVolSum = vwapCalc.AdhocVolSum;
 				adhocPvSum = vwapCalc.AdhocPvSum;
 			}
@@ -2554,8 +2596,18 @@ currentEntryState = EntryState.Idle;
 		// v1.15.42: Cleanup Method for Adhoc Lines (Visual Leak Fix)
 		public void ClearAdhocVisuals()
 		{
-			// Iterate from anchor to current and remove all segments
-			// We add a buffer (+5) to catch any edge cases
+			// v1.15.55: Robust HashSet Cleanup
+			// Iterate tracked tags to ensure 100% removal regardless of bar index
+			if (activeAdhocTags != null && activeAdhocTags.Count > 0)
+			{
+				foreach(string tag in activeAdhocTags)
+				{
+					RemoveDrawObject(tag);
+				}
+				activeAdhocTags.Clear();
+			}
+			
+			// Fallback: Also remove using the old loop if HashSet was empty (e.g. after reload) but AnchorBar is valid
 			if (adhocAnchorBar > 0)
 			{
 				for (int i = adhocAnchorBar; i <= CurrentBar + 5; i++)
@@ -2563,6 +2615,7 @@ currentEntryState = EntryState.Idle;
 					RemoveDrawObject("AdhocLine_" + i);
 				}
 			}
+			
 			// Reset tracking
 			visualAdhocLastBar = -1;
 		}
@@ -2800,7 +2853,12 @@ currentEntryState = EntryState.Idle;
                         
                         // Sanity Check: Prevent drawing if values are absurdly high (Infinity Lines)
                         if (visualAdhocPrevBarVal < 1000000 && v < 1000000)
+                        {
 						    Draw.Line(this, lineTag, false, 1, visualAdhocPrevBarVal, 0, v, Brushes.White, DashStyleHelper.Solid, 1);
+                            
+                            // v1.15.55: Track tag for clean removal
+                            if (activeAdhocTags != null) activeAdhocTags.Add(lineTag);
+                        }
 					}
 					
 					// REMOVED TEXT LABEL AS REQUESTED
@@ -3733,6 +3791,81 @@ currentEntryState = EntryState.Idle;
 		return fallbackValue;
 	}
 
+    // v1.15.54: DELTA SCORING LOGIC
+    // Returns total score and fills detailed phase scores references
+    public double CalculateDeltaScoreAdvanced(SessionLevel lvl, bool isShort, out double f1, out double f2, out double f3, out double f4)
+    {
+        double score = 0;
+        f1 = 0; f2 = 0; f3 = 0; f4 = 0;
+        
+        if (relativeDelta == null || lvl == null) return 0;
+
+        // FASE 1: Push (Swing -> Extreme)
+        // Simple logic: Weak delta on push = +15 (Reversal likely)
+        // Using DeltaAtSwingStart as proxy if available, or just Formation Delta context
+        // If Formation Delta is WEAK (< 500 abs) = +15
+        // Doc: "Push débil... Probable reversión"
+        if (Math.Abs(lvl.DeltaAtFormation) < 500) 
+        {
+            f1 = 15;
+            score += 15;
+        }
+
+        // FASE 2: Formation (At the Level)
+        // Short: Sellers dominating (< -2000 = +40)
+        // Long: Buyers dominating (> +2000 = +40)
+        if (isShort)
+        {
+            if (lvl.DeltaAtFormation < -2000) { f2 = 40; score += 40; }
+            else if (lvl.DeltaAtFormation < -500) { f2 = 30; score += 30; }
+            else if (lvl.DeltaAtFormation < 500) { f2 = 10; score += 10; } // Neutral
+        }
+        else
+        {
+            if (lvl.DeltaAtFormation > 2000) { f2 = 40; score += 40; }
+            else if (lvl.DeltaAtFormation > 500) { f2 = 30; score += 30; }
+            else if (lvl.DeltaAtFormation > -500) { f2 = 10; score += 10; } // Neutral
+        }
+
+        // FASE 3: Despegue (Detach)
+        // Delta change from Formation to NOW (or Confirm/Trigger time)
+        // We use current relativeDelta.DeltaClose[0] vs lvl.DeltaAtFormation
+        double currentDelta = relativeDelta.DeltaClose[0];
+        double deltaChange = currentDelta - lvl.DeltaAtFormation;
+        
+        if (isShort)
+        {
+            if (deltaChange < 0) { f3 = 25; score += 25; } // Sellers entering
+            else if (deltaChange < 500) { f3 = 10; score += 10; } // Neutral
+        }
+        else
+        {
+            if (deltaChange > 0) { f3 = 25; score += 25; } // Buyers entering
+            else if (deltaChange > -500) { f3 = 10; score += 10; } // Neutral
+        }
+
+        // FASE 4: Acumulado (Day Control)
+        // relativeDelta.DeltaClose[0] IS the cumulative session delta (if configured properly with Tick, 1)
+        double dayDelta = relativeDelta.DeltaClose[0];
+        
+        if (isShort)
+        {
+            if (dayDelta < -2000) { f4 = 30; score += 30; }
+            else if (dayDelta < 0) { f4 = 20; score += 20; }
+            else if (dayDelta > 2000) { f4 = -20; score -= 20; } // Penalty
+            else { f4 = -10; score -= 10; }
+        }
+        else
+        {
+            if (dayDelta > 2000) { f4 = 30; score += 30; }
+            else if (dayDelta > 0) { f4 = 20; score += 20; }
+            else if (dayDelta < -2000) { f4 = -20; score -= 20; } // Penalty
+            else { f4 = -10; score -= 10; }
+        }
+
+        return Math.Max(0, score);
+    }
+
 		private void ManagePositionExit()
 		{
 			// FAILSAFE: If we are actually Flat, do not attempt to manage exits.
@@ -4011,6 +4144,17 @@ currentEntryState = EntryState.Idle;
 								else
 									tradeDeltaDirection = tradeDeltaAtEntry <= 0 ? 1 : -1;
 								Log(Time + " DELTA CAPTURE: Entry Delta=" + tradeDeltaAtEntry + " Direction=" + tradeDeltaDirection);
+
+                                // v1.15.54: Calculate and Store Scoring Data for CSV
+                                if (activeLevel != null)
+                                {
+                                    bool isS = (tradeDirection == "Short"); // tradeDirection set above
+                                    tradeScoreTotal = CalculateDeltaScoreAdvanced(activeLevel, isS, out tradeScoreF1, out tradeScoreF2, out tradeScoreF3, out tradeScoreF4);
+                                    
+                                    tradeDeltaPush = activeLevel.DeltaAtSwingStart; // Proxy
+                                    tradeDeltaFormation = activeLevel.DeltaAtFormation;
+                                    tradeDeltaDespegue = tradeDeltaAtEntry - tradeDeltaFormation;
+                                }
 							}
 							catch { tradeDeltaAtEntry = 0; tradeDeltaDirection = 0; }
 						}
@@ -4262,7 +4406,7 @@ currentEntryState = EntryState.Idle;
                         string riskModelStr = UseDynamicSizing ? "Dynamic" : "Fixed";
                         if (UseDynamicSizing && UseATRScaling) riskModelStr += "_ATR";
                         
-						string line = string.Format("{0},{1},{2:yyyy-MM-dd HH:mm:ss},{3},{4},{5:yyyy-MM-dd HH:mm:ss},{6},{7},{8:F2},{9:F2},{10:F2},{11:F2},{12:F2},{13},{14},{15:F2},{16:F0},{17},{18:F0},{19:F0},{20},{21},{22},{23},{24},{25}",
+						string line = string.Format("{0},{1},{2:yyyy-MM-dd HH:mm:ss},{3},{4},{5:yyyy-MM-dd HH:mm:ss},{6},{7},{8:F2},{9:F2},{10:F2},{11:F2},{12:F2},{13},{14},{15:F2},{16:F0},{17},{18:F0},{19:F0},{20},{21},{22},{23},{24},{25},{26:F0},{27:F0},{28:F0},{29:F0},{30:F0},{31:F0},{32:F0},{33:F0}",
 							tradeId,
 							Instrument.FullName,
 							tradeEntryTime,
@@ -4288,7 +4432,15 @@ currentEntryState = EntryState.Idle;
 							execution.ExecutionId,   // v1.15.38: ExecutionId
                             SelectedEntryMode.ToString(), // {23}
                             TargetDistribution.ToString(), // {24}
-                            riskModelStr            // {25}
+                            riskModelStr,           // {25}
+                            tradeDeltaPush,         // {26}
+                            tradeDeltaFormation,    // {27}
+                            tradeDeltaDespegue,     // {28}
+                            tradeScoreTotal,        // {29}
+                            tradeScoreF1,           // {30}
+                            tradeScoreF2,           // {31}
+                            tradeScoreF3,           // {32}
+                            tradeScoreF4            // {33}
 						);
 						
 						System.IO.File.AppendAllText(csvExportPath, line + Environment.NewLine);

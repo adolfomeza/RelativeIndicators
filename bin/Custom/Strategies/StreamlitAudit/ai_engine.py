@@ -76,7 +76,17 @@ de una estrategia de trading de futuros. Tu análisis debe ser:
 - Directo y accionable
 - Basado en datos, no opiniones
 - En español
-- Con recomendaciones específicas cuando aplique"""
+- Con recomendaciones específicas cuando aplique
+
+CONTEXTO MECÁNICO DE LA ESTRATEGIA:
+1. Selección ("Deepest Level"): Si rompe varios niveles, entra en el MEJOR precio (más bajo para Long, más alto para Short).
+2. Confirmación: Espera vela cerrada fuera del VWAP (Low > VWAP+1 para Long). Puede ser cualquier vela posterior al toque.
+3. R:R Riguroso: Si (Target VWAP / Riesgo Stop) < 1.0, NO OPERA.
+4. Gestión:
+   - TP1 (50%): VWAP Global Dinámico (se mueve con el precio).
+   - Evento TP1: Al tocarlo, el Stop Loss del resto se mueve a Breakeven.
+   - TP2 (50%): Nivel Opuesto más extremo del día.
+   - SL Adaptativo: Si el precio salta el Stop, cierra a mercado (Supervivencia)."""
         
         return {
             "equity_curve": {
@@ -156,6 +166,26 @@ Incluye:
 3. Setups a POTENCIAR (mayor tamaño)
 4. Patrones en nombres de setup (¿ciertos niveles funcionan mejor?)
 5. Correlación entre tipo de nivel y rentabilidad"""
+            },
+
+            "attempt_performance": {
+                "brief": f"""{base_context}
+
+Analiza rendimiento por número de intento en 2-3 líneas:
+{{attempt_table}}
+
+Identifica: ¿vale la pena insistir después del 2do intento?""",
+
+                "full": f"""{base_context}
+
+Análisis DETALLADO por intento:
+{{attempt_table}}
+
+Incluye:
+1. Curva de degradación: ¿cómo cae el Win Rate con cada intento extra?
+2. Costo de oportunidad de permitir múltiples intentos
+3. Recomendación: ¿limitar estrategia a max N intentos?
+4. Análisis de "revenge trading" (intentos tardíos con gran pérdida)"""
             },
             
             "tier_analysis": {
@@ -361,13 +391,19 @@ Analiza interacción de sesiones en 2-3 líneas:
 Mejor combinación: {{best_combo}} (${{best_pnl}})
 Peor combinación: {{worst_combo}} (${{worst_pnl}})
 
-Identifica qué sesión 'domina' los niveles de las otras.""",
+Datos Completos:
+{{matrix_table}}
+
+Identifica qué sesión 'domina' los niveles de las otras. BASATE EN LOS DATOS, NO HALLUCINES.""",
                 
                 "full": f"""{base_context}
 
 Análisis DETALLADO de Matriz Agresor vs Defensor:
 Mejor combinación: {{best_combo}} (${{best_pnl}})
 Peor combinación: {{worst_combo}} (${{worst_pnl}})
+
+Tabla Completa:
+{{matrix_table}}
 
 Incluye:
 1. ¿Qué sesión (Agresor) es más efectiva rompiendo niveles?
@@ -642,6 +678,10 @@ def show_ai_analysis(chart_name: str, chart_type: str, data: dict, key_suffix: s
         data: Datos para el análisis
         key_suffix: Sufijo único para keys de Streamlit
     """
+    # Check if disabled by user
+    if not st.session_state.get('ai_enabled', True):
+        return
+
     analyzer = get_analyzer()
     
     if analyzer is None:
@@ -652,11 +692,7 @@ def show_ai_analysis(chart_name: str, chart_type: str, data: dict, key_suffix: s
     if 'ai_usage_stats' not in st.session_state:
         st.session_state.ai_usage_stats = {'cost': 0.0, 'tokens': 0}
 
-    with st.container():
-        st.markdown("---")
-        
-        # Análisis breve visible directamente
-        st.subheader(f"🧠 Análisis IA: {chart_name}")
+    with st.expander(f"🧠 Análisis IA: {chart_name}", expanded=False):
         
         with st.spinner("🧠 Analizando..."):
             brief_analysis, usage = analyzer.analyze_chart(chart_type, data, brief=True)

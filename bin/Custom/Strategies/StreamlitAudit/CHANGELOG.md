@@ -1,5 +1,205 @@
 # Changelog - Streamlit Trading Analysis App
 
+### [v2.12.1] - 2026-01-22
+
+### Added: Exit Tier Filters 🎯
+- **Filtro de Tipo de Salida**: Nuevo selector en el panel de control para filtrar trades según cómo terminaron:
+  - **Tier 1**: Trades que alcanzaron primer objetivo (`_01`)
+  - **Tier 2**: Trades que alcanzaron segundo objetivo (`_02`)
+  - **Tier 3+**: Resto de salidas.
+- **Filtrado Global**: La selección afecta instantáneamente a **todas** las pestañas (Análisis de Escala, Riesgo, Calendario, etc.), permitiendo estudiar independientemente el rendimiento de los primeros contratos vs los runners.
+
+### [v2.12.0] - 2026-01-19
+
+### New Features: Session Logic Integration 🌍
+- **Filtros de Sesión en Cascada**:
+  - Nuevos checkboxes "Filtro por Sesión" (Asia, Europa, USA) en el panel principal.
+  - **Lógica Inteligente**: Al seleccionar una sesión, los filtros de Setups, Instrumentos y Horas se actualizan automáticamente para mostrar solo opciones relevantes.
+- **Gráfico de Horas Reordenado**:
+  - El gráfico "Distribución Horaria" ahora comienza a las 18:00 (Apertura Asia) y termina a las 17:00 (Cierre USA).
+  - Permite visualizar el flujo continuo de la sesión de futuros sin cortes artificiales a medianoche.
+
+### Fixes 🐛
+- **Cascade Logic**: Corregido bug donde el filtro de horas mostraba opciones irrelevantes para la sesión seleccionada.
+
+---
+
+### [v2.11.0] - 2026-01-17
+
+### UI UX Consolidation: Level Analysis Merge 🧹
+- **Unificación de UI**: Fusionada la pestaña "Análisis de Niveles" (anteriormente Tab 8) dentro del "Tablero Principal" (Tab 1) para centralizar la información clave.
+- **Tab Cleanup**: Eliminada la pestaña redundante y reordenada la estructura de navegación.
+- **Optimización**: Código depurado para eliminar duplicidad en análisis de zonas.
+
+### Fixes 🐛
+- **Infinite Spinner**: Agregado toggle "Activar Auditor IA" en el sidebar. Permite desactivar el análisis IA si la API Key es inválida o no está activada, evitando bloqueos de carga.
+- **Charts Crash**: Corregido error `ExitDate` no encontrado en gráfico de análisis de penetración.
+- **Insights UX**: Mejorada la redacción del insight de eficiencia MAE para casos de 0% de trades ineficientes (mensaje más natural).
+- **AI Support**: Agregado soporte faltante para análisis IA en gráfico "PnL por Intento".
+- **AI Hallucinations**: Corregida alucinación en "Matriz de Interacción" enviando la tabla de datos completa al prompt de la IA.
+
+
+
+
+
+---
+
+### [v2.10.3] - 2026-01-17
+
+### Fixes 🐛
+- **Filtros Vacíos**: Corregido error donde deseleccionar "Todos" los intentos/instrumentos mostraba *toda* la data en lugar de *ninguna*. Ahora filtrar todo = gráfico vacío (como se espera).
+
+---
+
+### [v2.10.2] - 2026-01-17
+
+### AI & UI: Global Chart Styling 🎨
+- **Consistencia Visual**: Ahora TODOS los gráficos de barras (Escala, Temporal, R-Ladder) comparten el mismo estilo "Premium" que el Dashboard (Bordes Grises + Mapa de Calor Rojo-Lima).
+- **Legibilidad**: Mejor contraste para identificar ganancias vs pérdidas rápidamente en todas las pestañas.
+
+---
+
+### [v2.10.1] - 2026-01-16
+
+### Improved: Smart Rollover Logic (Auto-Stitch) 🧵
+Se acabaron los dolores de cabeza con los cambios de contrato.
+- ✅ **Detección Automática**: La app calcula el "Rollover Date" oficial de CME (2do Jueves del mes de vencimiento).
+- ✅ **Filtrado Inteligente**: Si cargas datos solapados (ej: Marzo completo de `03-25` y Marzo completo de `06-25`), la app elimina automáticamente la data "Zombi" y une las curvas en el día exacto del cambio.
+- ✅ **Resultado**: Puedes hacer backtest de meses completos sin preocuparte. La app te dará una curva continua y realista.
+
+---
+
+## [v2.10.0] - 2026-01-16
+
+### Improved: UI/UX - Filter Grouping 🧹
+Refinado el manejo de filtros para maximizar el espacio visual:
+- ✅ **Sidebar Minimalista**: Eliminados los selectores redundantes de Instrumento/Setup/Cuenta del sidebar. Solo se mantiene el filtro de **Fecha**.
+- ✅ **Filtros de Gráfico Colapsables**: Los filtros detallados (Checkboxes de Setup, Instrumento, Intentos, Antigüedad) ahora viven dentro de una sección desplegable **"🎛️ Filtros del Gráfico"** encima del Dashboard.
+- ✅ **Instrument Normalization**: Contracts (e.g., "MNQ 03-24", "MNQ 06-25") are now automatically grouped under the root symbol "MNQ" in filters and charts.
+- ✅ **Lag Alerts**: Added audible and visual alerts when data lag exceeds 60s.
+- ✅ **User Control**: Esta sección puede colapsarse para ocultar los controles una vez configurada la vista, dedicando todo el espacio a las gráficas.
+
+---
+
+## [v2.9.9] - 2026-01-16
+
+### Fixed: Calendar Navigation State 🗓️
+Corregido error de navegación donde al hacer clic en el calendario se reiniciaba la fuente de datos.
+
+#### Fix Details:
+- ✅ **State Persistence**: Los enlaces del calendario ahora preservan el parámetro `src` (Backtest/Playback/Demo).
+- ✅ **Seamless Navigation**: Puedes navegar entre fechas del calendario sin salir del modo de ejecución actual (ej: si estás en Playback, te mantienes en Playback).
+
+---
+
+## [v2.9.8] - 2026-01-16
+
+### Fixed: Risk Analysis Logic (MAE Integrity) 📉
+Corregido el módulo "Análisis de Riesgo" (Tab 4) que mostraba estadísticas "0.0%" erróneas.
+
+#### Fix Details:
+- ✅ **Trade-Level MAE**: Ahora el análisis agrupa por `Trade_Clust_ID` y toma el MAE MÁXIMO de todas las ejecuciones del trade. Esto evita que ejecuciones de salida (con MAE parcial o nulo) diluyan las estadísticas.
+- ✅ **Robust Filtering**: Se fuerza la conversión numérica de MAE/MFE para evitar errores con datos vacíos o strings.
+- ✅ **Accurate Insights**: Los insights de "Francotirador" y "Eficiencia" ahora reflejan la verdadera excursión adversa de cada posición completa.
+
+---
+
+## [v2.9.7] - 2026-01-16
+
+### Fixed: KPI Data Integrity (Logical Trades) 📊
+Corregido error crítico donde los KPIs del Dashboard contaban "ejecuciones" en lugar de "trades".
+
+#### Fix Details:
+- ✅ **Logical Trade Grouping**: Ahora el Dashboard agrupa las ejecuciones por `Trade_Clust_ID` antes de calcular métricas.
+- ✅ **True Win Rate**: El Win Rate ya no se infla falsamente por scale-outs (e.g., 1 trade con 3 salidas parciales contaba como 3 victorias; ahora cuenta como 1).
+- ✅ **Consistent Counts**: El "Total Trades" del Dashboard ahora coincide exactamente con el del Reporte Ejecutivo.
+- ✅ **Accurate Profit Factor**: Calculado sobre la suma neta de los trades, no sobre ejecuciones individuales.
+
+---
+
+## [v2.9.6] - 2026-01-16
+
+### Improved: Accessibility for Daltonism 👁️
+Añadidos bordes de alto contraste a todos los gráficos de barras para mejorar la visibilidad.
+
+#### Details:
+- ✅ **High Contrast Borders**: Todas las barras ahora tienen un borde gris sólido (`#666666`) de 1.5px.
+- ✅ **Enhanced Visibility**: Facilita distinguir las barras del fondo y separarlas entre sí, independientemente de la paleta de colores (Rojo/Verde) o el modo (Claro/Oscuro).
+- ✅ **Affected Charts**: PnL por Trade, Long vs Short, PnL por Setup, PnL por Intento, PnL por Antigüedad.
+
+---
+
+## [v2.9.5] - 2026-01-16
+
+### Fixed: Invisible Equity Curve in Light Mode 📉
+Corregido un problema crítico donde la línea de equidad global desaparecía (se veía blanca sobre fondo blanco).
+
+#### Fix Details:
+- ✅ **High Contrast Line**: Cambiado el color hardcoded `#FFFFFF` (Blanco) por `#238636` (GitHub Green).
+- ✅ **Universal Visibility**: La curva principal ahora es perfectamente visible tanto en modo claro (verde oscuro sobre blanco) como en modo oscuro (verde brillante sobre negro).
+
+---
+
+## [v2.9.4] - 2026-01-16
+
+### Improved: Pro Aesthetics for Light Mode 🎨
+Mejoras visuales significativas para el Modo Claro (Light Mode), eliminando el aspecto "lavado" y haciéndolo ver profesional.
+
+#### Changes:
+- ✅ **Theme-Aware CSS**: Reemplazados todos los colores hardcoded por variables nativas de Streamlit (`var(--secondary-background-color)`, `var(--text-color)`).
+- ✅ **Visible Borders**: Ajustados los bordes de gráficos y tarjetas para ser sutiles pero visibles en fondo blanco (`rgba(49, 51, 63, 0.2)`).
+- ✅ **Clean Typography**: El texto ahora usa el color por defecto del tema seleccionado, asegurando máximo contraste.
+- ✅ **Consistent Cards**: Los contenedores de métricas y gráficos ahora se integran perfectamente con el fondo, sea blanco o negro.
+
+---
+
+## [v2.9.3] - 2026-01-16
+
+### Fixed: Light Mode Compatibility ☀️
+Corregido el problema donde la app no cambiaba a fondo blanco en Light Mode.
+
+#### Changes:
+- ✅ **CSS Cleanup**: Eliminadas las definiciones CSS que forzaban el modo oscuro (background `#0E1117`) y colores de texto fijos.
+- ✅ **Chart Adaptation**: Eliminados los colores hardcoded en los gráficos Plotly para que el texto y grid se adapten automáticamente al tema claro/oscuro de Streamlit.
+- ✅ **Native Theming**: La app ahora respeta completamente la configuración de tema del usuario (Settings -> Theme).
+
+---
+
+## [v2.9.2] - 2026-01-16
+
+### Changed: Heatmap Styling (Red-Lime) 🎨
+Actualizada la paleta de colores de todos los gráficos de PnL en el Tablero Principal para usar un gradiente tipo "mapa de calor".
+
+#### Improvements:
+- ✅ **New Color Scale**: Red (#FF0000) ↔️ Dark (#161B22) ↔️ Lime Green (#32CD32)
+- ✅ **Heatmap Effect**: La intensidad del color ahora refleja la magnitud de la ganancia/pérdida.
+- ✅ **Consistent Application**: Aplicado a:
+  - PnL por Trade (Bar Chart)
+  - Rendimiento Long vs Short
+  - PnL por Setup
+  - PnL por Intento
+  - PnL por Antigüedad
+- ✅ **Midpoint Centering**: El gradiente está centrado en 0 (color oscuro de fondo), facilitando ver qué barras son apenas rentables vs muy rentables.
+
+---
+
+## [v2.9.1] - 2026-01-15
+
+### Added: Level Age Analysis 👴
+Nuevo módulo de análisis para evaluar la rentabilidad de los niveles según su antigüedad (días desde creación).
+
+#### Features:
+- ✅ **Columna LevelAge**: Añadida a la tabla de datos raw. Muestra los días de antigüedad del nivel (0=Hoy, 1=Ayer, etc.).
+- ✅ **Gráfico PnL vs Antigüedad**: Nuevo gráfico en Tab 1 que muestra rentabilidad por edad del nivel.
+- ✅ **Filtro Interactivo LevelAge**: Añadido selector horizontal en Tab 1 para filtrar trades por antigüedad (0d, 1d...) en tiempo real.
+- ✅ **Insight Automático**: Detecta cuál es la "edad perfecta" de los niveles (ej: "Los niveles de 0 días son los más rentables").
+
+### Fixed: Attempt Column Logic 🔧
+- **Revertido**: Eliminado el "hack" que usaba la última columna para intentos. Ahora se lee la columna `Attempt` estándar, que ya contiene datos correctos gracias al fix en la estrategia (v1.15.37).
+- **Robusted**: Añadido parser numérico para asegurar que `LevelAge` y `Attempt` sean siempre tratados como enteros.
+
+---
+
 ## [v2.9.0] - 2026-01-15
 
 ### Fixed: Trade Counting Consistency with NinjaTrader 🔧

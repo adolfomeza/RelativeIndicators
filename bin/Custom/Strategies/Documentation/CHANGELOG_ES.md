@@ -7,6 +7,93 @@ y este proyecto sigue [Semantic Versioning](https://semver.org/lang/es/).
 
 ---
 
+## [v1.15.58] - 2026-01-21
+
+### 🐛 Fixed
+
+**1. Persistencia de Datos de Delta Scoring (Causa de Scores = 0)**
+
+- **Problema**: El nuevo módulo "Study Delta" mostraba "No hay trades con Score Total > 0".
+- **Causa Raíz**: La clase `SessionLevelData` (usada para guardar niveles en XML al reiniciar la estrategia) no incluía los nuevos campos de Delta (`DeltaAtFormation`, `DeltaAtSwingStart`, etc.).
+  - Al reiniciar o recargar la estrategia, estos valores se perdían (volvían a 0).
+  - El cálculo de Score depende de estos valores, por lo que retornaba 0 o valores muy bajos.
+- **Solución**:
+  - Se agregaron los campos `DeltaAtFormation`, `DeltaHigh`, `DeltaLow`, `DeltaAtSwingStart` a `SessionLevelData`.
+  - Se actualizaron los métodos `SaveLevels` y `LoadLevels` para persistir correctamente estos datos.
+  - **Retroactive Delta Capture (Playback/Start)**: Se modificó `ScanHistoricalLevels` para buscar datos de Delta históricos al crear niveles pasados (ej. Sesión Asia al iniciar Playback en USA). Ahora los niveles ya existentes al inicio tendrán Score válido.
+  - **Correction (Fix 3)**: Se detectó que `ScanHistoricalLevels` NUNCA se llamaba en el código principal. Se agregó la llamada explícita en el inicio de Playback (`OnBarUpdate`).
+  - **Nota**: Los niveles antiguos (de sesiones previas al fix) seguirán teniendo 0 hasta que se formen nuevos niveles con este fix aplicado.
+
+## [v1.15.57] - 2026-01-21
+
+### 🐛 Fixed
+
+**1. Glitch Visual II: Líneas Adhoc "Quebradas" o con Dientes de Sierra**
+
+- **Problema**: A pesar de que la cantidad de objetos se redujo (fix 56), las líneas se dibujaban como pequeños segmentos desconectados o "dientes de sierra" (líneas diagonales repetitivas en cada barra).
+- **Causa Raíz Crítica**: El método `UpdateAdhocVWAP` contenía una lógica de sincronización defectuosa que sobrescribía la variable `visualAdhocLastBar` con el `AdhocAnchorBar` en cada tick.
+  - Esto engañaba al sistema de dibujo (`ManageEntryA_Plus`) haciéndole creer que *cada tick* era una "Nueva Barra".
+  - Resultado: En lugar de dibujar una línea continua desde el cierre anterior, se dibujaba una línea desde el valor actual al valor actual (longitud cero o micro-segmento), rompiendo la continuidad visual.
+- **Solución v1.15.57**:
+  - Se eliminó la sobrescritura corrupta de `visualAdhocLastBar` en `UpdateAdhocVWAP`.
+  - Se eliminó la llamada redundante (doble actualización) al calculador de VWAP para evitar distorsiones en el cálculo de volumen.
+- **Impacto**:
+  - ✅ Las líneas Adhoc ahora se dibujan suaves y continuas, conectando correctamente el cierre de la barra anterior con el valor actual.
+
+## [v1.15.56] - 2026-01-21
+
+### 🐛 Fixed
+
+**1. Glitch Visual: "AdhocLine" Multiplicación de Objetos**
+
+- **Problema**: El gráfico se llenaba con miles de objetos `AdhocLine_XXXX`, causando una apariencia saturada y posibles problemas de rendimiento.
+- **Causa Raíz**: La función de limpieza de líneas Adhoc (`ClearAdhocVisuals`) iteraba en un rango de barras estimado. Si el precio se movía mucho o se recargaba el script, la referencia a las barras viejas se perdía y los objetos de dibujo no se eliminaban correctamente, acumulándose indefinidamente.
+- **Solución v1.15.56**: 
+  - Se implementó un sistema de rastreo robusto (`HashSet<string>`) para registrar cada objeto `AdhocLine` dibujado.
+  - La limpieza ahora garantiza la eliminación del 100% de los objetos rastreados, independientemente del índice de barra.
+  - Se corrigió el "Memory Leak" de objetos visuales.
+- **Impacto**:
+  - ✅ Gráfico limpio y sin acumulación de objetos basura.
+  - ✅ Mejora en rendimiento al no renderizar miles de líneas ocultas.
+
+## [v1.15.55] - 2026-01-21
+
+### 🐛 Fixed
+
+**1. Glitch Visual: Niveles "Rotos" Después de Mitigación**
+
+- **Problema**: Después de que un nivel era mitigado y luego el precio hacía un nuevo máximo/mínimo, el nivel se expandía visualmente de forma incorrecta, apareciendo "roto" o desalineado en el gráfico.
+- **Causa Raíz**: La bandera `IsMitigated` no se reseteaba a `false` cuando el precio superaba el máximo/mínimo del nivel mitigado, lo que impedía que el nivel se redibujara correctamente en su nueva extensión.
+- **Solución v1.15.55**: Se agregó lógica para resetear `IsMitigated = false` en `CheckSession` cuando el precio excede el máximo/mínimo del nivel, permitiendo que el nivel se redibuje correctamente.
+- **Impacto**:
+  - ✅ Corrección visual de los niveles mitigados.
+  - ✅ Los niveles ahora se expanden y se muestran correctamente en el gráfico después de una mitigación y un nuevo extremo.
+- **Archivos Modificados**:
+  - `SessionLevelsStrategy.cs`: Modificado `CheckSession` para resetear `IsMitigated`.
+
+## [v1.15.54] - 2026-01-21
+
+### ✨ New Features
+
+**1. Sistema de Scoring con Delta (Delta-Based Level Scoring)**
+
+- Implementado sistema cuantitativo para filtrar trades basado en Order Flow (Delta).
+- **Parámetros**:
+  - `UseDeltaFilter`: Activa/Desactiva el filtro (Default: true).
+  - `MinDeltaScore`: Puntaje mínimo requerido para tomar el trade (0-100, Default: 40).
+- **Lógica de Scoring (Phases 1-4)**:
+  - **Fase 1 (Push)**: Premia pushes débiles (reversión probable).
+  - **Fase 2 (Formation)**: Premia Deltas alineados con la reversión en el extremo.
+  - **Fase 3 (Despegue)**: Premia la entrada de participantes agresivos a favor del trade.
+  - **Fase 4 (Control Diario)**: Evalúa quién controla la sesión.
+- **Data Capture**:
+  - Se modificó `SessionLevel` para almacenar el Delta en el momento de formación.
+  - La estrategia captura métricas detalladas en `CheckSession` y `OnExecutionUpdate`.
+- **CSV Export**:
+  - Se agregaron nuevas columnas al reporte CSV para análisis posterior:
+    - `DeltaPush`, `DeltaFormation`, `DeltaDespegue`
+    - `DeltaScore`, `Phase1`, `Phase2`, `Phase3`, `Phase4`
+
 ## [v1.15.53] - 2026-01-21
 
 ### 🐛 Fixed

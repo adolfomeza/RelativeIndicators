@@ -28,11 +28,13 @@ SI no hay posición Y estado = Idle:
   → Espera NUEVO trigger
 ```
 
-### 4. Nueva Semana (v1.10.37)
+### 4. Nueva Semana (v1.15.38 - Weekly Reset Fix)
 ```
-SI domingo y pasó viernes 6pm NY:
-  → LIMPIA todo el estado
-  → Log: "WEEK RESET"
+SI (Hoy es Viernes >= 6pm) O (Hoy > Viernes 6pm pasado):
+  → El "LastFriday" se calcula con precisión (si es viernes temprano, usa viernes PASADO).
+  → Si LastFriday > lastWeeklyReset trakeado:
+      → LIMPIA todo el estado (ActiveLevels, etc.)
+      → Log: "WEEK RESET"
 ```
 
 ---

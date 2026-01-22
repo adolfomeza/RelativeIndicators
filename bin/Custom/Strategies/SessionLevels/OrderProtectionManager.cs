@@ -140,22 +140,129 @@ namespace NinjaTrader.NinjaScript.Strategies
 		    // BUG: Previously both calls used same validatedTargetPrice, causing TP2 to change to TP1's price
 		    // Example: MCL Jan 6 2025 4:26am - TP2 changed from 74.39 to 73.83 (TP1's price)
 		    // FIX: Pass validatedTp1Price to TP1 and validatedTp2Price to TP2
-		    if (neededTp1 > 0)
-			    SubmitProtectionOrders(direction, true, neededTp1, currentVwapNumber, isShortSetup, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTp1Price);
+            
+            // v1.15.40: ROUTING based on Exit Strategy
+            if (strategy.ExitStrategy == ExitStrategyType.Ladder)
+            {
+                // Ladder Logic
+                EnsureLadderProtection(direction, entrySignalName, filledQty, currentVwapNumber, isShortSetup, setupAnchorPrice);
+            }
+            else
+            {
+                // Standard Logic (TP1/TP2)
+    		    if (neededTp1 > 0)
+	    		    SubmitProtectionOrders(direction, true, neededTp1, currentVwapNumber, isShortSetup, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTp1Price);
+    
+	    	    if (neededTp2 > 0)
+		    	    SubmitProtectionOrders(direction, false, neededTp2, currentVwapNumber, isShortSetup, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTp2Price);
+            }
 
-		    if (neededTp2 > 0)
-			    SubmitProtectionOrders(direction, false, neededTp2, currentVwapNumber, isShortSetup, setupLevelName, setupLevelTime, setupAnchorPrice, validatedTp2Price);
 
-		    // Update State: protectedQty tracks what SHOULD be protected (total target), not fill allocation
-		    strategy.protectedTp1Qty = totalTp1Target;
-		    strategy.protectedTp2Qty = totalTp2Target;
-		    
-		    // v1.11.14: Mark protection orders as created (This flag seems local to strategy but unused in new logic? Or generic flag?)
-            // strategy.protectionOrdersCreated is not directly exposed but it was just a flag.
-            // If needed, we can expose it, but let's assume it was for internal flow in EnsureProtection old.
-		    
-		    strategy.Log(strategy.Time[0] + " EnsureProtection COMPLETE");
-	    }
+        }
+
+
+        public void EnsureLadderProtection(string direction, string entrySignalName, int filledQty,
+                                         int currentVwapNumber, bool isShortSetup, double setupAnchorPrice)
+        {
+            // v1.15.40: LADDER EXIT LOGIC
+            // Goal: Scale out 1 contract at 1R, 1 contract at 2R, etc.
+            
+            try 
+            {
+                int totalPositionQty = Math.Abs(strategy.Position.Quantity);
+                if (totalPositionQty == 0) return;
+
+                double avgEntry = strategy.Position.AveragePrice;
+                
+                // 1. Calculate Risk (R)
+                // SL is at setupAnchorPrice +/- 1 tick (or 5 ticks fallback)
+                double slPrice = isShortSetup ? 
+                    (setupAnchorPrice + strategy.TickSize) : 
+                    (setupAnchorPrice - strategy.TickSize);
+                
+                // Fallback SL logic matches SubmitProtectionOrders
+                double fallbackDist = (strategy.StopLossTicks * strategy.TickSize);
+                if (isShortSetup && slPrice <= avgEntry) slPrice = avgEntry + fallbackDist;
+                if (!isShortSetup && slPrice >= avgEntry) slPrice = avgEntry - fallbackDist;
+                
+                // Round SL
+                slPrice = strategy.Instrument.MasterInstrument.RoundToTickSize(slPrice);
+
+                double riskAmount = Math.Abs(avgEntry - slPrice);
+                // Ensure min risk to prevent tiny targets
+                if (riskAmount < 5 * strategy.TickSize) riskAmount = 5 * strategy.TickSize;
+
+                strategy.Log(string.Format("LADDER_CALC: Entry={0} SL={1} Risk(1R)={2}", avgEntry, slPrice, riskAmount));
+
+                // 2. Submit/Update STOP LOSS (Single Order)
+                // We use standard 'stopOrder' for the entire position
+                if (strategy.stopOrder == null && !SlOrderCreatedThisEntry)
+                {
+                     string slTag = string.Format("{0}_{1:D2}", isShortSetup ? "SL_Short" : "SL_Long", currentVwapNumber);
+				     OrderAction slAction = isShortSetup ? OrderAction.BuyToCover : OrderAction.Sell;
+                     strategy.stopOrder = strategy.SubmitOrderUnmanagedWrapper(0, slAction, OrderType.StopMarket, totalPositionQty, 0, slPrice, "", slTag);
+                     SlOrderCreatedThisEntry = true;
+                     strategy.Log("LADDER_SL: Created " + slTag + " @ " + slPrice + " Qty=" + totalPositionQty);
+                }
+                else if (strategy.stopOrder != null && 
+                        (strategy.stopOrder.OrderState == OrderState.Working || strategy.stopOrder.OrderState == OrderState.Accepted) &&
+                         strategy.stopOrder.Quantity != totalPositionQty)
+                {
+                     strategy.ChangeOrderWrapper(strategy.stopOrder, totalPositionQty, 0, slPrice);
+                     strategy.Log("LADDER_SL: Updated Qty to " + totalPositionQty);
+                }
+
+                // 3. Submit LADDER TARGETS (1 per Contract)
+                // We want 1 order per unit of quantity
+                // Ex: Qty=3 -> TP #1 @ 1R, TP #2 @ 2R, TP #3 @ 3R
+                
+                // Sync List: Remove Filled/Cancelled orders
+                strategy.ladderOrders.RemoveAll(o => o == null || 
+                    o.OrderState == OrderState.Filled || 
+                    o.OrderState == OrderState.Cancelled || 
+                    o.OrderState == OrderState.Rejected);
+
+                int currentLadderCount = strategy.ladderOrders.Count;
+                int neededLadders = totalPositionQty - currentLadderCount;
+
+                if (neededLadders > 0)
+                {
+                    // Start index based on how many we already have (to continue sequence 1R, 2R...)
+                    // Actually, simpler: We always want Target 1 @ 1R, Target 2 @ 2R relative to Entry
+                    // But we only submit NEW ones.
+                    // If we have 2 active orders, we assume they are covering the "last" contracts (ex: Target 2 and 3). 
+                    // Or do we strictly bind? "Order for 1R", "Order for 2R".
+                    // STRATEGY: Create missing orders for the NEXT available slots.
+                    // If we have 0 orders, create for index 1, 2, 3.
+                    // If we have 1 order, create for index 2, 3.
+                    
+                    int startStep = currentLadderCount + 1; // 1-based step
+                    
+                    for (int i = 0; i < neededLadders; i++)
+                    {
+                        int step = startStep + i; // 1, 2, 3...
+                        double rewardDist = riskAmount * step;
+                        double targetPrice = isShortSetup ? (avgEntry - rewardDist) : (avgEntry + rewardDist);
+                        targetPrice = strategy.Instrument.MasterInstrument.RoundToTickSize(targetPrice);
+                        
+                        string tpTag = string.Format("LadderTP_{0}_{1}", step, currentVwapNumber);
+                        OrderAction tpAction = isShortSetup ? OrderAction.BuyToCover : OrderAction.Sell;
+                        
+                        // Submit for 1 Qty
+                        Order ladderOrd = strategy.SubmitOrderUnmanagedWrapper(0, tpAction, OrderType.Limit, 1, targetPrice, 0, "", tpTag);
+                        strategy.ladderOrders.Add(ladderOrd);
+                        
+                        strategy.Log(string.Format("LADDER_TP: Created #{0} ({1}R) @ {2}", step, step, targetPrice));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                strategy.Log("LADDER ERROR: " + ex.Message);
+            }
+        }
+
+
 
         private void SubmitProtectionOrders(string direction, bool isTp1, int qty,
                                             int currentVwapNumber, bool isShortSetup, string setupLevelName,
@@ -417,8 +524,21 @@ namespace NinjaTrader.NinjaScript.Strategies
             double externalLevelBelow = 0;
             
             if (setupLevel == null || allLevels == null) return;
-            
-            // v1.14.59: Filter only TODAY's levels for internal/external classification
+    
+    // v1.15.39: CRITICAL FIX - Historical Levels are ALWAYS External
+    // If a level is from a previous day, it cannot be "Internal" to today's session.
+    // This forces the use of Global VWAP (Visible Line) which users expect for historical levels.
+    if (setupLevel.StartTime.Date < strategy.Time[0].Date)
+    {
+        IsInternalLevel = false;
+        ExternalLevelAboveName = "Historical Context"; // Fallback name
+        ExternalLevelBelowName = "Historical Context";
+        strategy.Log(string.Format("EXTERNAL LEVEL (HISTORICAL): {0} @ {1} (Date={2}) -> Uses Global VWAP",
+            setupLevel.Name, setupLevel.Price, setupLevel.StartTime.ToShortDateString()));
+        return;
+    }
+
+    // v1.14.59: Filter only TODAY's levels for internal/external classification
             DateTime today = strategy.Time[0].Date;
             var todayLevels = allLevels.Where(l => l.StartTime.Date == today).ToList();
             
@@ -639,45 +759,73 @@ namespace NinjaTrader.NinjaScript.Strategies
                 return sessionStartTime.Date.AddDays(1);
             }
             else
-            {
                 return sessionStartTime.Date;
             }
-        }
 
-        // v1.14.40: Handle TP1 Fill - Move SL to Breakeven
-        public void HandleTP1Fill()
-        {
-            // v1.15.21: ALWAYS update SL quantity after TP1, even if BE is disabled
-            // Only skip moving price to breakeven if disabled
 
-            if (strategy.stopOrder != null)
-            {
-                int remainingQty = Math.Abs(strategy.Position.Quantity);
-
-                // Guard against Qty=0 (position already fully closed by TP1)
-                if (remainingQty > 0)
+        		// v1.14.40: Handle TP1 Fill - Move SL to Breakeven
+		public void HandleTP1Fill(int fillQty)
+		{
+			// v1.15.21: ALWAYS update SL quantity after TP1
+			if (strategy.stopOrder != null)
+			{
+				// LAG PROTECTION: Position.Quantity might not have updated yet in OnExecutionUpdate
+				int currentPosQty = Math.Abs(strategy.Position.Quantity);
+				int slQty = strategy.stopOrder.Quantity;
+				
+				// Smart Quantity: If Position matches SL (meaning no change detected yet), manually subtract fill
+				int targetQty = currentPosQty;
+				
+				if (currentPosQty == slQty)
+				{
+					targetQty = slQty - fillQty;
+					strategy.Log(string.Format("LAG DETECTED: Position.Qty ({0}) same as SL.Qty. Manually reducing by fill ({1}) -> {2}", currentPosQty, fillQty, targetQty));
+				}
+				
+				// v1.15.48: SAFETY GUARD (Playback/Lag Fix)
+                // If Lag Detection double-counts (e.g. called twice), targetQty might drop to 0 erroneously.
+                // We MUST ensure SL covers at least the remaining active TP2 orders.
+                int minRequired = 0;
+                if (strategy.tp2Order != null && (strategy.tp2Order.OrderState == OrderState.Working || strategy.tp2Order.OrderState == OrderState.Accepted))
                 {
-                    if (!strategy.EnableBreakeven)
-                    {
-                        // v1.15.21: Breakeven disabled - Update quantity only, keep original SL price
-                        strategy.Log(strategy.Time[0] + " SL QTY UPDATE: TP1 filled, updating SL (" + strategy.stopOrder.Name + ") Qty to " + remainingQty + " (BE disabled, keeping original SL price)");
-                        strategy.ChangeOrderWrapper(strategy.stopOrder, remainingQty, 0, strategy.stopOrder.StopPrice);
-                    }
-                    else
-                    {
-                        // v1.15.21: Breakeven enabled - Update quantity AND move to breakeven price
-                        strategy.Log(strategy.Time[0] + " BE ACTION: Moving SL (" + strategy.stopOrder.Name + ") to BE @ " + strategy.entryOrder.AverageFillPrice + " Qty=" + remainingQty);
-                        strategy.ChangeOrderWrapper(strategy.stopOrder, remainingQty, 0, strategy.entryOrder.AverageFillPrice);
-                    }
+                    minRequired = strategy.tp2Order.Quantity;
                 }
-                else
+                
+                if (targetQty < minRequired) 
                 {
-                    strategy.Log(strategy.Time[0] + " BE SKIP: Position already flat, cancelling orphan SL");
-                    if (strategy.stopOrder.OrderState == OrderState.Working || strategy.stopOrder.OrderState == OrderState.Accepted)
-                        strategy.CancelOrderWrapper(strategy.stopOrder);
+                    strategy.Log(string.Format("SL PROTECTION GUARD: TargetQty ({0}) < MinRequired ({1}). Clamping to {1}.", targetQty, minRequired));
+                    targetQty = minRequired;
                 }
-            }
-        }
+				
+				if (targetQty <= 0) targetQty = 0; // Safety
+
+				// Guard against Qty=0
+				if (targetQty > 0)
+				{
+					double bePrice = (strategy.entryOrder != null) ? strategy.entryOrder.AverageFillPrice : strategy.stopOrder.StopPrice; 
+					// Fallback to current stop if entryOrder lost (rare)
+					
+					if (!strategy.EnableBreakeven)
+					{
+						// Breakeven disabled - Update quantity only, keep original SL price
+						strategy.Log(strategy.Time[0] + " SL QTY UPDATE: TP1 filled. SL (" + strategy.stopOrder.Name + ") " + slQty + "->" + targetQty + " (BE Disabled)");
+						strategy.ChangeOrderWrapper(strategy.stopOrder, targetQty, 0, strategy.stopOrder.StopPrice);
+					}
+					else
+					{
+						// Breakeven enabled
+						strategy.Log(strategy.Time[0] + " BE ACTION: Moving SL (" + strategy.stopOrder.Name + ") " + slQty + "->" + targetQty + " @ " + bePrice);
+						strategy.ChangeOrderWrapper(strategy.stopOrder, targetQty, 0, bePrice);
+					}
+				}
+				else
+				{
+					strategy.Log(strategy.Time[0] + " BE SKIP: Target Qty is 0, cancelling orphan SL");
+					if (strategy.stopOrder.OrderState == OrderState.Working || strategy.stopOrder.OrderState == OrderState.Accepted)
+						strategy.CancelOrderWrapper(strategy.stopOrder);
+				}
+			}
+		}
         
         // v1.14.40: Handle TP2 Fill - Logging only (SL already at BE from TP1)
         public void HandleTP2Fill()
@@ -715,6 +863,22 @@ namespace NinjaTrader.NinjaScript.Strategies
             {
                 strategy.CancelOrderWrapper(strategy.tp2Order);
                 strategy.Log("CANCEL_ALL: Cancelled TP2 order - " + strategy.tp2Order.Name);
+            }
+
+            // Cancel Ladder Orders (v1.15.40)
+            if (strategy.ladderOrders != null && strategy.ladderOrders.Count > 0)
+            {
+                // Create copy to iterate safely
+                var ordersToCancel = new List<Order>(strategy.ladderOrders);
+                foreach(var ord in ordersToCancel)
+                {
+                     if (ord != null && (ord.OrderState == OrderState.Working || ord.OrderState == OrderState.Accepted))
+                     {
+                         strategy.CancelOrderWrapper(ord);
+                         strategy.Log("CANCEL_ALL: Cancelled Ladder order - " + ord.Name);
+                     }
+                }
+                strategy.ladderOrders.Clear();
             }
         }
     }

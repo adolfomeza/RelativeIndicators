@@ -93,6 +93,16 @@ namespace NinjaTrader.NinjaScript.Strategies
                         PvSum = strategy.Volume[0] * strategy.Close[0], 
                         JustReset = true
                     };
+                    
+                    // v1.15.54: Capture Delta
+                    if (strategy.relativeDelta != null)
+                    {
+                         highLvl.DeltaAtFormation = strategy.relativeDelta.DeltaClose[0];
+                         highLvl.DeltaHigh = strategy.relativeDelta.DeltaHigh[0];
+                         highLvl.DeltaLow = strategy.relativeDelta.DeltaLow[0];
+                         highLvl.DeltaAtSwingStart = strategy.relativeDelta.DeltaOpen[0];
+                    }
+                    
                     activeLevels.Add(highLvl);
                 }
                 else 
@@ -118,6 +128,16 @@ namespace NinjaTrader.NinjaScript.Strategies
                         PvSum = strategy.Volume[0] * strategy.Close[0],
                         JustReset = true
                     };
+
+                    // v1.15.54: Capture Delta
+                    if (strategy.relativeDelta != null)
+                    {
+                         lowLvl.DeltaAtFormation = strategy.relativeDelta.DeltaClose[0];
+                         lowLvl.DeltaHigh = strategy.relativeDelta.DeltaHigh[0];
+                         lowLvl.DeltaLow = strategy.relativeDelta.DeltaLow[0];
+                         lowLvl.DeltaAtSwingStart = strategy.relativeDelta.DeltaOpen[0];
+                    }
+
                     activeLevels.Add(lowLvl);
                     strategy.Print("[DEBUG] Created " + sessionName + " Low tag=" + tagL + " start=" + chartStartTime);
                 }
@@ -134,6 +154,16 @@ namespace NinjaTrader.NinjaScript.Strategies
                     highLvl.VolSum = strategy.Volume[0];
                     highLvl.PvSum = strategy.Volume[0] * strategy.Close[0];
                     highLvl.JustReset = true;
+                    highLvl.IsMitigated = false; // v1.15.55: Reset mitigation status on expansion
+                    
+                    // v1.15.54: Update Delta on Re-Anchor
+                    if (strategy.relativeDelta != null)
+                    {
+                         highLvl.DeltaAtFormation = strategy.relativeDelta.DeltaClose[0];
+                         highLvl.DeltaHigh = strategy.relativeDelta.DeltaHigh[0];
+                         highLvl.DeltaLow = strategy.relativeDelta.DeltaLow[0];
+                         highLvl.DeltaAtSwingStart = strategy.relativeDelta.DeltaOpen[0];
+                    }
                 }
 
                 // Update Low if new low made
@@ -144,6 +174,16 @@ namespace NinjaTrader.NinjaScript.Strategies
                     lowLvl.VolSum = strategy.Volume[0];
                     lowLvl.PvSum = strategy.Volume[0] * strategy.Close[0];
                     lowLvl.JustReset = true;
+                    lowLvl.IsMitigated = false; // v1.15.55: Reset mitigation status on expansion
+                    
+                    // v1.15.54: Update Delta on Re-Anchor
+                    if (strategy.relativeDelta != null)
+                    {
+                         lowLvl.DeltaAtFormation = strategy.relativeDelta.DeltaClose[0];
+                         lowLvl.DeltaHigh = strategy.relativeDelta.DeltaHigh[0];
+                         lowLvl.DeltaLow = strategy.relativeDelta.DeltaLow[0];
+                         lowLvl.DeltaAtSwingStart = strategy.relativeDelta.DeltaOpen[0];
+                    }
                 }
 
                 // Extend lines while in session
@@ -210,6 +250,8 @@ namespace NinjaTrader.NinjaScript.Strategies
                 double sessionLow = double.MaxValue;
                 DateTime highTime = DateTime.MinValue;
                 DateTime lowTime = DateTime.MinValue;
+                int highBarsAgo = -1;
+                int lowBarsAgo = -1;
 
                 DateTime sessionEndNY = startTs > endTs 
                     ? sessionStartNY.Date.AddDays(1).Add(endTs) 
@@ -225,11 +267,13 @@ namespace NinjaTrader.NinjaScript.Strategies
                         {
                             sessionHigh = strategy.High[strategy.CurrentBar - i];
                             highTime = strategy.Time[strategy.CurrentBar - i];
+                            highBarsAgo = i; // CurrentBar - (CurrentBar - i) = i
                         }
                         if (strategy.Low[strategy.CurrentBar - i] < sessionLow)
                         {
                             sessionLow = strategy.Low[strategy.CurrentBar - i];
                             lowTime = strategy.Time[strategy.CurrentBar - i];
+                            lowBarsAgo = i;
                         }
                     }
                 }
@@ -255,6 +299,18 @@ namespace NinjaTrader.NinjaScript.Strategies
                         PvSum = 0,
                         JustReset = false
                     };
+                    
+                    // v1.15.58: Retroactive Delta Capture
+                    if (highBarsAgo != -1 && strategy.relativeDelta != null)
+                    {
+                        try {
+                            highLvl.DeltaAtFormation = strategy.relativeDelta.DeltaClose[highBarsAgo];
+                            highLvl.DeltaHigh = strategy.relativeDelta.DeltaHigh[highBarsAgo];
+                            highLvl.DeltaLow = strategy.relativeDelta.DeltaLow[highBarsAgo];
+                            highLvl.DeltaAtSwingStart = strategy.relativeDelta.DeltaOpen[highBarsAgo];
+                        } catch {}
+                    }
+                    
                     activeLevels.Add(highLvl);
                     strategy.Print("[RETROACTIVE] Created " + session.Name + " High @ " + sessionHigh + " tag=" + tagH);
                 }
@@ -276,6 +332,18 @@ namespace NinjaTrader.NinjaScript.Strategies
                         PvSum = 0,
                         JustReset = false
                     };
+                    
+                    // v1.15.58: Retroactive Delta Capture
+                    if (lowBarsAgo != -1 && strategy.relativeDelta != null)
+                    {
+                        try {
+                            lowLvl.DeltaAtFormation = strategy.relativeDelta.DeltaClose[lowBarsAgo];
+                            lowLvl.DeltaHigh = strategy.relativeDelta.DeltaHigh[lowBarsAgo];
+                            lowLvl.DeltaLow = strategy.relativeDelta.DeltaLow[lowBarsAgo];
+                            lowLvl.DeltaAtSwingStart = strategy.relativeDelta.DeltaOpen[lowBarsAgo];
+                        } catch {}
+                    }
+                    
                     activeLevels.Add(lowLvl);
                     strategy.Print("[RETROACTIVE] Created " + session.Name + " Low @ " + sessionLow + " tag=" + tagL);
                 }

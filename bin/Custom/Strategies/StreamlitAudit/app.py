@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -22,7 +23,7 @@ COMMISSION_RATES = {
         'MicroCrypto': 1.56,# MBT, MET
         'Nano': 0.35,       # Nano Bitcoin
         'Commodity': 3.09,  # CL, GC, SI, HG
-        'MicroCom': 0.77    # MCL, MGC, M6E
+        'MicroCom': 1.20    # v1.15.35: MGC, MCL, M6E - matching C# strategy ($2.40 RT)
     },
     'Lifetime (Lifetime)': {
         'Micro': 0.56,
@@ -30,7 +31,7 @@ COMMISSION_RATES = {
         'MicroCrypto': 0.81,
         'Nano': 0.15,
         'Commodity': 2.44, # Approx for CL
-        'MicroCom': 0.42
+        'MicroCom': 1.20    # v1.15.35: Same as Free for consistency (user confirmed $2.40 RT)
     }
 }
 
@@ -46,9 +47,9 @@ if 'selected_date_audit' not in st.session_state:
 # --- CUSTOM CSS & THEME ---
 st.markdown("""
 <style>
-    /* Main Background */
+    /* Main Background - REMOVED to support Light Mode */
+    /* .stApp { background-color: #0E1117; font-family: 'Inter', sans-serif; } */
     .stApp {
-        background-color: #0E1117;
         font-family: 'Inter', sans-serif;
     }
 
@@ -89,21 +90,23 @@ st.markdown("""
     }
 
     /* Global Text */
+    /* Global Text - REMOVED to support Light Mode */
+    /* h1, h2, h3 { color: #E6E6E6 !important; font-weight: 700; } */
+    /* p, label, .stMarkdown { color: #B0B0B0 !important; } */
+    
     h1, h2, h3 {
-        color: #E6E6E6 !important;
         font-weight: 700;
     }
-    p, label, .stMarkdown {
-        color: #B0B0B0 !important;
-    }
 
-    /* Metric Cards (Glassmorphism) - v2.8.3: Compact */
+    /* Metric Cards (Glassmorphism) - v2.9.4: Theme Aware */
     div[data-testid="metric-container"] {
-        background-color: rgba(22, 27, 34, 0.8);
-        border: 1px solid rgba(48, 54, 61, 0.5);
+        background-color: var(--secondary-background-color);
+        border: 1px solid var(--text-color);
+        /* Use slight opacity for border */
+        border-color: rgba(49, 51, 63, 0.2);
         padding: 12px 16px !important;
         border-radius: 12px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         transition: transform 0.2s ease, box-shadow 0.2s ease;
         margin-bottom: 0.5rem !important;
     }
@@ -113,14 +116,17 @@ st.markdown("""
         border-color: #00FF99;
     }
     div[data-testid="metric-container"] label {
-        color: #8B949E !important;
+        color: var(--text-color) !important;
+        opacity: 0.7;
         font-size: 0.85rem !important;
         margin-bottom: 0.2rem !important;
     }
     div[data-testid="metric-container"] div[data-testid="stMetricValue"] {
         color: #00FF99 !important;
+        /* Keep neon green for values as it pops on both white/black if bold enough, or we can use theme color for light mode? 
+           User specifically asked for "Pro", Neon Green on White is okay if contrast is high. */
         font-size: 1.5rem !important;
-        text-shadow: 0 0 10px rgba(0, 255, 153, 0.3);
+        text-shadow: 0 0 10px rgba(0, 255, 153, 0.2);
     }
 
     /* Compact columns */
@@ -157,8 +163,8 @@ st.markdown("""
 
     /* Sidebar */
     [data-testid="stSidebar"] {
-        background-color: #010409;
-        border-right: 1px solid #30363D;
+        background-color: var(--secondary-background-color);
+        border-right: 1px solid rgba(49, 51, 63, 0.2);
     }
     
     /* Tabs - v2.8.3: Compact */
@@ -172,9 +178,10 @@ st.markdown("""
         white-space: pre-wrap;
         background-color: transparent;
         border-radius: 4px;
-        color: #8B949E;
+        color: var(--text-color);
         font-weight: 600;
         padding: 0.5rem 1rem !important;
+        opacity: 0.6;
     }
     .stTabs [aria-selected="true"] {
         background-color: transparent;
@@ -183,13 +190,14 @@ st.markdown("""
     }
 
     /* v2.2.1 + v2.8.3: Chart Containers - Compact with rounded borders */
+    /* v2.9.4: Chart Containers - Theme Aware */
     div[data-testid="stPlotlyChart"] {
-        background-color: rgba(22, 27, 34, 0.6);
-        border: 1px solid rgba(100, 110, 120, 0.7);
+        background-color: var(--secondary-background-color);
+        border: 1px solid rgba(49, 51, 63, 0.2);
         border-radius: 16px;
         padding: 10px !important;
         margin: 0.5rem 0 !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         overflow: hidden !important;
     }
     div[data-testid="stPlotlyChart"] > div,
@@ -204,9 +212,10 @@ st.markdown("""
     }
     
     /* DataFrame tables - v2.8.3: Compact with rounded borders */
+    /* DataFrame tables - v2.9.4: Theme Aware */
     div[data-testid="stDataFrame"] {
-        background-color: rgba(22, 27, 34, 0.6);
-        border: 1px solid rgba(100, 110, 120, 0.7);
+        background-color: var(--secondary-background-color);
+        border: 1px solid rgba(49, 51, 63, 0.2);
         border-radius: 12px;
         padding: 8px !important;
         margin: 0.5rem 0 !important;
@@ -218,9 +227,10 @@ st.markdown("""
     }
 
     /* Compact horizontal rules (separators) */
+    /* Compact horizontal rules (separators) */
     hr {
         margin: 0.5rem 0 !important;
-        border-color: rgba(48, 54, 61, 0.5) !important;
+        border-color: rgba(49, 51, 63, 0.2) !important;
     }
 
     /* Compact expanders */
@@ -255,14 +265,15 @@ st.markdown("""
     .cal-header {
         text-align: center;
         font-weight: 700;
-        color: #8B949E;
+        color: var(--text-color);
         padding: 8px;
         text-transform: uppercase;
         font-size: 0.8rem;
+        opacity: 0.6;
     }
     .cal-day {
-        background-color: #161B22;
-        border: 1px solid #30363D;
+        background-color: var(--secondary-background-color);
+        border: 1px solid rgba(49, 51, 63, 0.2);
         border-radius: 8px;
         min-height: 100px;
         padding: 10px;
@@ -277,22 +288,22 @@ st.markdown("""
         z-index: 2;
     }
     .cal-day.green { 
-        background: linear-gradient(135deg, rgba(204, 255, 0, 0.2) 0%, rgba(22, 27, 34, 0) 100%);
-        border-left: 3px solid #CCFF00;
+        background: linear-gradient(135deg, rgba(50, 205, 50, 0.1) 0%, rgba(22, 27, 34, 0) 100%);
+        border-left: 3px solid #32CD32;
     }
     .cal-day.red { 
-        background: linear-gradient(135deg, rgba(218, 54, 51, 0.2) 0%, rgba(22, 27, 34, 0) 100%);
-        border-left: 3px solid #FF4444; 
+        background: linear-gradient(135deg, rgba(255, 0, 0, 0.1) 0%, rgba(22, 27, 34, 0) 100%);
+        border-left: 3px solid #FF0000; 
     }
-    .cal-date { font-size: 14px; color: #E6E6E6; font-weight: bold;}
+    .cal-date { font-size: 14px; color: var(--text-color); font-weight: bold;}
     .cal-pnl-pos { color: #CCFF00; font-size: 16px; font-weight: 800; text-shadow: 0 0 5px rgba(204,255,0,0.3);}
     .cal-pnl-neg { color: #FF4444; font-size: 16px; font-weight: 800; text-shadow: 0 0 5px rgba(255,68,68,0.3);}
     .cal-trades { font-size: 11px; color: #8B949E; margin-top: 4px; font-style: italic;}
     .cal-empty { background-color: transparent; border: none; }
     
     .cal-weekly {
-        background-color: #0D1117;
-        border: 1px dashed #30363D;
+        background-color: var(--secondary-background-color);
+        border: 1px dashed rgba(49, 51, 63, 0.3);
         border-radius: 8px;
         padding: 10px;
         display: flex;
@@ -306,9 +317,9 @@ st.markdown("""
     /* ACCESSIBILITY OVERRIDES (Colorblind Friendly) */
     /* Info/Warning/Success/Error Boxes -> Gray Scale with Borders */
     div[data-testid="stAlert"] {
-        background-color: #161B22; /* Dark Gray Background */
-        color: #C9D1D9; /* Light Gray Text */
-        border: 1px solid #30363D;
+        background-color: var(--secondary-background-color);
+        color: var(--text-color);
+        border: 1px solid rgba(49, 51, 63, 0.2);
         border-radius: 8px;
     }
     
@@ -320,42 +331,335 @@ st.markdown("""
     
     /* Force text inside alerts to be Gray/White */
     div[data-testid="stAlert"] > div {
-        color: #C9D1D9 !important;
+        color: var(--text-color) !important;
     }
     div[data-testid="stAlert"] p {
-        color: #C9D1D9 !important;
+        color: var(--text-color) !important;
+        opacity: 0.9;
     }
     
 </style>
 """, unsafe_allow_html=True)
 
 # --- CHART THEME HELPER ---
+
+# ===================================================================
+# SESSION CLASSIFICATION (v2.13)
+# ===================================================================
+
+def classify_entry_session(entry_time):
+    """
+    Clasifica un trade según la sesión horaria activa en NY timezone.
+    
+    Args:
+        entry_time: pd.Timestamp con hora de entrada del trade
+        
+    Returns:
+        'Asia', 'Europe', o 'USA'
+        
+    Session Times (NY):
+        - Asia: 18:00 - 03:00 (overnight)
+        - Europe: 03:00 - 09:00
+        - USA: 09:00 - 18:00
+    """
+    if pd.isna(entry_time):
+        return 'Unknown'
+    
+    # Extraer solo la hora (ignorar fecha para facilitar comparación)
+    hour = entry_time.hour
+    minute = entry_time.minute
+    time_decimal = hour + minute / 60.0
+    
+    # Asia: 18:00 - 03:00 (overnight session)
+    # Se divide en: 18:00-24:00 y 00:00-03:00
+    if time_decimal >= 18.0 or time_decimal < 3.0:
+        return 'Asia'
+    
+    # Europe: 03:00 - 09:00
+    elif 3.0 <= time_decimal < 9.0:
+        return 'Europe'
+    
+    # USA: 09:00 - 18:00
+    else:
+        return 'USA'
+
+
+# ===================================================================
+# AI SMART OPTIMIZER (v2.13 - Session-Aware)
+# ===================================================================
+
+def find_optimal_config(df, session_filter=None):
+    """
+    Brute-force optimization to find the best Robust Config.
+    
+    Args:
+        df: DataFrame con trades históricos
+        session_filter: (opcional) 'Asia', 'Europe', 'USA' para optimizar solo esa sesión
+    
+    Iterates through:
+    1. Filter Combinations (Removing worst performers progressively)
+    2. Max Age (5, 10, 20, 30 days)
+    3. Direction (Both, Long, Short)
+    4. Attempt Ranges (Min-Max)
+    """
+    if df.empty or 'SetupName' not in df.columns:
+        return None
+
+    # Pre-process Data
+    # Parse Zones
+    df_opt = df.copy()
+    
+    # v2.13: Session Filtering
+    if session_filter:
+        # Clasificar todos los trades por sesión
+        if 'EntryTime' in df_opt.columns:
+            # DEBUG: Ver trades antes de filtrar
+            print(f"[DEBUG] Total trades antes de filtro de sesión: {len(df_opt)}")
+            
+            df_opt['ActiveSession'] = df_opt['EntryTime'].apply(classify_entry_session)
+            
+            # DEBUG: Ver distribución de sesiones
+            session_counts = df_opt['ActiveSession'].value_counts()
+            print(f"[DEBUG] Distribución de sesiones:\n{session_counts}")
+            
+            df_opt = df_opt[df_opt['ActiveSession'] == session_filter]
+            
+            print(f"[DEBUG] Trades en sesión '{session_filter}': {len(df_opt)}")
+            
+            if df_opt.empty:
+                print(f"[DEBUG] ⚠️ No hay trades para sesión '{session_filter}'")
+                return None # No trades en esta sesión
+    try:
+        df_opt['Zone'] = df_opt['SetupName'].str.extract(r'(Asia|Europe|USA)\s*(Low|High)', expand=False).apply(lambda x: f"{x[0]} {x[1]}" if pd.notnull(x[0]) else "Other", axis=1)
+        df_opt = df_opt[df_opt['Zone'] != "Other"] # Only analyze core zones
+
+        if df_opt.empty: return None
+
+        # Base Metrics
+        total_pnl = df_opt['PnL'].sum()
+        all_zones = sorted(df_opt['Zone'].unique())
+        
+        # 1. Zone Candidates (Progressive Removal)
+        zone_stats = df_opt.groupby('Zone')['PnL'].sum().sort_values()
+        
+        zone_candidates = [all_zones] # Default (All)
+        
+        worst_zones = zone_stats.index.tolist() # Sorted Low to High PnL
+        
+        # Candidate 2: Remove Worst 1
+        if len(worst_zones) > 0:
+            c1 = [z for z in all_zones if z != worst_zones[0]]
+            if c1: zone_candidates.append(c1)
+            
+        # Candidate 3: Remove Worst 2 (only if we have enough zones)
+        if len(worst_zones) > 3:
+            c2 = [z for z in all_zones if z not in worst_zones[:2]]
+            if c2: zone_candidates.append(c2)
+        # 2. Parameter Grid
+        # Import combinations early for both age and attempt buckets
+        from itertools import combinations, chain
+        
+        # v2.17: SIMPLIFIED CONSERVATIVE OPTIMIZER
+        # Enfoque similar al manual del usuario: rangos simples y lógicos
+        
+        # Edad: Solo rangos continuos conservadores
+        age_grid = [
+            frozenset(range(1, 6)),     # ≤5 días (muy fresco)
+            frozenset(range(1, 11)),    # ≤10 días (fresco)
+            frozenset(range(1, 21)),    # ≤20 días (reciente)
+            frozenset(range(1, 31)),    # ≤30 días (establecido)
+            frozenset(range(1, 121)),   # Todos (sin filtro)
+        ]
+        
+        # Intentos: Solo rangos simples y conservadores (como usuario hace manualmente)
+        attempt_grid = [
+            frozenset(range(1, 11)),    # 1-10 (todos)
+            frozenset(range(1, 6)),     # 1-5 (primeros)
+            frozenset(range(2, 11)),    # 2-10 (saltar primero)
+            frozenset(range(2, 6)),     # 2-5 (primeros reintentos)
+            frozenset(range(5, 11)),    # 5-10 (solo profundos)
+        ]
+        
+        best_score = -float('inf')
+        best_cfg = None
+        
+        # v2.15: Tracking para reporte detallado
+        all_tested_configs = []  # Guardar TODAS las combinaciones probadas
+        
+        # Optimization Loop
+        import itertools
+        import math
+        
+        # v2.17: Calculate total iterations (simplified)
+        total_iterations = len(zone_candidates) * len(age_grid) * len(attempt_grid)
+        
+        # v2.17: Iterate WITHOUT direction, simplified age/attempt ranges
+        # Iterate: Zones x AgeRanges x AttemptRanges
+        iteration_count = 0
+        for z_list, age_set, attempt_set in itertools.product(zone_candidates, age_grid, attempt_grid):
+            iteration_count += 1
+            
+            # DEBUG: Solo imprimir primeras 5 iteraciones
+            debug_print = iteration_count <= 5
+            
+            # Apply Filters
+            mask = df_opt['Zone'].isin(z_list)
+            
+            if debug_print:
+                print(f"\n[DEBUG] Iteración #{iteration_count}")
+                print(f"  Zonas: {z_list}")
+                print(f"  Age set size: {len(age_set)} días")
+                print(f"  Attempt set: {sorted(list(attempt_set))[:5]}... (mostrando primeros 5)")
+                print(f"  Trades después de filtro de zona: {mask.sum()}")
+            
+            # v2.16: Age BITMAP Filter (Set Matching)
+            # Filtra para incluir SOLO las edades en el set actual
+            # Ejemplo: age_set = {1,2,3,4,5, 91,92,...120} = Ultra Fresco + Antiguo
+            # IMPORTANTE: Convertir frozenset a list para compatibilidad con pandas
+            if 'LevelAge' in df_opt.columns: 
+                mask = mask & (df_opt['LevelAge'].isin(list(age_set)))
+                if debug_print:
+                    print(f"  Trades después de filtro de edad: {mask.sum()}")
+            else:
+                if debug_print:
+                    print(f"  ⚠️ Columna 'LevelAge' NO existe en df_opt!")
+            
+            # v2.14: Attempt BITMAP Filter (Set Matching)
+            # Filtra para incluir SOLO los intentos en el set actual
+            # Ejemplo: attempt_set = {1, 5, 8, 9, 10} solo incluye esos intentos específicos
+            # IMPORTANTE: Convertir frozenset a list para compatibilidad con pandas
+            if 'Attempt' in df_opt.columns: 
+                mask = mask & (df_opt['Attempt'].isin(list(attempt_set)))
+                if debug_print:
+                    print(f"  Trades después de filtro de intentos: {mask.sum()}")
+            else:
+                if debug_print:
+                    print(f"  ⚠️ Columna 'Attempt' NO existe en df_opt!")
+                
+            filtered_df = df_opt[mask]
+            
+            if filtered_df.empty: continue
+            
+            # Robustness Score
+            pnl = filtered_df['PnL'].sum()
+            count = len(filtered_df)
+            
+            if pnl <= 0: 
+                score = pnl 
+            else:
+                # Reliability Penalty: 10 trades = 1.0, 100 trades = 2.0
+                # v2.14: Penalización por selectividad excesiva (muy pocos intentos = overfitting)
+                complexity_penalty = 1.0
+                
+                # Si solo usa 1-2 intentos, penalizar (riesgo de overfitting)
+                if len(attempt_set) <= 2:
+                    complexity_penalty *= 0.90
+                
+                reliability = math.log10(count) if count > 10 else 0.1
+                score = pnl * reliability * complexity_penalty
+                
+            # v2.15: Guardar TODAS las configs probadas para reporte
+            all_tested_configs.append({
+                'zones': z_list,
+                'age_set': sorted(list(age_set)),  # v2.16: Bitmap de edad
+                'attempts': sorted(list(attempt_set)),
+                'pnl': pnl,
+                'count': count,
+                'score': score
+            })
+                
+            if score > best_score:
+                best_score = score
+                # Calc Improvement
+                pf = (filtered_df[filtered_df['PnL']>0]['PnL'].sum() / abs(filtered_df[filtered_df['PnL']<0]['PnL'].sum())) if filtered_df[filtered_df['PnL']<0]['PnL'].sum() != 0 else 0
+                
+                best_cfg = {
+                    'enabled_zones': z_list,
+                    'age_set': sorted(list(age_set)),  # v2.16: Lista ordenada de días permitidos
+                    'attempt_set': sorted(list(attempt_set)),  # v2.14: Lista ordenada de intentos exitosos
+                    'pnl': pnl,
+                    'count': count,
+                    'pf': pf,
+                    'removed_zones': [z for z in all_zones if z not in z_list]
+                }
+        
+        # v2.17: Agregar metadata del estudio al resultado
+        if best_cfg:
+            best_cfg['optimization_metadata'] = {
+                'total_combinations_tested': len(all_tested_configs),
+                'age_patterns_tested': len(age_grid),  # v2.17: Simplified
+                'attempt_patterns_tested': len(attempt_grid),  # v2.17: Simplified
+                'zone_combinations_tested': len(zone_candidates)
+            }
+                
+        return best_cfg
+    except Exception as e:
+        print(f"[DEBUG] ⚠️ ERROR en find_optimal_config: {type(e).__name__}: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return None
+
+
+def find_optimal_config_all_sessions(df):
+    """
+    Ejecuta find_optimal_config para cada sesi\u00f3n por separado.
+    
+    Returns:
+        Dictionary con 3 keys: 'asia', 'europe', 'usa', cada uno con su configuraci\u00f3n \u00f3ptima
+    """
+    if df.empty or 'EntryTime' not in df.columns:
+        return None
+    
+    sessions = ['Asia', 'Europe', 'USA']
+    results = {}
+    
+    for session in sessions:
+        session_config = find_optimal_config(df, session_filter=session)
+        if session_config:
+            results[session.lower()] = session_config
+        else:
+            # Si no hay trades en esa sesión, usar defaults
+            results[session.lower()] = {
+                'enabled_zones': [],
+                'age_set': list(range(1, 121)),  # v2.16: Todos los días 1-120 por defecto
+                'attempt_set': list(range(1, 11)),  # v2.14: Todos los intentos 1-10 por defecto
+                'pnl': 0,
+                'count': 0,
+                'pf': 0,
+                'removed_zones': []
+            }
+    
+    return results
+
+
 def apply_premium_style(fig, title=None):
     """Applies a consistent Premium/Dark/Neon theme to Plotly figures."""
     if title: fig.update_layout(title=title)
     
+    # v2.9.3: Removed hardcoded colors to support Light Mode
+    # Use Streamlit defaults for font colors
     fig.update_layout(
         font_family="Inter, sans-serif",
         font_size=12,
-        font_color="#B0B0B0",
+        # font_color="#B0B0B0",  <-- Removed
         title_font_size=20,
-        title_font_color="#E6E6E6",
-        paper_bgcolor="rgba(0,0,0,0)", # Transparent
+        # title_font_color="#E6E6E6", <-- Removed
+        paper_bgcolor="rgba(0,0,0,0)", # Transparent (Adapts to Light/Dark)
         plot_bgcolor="rgba(0,0,0,0)",  # Transparent
-        hoverlabel=dict(
-            bgcolor="#161B22",
-            font_size=13,
-            font_family="Monospace"
-        ),
+        # hoverlabel=dict(
+        #    bgcolor="#161B22", <-- Removed
+        #    font_size=13,
+        #    font_family="Monospace"
+        # ),
         xaxis=dict(
-            gridcolor="#30363D",
+            # gridcolor="#30363D", <-- Let Plotly decide based on template
             showgrid=True,
-            zerolinecolor="#30363D"
+            # zerolinecolor="#30363D"
         ),
         yaxis=dict(
-            gridcolor="#30363D",
+            # gridcolor="#30363D",
             showgrid=True,
-            zerolinecolor="#30363D"
+            # zerolinecolor="#30363D"
         ),
         legend=dict(
             orientation="h",
@@ -365,7 +669,7 @@ def apply_premium_style(fig, title=None):
             x=1
         ),
         margin=dict(l=40, r=40, t=60, b=40),
-        height=450  # v2.2.1: Minimum height to avoid scroll
+        height=450
     )
     return fig
 
@@ -756,6 +1060,8 @@ def plot_r_ladder_chart(r_df):
         y=r_df['Percent_Reached'],
         name='% Alcanzado',
         marker_color='#2EA043',
+        marker_line_color='#666666', # v2.10.2: Premium Border
+        marker_line_width=1.5,
         yaxis='y',
         text=r_df['Percent_Reached'].apply(lambda x: f"{x:.1f}%"),
         textposition='outside'
@@ -981,6 +1287,119 @@ def analyze_scaling_out(df, r_df, position_sizes=[3, 5, 10, 20]):
     return section, comparison_df
 
 
+# --- ROLLOVERS (Smart Stitching) ---
+def get_cme_rollover_date(year, month):
+    """
+    Calculates the CME Rollover Date (2nd Thursday of the expiration month).
+    Expiration months: March (3), June (6), September (9), December (12).
+    """
+    # 1. Start at the 1st of the month
+    c = calendar.Calendar(firstweekday=calendar.THURSDAY)
+    month_cal = c.monthdatescalendar(year, month)
+    
+    # 2. Find the second Thursday
+    thursdays = [day for week in month_cal for day in week if day.weekday() == calendar.THURSDAY and day.month == month]
+    
+    if len(thursdays) >= 2:
+        return pd.Timestamp(thursdays[1]) # 2nd Thursday
+    return pd.Timestamp(year, month, 15) # Fallback
+
+def smart_rollover_filter(df):
+    """
+    Filters overlapping trades by enforcing strict Rollover Dates.
+    - Before Rollover Date: Only accepts expiring contract (e.g. 03-25)
+    - After Rollover Date: Only accepts next contract (e.g. 06-25)
+    """
+    if df.empty or 'FullInstrument' not in df.columns:
+        return df
+
+    # v2.10.1: Auto-Detect Contract Matches
+    # Expected format: "Symbol MM-YY" e.g., "MNQ 03-25"
+    
+    # Helper to parse contract info
+    def parse_contract(s):
+        try:
+            parts = str(s).split(' ')
+            if len(parts) >= 2:
+                # parts[1] should be "03-25"
+                m_y = parts[1].split('-')
+                if len(m_y) == 2:
+                    return int(m_y[0]), int(f"20{m_y[1]}") # Month, Year
+        except:
+            pass
+        return None, None
+
+    # We need to filter row by row primarily based on date
+    # But vectorized is faster. 
+    # Let's iterate through unique dates in the dataset to build a mask
+    valid_indices = []
+    
+    # Group by date for efficiency
+    dates = df['EntryTime'].dt.normalize().unique()
+    
+    for d in dates:
+        # Determine strict active contract for this date
+        d_ts = pd.Timestamp(d)
+        year = d_ts.year
+        
+        # Determine the "Current" or "Next" expiration
+        # Rollover months: 3, 6, 9, 12
+        # Logic: Find the next expiration match
+        expiration_cycles = [3, 6, 9, 12]
+        
+        # Find relevant rollover for this period
+        # If today is Jan/Feb/Mar(early) -> Target is Mar (03)
+        # If today is Mar(late)/Apr/Jun(early) -> Target is Jun (06)
+        
+        target_month = 0
+        target_year = year
+        
+        # Simple cycle check
+        found = False
+        for m in expiration_cycles:
+            roll_date = get_cme_rollover_date(year, m)
+            if d_ts < roll_date:
+                # This is the active contract until that date
+                target_month = m
+                target_year = year
+                found = True
+                break
+        
+        if not found:
+            # Must be Dec -> Next Year Mar
+            target_month = 3
+            target_year = year + 1
+            
+        # Target String suffix: "MM-YY"
+        target_suffix = f"{target_month:02d}-{str(target_year)[-2:]}"
+        
+        # Get trades for this date
+        day_trades = df[df['EntryTime'].dt.normalize() == d_ts]
+        
+        # Filter: Allow only instruments ending in target_suffix
+        # But also allow "Unknown" formats to pass through (don't delete if parse fails)
+        for idx, row in day_trades.iterrows():
+            inst = row['FullInstrument']
+            
+            # v2.10.1: SAFETY CHECK - Only apply strict rollover logic to known CME EQUITY INDICES
+            # Commodities (CL, GC) have different schedules (Monthly). Don't touch them.
+            is_equity_index = any(s in str(inst).upper() for s in ['NQ', 'ES', 'YM', 'RTY', 'EMD', 'MES', 'MNQ', 'MYM', 'M2K'])
+            
+            if is_equity_index and "-" in str(inst) and " " in str(inst): # Crude check for "SYM MM-YY"
+                if inst.endswith(target_suffix):
+                    valid_indices.append(idx)
+                else: 
+                     # This trade is from a contract that SHOULD NOT be active today
+                     pass
+            else:
+                # Non-standard name or COMMODITY -> Keep it safe (Manual Stitching for those)
+                valid_indices.append(idx)
+
+    if not valid_indices:
+        return df # Safety fall back if logic cleared everything
+        
+    return df.loc[valid_indices].sort_values('EntryTime').reset_index(drop=True)
+
 # --- 1. DATA LOADING & PRE-PROCESSING (CLUSTERING) ---
 # v2.1: Updated to support new CSV format with Commission, NetPnL, Attempt, RiskReward
 @st.cache_data
@@ -1000,26 +1419,84 @@ def load_and_process_data(target_path, license_tier='Free (Default)'):
     
     for filepath in files_to_load:
         try:
-            # 1. Detect Header
+            # 1. Detect Header and Format
             with open(filepath, 'r') as f:
                 first_line = f.readline().strip()
-                
-            has_header = first_line.startswith("ID") or first_line.startswith('"ID"')
-            
-            # v2.8.3: Updated column names to match extended CSV format with Delta columns
-            # Actual format: ID,Instrument,EntryTime,Type,EntryPrice,ExitTime,ExitPrice,Result,PnL,Commission,NetPnL,MAE,MFE,Setup,Attempt_UNUSED,RiskReward,DeltaAtEntry,DeltaDirection,SessionDelta,DeltaAtTP1,Attempt
-            col_names_new = ['ID','Instrument','EntryTime','Type','EntryPrice','ExitTime','ExitPrice','Result','GrossPnL','Commission','NetPnL','MAE','MFE','SetupName','Attempt_UNUSED','RiskReward','DeltaAtEntry','DeltaDirection','SessionDelta','DeltaAtTP1','Attempt']
-            # Legacy format fallback
-            col_names_legacy = ['ID','Instrument','EntryTime','Type','EntryPrice','ExitTime','ExitPrice','Result','PnL','SetupName','MAE','MFE','Account']
-            
-            if has_header:
-                # v2.8.3: CSV has malformed header (20 names but 21 data columns)
-                # Pandas discards the 21st column when header doesn't match data length
-                # Solution: Read without header and skip first row manually
-                df_temp = pd.read_csv(filepath, names=col_names_new, header=None, skiprows=1, on_bad_lines='skip', engine='python', index_col=False)
+
+            # v2.9.0: Detect NinjaTrader Trade Performance export format
+            # NT format: "Trade number,Instrument,Account,Strategy,Market pos.,Qty,Entry price,Exit price,Entry time,Exit time,Entry name,Exit name,Profit,Cum. net profit,Commission,..."
+            is_nt_format = first_line.startswith("Trade number") or first_line.startswith('"Trade number"')
+            has_header = first_line.startswith("ID") or first_line.startswith('"ID"') or is_nt_format
+
+            if is_nt_format:
+                # v2.9.0: Parse NinjaTrader Trade Performance export directly
+                # This ensures exact match with NT's Trade Performance window
+                df_temp = pd.read_csv(filepath, header=0, on_bad_lines='skip', engine='python')
+
+                # Rename columns to match our internal format
+                col_mapping = {
+                    'Trade number': 'ID',
+                    'Instrument': 'Instrument',
+                    'Market pos.': 'Type',
+                    'Qty': 'Quantity',
+                    'Entry price': 'EntryPrice',
+                    'Exit price': 'ExitPrice',
+                    'Entry time': 'EntryTime',
+                    'Exit time': 'ExitTime',
+                    'Entry name': 'EntryName',
+                    'Exit name': 'Result',
+                    'Profit': 'GrossPnL',
+                    'Cum. net profit': 'CumNetPnL',
+                    'Commission': 'Commission',
+                    'MAE': 'MAE',
+                    'MFE': 'MFE',
+                    'ETD': 'ETD',
+                    'Bars': 'Bars'
+                }
+                df_temp.rename(columns=col_mapping, inplace=True)
+
+                # Parse NT money format: "$-8200" -> -82.00, "$1200" -> 12.00
+                # NT shows values in cents (multiply by 100), need to divide
+                def parse_nt_money(val):
+                    if pd.isna(val):
+                        return 0.0
+                    s = str(val).replace('$', '').replace(',', '').strip()
+                    try:
+                        # NT exports values * 100 (e.g., $-8200 means -$82.00)
+                        return float(s) / 100.0
+                    except:
+                        return 0.0
+
+                for col in ['GrossPnL', 'CumNetPnL', 'Commission', 'MAE', 'MFE', 'ETD']:
+                    if col in df_temp.columns:
+                        df_temp[col] = df_temp[col].apply(parse_nt_money)
+
+                # Calculate NetPnL (GrossPnL already includes commission effect from NT)
+                # But we have separate Commission column, so: NetPnL = GrossPnL (which is already net in NT)
+                df_temp['NetPnL'] = df_temp['GrossPnL']
+                df_temp['PnL'] = df_temp['NetPnL']
+
+                # Extract SetupName from Entry/Exit names (e.g., "EntryA+_Long_01" -> derive from level)
+                # For NT format, we don't have SetupName directly, use placeholder
+                if 'SetupName' not in df_temp.columns:
+                    df_temp['SetupName'] = 'Unknown'
+
+                # Add missing columns with defaults
+                df_temp['Attempt'] = 1
+                df_temp['RiskReward'] = 0.0
+
             else:
-                # No header, use our column names
-                df_temp = pd.read_csv(filepath, names=col_names_new, header=None, on_bad_lines='skip', engine='python', index_col=False)
+                # Original strategy CSV format
+                # v2.8.3: Updated column names to match extended CSV format with Delta columns
+                # v1.15.33: Added 'Quantity' column for exact NT matching
+                col_names_new = ['ID','Instrument','EntryTime','Type','EntryPrice','ExitTime','ExitPrice','Result','GrossPnL','Commission','NetPnL','MAE','MFE','SetupName','Attempt_UNUSED','RiskReward','DeltaAtEntry','DeltaDirection','SessionDelta','DeltaAtTP1','LevelAge','Quantity','ExecutionId','EntryMode','ExitStrategy','RiskModel']
+                # Legacy format fallback
+                col_names_legacy = ['ID','Instrument','EntryTime','Type','EntryPrice','ExitTime','ExitPrice','Result','PnL','SetupName','MAE','MFE','Account']
+
+                if has_header:
+                    df_temp = pd.read_csv(filepath, names=col_names_new, header=None, skiprows=1, on_bad_lines='skip', engine='python', index_col=False)
+                else:
+                    df_temp = pd.read_csv(filepath, names=col_names_new, header=None, on_bad_lines='skip', engine='python', index_col=False)
                 
             # Sanitize headers
             df_temp.columns = df_temp.columns.str.strip()
@@ -1028,6 +1505,15 @@ def load_and_process_data(target_path, license_tier='Free (Default)'):
             # Rename 'Setup' to 'SetupName' if using new format
             if 'Setup' in df_temp.columns and 'SetupName' not in df_temp.columns:
                 df_temp.rename(columns={'Setup': 'SetupName'}, inplace=True)
+
+            # v2.10.0: Normalize Instrument Name (Group Contracts)
+            if 'Instrument' in df_temp.columns:
+                # 1. Preserve original logic/file lookup name
+                df_temp['FullInstrument'] = df_temp['Instrument']
+                
+                # 2. Normalize UI Name: "MNQ 03-24" -> "MNQ"
+                # Split by space and take first part. If no space, keeps original.
+                df_temp['Instrument'] = df_temp['Instrument'].astype(str).apply(lambda x: x.split(' ')[0])
             
             # v2.1: Use NetPnL if available, fallback to PnL
             if 'NetPnL' in df_temp.columns:
@@ -1039,6 +1525,10 @@ def load_and_process_data(target_path, license_tier='Free (Default)'):
                 df_temp['PnL'] = pd.to_numeric(df_temp['GrossPnL'], errors='coerce')
             
             # v2.1: Ensure new columns exist with defaults
+            # v1.15.35: Rename Attempt_UNUSED to Attempt for filters
+            if 'Attempt_UNUSED' in df_temp.columns:
+                df_temp.rename(columns={'Attempt_UNUSED': 'Attempt'}, inplace=True)
+            
             if 'Attempt' not in df_temp.columns:
                 df_temp['Attempt'] = 1
             else:
@@ -1053,6 +1543,17 @@ def load_and_process_data(target_path, license_tier='Free (Default)'):
                 df_temp['Commission'] = 0.0
             else:
                 df_temp['Commission'] = pd.to_numeric(df_temp['Commission'], errors='coerce').fillna(0.0)
+            
+            # v1.15.33: Ensure Quantity exists with default
+            if 'Quantity' not in df_temp.columns:
+                df_temp['Quantity'] = 1
+            else:
+                df_temp['Quantity'] = pd.to_numeric(df_temp['Quantity'], errors='coerce').fillna(1).astype(int)
+
+            if 'LevelAge' not in df_temp.columns:
+                df_temp['LevelAge'] = 0
+            else:
+                df_temp['LevelAge'] = pd.to_numeric(df_temp['LevelAge'], errors='coerce').fillna(0).astype(int)
             
             # Validation
             if 'EntryTime' in df_temp.columns:
@@ -1085,7 +1586,8 @@ def load_and_process_data(target_path, license_tier='Free (Default)'):
 
         # Then drop logical duplicates (same trade ID at same time)
         # Keep 'last' assuming latest run is most relevant
-        subset_cols = ['Instrument', 'EntryTime']
+        # v2.10.0: Use FullInstrument to distinguish between different contracts (e.g. 03-25 vs 06-25) executing at same time
+        subset_cols = ['FullInstrument' if 'FullInstrument' in df.columns else 'Instrument', 'EntryTime']
         if 'ID' in df.columns:
             subset_cols.append('ID')
         
@@ -1094,42 +1596,53 @@ def load_and_process_data(target_path, license_tier='Free (Default)'):
             # st.warning(f"Se eliminaron {duplicates_count} trades duplicados (mismas ejecuciones).")
             df.drop_duplicates(subset=subset_cols, keep='last', inplace=True)
         
-        # v1.14.15: Apply Dynamic Commissions
-        # Recalculate NetPnL based on selected License Tier
-        rates = COMMISSION_RATES[license_tier]
+        # v1.15.35: DISABLED - Use Commission from CSV instead of recalculating
+        # The C# strategy already calculates commissions correctly based on Quantity
+        # Recalculating here causes inconsistencies and requires manual fixes
         
-        def calculate_commission(row):
-            inst = str(row['Instrument']).upper()
-            rate = rates['Standard'] # Default
-            
-            # Logic to detect type
-            if inst.startswith('M') and not inst.startswith('MY'): # Micro general
-                if 'MBT' in inst or 'MET' in inst: rate = rates['MicroCrypto']
-                elif 'MCL' in inst or 'MGC' in inst or 'MHG' in inst: rate = rates['MicroCom']
-                else: rate = rates['Micro']
-            elif inst.startswith('MYM') or inst.startswith('M2K'): # Explicit Micros
-                rate = rates['Micro']
-            elif inst in ['CL', 'GC', 'SI', 'HG', '6E', '6B', '6J']: # Commodities/Currencies
-                rate = rates['Commodity']
-            
-            return rate * 2 # Round trip
-            
-        # Apply
-        df['Commission'] = df.apply(calculate_commission, axis=1)
+        # # v1.14.15: Apply Dynamic Commissions
+        # # Recalculate NetPnL based on selected License Tier
+        # rates = COMMISSION_RATES[license_tier]
+        # 
+        # def calculate_commission(row):
+        #     inst = str(row['Instrument']).upper()
+        #     rate = rates['Standard'] # Default
+        #     
+        #     # Logic to detect type
+        #     if inst.startswith('M') and not inst.startswith('MY'): # Micro general
+        #         if 'MBT' in inst or 'MET' in inst: rate = rates['MicroCrypto']
+        #         elif 'MCL' in inst or 'MGC' in inst or 'MHG' in inst: rate = rates['MicroCom']
+        #         else: rate = rates['Micro']
+        #     elif inst.startswith('MYM') or inst.startswith('M2K'): # Explicit Micros
+        #         rate = rates['Micro']
+        #     elif inst in ['CL', 'GC', 'SI', 'HG', '6E', '6B', '6J']: # Commodities/Currencies
+        #         rate = rates['Commodity']
+        #     
+        #     # v1.15.35: FIX - Multiply by Quantity (each row may have different contract quantities)
+        #     quantity = row.get('Quantity', 1)  # Default to 1 if column doesn't exist
+        #     return rate * 2 * quantity # Round trip * Quantity
+        #     
+        # # Apply
+        # df['Commission'] = df.apply(calculate_commission, axis=1)
+        # 
+        # # Recalculate Net PnL
+        # # Note: 'PnL' in CSV is typically Gross if explicitly exported as such, or Net if strategy did it.
+        # # But we want to OVERWRITE the strategy's static commission.
+        # # So we reconstruct Gross from PnL + OldCommission (if exists) or just treat PnL as Gross if Commission was 0
+        # 
+        # # Safest way: Assume 'GrossPnL' exists (we checked load logic). If not, derive it.
+        # if 'GrossPnL' not in df.columns:
+        #      # Fallback: Assume current PnL is Gross for safety or try to reverse
+        #      df['GrossPnL'] = df['PnL'] 
+        # 
+        # df['NetPnL'] = df['GrossPnL'] - df['Commission']]
+        # # Update main PnL column to be Net for analysis
+        # df['PnL'] = df['NetPnL']
         
-        # Recalculate Net PnL
-        # Note: 'PnL' in CSV is typically Gross if explicitly exported as such, or Net if strategy did it.
-        # But we want to OVERWRITE the strategy's static commission.
-        # So we reconstruct Gross from PnL + OldCommission (if exists) or just treat PnL as Gross if Commission was 0
-        
-        # Safest way: Assume 'GrossPnL' exists (we checked load logic). If not, derive it.
-        if 'GrossPnL' not in df.columns:
-             # Fallback: Assume current PnL is Gross for safety or try to reverse
-             df['GrossPnL'] = df['PnL'] 
-        
-        df['NetPnL'] = df['GrossPnL'] - df['Commission']
-        # Update main PnL column to be Net for analysis
-        df['PnL'] = df['NetPnL']
+        # v1.15.35: Just use Commission and NetPnL from CSV (already correct)
+        # Ensure PnL column uses NetPnL for analysis
+        if 'NetPnL' in df.columns:
+            df['PnL'] = df['NetPnL']
 
     # Basic Cleaning
     try:
@@ -1272,6 +1785,13 @@ def load_and_process_data(target_path, license_tier='Free (Default)'):
         st.error(f"Data Processing Error: {e}")
         return None
         
+    # v2.10.1: Apply Smart Rollover Filtering (Auto-Stitch)
+    # This automatically removes data from expired contracts if newer data exists for the same period
+    try:
+        df = smart_rollover_filter(df)
+    except Exception as e:
+        st.warning(f"Smart Rollover Error: {e}")
+
     return df
 
 @st.cache_data
@@ -1335,6 +1855,9 @@ if analyzer is not None:
     st.sidebar.markdown("---")
     
     st.sidebar.success("🤖 IA: Activa")
+    
+    # v1.15.35: Data Table Debugger
+    show_data_table = st.sidebar.checkbox("🔍 Mostrar Tabla de Datos Raw", value=False, help="Ver datos completos del CSV (Commission, Quantity, etc.)")
     
     # AI Cost Metrics (Persistent + Session)
     if 'ai_usage_stats' in st.session_state:
@@ -1440,7 +1963,8 @@ elif data_source == "📁 DEMO":
 data_path = st.sidebar.text_input("Ruta CSV", default_path)
 
 if st.sidebar.button("Recargar Datos"):
-    st.cache_data.clear()
+    st.cache_data.clear()  # Limpiar cache primero
+    st.rerun()  # Luego recargar app
 
 # Debug: Raw Data Inspector
 with st.sidebar.expander("🔍 Inspector de Datos Crudos"):
@@ -1456,75 +1980,141 @@ with st.sidebar.expander("🔍 Inspector de Datos Crudos"):
 
 df_raw = load_and_process_data(data_path, license_tier)
 
+if df_raw is not None:
+    # v1.15.38: Robust Deduplication for Cumulative Backtests
+    # If ExecutionId exists (new format), use it for strict deduplication
+    if 'ExecutionId' in df_raw.columns:
+        init_len = len(df_raw)
+        df_raw = df_raw.drop_duplicates(subset=['ExecutionId'], keep='last')  # Keep last run's data
+        dupes = init_len - len(df_raw)
+        if dupes > 0:
+            st.toast(f"🧹 Se eliminaron {dupes} ejecuciones duplicadas (re-run detected).")
+    else:
+        # Fallback for old files: Deduplicate by exact Time + Instrument + Type + Price
+        # Risky for exact simultaneous fills, but better than double counting entire weeks
+        init_len = len(df_raw)
+        df_raw = df_raw.drop_duplicates(subset=['Instrument', 'EntryTime', 'Type', 'EntryPrice', 'ExitPrice'], keep='last')
+        dupes = init_len - len(df_raw)
+        if dupes > 0:
+            st.toast(f"🧹 Deduplicación Legacy: {dupes} filas eliminadas.")
+
+
 if df_raw is None:
     st.warning("⚠️ Esperando datos. Por favor ejecuta un Backtest en NinjaTrader primero.")
     st.stop()
 
-# Interactive Filters
-instruments = ['Todos'] + list(df_raw['Instrument'].unique())
-selected_inst = st.sidebar.selectbox("Instrumento", instruments)
-
-setups = ['Todos'] + list(df_raw['SetupName'].unique())
-selected_setup = st.sidebar.selectbox("Nombre del Setup", setups)
-
-# Date Filter
-# V_FIX: Drop NaT rows to prevent crashes
-df_raw = df_raw.dropna(subset=['EntryTime'])
-
-if df_raw.empty:
-    st.warning("⚠️ Data loaded but contains no valid dates.")
-    st.stop()
-
-min_date = df_raw['EntryTime'].min().date()
-max_date = df_raw['EntryTime'].max().date()
-
-# Safety: Ensure min <= max (basic logic, but NaT could mess it up)
-if min_date > max_date:
-    min_date = max_date
-
-try:
-    date_range = st.sidebar.date_input(
-        "Rango de Fechas",
-        value=(min_date, max_date),
-        min_value=min_date,
-        max_value=max_date,
-        format="DD/MM/YYYY"
+# v2.24: Filter out zombie trades (Friday entry → Sunday/Monday exit)
+# These are leftover positions from previous week that contaminate metrics
+if 'EntryTime' in df_raw.columns and 'ExitTime' in df_raw.columns:
+    initial_count = len(df_raw)
+    # dayofweek: Monday=0, Friday=4, Sunday=6
+    zombie_mask = (
+        (df_raw['EntryTime'].dt.dayofweek == 4) &  # Entry on Friday
+        (df_raw['ExitTime'].dt.dayofweek.isin([6, 0, 1]))  # Exit on Sunday/Monday/Tuesday
     )
-except Exception as e:
-    st.error(f"Date Error: {e}")
-    date_range = (min_date, max_date)
+    zombies_found = zombie_mask.sum()
+    df_raw = df_raw[~zombie_mask]
+    
+    if zombies_found > 0:
+        st.sidebar.info(f"🧹 Filtrados {zombies_found} trades zombie (Viernes→Domingo/Lunes)")
+    
+    st.sidebar.caption(f"📊 Trades válidos: {len(df_raw)} de {initial_count}")
 
-# Commission Input
-commission = st.sidebar.number_input("Comisión por Contrato (RT)", value=2.04, step=0.01)
+# Interactive Filters
+with st.sidebar.expander("🛠️ Filtros de Análisis", expanded=True):
+    # Date Filter Only
+    # V_FIX: Drop NaT rows to prevent crashes
+    df_raw = df_raw.dropna(subset=['EntryTime'])
+
+    if df_raw.empty:
+        st.warning("⚠️ Data loaded but contains no valid dates.")
+        st.stop()
+
+    min_date = df_raw['EntryTime'].min().date()
+    max_date = df_raw['EntryTime'].max().date()
+
+    # Safety: Ensure min <= max (basic logic, but NaT could mess it up)
+    if min_date > max_date:
+        min_date = max_date
+
+    try:
+        date_range = st.date_input(
+            "Rango de Fechas",
+            value=(min_date, max_date),
+            min_value=min_date,
+            max_value=max_date,
+            format="DD/MM/YYYY"
+        )
+
+    except Exception as e:
+        st.error(f"Date Error: {e}")
+        date_range = (min_date, max_date)
+
+
+# AI Config (Sidebar)
+with st.sidebar.expander("🤖 Configuración IA", expanded=True):
+    # Retrieve persist state from query params
+    qp_ai = st.query_params.get("ai", "true").lower() == "true"
+    
+    def on_ai_change():
+        st.query_params["ai"] = str(st.session_state.ai_enabled_toggle).lower()
+        st.session_state['ai_enabled'] = st.session_state.ai_enabled_toggle
+
+    # Default to True, but allow user to disable if API hangs
+    ai_status = st.toggle("Activar Auditor IA", 
+                          value=qp_ai, 
+                          key="ai_enabled_toggle",
+                          on_change=on_ai_change,
+                          help="Desactívalo si la API Key es inválida o el análisis se cuelga.")
+    
+    # Ensure session state is synced on first load
+    if 'ai_enabled' not in st.session_state:
+        st.session_state['ai_enabled'] = qp_ai
+
+    if not ai_status:
+        st.caption("🚫 IA Desactivada")
+    else:
+        st.caption("✅ IA Activa")
 
 # Apply Filters
 df = df_raw.copy()
 
-# Date Logic
+# Date Logic Only (Sidebar filters for Inst/Setup removed per user request)
 if len(date_range) == 2:
     start_d, end_d = date_range
     # Filter inclusive
     mask = (df['EntryTime'].dt.date >= start_d) & (df['EntryTime'].dt.date <= end_d)
     df = df[mask]
+
+# v1.15.35: Data Table for Debugging
+if show_data_table:
+    st.markdown("---")
+    st.subheader("🔍 Tabla de Datos Raw")
     
-if selected_inst != 'Todos':
-    df = df[df['Instrument'] == selected_inst]
-if selected_setup != 'Todos':
-    df = df[df['SetupName'] == selected_setup]
+    st.caption("**Mostrando datos cargados (filtrados por fecha)**")
+    
+    # Column selection with all useful columns
+    cols_to_show = ['ID', 'Instrument', 'EntryTime', 'ExitTime', 'Type', 'Quantity', 
+                    'EntryPrice', 'ExitPrice', 'GrossPnL', 'Commission', 'NetPnL', 
+                    'SetupName', 'Result', 'MAE', 'MFE', 'Attempt', 'LevelAge']
+    cols_available = [c for c in cols_to_show if c in df.columns]
+    
+    # Display table (respects filters from df)
+    st.dataframe(df[cols_available].head(100), use_container_width=True, height=500)
+    
+    # Summary metrics
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Registros Filtrados", len(df))
+    if 'Commission' in df.columns: 
+        c2.metric("Total Commission", f"${df['Commission'].sum():.2f}")
+    if 'GrossPnL' in df.columns: 
+        c3.metric("Gross PnL", f"${df['GrossPnL'].sum():.2f}")
+    if 'NetPnL' in df.columns:
+        c4.metric("Net PnL", f"${df['NetPnL'].sum():.2f}")
+    
+    st.markdown("---")
 
-# Account Filter
-if 'Account' in df.columns:
-    accounts = ['Todos'] + list(df['Account'].unique())
-    selected_acc = st.sidebar.selectbox("Cuenta", accounts)
-    if selected_acc != 'Todos':
-        df = df[df['Account'] == selected_acc]
 
-# Apply Commission (Net PnL)
-# Apply Commission (Net PnL)
-# Assuming CSV 'PnL' is Gross. We subtract commission per row (since each row is 1 contract)
-if commission > 0:
-    df['PnL'] = df['PnL'] - commission
-    df['PnL_Gross'] = df['PnL'] + commission # Keep gross for reference if needed
 
 # --- 3. METRICS ENGINE ---
 
@@ -1608,103 +2198,692 @@ else:
                 st.session_state.chat_history = []
                 st.rerun()
 
+
+# ========================================================================================
+# TRAILING STOP SIMULATION FUNCTIONS (v2.25)
+# ========================================================================================
+
+def reconstruct_price_path(entry_price, mfe, mae, exit_price, direction, steps=150):
+    """
+    Reconstruct approximate price path from entry to exit using MFE/MAE
+    
+    Limitation: Without tick-by-tick data, we create synthetic path
+    Assumptions:
+    - Price moves from entry toward MFE peak
+    - Then retraces toward exit (which may include MAE)
+    """
+    if direction == 'Long':
+        peak = entry_price + mfe
+        trough = entry_price - mae
+    else:  # Short
+        peak = entry_price - mfe  # For shorts, mfe is negative move
+        trough = entry_price + mae
+    
+    # Create path: Entry → Peak → Exit
+    # Split into segments
+    path_to_peak = np.linspace(entry_price, peak, int(steps * 0.6))
+    path_to_exit = np.linspace(peak, exit_price, int(steps * 0.4))
+    
+    return np.concatenate([path_to_peak, path_to_exit])
+
+def simulate_trailing_escalones(entry_price, price_path, direction, steps, initial_sl):
+    """
+    Trailing stop con escalones fijos
+    
+    Parameters:
+    - steps: list of tuples [(trigger_ticks, new_sl_offset_ticks), ...]
+    - initial_sl: initial stop loss distance in ticks
+    
+    Returns: (exit_price, exit_reason)
+    """
+    tick_size = 0.25  # MNQ
+    sl_price = entry_price - (initial_sl * tick_size) if direction == 'Long' else entry_price + (initial_sl * tick_size)
+    
+    for price in price_path:
+        # Calculate current profit in ticks
+        if direction == 'Long':
+            profit_ticks = (price - entry_price) / tick_size
+        else:
+            profit_ticks = (entry_price - price) / tick_size
+        
+        # Update SL based on steps
+        for trigger, new_sl_offset in steps:
+            if profit_ticks >= trigger:
+                if direction == 'Long':
+                    new_sl = entry_price + (new_sl_offset * tick_size)
+                    sl_price = max(sl_price, new_sl)
+                else:
+                    new_sl = entry_price - (new_sl_offset * tick_size)
+                    sl_price = min(sl_price, new_sl)
+        
+        # Check if SL hit
+        if direction == 'Long' and price <= sl_price:
+            return sl_price, 'Trailing_SL'
+        elif direction == 'Short' and price >= sl_price:
+            return sl_price, 'Trailing_SL'
+    
+    # Reached end without hitting SL
+    return price_path[-1], 'Natural_Exit'
+
+def simulate_trailing_porcentual(entry_price, price_path, direction, percentage, initial_sl):
+    """
+    Trailing stop porcentual: mantiene X% del profit desde peak
+    
+    Parameters:
+    - percentage: % del profit a mantener (ej: 60 = mantener 60% del profit)
+    """
+    tick_size = 0.25
+    peak = entry_price
+    sl_price = entry_price - (initial_sl * tick_size) if direction == 'Long' else entry_price + (initial_sl * tick_size)
+    
+    for price in price_path:
+        # Update peak
+        if direction == 'Long':
+            peak = max(peak, price)
+            profit_from_entry = peak - entry_price
+            # SL = Entry + (Profit × percentage)
+            new_sl = entry_price + (profit_from_entry * (percentage / 100))
+            sl_price = max(sl_price, new_sl)
+            
+            if price <= sl_price:
+                return sl_price, 'Trailing_SL'
+        else:
+            peak = min(peak, price)
+            profit_from_entry = entry_price - peak
+            new_sl = entry_price - (profit_from_entry * (percentage / 100))
+            sl_price = min(sl_price, new_sl)
+            
+            if price >= sl_price:
+                return sl_price, 'Trailing_SL'
+    
+    return price_path[-1], 'Natural_Exit'
+
+def simulate_trailing_atr(entry_price, price_path, direction, atr_value, multiplier, initial_sl):
+    """
+    Trailing stop basado en ATR
+    
+    SL = Peak - (ATR × multiplier)
+    """
+    tick_size = 0.25
+    peak = entry_price
+    sl_price = entry_price - (initial_sl * tick_size) if direction == 'Long' else entry_price + (initial_sl * tick_size)
+    
+    for price in price_path:
+        if direction == 'Long':
+            peak = max(peak, price)
+            new_sl = peak - (atr_value * multiplier)
+            sl_price = max(sl_price, new_sl)
+            
+            if price <= sl_price:
+                return sl_price, 'Trailing_SL'
+        else:
+            peak = min(peak, price)
+            new_sl = peak + (atr_value * multiplier)
+            sl_price = min(sl_price, new_sl)
+            
+            if price >= sl_price:
+                return sl_price, 'Trailing_SL'
+    
+    return price_path[-1], 'Natural_Exit'
+
+def simulate_trailing_retroceso(entry_price, price_path, direction, activation_ticks, retrace_ticks, initial_sl):
+    """
+    Trailing por retroceso: activa después de X ticks de profit, cierra si retrocede Y ticks
+    
+    Parameters:
+    - activation_ticks: MFE mínimo para activar trailing
+    - retrace_ticks: Retroceso desde peak para cerrar
+    """
+    tick_size = 0.25
+    peak = entry_price
+    trailing_active = False
+    sl_price = entry_price - (initial_sl * tick_size) if direction == 'Long' else entry_price + (initial_sl * tick_size)
+    
+    for price in price_path:
+        if direction == 'Long':
+            profit_ticks = (price - entry_price) / tick_size
+            
+            # Activar trailing
+            if profit_ticks >= activation_ticks:
+                trailing_active = True
+                peak = max(peak, price)
+            
+            # Si trailing activo, verificar retroceso
+            if trailing_active:
+                retrace_from_peak = (peak - price) / tick_size
+                if retrace_from_peak >= retrace_ticks:
+                    return price, 'Trailing_Retrace'
+            
+            # Check initial SL (siempre activo)
+            if price <= sl_price:
+                return sl_price, 'Initial_SL'
+        else:
+            profit_ticks = (entry_price - price) / tick_size
+            
+            if profit_ticks >= activation_ticks:
+                trailing_active = True
+                peak = min(peak, price)
+            
+            if trailing_active:
+                retrace_from_peak = (price - peak) / tick_size
+                if retrace_from_peak >= retrace_ticks:
+                    return price, 'Trailing_Retrace'
+            
+            if price >= sl_price:
+                return sl_price, 'Initial_SL'
+    
+    return price_path[-1], 'Natural_Exit'
+
+def calculate_pnl(entry_price, exit_price, direction, quantity=1):
+    """Calculate PnL in dollars for MNQ"""
+    tick_size = 0.25
+    point_value = 2  # MNQ = $2 per point
+    
+    if direction == 'Long':
+        ticks = (exit_price - entry_price) / tick_size
+    else:
+        ticks = (entry_price - exit_price) / tick_size
+    
+    return ticks * tick_size * point_value * quantity
+
+# ========================================================================================
 # --- UI LAYOUT ---
 
 st.title("🔬 Auditor de Microestructura Quant")
 st.markdown(f"**Dataset:** {len(df)} Ejecuciones | **Trades Lógicos:** {total_trades}")
 
+# v2.22: This df will be updated by filters in tab1, but initialized here for other tabs to use
+df = df.copy() # Start with date-filtered df
+
 # Tabs
-tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9, tab10 = st.tabs([
+tab1, tab2, tab3, tab4, tab5, tab6, tab8, tab9 = st.tabs([
     "📊 Tablero", 
     "🧅 Análisis de Escala", 
     "📉 Análisis de Riesgo", 
     "🎯 MAE/MFE", 
     "🎲 Monte Carlo", 
     "📅 Calendario", 
-    "⏰ Análisis Temporal", 
-    "🧱 Análisis de Niveles", 
     "🆚 Live vs Backtest",
-    "🎯 Reporte Ejecutivo"
+    "🧪 Trailing Lab"
 ])
 
 with tab1:
     # v2.8.3: Interactive Filters above charts - Horizontal layout
-    st.markdown("### 🎛️ Filtros Interactivos")
+    # v2.23: Persist expander state across reloads
+    if 'filter_expander_open' not in st.session_state:
+        st.session_state.filter_expander_open = True  # Default: open on first load
+    
+    with st.expander("🎛️ Filtros del Gráfico", expanded=st.session_state.filter_expander_open):
+        # --- NUEVO: FILTRO DE SESIÓN (Posición 1) ---
+        st.markdown("**Sesión de Ejecución (Hora NY)**")
+        col_select_all_s, col_asia, col_eu, col_usa = st.columns([1.5, 1, 1, 1])
+        
+        with col_select_all_s:
+            all_sessions_checked = st.checkbox("Todas", value=True, key="all_sessions_check")
+            
+        # Sync Logic
+        if 'prev_all_sessions' not in st.session_state:
+            st.session_state.prev_all_sessions = True
+            
+        if st.session_state.prev_all_sessions != all_sessions_checked:
+            st.session_state.session_Asia = all_sessions_checked
+            st.session_state.session_Europe = all_sessions_checked
+            st.session_state.session_USA = all_sessions_checked
+            st.session_state.prev_all_sessions = all_sessions_checked
+            
+        selected_sessions = []
+        with col_asia:
+            # Note: Using classify_entry_session returns 'Asia', 'Europe', 'USA'
+            if st.checkbox("Asia", value=True, key="session_Asia"): selected_sessions.append('Asia')
+        with col_eu:
+            if st.checkbox("Europa", value=True, key="session_Europe"): selected_sessions.append('Europe')
+        with col_usa:
+            if st.checkbox("USA", value=True, key="session_USA"): selected_sessions.append('USA')
+            
+        # --- NUEVO: FILTRO DE TIER DE SALIDA (Posición 2) ---
+        st.markdown("**Tipo de Salida (Tier)**")
+        col_select_all_t, col_t1, col_t2, col_t3, col_t4 = st.columns([1.5, 1, 1, 1, 1])
+        
+        with col_select_all_t:
+            all_tiers_checked = st.checkbox("Todos", value=True, key="all_tiers_check")
+            
+        # Sync Logic for Tiers
+        if 'prev_all_tiers' not in st.session_state:
+            st.session_state.prev_all_tiers = True
+            
+        if st.session_state.prev_all_tiers != all_tiers_checked:
+            st.session_state.tier_1 = all_tiers_checked
+            st.session_state.tier_2 = all_tiers_checked
+            st.session_state.tier_3 = all_tiers_checked
+            st.session_state.tier_4 = all_tiers_checked
+            st.session_state.prev_all_tiers = all_tiers_checked
+            
+        selected_tiers = []
+        with col_t1:
+            if st.checkbox("Tier 1 (_01)", value=True, key="tier_1", help="Trades terminados en _01 (TP1/SL1)"): selected_tiers.append(1)
+        with col_t2:
+            if st.checkbox("Tier 2 (_02)", value=True, key="tier_2", help="Trades terminados en _02 (TP2/SL2)"): selected_tiers.append(2)
+        with col_t3:
+            if st.checkbox("Tier 3 (_03)", value=True, key="tier_3", help="Trades terminados en _03 (TP3/SL3)"): selected_tiers.append(3)
+        with col_t4:
+            if st.checkbox("Tier 4+ (Otros)", value=True, key="tier_4", help="Trades terminados en _04 o superior"): selected_tiers.append(4)
 
-    # Get unique values for filters
-    all_setups = sorted(df_raw['SetupName'].unique())
-    all_instruments = sorted(df_raw['Instrument'].unique())
-    all_attempts = sorted(df_raw['Attempt'].unique())
+        st.markdown("---") # Separador visual antes de Niveles
 
-    # Niveles Filter - Horizontal layout
-    st.markdown("**Niveles**")
-    col_select_all_1, *nivel_cols = st.columns([1.5] + [1] * min(len(all_setups), 6))
+        # v2.21: BIDIRECTIONAL CASCADE - All filters affect each other
+        # Extract current selections from session_state and apply to df_cascade
+        df_cascade = df_raw.copy()
+        
+        # Apply Session Filter
+        if len(selected_sessions) < 3:
+             if 'EntryTime' in df_cascade.columns:
+                 if 'ActiveSession' not in df_cascade.columns:
+                     df_cascade['ActiveSession'] = df_cascade['EntryTime'].apply(classify_entry_session)
+                 df_cascade = df_cascade[df_cascade['ActiveSession'].isin(selected_sessions)]
 
-    with col_select_all_1:
-        all_setups_checked = st.checkbox("Todos", value=True, key="all_setups_check")
+        # Apply Tier Filter to df_cascade
+        if len(selected_tiers) < 4:
+            # Helper logic for Tier classification
+            def get_tier(val):
+                s = str(val)
+                if s.endswith("_01"): return 1
+                if s.endswith("_02"): return 2
+                if s.endswith("_03"): return 3
+                return 4 # Default for others
+            
+            if 'Tier' not in df_cascade.columns:
+                df_cascade['Tier'] = df_cascade['Result'].apply(get_tier)
+            
+            df_cascade = df_cascade[df_cascade['Tier'].isin(selected_tiers)]
 
-    selected_setups = []
-    for idx, setup in enumerate(all_setups):
-        with nivel_cols[idx % 6]:
-            if st.checkbox(setup, value=all_setups_checked, key=f"setup_{setup}", label_visibility="visible"):
-                selected_setups.append(setup)
+        # Extract current filter selections from session_state
+        active_setups = [s.replace("setup_", "") for s in st.session_state.keys() 
+                        if s.startswith("setup_") and st.session_state.get(s, False)]
+        active_instruments = [s.replace("instrument_", "") for s in st.session_state.keys() 
+                             if s.startswith("instrument_") and st.session_state.get(s, False)]
+        
+        active_attempts = []
+        for key in st.session_state.keys():
+            if key.startswith("attempt_") and st.session_state.get(key, False):
+                try:
+                    active_attempts.append(int(key.replace("attempt_", "")))
+                except: pass
+        
+        active_hours = []
+        for key in st.session_state.keys():
+            if key.startswith("hour_") and st.session_state.get(key, False):
+                try:
+                    active_hours.append(int(key.replace("hour_", "")))
+                except: pass
+        
+        active_days = [s.replace("day_", "") for s in st.session_state.keys() 
+                      if s.startswith("day_") and st.session_state.get(s, False)]
+        
+        active_ages = []
+        for key in st.session_state.keys():
+            if key.startswith("age_") and st.session_state.get(key, False):
+                try:
+                    active_ages.append(int(key.replace("age_", "")))
+                except: pass
 
-    # Instrumentos Filter - Horizontal layout
-    st.markdown("**Instrumentos**")
-    col_select_all_2, *inst_cols = st.columns([1.5] + [1] * len(all_instruments))
+        # Apply all active filters to df_cascade
+        if active_setups:
+            df_cascade = df_cascade[df_cascade['SetupName'].isin(active_setups)]
+        if active_instruments:
+            df_cascade = df_cascade[df_cascade['Instrument'].isin(active_instruments)]
+        if active_attempts:
+            df_cascade = df_cascade[df_cascade['Attempt'].isin(active_attempts)]
+        if active_hours and 'EntryTime' in df_cascade.columns:
+            df_cascade = df_cascade[df_cascade['EntryTime'].dt.hour.isin(active_hours)]
+        if active_days and 'EntryTime' in df_cascade.columns:
+            df_cascade = df_cascade[df_cascade['EntryTime'].dt.day_name().isin(active_days)]
+        if active_ages and 'LevelAge' in df_cascade.columns:
+            df_cascade = df_cascade[df_cascade['LevelAge'].isin(active_ages)]
 
-    with col_select_all_2:
-        all_instruments_checked = st.checkbox("Todos", value=True, key="all_instruments_check")
+        # Calculate available options from df_cascade (all filters respect each other)
+        all_setups = sorted(df_cascade['SetupName'].unique())
+        # available_instruments and available_attempts will be calculated dynamically
 
-    selected_instruments = []
-    for idx, instrument in enumerate(all_instruments):
-        with inst_cols[idx]:
-            if st.checkbox(instrument, value=all_instruments_checked, key=f"instrument_{instrument}", label_visibility="visible"):
-                selected_instruments.append(instrument)
+        # Niveles Filter - Horizontal layout
+        st.markdown("**Niveles**")
+        col_select_all_1, *nivel_cols = st.columns([1.5] + [1] * min(len(all_setups), 6))
 
-    # Intentos Filter - Horizontal layout
-    st.markdown("**Intentos**")
-    col_select_all_3, *attempt_cols = st.columns([1.5] + [1] * min(len(all_attempts), 10))
+        with col_select_all_1:
+            all_setups_checked = st.checkbox("Todos", value=True, key="all_setups_check")
+        
+        # v1.15.35: Sync individual checkboxes when "Todos" changes
+        if 'prev_all_setups' not in st.session_state:
+            st.session_state.prev_all_setups = True
+        
+        if st.session_state.prev_all_setups != all_setups_checked:
+            for setup in all_setups:
+                st.session_state[f"setup_{setup}"] = all_setups_checked
+            st.session_state.prev_all_setups = all_setups_checked
 
-    with col_select_all_3:
-        all_attempts_checked = st.checkbox("Todos", value=True, key="all_attempts_check")
+        selected_setups = []
+        for idx, setup in enumerate(all_setups):
+            # Safe modulo if more setups than cols
+            col_idx = idx % 6 if len(nivel_cols) > 0 else 0
+            with nivel_cols[col_idx]:
+                if st.checkbox(setup, value=all_setups_checked, key=f"setup_{setup}", label_visibility="visible"):
+                    selected_setups.append(setup)
 
-    selected_attempts = []
-    for idx, attempt in enumerate(all_attempts):
-        col_idx = idx % 10
-        with attempt_cols[col_idx]:
-            if st.checkbox(f"Int {attempt}", value=all_attempts_checked, key=f"attempt_{attempt}", label_visibility="visible"):
-                selected_attempts.append(attempt)
+        # Instrumentos Filter - Calculated from df_cascade (respects ALL filters)
+        all_instruments = sorted(df_cascade['Instrument'].unique())
 
-    # Apply filters to df
-    df_filtered = df.copy()
-    if selected_setups:
+        st.markdown("**Instrumentos**")
+        col_select_all_2, *inst_cols = st.columns([1.5] + [1] * len(all_instruments))
+
+        with col_select_all_2:
+            all_instruments_checked = st.checkbox("Todos", value=True, key="all_instruments_check")
+        
+        # v1.15.35: Sync individual checkboxes when "Todos" changes
+        if 'prev_all_instruments' not in st.session_state:
+            st.session_state.prev_all_instruments = True
+        
+        if st.session_state.prev_all_instruments != all_instruments_checked:
+            # "Todos" changed, update all individual checkboxes
+            for instrument in all_instruments:
+                st.session_state[f"instrument_{instrument}"]  = all_instruments_checked
+            st.session_state.prev_all_instruments = all_instruments_checked
+
+        selected_instruments = []
+        for idx, instrument in enumerate(all_instruments):
+            # Safe access
+            if idx < len(inst_cols):
+                with inst_cols[idx]:
+                    if st.checkbox(instrument, value=all_instruments_checked, key=f"instrument_{instrument}", label_visibility="visible"):
+                        selected_instruments.append(instrument)
+
+        # Intentos Filter - Calculated from df_cascade (respects ALL filters)
+        all_attempts = sorted(df_cascade['Attempt'].unique())
+
+        st.markdown("**Intentos**")
+        col_select_all_3, *attempt_cols = st.columns([1.5] + [1] * min(len(all_attempts), 10))
+
+        with col_select_all_3:
+            all_attempts_checked = st.checkbox("Todos", value=True, key="all_attempts_check")
+        
+        # v1.15.35: Sync individual checkboxes when "Todos" changes
+        if 'prev_all_attempts' not in st.session_state:
+            st.session_state.prev_all_attempts = True
+        
+        if st.session_state.prev_all_attempts != all_attempts_checked:
+            for attempt in all_attempts:
+                st.session_state[f"attempt_{attempt}"] = all_attempts_checked
+            st.session_state.prev_all_attempts = all_attempts_checked
+
+        selected_attempts = []
+        for idx, attempt in enumerate(all_attempts):
+            col_idx = idx % 10
+            if col_idx < len(attempt_cols):
+                with attempt_cols[col_idx]:
+                    if st.checkbox(f"Int {attempt}", value=all_attempts_checked, key=f"attempt_{attempt}", label_visibility="visible"):
+                        selected_attempts.append(attempt)
+
+        # Horas Filter - Calculated from df_cascade (respects ALL filters)
+        if 'EntryTime' in df_cascade.columns:
+            all_hours = sorted(df_cascade['EntryTime'].dt.hour.unique())
+        else:
+            all_hours = []
+
+        st.markdown("**Horas de Inicio**")
+        col_select_all_h, *hour_cols = st.columns([1.5] + [1] * min(len(all_hours), 12)) # Up to 12 cols for hours
+        
+        with col_select_all_h:
+            all_hours_checked = st.checkbox("Todos", value=True, key="all_hours_check")
+            
+        if 'prev_all_hours' not in st.session_state:
+            st.session_state.prev_all_hours = True
+        
+        if st.session_state.prev_all_hours != all_hours_checked:
+            for h in range(24): # Sync all possible hours just in case
+                st.session_state[f"hour_{h}"] = all_hours_checked
+            st.session_state.prev_all_hours = all_hours_checked
+            
+        selected_hours = []
+        for idx, h in enumerate(all_hours):
+            col_idx = idx % 12
+            if col_idx < len(hour_cols):
+                with hour_cols[col_idx]:
+                    if st.checkbox(f"{h}h", value=all_hours_checked, key=f"hour_{h}", label_visibility="visible"):
+                        selected_hours.append(h)
+
+        # Días Filter - Calculated from df_cascade (respects ALL filters)
+        if 'EntryTime' in df_cascade.columns:
+            present_days = df_cascade['EntryTime'].dt.day_name().unique()
+            day_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+            all_days = [d for d in day_order if d in present_days]
+        else:
+            all_days = []
+
+        st.markdown("**Días de la Semana**")
+        col_select_all_d, *day_cols = st.columns([1.5] + [1] * min(len(all_days), 7))
+        
+        with col_select_all_d:
+            all_days_checked = st.checkbox("Todos", value=True, key="all_days_check")
+            
+        if 'prev_all_days' not in st.session_state:
+            st.session_state.prev_all_days = True
+            
+        if st.session_state.prev_all_days != all_days_checked:
+            for d in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']:
+                st.session_state[f"day_{d}"] = all_days_checked
+            st.session_state.prev_all_days = all_days_checked
+            
+        selected_days = []
+        for idx, d in enumerate(all_days):
+            col_idx = idx % 7
+            if col_idx < len(day_cols):
+                with day_cols[col_idx]:
+                    short_day = d[:3] # Mon, Tue...
+                    if st.checkbox(short_day, value=all_days_checked, key=f"day_{d}", label_visibility="visible"):
+                        selected_days.append(d)
+
+        # v2.9.1: Level Age Filter - Calculated from df_cascade (respects ALL filters)
+        selected_ages = []
+        if 'LevelAge' in df_raw.columns:
+            st.markdown("**Antigüedad (Días)**")
+            try:
+                all_ages = sorted(df_cascade['LevelAge'].dropna().astype(int).unique())
+            except:
+                all_ages = sorted(df_cascade['LevelAge'].unique())
+
+            col_select_all_4, *age_cols = st.columns([1.5] + [1] * min(len(all_ages), 10))
+
+            with col_select_all_4:
+                all_ages_checked = st.checkbox("Todos", value=True, key="all_ages_check")
+            
+            # Sync logic
+            if 'prev_all_ages' not in st.session_state:
+                st.session_state.prev_all_ages = True
+            
+            if st.session_state.prev_all_ages != all_ages_checked:
+                for age in all_ages:
+                    st.session_state[f"age_{age}"] = all_ages_checked
+                st.session_state.prev_all_ages = all_ages_checked
+
+            for idx, age in enumerate(all_ages):
+                col_idx = idx % 10
+                # Safety check for columns (if more ages than columns created)
+                if col_idx < len(age_cols):
+                    with age_cols[col_idx]:
+                        if st.checkbox(f"{age}d", value=all_ages_checked, key=f"age_{age}"):
+                            selected_ages.append(age)
+
+        # Apply filters to df
+        df_filtered = df.copy()
+        
+        # v2.18: Session Filter Logic (Applied FIRST for efficiency)
+        if 'EntryTime' in df_filtered.columns:
+             if len(selected_sessions) < 3: # Solo filtrar si no están todas seleccionadas
+                 if 'ActiveSession' not in df_filtered.columns:
+                     df_filtered['ActiveSession'] = df_filtered['EntryTime'].apply(classify_entry_session)
+                 df_filtered = df_filtered[df_filtered['ActiveSession'].isin(selected_sessions)]
+
+        # v2.26: Tier Filter Logic
+        if len(selected_tiers) < 4:
+            if 'Tier' not in df_filtered.columns:
+                # Same helper logic inline or ensure column exists if shared (safe to re-apply)
+                def get_tier_filter(val):
+                    s = str(val)
+                    if s.endswith("_01"): return 1
+                    if s.endswith("_02"): return 2
+                    if s.endswith("_03"): return 3
+                    return 4 
+                df_filtered['Tier'] = df_filtered['Result'].apply(get_tier_filter)
+            
+            df_filtered = df_filtered[df_filtered['Tier'].isin(selected_tiers)]
+
+        # v2.10.3: Fix - Always apply filters to support "Select None" (Empty List = Empty Data)
         df_filtered = df_filtered[df_filtered['SetupName'].isin(selected_setups)]
-    if selected_instruments:
         df_filtered = df_filtered[df_filtered['Instrument'].isin(selected_instruments)]
-    if selected_attempts:
         df_filtered = df_filtered[df_filtered['Attempt'].isin(selected_attempts)]
+        
+        if 'EntryTime' in df_filtered.columns:
+             df_filtered = df_filtered[df_filtered['EntryTime'].dt.hour.isin(selected_hours)]
+             df_filtered = df_filtered[df_filtered['EntryTime'].dt.day_name().isin(selected_days)]
+        
+        if 'LevelAge' in df_filtered.columns:
+            df_filtered = df_filtered[df_filtered['LevelAge'].isin(selected_ages)]
 
-    # Update df for the rest of tab1
+        st.markdown("---")
+        # v2.20: Automated Filename (Date_Time_Instrument)
+        st.markdown("**💾 Guardar Configuración (AI Config)**")
+        
+        # Auto-generate filename for preview
+        now_str = datetime.now().strftime('%Y-%m-%d_%H-%M')
+        inst_label = "MULTI"
+        if selected_instruments and len(selected_instruments) == 1:
+            inst_label = selected_instruments[0].replace(' ', '').replace('/', '')
+            
+        auto_filename = f"{inst_label}_{now_str}.json"
+        
+        st.info(f"📄 Se generará el archivo: **{auto_filename}**")
+        
+        if st.button("Guardar Configuración", help="Guarda automáticamente en la carpeta del instrumento con fecha y hora."):
+            import json
+            
+            # 1. Derive Max Age
+            max_age_val = 0 # Unlimited
+            if selected_ages:
+                try:
+                     # Remove 'd' suffix and convert
+                     age_ints = [int(a) for a in selected_ages]
+                     max_age_val = max(age_ints)
+                except: pass
+                
+            # 2. Derive Attempts
+            min_att = 1
+            max_retries = 10
+            if selected_attempts:
+                try:
+                    att_ints = sorted([int(a) for a in selected_attempts])
+                    if att_ints:
+                        min_att = att_ints[0]
+                        max_retries = att_ints[-1]
+                except: pass
+
+            config_data = {
+                "generated_at": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                "enabled_zones": list(selected_setups) if isinstance(selected_setups, (list, tuple)) else selected_setups,
+                "enabled_instruments": list(selected_instruments) if isinstance(selected_instruments, (list, tuple)) else selected_instruments,
+                "enabled_hours": [int(h) for h in selected_hours], # Force standard int
+                "enabled_days": list(selected_days) if isinstance(selected_days, (list, tuple)) else selected_days,
+                "max_age": int(max_age_val),
+                "min_attempt": int(min_att),
+                "max_retries": int(max_retries),
+                "optimization_mode": "global"
+            }
+            
+            try:
+                # v2.19: Folder Structure Logic
+                base_dir = os.path.dirname(os.path.abspath(__file__))
+                configs_root = os.path.join(base_dir, 'AI_Configs')
+                
+                # Determine Subfolder
+                subfolder = "MULTI"
+                if selected_instruments and len(selected_instruments) == 1:
+                    subfolder = selected_instruments[0].replace(' ', '').replace('/', '')
+                
+                target_dir = os.path.join(configs_root, subfolder)
+                
+                # Create Directories
+                if not os.path.exists(target_dir):
+                    os.makedirs(target_dir)
+                
+                # Final Path
+                json_path = os.path.join(target_dir, auto_filename)
+                
+                with open(json_path, 'w') as f:
+                    json.dump(config_data, f, indent=4)
+                
+                st.success(f"✅ Guardado en: **AI_Configs/{subfolder}/{auto_filename}**")
+                st.code(json_path, language="text") # Easy copy for user
+                st.info("👉 COPIA la ruta de arriba y pégala en el parámetro 'AI Config Path' de tu Estrategia en NinjaTrader.")
+                st.toast(f"Guardado: {subfolder}/{auto_filename}")
+            except Exception as e:
+                st.error(f"Error guardando JSON: {e}")
+
+    # v2.22: Update global df with filtered data (affects ALL tabs)
     df = df_filtered.copy()
 
     st.markdown("---")
+    try:
+        if 'Trade_Clust_ID' in df.columns:
+            # Group by Trade ID first to get true Trade PnL
+            filtered_trade_gb = df.groupby('Trade_Clust_ID')['PnL'].sum()
+            
+            # Now calculate metrics on the grouped Series (one item per logical trade)
+            filtered_total_pnl = filtered_trade_gb.sum() # Should match df['PnL'].sum() anyway
+            filtered_wins = (filtered_trade_gb > 0).sum()
+            filtered_losses = (filtered_trade_gb <= 0).sum()
+            filtered_total_trades = len(filtered_trade_gb)
+            filtered_win_rate = (filtered_wins / filtered_total_trades * 100) if filtered_total_trades > 0 else 0
+            
+            # Profit Factor on Trade Level
+            total_win_amt = filtered_trade_gb[filtered_trade_gb > 0].sum()
+            total_loss_amt = abs(filtered_trade_gb[filtered_trade_gb <= 0].sum())
+            # Avoid div by zero
+            if total_loss_amt == 0:
+                 filtered_pf = total_win_amt if total_win_amt > 0 else 0
+                 # If unlimited, maybe show infinity symbol or just win amount? Stick to number.
+            else:
+                 filtered_pf = total_win_amt / total_loss_amt
 
-    # v2.8.3: KPI Row above equity chart
-    # Recalculate metrics based on filtered data
-    filtered_total_pnl = df['PnL'].sum()
-    filtered_wins = len(df[df['PnL'] > 0])
-    filtered_losses = len(df[df['PnL'] <= 0])
-    filtered_trade_gb = df.groupby('Trade_Clust_ID')['PnL'].sum()
-    filtered_total_trades = len(filtered_trade_gb)
-    filtered_win_rate = (filtered_wins / len(df) * 100) if len(df) > 0 else 0
+            filtered_avg_trade = filtered_trade_gb.mean() if filtered_total_trades > 0 else 0
+            
+            # Max Tier Calculation (requires joining back or separate lookup)
+            # Find the max exit rank in the filtered dataset
+            # We can still use df['Exit_Rank'] max to see best tier hit *overall* in the filtered set
+            max_rank_val = df['Exit_Rank'].max()
+            # Get the label for this rank
+            if not pd.isna(max_rank_val):
+                 filtered_max_tier = df.loc[df['Exit_Rank'] == max_rank_val, 'Exit_Tier'].iloc[0]
+            else:
+                 filtered_max_tier = 'N/A'
 
-    total_win_amt = df[df['PnL'] > 0]['PnL'].sum() if filtered_wins > 0 else 0
-    total_loss_amt = abs(df[df['PnL'] <= 0]['PnL'].sum()) if filtered_losses > 0 else 1
-    filtered_pf = total_win_amt / total_loss_amt if total_loss_amt > 0 else 0
+        else:
+            # Fallback for old data without clusters
+            filtered_total_pnl = df['PnL'].sum()
+            filtered_wins = len(df[df['PnL'] > 0])
+            filtered_losses = len(df[df['PnL'] <= 0])
+            filtered_total_trades = len(df)
+            filtered_win_rate = (filtered_wins / filtered_total_trades * 100) if filtered_total_trades > 0 else 0
+            
+            total_win_amt = df[df['PnL'] > 0]['PnL'].sum() if filtered_wins > 0 else 0
+            total_loss_amt = abs(df[df['PnL'] <= 0]['PnL'].sum()) if filtered_losses > 0 else 1
+            filtered_pf = total_win_amt / total_loss_amt if total_loss_amt > 0 else 0
+            filtered_avg_trade = filtered_total_pnl / filtered_total_trades if filtered_total_trades > 0 else 0
+            filtered_max_tier = 'N/A'
 
-    filtered_avg_trade = filtered_trade_gb.mean() if filtered_total_trades > 0 else 0
-    filtered_max_tier = df[df['Exit_Rank'] == df['Exit_Rank'].max()]['Exit_Tier'].iloc[0] if len(df) > 0 else 'N/A'
+    except Exception as e:
+        st.error(f"Error calculating KPIs: {e}")
+        filtered_total_pnl = 0
+        filtered_pf = 0
+        filtered_win_rate = 0
+        filtered_avg_trade = 0
+        filtered_max_tier = 'Error'
 
     kpi1, kpi2, kpi3, kpi4, kpi5 = st.columns(5)
     kpi1.metric("Beneficio Neto", f"${filtered_total_pnl:,.2f}")
@@ -1791,14 +2970,15 @@ with tab1:
             y=df['Cumulative_PnL'],
             mode='lines',
             name='TOTAL',
-            line=dict(width=3.5, color='#FFFFFF'),
+            # v2.9.5: Changed from White to Green for Light Mode visibility
+            line=dict(width=3.5, color='#238636'),
             hovertemplate='Total: %{y:$.2f}<extra></extra>'
         ))
 
         fig_eq.update_xaxes(type='category')
 
         # v2.8.3: Add equity amount annotation at the top
-        final_equity = df['Cumulative_PnL'].iloc[-1]
+        final_equity = df['Cumulative_PnL'].iloc[-1] if not df.empty else 0
         fig_eq = apply_premium_style(fig_eq, title=f'Equidad del Portafolio: ${final_equity:,.2f}')
 
         # Improve legend layout
@@ -1815,13 +2995,22 @@ with tab1:
 
     else:
         # Bar chart showing PnL per trade with colors (no gaps)
-        colors = ['#00FF99' if pnl >= 0 else '#FF4444' for pnl in df['PnL']]
+        # v2.9.2: Custom Red-Lime Heatmap
+        custom_scale = [(0, '#FF0000'), (0.5, '#161B22'), (1, '#32CD32')] # Red -> Dark -> Lime
+        
         # Convert ExitTime to string to make it categorical (no gaps)
         df['ExitLabel'] = df['ExitTime'].dt.strftime('%m/%d %H:%M')
-        fig_eq = px.bar(df, x='ExitLabel', y='PnL', color_discrete_sequence=['#00FF99'])
-        fig_eq.update_traces(marker_color=colors)
+        
+        # Use color='PnL' for heatmap effect, centered at 0
+        fig_eq = px.bar(df, x='ExitLabel', y='PnL', 
+                        color='PnL', 
+                        color_continuous_scale=custom_scale,
+                        color_continuous_midpoint=0) # Ensures 0 is dark center
+                        
         fig_eq.update_xaxes(type='category')  # Force categorical axis
-        fig_eq = apply_premium_style(fig_eq, title='PnL por Trade')
+        # v2.9.6: Accessibility - Add Gray Border to bars
+        fig_eq.update_traces(marker_line_color='#666666', marker_line_width=1.5)
+        fig_eq = apply_premium_style(fig_eq, title='PnL por Trade (Heatmap)')
 
     st.plotly_chart(fig_eq, use_container_width=True)
     
@@ -1831,7 +3020,7 @@ with tab1:
         chart_type="equity_curve",
         data={
             "total_pnl": total_pnl,
-            "max_drawdown": drawdown.min(),
+            "max_drawdown": drawdown.min() if len(drawdown) > 0 else 0,
             "win_rate": win_rate,
             "pf": pf,
             "total_trades": total_trades
@@ -1856,10 +3045,16 @@ with tab1:
         wr_long = (long_data.groupby('Trade_Clust_ID')['PnL'].sum() > 0).mean() * 100 if trades_long > 0 else 0
         wr_short = (short_data.groupby('Trade_Clust_ID')['PnL'].sum() > 0).mean() * 100 if trades_short > 0 else 0
         
-        # Apply matching colors (Green/Red) from PnL chart
-        type_colors = ['#00FF99' if pnl >= 0 else '#FF4444' for pnl in type_perf['PnL']]
-        fig_type = px.bar(type_perf, x='Type', y='PnL')
-        fig_type.update_traces(marker_color=type_colors)
+        # v2.9.2: Apply custom heatmap colors
+        custom_scale = [(0, '#FF0000'), (0.5, '#161B22'), (1, '#32CD32')]
+        
+        fig_type = px.bar(type_perf, x='Type', y='PnL',
+                          color='PnL',
+                          color_continuous_scale=custom_scale,
+                          color_continuous_midpoint=0)
+                          
+        # v2.9.6: Accessibility
+        fig_type.update_traces(marker_line_color='#666666', marker_line_width=1.5)
         fig_type = apply_premium_style(fig_type, title='Rendimiento Long vs Short')
         st.plotly_chart(fig_type, use_container_width=True)
         
@@ -1877,11 +3072,65 @@ with tab1:
             },
             key_suffix="tab1_longshort"
         )
+
+        # --- NEW: PnL by Attempt ---
+        if 'Attempt' in df.columns:
+            st.markdown("### Rendimiento por Intento")
+            
+            # Group by Attempt
+            # v1.15.36: Aggregate PnL and calculate Win Rate per Attempt
+            attempt_perf = df.groupby('Attempt')['PnL'].agg(['sum', 'count', lambda x: (x > 0).mean() * 100]).reset_index()
+            attempt_perf.columns = ['Attempt', 'TotalPnL', 'TradeCount', 'WinRate']
+            attempt_perf = attempt_perf.sort_values('Attempt')
+            
+            # Create Figure
+            # Use text to show Count and Win Rate on the bars
+            # v2.9.2: Custom Heatmap Red/Lime
+            custom_scale = [(0, '#FF0000'), (0.5, '#161B22'), (1, '#32CD32')]
+            
+            fig_attempt = px.bar(attempt_perf, x='Attempt', y='TotalPnL',
+                                 title="PnL vs Número de Intento",
+                                 labels={'Attempt': 'Intento #', 'TotalPnL': 'PnL Acumulado'},
+                                 color='TotalPnL', 
+                                 color_continuous_scale=custom_scale,
+                                 color_continuous_midpoint=0,
+                                 text=attempt_perf.apply(lambda x: f"{int(x['TradeCount'])} ({x['WinRate']:.1f}%)", axis=1))
+            
+            # v2.9.6: Accessibility
+            fig_attempt.update_traces(textposition='outside', marker_line_color='#666666', marker_line_width=1.5)
+            # Force categorical X axis if attempts are integers 1, 2, 3...
+            fig_attempt.update_xaxes(type='category')
+            
+            fig_attempt = apply_premium_style(fig_attempt)
+            st.plotly_chart(fig_attempt, use_container_width=True)
+            
+            # AI Analysis
+            attempt_table_str = attempt_perf.to_string(index=False)
+            show_ai_analysis(
+                chart_name="PnL por Intento",
+                chart_type="attempt_performance",
+                data={
+                     "attempt_table": attempt_table_str
+                },
+                key_suffix="tab1_attempt"
+            )
         
     with col2:
         st.markdown("### PnL por Setup")
         setup_perf = df.groupby('SetupName')['PnL'].sum().sort_values().reset_index()
-        fig_setup = px.bar(setup_perf, y='SetupName', x='PnL', orientation='h', color='PnL', color_continuous_scale='RdBu')
+        
+        # v2.9.2: Custom Scale
+        custom_scale = [(0, '#FF0000'), (0.5, '#161B22'), (1, '#32CD32')]
+        
+        fig_setup = px.bar(setup_perf, y='SetupName', x='PnL', orientation='h', 
+                           color='PnL', 
+                           color_continuous_scale=custom_scale,
+                           color_continuous_midpoint=0)
+                           
+        # v2.9.6: Accessibility - Add Gray Border
+        fig_setup.update_traces(marker_line_color='#666666', marker_line_width=1.5)
+        # Fixed Undefined Title Logic
+        fig_setup.update_layout(title_text="PnL por Setup", transition_duration=500)
         fig_setup = apply_premium_style(fig_setup)
         st.plotly_chart(fig_setup, use_container_width=True)
         
@@ -1895,6 +3144,1304 @@ with tab1:
             },
             key_suffix="tab1_setup"
         )
+        
+        # --- NEW: PnL by Level Age ---
+        if 'LevelAge' in df.columns:
+            st.markdown("### Rendimiento por Antigüedad del Nivel")
+            
+            # Group by Age
+            # v1.15.37: Ensure numeric sorting
+            age_perf = df.groupby('LevelAge')['PnL'].agg(['sum', 'count']).reset_index()
+            age_perf.columns = ['LevelAge', 'TotalPnL', 'TradeCount']
+            age_perf = age_perf.sort_values('LevelAge')
+            
+            # Bar Chart
+            custom_scale = [(0, '#FF0000'), (0.5, '#161B22'), (1, '#32CD32')]
+            
+            fig_age = px.bar(age_perf, x='LevelAge', y='TotalPnL', 
+                             title="PnL vs Edad del Nivel (Días)",
+                             labels={'LevelAge': 'Días desde Creación (0=Hoy)', 'TotalPnL': 'PnL Acumulado'},
+                             color='TotalPnL', 
+                             color_continuous_scale=custom_scale,
+                             color_continuous_midpoint=0,
+                             text='TradeCount')
+            
+            # v2.9.6: Accessibility
+            fig_age.update_traces(texttemplate='%{text}', textposition='outside', marker_line_color='#666666', marker_line_width=1.5)
+            fig_age = apply_premium_style(fig_age)
+            st.plotly_chart(fig_age, use_container_width=True)
+            
+            # Insight
+            if not age_perf.empty:
+                best_age_idx = age_perf['TotalPnL'].idxmax()
+                best_age = age_perf.loc[best_age_idx]
+                st.info(f"💡 **Insight Táctico:** Los niveles con **{int(best_age['LevelAge'])} días** de antigüedad son los más rentables en tu histórica (${best_age['TotalPnL']:,.0f}).")
+
+    # -------------------------------------------------------------------------
+    # MERGED TAB 8 CONTENT INTO TAB 1 (v2.11.0)
+    # -------------------------------------------------------------------------
+    
+    st.markdown("---")
+    st.header("⏰ Análisis de Microestructura Temporal")
+    
+    if not df.empty:
+        df['Hour'] = df['EntryTime'].dt.hour
+        df['Weekday'] = df['EntryTime'].dt.day_name()
+        
+        # Order Weekdays
+        days_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+        
+        col1_time, col2_time = st.columns(2)
+        
+        with col1_time:
+            st.subheader("Rendimiento por Hora")
+            hour_stats = df.groupby('Hour')['PnL'].sum().reset_index()
+            
+            # v2.10.2: Premium Styling (Red/Lime Heatmap)
+            custom_scale_time = [(0, '#FF0000'), (0.5, '#161B22'), (1, '#32CD32')]
+            
+            # v2.21: Reorder Axis to follow Global Session Flow (Asia Open 18:00 -> USA Close 17:00)
+            # Standard: 0..23
+            # Desired: 18, 19, ... 23, 0, 1, ... 17
+            custom_hour_order = list(range(18, 24)) + list(range(0, 18))
+            
+            # Ensure all hours exist in stats to prevent Plotly skipping
+            # (Optional, but good for consistent X-axis)
+            
+            fig_hour = px.bar(hour_stats, x='Hour', y='PnL', color='PnL', 
+                              color_continuous_scale=custom_scale_time,
+                              color_continuous_midpoint=0) # Center at 0
+            
+            # Apply Custom Sort Order
+            fig_hour.update_xaxes(type='category', categoryorder='array', categoryarray=custom_hour_order)
+                              
+            fig_hour.update_traces(marker_line_color='#666666', marker_line_width=1.5)
+            fig_hour = apply_premium_style(fig_hour, "Distribución Horaria (Inicio 18:00 Asia)")
+            st.plotly_chart(fig_hour, use_container_width=True)
+            
+        with col2_time:
+            st.subheader("Rendimiento por Día")
+            day_stats = df.groupby('Weekday')['PnL'].sum().reindex(days_order).reset_index()
+            
+            fig_day_bar = px.bar(day_stats, x='Weekday', y='PnL', color='PnL', 
+                                 color_continuous_scale=custom_scale_time,
+                                 color_continuous_midpoint=0)
+                                 
+            fig_day_bar.update_traces(marker_line_color='#666666', marker_line_width=1.5)
+            fig_day_bar = apply_premium_style(fig_day_bar, "Distribución Semanal")
+            st.plotly_chart(fig_day_bar, use_container_width=True)
+            
+        # --- AUTOMATED TIME INSIGHTS ---
+        time_insight = ""
+        
+        # 1. Analyze Toxic Hours
+        toxic_hours = hour_stats[hour_stats['PnL'] < 0]
+        toxic_pnl_h = toxic_hours['PnL'].sum()
+        
+        # 2. Analyze Toxic Days
+        day_stats_calc = df.groupby('Weekday')['PnL'].sum() # Re-calc without reindex format for ease
+        toxic_days = day_stats_calc[day_stats_calc < 0]
+        toxic_pnl_d = toxic_days.sum()
+        
+        current_total = total_pnl
+        
+        # Scenario A: Hourly Optimization
+        if not toxic_hours.empty:
+            bad_hours_list = [f"{h}:00" for h in toxic_hours['Hour'].tolist()]
+            optimized_total = current_total - toxic_pnl_h # Subtracting negative = Adding value
+            improvement_pct = ((optimized_total - current_total) / abs(current_total)) * 100 if current_total != 0 else 0
+            
+            time_insight += f"**⏳ Horas Tóxicas Detectadas:** {', '.join(bad_hours_list)}\n"
+            time_insight += f"- 🛑 Estas horas te están costando **${abs(toxic_pnl_h):,.2f}**.\n"
+            time_insight += f"- 💡 **Proyección:** Si dejas de operar en estas horas, tu Beneficio Neto subiría a **${optimized_total:,.2f}** (Mejora del +{improvement_pct:.1f}%).\n\n"
+        else:
+            time_insight += "✅ **Horario Limpio:** No tienes horas sistemáticamente perdedoras.\n\n"
+            
+        # Scenario B: Daily Optimization
+        if not toxic_days.empty:
+            bad_days_list = toxic_days.index.tolist()
+            time_insight += f"**🗓️ Días Tóxicos Detectados:** {', '.join(bad_days_list)}\n"
+            time_insight += f"- 🛑 Los {', '.join(bad_days_list)} restan **${abs(toxic_pnl_d):,.2f}** a tu cuenta.\n"
+        else:
+            time_insight += "✅ **Calendario Limpio:** Eres consistente todos los días de la semana.\n"
+
+        with st.expander("🧠 Insight de Experto Quant: Edges Temporales"):
+            st.markdown(f"""
+            {time_insight}
+            
+            *   **Acción:** Evita horas donde pierdes consistentemente. Los mejores traders *eliminan momentos tóxicos* en lugar de operar todo el día.
+            *   **Dato:** Las horas de empalme de sesiones (9-11 AM ET, donde Europa todavía opera) suelen ser las más líquidas pero también más erráticas. Verifica si tus ganancias están ahí o en NY pure (11 AM-4 PM).
+            """)
+        
+        # AI Analysis for Hourly Patterns
+        hourly_stats_ai = df.groupby('Hour').agg({
+            'PnL': ['sum', 'mean', 'count']
+        }).round(2)
+        
+        show_ai_analysis(
+            chart_name="Patrones Horarios",
+            chart_type="hourly",
+            data={"hourly_data": hourly_stats_ai.to_string()},
+            key_suffix="tab1_hourly"
+        )
+    else:
+        st.warning("No hay datos temporales para analizar.")
+    st.markdown("---")
+    st.header("🧱 Análisis de Niveles y Zonas")
+    
+    # 1. Parsing Logic (v2.2.1: Support both "Europe Low" and "Europe Low 3 Days" formats)
+    import re
+    
+    def parse_level_data(row):
+        setup = str(row['SetupName'])
+        
+        # First try: Regex for "USA Low 3 Days" or "Asia High 1 Days" (with days)
+        match_with_days = re.search(r'(Asia|Europe|USA)\s(High|Low)\s(\d+)\sDays', setup)
+        if match_with_days:
+            return pd.Series([f"{match_with_days.group(1)} {match_with_days.group(2)}", int(match_with_days.group(3))])
+        
+        # Second try: Simple format "Europe Low", "Asia High", "USA Low" (without days)
+        match_simple = re.search(r'(Asia|Europe|USA)\s(High|Low)', setup, re.IGNORECASE)
+        if match_simple:
+            return pd.Series([f"{match_simple.group(1)} {match_simple.group(2)}", 0])  # 0 days = current day
+        
+        # Fallback
+        return pd.Series(["Other", -1])
+
+    # Apply parsing
+    level_df = df.copy()
+    level_df[['Zone', 'DaysAgo']] = level_df.apply(parse_level_data, axis=1)
+    
+    # Filter only Valid Level Trades
+    level_df = level_df[level_df['Zone'] != "Other"]
+    
+    if level_df.empty:
+        st.warning("⚠️ No se detectaron trades de Niveles (Formato 'Session High/Low' no encontrado).")
+    else:
+        # ================================================================
+        # SECTION 1: ENHANCED PERFORMANCE DASHBOARD
+        # ================================================================
+        st.subheader("📊 Dashboard de Rendimiento por Zona")
+        
+        # Calculate comprehensive metrics per zone
+        zone_metrics = level_df.groupby('Zone').agg({
+            'PnL': ['sum', 'mean', 'std', 'count'],
+            'Result': lambda x: (x.str.contains('TP', na=False)).sum()  # Wins
+        }).round(2)
+        
+        zone_metrics.columns = ['Total_PnL', 'Avg_PnL', 'Std_PnL', 'Trades', 'Wins']
+        zone_metrics['Win_Rate'] = (zone_metrics['Wins'] / zone_metrics['Trades'] * 100).round(1)
+        zone_metrics['Sharpe_Proxy'] = (zone_metrics['Avg_PnL'] / zone_metrics['Std_PnL']).round(2)
+        zone_metrics['Sharpe_Proxy'] = zone_metrics['Sharpe_Proxy'].replace([np.inf, -np.inf], 0)
+        
+        # Calculate R:R (Winners vs Losers)
+        rr_data = []
+        for zone in level_df['Zone'].unique():
+            zone_trades = level_df[level_df['Zone'] == zone]
+            wins = zone_trades[zone_trades['PnL'] > 0]['PnL'].mean()
+            losses = abs(zone_trades[zone_trades['PnL'] <= 0]['PnL'].mean())
+            rr = wins / losses if losses > 0 else 0
+            rr_data.append({'Zone': zone, 'RR': round(rr, 2)})
+        
+        rr_df = pd.DataFrame(rr_data).set_index('Zone')
+        zone_metrics = zone_metrics.join(rr_df)
+        
+        # Sort by Total PnL descending
+        zone_metrics = zone_metrics.sort_values('Total_PnL', ascending=False)
+        
+        # Display formatted table
+        display_metrics = zone_metrics[['Total_PnL', 'Win_Rate', 'RR', 'Trades', 'Avg_PnL', 'Sharpe_Proxy']].copy()
+        display_metrics.columns = ['PnL Total ($)', 'Win Rate (%)', 'R:R', 'Trades', 'Avg Win ($)', 'Sharpe']
+        
+        st.dataframe(
+            display_metrics.style.format({
+                'PnL Total ($)': '${:,.0f}',
+                'Win Rate (%)': '{:.1f}%',
+                'R:R': '{:.2f}',
+                'Avg Win ($)': '${:.0f}',
+                'Sharpe': '{:.2f}'
+            }).background_gradient(cmap='RdYlGn', subset=['PnL Total ($)', 'Win Rate (%)']),
+            use_container_width=True
+        )
+        
+        # Auto-generated Insights (Section 1)
+        best_zone = zone_metrics.index[0]
+        worst_zone = zone_metrics.index[-1]
+        best_wr = zone_metrics.loc[best_zone, 'Win_Rate']
+        worst_wr = zone_metrics.loc[worst_zone, 'Win_Rate']
+        best_pnl = zone_metrics.loc[best_zone, 'Total_PnL']
+        worst_pnl = zone_metrics.loc[worst_zone, 'Total_PnL']
+        
+        insight_s1 = f'''
+🧠 **Insight de Experto Quant: Jerarquía de Niveles**
+
+**🏆 Tu Mejor Edge:** {best_zone}
+- Win Rate: {best_wr:.1f}% | PnL: ${best_pnl:,.0f}
+- **Acción:** Prioriza este setup. Considera aumentar tamaño de posición aquí.
+
+**⚠️ Tu Mayor Lastre:** {worst_zone}
+- Win Rate: {worst_wr:.1f}% | PnL: ${worst_pnl:,.0f}
+- **Acción:** {"Filtra este nivel completamente" if worst_pnl < -200 else "Reduce frecuencia o ajusta lógica"}
+        '''
+        
+        # Check for Sharpe outliers
+        high_sharpe = zone_metrics[zone_metrics['Sharpe_Proxy'] > 1.5]
+        if not high_sharpe.empty:
+            insight_s1 += f"\\n\\n**💎 Zonas Premium (Sharpe > 1.5):** {', '.join(high_sharpe.index.tolist())}"
+            insight_s1 += "\\n- Estas zonas tienen retorno/riesgo excepcional. Son tus *verdaderos edges*."
+        
+        with st.expander("🧠 Insight de Experto Quant: Jerarquía de Niveles"):
+            st.markdown(insight_s1.replace("🧠 **Insight de Experto Quant: Jerarquía de Niveles**", ""))
+        
+        
+        # Prepare clean data for AI (Section 1)
+        ai_perf_summary = "Dashboard de Rendimiento por Zona:\\n\\n"
+        ai_perf_summary += "REGLA: PnL > 0 = RENTABLE (mantener). Sharpe > 1.5 = PREMIUM. Trades < 10 = Muestra insuficiente.\\n\\n"
+        
+        for zone in zone_metrics.index:
+            data = zone_metrics.loc[zone]
+            pnl = data['Total_PnL']
+            wr = data['Win_Rate']
+            rr = data['RR']
+            trades = int(data['Trades'])
+            sharpe = data['Sharpe_Proxy']
+            
+            verdict = "✅ RENTABLE" if pnl > 0 else "❌ PERDEDOR"
+            if pnl > 500 and sharpe > 1.5:
+                verdict += " (PREMIUM)"
+            if trades < 10:
+                verdict += " ⚠️ MUESTRA PEQUEÑA"
+            
+            ai_perf_summary += f"{zone}: PnL ${pnl:,.0f} ({verdict})\\n"
+            ai_perf_summary += f"  - Win Rate: {wr:.1f}%, R:R: {rr:.2f}, Trades: {trades}, Sharpe: {sharpe:.2f}\\n"
+        
+        # AI Analysis Button (Premium)
+        show_ai_analysis(
+            chart_name="Dashboard de Rendimiento",
+            chart_type="performance_dashboard",
+            data={"zone_metrics": ai_perf_summary},
+            key_suffix="tab8_section1"
+        )
+        
+        st.markdown("---")
+        
+        # ================================================================
+        # SECTION 1B: TEMPORAL DECAY (Full Width)
+        # ================================================================
+        st.subheader("⏳ Decaimiento Temporal por Zona")
+        
+        # Create pivot: Zone (Y) vs DaysAgo (X), values = PnL
+        heatmap_data = level_df.pivot_table(
+            index='Zone', 
+            columns='DaysAgo', 
+            values='PnL', 
+            aggfunc='sum', 
+            fill_value=0
+        )
+        
+        # Sort zones by total PnL (best to worst)
+        zone_totals = heatmap_data.sum(axis=1).sort_values(ascending=False)
+        heatmap_data = heatmap_data.loc[zone_totals.index]
+        
+        # Create heatmap
+        fig_days = go.Figure(data=go.Heatmap(
+            z=heatmap_data.values,
+            x=[f"{int(d)} días" if d > 0 else "Hoy" for d in heatmap_data.columns],
+            y=heatmap_data.index,
+            colorscale='RdBu',
+            zmid=0,  # Center at 0 (red=loss, blue=profit)
+            text=heatmap_data.values.round(0),
+            texttemplate='$%{text}',
+            textfont={"size": 10},
+            hovertemplate='<b>%{y}</b><br>Antigüedad: %{x}<br>PnL: $%{z:.0f}<extra></extra>',
+            colorbar=dict(title="PnL")
+        ))
+        
+        fig_days = apply_premium_style(fig_days, "Rendimiento por Zona y Antigüedad")
+        fig_days.update_layout(
+            xaxis_title="Antigüedad del Nivel",
+            yaxis_title="Zona",
+            height=400
+        )
+        st.plotly_chart(fig_days, use_container_width=True)
+
+        # ================================================================
+        # SECTION 2: DIRECTIONALITY MATRIX
+        # ================================================================
+        st.markdown("---")
+        st.subheader("🎯 Matriz Direccional: ¿Long o Short?")
+        
+        # Create pivot: Zone x Direction
+        dir_matrix = level_df.pivot_table(
+            index='Zone',
+            columns='Type',
+            values='PnL',
+            aggfunc=['sum', lambda x: (level_df.loc[x.index, 'Result'].str.contains('TP', na=False)).sum(), 'count']
+        )
+        
+        # Flatten columns
+        dir_matrix.columns = ['_'.join(col).strip() for col in dir_matrix.columns.values]
+        
+        # Calculate Win Rates
+        for direction in ['Long', 'Short']:
+            if f'sum_{direction}' in dir_matrix.columns:
+                wins_col = f'<lambda>_{direction}'
+                total_col = f'count_{direction}'
+                if wins_col in dir_matrix.columns and total_col in dir_matrix.columns:
+                    dir_matrix[f'WR_{direction}'] = (dir_matrix[wins_col] / dir_matrix[total_col] * 100).round(1)
+        
+        # Display in two columns
+        col_dir1, col_dir2 = st.columns(2)
+        
+        with col_dir1:
+            st.markdown("**PnL por Dirección**")
+            pnl_display = dir_matrix[[col for col in dir_matrix.columns if col.startswith('sum_')]].copy()
+            pnl_display.columns = [col.replace('sum_', '') for col in pnl_display.columns]
+            st.dataframe(
+                pnl_display.style.format('${:,.0f}').background_gradient(cmap='RdYlGn', axis=None),
+                use_container_width=True
+            )
+        
+        with col_dir2:
+            st.markdown("**Win Rate (%) por Dirección**")
+            wr_display = dir_matrix[[col for col in dir_matrix.columns if col.startswith('WR_')]].copy()
+            wr_display.columns = [col.replace('WR_', '') for col in wr_display.columns]
+            st.dataframe(
+                wr_display.style.format('{:.1f}%').background_gradient(cmap='RdYlGn', axis=None, vmin=0, vmax=100),
+                use_container_width=True
+            )
+
+        # Auto-generated Insights (Section 2)
+        insight_s2 = "🧠 **Insight de Experto Quant: Bias Direccional**\\n\\n"
+        
+        directional_findings = []
+        for zone in dir_matrix.index:
+            long_wr = dir_matrix.loc[zone, 'WR_Long'] if 'WR_Long' in dir_matrix.columns else None
+            short_wr = dir_matrix.loc[zone, 'WR_Short'] if 'WR_Short' in dir_matrix.columns else None
+            
+            # Case 1: Both directions have data
+            if pd.notna(long_wr) and pd.notna(short_wr):
+                diff = abs(long_wr - short_wr)
+                if diff > 20:  # Significant bias
+                    better_dir = "LONG" if long_wr > short_wr else "SHORT"
+                    directional_findings.append(
+                        f"**{zone}**: Sesgo claro hacia {better_dir} ({max(long_wr, short_wr):.1f}% vs {min(long_wr, short_wr):.1f}%)"
+                    )
+            
+            # Case 2: Only LONG has data (100% bias)
+            elif pd.notna(long_wr) and pd.isna(short_wr):
+                directional_findings.append(
+                    f"**{zone}**: Solo opera LONG (WR: {long_wr:.1f}%) - Sesgo extremo"
+                )
+            
+            # Case 3: Only SHORT has data (100% bias)
+            elif pd.isna(long_wr) and pd.notna(short_wr):
+                directional_findings.append(
+                    f"**{zone}**: Solo opera SHORT (WR: {short_wr:.1f}%) - Sesgo extremo"
+                )
+        
+        if directional_findings:
+            insight_s2 += "**Zonas con Bias Claro:**\\n"
+            for finding in directional_findings[:3]:  # Top 3
+                insight_s2 += f"- {finding}\\n"
+            insight_s2 += "\\n**Acción:** Considera deshabilitar la dirección débil en estas zonas para mejorar consistencia."
+        else:
+            insight_s2 += "✅ **Balance Direccional:** Tus zonas funcionan de manera similar en ambas direcciones. Mantén flexibilidad."
+        
+        with st.expander("🧠 Insight de Experto Quant: Bias Direccional"):
+            st.markdown(insight_s2.replace("🧠 **Insight de Experto Quant: Bias Direccional**", ""))
+        
+        
+        # Prepare clean data for AI
+        ai_summary = "Rendimiento por Zona y Dirección:\\n\\n"
+        ai_summary += "IMPORTANTE: Un Win Rate bajo con PnL POSITIVO es válido (R:R alto). No rechaces setups solo por WR bajo.\\n\\n"
+        
+        for zone in dir_matrix.index:
+            long_pnl = dir_matrix.loc[zone, 'sum_Long'] if 'sum_Long' in dir_matrix.columns else None
+            short_pnl = dir_matrix.loc[zone, 'sum_Short'] if 'sum_Short' in dir_matrix.columns else None
+            long_wr = dir_matrix.loc[zone, 'WR_Long'] if 'WR_Long' in dir_matrix.columns else None
+            short_wr = dir_matrix.loc[zone, 'WR_Short'] if 'WR_Short' in dir_matrix.columns else None
+            
+            ai_summary += f"{zone}:\\n"
+            if pd.notna(long_pnl):
+                verdict = "✅ RENTABLE" if long_pnl > 0 else "❌ PERDEDOR"
+                ai_summary += f"  - LONG: PnL ${long_pnl:,.0f} ({verdict}), Win Rate {long_wr:.1f}%\\n"
+            if pd.notna(short_pnl):
+                verdict = "✅ RENTABLE" if short_pnl > 0 else "❌ PERDEDOR"
+                ai_summary += f"  - SHORT: PnL ${short_pnl:,.0f} ({verdict}), Win Rate {short_wr:.1f}%\\n"
+            if pd.isna(long_pnl) and pd.notna(short_pnl):
+                ai_summary += f"  - Solo opera SHORT\\n"
+            elif pd.notna(long_pnl) and pd.isna(short_pnl):
+                ai_summary += f"  - Solo opera LONG\\n"
+        
+        # AI Analysis Button (Premium)
+        show_ai_analysis(
+            chart_name="Matriz Direccional",
+            chart_type="directionality_matrix",
+            data={"dir_matrix": ai_summary},
+            key_suffix="tab8_section2"
+        )
+
+        # ================================================================
+        # SECTION 3: TEMPORAL PERFORMANCE (Zone x Hour)
+        # ================================================================
+        st.markdown("---")
+        st.subheader("⏰ Rendimiento Temporal: Zona x Hora del Día")
+        
+        # Extract hour from EntryTime
+        if 'EntryTime' in level_df.columns:
+            level_df['Hour'] = pd.to_datetime(level_df['EntryTime']).dt.hour
+            
+            # Create pivot: Zone (Y) x Hour (X)
+            temporal_pivot = level_df.pivot_table(
+                index='Zone',
+                columns='Hour',
+                values='PnL',
+                aggfunc='sum',
+                fill_value=0
+            )
+            
+            # Sort zones by total
+            temporal_pivot = temporal_pivot.loc[temporal_pivot.sum(axis=1).sort_values(ascending=False).index]
+            
+            # Create heatmap
+            fig_temporal = go.Figure(data=go.Heatmap(
+                z=temporal_pivot.values,
+                x=[f"{int(h)}:00" for h in temporal_pivot.columns],
+                y=temporal_pivot.index,
+                colorscale='RdBu',
+                zmid=0,
+                text=temporal_pivot.values.round(0),
+                texttemplate='$%{text}',
+                textfont={"size": 9},
+                hovertemplate='<b>%{y}</b><br>Hora: %{x}<br>PnL: $%{z:.0f}<extra></extra>',
+                colorbar=dict(title="PnL")
+            ))
+            
+            fig_temporal = apply_premium_style(fig_temporal, "Rendimiento por Zona y Hora")
+            fig_temporal.update_layout(
+                xaxis_title="Hora del Día (ET)",
+                yaxis_title="Zona",
+                height=400
+            )
+            st.plotly_chart(fig_temporal, use_container_width=True)
+            
+            # Automated Toxic Time Detection
+            toxic_combinations = []
+            for zone in temporal_pivot.index:
+                for hour in temporal_pivot.columns:
+                    pnl = temporal_pivot.loc[zone, hour]
+                    if pnl < -100:  # Threshold for "toxic"
+                        toxic_combinations.append({
+                            'Zone': zone,
+                            'Hour': f"{int(hour)}:00",
+                            'Loss': f"${pnl:.0f}"
+                        })
+            
+            if toxic_combinations:
+                st.warning(f"⚠️ **{len(toxic_combinations)} Combinaciones Tóxicas Detectadas** (Pérdida > $100):")
+                toxic_df = pd.DataFrame(toxic_combinations)
+                st.dataframe(toxic_df, use_container_width=True)
+                
+            # Auto-generated Insights (Section 3)
+            if toxic_combinations:
+                worst_combo = toxic_combinations[0]
+                insight_s3 = f'''
+🧠 **Insight de Experto Quant: Ventanas Tóxicas**
+
+**⚠️ Peor Combinación:** {worst_combo['Zone']} a las {worst_combo['Hour']}
+- Pérdida: {worst_combo['Loss']}
+- **Hipótesis:** Probablemente coincide con bajo volumen, empalme de sesiones, o datos económicos.
+- **Acción:** Agrega en tu código: `if (zone == '{worst_combo['Zone'].split()[0]}' && hour == {worst_combo['Hour'].split(':')[0]}) return;`
+
+**Patrón General:** Las ventanas tóxicas suelen ser:
+- 12-13 PM (Lunch, bajo volumen)
+- 15:30+ (Near close, comportamiento errático)
+                '''
+                with st.expander("🧠 Insight de Experto Quant: Ventanas Tóxicas"):
+                    st.markdown(insight_s3.replace("🧠 **Insight de Experto Quant: Ventanas Tóxicas**", ""))
+            else:
+                st.success("✅ **Horario Limpio:** No se detectaron ventanas horarias sistemáticamente tóxicas.")
+            
+            # Prepare clean data for AI (Section 3)
+            ai_temporal_summary = "Rendimiento Temporal (Zona x Hora):\\n\\n"
+            ai_temporal_summary += "CONTEXTO: Asia 20-03 ET, Europe 03-12 ET, USA 09-16 ET. Lunch 12-13 ET (bajo volumen).\\n"
+            ai_temporal_summary += "REGLA: Ventana con PnL < -$100 = TÓXICA (filtrar). < 5 trades = ruido.\\n\\n"
+            
+            # Format top toxic combinations
+            if toxic_combinations:
+                ai_temporal_summary += "VENTANAS TÓXICAS:\\n"
+                for combo in toxic_combinations[:5]:  # Top 5
+                    ai_temporal_summary += f"- {combo['Zone']} a las {combo['Hour']}: {combo['Loss']}\\n"
+                ai_temporal_summary += f"\\nTotal detectadas: {len(toxic_combinations)}\\n"
+            else:
+                ai_temporal_summary += "✅ No se detectaron ventanas tóxicas significativas.\\n"
+            
+            # Add full matrix summary
+            ai_temporal_summary += "\\nMATRIZ COMPLETA (Zona x Hora con PnL):\\n"
+            for zone in temporal_pivot.index:
+                ai_temporal_summary += f"\\n{zone}:\\n"
+                for hour in temporal_pivot.columns:
+                    pnl = temporal_pivot.loc[zone, hour]
+                    if pnl != 0:
+                        verdict = "TÓXICA" if pnl < -100 else ("RENTABLE" if pnl > 100 else "neutral")
+                        ai_temporal_summary += f"  {int(hour)}:00-{int(hour)+1}:00 = ${pnl:.0f} ({verdict})\\n"
+            
+            # AI Analysis Button (Premium)
+            show_ai_analysis(
+                chart_name="Rendimiento Temporal",
+                chart_type="temporal_performance",
+                data={"temporal_data": ai_temporal_summary},
+                key_suffix="tab8_section3"
+            )
+            
+        else:
+            st.info("No hay información de hora en los datos para análisis temporal.")
+
+        # --- DEEP INSIGHT: PENETRATION ANALYSIS ---
+        st.markdown("---")
+        st.subheader("🧪 Análisis de Penetración (Punto de No Retorno)")
+        
+        # Scatter: MAE (Penetration) vs PnL
+        # We want to see: Is there a MAE value where NO trades win?
+        
+        level_df['Size_Fixed'] = 15 # Constant size for visibility
+        
+        fig_penetration = px.scatter(
+            level_df, 
+            x='MAE', 
+            y='PnL', 
+            color='Zone', 
+            symbol='Zone', # V_ACCESSIBILITY: Shapes allow distinction without color
+            size='Size_Fixed',
+            size_max=15, 
+            hover_data=['Result', 'SetupName', 'ExitTime'], 
+            color_discrete_map={'Asia': '#FFFF00', 'Europe': '#4169E1', 'USA': '#FFFFFF'} # High Contrast (Yellow/Blue/White)
+        )
+        
+        # Move legend to bottom to avoid clutter
+        fig_penetration.update_layout(
+            legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                y=1.05, # Slightly higher to avoid title clash
+                xanchor="right",
+                x=1,
+                title=None # Remove legend title "Result"
+            )
+        )
+        
+        # Add a vertical line cursor or threshold? 
+        # Let's calculate the "Death Line" -> The MAE percentile purely for Losers
+        
+        fig_penetration = apply_premium_style(fig_penetration, "Penetración de Nivel (MAE) vs Resultado")
+        st.plotly_chart(fig_penetration, use_container_width=True)
+        
+        # Automated Heuristic for Penetration (v2.2.1: Use absolute MAE values)
+        winners_l = level_df[level_df['PnL'] > 0].copy()
+        losers_l = level_df[level_df['PnL'] <= 0].copy()
+        
+        pen_insight = ""
+        
+        if not winners_l.empty:
+            # MAE comes as negative values, so we use absolute value for analysis
+            winners_l['MAE_abs'] = winners_l['MAE'].abs()
+            losers_l['MAE_abs'] = losers_l['MAE'].abs() if not losers_l.empty else 0
+            
+            max_mae_winner = winners_l['MAE_abs'].quantile(0.95)  # 95th percentile of winners MAE
+            avg_mae_winner = winners_l['MAE_abs'].mean()
+            avg_mae_loser = losers_l['MAE_abs'].mean() if not losers_l.empty else 0
+            
+            pen_insight += f"**🛡️ El Límite de Tolerancia:** El 95% de tus trades ganadores soportaron una penetración máxima de **${max_mae_winner:.2f} USD**.\\n"
+            pen_insight += f"- **Dolor Promedio Ganadores:** ${avg_mae_winner:.2f} | **Dolor Promedio Perdedores:** ${avg_mae_loser:.2f}\\n"
+            pen_insight += f"- **Interpretación:** Si el precio cruza el nivel y tu negativo flotante supera **${max_mae_winner:.2f}**, la probabilidad de recuperación cae drásticamente.\\n"
+            pen_insight += f"- **Acción Sugerida:** Considera tu Stop Loss técnico cerca de ${max_mae_winner:.2f}. Más allá = ruptura real, no cacería de liquidez.\\n"
+        else:
+            pen_insight += "No hay suficientes trades ganadores para calcular un límite de tolerancia estadístico.\\n"
+            
+        pen_insight += f"\\n- **¿'Falso Quiebre' o 'Ruptura'?** Los puntos verdes muestran cuánto dolor aguantaron los trades que *funcionaron*.\\n"
+        pen_insight += f"- **Zona Muerta:** El espacio vacío a la *derecha* de los puntos verdes = zona donde el precio *rompe con intención*."
+                            
+        with st.expander("🧠 Insight de Experto Quant: Profundidad de Mercado"):
+            st.markdown(pen_insight)
+        
+        # AI Analysis for Levels (Penetration + Stats)
+        if 'zone_stats' in locals() and not zone_stats.empty:
+            best_zone = zone_stats.iloc[0]['Zone']
+            best_zone_pnl = zone_stats.iloc[0]['PnL']
+            worst_zone = zone_stats.iloc[-1]['Zone']
+            worst_zone_pnl = zone_stats.iloc[-1]['PnL']
+            
+            show_ai_analysis(
+                chart_name="Análisis de Niveles",
+                chart_type="levels_analysis",
+                data={
+                    "best_zone": best_zone,
+                    "best_zone_pnl": best_zone_pnl,
+                    "worst_zone": worst_zone,
+                    "worst_zone_pnl": worst_zone_pnl,
+                    "total_pnl": zone_stats['PnL'].sum(),
+                    "penetration_insight": pen_insight
+                },
+                key_suffix="tab8_levels"
+            )
+
+        # --- INTERACTION MATRIX (Who Breaks Who?) ---
+        st.markdown("---")
+        st.subheader("⚔️ Matriz de Interacción: Agresor vs Defensor")
+        st.caption("¿Qué sesión (Agresor) es más efectiva rompiendo los niveles de quién (Defensor)?")
+        
+        # v2.2.1: Extract base session (Asia/Europe/USA) from zone names like "Europe Low"
+        level_df['Session'] = level_df['Zone'].str.extract(r'(Asia|Europe|USA)', expand=False)
+        
+        # Filter valid sessions only
+        matrix_df = level_df[level_df['Session'].isin(['Asia', 'Europe', 'USA'])].copy()
+        
+        if not matrix_df.empty and 'Aggressor' in matrix_df.columns:
+            # v2.2.2: THREE HEATMAPS - General, Longs, Shorts
+            
+            # 1. GENERAL HEATMAP (All directions)
+            st.markdown("### 🌐 Todos los Trades (Long + Short)")
+            fig_matrix = px.density_heatmap(
+                matrix_df,
+                x='Session',
+                y='Aggressor',
+                z='PnL',
+                histfunc='sum',
+                color_continuous_scale='RdYlGn',
+                text_auto='.0f',
+            )
+            apply_premium_style(fig_matrix)
+            fig_matrix.update_layout(
+                xaxis_title="Defensor",
+                yaxis_title="Atacante",
+                coloraxis_colorbar_title="PnL ($)",
+                height=350
+            )
+            st.plotly_chart(fig_matrix, use_container_width=True)
+            
+            # 2. SIDE BY SIDE: LONGS vs SHORTS
+            col_hm1, col_hm2 = st.columns(2)
+            
+            # Filter data by direction
+            long_df = matrix_df[matrix_df['Type'] == 'Long']
+            short_df = matrix_df[matrix_df['Type'] == 'Short']
+            
+            with col_hm1:
+                st.markdown("### 📈 Solo LONGS")
+                if not long_df.empty:
+                    fig_long = px.density_heatmap(
+                        long_df,
+                        x='Session',
+                        y='Aggressor',
+                        z='PnL',
+                        histfunc='sum',
+                        color_continuous_scale='RdYlGn',
+                        text_auto='.0f',
+                    )
+                    apply_premium_style(fig_long)
+                    fig_long.update_layout(
+                        xaxis_title="Defensor",
+                        yaxis_title="Atacante",
+                        coloraxis_showscale=False,
+                        height=300
+                    )
+                    st.plotly_chart(fig_long, use_container_width=True)
+                else:
+                    st.info("No hay datos de Longs")
+            
+            with col_hm2:
+                st.markdown("### 📉 Solo SHORTS")
+                if not short_df.empty:
+                    fig_short = px.density_heatmap(
+                        short_df,
+                        x='Session',
+                        y='Aggressor',
+                        z='PnL',
+                        histfunc='sum',
+                        color_continuous_scale='RdYlGn',
+                        text_auto='.0f',
+                    )
+                    apply_premium_style(fig_short)
+                    fig_short.update_layout(
+                        xaxis_title="Defensor",
+                        yaxis_title="Atacante",
+                        coloraxis_showscale=False,
+                        height=300
+                    )
+                    st.plotly_chart(fig_short, use_container_width=True)
+                else:
+                    st.info("No hay datos de Shorts para la matriz.")
+            
+            st.markdown("---")
+            
+            try:
+                # Insight Generation
+                combo_stats = matrix_df.groupby(['Aggressor', 'Session']).agg({
+                    'PnL': ['sum', 'count', 'mean']
+                }).reset_index()
+                combo_stats.columns = ['Sesión_Trading', 'Nivel_Origen', 'PnL_Total', 'Trades', 'PnL_Promedio']
+                
+                best = combo_stats.loc[combo_stats['PnL_Total'].idxmax()]
+                worst = combo_stats.loc[combo_stats['PnL_Total'].idxmin()]
+                
+                # v2.2.3: Insights más claros y accionables
+                with st.expander("💡 Interpretación de la Matriz"):
+                    st.info('''
+**¿Cómo leer esto?**
+- **Sesión de Trading** = Cuándo TÚ operas (ej: durante horario USA)
+- **Nivel de Origen** = De qué sesión es el nivel (ej: Low creado en Asia)
+- **PnL Positivo** = Esa combinación funciona para ti (el nivel se respeta)
+- **PnL Negativo** = Esa combinación NO funciona (el nivel falla o tu timing es malo)
+                    ''')
+                    
+                    st.success(f'''🎯 **MEJOR Combinación:** Operar durante **{best['Sesión_Trading']}** en niveles de **{best['Nivel_Origen']}**
+→ Ganancia: ${best['PnL_Total']:,.0f} en {int(best['Trades'])} trades (${best['PnL_Promedio']:.2f}/trade)
+→ **Acción:** Prioriza esta combinación''')
+                    
+                    st.error(f'''⚠️ **PEOR Combinación:** Operar durante **{worst['Sesión_Trading']}** en niveles de **{worst['Nivel_Origen']}**
+→ Pérdida: ${worst['PnL_Total']:,.0f} en {int(worst['Trades'])} trades
+→ **Acción:** Considera BLOQUEAR esta combinación en tu estrategia''')
+                
+                # Table summary
+                st.markdown("### 📊 Resumen Completo")
+                st.dataframe(combo_stats.sort_values('PnL_Total', ascending=False).style.format({
+                    'PnL_Total': '${:,.0f}',
+                    'PnL_Promedio': '${:.2f}'
+                }), use_container_width=True)
+                
+                # AI Analysis for Interaction Matrix
+                if 'combo_stats' in locals() and not combo_stats.empty:
+                    best_combo = f"{combo_stats.iloc[0]['Sesión_Trading']} atacando {combo_stats.iloc[0]['Nivel_Origen']}"
+                    best_combo_pnl = combo_stats.iloc[0]['PnL_Total']
+                    worst_combo = f"{combo_stats.iloc[-1]['Sesión_Trading']} atacando {combo_stats.iloc[-1]['Nivel_Origen']}"
+                    worst_combo_pnl = combo_stats.iloc[-1]['PnL_Total']
+                    
+                    show_ai_analysis(
+                        chart_name="Matriz de Interacción",
+                        chart_type="interaction_matrix",
+                        data={
+                            "best_combo": best_combo,
+                            "best_pnl": best_combo_pnl,
+                            "worst_combo": worst_combo,
+                            "worst_pnl": worst_combo_pnl,
+                            "matrix_table": combo_stats.sort_values('PnL_Total', ascending=False).head(5).to_string(index=False)
+                        },
+                        key_suffix="tab8_matrix"
+                    )
+                
+                # v2.2.2: GRANULAR ANALYSIS BY DIRECTION (Long vs Short)
+                st.markdown("---")
+                st.subheader("🎯 Análisis por Dirección (Long vs Short)")
+                st.caption("⚡ La misma combinación puede ser rentable en LONG pero tóxica en SHORT (o viceversa)")
+                
+                # Group by Attacker, Defender AND Type (Long/Short)
+                direction_stats = matrix_df.groupby(['Aggressor', 'Session', 'Type']).agg({
+                    'PnL': ['sum', 'count', 'mean']
+                }).reset_index()
+                direction_stats.columns = ['Sesión_Trading', 'Nivel_Origen', 'Dirección', 'PnL_Total', 'Trades', 'PnL_Promedio']
+                direction_stats = direction_stats.sort_values('PnL_Total', ascending=False)
+                
+                # Color-coded table
+                def color_pnl(val):
+                    if isinstance(val, (int, float)):
+                        return 'color: #00FF00' if val >= 0 else 'color: #FF4444'
+                    return ''
+                
+                st.dataframe(direction_stats.style.format({
+                    'PnL_Total': '${:,.0f}',
+                    'PnL_Promedio': '${:.2f}'
+                }).applymap(color_pnl, subset=['PnL_Total', 'PnL_Promedio']), use_container_width=True)
+                
+                # Find best/worst by direction
+                best_long = direction_stats[direction_stats['Dirección'] == 'Long'].head(1)
+                worst_long = direction_stats[direction_stats['Dirección'] == 'Long'].tail(1)
+                best_short = direction_stats[direction_stats['Dirección'] == 'Short'].head(1)
+                worst_short = direction_stats[direction_stats['Dirección'] == 'Short'].tail(1)
+                
+                col_dir1, col_dir2 = st.columns(2)
+                with col_dir1:
+                    st.markdown("**📈 LONGS - Recomendaciones**")
+                    if not best_long.empty:
+                        b = best_long.iloc[0]
+                        st.success(f"✅ Operar LONG durante {b['Sesión_Trading']} en niveles {b['Nivel_Origen']}: ${b['PnL_Total']:,.0f}")
+                    if not worst_long.empty:
+                        w = worst_long.iloc[0]
+                        if w['PnL_Total'] < 0:
+                            st.error(f"❌ EVITAR LONG durante {w['Sesión_Trading']} en niveles {w['Nivel_Origen']}: ${w['PnL_Total']:,.0f}")
+                
+                with col_dir2:
+                    st.markdown("**📉 SHORTS - Recomendaciones**")
+                    if not best_short.empty:
+                        b = best_short.iloc[0]
+                        st.success(f"✅ Operar SHORT durante {b['Sesión_Trading']} en niveles {b['Nivel_Origen']}: ${b['PnL_Total']:,.0f}")
+                    if not worst_short.empty:
+                        w = worst_short.iloc[0]
+                        if w['PnL_Total'] < 0:
+                            st.error(f"❌ EVITAR SHORT durante {w['Sesión_Trading']} en niveles {w['Nivel_Origen']}: ${w['PnL_Total']:,.0f}")
+                
+            except Exception as e:
+                st.warning(f"Error generando insights: {e}")
+        else:
+            st.info("No hay suficientes datos de zonas para generar la matriz.")
+
+        # ================================================================
+        # SECTION 5: TOXIC COMBINATION FILTERS
+        # ================================================================
+        st.markdown("---")
+        st.subheader("🔥 Filtro de Combinaciones Tóxicas")
+        st.caption("Identifica patrones multi-variables que generan pérdidas sistemáticas")
+        
+        # Create comprehensive combination table
+        filter_df = level_df.copy()
+        filter_df['Hour_Bracket'] = pd.to_datetime(filter_df['EntryTime']).dt.hour.apply(
+            lambda x: f"{x}:00-{x+1}:00"
+        )
+        
+        # Group by Zone + Direction + Hour
+        combo_analysis = filter_df.groupby(['Zone', 'Type', 'Hour_Bracket']).agg({
+            'PnL': ['sum', 'count', 'mean'],
+            'Result': lambda x: (x.str.contains('TP', na=False)).sum()
+        }).round(2)
+        
+        combo_analysis.columns = ['Total_PnL', 'Trades', 'Avg_PnL', 'Wins']
+        combo_analysis['Win_Rate'] = (combo_analysis['Wins'] / combo_analysis['Trades'] * 100).round(1)
+        combo_analysis = combo_analysis.reset_index()
+        
+        # Sort by worst performers
+        combo_analysis = combo_analysis.sort_values('Total_PnL')
+        
+        # Show top toxic combinations
+        toxic_combos = combo_analysis[combo_analysis['Total_PnL'] < 0].head(10)
+        
+        if not toxic_combos.empty:
+            st.dataframe(
+                toxic_combos.style.format({
+                    'Total_PnL': '${:,.0f}',
+                    'Avg_PnL': '${:.0f}',
+                    'Win_Rate': '{:.1f}%'
+                }).background_gradient(cmap='Reds', subset=['Total_PnL', 'Win_Rate']),
+                use_container_width=True
+            )
+            
+            # Auto-generated Insights (Section 5)
+            if not toxic_combos.empty:
+                worst_combo = toxic_combos.iloc[0]
+                insight_s5 = f'''
+🧠 **Insight de Experto Quant: Filtros Multi-Variable**
+
+**🔴 Peor Patron:** {worst_combo['Zone']} {worst_combo['Type']} durante {worst_combo['Hour_Bracket']}
+- Pérdida Total: ${worst_combo['Total_PnL']:,.0f} en {int(worst_combo['Trades'])} trades
+- Win Rate: {worst_combo['Win_Rate']:.1f}%
+
+**Código Sugerido (C#):**
+```csharp
+// En tu método de validación de entrada:
+if (setupZone == "{worst_combo['Zone'].split()[0]}" && 
+    entryDirection == Position.{worst_combo['Type']} && 
+    Time[0].Hour >= {worst_combo['Hour_Bracket'].split(':')[0]} && 
+    Time[0].Hour < {int(worst_combo['Hour_Bracket'].split(':')[0]) + 1})
+{{
+    Print("Filtro Tóxico activado - Trade cancelado");
+    return;
+}}
+```
+
+**Impacto Estimado:** Eliminar estos {int(toxic_combos.head(3)['Trades'].sum())} trades tóxicos mejoraría tu PnL en ${abs(toxic_combos.head(3)['Total_PnL'].sum()):,.0f}
+                '''
+                with st.expander("🧠 Insight de Experto Quant: Filtros Multi-Variable"):
+                    st.markdown(insight_s5.replace("🧠 **Insight de Experto Quant: Filtros Multi-Variable**", ""))
+            else:
+                st.success("✅ **Limpio:** No se encontraron patrones multi-variable tóxicos.")
+            
+            # Prepare clean data for AI (Section 5)
+            ai_toxic_summary = "Análisis de Combinaciones Tóxicas (Zona+Dirección+Hora):\\n\\n"
+            ai_toxic_summary += "REGLA: Combos con <5 trades = ruido. Combos con >10 trades y PnL muy negativo = SISTEMÁTICO (filtrar).\\n\\n"
+            
+            if not toxic_combos.empty:
+                ai_toxic_summary += f"TOP {min(len(toxic_combos), 10)} PEORES COMBINACIONES:\\n\\n"
+                for idx, row in toxic_combos.head(10).iterrows():
+                    zone = row['Zone']
+                    direction = row['Type']
+                    hour = row['Hour_Bracket']
+                    pnl = row['Total_PnL']
+                    trades = int(row['Trades'])
+                    wr = row['Win_Rate']
+                    
+                    verdict = "⚠️ RUIDO" if trades < 5 else ("🔴 TÓXICO SISTEMÁTICO" if trades >= 10 else "⚠️ MONITOREAR")
+                    
+                    ai_toxic_summary += f"{idx+1}. {zone} {direction} {hour}\\n"
+                    ai_toxic_summary += f"   PnL: ${pnl:,.0f}, Trades: {trades}, WR: {wr:.1f}% ({verdict})\\n\\n"
+                
+                # Pattern analysis
+                ai_toxic_summary += "\\nPATRONES DETECTADOS:\\n"
+                zone_counts = toxic_combos['Zone'].value_counts()
+                hour_counts = toxic_combos['Hour_Bracket'].value_counts()
+                
+                if not zone_counts.empty:
+                    ai_toxic_summary += f"- Zona más problemática: {zone_counts.index[0]} ({zone_counts.iloc[0]} combos tóxicos)\\n"
+                if not hour_counts.empty:
+                    ai_toxic_summary += f"- Hora más problemática: {hour_counts.index[0]} ({hour_counts.iloc[0]} combos tóxicos)\\n"
+                
+                total_impact = abs(toxic_combos.head(5)['Total_PnL'].sum())
+                ai_toxic_summary += f"\\nIMPACTO: Filtrar top 5 combos mejoraría PnL en ${total_impact:,.0f}\\n"
+            else:
+                ai_toxic_summary += "✅ No se detectaron combinaciones multi-variable tóxicas.\\n"
+            
+            # AI Analysis Button (Premium)
+            show_ai_analysis(
+                chart_name="Combinaciones Tóxicas",
+                chart_type="toxic_combinations",
+                data={"toxic_combos": ai_toxic_summary},
+                key_suffix="tab8_section5"
+            )
+            
+        else:
+            st.success("✅ No se detectaron combinaciones tóxicas significativas")
+
+        # ================================================================
+        # SECTION 6: ACTIONABLE RECOMMENDATIONS
+        # ================================================================
+        st.markdown("---")
+        st.subheader("✅ Recomendaciones Accionables para Código")
+        
+        avoid_list = []
+        prioritize_list = []
+        
+        # Analyze zone performance
+        for zone in zone_metrics.index:
+            zone_data = zone_metrics.loc[zone]
+            
+            # Toxic zones (WR < 40% and negative PnL)
+            if zone_data['Win_Rate'] < 40 and zone_data['Total_PnL'] < 0:
+                avoid_list.append(f"🚫 **{zone}**: WR {zone_data['Win_Rate']:.1f}%, PnL ${zone_data['Total_PnL']:.0f}")
+            
+            # Premium zones (WR > 60% and positive PnL)
+            elif zone_data['Win_Rate'] > 60 and zone_data['Total_PnL'] > 500:
+                prioritize_list.append(f"✅ **{zone}**: WR {zone_data['Win_Rate']:.1f}%, PnL ${zone_data['Total_PnL']:.0f}, R:R {zone_data['RR']:.2f}")
+        
+        # Add directional insights
+        if 'dir_matrix' in locals():
+            for direction in ['Long', 'Short']:
+                wr_col = f'WR_{direction}'
+                pnl_col = f'sum_{direction}'
+                
+                if wr_col in dir_matrix.columns and pnl_col in dir_matrix.columns:
+                    for zone in dir_matrix.index:
+                        wr = dir_matrix.loc[zone, wr_col]
+                        pnl = dir_matrix.loc[zone, pnl_col]
+                        
+                        if pd.notna(wr) and pd.notna(pnl):
+                            if wr < 30 and pnl < -200:
+                                avoid_list.append(f"🚫 **{zone} {direction}**: WR {wr:.1f}%, Pérdida ${pnl:.0f}")
+        
+        col_rec1, col_rec2 = st.columns(2)
+        
+        with col_rec1:
+            st.markdown("### 🚫 EVITAR (Filtros Sugeridos)")
+            if avoid_list:
+                for item in avoid_list[:5]:  # Top 5
+                    st.markdown(item)
+            else:
+                st.success("✅ No hay patrones tóxicos claros para filtrar")
+        
+        with col_rec2:
+            st.markdown("### ✅ PRIORIZAR (Edges Confirmados)")
+            if prioritize_list:
+                for item in prioritize_list[:5]:  # Top 5
+                    st.markdown(item)
+            else:
+                st.info("ℹ️ Ejecuta más trades para identificar edges claros")
+
+    # -------------------------------------------------------------------------
+    # NEW: AI CONFIGURATION SECTION (Moved from Tab 9)
+    # -------------------------------------------------------------------------
+    st.markdown("---")
+    st.header("⚙️ Configuración AI (Smart Optimizer)")
+    st.caption("Genera y optimiza la configuración para la Estrategia NinjaTrader.")
+    
+    # --- AUTO-CALCULATE SUGGESTIONS (Standard) ---
+    suggested_zones_str = ""
+    suggested_age = 5
+    suggested_retries = 1
+    
+    # Check if we have data to suggest from
+    if not df.empty and 'SetupName' in df.columns:
+        try:
+            # Filter for Level Trades
+            level_df_cfg = df[df['SetupName'].str.contains('Asia|Europe|USA', case=False, na=False)].copy()
+            if not level_df_cfg.empty:
+                # Parse Zone
+                level_df_cfg['Zone'] = level_df_cfg['SetupName'].str.extract(r'(Asia|Europe|USA)\s*(Low|High)', expand=False).apply(lambda x: f"{x[0]} {x[1]}" if pd.notnull(x[0]) else "Other", axis=1)
+                # Remove failures
+                level_df_cfg = level_df_cfg[level_df_cfg['Zone'] != "Other"]
+                
+                # Group PnL
+                zone_pnl_cfg = level_df_cfg.groupby('Zone')['PnL'].sum()
+                
+                # Logic: Enable zones that are NOT toxic (PnL > -150)
+                safe_zones = zone_pnl_cfg[zone_pnl_cfg > -150].index.tolist()
+                
+                # Sort for readability
+                safe_zones.sort()
+                suggested_zones_str = ", ".join(safe_zones)
+                
+                # --- SUGGEST MAX LEVEL AGE ---
+                if 'LevelAge' in df.columns:
+                    age_stats = df.groupby('LevelAge')['PnL'].sum()
+                    profitable_ages = age_stats[age_stats > 0].index.tolist()
+                    if profitable_ages:
+                        suggested_age = int(max(profitable_ages))
+                        if suggested_age > 30: suggested_age = 30 
+                    else:
+                        suggested_age = 5 
+                
+                # --- SUGGEST MAX RETRIES ---
+                if 'Attempt' in df.columns:
+                    att_stats = df.groupby('Attempt')['PnL'].sum()
+                    safe_attempts = att_stats[att_stats > -100].index.tolist()
+                    if safe_attempts:
+                        suggested_retries = int(max(safe_attempts))
+                    else:
+                        suggested_retries = 1
+                    
+        except Exception as e:
+            st.warning(f"No se pudieron calcular sugerencias automáticas: {e}")
+    
+    # --- SMART OPTIMIZATION (v2.13: Session-Aware) ---
+    if 'ai_opt_config' not in st.session_state:
+        st.session_state.ai_opt_config = None
+    if 'ai_opt_mode' not in st.session_state:
+        st.session_state.ai_opt_mode = 'global'
+
+    # Mode Toggle
+    st.markdown("**Modo de Optimización:**")
+    opt_mode = st.radio(
+        "Selecciona el alcance de optimización:",
+        options=['Global (Todas las sesiones)', 'Por Sesión (Asia/Europe/USA)'],
+        index=0 if st.session_state.ai_opt_mode == 'global' else 1,
+        horizontal=True,
+        label_visibility="collapsed"
+    )
+    
+    st.session_state.ai_opt_mode = '0' if '0' in opt_mode else 'per_session'
+
+    if st.button("🚀 Optimizar Configuración (Smart)", help="Busca combinaciones robustas de filtros para maximizar PnL sin overfitting."):
+        if st.session_state.ai_opt_mode == 'per_session':
+            with st.spinner("Simulando miles de combinaciones por cada sesión (Asia, Europe, USA)..."):
+                session_results = find_optimal_config_all_sessions(df)
+                if session_results:
+                    st.session_state.ai_opt_config = session_results
+                    st.success("✅ ¡Optimización Por Sesión Completada!")
+                    
+                    # Display 3-Column Results
+                    col_asia, col_europe, col_usa = st.columns(3)
+                    
+                    with col_asia:
+                        st.markdown("### 🌏 ASIA (18:00-03:00)")
+                        asia_cfg = session_results.get('asia', {})
+                        st.metric("PnL Proyectado", f"${asia_cfg.get('pnl', 0):,.2f}")
+                        st.metric("Trades", asia_cfg.get('count', 0))
+                        st.metric("Profit Factor", f"{asia_cfg.get('pf', 0):.2f}")
+                        
+                        # Zonas
+                        zones_list = asia_cfg.get('enabled_zones', [])
+                        if zones_list:
+                            st.caption(f"Zonas: {', '.join(zones_list)}")
+                        
+                        # Intentos (Bitmap)
+                        att_set = asia_cfg.get('attempt_set', [])
+                        if att_set:
+                            st.caption(f"Intentos: {att_set}")
+                        
+                        # Edad
+                        st.caption(f"Edad: ≤{asia_cfg.get('max_age', 0)} días")
+                    
+                    with col_europe:
+                        st.markdown("### 🇪🇺 EUROPE (03:00-09:00)")
+                        eu_cfg = session_results.get('europe', {})
+                        st.metric("PnL Proyectado", f"${eu_cfg.get('pnl', 0):,.2f}")
+                        st.metric("Trades", eu_cfg.get('count', 0))
+                        st.metric("Profit Factor", f"{eu_cfg.get('pf', 0):.2f}")
+                        
+                        zones_list = eu_cfg.get('enabled_zones', [])
+                        if zones_list:
+                            st.caption(f"Zonas: {', '.join(zones_list)}")
+                        
+                        att_set = eu_cfg.get('attempt_set', [])
+                        if att_set:
+                            st.caption(f"Intentos: {att_set}")
+                        
+                        st.caption(f"Edad: ≤{eu_cfg.get('max_age', 0)} días")
+                    
+                    with col_usa:
+                        st.markdown("### 🇺🇸 USA (09:00-18:00)")
+                        usa_cfg = session_results.get('usa', {})
+                        st.metric("PnL Proyectado", f"${usa_cfg.get('pnl', 0):,.2f}")
+                        st.metric("Trades", usa_cfg.get('count', 0))
+                        st.metric("Profit Factor", f"{usa_cfg.get('pf', 0):.2f}")
+                        
+                        zones_list = usa_cfg.get('enabled_zones', [])
+                        if zones_list:
+                            st.caption(f"Zonas: {', '.join(zones_list)}")
+                        
+                        att_set = usa_cfg.get('attempt_set', [])
+                        if att_set:
+                            st.caption(f"Intentos: {att_set}")
+                        
+                        # v2.16: Age Set Display
+                        age_set_usa = usa_cfg.get('age_set', [])
+                        if age_set_usa:
+                            # Mostrar rango compacto si es continuo, sino mostrar patrón
+                            if len(age_set_usa) > 10:
+                                st.caption(f"Edad: Días {min(age_set_usa)}-{max(age_set_usa)} (+ patrones)")
+                            else:
+                                st.caption(f"Edad: Días {age_set_usa}")
+                    
+                    # v2.15: Reporte Detallado
+                    st.markdown("---")
+                    st.markdown("### 📊 Reporte de Optimización Exhaustiva")
+                    
+                    # Mostrar metadata si existe
+                    if 'optimization_metadata' in asia_cfg:
+                        meta = asia_cfg['optimization_metadata']
+                        st.info(f"""
+                        **Estudio Completado (Simplificado):**
+                        - ✅ {meta.get('total_combinations_tested', 0):,} combinaciones probadas
+                        - 🎯 {meta.get('zone_combinations_tested', 0)} combinaciones de zonas
+                        - 📅 {meta.get('age_patterns_tested', 0):,} rangos de edad
+                        - 🔄 {meta.get('attempt_patterns_tested', 0):,} rangos de intentos
+                        """)
+                else:
+                    st.warning("No se pudo optimizar. Verifica que haya datos suficientes.")
+        else:
+            # Global Mode (Original Behavior)
+            with st.spinner("Simulando miles de combinaciones..."):
+                best_opt = find_optimal_config(df)
+                if best_opt:
+                    st.session_state.ai_opt_config = best_opt
+                    
+                    st.success(f"✅ ¡Optimización Encontrada!")
+                    st.markdown(f"""
+                    *   **PnL Proyectado:** ${best_opt['pnl']:,.2f} (PF: {best_opt['pf']:.2f})
+                    *   **Trades:** {best_opt['count']}
+                    *   **Zonas Eliminadas:** `{best_opt['removed_zones']}`
+                    """)
+                else:
+                    st.warning("No se encontró una mejora clara.")
+
+    # v2.13: Defaults (removed suggested_directions - no longer used)
+    suggested_min_attempt = 1
+
+    # Apply Optimized Values if available
+    if st.session_state.ai_opt_config:
+        opt = st.session_state.ai_opt_config
+        
+        # v2.13: Detect config format (global vs per_session)
+        if isinstance(opt, dict) and 'asia' in opt:
+            # Per-Session format: No pre-fill (form disabled in per-session mode)
+            # User should use the session-specific results displayed above
+            pass
+        elif isinstance(opt, dict) and 'enabled_zones' in opt:
+            # Global format: Pre-fill form with optimized values
+            suggested_zones_str = ", ".join(opt['enabled_zones'])
+            
+            # v2.16: Handle age_set (bitmap) or legacy max_age
+            if 'age_set' in opt:
+                # Convert bitmap to max for form compatibility
+                age_set_vals = opt['age_set']
+                if age_set_vals:
+                    suggested_age = max(age_set_vals)  # Usar el máximo como referencia
+                else:
+                    suggested_age = 120
+            else:
+                # Legacy format
+                suggested_age = int(opt.get('max_age', 120))
+            
+            # v2.14: Handle attempt_set (bitmap) or legacy min/max
+            if 'attempt_set' in opt:
+                # Convert bitmap to range for form compatibility
+                att_set = opt['attempt_set']
+                if att_set:
+                    suggested_min_attempt = min(att_set)
+                    suggested_retries = max(att_set)
+                else:
+                    suggested_min_attempt = 1
+                    suggested_retries = 10
+            else:
+                # Legacy format
+                suggested_retries = int(opt.get('max_retries', 10))
+                suggested_min_attempt = int(opt.get('min_attempt', 1))
+
+    with st.form("ai_config_form"):
+        st.markdown("**1. Filtro de Zonas**")
+        zones_input = st.text_area("Zonas Habilitadas", value=suggested_zones_str, help="Separadas por coma. Borra para habilitar todas. La dirección (Long/Short) está implícita en cada zona (High=Short, Low=Long).")
+
+        st.markdown("**2. Filtros de Ejecución**")
+        col_cfg3, col_cfg4, col_cfg5 = st.columns(3)
+        with col_cfg3:
+            max_age_input = st.number_input("Edad Máx Nivel (Días)", min_value=0, max_value=365, value=suggested_age, help="0 = Sin límite")
+        with col_cfg4:
+            min_attempt_input = st.number_input("Min Intento (Start)", min_value=1, max_value=20, value=suggested_min_attempt, help="Saltar primeros intentos (ej: empezar en el 2do).")
+        with col_cfg5:
+            # Dynamic max validation
+            calc_max_val = max(50, suggested_retries + 5)
+            max_retries_input = st.number_input("Max Intento (End)", min_value=1, max_value=calc_max_val, value=suggested_retries, help="Hasta qué intento operar.")
+        
+        submitted = st.form_submit_button("💾 Guardar Archivo ai_config.json")
+    
+    if submitted:
+        import json
+        
+        # v2.13: Detect Optimization Mode
+        if st.session_state.ai_opt_mode == 'per_session' and isinstance(st.session_state.ai_opt_config, dict) and 'asia' in st.session_state.ai_opt_config:
+            # Per-Session Mode: Guardar configs independientes
+            asia_cfg = st.session_state.ai_opt_config.get('asia', {})
+            europe_cfg = st.session_state.ai_opt_config.get('europe', {})
+            usa_cfg = st.session_state.ai_opt_config.get('usa', {})
+            
+            config_data = {
+                "optimization_mode": "per_session",
+                "generated_at": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                "asia": {
+                    "enabled_zones": asia_cfg.get('enabled_zones', []),
+                    "age_set": asia_cfg.get('age_set', list(range(1, 121))),  # v2.16: Bitmap de edad
+                    "attempt_set": asia_cfg.get('attempt_set', list(range(1, 11)))  # v2.14: Bitmap de intentos
+                },
+                "europe": {
+                    "enabled_zones": europe_cfg.get('enabled_zones', []),
+                    "age_set": europe_cfg.get('age_set', list(range(1, 121))),
+                    "attempt_set": europe_cfg.get('attempt_set', list(range(1, 11)))
+                },
+                "usa": {
+                    "enabled_zones": usa_cfg.get('enabled_zones', []),
+                    "age_set": usa_cfg.get('age_set', list(range(1, 121))),
+                    "attempt_set": usa_cfg.get('attempt_set', list(range(1, 11)))
+                }
+            }
+        else:
+            # Global Mode (Original Format)
+            config_data = {
+                "optimization_mode": "global",
+                "enabled_zones": [z.strip() for z in zones_input.split(',') if z.strip()],
+                "max_age": int(max_age_input),
+                "min_attempt": int(min_attempt_input),
+                "max_retries": int(max_retries_input),
+                "generated_at": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            }
+        
+        try:
+            with open("ai_config.json", "w") as f:
+                json.dump(config_data, f, indent=4)
+            st.success("✅ Archivo ai_config.json guardado exitosamente!")
+            st.code(json.dumps(config_data, indent=4), language="json")
+        except Exception as e:
+            st.error(f"Error guardando archivo: {e}")
+
+
+
+
+
 
 with tab2:
     st.header("Análisis de Escala (Cebolla) 🧅")
@@ -1974,10 +4521,14 @@ with tab2:
         insight_text += "\n"
 
     # 3. Cumulative Contribution (v2.2.1: Conditional colors - lime for positive, red for negative)
-    tier_stats['Color'] = tier_stats['TotalPnL'].apply(lambda x: '#00FF00' if x >= 0 else '#FF4444')
+    # v2.10.2: Upgrade to Global Premium Styling (Red/Lime Heatmap)
+    custom_scale = [(0, '#FF0000'), (0.5, '#161B22'), (1, '#32CD32')]
+    
     fig_cum_ranks = px.bar(tier_stats, x='Exit_Tier', y='TotalPnL', color='TotalPnL',
-                           color_continuous_scale=[[0, '#FF4444'], [0.5, '#333333'], [1, '#00FF00']])
-    fig_cum_ranks.update_traces(marker_color=tier_stats['Color'].tolist())
+                           color_continuous_scale=custom_scale,
+                           color_continuous_midpoint=0)
+                           
+    fig_cum_ranks.update_traces(marker_line_color='#666666', marker_line_width=1.5)
     fig_cum_ranks.update_layout(showlegend=False, coloraxis_showscale=False)
     fig_cum_ranks = apply_premium_style(fig_cum_ranks, "Contribución Neta por Tier")
     st.plotly_chart(fig_cum_ranks, use_container_width=True)
@@ -1991,14 +4542,13 @@ with tab2:
         key_suffix="tab2_tiers"
     )
 
-    st.info(f"""
-    🧠 **Insight de Experto Quant: La Cebolla de Rentabilidad**
-    
-    {insight_text}
-    
-    *   **Filosofía:** En sistemas de escala, los primeros contratos (T1, T2) suelen tener alto Win Rate para "financiar" el riesgo de los últimos contratos (Runners).
-    *   **Acción:** Revisa la columna **'Sharpe_Proxy'**. Si tus últimos Tiers tienen un Sharpe bajo y apenas suman PnL total, estás asumiendo volatilidad inútil. Córtalos y reduce tu riesgo.
-    """)
+    with st.expander("🧠 Insight de Experto Quant: La Cebolla de Rentabilidad"):
+        st.markdown(f"""
+        {insight_text}
+        
+        *   **Filosofía:** En sistemas de escala, los primeros contratos (T1, T2) suelen tener alto Win Rate para "financiar" el riesgo de los últimos contratos (Runners).
+        *   **Acción:** Revisa la columna **'Sharpe_Proxy'**. Si tus últimos Tiers tienen un Sharpe bajo y apenas suman PnL total, estás asumiendo volatilidad inútil. Córtalos y reduce tu riesgo.
+        """)
 
 with tab3:
     st.header("Riesgo & Drawdown")
@@ -2014,7 +4564,8 @@ with tab3:
     fig_dd = apply_premium_style(fig_dd, 'Gráfico Submarino (Drawdown)')
     st.plotly_chart(fig_dd, use_container_width=True)
     
-    st.metric("Max Drawdown", f"${drawdown.min():,.2f}")
+    max_dd_val = drawdown.min() if len(drawdown) > 0 else 0
+    st.metric("Max Drawdown", f"${max_dd_val:,.2f}")
     
     # AI Analysis for Drawdown
     dd_periods = len(df[df['Drawdown'] < 0]) / len(df) * 100 if len(df) > 0 else 0
@@ -2022,27 +4573,45 @@ with tab3:
         chart_name="Análisis de Riesgo",
         chart_type="drawdown",
         data={
-            "max_dd": abs(drawdown.min()),
+            "max_dd": abs(drawdown.min()) if len(drawdown) > 0 else 0,
             "current_dd": abs(drawdown[-1]) if len(drawdown) > 0 else 0,
             "dd_periods": dd_periods
         },
         key_suffix="tab3_drawdown"
     )
 
-    st.info("""
-    🧠 **Insight de Experto Quant: Asimetría del Drawdown**
-    
-    *   **Recuperación:** Una caída del 50% requiere un 100% de retorno para volver a breakeven. Protege tu capital agresivamente.
-    *   **Duración (Time Underwater):** No solo importa *cuánto* pierdes, sino *por cuánto tiempo*. Un sistema que pasa 6 meses en negativo destruye la psicología del operador.
-    *   **Consejo:** Si tu "Underwater Plot" muestra periodos de recuperación planos y eternos (meses), tu sistema carece de "alfa" para salir de hoyos. Busca recuperaciones rápidas en forma de 'V'.
-    """)
+    with st.expander("🧠 Insight de Experto Quant: Asimetría del Drawdown"):
+        st.markdown("""
+        *   **Recuperación:** Una caída del 50% requiere un 100% de retorno para volver a breakeven. Protege tu capital agresivamente.
+        *   **Duración (Time Underwater):** No solo importa *cuánto* pierdes, sino *por cuánto tiempo*. Un sistema que pasa 6 meses en negativo destruye la psicología del operador.
+        *   **Consejo:** Si tu "Underwater Plot" muestra periodos de recuperación planos y eternos (meses), tu sistema carece de "alfa" para salir de hoyos. Busca recuperaciones rápidas en forma de 'V'.
+        """)
 
 with tab4:
     st.header("Optimización: MAE vs PnL")
     st.markdown("Optimización: **Excursión Adversa Máxima** (Dolor Máximo Aguantado) vs Beneficio Final.")
     
-    if 'MAE' in df.columns:
-        fig_scatter = px.scatter(df, x='MAE', y='PnL', color='Exit_Rank', 
+    if 'MAE' in df.columns and 'MFE' in df.columns:
+        # v2.9.7: Aggregate by Logical Trade for Scatter Plot & Insights
+        # This prevents execution-level noise (e.g. scale-outs with partial MAE)
+        if 'Trade_Clust_ID' in df.columns:
+             # Aggregate
+             trade_df = df.groupby('Trade_Clust_ID').agg({
+                 'PnL': 'sum',
+                 'MAE': 'max', # Max pain suffered during the whole trade
+                 'MFE': 'max', # Max gain reached
+                 'Exit_Rank': 'max',
+                 'Instrument': 'first',
+                 'SetupName': 'first'
+             }).reset_index()
+        else:
+             trade_df = df.copy() # Fallback
+             
+        # Ensure numeric
+        trade_df['MAE'] = pd.to_numeric(trade_df['MAE'], errors='coerce').fillna(0)
+        trade_df['MFE'] = pd.to_numeric(trade_df['MFE'], errors='coerce').fillna(0)
+
+        fig_scatter = px.scatter(trade_df, x='MAE', y='PnL', color='Exit_Rank', 
                                  hover_data=['Instrument', 'SetupName', 'MFE'])
         # Invert MAE axis? No, 0 is good.
         fig_scatter.add_vline(x=0, line_dash="dash", line_color="#00FF99")
@@ -2051,7 +4620,7 @@ with tab4:
         
         # --- AUTOMATED MAE INSIGHTS ---
         mae_insight = ""
-        winners = df[df['PnL'] > 0].copy()
+        winners = trade_df[trade_df['PnL'] > 0].copy()
         
         if not winners.empty:
             count_win = len(winners)
@@ -2069,7 +4638,7 @@ with tab4:
             n_inefficient = len(inefficient)
             pct_inefficient = (n_inefficient / count_win) * 100
             
-            mae_insight += f"**Análisis de tus {count_win} Trades Ganadores:**\n"
+            mae_insight += f"**Análisis de tus {count_win} Trades Ganadores (Lógicos):**\n"
             
             # Message Logic based on Sample Size
             if count_win < 5:
@@ -2093,23 +4662,26 @@ with tab4:
                 if pct_inefficient > 30:
                     mae_insight += f"- ⚠️ **ZONA DE PELIGRO:** El **{pct_inefficient:.1f}%** de tus ganadores sufrieron un retroceso severo (>50% de la ganancia) antes de funcionar. **Acción:** Estas son las 'verdes a la derecha'. Considera ajustar el Stop Loss, estás regalando demasiado espacio.\n"
                 elif pct_inefficient < 10:
-                     mae_insight += f"- ✅ **Alta Eficiencia:** Solo un {pct_inefficient:.1f}% de trades sufrieron mucho. Tus stops parecen estar bien calibrados.\n"
+                     if pct_inefficient == 0:
+                         mae_insight += f"- ✅ **Eficiencia Máxima:** Ningún trade ganador sufrió retroceso severo. Tus entradas son muy limpias una vez que funcionan.\n"
+                     else:
+                         mae_insight += f"- ✅ **Alta Eficiencia:** Solo un {pct_inefficient:.1f}% de trades sufrieron mucho. Tus stops parecen estar bien calibrados.\n"
         
-        st.info(f"""
-        🧠 **Insight de Experto Quant: La Frontera de Eficiencia**
-        
-        {mae_insight}
-        
-        *   **El Gráfico:** Muestra cuánto dolor (MAE - Eje X) tuviste que aguantar para obtener una ganancia (PnL - Eje Y).
-        *   **Zona Óptima (Arriba-Izquierda):** Ganancias altas con poco dolor (poca excursión negativa). Entradas tipo "Sniper".
-        *   **Zona de Peligro (Arriba-Derecha):** Ganaste dinero, PERO el precio se fue muy en contra antes de volver. Esto es "suerte" o stops demasiado amplios.
-        """)
+        with st.expander("🧠 Insight de Experto Quant: La Frontera de Eficiencia"):
+            st.markdown(f"""
+            {mae_insight}
+            
+            *   **El Gráfico:** Muestra cuánto dolor (MAE - Eje X) tuviste que aguantar para obtener una ganancia (PnL - Eje Y).
+            *   **Zona Óptima (Arriba-Izquierda):** Ganancias altas con poco dolor (poca excursión negativa). Entradas tipo "Sniper".
+            *   **Zona de Peligro (Arriba-Derecha):** Ganaste dinero, PERO el precio se fue muy en contra antes de volver. Esto es "suerte" o stops demasiado amplios.
+            """)
         
         # AI Analysis for MAE/MFE
-        avg_mae = df['MAE'].mean() if 'MAE' in df.columns else 0
-        avg_mfe = df['MFE'].mean() if 'MFE' in df.columns else 0
-        efficiency = (total_pnl / (avg_mfe * len(df)) * 100) if avg_mfe > 0 and len(df) > 0 else 0
-        sniper_pct = pct_snipers if 'pct_snipers' in dir() else 0
+        avg_mae = trade_df['MAE'].mean()
+        avg_mfe = trade_df['MFE'].mean()
+        total_pnl_trade = trade_df['PnL'].sum()
+        efficiency = (total_pnl_trade / (avg_mfe * len(trade_df)) * 100) if avg_mfe > 0 and len(trade_df) > 0 else 0
+        sniper_pct = pct_snipers if 'pct_snipers' in locals() else 0
         
         show_ai_analysis(
             chart_name="MAE vs MFE",
@@ -2240,14 +4812,13 @@ with tab5:
         *   **Capitalización:** Tu cuenta debe soportar no el Drawdown Histórico, sino al menos **1.5x a 2x** el peor Drawdown visible en simulaciones de Monte Carlo.
         *   **Recomendación de Capital:** Ejecuta la simulación para calcular el "Cisne Negro" específico de tu estrategia."""
 
-    st.warning(f"""
-    🧠 **Insight de Experto Quant: Riesgo de Secuencia y Capitalización**
-    
-    {metric_comment}
-    
-    *   **Ley de los Grandes Números:** Si tienes pocos datos (<50 trades), Monte Carlo asume que tu futuro será una repetición exacta de ese breve pasado. Eso es peligroso. A mayor muestra (10 años), más confiable es la proyección.
-    {capital_advice}
-    """)
+    with st.expander("🧠 Insight de Experto Quant: Riesgo de Secuencia y Capitalización"):
+        st.markdown(f"""
+        {metric_comment}
+        
+        *   **Ley de los Grandes Números:** Si tienes pocos datos (<50 trades), Monte Carlo asume que tu futuro será una repetición exacta de ese breve pasado. Eso es peligroso. A mayor muestra (10 años), más confiable es la proyección.
+        {capital_advice}
+        """)
     
     # AI Analysis for Monte Carlo (only show if simulation was run)
     if 'worst_drawdown_mc' in locals() and worst_drawdown_mc != 0:
@@ -2393,7 +4964,9 @@ with tab6:
                     cell_class = "cal-day"
                     
                     # Interactivity Wrapper: Link to self with param
-                    link_start = f'<a href="?audit_date={date_str}&audit_month={current_month_str}" target="_self" style="text-decoration:none; color:inherit; display:block; height:100%;">'
+                    # v2.9.9: Persist 'src' to avoid switching context (Backtest/Playback)
+                    current_src = st.query_params.get("src", "backtest")
+                    link_start = f'<a href="?audit_date={date_str}&audit_month={current_month_str}&src={current_src}" target="_self" style="text-decoration:none; color:inherit; display:block; height:100%;">'
                     link_end = '</a>'
                     
                     if current_date in month_stats.index:
@@ -2495,7 +5068,8 @@ with tab6:
                     
                     # Logic
                     replay_row = day_df[day_df['Trade_Clust_ID'] == sel_replay_id].iloc[0]
-                    r_instr = replay_row['Instrument']
+                    # v2.10.0: Use FullInstrument for file lookup if available (to handle normalized UI names)
+                    r_instr = replay_row['FullInstrument'] if 'FullInstrument' in replay_row else replay_row['Instrument']
                     r_date = replay_row['EntryTime'].date()
                     
                     # Load Logs
@@ -2629,961 +5203,12 @@ with tab6:
         st.info("No data available for calendar.")
 
 
-with tab7:
-    st.header("⏰ Análisis de Microestructura Temporal")
-    
-    if not df.empty:
-        df['Hour'] = df['EntryTime'].dt.hour
-        df['Weekday'] = df['EntryTime'].dt.day_name()
-        
-        # Order Weekdays
-        days_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
-        
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            st.subheader("Rendimiento por Hora")
-            hour_stats = df.groupby('Hour')['PnL'].sum().reset_index()
-            fig_hour = px.bar(hour_stats, x='Hour', y='PnL', color='PnL', color_continuous_scale='RdBu')
-            fig_hour = apply_premium_style(fig_hour, "Distribución Horaria")
-            st.plotly_chart(fig_hour, use_container_width=True)
-            
-        with col2:
-            st.subheader("Rendimiento por Día")
-            day_stats = df.groupby('Weekday')['PnL'].sum().reindex(days_order).reset_index()
-            fig_day_bar = px.bar(day_stats, x='Weekday', y='PnL', color='PnL', color_continuous_scale='RdBu')
-            fig_day_bar = apply_premium_style(fig_day_bar, "Distribución Semanal")
-            st.plotly_chart(fig_day_bar, use_container_width=True)
-            
-        # --- AUTOMATED TIME INSIGHTS ---
-        time_insight = ""
-        
-        # 1. Analyze Toxic Hours
-        toxic_hours = hour_stats[hour_stats['PnL'] < 0]
-        toxic_pnl_h = toxic_hours['PnL'].sum()
-        
-        # 2. Analyze Toxic Days
-        day_stats_calc = df.groupby('Weekday')['PnL'].sum() # Re-calc without reindex format for ease
-        toxic_days = day_stats_calc[day_stats_calc < 0]
-        toxic_pnl_d = toxic_days.sum()
-        
-        current_total = total_pnl
-        
-        # Scenario A: Hourly Optimization
-        if not toxic_hours.empty:
-            bad_hours_list = [f"{h}:00" for h in toxic_hours['Hour'].tolist()]
-            optimized_total = current_total - toxic_pnl_h # Subtracting negative = Adding value
-            improvement_pct = ((optimized_total - current_total) / abs(current_total)) * 100 if current_total != 0 else 0
-            
-            time_insight += f"**⏳ Horas Tóxicas Detectadas:** {', '.join(bad_hours_list)}\n"
-            time_insight += f"- 🛑 Estas horas te están costando **${abs(toxic_pnl_h):,.2f}**.\n"
-            time_insight += f"- 💡 **Proyección:** Si dejas de operar en estas horas, tu Beneficio Neto subiría a **${optimized_total:,.2f}** (Mejora del +{improvement_pct:.1f}%).\n\n"
-        else:
-            time_insight += "✅ **Horario Limpio:** No tienes horas sistemáticamente perdedoras.\n\n"
-            
-        # Scenario B: Daily Optimization
-        if not toxic_days.empty:
-            bad_days_list = toxic_days.index.tolist()
-            time_insight += f"**🗓️ Días Tóxicos Detectados:** {', '.join(bad_days_list)}\n"
-            time_insight += f"- 🛑 Los {', '.join(bad_days_list)} restan **${abs(toxic_pnl_d):,.2f}** a tu cuenta.\n"
-        else:
-             time_insight += "✅ **Calendario Limpio:** Eres consistente todos los días de la semana.\n"
 
-            
-        st.info(f"""
-        🧠 **Insight de Experto Quant: Edges Temporales**  
-        {time_insight}
-        
-        *   **Acción:** Evita horas donde pierdes consistentemente. Los mejores traders *eliminan momentos tóxicos* en lugar de operar todo el día.
-        *   **Dato:** Las horas de empalme de sesiones (9-11 AM ET, donde Europa todavía opera) suelen ser las más líquidas pero también más erráticas. Verifica si tus ganancias están ahí o en NY pure (11 AM-4 PM).
-        """)
-        
-        # AI Analysis for Hourly Patterns
-        hourly_stats_ai = df.groupby('Hour').agg({
-            'PnL': ['sum', 'mean', 'count']
-        }).round(2)
-        
-        show_ai_analysis(
-            chart_name="Patrones Horarios",
-            chart_type="hourly",
-            data={"hourly_data": hourly_stats_ai.to_string()},
-            key_suffix="tab7_hourly"
-        )
-    else:
-        st.warning("No hay datos temporales para analizar.")
 
     # -------------------------------------------------------------------------
-    # TAB 8: LEVEL ANALYSIS (New)
+    # TAB 8: LIVE vs BACKTEST (Reality Check)
     # -------------------------------------------------------------------------
     with tab8:
-        st.header("🧱 Análisis de Niveles y Zonas")
-        
-        # 1. Parsing Logic (v2.2.1: Support both "Europe Low" and "Europe Low 3 Days" formats)
-        import re
-        
-        def parse_level_data(row):
-            setup = str(row['SetupName'])
-            
-            # First try: Regex for "USA Low 3 Days" or "Asia High 1 Days" (with days)
-            match_with_days = re.search(r'(Asia|Europe|USA)\s(High|Low)\s(\d+)\sDays', setup)
-            if match_with_days:
-                return pd.Series([f"{match_with_days.group(1)} {match_with_days.group(2)}", int(match_with_days.group(3))])
-            
-            # Second try: Simple format "Europe Low", "Asia High", "USA Low" (without days)
-            match_simple = re.search(r'(Asia|Europe|USA)\s(High|Low)', setup, re.IGNORECASE)
-            if match_simple:
-                return pd.Series([f"{match_simple.group(1)} {match_simple.group(2)}", 0])  # 0 days = current day
-            
-            # Fallback
-            return pd.Series(["Other", -1])
-
-        # Apply parsing
-        level_df = df.copy()
-        level_df[['Zone', 'DaysAgo']] = level_df.apply(parse_level_data, axis=1)
-        
-        # Filter only Valid Level Trades
-        level_df = level_df[level_df['Zone'] != "Other"]
-        
-        if level_df.empty:
-            st.warning("⚠️ No se detectaron trades de Niveles (Formato 'Session High/Low' no encontrado).")
-        else:
-            # ================================================================
-            # SECTION 1: ENHANCED PERFORMANCE DASHBOARD
-            # ================================================================
-            st.subheader("📊 Dashboard de Rendimiento por Zona")
-            
-            # Calculate comprehensive metrics per zone
-            zone_metrics = level_df.groupby('Zone').agg({
-                'PnL': ['sum', 'mean', 'std', 'count'],
-                'Result': lambda x: (x.str.contains('TP', na=False)).sum()  # Wins
-            }).round(2)
-            
-            zone_metrics.columns = ['Total_PnL', 'Avg_PnL', 'Std_PnL', 'Trades', 'Wins']
-            zone_metrics['Win_Rate'] = (zone_metrics['Wins'] / zone_metrics['Trades'] * 100).round(1)
-            zone_metrics['Sharpe_Proxy'] = (zone_metrics['Avg_PnL'] / zone_metrics['Std_PnL']).round(2)
-            zone_metrics['Sharpe_Proxy'] = zone_metrics['Sharpe_Proxy'].replace([np.inf, -np.inf], 0)
-            
-            # Calculate R:R (Winners vs Losers)
-            rr_data = []
-            for zone in level_df['Zone'].unique():
-                zone_trades = level_df[level_df['Zone'] == zone]
-                wins = zone_trades[zone_trades['PnL'] > 0]['PnL'].mean()
-                losses = abs(zone_trades[zone_trades['PnL'] <= 0]['PnL'].mean())
-                rr = wins / losses if losses > 0 else 0
-                rr_data.append({'Zone': zone, 'RR': round(rr, 2)})
-            
-            rr_df = pd.DataFrame(rr_data).set_index('Zone')
-            zone_metrics = zone_metrics.join(rr_df)
-            
-            # Sort by Total PnL descending
-            zone_metrics = zone_metrics.sort_values('Total_PnL', ascending=False)
-            
-            # Display formatted table
-            display_metrics = zone_metrics[['Total_PnL', 'Win_Rate', 'RR', 'Trades', 'Avg_PnL', 'Sharpe_Proxy']].copy()
-            display_metrics.columns = ['PnL Total ($)', 'Win Rate (%)', 'R:R', 'Trades', 'Avg Win ($)', 'Sharpe']
-            
-            st.dataframe(
-                display_metrics.style.format({
-                    'PnL Total ($)': '${:,.0f}',
-                    'Win Rate (%)': '{:.1f}%',
-                    'R:R': '{:.2f}',
-                    'Avg Win ($)': '${:.0f}',
-                    'Sharpe': '{:.2f}'
-                }).background_gradient(cmap='RdYlGn', subset=['PnL Total ($)', 'Win Rate (%)']),
-                use_container_width=True
-            )
-            
-            # Auto-generated Insights (Section 1)
-            best_zone = zone_metrics.index[0]
-            worst_zone = zone_metrics.index[-1]
-            best_wr = zone_metrics.loc[best_zone, 'Win_Rate']
-            worst_wr = zone_metrics.loc[worst_zone, 'Win_Rate']
-            best_pnl = zone_metrics.loc[best_zone, 'Total_PnL']
-            worst_pnl = zone_metrics.loc[worst_zone, 'Total_PnL']
-            
-            insight_s1 = f"""
-🧠 **Insight de Experto Quant: Jerarquía de Niveles**
-
-**🏆 Tu Mejor Edge:** {best_zone}
-- Win Rate: {best_wr:.1f}% | PnL: ${best_pnl:,.0f}
-- **Acción:** Prioriza este setup. Considera aumentar tamaño de posición aquí.
-
-**⚠️ Tu Mayor Lastre:** {worst_zone}
-- Win Rate: {worst_wr:.1f}% | PnL: ${worst_pnl:,.0f}
-- **Acción:** {"Filtra este nivel completamente" if worst_pnl < -200 else "Reduce frecuencia o ajusta lógica"}
-            """
-            
-            # Check for Sharpe outliers
-            high_sharpe = zone_metrics[zone_metrics['Sharpe_Proxy'] > 1.5]
-            if not high_sharpe.empty:
-                insight_s1 += f"\n\n**💎 Zonas Premium (Sharpe > 1.5):** {', '.join(high_sharpe.index.tolist())}"
-                insight_s1 += "\n- Estas zonas tienen retorno/riesgo excepcional. Son tus *verdaderos edges*."
-            
-            st.info(insight_s1)
-            
-            
-            # Prepare clean data for AI (Section 1)
-            ai_perf_summary = "Dashboard de Rendimiento por Zona:\n\n"
-            ai_perf_summary += "REGLA: PnL > 0 = RENTABLE (mantener). Sharpe > 1.5 = PREMIUM. Trades < 10 = Muestra insuficiente.\n\n"
-            
-            for zone in zone_metrics.index:
-                data = zone_metrics.loc[zone]
-                pnl = data['Total_PnL']
-                wr = data['Win_Rate']
-                rr = data['RR']
-                trades = int(data['Trades'])
-                sharpe = data['Sharpe_Proxy']
-                
-                verdict = "✅ RENTABLE" if pnl > 0 else "❌ PERDEDOR"
-                if pnl > 500 and sharpe > 1.5:
-                    verdict += " (PREMIUM)"
-                if trades < 10:
-                    verdict += " ⚠️ MUESTRA PEQUEÑA"
-                
-                ai_perf_summary += f"{zone}: PnL ${pnl:,.0f} ({verdict})\n"
-                ai_perf_summary += f"  - Win Rate: {wr:.1f}%, R:R: {rr:.2f}, Trades: {trades}, Sharpe: {sharpe:.2f}\n"
-            
-            # AI Analysis Button (Premium)
-            show_ai_analysis(
-                chart_name="Dashboard de Rendimiento",
-                chart_type="performance_dashboard",
-                data={"zone_metrics": ai_perf_summary},
-                key_suffix="tab8_section1"
-            )
-            
-            st.markdown("---")
-            
-            # ================================================================
-            # SECTION 1B: TEMPORAL DECAY (Full Width)
-            # ================================================================
-            st.subheader("⏳ Decaimiento Temporal por Zona")
-            
-            # Create pivot: Zone (Y) vs DaysAgo (X), values = PnL
-            heatmap_data = level_df.pivot_table(
-                index='Zone', 
-                columns='DaysAgo', 
-                values='PnL', 
-                aggfunc='sum', 
-                fill_value=0
-            )
-            
-            # Sort zones by total PnL (best to worst)
-            zone_totals = heatmap_data.sum(axis=1).sort_values(ascending=False)
-            heatmap_data = heatmap_data.loc[zone_totals.index]
-            
-            # Create heatmap
-            fig_days = go.Figure(data=go.Heatmap(
-                z=heatmap_data.values,
-                x=[f"{int(d)} días" if d > 0 else "Hoy" for d in heatmap_data.columns],
-                y=heatmap_data.index,
-                colorscale='RdBu',
-                zmid=0,  # Center at 0 (red=loss, blue=profit)
-                text=heatmap_data.values.round(0),
-                texttemplate='$%{text}',
-                textfont={"size": 10},
-                hovertemplate='<b>%{y}</b><br>Antigüedad: %{x}<br>PnL: $%{z:.0f}<extra></extra>',
-                colorbar=dict(title="PnL")
-            ))
-            
-            fig_days = apply_premium_style(fig_days, "Rendimiento por Zona y Antigüedad")
-            fig_days.update_layout(
-                xaxis_title="Antigüedad del Nivel",
-                yaxis_title="Zona",
-                height=400
-            )
-            st.plotly_chart(fig_days, use_container_width=True)
-
-            # ================================================================
-            # SECTION 2: DIRECTIONALITY MATRIX
-            # ================================================================
-            st.markdown("---")
-            st.subheader("🎯 Matriz Direccional: ¿Long o Short?")
-            
-            # Create pivot: Zone x Direction
-            dir_matrix = level_df.pivot_table(
-                index='Zone',
-                columns='Type',
-                values='PnL',
-                aggfunc=['sum', lambda x: (level_df.loc[x.index, 'Result'].str.contains('TP', na=False)).sum(), 'count']
-            )
-            
-            # Flatten columns
-            dir_matrix.columns = ['_'.join(col).strip() for col in dir_matrix.columns.values]
-            
-            # Calculate Win Rates
-            for direction in ['Long', 'Short']:
-                if f'sum_{direction}' in dir_matrix.columns:
-                    wins_col = f'<lambda>_{direction}'
-                    total_col = f'count_{direction}'
-                    if wins_col in dir_matrix.columns and total_col in dir_matrix.columns:
-                        dir_matrix[f'WR_{direction}'] = (dir_matrix[wins_col] / dir_matrix[total_col] * 100).round(1)
-            
-            # Display in two columns
-            col_dir1, col_dir2 = st.columns(2)
-            
-            with col_dir1:
-                st.markdown("**PnL por Dirección**")
-                pnl_display = dir_matrix[[col for col in dir_matrix.columns if col.startswith('sum_')]].copy()
-                pnl_display.columns = [col.replace('sum_', '') for col in pnl_display.columns]
-                st.dataframe(
-                    pnl_display.style.format('${:,.0f}').background_gradient(cmap='RdYlGn', axis=None),
-                    use_container_width=True
-                )
-            
-            with col_dir2:
-                st.markdown("**Win Rate (%) por Dirección**")
-                wr_display = dir_matrix[[col for col in dir_matrix.columns if col.startswith('WR_')]].copy()
-                wr_display.columns = [col.replace('WR_', '') for col in wr_display.columns]
-                st.dataframe(
-                    wr_display.style.format('{:.1f}%').background_gradient(cmap='RdYlGn', axis=None, vmin=0, vmax=100),
-                    use_container_width=True
-                )
-
-            # Auto-generated Insights (Section 2)
-            insight_s2 = "🧠 **Insight de Experto Quant: Bias Direccional**\n\n"
-            
-            directional_findings = []
-            for zone in dir_matrix.index:
-                long_wr = dir_matrix.loc[zone, 'WR_Long'] if 'WR_Long' in dir_matrix.columns else None
-                short_wr = dir_matrix.loc[zone, 'WR_Short'] if 'WR_Short' in dir_matrix.columns else None
-                
-                # Case 1: Both directions have data
-                if pd.notna(long_wr) and pd.notna(short_wr):
-                    diff = abs(long_wr - short_wr)
-                    if diff > 20:  # Significant bias
-                        better_dir = "LONG" if long_wr > short_wr else "SHORT"
-                        directional_findings.append(
-                            f"**{zone}**: Sesgo claro hacia {better_dir} ({max(long_wr, short_wr):.1f}% vs {min(long_wr, short_wr):.1f}%)"
-                        )
-                
-                # Case 2: Only LONG has data (100% bias)
-                elif pd.notna(long_wr) and pd.isna(short_wr):
-                    directional_findings.append(
-                        f"**{zone}**: Solo opera LONG (WR: {long_wr:.1f}%) - Sesgo extremo"
-                    )
-                
-                # Case 3: Only SHORT has data (100% bias)
-                elif pd.isna(long_wr) and pd.notna(short_wr):
-                    directional_findings.append(
-                        f"**{zone}**: Solo opera SHORT (WR: {short_wr:.1f}%) - Sesgo extremo"
-                    )
-            
-            if directional_findings:
-                insight_s2 += "**Zonas con Bias Claro:**\n"
-                for finding in directional_findings[:3]:  # Top 3
-                    insight_s2 += f"- {finding}\n"
-                insight_s2 += "\n**Acción:** Considera deshabilitar la dirección débil en estas zonas para mejorar consistencia."
-            else:
-                insight_s2 += "✅ **Balance Direccional:** Tus zonas funcionan de manera similar en ambas direcciones. Mantén flexibilidad."
-            
-            st.info(insight_s2)
-            
-            
-            # Prepare clean data for AI
-            ai_summary = "Rendimiento por Zona y Dirección:\n\n"
-            ai_summary += "IMPORTANTE: Un Win Rate bajo con PnL POSITIVO es válido (R:R alto). No rechaces setups solo por WR bajo.\n\n"
-            
-            for zone in dir_matrix.index:
-                long_pnl = dir_matrix.loc[zone, 'sum_Long'] if 'sum_Long' in dir_matrix.columns else None
-                short_pnl = dir_matrix.loc[zone, 'sum_Short'] if 'sum_Short' in dir_matrix.columns else None
-                long_wr = dir_matrix.loc[zone, 'WR_Long'] if 'WR_Long' in dir_matrix.columns else None
-                short_wr = dir_matrix.loc[zone, 'WR_Short'] if 'WR_Short' in dir_matrix.columns else None
-                
-                ai_summary += f"{zone}:\n"
-                if pd.notna(long_pnl):
-                    verdict = "✅ RENTABLE" if long_pnl > 0 else "❌ PERDEDOR"
-                    ai_summary += f"  - LONG: PnL ${long_pnl:,.0f} ({verdict}), Win Rate {long_wr:.1f}%\n"
-                if pd.notna(short_pnl):
-                    verdict = "✅ RENTABLE" if short_pnl > 0 else "❌ PERDEDOR"
-                    ai_summary += f"  - SHORT: PnL ${short_pnl:,.0f} ({verdict}), Win Rate {short_wr:.1f}%\n"
-                if pd.isna(long_pnl) and pd.notna(short_pnl):
-                    ai_summary += f"  - Solo opera SHORT\n"
-                elif pd.notna(long_pnl) and pd.isna(short_pnl):
-                    ai_summary += f"  - Solo opera LONG\n"
-            
-            # AI Analysis Button (Premium)
-            show_ai_analysis(
-                chart_name="Matriz Direccional",
-                chart_type="directionality_matrix",
-                data={"dir_matrix": ai_summary},
-                key_suffix="tab8_section2"
-            )
-
-            # ================================================================
-            # SECTION 3: TEMPORAL PERFORMANCE (Zone x Hour)
-            # ================================================================
-            st.markdown("---")
-            st.subheader("⏰ Rendimiento Temporal: Zona x Hora del Día")
-            
-            # Extract hour from EntryTime
-            if 'EntryTime' in level_df.columns:
-                level_df['Hour'] = pd.to_datetime(level_df['EntryTime']).dt.hour
-                
-                # Create pivot: Zone (Y) x Hour (X)
-                temporal_pivot = level_df.pivot_table(
-                    index='Zone',
-                    columns='Hour',
-                    values='PnL',
-                    aggfunc='sum',
-                    fill_value=0
-                )
-                
-                # Sort zones by total
-                temporal_pivot = temporal_pivot.loc[temporal_pivot.sum(axis=1).sort_values(ascending=False).index]
-                
-                # Create heatmap
-                fig_temporal = go.Figure(data=go.Heatmap(
-                    z=temporal_pivot.values,
-                    x=[f"{int(h)}:00" for h in temporal_pivot.columns],
-                    y=temporal_pivot.index,
-                    colorscale='RdBu',
-                    zmid=0,
-                    text=temporal_pivot.values.round(0),
-                    texttemplate='$%{text}',
-                    textfont={"size": 9},
-                    hovertemplate='<b>%{y}</b><br>Hora: %{x}<br>PnL: $%{z:.0f}<extra></extra>',
-                    colorbar=dict(title="PnL")
-                ))
-                
-                fig_temporal = apply_premium_style(fig_temporal, "Rendimiento por Zona y Hora")
-                fig_temporal.update_layout(
-                    xaxis_title="Hora del Día (ET)",
-                    yaxis_title="Zona",
-                    height=400
-                )
-                st.plotly_chart(fig_temporal, use_container_width=True)
-                
-                # Automated Toxic Time Detection
-                toxic_combinations = []
-                for zone in temporal_pivot.index:
-                    for hour in temporal_pivot.columns:
-                        pnl = temporal_pivot.loc[zone, hour]
-                        if pnl < -100:  # Threshold for "toxic"
-                            toxic_combinations.append({
-                                'Zone': zone,
-                                'Hour': f"{int(hour)}:00",
-                                'Loss': f"${pnl:.0f}"
-                            })
-                
-                if toxic_combinations:
-                    st.warning(f"⚠️ **{len(toxic_combinations)} Combinaciones Tóxicas Detectadas** (Pérdida > $100):")
-                    toxic_df = pd.DataFrame(toxic_combinations)
-                    st.dataframe(toxic_df, use_container_width=True)
-                    
-                # Auto-generated Insights (Section 3)
-                if toxic_combinations:
-                    worst_combo = toxic_combinations[0]
-                    insight_s3 = f"""
-🧠 **Insight de Experto Quant: Ventanas Tóxicas**
-
-**⚠️ Peor Combinación:** {worst_combo['Zone']} a las {worst_combo['Hour']}
-- Pérdida: {worst_combo['Loss']}
-- **Hipótesis:** Probablemente coincide con bajo volumen, empalme de sesiones, o datos económicos.
-- **Acción:** Agrega en tu código: `if (zone == '{worst_combo['Zone'].split()[0]}' && hour == {worst_combo['Hour'].split(':')[0]}) return;`
-
-**Patrón General:** Las ventanas tóxicas suelen ser:
-- 12-13 PM (Lunch, bajo volumen)
-- 15:30+ (Near close, comportamiento errático)
-                    """
-                    st.info(insight_s3)
-                else:
-                    st.success("✅ **Horario Limpio:** No se detectaron ventanas horarias sistemáticamente tóxicas.")
-                
-                # Prepare clean data for AI (Section 3)
-                ai_temporal_summary = "Rendimiento Temporal (Zona x Hora):\n\n"
-                ai_temporal_summary += "CONTEXTO: Asia 20-03 ET, Europe 03-12 ET, USA 09-16 ET. Lunch 12-13 ET (bajo volumen).\n"
-                ai_temporal_summary += "REGLA: Ventana con PnL < -$100 = TÓXICA (filtrar). < 5 trades = ruido.\n\n"
-                
-                # Format top toxic combinations
-                if toxic_combinations:
-                    ai_temporal_summary += "VENTANAS TÓXICAS:\n"
-                    for combo in toxic_combinations[:5]:  # Top 5
-                        ai_temporal_summary += f"- {combo['Zone']} a las {combo['Hour']}: {combo['Loss']}\n"
-                    ai_temporal_summary += f"\nTotal detectadas: {len(toxic_combinations)}\n"
-                else:
-                    ai_temporal_summary += "✅ No se detectaron ventanas tóxicas significativas.\n"
-                
-                # Add full matrix summary
-                ai_temporal_summary += "\nMATRIZ COMPLETA (Zona x Hora con PnL):\n"
-                for zone in temporal_pivot.index:
-                    ai_temporal_summary += f"\n{zone}:\n"
-                    for hour in temporal_pivot.columns:
-                        pnl = temporal_pivot.loc[zone, hour]
-                        if pnl != 0:
-                            verdict = "TÓXICA" if pnl < -100 else ("RENTABLE" if pnl > 100 else "neutral")
-                            ai_temporal_summary += f"  {int(hour)}:00-{int(hour)+1}:00 = ${pnl:.0f} ({verdict})\n"
-                
-                # AI Analysis Button (Premium)
-                show_ai_analysis(
-                    chart_name="Rendimiento Temporal",
-                    chart_type="temporal_performance",
-                    data={"temporal_data": ai_temporal_summary},
-                    key_suffix="tab8_section3"
-                )
-                
-            else:
-                st.info("No hay información de hora en los datos para análisis temporal.")
-
-            # --- DEEP INSIGHT: PENETRATION ANALYSIS ---
-            st.markdown("---")
-            st.subheader("🧪 Análisis de Penetración (Punto de No Retorno)")
-            
-            # Scatter: MAE (Penetration) vs PnL
-            # We want to see: Is there a MAE value where NO trades win?
-            
-            level_df['Size_Fixed'] = 15 # Constant size for visibility
-            
-            fig_penetration = px.scatter(
-                level_df, 
-                x='MAE', 
-                y='PnL', 
-                color='Zone', 
-                symbol='Zone', # V_ACCESSIBILITY: Shapes allow distinction without color
-                size='Size_Fixed',
-                size_max=15, 
-                hover_data=['Result', 'SetupName', 'ExitDate'], 
-                color_discrete_map={'Asia': '#FFFF00', 'Europe': '#4169E1', 'USA': '#FFFFFF'} # High Contrast (Yellow/Blue/White)
-            )
-            
-            # Move legend to bottom to avoid clutter
-            fig_penetration.update_layout(
-                legend=dict(
-                    orientation="h",
-                    yanchor="bottom",
-                    y=1.05, # Slightly higher to avoid title clash
-                    xanchor="right",
-                    x=1,
-                    title=None # Remove legend title "Result"
-                )
-            )
-            
-            # Add a vertical line cursor or threshold? 
-            # Let's calculate the "Death Line" -> The MAE percentile purely for Losers
-            
-            fig_penetration = apply_premium_style(fig_penetration, "Penetración de Nivel (MAE) vs Resultado")
-            st.plotly_chart(fig_penetration, use_container_width=True)
-            
-            # Automated Heuristic for Penetration (v2.2.1: Use absolute MAE values)
-            winners_l = level_df[level_df['PnL'] > 0].copy()
-            losers_l = level_df[level_df['PnL'] <= 0].copy()
-            
-            pen_insight = ""
-            
-            if not winners_l.empty:
-                # MAE comes as negative values, so we use absolute value for analysis
-                winners_l['MAE_abs'] = winners_l['MAE'].abs()
-                losers_l['MAE_abs'] = losers_l['MAE'].abs() if not losers_l.empty else 0
-                
-                max_mae_winner = winners_l['MAE_abs'].quantile(0.95)  # 95th percentile of winners MAE
-                avg_mae_winner = winners_l['MAE_abs'].mean()
-                avg_mae_loser = losers_l['MAE_abs'].mean() if not losers_l.empty else 0
-                
-                pen_insight += f"**🛡️ El Límite de Tolerancia:** El 95% de tus trades ganadores soportaron una penetración máxima de **${max_mae_winner:.2f} USD**.\n"
-                pen_insight += f"- **Dolor Promedio Ganadores:** ${avg_mae_winner:.2f} | **Dolor Promedio Perdedores:** ${avg_mae_loser:.2f}\n"
-                pen_insight += f"- **Interpretación:** Si el precio cruza el nivel y tu negativo flotante supera **${max_mae_winner:.2f}**, la probabilidad de recuperación cae drásticamente.\n"
-                pen_insight += f"- **Acción Sugerida:** Considera tu Stop Loss técnico cerca de ${max_mae_winner:.2f}. Más allá = ruptura real, no cacería de liquidez.\n"
-            else:
-                pen_insight += "No hay suficientes trades ganadores para calcular un límite de tolerancia estadístico.\n"
-                
-            pen_insight += f"\n- **¿'Falso Quiebre' o 'Ruptura'?** Los puntos verdes muestran cuánto dolor aguantaron los trades que *funcionaron*.\n"
-            pen_insight += f"- **Zona Muerta:** El espacio vacío a la *derecha* de los puntos verdes = zona donde el precio *rompe con intención*."
-                                
-            st.info(f"""
-            🧠 **Insight de Experto Quant: Profundidad de Mercado**
-            
-            {pen_insight}
-            """)
-            
-            # AI Analysis for Levels (Penetration + Stats)
-            if 'zone_stats' in locals() and not zone_stats.empty:
-                best_zone = zone_stats.iloc[0]['Zone']
-                best_zone_pnl = zone_stats.iloc[0]['PnL']
-                worst_zone = zone_stats.iloc[-1]['Zone']
-                worst_zone_pnl = zone_stats.iloc[-1]['PnL']
-                
-                show_ai_analysis(
-                    chart_name="Análisis de Niveles",
-                    chart_type="levels_analysis",
-                    data={
-                        "best_zone": best_zone,
-                        "best_zone_pnl": best_zone_pnl,
-                        "worst_zone": worst_zone,
-                        "worst_zone_pnl": worst_zone_pnl,
-                        "total_pnl": zone_stats['PnL'].sum(),
-                        "penetration_insight": pen_insight
-                    },
-                    key_suffix="tab8_levels"
-                )
-
-            # --- INTERACTION MATRIX (Who Breaks Who?) ---
-            st.markdown("---")
-            st.subheader("⚔️ Matriz de Interacción: Agresor vs Defensor")
-            st.caption("¿Qué sesión (Agresor) es más efectiva rompiendo los niveles de quién (Defensor)?")
-            
-            # v2.2.1: Extract base session (Asia/Europe/USA) from zone names like "Europe Low"
-            level_df['Session'] = level_df['Zone'].str.extract(r'(Asia|Europe|USA)', expand=False)
-            
-            # Filter valid sessions only
-            matrix_df = level_df[level_df['Session'].isin(['Asia', 'Europe', 'USA'])].copy()
-            
-            if not matrix_df.empty and 'Aggressor' in matrix_df.columns:
-                # v2.2.2: THREE HEATMAPS - General, Longs, Shorts
-                
-                # 1. GENERAL HEATMAP (All directions)
-                st.markdown("### 🌐 Todos los Trades (Long + Short)")
-                fig_matrix = px.density_heatmap(
-                    matrix_df,
-                    x='Session',
-                    y='Aggressor',
-                    z='PnL',
-                    histfunc='sum',
-                    color_continuous_scale='RdYlGn',
-                    text_auto='.0f',
-                )
-                apply_premium_style(fig_matrix)
-                fig_matrix.update_layout(
-                    xaxis_title="Defensor",
-                    yaxis_title="Atacante",
-                    coloraxis_colorbar_title="PnL ($)",
-                    height=350
-                )
-                st.plotly_chart(fig_matrix, use_container_width=True)
-                
-                # 2. SIDE BY SIDE: LONGS vs SHORTS
-                col_hm1, col_hm2 = st.columns(2)
-                
-                # Filter data by direction
-                long_df = matrix_df[matrix_df['Type'] == 'Long']
-                short_df = matrix_df[matrix_df['Type'] == 'Short']
-                
-                with col_hm1:
-                    st.markdown("### 📈 Solo LONGS")
-                    if not long_df.empty:
-                        fig_long = px.density_heatmap(
-                            long_df,
-                            x='Session',
-                            y='Aggressor',
-                            z='PnL',
-                            histfunc='sum',
-                            color_continuous_scale='RdYlGn',
-                            text_auto='.0f',
-                        )
-                        apply_premium_style(fig_long)
-                        fig_long.update_layout(
-                            xaxis_title="Defensor",
-                            yaxis_title="Atacante",
-                            coloraxis_showscale=False,
-                            height=300
-                        )
-                        st.plotly_chart(fig_long, use_container_width=True)
-                    else:
-                        st.info("No hay datos de Longs")
-                
-                with col_hm2:
-                    st.markdown("### 📉 Solo SHORTS")
-                    if not short_df.empty:
-                        fig_short = px.density_heatmap(
-                            short_df,
-                            x='Session',
-                            y='Aggressor',
-                            z='PnL',
-                            histfunc='sum',
-                            color_continuous_scale='RdYlGn',
-                            text_auto='.0f',
-                        )
-                        apply_premium_style(fig_short)
-                        fig_short.update_layout(
-                            xaxis_title="Defensor",
-                            yaxis_title="Atacante",
-                            coloraxis_showscale=False,
-                            height=300
-                        )
-                        st.plotly_chart(fig_short, use_container_width=True)
-                    else:
-                        st.info("No hay datos de Shorts para la matriz.")
-                
-                st.markdown("---")
-                
-                try:
-                    # Insight Generation
-                    combo_stats = matrix_df.groupby(['Aggressor', 'Session']).agg({
-                        'PnL': ['sum', 'count', 'mean']
-                    }).reset_index()
-                    combo_stats.columns = ['Sesión_Trading', 'Nivel_Origen', 'PnL_Total', 'Trades', 'PnL_Promedio']
-                    
-                    best = combo_stats.loc[combo_stats['PnL_Total'].idxmax()]
-                    worst = combo_stats.loc[combo_stats['PnL_Total'].idxmin()]
-                    
-                    # v2.2.3: Insights más claros y accionables
-                    st.markdown("### 💡 Interpretación de la Matriz")
-                    st.info("""
-**¿Cómo leer esto?**
-- **Sesión de Trading** = Cuándo TÚ operas (ej: durante horario USA)
-- **Nivel de Origen** = De qué sesión es el nivel (ej: Low creado en Asia)
-- **PnL Positivo** = Esa combinación funciona para ti (el nivel se respeta)
-- **PnL Negativo** = Esa combinación NO funciona (el nivel falla o tu timing es malo)
-                    """)
-                    
-                    st.success(f"""🎯 **MEJOR Combinación:** Operar durante **{best['Sesión_Trading']}** en niveles de **{best['Nivel_Origen']}**
-→ Ganancia: ${best['PnL_Total']:,.0f} en {int(best['Trades'])} trades (${best['PnL_Promedio']:.2f}/trade)
-→ **Acción:** Prioriza esta combinación""")
-                    
-                    st.error(f"""⚠️ **PEOR Combinación:** Operar durante **{worst['Sesión_Trading']}** en niveles de **{worst['Nivel_Origen']}**
-→ Pérdida: ${worst['PnL_Total']:,.0f} en {int(worst['Trades'])} trades
-→ **Acción:** Considera BLOQUEAR esta combinación en tu estrategia""")
-                    
-                    # Table summary
-                    st.markdown("### 📊 Resumen Completo")
-                    st.dataframe(combo_stats.sort_values('PnL_Total', ascending=False).style.format({
-                        'PnL_Total': '${:,.0f}',
-                        'PnL_Promedio': '${:.2f}'
-                    }), use_container_width=True)
-                    
-                    # AI Analysis for Interaction Matrix
-                    if 'combo_stats' in locals() and not combo_stats.empty:
-                        best_combo = f"{combo_stats.iloc[0]['Sesión_Trading']} atacando {combo_stats.iloc[0]['Nivel_Origen']}"
-                        best_combo_pnl = combo_stats.iloc[0]['PnL_Total']
-                        worst_combo = f"{combo_stats.iloc[-1]['Sesión_Trading']} atacando {combo_stats.iloc[-1]['Nivel_Origen']}"
-                        worst_combo_pnl = combo_stats.iloc[-1]['PnL_Total']
-                        
-                        show_ai_analysis(
-                            chart_name="Matriz de Interacción",
-                            chart_type="interaction_matrix",
-                            data={
-                                "best_combo": best_combo,
-                                "best_pnl": best_combo_pnl,
-                                "worst_combo": worst_combo,
-                                "worst_pnl": worst_combo_pnl
-                            },
-                            key_suffix="tab8_matrix"
-                        )
-                    
-                    # v2.2.2: GRANULAR ANALYSIS BY DIRECTION (Long vs Short)
-                    st.markdown("---")
-                    st.subheader("🎯 Análisis por Dirección (Long vs Short)")
-                    st.caption("⚡ La misma combinación puede ser rentable en LONG pero tóxica en SHORT (o viceversa)")
-                    
-                    # Group by Attacker, Defender AND Type (Long/Short)
-                    direction_stats = matrix_df.groupby(['Aggressor', 'Session', 'Type']).agg({
-                        'PnL': ['sum', 'count', 'mean']
-                    }).reset_index()
-                    direction_stats.columns = ['Sesión_Trading', 'Nivel_Origen', 'Dirección', 'PnL_Total', 'Trades', 'PnL_Promedio']
-                    direction_stats = direction_stats.sort_values('PnL_Total', ascending=False)
-                    
-                    # Color-coded table
-                    def color_pnl(val):
-                        if isinstance(val, (int, float)):
-                            return 'color: #00FF00' if val >= 0 else 'color: #FF4444'
-                        return ''
-                    
-                    st.dataframe(direction_stats.style.format({
-                        'PnL_Total': '${:,.0f}',
-                        'PnL_Promedio': '${:.2f}'
-                    }).applymap(color_pnl, subset=['PnL_Total', 'PnL_Promedio']), use_container_width=True)
-                    
-                    # Find best/worst by direction
-                    best_long = direction_stats[direction_stats['Dirección'] == 'Long'].head(1)
-                    worst_long = direction_stats[direction_stats['Dirección'] == 'Long'].tail(1)
-                    best_short = direction_stats[direction_stats['Dirección'] == 'Short'].head(1)
-                    worst_short = direction_stats[direction_stats['Dirección'] == 'Short'].tail(1)
-                    
-                    col_dir1, col_dir2 = st.columns(2)
-                    with col_dir1:
-                        st.markdown("**📈 LONGS - Recomendaciones**")
-                        if not best_long.empty:
-                            b = best_long.iloc[0]
-                            st.success(f"✅ Operar LONG durante {b['Sesión_Trading']} en niveles {b['Nivel_Origen']}: ${b['PnL_Total']:,.0f}")
-                        if not worst_long.empty:
-                            w = worst_long.iloc[0]
-                            if w['PnL_Total'] < 0:
-                                st.error(f"❌ EVITAR LONG durante {w['Sesión_Trading']} en niveles {w['Nivel_Origen']}: ${w['PnL_Total']:,.0f}")
-                    
-                    with col_dir2:
-                        st.markdown("**📉 SHORTS - Recomendaciones**")
-                        if not best_short.empty:
-                            b = best_short.iloc[0]
-                            st.success(f"✅ Operar SHORT durante {b['Sesión_Trading']} en niveles {b['Nivel_Origen']}: ${b['PnL_Total']:,.0f}")
-                        if not worst_short.empty:
-                            w = worst_short.iloc[0]
-                            if w['PnL_Total'] < 0:
-                                st.error(f"❌ EVITAR SHORT durante {w['Sesión_Trading']} en niveles {w['Nivel_Origen']}: ${w['PnL_Total']:,.0f}")
-                    
-                except Exception as e:
-                    st.warning(f"Error generando insights: {e}")
-            else:
-                st.info("No hay suficientes datos de zonas para generar la matriz.")
-
-            # ================================================================
-            # SECTION 5: TOXIC COMBINATION FILTERS
-            # ================================================================
-            st.markdown("---")
-            st.subheader("🔥 Filtro de Combinaciones Tóxicas")
-            st.caption("Identifica patrones multi-variables que generan pérdidas sistemáticas")
-            
-            # Create comprehensive combination table
-            filter_df = level_df.copy()
-            filter_df['Hour_Bracket'] = pd.to_datetime(filter_df['EntryTime']).dt.hour.apply(
-                lambda x: f"{x}:00-{x+1}:00"
-            )
-            
-            # Group by Zone + Direction + Hour
-            combo_analysis = filter_df.groupby(['Zone', 'Type', 'Hour_Bracket']).agg({
-                'PnL': ['sum', 'count', 'mean'],
-                'Result': lambda x: (x.str.contains('TP', na=False)).sum()
-            }).round(2)
-            
-            combo_analysis.columns = ['Total_PnL', 'Trades', 'Avg_PnL', 'Wins']
-            combo_analysis['Win_Rate'] = (combo_analysis['Wins'] / combo_analysis['Trades'] * 100).round(1)
-            combo_analysis = combo_analysis.reset_index()
-            
-            # Sort by worst performers
-            combo_analysis = combo_analysis.sort_values('Total_PnL')
-            
-            # Show top toxic combinations
-            toxic_combos = combo_analysis[combo_analysis['Total_PnL'] < 0].head(10)
-            
-            if not toxic_combos.empty:
-                st.dataframe(
-                    toxic_combos.style.format({
-                        'Total_PnL': '${:,.0f}',
-                        'Avg_PnL': '${:.0f}',
-                        'Win_Rate': '{:.1f}%'
-                    }).background_gradient(cmap='Reds', subset=['Total_PnL', 'Win_Rate']),
-                    use_container_width=True
-                )
-                
-                # Auto-generated Insights (Section 5)
-                if not toxic_combos.empty:
-                    worst_combo = toxic_combos.iloc[0]
-                    insight_s5 = f"""
-🧠 **Insight de Experto Quant: Filtros Multi-Variable**
-
-**🔴 Peor Patron:** {worst_combo['Zone']} {worst_combo['Type']} durante {worst_combo['Hour_Bracket']}
-- Pérdida Total: ${worst_combo['Total_PnL']:,.0f} en {int(worst_combo['Trades'])} trades
-- Win Rate: {worst_combo['Win_Rate']:.1f}%
-
-**Código Sugerido (C#):**
-```csharp
-// En tu método de validación de entrada:
-if (setupZone == "{worst_combo['Zone'].split()[0]}" && 
-    entryDirection == Position.{worst_combo['Type']} && 
-    Time[0].Hour >= {worst_combo['Hour_Bracket'].split(':')[0]} && 
-    Time[0].Hour < {int(worst_combo['Hour_Bracket'].split(':')[0]) + 1})
-{{
-    Print("Filtro Tóxico activado - Trade cancelado");
-    return;
-}}
-```
-
-**Impacto Estimado:** Eliminar estos {int(toxic_combos.head(3)['Trades'].sum())} trades tóxicos mejoraría tu PnL en ${abs(toxic_combos.head(3)['Total_PnL'].sum()):,.0f}
-                    """
-                    st.info(insight_s5)
-                else:
-                    st.success("✅ **Limpio:** No se encontraron patrones multi-variable tóxicos.")
-                
-                # Prepare clean data for AI (Section 5)
-                ai_toxic_summary = "Análisis de Combinaciones Tóxicas (Zona+Dirección+Hora):\n\n"
-                ai_toxic_summary += "REGLA: Combos con <5 trades = ruido. Combos con >10 trades y PnL muy negativo = SISTEMÁTICO (filtrar).\n\n"
-                
-                if not toxic_combos.empty:
-                    ai_toxic_summary += f"TOP {min(len(toxic_combos), 10)} PEORES COMBINACIONES:\n\n"
-                    for idx, row in toxic_combos.head(10).iterrows():
-                        zone = row['Zone']
-                        direction = row['Type']
-                        hour = row['Hour_Bracket']
-                        pnl = row['Total_PnL']
-                        trades = int(row['Trades'])
-                        wr = row['Win_Rate']
-                        
-                        verdict = "⚠️ RUIDO" if trades < 5 else ("🔴 TÓXICO SISTEMÁTICO" if trades >= 10 else "⚠️ MONITOREAR")
-                        
-                        ai_toxic_summary += f"{idx+1}. {zone} {direction} {hour}\n"
-                        ai_toxic_summary += f"   PnL: ${pnl:,.0f}, Trades: {trades}, WR: {wr:.1f}% ({verdict})\n\n"
-                    
-                    # Pattern analysis
-                    ai_toxic_summary += "\nPATRONES DETECTADOS:\n"
-                    zone_counts = toxic_combos['Zone'].value_counts()
-                    hour_counts = toxic_combos['Hour_Bracket'].value_counts()
-                    
-                    if not zone_counts.empty:
-                        ai_toxic_summary += f"- Zona más problemática: {zone_counts.index[0]} ({zone_counts.iloc[0]} combos tóxicos)\n"
-                    if not hour_counts.empty:
-                        ai_toxic_summary += f"- Hora más problemática: {hour_counts.index[0]} ({hour_counts.iloc[0]} combos tóxicos)\n"
-                    
-                    total_impact = abs(toxic_combos.head(5)['Total_PnL'].sum())
-                    ai_toxic_summary += f"\nIMPACTO: Filtrar top 5 combos mejoraría PnL en ${total_impact:,.0f}\n"
-                else:
-                    ai_toxic_summary += "✅ No se detectaron combinaciones multi-variable tóxicas.\n"
-                
-                # AI Analysis Button (Premium)
-                show_ai_analysis(
-                    chart_name="Combinaciones Tóxicas",
-                    chart_type="toxic_combinations",
-                    data={"toxic_combos": ai_toxic_summary},
-                    key_suffix="tab8_section5"
-                )
-                
-            else:
-                st.success("✅ No se detectaron combinaciones tóxicas significativas")
-
-            # ================================================================
-            # SECTION 6: ACTIONABLE RECOMMENDATIONS
-            # ================================================================
-            st.markdown("---")
-            st.subheader("✅ Recomendaciones Accionables para Código")
-            
-            avoid_list = []
-            prioritize_list = []
-            
-            # Analyze zone performance
-            for zone in zone_metrics.index:
-                zone_data = zone_metrics.loc[zone]
-                
-                # Toxic zones (WR < 40% and negative PnL)
-                if zone_data['Win_Rate'] < 40 and zone_data['Total_PnL'] < 0:
-                    avoid_list.append(f"🚫 **{zone}**: WR {zone_data['Win_Rate']:.1f}%, PnL ${zone_data['Total_PnL']:.0f}")
-                
-                # Premium zones (WR > 60% and positive PnL)
-                elif zone_data['Win_Rate'] > 60 and zone_data['Total_PnL'] > 500:
-                    prioritize_list.append(f"✅ **{zone}**: WR {zone_data['Win_Rate']:.1f}%, PnL ${zone_data['Total_PnL']:.0f}, R:R {zone_data['RR']:.2f}")
-            
-            # Add directional insights
-            if 'dir_matrix' in locals():
-                for direction in ['Long', 'Short']:
-                    wr_col = f'WR_{direction}'
-                    pnl_col = f'sum_{direction}'
-                    
-                    if wr_col in dir_matrix.columns and pnl_col in dir_matrix.columns:
-                        for zone in dir_matrix.index:
-                            wr = dir_matrix.loc[zone, wr_col]
-                            pnl = dir_matrix.loc[zone, pnl_col]
-                            
-                            if pd.notna(wr) and pd.notna(pnl):
-                                if wr < 30 and pnl < -200:
-                                    avoid_list.append(f"🚫 **{zone} {direction}**: WR {wr:.1f}%, Pérdida ${pnl:.0f}")
-            
-            col_rec1, col_rec2 = st.columns(2)
-            
-            with col_rec1:
-                st.markdown("### 🚫 EVITAR (Filtros Sugeridos)")
-                if avoid_list:
-                    for item in avoid_list[:5]:  # Top 5
-                        st.markdown(item)
-                else:
-                    st.success("✅ No hay patrones tóxicos claros para filtrar")
-            
-            with col_rec2:
-                st.markdown("### ✅ PRIORIZAR (Edges Confirmados)")
-                if prioritize_list:
-                    for item in prioritize_list[:5]:  # Top 5
-                        st.markdown(item)
-                else:
-                    st.info("ℹ️ Ejecuta más trades para identificar edges claros")
-
-    # -------------------------------------------------------------------------
-    # TAB 9: LIVE vs BACKTEST (Reality Check)
-    # -------------------------------------------------------------------------
-    with tab9:
         st.header("🆚 Realidad (Live) vs Expectativa (Backtest)")
         
         # 1. Load Backtest Data (Benchmark)
@@ -3715,166 +5340,207 @@ if (setupZone == "{worst_combo['Zone'].split()[0]}" &&
 
         except Exception as e:
             st.error(f"Error en comparación Reality Check: {e}")
+
+
+# ========================================================================================
+# TAB 9: TRAILING STOP LABORATORY (v2.25)
+# ========================================================================================
+
+with tab9:
+    st.markdown("##  Laboratorio de Trailing Stop")
+    st.markdown("Análisis comparativo de estrategias de trailing stop para optimizar TP2")
     
-    # =========================================================================
-    # TAB 10: EXECUTIVE REPORT IA
-    # =========================================================================
-    with tab10:
-        st.title("🎯 Reporte Ejecutivo IA")
-        st.caption("Compilación estratégica de todos los análisis con recomendaciones accionables")
+    # Filter TP2 trades that exited via SL
+    if 'ExitReason' in df.columns and 'MFE' in df.columns:
+        tp2_sl_trades = df[
+            (df['ExitReason'].str.contains('SL_', na=False)) &
+            (df['MFE'] > 0)  # Only trades that had favorable excursion
+        ].copy()
         
-        # Auto-generate report on first load or if data changed
-        if 'executive_report' not in st.session_state or st.button("🔄 Regenerar Reporte", key="regen_exec_report"):
-            with st.spinner("📊 Compilando análisis global..."):
-                try:
-                    # Generate the report (returns tuple: report_text, r_df, scaling_df)
-                    report_text, r_df, scaling_df = generate_executive_report(df)
-                    st.session_state['executive_report'] = report_text
-                    st.session_state['r_ladder_df'] = r_df  # Store R-Ladder DataFrame
-                    st.session_state['scaling_df'] = scaling_df  # Store Scaling Comparison DataFrame
-                    st.session_state['report_timestamp'] = datetime.now().strftime('%Y-%m-%d %H:%M')
-                except Exception as e:
-                    st.error(f"Error generando reporte: {e}")
-                    st.session_state['executive_report'] = None
-                    st.session_state['r_ladder_df'] = None
-                    st.session_state['scaling_df'] = None
-        
-        # Show report if exists
-        if 'executive_report' in st.session_state and st.session_state['executive_report']:
-            # Header with export button
-            col_header1, col_header2 = st.columns([4, 1])
-            
-            with col_header1:
-                st.success(f"✅ Reporte generado: {st.session_state.get('report_timestamp', 'N/A')}")
-            
-            with col_header2:
-                # Export button
-                st.download_button(
-                    label="📥 Exportar",
-                    data=st.session_state['executive_report'],
-                    file_name=f"executive_report_{datetime.now().strftime('%Y%m%d_%H%M')}.txt",
-                    mime="text/plain",
-                    key="download_exec_report"
-                )
-            
-            st.markdown("---")
-            
-            # Display report in monospace font for better formatting
-            st.markdown(f"```\n{st.session_state['executive_report']}\n```")
-            
-            # NEW: R-Ladder Visualization
-            if 'r_ladder_df' in st.session_state and st.session_state['r_ladder_df'] is not None:
-                st.markdown("---")
-                st.subheader("📊 Visualización R-Ladder")
-                st.caption("Análisis interactivo de niveles R alcanzados")
-                
-                fig_r_ladder = plot_r_ladder_chart(st.session_state['r_ladder_df'])
-                if fig_r_ladder:
-                    st.plotly_chart(fig_r_ladder, use_container_width=True)
-                    
-                    # AI Analysis for R-Ladder
-                    r_df = st.session_state['r_ladder_df']
-                    
-                    # Helper to safe get value
-                    def get_r_val(r_str, col):
-                        row = r_df[r_df['R_Level'] == r_str]
-                        return row[col].values[0] if not row.empty else 0
-                    
-                    show_ai_analysis(
-                        chart_name="Potencial de Runners (R-Ladder)",
-                        chart_type="r_ladder",
-                        data={
-                            "reached_1r": get_r_val('1R', 'Percent_Reached'),
-                            "reached_5r": get_r_val('5R', 'Percent_Reached'),
-                            "reached_10r": get_r_val('10R', 'Percent_Reached'),
-                            "reached_20r": get_r_val('20R', 'Percent_Reached'),
-                            "pnl_5r": get_r_val('5R', 'Cumulative_PnL'),
-                            "pnl_10r": get_r_val('10R', 'Cumulative_PnL'),
-                            "pnl_20r": get_r_val('20R', 'Cumulative_PnL')
-                        },
-                        key_suffix="tab10_rladder"
-                    )
-                
-                # Show detailed table in expander
-                with st.expander("📋 Ver Tabla Detallada R-Ladder"):
-                    st.dataframe(
-                        st.session_state['r_ladder_df'][['R_Level', 'Trades_Reached', 'Percent_Reached', 'Potential_PnL', 'Cumulative_PnL']],
-                        use_container_width=True,
-                        hide_index=True
-                    )
-            
-            # Optional: AI analysis of the full report
-            analyzer = get_analyzer()
-            if analyzer:
-                st.markdown("---")
-                if st.button("🤖  Análisis IA Profundo del Reporte", key="ai_full_report"):
-                    with st.spinner("Analizando reporte completo con IA..."):
-                        try:
-                            # For full report, we'll use a specific prompt
-                            prompt = f"""Eres un experto trader cuantitativo. Analiza este reporte ejecutivo completo y provee:
-1. Validación de las conclusiones
-2. Insights adicionales no mencionados
-3. Sugerencias de optimización avanzadas
-4. Advertencias sobre posibles sesgos en los datos
-
-REPORTE:
-{st.session_state['executive_report']}
-"""
-                            response = analyzer.model_full.generate_content(prompt)
-                            
-                            # TRACK COST & USAGE
-                            usage = response.usage_metadata
-                            if usage:
-                                # Gemini 1.5 Pro Pricing: $1.25/1M input, $5.00/1M output
-                                input_cost = (usage.prompt_token_count / 1_000_000) * 1.25
-                                output_cost = (usage.candidates_token_count / 1_000_000) * 5.00
-                                total_cost = input_cost + output_cost
-                                
-                                # Update Session State & Persistence
-                                if 'ai_usage_stats' not in st.session_state:
-                                    st.session_state.ai_usage_stats = {'cost': 0.0, 'tokens': 0}
-                                
-                                st.session_state.ai_usage_stats['cost'] += total_cost
-                                st.session_state.ai_usage_stats['tokens'] += usage.total_token_count
-                                
-                                update_usage_history(total_cost, usage.total_token_count)
-                                
-                                # Display Cost Widget
-                                st.caption(f"💰 Costo: ${total_cost:.4f} | Tokens: {usage.total_token_count} (Modelo: Gemini Pro)")
-
-                            st.markdown("### 🤖 Análisis IA Profundo:")
-                            st.markdown(response.text)
-                        except Exception as e:
-                            st.warning(f"Error en análisis IA: {e}")
-
-            st.markdown("---")
-            st.subheader("⚙️ Configuración Automática para NinjaTrader")
-            st.caption("Guarda estos ajustes para que la Estrategia los cargue automáticamente (requiere activar 'Auto Load AI Config' en NinjaTrader).")
-            
-            with st.form("ai_config_form"):
-                col_cfg1, col_cfg2 = st.columns(2)
-                with col_cfg1:
-                    zones_input = st.text_area("Zonas Habilitadas (Separadas por comas, Ej: Asia High, USA Low)", value="", help="Deja vacío para habilitar todas.")
-                with col_cfg2:
-                    max_age_input = st.number_input("Edad Máxima Niveles (Días)", min_value=0, max_value=365, value=0, help="0 = Sin límite")
-                
-                submitted = st.form_submit_button("💾 Guardar Archivo ai_config.json")
-                
-                if submitted:
-                    import json
-                    config_data = {
-                        "enabled_zones": [z.strip() for z in zones_input.split(',') if z.strip()],
-                        "max_age": int(max_age_input),
-                        "generated_at": datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                    }
-                    
-                    try:
-                        with open("ai_config.json", "w") as f:
-                            json.dump(config_data, f, indent=4)
-                        st.success("✅ Archivo ai_config.json guardado exitosamente! NinjaTrader lo leerá al reiniciar la estrategia.")
-                        st.code(json.dumps(config_data, indent=4), language="json")
-                    except Exception as e:
-                        st.error(f"Error guardando archivo: {e}")
+        if len(tp2_sl_trades) == 0:
+            st.warning(" No hay trades de TP2 que salieron por SL con MFE positivo para analizar.")
         else:
-            st.info("⏳ Generando reporte automáticamente...")
+            st.success(f" {len(tp2_sl_trades)} trades encontrados para análisis")
+            
+            # Configuration
+            with st.expander(" Configuración de Métodos", expanded=True):
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    st.markdown("**Métodos Activos**")
+                    use_porcentual = st.checkbox("Trailing Porcentual", value=True)
+                    use_retroceso = st.checkbox("Trailing Retroceso", value=True)
+                    use_escalones = st.checkbox("Trailing Escalones", value=False)
+                
+                with col2:
+                    st.markdown("**Parámetros**")
+                    if use_porcentual:
+                        pct = st.slider("Porcentaje a mantener", 30, 70, 50, 5)
+                    if use_retroceso:
+                        activation = st.slider("Activación (ticks)", 10, 30, 15, 5)
+                        retrace = st.slider("Retroceso (ticks)", 5, 15, 10, 1)
+                    
+                    initial_sl = st.number_input("SL Inicial (ticks)", 8, 20, 12)
+            
+            if st.button(" Ejecutar Simulación", type="primary"):
+                results = []
+                
+                for idx, trade in tp2_sl_trades.iterrows():
+                    entry = trade.get('EntryPrice', 0)
+                    exit_p = trade.get('ExitPrice', 0)
+                    mfe = trade.get('MFE', 0)
+                    mae = trade.get('MAE', 0)
+                    direction = trade.get('Type', 'Long')
+                    actual_pnl = trade.get('PnL', 0)
+                    
+                    # Reconstruct price path
+                    try:
+                        path = reconstruct_price_path(entry, mfe, mae, exit_p, direction)
+                        
+                        trail_results = {'TradeID': idx, 'Actual_PnL': actual_pnl, 'Direction': direction}
+                        
+                        # Simulate each method
+                        if use_porcentual:
+                            exit_price, reason = simulate_trailing_porcentual(entry, path, direction, pct, initial_sl)
+                            pnl = calculate_pnl(entry, exit_price, direction)
+                            trail_results['Porcentual_PnL'] = pnl
+                            trail_results[f'Porcentual_Improvement'] = pnl - actual_pnl
+                        
+                        if use_retroceso:
+                            exit_price, reason = simulate_trailing_retroceso(entry, path, direction, activation, retrace, initial_sl)
+                            pnl = calculate_pnl(entry, exit_price, direction)
+                            trail_results['Retroceso_PnL'] = pnl
+                            trail_results['Retroceso_Improvement'] = pnl - actual_pnl
+                        
+                        results.append(trail_results)
+                    except Exception as e:
+                        continue
+                
+                if results:
+                    results_df = pd.DataFrame(results)
+                    
+                    # Summary Table
+                    st.markdown("###  Resultados Comparativos")
+                    
+                    summary_data = []
+                    # Baseline (actual)
+                    summary_data.append({
+                        'Método': 'Sin Trailing (Actual)',
+                        'Trades': len(results_df),
+                        'PnL Total': f"${results_df['Actual_PnL'].sum():.2f}",
+                        'PnL Promedio': f"${results_df['Actual_PnL'].mean():.2f}",
+                        'Win Rate': f"{(results_df['Actual_PnL'] > 0).mean() * 100:.1f}%",
+                        'Mejora': '-'
+                    })
+                    
+                    if use_porcentual:
+                        pnl_total = results_df['Porcentual_PnL'].sum()
+                        improvement = ((pnl_total / results_df['Actual_PnL'].sum()) - 1) * 100
+                        summary_data.append({
+                            'Método': f'Trailing Porcentual {pct}%',
+                            'Trades': len(results_df),
+                            'PnL Total': f"${results_df['Porcentual_PnL'].sum():.2f}",
+                            'PnL Promedio': f"${results_df['Porcentual_PnL'].mean():.2f}",
+                            'Win Rate': f"{(results_df['Porcentual_PnL'] > 0).mean() * 100:.1f}%",
+                            'Mejora': f"+{improvement:.1f}%" if improvement > 0 else f"{improvement:.1f}%"
+                        })
+                    
+                    if use_retroceso:
+                        pnl_total = results_df['Retroceso_PnL'].sum()
+                        improvement = ((pnl_total / results_df['Actual_PnL'].sum()) - 1) * 100
+                        summary_data.append({
+                            'Método': f'Trailing Retroceso {activation}t/{retrace}t',
+                            'Trades': len(results_df),
+                            'PnL Total': f"${results_df['Retroceso_PnL'].sum():.2f}",
+                            'PnL Promedio': f"${results_df['Retroceso_PnL'].mean():.2f}",
+                            'Win Rate': f"{(results_df['Retroceso_PnL'] > 0).mean() * 100:.1f}%",
+                            'Mejora': f"+{improvement:.1f}%" if improvement > 0 else f"{improvement:.1f}%"
+                        })
+                    
+                    summary_df = pd.DataFrame(summary_data)
+                    st.dataframe(summary_df, use_container_width=True)
+                    
+                    # Detailed results
+                    with st.expander(" Resultados Detallados por Trade"):
+                        st.dataframe(results_df, use_container_width=True)
+                    
+                    #Recommendation
+                    st.markdown("###  Recomendación")
+                    best_method = summary_df.iloc[1:]['PnL Total'].str.replace(r'\$', '', regex=True).str.replace(',', '').astype(float).idxmax()
+                    best_row = summary_df.iloc[best_method + 1]
+                    st.success(f"**Mejor Método:** {best_row['Método']} con mejora de {best_row['Mejora']}")
+                    
 
+                    
+                    # Visualizations
+                    st.markdown("###  Visualizaciones Comparativas")
+                    
+                    col1, col2 = st.columns(2)
+                    
+                    with col1:
+                        # Equity Curve Comparison
+                        st.markdown("**Curva de Equidad Acumulada**")
+                        equity_data = []
+                        
+                        # Actual
+                        equity_data.append({
+                            'Método': 'Actual',
+                            'Trade': list(range(1, len(results_df) + 1)),
+                            'Equity': results_df['Actual_PnL'].cumsum().tolist()
+                        })
+                        
+                        if use_porcentual:
+                            equity_data.append({
+                                'Método': f'Porcentual {pct}%',
+                                'Trade': list(range(1, len(results_df) + 1)),
+                                'Equity': results_df['Porcentual_PnL'].cumsum().tolist()
+                            })
+                        
+                        if use_retroceso:
+                            equity_data.append({
+                                'Método': f'Retroceso {activation}t/{retrace}t',
+                                'Trade': list(range(1, len(results_df) + 1)),
+                                'Equity': results_df['Retroceso_PnL'].cumsum().tolist()
+                            })
+                        
+                        # Create equity DataFrame
+                        equity_rows = []
+                        for method_data in equity_data:
+                            for i, (trade_num, equity_val) in enumerate(zip(method_data['Trade'], method_data['Equity'])):
+                                equity_rows.append({
+                                    'Método': method_data['Método'],
+                                    'Trade': trade_num,
+                                    'Equity': equity_val
+                                })
+                        
+                        equity_df = pd.DataFrame(equity_rows)
+                        fig_equity = px.line(equity_df, x='Trade', y='Equity', color='Método',
+                                           title='Comparación de Equidad Acumulada',
+                                           labels={'Equity': 'PnL Acumulado ($)', 'Trade': 'Trade #'})
+                        fig_equity.update_layout(height=400)
+                        st.plotly_chart(fig_equity, use_container_width=True)
+                    
+                    with col2:
+                        # Box Plot - PnL Distribution
+                        st.markdown("**Distribución de PnL por Método**")
+                        box_data = []
+                        
+                        for idx, row in results_df.iterrows():
+                            box_data.append({'Método': 'Actual', 'PnL': row['Actual_PnL']})
+                            if use_porcentual:
+                                box_data.append({'Método': f'Porcentual {pct}%', 'PnL': row['Porcentual_PnL']})
+                            if use_retroceso:
+                                box_data.append({'Método': f'Retroceso {activation}t/{retrace}t', 'PnL': row['Retroceso_PnL']})
+                        
+                        box_df = pd.DataFrame(box_data)
+                        fig_box = px.box(box_df, x='Método', y='PnL', 
+                                        title='Distribución de Resultados',
+                                        labels={'PnL': 'PnL ($)'})
+                        fig_box.update_layout(height=400)
+                        st.plotly_chart(fig_box, use_container_width=True)
+
+                else:
+                    st.error("No se pudieron simular los trades. Verifica que tu CSV tiene las columnas necesarias.")
+    else:
+        st.warning(" El CSV no contiene las columnas necesarias (ExitReason, MFE) para este análisis.")
+                    

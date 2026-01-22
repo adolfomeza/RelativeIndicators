@@ -68,7 +68,15 @@ namespace NinjaTrader.NinjaScript.Strategies
         public bool JustReset;
         
         // v1.10.25: Retry tracking
+        // v1.10.25: Retry tracking
         public int EntryAttempts = 0;
+
+        // v1.15.54: Delta Scoring Data
+        public double DeltaAtFormation; // DeltaClose[0] when level formed
+        public double DeltaHigh;        // DeltaHigh[0]
+        public double DeltaLow;         // DeltaLow[0]
+        public double DeltaAtSwingStart; // Representing Phase 1 Push
+        public bool AbsorptionDetected;
     }
 
     // GLOBAL ETH SESSION VWAP LOGIC
@@ -104,5 +112,12 @@ namespace NinjaTrader.NinjaScript.Strategies
         public double PvSum;
         public string Tag;
         // Color is not serialized easily, we infer it from Name or defaults.
+        
+        // v1.15.54: Delta Scoring Persistence
+        public double DeltaAtFormation;
+        public double DeltaHigh;
+        public double DeltaLow;
+        public double DeltaAtSwingStart;
+        public bool AbsorptionDetected;
     }
 }

@@ -30,6 +30,27 @@ namespace NinjaTrader.NinjaScript.Strategies
             }
         }
 
+        // v1.15.48: Clear cache files for Playback/Backtest to ensure clean EntryAttempts
+        public void ClearCache()
+        {
+            try
+            {
+                if (Directory.Exists(cachePath))
+                {
+                    var files = Directory.GetFiles(cachePath, "*.xml");
+                    foreach (var file in files)
+                    {
+                        File.Delete(file);
+                    }
+                    strategy.Log($"[PLAYBACK] Cleared {files.Length} persistence cache files for clean testing");
+                }
+            }
+            catch (Exception ex)
+            {
+                strategy.Log($"[PERSISTENCE ERROR] ClearCache failed: {ex.Message}");
+            }
+        }
+
         private string GetFilePath(string instrumentName)
         {
             // File: levels_Instrument_YYYYMMDD.xml

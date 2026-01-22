@@ -1,0 +1,40 @@
+{
+    "generated_at": "2026-01-19 15:54:55",
+    "enabled_zones": [
+        "Asia High",
+        "Asia Low",
+        "Europe High",
+        "USA High",
+        "USA Low"
+    ],
+    "enabled_instruments": [
+        "MNQ"
+    ],
+    "enabled_hours": [
+        1,
+        4,
+        5,
+        7,
+        8,
+        10,
+        12,
+        13,
+        16,
+        17,
+        19,
+        21,
+        22
+    ],
+    "enabled_days": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Sunday"
+    ],
+    "max_age": 6,
+    "min_attempt": 1,
+    "max_retries": 8,
+    "optimization_mode": "global"
+}

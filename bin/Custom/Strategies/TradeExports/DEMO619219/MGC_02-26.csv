@@ -1,1 +1,2 @@
 ID,Instrument,EntryTime,Type,EntryPrice,ExitTime,ExitPrice,Result,PnL,Commission,NetPnL,MAE,MFE,Setup,Attempt,RiskReward,DeltaAtEntry,DeltaDirection,SessionDelta,DeltaAtTP1
+20260116_1,MGC 02-26,2026-01-16 09:25:02,Long,4592.4,2026-01-16 09:29:16,4586.1,SL_Long_01,-126.00,4.80,-130.80,-108.00,102.00,Asia Low,1,-1.00,-4245,-1,-4245,0,1,2,363062133654_1

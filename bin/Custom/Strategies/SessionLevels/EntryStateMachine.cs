@@ -95,7 +95,15 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
             {
                 // FILTER: Ignorar niveles AI bloqueados
                 if (!strategy.IsZoneEnabled(lvl.Name, lvl.StartTime))
+                {
+                    // v1.15.44: Track ignored entry for panel
+                    if (lvl.IsMitigated && lvl.MitigationTime == strategy.Time[0])
+                    {
+                        string direction = lvl.IsResistance ? "SHORT" : "LONG";
+                        strategy.TrackIgnoredEntry(direction, lvl.Name, lvl.Price, "Zona deshabilitada");
+                    }
                     continue;
+                }
 
                 // BACKTEST SAFETY: Ignore Future Levels
                 if (lvl.StartTime > strategy.Time[0]) continue;
@@ -140,6 +148,14 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
                 // v1.10.25: Check if max retries exceeded
                 if (lvl.EntryAttempts >= strategy.MaxRetriesPerLevel)
                 {
+                    // v1.15.44: Track ignored entry for panel
+                    if (lvl.IsMitigated && lvl.MitigationTime == strategy.Time[0])
+                    {
+                        string direction = lvl.IsResistance ? "SHORT" : "LONG";
+                        strategy.TrackIgnoredEntry(direction, lvl.Name, lvl.Price, 
+                            string.Format("Intentos agotados ({0}/{1})", lvl.EntryAttempts, strategy.MaxRetriesPerLevel));
+                    }
+                    
                     // v1.14.80: Debug Log to explain why opportunities are "ignored"
                     if (strategy.EnableDebugLogs && strategy.IsFirstTickOfBar)
                          strategy.Log(string.Format("SCAN IGNORE: Level {0} Max Retries Reached ({1}/{2})", lvl.Name, lvl.EntryAttempts, strategy.MaxRetriesPerLevel));
@@ -210,10 +226,13 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
                     strategy.Log(strategy.Time[0] + " SWITCH: New Trigger on " + lvl.Name + " overrides " + strategy.setupLevelName);
                 }
             }
-                
+
             // TRIGGER CONFIRMED -> Initialize Setup
             if (!lvl.IsResistance)
             {
+                // v1.15.42: Cleanup previous Adhoc Lines before starting new setup
+                strategy.ClearAdhocVisuals();
+
                 // Long Setup
                 // v1.14.80: Recycle Tags to prevent Drawing Object Accumulation Leak
                 strategy.triggerTag = "TriggerLong_" + (strategy.triggerLabelIndex % 50);
@@ -228,7 +247,8 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
                 strategy.setupAnchorPrice = strategy.Low[0];
                 strategy.setupLevelName = lvl.Name;
                 strategy.setupLevelTime = lvl.StartTime;
-                strategy.validatedTargetPrice = 0;
+                strategy.validatedTp1Price = 0; // v1.15.26: Split from validatedTargetPrice
+                strategy.validatedTp2Price = 0; // v1.15.26: Split from validatedTargetPrice
                 strategy.cachedOppositeLevel = null;
                 
                 // Reset retry state
@@ -236,9 +256,14 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
                 strategy.currentVwapNumber = 1;
                 strategy.vwapCandleExtreme = 0;
                 
-                lvl.EntryAttempts++;
-                strategy.Log(string.Format("{0} ENTRY ATTEMPT #{1}/{2} on {3} (Deepest Selection)", strategy.Time[0], lvl.EntryAttempts, strategy.MaxRetriesPerLevel, lvl.Name));
-				strategy.currentLevelAttempts = lvl.EntryAttempts; // v1.15.15: Store for persistent display
+                // v1.15.48: EntryAttempts++ moved to OnExecutionUpdate (only increment on actual trade fill)
+                
+                // v1.15.36: TRADE SECTION START (from trigger, not from fill)
+                strategy.Log("==========================================================================================");
+                strategy.Log(string.Format("   TRIGGER: {0} @ {1} (Deepest Selection)", lvl.Name, lvl.Price));
+                strategy.Log("==========================================================================================");
+                
+                strategy.Log(string.Format("{0} LEVEL TRIGGERED: {1} (Deepest Selection)", strategy.Time[0], lvl.Name));
                 
                 strategy.DetectInternalLevel(lvl, strategy.activeLevels);
                 
@@ -249,6 +274,7 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
                 else if (strategy.VwapMethod == VwapCalculationMode.OHLC4) 
                     price = (strategy.Open[0] + strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 4.0;
 
+                strategy.ClearAdhocVisuals(); // v1.15.42: Cleanup old lines
                 strategy.adhocVolSum = strategy.Volume[0];
                 strategy.adhocPvSum = strategy.Volume[0] * price;
                 strategy.adhocLastBar = strategy.CurrentBar;
@@ -275,7 +301,8 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
                 strategy.setupAnchorPrice = strategy.High[0];
                 strategy.setupLevelName = lvl.Name;
                 strategy.setupLevelTime = lvl.StartTime;
-                strategy.validatedTargetPrice = 0;
+                strategy.validatedTp1Price = 0; // v1.15.26: Split from validatedTargetPrice
+                strategy.validatedTp2Price = 0; // v1.15.26: Split from validatedTargetPrice
                 strategy.cachedOppositeLevel = null;
                 
                 // Reset retry state
@@ -283,9 +310,14 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
                 strategy.currentVwapNumber = 1;
                 strategy.vwapCandleExtreme = 0;
                 
-                lvl.EntryAttempts++;
-				strategy.currentLevelAttempts = lvl.EntryAttempts; // v1.15.15: Store for persistent display
-                strategy.Log(string.Format("{0} ENTRY ATTEMPT #{1}/{2} on {3} (Deepest Selection)", strategy.Time[0], lvl.EntryAttempts, strategy.MaxRetriesPerLevel, lvl.Name));
+                // v1.15.48: EntryAttempts++ moved to OnExecutionUpdate (only increment on actual trade fill)
+                
+                // v1.15.36: TRADE SECTION START (from trigger, not from fill)
+                strategy.Log("==========================================================================================");
+                strategy.Log(string.Format("   TRIGGER: {0} @ {1} (Deepest Selection)", lvl.Name, lvl.Price));
+                strategy.Log("==========================================================================================");
+                
+                strategy.Log(string.Format("{0} LEVEL TRIGGERED: {1} (Deepest Selection)", strategy.Time[0], lvl.Name));
                 
                 strategy.DetectInternalLevel(lvl, strategy.activeLevels);
                 
@@ -296,15 +328,8 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
                 else if (strategy.VwapMethod == VwapCalculationMode.OHLC4) 
                     price = (strategy.Open[0] + strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 4.0;
 
-                strategy.adhocVolSum = strategy.Volume[0];
-                strategy.adhocPvSum = strategy.Volume[0] * price;
-                strategy.adhocLastBar = strategy.CurrentBar;
-                strategy.adhocLastVol = strategy.Volume[0];
-                strategy.adhocAnchorBar = strategy.CurrentBar;
-
-                strategy.visualAdhocPrevBarVal = price;
-                strategy.visualAdhocLastVal = price;
-                strategy.visualAdhocLastBar = -1;
+                // v1.15.39: CRITICAL FIX - Use dedicated Reset method to clear Calculator State
+                strategy.ResetAdhocVWAP(strategy.Volume[0], price, strategy.CurrentBar);
             }
             
             // v1.14.50: Audio Alert
@@ -360,6 +385,7 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
                 else if (strategy.VwapMethod == VwapCalculationMode.OHLC4)
                     price = (strategy.Open[0] + strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 4.0;
 
+                strategy.ClearAdhocVisuals(); // v1.15.42: Cleanup old lines
                 strategy.adhocVolSum = strategy.Volume[0];
                 strategy.adhocPvSum = strategy.Volume[0] * price;
                 strategy.adhocLastBar = strategy.CurrentBar;
@@ -386,6 +412,7 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
                 else if (strategy.VwapMethod == VwapCalculationMode.OHLC4)
                     price = (strategy.Open[0] + strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 4.0;
 
+                strategy.ClearAdhocVisuals(); // v1.15.42: Cleanup old lines
                 strategy.adhocVolSum = strategy.Volume[0];
                 strategy.adhocPvSum = strategy.Volume[0] * price;
                 strategy.adhocLastBar = strategy.CurrentBar;
@@ -452,6 +479,9 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
                 strategy.currentEntryState = EntryState.Idle;
                 strategy.isInternalLevel = false;
 
+                // v1.15.42: Cleanup Adhoc Lines
+                strategy.ClearAdhocVisuals();
+
                 // v1.10.2: AUTO-TRIGGER on external level after invalidation
                 string externalName = isShortSetup ? strategy.externalLevelAboveName : strategy.externalLevelBelowName;
                 double externalPrice = isShortSetup ? strategy.externalLevelAbove : strategy.externalLevelBelow;
@@ -497,9 +527,13 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
             
             if (priceBreaksExtreme)
             {
-                strategy.Log(string.Format("{0} VWAP RETRY TRIGGERED: Price broke {1:F2}. Starting attempt #{2}", 
+                strategy.Log(string.Format("{0} VWAP RETRY TRIGGERED: Price broke {1:F2}. Starting attempt #{2}",
                     strategy.Time[0], strategy.vwapCandleExtreme, strategy.currentVwapNumber));
-                
+
+				// v1.15.50: REMOVED - EntryAttempts++ was incorrectly here (incremented on VWAP break, not trade fill)
+				// Counter now increments ONLY in OnExecutionUpdate when trade actually fills
+				// This fixes the "20/20 retries exhausted" bug when only 2 real trades occurred
+
                 // Reset to WaitingForConfirmation to re-run the entry logic
                 strategy.currentEntryState = EntryState.WaitingForConfirmation;
                 strategy.waitingForVwapMitigation = false;
@@ -533,6 +567,7 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
                 else if (strategy.VwapMethod == VwapCalculationMode.OHLC4) 
                     price = (strategy.Open[0] + strategy.High[0] + strategy.Low[0] + strategy.Close[0]) / 4.0;
                 
+                strategy.ClearAdhocVisuals(); // v1.15.42: Cleanup old lines
                 strategy.adhocVolSum = strategy.Volume[0];
                 strategy.adhocPvSum = strategy.Volume[0] * price;
                 strategy.adhocLastBar = strategy.CurrentBar;
@@ -570,8 +605,17 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
 			{
 				// Short: High[1] < Bearish VWAP (setupVWAP) - 1 Tick
 				// Confirmation Rule: The candle must stay BELOW the VWAP to confirm rejection.
-				if (strategy.isValidVWAP(setupVWAP) && strategy.High[1] < (setupVWAP - TickSize))
+				if (strategy.isValidVWAP(setupVWAP)) 
 				{
+					bool isGapValid = strategy.High[1] < (setupVWAP - TickSize);
+					if (strategy.EnableDebugLogs || strategy.CurrentBar % 5 == 0) // Reduce spam but ensure capture
+					{
+						strategy.Log(string.Format("{0} | DIAG_CONFIRM_SHORT: High[1]={1:F2} VWAP={2:F2} Threshold={3:F2} Valid={4}", 
+							strategy.Time[0], strategy.High[1], setupVWAP, (setupVWAP - TickSize), isGapValid));
+					}
+					
+					if (isGapValid)
+					{
 					// --- RISK / REWARD CHECK ---
 					double projectedEntry = setupVWAP;
 					
@@ -601,17 +645,21 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
 						// but leave validatedTargetPrice as 0 so OrderProtectionManager can try again.
 						double levelPrice = strategy.GetOppositeLevelPrice(setupLevelName, setupLevelTime, setupAnchorPrice, true);
 						double rrTarget = levelPrice;
-						
-						if (rrTarget == 0) 
+
+						if (rrTarget == 0)
 						{
 							rrTarget = strategy.GetCurrentLowVWAP();
-							// Do NOT set validatedTargetPrice here. Let it remain 0.
-							strategy.validatedTargetPrice = 0; 
+							// Do NOT set validatedTp2Price here. Let it remain 0.
+							// v1.15.26: This is opposite level price, goes to TP2
+							strategy.validatedTp1Price = 0; // TP1 always uses dynamic VWAP
+							strategy.validatedTp2Price = 0; // No opposite level found, let OrderProtectionManager try again
 						}
 						else
 						{
-							// Found a real level - lock it in
-							strategy.validatedTargetPrice = levelPrice;
+							// Found a real level - lock it in for TP2
+							// v1.15.26: This is opposite level price, goes to TP2
+							strategy.validatedTp1Price = 0; // TP1 always uses dynamic VWAP
+							strategy.validatedTp2Price = levelPrice; // TP2 uses opposite level
 						}
 
 						// EXE DEBUG & ROUNDING
@@ -660,6 +708,29 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
 						// DYNAMIC SIZING (v1.8.0)
 						int dynamicQuantity = strategy.CalculateDynamicQuantity(entryPrice, projectedStop);
 
+                        // v1.15.54: DELTA SCORING FILTER
+                        if (strategy.UseDeltaFilter)
+                        {
+                            var activeLevel = strategy.activeLevels.FirstOrDefault(l => l.Name == setupLevelName && l.StartTime == setupLevelTime);
+                            if (activeLevel != null)
+                            {
+                                double f1, f2, f3, f4;
+                                double deltaScore = strategy.CalculateDeltaScoreAdvanced(activeLevel, true /*isShort=true*/, out f1, out f2, out f3, out f4);
+                                
+                                if (deltaScore < strategy.MinDeltaScore)
+                                {
+                                    string msg = string.Format("Skipped: Low Delta Score {0} < {1} (F1={2} F2={3} F3={4} F4={5})", 
+                                        deltaScore, strategy.MinDeltaScore, f1, f2, f3, f4);
+                                    strategy.TrackIgnoredEntry("Short", setupLevelName, entryPrice, msg);
+                                    return; 
+                                }
+                                else
+                                {
+                                    strategy.Log(string.Format("DELTA SCORE PASS: {0} >= {1} (F1={2} F2={3} F3={4} F4={5})", deltaScore, strategy.MinDeltaScore, f1, f2, f3, f4));
+                                }
+                            }
+                        }
+
 						// v1.11.17: Lag Filter - Block order if chart has lag
 						if (!strategy.CheckChartLag())
 						{
@@ -693,9 +764,19 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
 					}
 					else
 					{
+						// v1.15.29: Abandon setup immediately on invalid R:R
 						string msg = string.Format("Skipped: R/R {0:F2} < 1.0", (risk > 0 ? (reward/risk) : 0));
-						strategy.Log(strategy.Time[0] + string.Format(" Trade Skipped (Short). Risk: {0:F2} Reward: {1:F2} Ratio: {2:F2}", risk, reward, (risk > 0 ? (reward/risk) : 0)));
-						strategy.lastFilterReason = msg; strategy.lastFilterTime = DateTime.Now;
+						strategy.Log(strategy.Time[0] + string.Format(" RR_ABANDON: R:R {0:F2} invalid. Abandoning setup immediately to search for better opportunities.", (risk > 0 ? (reward/risk) : 0)));
+
+						// Reset to IDLE to search for better setups
+						strategy.currentEntryState = EntryState.Idle;
+                        // v1.15.42: Cleanup Adhoc Lines
+                        strategy.ClearAdhocVisuals();
+						strategy.setupLevelName = "";
+						strategy.setupLevelTime = DateTime.MinValue;
+						strategy.setupAnchorPrice = 0;
+						strategy.lastFilterReason = "Abandoned: R:R < 1.0";
+						strategy.lastFilterTime = DateTime.Now;
 					}
 				}
 				else
@@ -715,13 +796,23 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
 						// 		strategy.GetCurrentHighVWAP(), strategy.GetCurrentLowVWAP(), setupAnchorPrice));
 					}
 				}
+				}
 			}
 			else
 			{
 				// LONG SETUP
 				// Long: Low[1] > Bullish VWAP (setupVWAP) + 1 Tick
-				if (strategy.isValidVWAP(setupVWAP) && strategy.Low[1] > (setupVWAP + TickSize))
+				if (strategy.isValidVWAP(setupVWAP))
 				{
+					bool isGapValid = strategy.Low[1] > (setupVWAP + TickSize);
+					if (strategy.EnableDebugLogs || strategy.CurrentBar % 5 == 0)
+					{
+						strategy.Log(string.Format("{0} | DIAG_CONFIRM_LONG: Low[1]={1:F2} VWAP={2:F2} Threshold={3:F2} Valid={4}", 
+							strategy.Time[0], strategy.Low[1], setupVWAP, (setupVWAP + TickSize), isGapValid));
+					}
+					
+					if (isGapValid)
+					{
 					// --- RISK / REWARD CHECK ---
 					double projectedEntry = setupVWAP;
 					double projectedStop = setupAnchorPrice - TickSize; // Padding
@@ -746,16 +837,20 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
 						double levelPrice = strategy.GetOppositeLevelPrice(setupLevelName, setupLevelTime, setupAnchorPrice, false);
 						double rrTarget = levelPrice;
 						
-						if (rrTarget == 0) 
+						if (rrTarget == 0)
 						{
 							rrTarget = strategy.GetCurrentHighVWAP();
-							// Do NOT set validatedTargetPrice here. Let it remain 0.
-							strategy.validatedTargetPrice = 0; 
+							// Do NOT set validatedTp2Price here. Let it remain 0.
+							// v1.15.26: This is opposite level price, goes to TP2
+							strategy.validatedTp1Price = 0; // TP1 always uses dynamic VWAP
+							strategy.validatedTp2Price = 0; // No opposite level found, let OrderProtectionManager try again
 						}
 						else
 						{
-							// Found a real level - lock it in
-							strategy.validatedTargetPrice = levelPrice;
+							// Found a real level - lock it in for TP2
+							// v1.15.26: This is opposite level price, goes to TP2
+							strategy.validatedTp1Price = 0; // TP1 always uses dynamic VWAP
+							strategy.validatedTp2Price = levelPrice; // TP2 uses opposite level
 						}
 
 						// EXE DEBUG & ROUNDING
@@ -802,6 +897,29 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
 
 						int dynamicQuantity = strategy.CalculateDynamicQuantity(entryPrice, projectedStop);
 
+                        // v1.15.54: DELTA SCORING FILTER
+                        if (strategy.UseDeltaFilter)
+                        {
+                            var activeLevel = strategy.activeLevels.FirstOrDefault(l => l.Name == setupLevelName && l.StartTime == setupLevelTime);
+                            if (activeLevel != null)
+                            {
+                                double f1, f2, f3, f4;
+                                double deltaScore = strategy.CalculateDeltaScoreAdvanced(activeLevel, false /*isShort=false*/, out f1, out f2, out f3, out f4);
+                                
+                                if (deltaScore < strategy.MinDeltaScore)
+                                {
+                                    string msg = string.Format("Skipped: Low Delta Score {0} < {1} (F1={2} F2={3} F3={4} F4={5})", 
+                                        deltaScore, strategy.MinDeltaScore, f1, f2, f3, f4);
+                                    strategy.TrackIgnoredEntry("Long", setupLevelName, entryPrice, msg);
+                                    return; 
+                                }
+                                else
+                                {
+                                    strategy.Log(string.Format("DELTA SCORE PASS: {0} >= {1} (F1={2} F2={3} F3={4} F4={5})", deltaScore, strategy.MinDeltaScore, f1, f2, f3, f4));
+                                }
+                            }
+                        }
+
 						if (!strategy.CheckChartLag())
 						{
 							string msg = "Skipped: Network Lag Detected";
@@ -834,14 +952,23 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
 					}
 					else
 					{
+						// v1.15.29: Abandon setup immediately on invalid R:R
 						string msg = string.Format("Skipped: R/R {0:F2} < 1.0", (risk > 0 ? (reward/risk) : 0));
-						strategy.Log(strategy.Time[0] + string.Format(" Trade Skipped (Long). Risk: {0:F2} Reward: {1:F2} Ratio: {2:F2}", risk, reward, (risk > 0 ? (reward/risk) : 0)));
-						strategy.lastFilterReason = msg; strategy.lastFilterTime = DateTime.Now;
+						strategy.Log(strategy.Time[0] + string.Format(" RR_ABANDON: R:R {0:F2} invalid. Abandoning setup immediately to search for better opportunities.", (risk > 0 ? (reward/risk) : 0)));
+
+						// Reset to IDLE to search for better setups
+						strategy.currentEntryState = EntryState.Idle;
+						strategy.setupLevelName = "";
+						strategy.setupLevelTime = DateTime.MinValue;
+						strategy.setupAnchorPrice = 0;
+						strategy.lastFilterReason = "Abandoned: R:R < 1.0";
+						strategy.lastFilterTime = DateTime.Now;
 					}
 				}
 				else
 				{
 					// Check invalidation handled by UpdateAnchorIfNeeded
+				}
 				}
 			}
 		}
