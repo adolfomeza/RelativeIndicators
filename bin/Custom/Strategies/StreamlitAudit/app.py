@@ -2440,33 +2440,32 @@ with tab1:
         with col_usa:
             if st.checkbox("USA", value=True, key="session_USA"): selected_sessions.append('USA')
             
-        # --- NUEVO: FILTRO DE TIER DE SALIDA (Posición 2) ---
-        st.markdown("**Tipo de Salida (Tier)**")
-        col_select_all_t, col_t1, col_t2, col_t3, col_t4 = st.columns([1.5, 1, 1, 1, 1])
+        st.markdown("**Resultado del Trade**")
+        col_select_all_t, col_tp1, col_tp2, col_sl, col_other = st.columns([1.5, 1, 1, 1, 1])
         
         with col_select_all_t:
-            all_tiers_checked = st.checkbox("Todos", value=True, key="all_tiers_check")
+            all_outcomes_checked = st.checkbox("Todos", value=True, key="all_outcomes_check")
             
-        # Sync Logic for Tiers
-        if 'prev_all_tiers' not in st.session_state:
-            st.session_state.prev_all_tiers = True
+        # Sync Logic
+        if 'prev_all_outcomes' not in st.session_state:
+            st.session_state.prev_all_outcomes = True
             
-        if st.session_state.prev_all_tiers != all_tiers_checked:
-            st.session_state.tier_1 = all_tiers_checked
-            st.session_state.tier_2 = all_tiers_checked
-            st.session_state.tier_3 = all_tiers_checked
-            st.session_state.tier_4 = all_tiers_checked
-            st.session_state.prev_all_tiers = all_tiers_checked
+        if st.session_state.prev_all_outcomes != all_outcomes_checked:
+            st.session_state.outcome_tp1 = all_outcomes_checked
+            st.session_state.outcome_tp2 = all_outcomes_checked
+            st.session_state.outcome_sl = all_outcomes_checked
+            st.session_state.outcome_other = all_outcomes_checked
+            st.session_state.prev_all_outcomes = all_outcomes_checked
             
-        selected_tiers = []
-        with col_t1:
-            if st.checkbox("Tier 1 (_01)", value=True, key="tier_1", help="Trades terminados en _01 (TP1/SL1)"): selected_tiers.append(1)
-        with col_t2:
-            if st.checkbox("Tier 2 (_02)", value=True, key="tier_2", help="Trades terminados en _02 (TP2/SL2)"): selected_tiers.append(2)
-        with col_t3:
-            if st.checkbox("Tier 3 (_03)", value=True, key="tier_3", help="Trades terminados en _03 (TP3/SL3)"): selected_tiers.append(3)
-        with col_t4:
-            if st.checkbox("Tier 4+ (Otros)", value=True, key="tier_4", help="Trades terminados en _04 o superior"): selected_tiers.append(4)
+        selected_outcomes = []
+        with col_tp1:
+            if st.checkbox("TP1", value=True, key="outcome_tp1", help="Trades que tocaron Target 1"): selected_outcomes.append('TP1')
+        with col_tp2:
+            if st.checkbox("TP2", value=True, key="outcome_tp2", help="Trades que tocaron Target 2 (Runners)"): selected_outcomes.append('TP2')
+        with col_sl:
+            if st.checkbox("Stop Loss", value=True, key="outcome_sl", help="Trades cerrados por Stop Loss"): selected_outcomes.append('SL')
+        with col_other:
+            if st.checkbox("Otros", value=True, key="outcome_other", help="Salidas manuales, Flat, Cierres de sesión"): selected_outcomes.append('Other')
 
         st.markdown("---") # Separador visual antes de Niveles
 
@@ -2481,20 +2480,19 @@ with tab1:
                      df_cascade['ActiveSession'] = df_cascade['EntryTime'].apply(classify_entry_session)
                  df_cascade = df_cascade[df_cascade['ActiveSession'].isin(selected_sessions)]
 
-        # Apply Tier Filter to df_cascade
-        if len(selected_tiers) < 4:
-            # Helper logic for Tier classification
-            def get_tier(val):
-                s = str(val)
-                if s.endswith("_01"): return 1
-                if s.endswith("_02"): return 2
-                if s.endswith("_03"): return 3
-                return 4 # Default for others
+        # Apply Outcome Filter to df_cascade
+        if len(selected_outcomes) < 4:
+            def classify_outcome(val):
+                s = str(val).upper()
+                if s.startswith("TP1"): return 'TP1'
+                if s.startswith("TP2"): return 'TP2'
+                if s.startswith("SL"): return 'SL'
+                return 'Other'
             
-            if 'Tier' not in df_cascade.columns:
-                df_cascade['Tier'] = df_cascade['Result'].apply(get_tier)
+            if 'Outcome' not in df_cascade.columns:
+                df_cascade['Outcome'] = df_cascade['Result'].apply(classify_outcome)
             
-            df_cascade = df_cascade[df_cascade['Tier'].isin(selected_tiers)]
+            df_cascade = df_cascade[df_cascade['Outcome'].isin(selected_outcomes)]
 
         # Extract current filter selections from session_state
         active_setups = [s.replace("setup_", "") for s in st.session_state.keys() 
@@ -2721,19 +2719,17 @@ with tab1:
                      df_filtered['ActiveSession'] = df_filtered['EntryTime'].apply(classify_entry_session)
                  df_filtered = df_filtered[df_filtered['ActiveSession'].isin(selected_sessions)]
 
-        # v2.26: Tier Filter Logic
-        if len(selected_tiers) < 4:
-            if 'Tier' not in df_filtered.columns:
-                # Same helper logic inline or ensure column exists if shared (safe to re-apply)
-                def get_tier_filter(val):
-                    s = str(val)
-                    if s.endswith("_01"): return 1
-                    if s.endswith("_02"): return 2
-                    if s.endswith("_03"): return 3
-                    return 4 
-                df_filtered['Tier'] = df_filtered['Result'].apply(get_tier_filter)
+        if len(selected_outcomes) < 4:
+            if 'Outcome' not in df_filtered.columns:
+                def classify_outcome_filter(val):
+                    s = str(val).upper()
+                    if s.startswith("TP1"): return 'TP1'
+                    if s.startswith("TP2"): return 'TP2'
+                    if s.startswith("SL"): return 'SL'
+                    return 'Other'
+                df_filtered['Outcome'] = df_filtered['Result'].apply(classify_outcome_filter)
             
-            df_filtered = df_filtered[df_filtered['Tier'].isin(selected_tiers)]
+            df_filtered = df_filtered[df_filtered['Outcome'].isin(selected_outcomes)]
 
         # v2.10.3: Fix - Always apply filters to support "Select None" (Empty List = Empty Data)
         df_filtered = df_filtered[df_filtered['SetupName'].isin(selected_setups)]
