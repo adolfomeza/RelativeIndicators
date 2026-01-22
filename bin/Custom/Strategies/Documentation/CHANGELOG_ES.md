@@ -7,6 +7,20 @@ y este proyecto sigue [Semantic Versioning](https://semver.org/lang/es/).
 
 ---
 
+## [v1.15.59] - 2026-01-22
+
+### 🐛 Fixed
+
+**1. Bug Crítico: RR Inválido en Entradas Anticipadas (Anticipated Mode)**
+
+- **Problema**: La estrategia tomaba entradas con R:R absurdo (ej. Risk 66 pts / Reward 3 pts) cuando se usaba el modo `Anticipado`.
+- **Causa Raíz**: La lógica de validación de Riesgo/Recompensa usaba siempre el precio del VWAP (`setupVWAP`) como precio de entrada proyectado, incluso si la estrategia estaba configurada para entrar a Mercado (`Close[0]`) que podía estar mucho más lejos.
+  - Ejemplo real: VWAP @ 21812, Precio Entrada Real @ 21772.
+  - La validación pensaba que entraba a 21812 (RR válido > 1.0).
+  - La realidad entró a 21772 (RR terrible 0.03).
+- **Solución v1.15.59**: Se modificó `EntryStateMachine.cs` para usar dinámicamente el precio de cierre (`Close[0]`) como referencia de entrada cuando el modo seleccionado es `Anticipado`.
+- **Impacto**: La estrategia ahora rechazará correctamente setups donde el precio se haya alejado demasiado del VWAP, protegiendo el R:R.
+
 ## [App v2.12.1] - 2026-01-22
 
 ### ✨ Agregado

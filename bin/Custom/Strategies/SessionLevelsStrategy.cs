@@ -46,7 +46,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	[Gui.CategoryOrder("Risk Management", 2)]
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.15.58"; // v1.15.58: Fix Delta Persistence (SessionLevelData)
+		private const string StrategyVersion = "v1.15.59"; // v1.15.59: Fix Anticipated Entry RR Bug
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;

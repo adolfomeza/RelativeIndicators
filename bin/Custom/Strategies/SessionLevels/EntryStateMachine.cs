@@ -617,7 +617,9 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
 					if (isGapValid)
 					{
 					// --- RISK / REWARD CHECK ---
-					double projectedEntry = setupVWAP;
+					// --- RISK / REWARD CHECK ---
+					// v1.15.59: FIX - Anticipated Mode must use Close[0] for valid Risk calc
+					double projectedEntry = (strategy.SelectedEntryMode == EntryMode.Anticipado) ? strategy.Close[0] : setupVWAP;
 					
 					// Log(string.Format("{0} | DEBUG_ENTRY: Calling GetOppositeLevelPrice...", strategy.Time[0]));
 					
@@ -814,7 +816,9 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
 					if (isGapValid)
 					{
 					// --- RISK / REWARD CHECK ---
-					double projectedEntry = setupVWAP;
+					// --- RISK / REWARD CHECK ---
+					// v1.15.59: FIX - Anticipated Mode must use Close[0] for valid Risk calc
+					double projectedEntry = (strategy.SelectedEntryMode == EntryMode.Anticipado) ? strategy.Close[0] : setupVWAP;
 					double projectedStop = setupAnchorPrice - TickSize; // Padding
 
 					// VALIDATE R/R

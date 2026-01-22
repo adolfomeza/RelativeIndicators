@@ -140,7 +140,7 @@ namespace NinjaTrader.NinjaScript.Strategies
             double minRiskUSD = strategy.StopLossTicks * strategy.MinQuantity * minTickValue;
 
             // Level Info
-            string versionStr = "v1.15.58";
+            string versionStr = "v1.15.59";
             string levelInfo = "-";
             if (!string.IsNullOrEmpty(strategy.setupLevelName) && strategy.setupLevelTime != DateTime.MinValue)
             {
@@ -277,7 +277,7 @@ namespace NinjaTrader.NinjaScript.Strategies
             }
 
             string text = string.Format("Ver: {0}\nState: {1}\nLevel: {2}{3}\nPosition: {4}\nPnL: {5} | Risk: {6:C0} (Min: {7:C0}){8}{9}",
-                "v1.15.58", // v1.15.58: Fix Delta Persistence
+                "v1.15.59", // v1.15.59: Fix Anticipated Entry RR Bug
                 stateDisplay,
                 levelInfo,
                 retryInfo,
