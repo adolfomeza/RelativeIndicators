@@ -7,6 +7,19 @@ y este proyecto sigue [Semantic Versioning](https://semver.org/lang/es/).
 
 ---
 
+## [App v2.12.1] - 2026-01-22
+
+### ✨ Agregado
+
+**1. Filtros de Salida por Tier (Exit Tier Filters)**
+
+- **Nuevo Filtro en Dashboard**: Se agregó un selector de "Tipo de Salida" en el panel de control para filtrar trades según su resultado final.
+- **Categorías**:
+  - **Tier 1**: Trades que terminaron en la primera salida (TP1 o SL1, sufijo `_01`).
+  - **Tier 2**: Trades que alcanzaron el segundo nivel (TP2 o SL2, sufijo `_02`).
+  - **Tier 3+**: Trades de "runners" o niveles superiores.
+- **Alcance Global**: El filtro se aplica dinámicamente a **todas las pestañas** de la aplicación (Análisis de Escala, Riesgo, Calendario, etc.), permitiendo aislar el rendimiento de contratos específicos sin necesidad de modificar la estrategia.
+
 ## [v1.15.58] - 2026-01-21
 
 ### 🐛 Fixed
