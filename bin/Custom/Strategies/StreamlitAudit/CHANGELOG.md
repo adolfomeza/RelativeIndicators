@@ -1,17 +1,6 @@
 # Changelog - Streamlit Trading Analysis App
 
-### [v1.15.59] - 2026-01-22
 
-### 🐛 Fixed
-
-**1. Critical Bug: Invalid R:R in Anticipated Entry Mode**
-- **Issue**: Strategy accepted trades with absurd Risk/Reward (e.g., Risk 66 pts / Reward 3 pts) when using `Anticipated` entry mode.
-- **Root Cause**: The R/R validation logic always used `setupVWAP` as the projected entry price, even if the strategy was configured to enter at Market (`Close[0]`) which could be significantly worse.
-  - Real example: VWAP @ 21812, Real Entry @ 21772.
-  - Validation saw 21812 (Valid RR > 1.0).
-  - Reality was 21772 (Terrible RR 0.03).
-- **Fix**: Modified `EntryStateMachine.cs` to dynamically use `Close[0]` as the projected entry reference when `selectedEntryMode == Anticipated`.
-- **Impact**: Strategy will now correctly reject setups where price has drifted too far from VWAP, preserving R:R integrity.
 
 ### [v2.12.1] - 2026-01-22
 
