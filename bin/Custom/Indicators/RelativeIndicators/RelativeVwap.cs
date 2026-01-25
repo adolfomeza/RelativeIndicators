@@ -1011,11 +1011,21 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                   // CHECK: Have we signaled for THIS specific anchor yet?
                   if (highHasTakenRelevant && High[0] <= (hVwap - Signal2ThresholdTicks * TickSize))
                   {
+                       // LOG DIAGNOSTICS FOR SIGNAL 2 SHORT
+                       /*
+                       Print(string.Format("DEBUG SIG2 SHORT: Bar={0} High={1} hVwap={2} Thresh={3} Diff={4}", 
+                           CurrentBar, High[0], hVwap, Signal2ThresholdTicks * TickSize, hVwap - High[0]));
+                       */
+                       
                       if (sessionHighBarIdx != lastSignaledHighAnchorBar)
                       {
                           // v1.0.8: Paint Signal 2 candle yellow (only the first separation candle)
                           // FIX: Store the Index for persistent painting in Live/Tick mode
                           highSignal2BarIdx = CurrentBar;
+
+                          // CRITICAL LOGGING: Confirming why this fired if user sees High > VWAP
+                          Print(string.Format("[RelativeVwap SIG2 SHORT FIRED] Bar:{0} Time:{1} High:{2:F2} VWAP:{3:F2} Threshold:{4} Condition(H<=V-T):{5} AnchorBar:{6}",
+                              CurrentBar, Time[0], High[0], hVwap, Signal2ThresholdTicks, (High[0] <= (hVwap - Signal2ThresholdTicks * TickSize)), sessionHighBarIdx));
 
                           highAnchorSequence++;
 
@@ -1258,6 +1268,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           // v1.0.8: Paint Signal 2 candle yellow (only the first separation candle)
                           // FIX: Store the Index for persistent painting in Live/Tick mode
                           lowSignal2BarIdx = CurrentBar;
+                          
+                          // CRITICAL LOGGING: Confirming why this fired
+                          Print(string.Format("[RelativeVwap SIG2 LONG FIRED] Bar:{0} Time:{1} Low:{2:F2} VWAP:{3:F2} Threshold:{4} Condition(L>=V+T):{5} AnchorBar:{6}",
+                              CurrentBar, Time[0], Low[0], lVwap, Signal2ThresholdTicks, (Low[0] >= (lVwap + Signal2ThresholdTicks * TickSize)), sessionLowBarIdx));
 
                           lowAnchorSequence++;
 
