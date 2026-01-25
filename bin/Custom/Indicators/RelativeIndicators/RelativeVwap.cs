@@ -28,10 +28,13 @@ using NinjaTrader.NinjaScript.Indicators.RelativeIndicators; // Fix for Generate
 namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 {
     public enum TradeDirectionMode { Both, LongOnly, ShortOnly }
+    public enum VwapPriceMethod { Close, Typical, OHLC4 }
+    public enum LabelMode { Default, Simple, Custom }
+    
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.0";
+        private const string VERSION = "1.0.11";  // v1.0.11: Fix Live Painting Signal 2
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -61,6 +64,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         private double lowCumPV, lowCumVol;
         private bool highDetached;
         private bool lowDetached;
+        private bool _highJustReset;  // v1.0.2: Skip accumulation on anchor bar
+        private bool _lowJustReset;   // v1.0.2: Skip accumulation on anchor bar
         private bool highSignalFired;
         private bool lowSignalFired;
         private double currentHighVWAP;
@@ -75,6 +80,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         private int lastSignaledLowAnchorBar = -1;  // V_SIGNAL_2 Anchor Tracker
         private SessionLevelInfo lastUnlockedHighSession = null;
         private SessionLevelInfo lastUnlockedLowSession = null;
+        
+        // V_FIX_LIVE: Persistent Signal 2 Painting State
+        private int highSignal2BarIdx = -1; // Tracks specific bar index for High Signal 2
+        private int lowSignal2BarIdx = -1;  // Tracks specific bar index for Low Signal 2
         
         // Session Levels Tracking
         public class SessionLevelInfo
@@ -146,60 +155,30 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         
         // V_NORM: ATR-based Normalization for consistent spacing across instruments
         private NinjaTrader.NinjaScript.Indicators.ATR atr;
-        private double verticalUnit;
         
-        // V_COLLISION: Anti-Collision Stacks
-        private int lastColBarIdx = -1;
-        private double stackHighY = double.MinValue;
-        private double stackLowY = double.MaxValue;
+        // v1.0.5: Anti-Collision System for Labels (SIMPLIFIED)
+        // NOTE: Returns proposedY directly - collision avoidance removed due to visual issues
+        private double _highLabelY = double.MinValue;
+        private double _lowLabelY = double.MaxValue;
         
-        // Helper Methods for Stacking
-        private double GetStackedHighY(double desiredY, double heightBuffer)
+        /// <summary>
+        /// Simply returns the proposed Y position.
+        /// The LabelCollisionSpacing parameter now only affects the base offset from price.
+        /// </summary>
+        private double GetNonCollidingHighY(double proposedY, double spacing)
         {
-             // If this is the first item (stack is empty), just take desiredY
-             if (stackHighY == double.MinValue) 
-             {
-                 stackHighY = desiredY;
-                 return desiredY;
-             }
-             
-             // If desiredY is overlapping or below the stack, push it UP
-             if (desiredY <= stackHighY + heightBuffer)
-             {
-                  double newY = stackHighY + heightBuffer;
-                  stackHighY = newY;
-                  return newY;
-             }
-             else
-             {
-                  // It's way above, so it's safe. Update stack to this new high.
-                  stackHighY = desiredY;
-                  return desiredY;
-             }
+            // Just return the proposed position - no stacking
+            return proposedY;
         }
-
-        private double GetStackedLowY(double desiredY, double heightBuffer)
+        
+        /// <summary>
+        /// Simply returns the proposed Y position.
+        /// The LabelCollisionSpacing parameter now only affects the base offset from price.
+        /// </summary>
+        private double GetNonCollidingLowY(double proposedY, double spacing)
         {
-             // If this is the first item (stack is empty), just take desiredY
-             if (stackLowY == double.MaxValue) 
-             {
-                 stackLowY = desiredY;
-                 return desiredY;
-             }
-             
-             // If desiredY is overlapping or ABOVE the stack (remember Lows go DOWN), push it DOWN
-             if (desiredY >= stackLowY - heightBuffer)
-             {
-                  double newY = stackLowY - heightBuffer;
-                  stackLowY = newY;
-                  return newY;
-             }
-             else
-             {
-                  // It's way below, so it's safe.
-                  stackLowY = desiredY;
-                  return desiredY;
-             }
+            // Just return the proposed position - no stacking
+            return proposedY;
         }
 
         // Smart Label Queue
@@ -251,6 +230,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         private void AddSignal(int barIdx, double price, string text, bool isHigh, Brush brush, string signalType)
         {
             if (signalLabels == null) return;
+            
+            // v1.0.4: Skip if ShowSignalLabels is disabled
+            if (!ShowSignalLabels) return;
             
             // Unique key per signal type/bar (Ignore text for key uniqueness)
             // This ensures we don't get duplicates if text evolves (e.g. "AH.1" -> "AH.1.1")
@@ -355,11 +337,16 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                 
                 UseExchangeTime = true;    // Default ON
                 
+                // VWAP Method (v1.0.1)
+                VwapMethod = VwapPriceMethod.Close;  // Default: Close (matches SessionLevels strategy)
+                
                 EnableAlerts = true;
                 AlertSound = "mzpack_alert4.wav";
 
                 
                 ShowDaysAgo = true; // Default True
+                
+                Print("RelativeVwap Indicator: OnStateChange (SetDefaults) Reached - VERSION " + VERSION);
             }
             else if (State == State.DataLoaded)
             {
@@ -467,12 +454,22 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             lowAnchorSequence = 0;
             lastSignaledHighAnchorBar = -1;
             lastSignaledLowAnchorBar = -1;
-            // highCumPV = 0; highCumVol = 0; // RESET DISABLED
-            // lowCumPV = 0; lowCumVol = 0; // RESET DISABLED
+            // highCumPV = 0; highCumVol = 0; // RESET DISABLED - not used anymore
+            // lowCumPV = 0; lowCumVol = 0; // RESET DISABLED - not used anymore
+            
+            // v1.0.2 FIX: Reset the session variables that are now used for VWAP display
+            sessionHighPV = 0;
+            sessionHighVol = 0;
+            sessionLowPV = 0;
+            sessionLowVol = 0;
             
             // FIX: Reset Unlocked Sessions to prevent persistence of yesterday's internal anchors
             lastUnlockedHighSession = null;
             lastUnlockedLowSession = null;
+            
+            // V_FIX_LIVE: Reset Painting State
+            highSignal2BarIdx = -1;
+            lowSignal2BarIdx = -1;
             
             if (ShowDebugLabels)
                 Draw.Text(this, "Reset" + CurrentBar, "RESET", 0, Low[0] - 5 * TickSize, Brushes.Red);
@@ -515,35 +512,41 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
         protected override void OnBarUpdate()
         {
-              if (CurrentBar < 14) return; // Wait for ATR
+      if (CurrentBar < 14) 
+      {
+          // v1.0.6: Prevent "0" values from breaking AutoScale during warmup
+          Values[0][0] = Close[0];
+          Values[1][0] = Close[0];
+          return; 
+      }
               debugUpdateCounter++; // Count EVERY call
               
-              // V_NORM: Calculate dynamic vertical unit (1 unit = 10% of 14-period ATR)
-              // This ensures visually identical spacing on MNQ, MES, MYM, etc.
-              verticalUnit = atr[0] * 0.1;
-              if (verticalUnit <= 0) verticalUnit = TickSize; // Fallback
+      double priceLimit = Close[0] * 0.5; // Safety threshold (50% of price)
+      
+      if (hasHighVWAP) {
+          double hVol = Math.Max(1, sessionHighVol); 
+          double val = sessionHighPV / hVol;
+          
+          // SAFETY: If val is 0 or absurdly low, use Close or Previous
+          if (val < priceLimit) 
+              val = Values[0].IsValidDataPointAt(CurrentBar - 1) ? Values[0][1] : Close[0];
               
-              // V_COLLISION: Reset Stacks for New Bar / Tick Re-calculation
-              // Must reset EVERY update because OnBarUpdate rebuilds the layout for the current bar from scratch.
-              stackHighY = double.MinValue;
-              stackLowY = double.MaxValue;
-              lastColBarIdx = CurrentBar;
-              
-             if (hasHighVWAP) {
-         double hVol = Math.Max(1, sessionHighVol); // DivZero Prot
-         double val = sessionHighPV / hVol;
-         Values[0][0] = val; // High VWAP
-     } else {
-         Values[0][0] = Values[0].IsValidDataPointAt(CurrentBar - 1) ? Values[0][1] : Close[0];
-     }
-     
-     if (hasLowVWAP) {
-         double lVol = Math.Max(1, sessionLowVol);
-         double val = sessionLowPV / lVol;
-         Values[1][0] = val; // Low VWAP
-     } else {
-         Values[1][0] = Values[1].IsValidDataPointAt(CurrentBar - 1) ? Values[1][1] : Close[0];
-     }
+          Values[0][0] = val; // High VWAP
+      } else {
+          Values[0][0] = Values[0].IsValidDataPointAt(CurrentBar - 1) ? Values[0][1] : Close[0];
+      }
+      
+      if (hasLowVWAP) {
+          double lVol = Math.Max(1, sessionLowVol);
+          double val = sessionLowPV / lVol;
+          
+          if (val < priceLimit) 
+              val = Values[1].IsValidDataPointAt(CurrentBar - 1) ? Values[1][1] : Close[0];
+
+          Values[1][0] = val; // Low VWAP
+      } else {
+          Values[1][0] = Values[1].IsValidDataPointAt(CurrentBar - 1) ? Values[1][1] : Close[0];
+      }
              
              try
              {
@@ -598,6 +601,53 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
               {
                   _isNewBar = true;
                   _lastVol = 0; // V_SYNC: Explicit Reset on New Bar to prevent calc drift
+                  
+                  // v1.0.2: RETROACTIVE ANCHOR UPDATE (matching VWAPCalculator.cs lines 86-113)
+                  // If previous bar was the anchor, recalculate with Close[1] definitive
+                  if (CurrentBar > 0)
+                  {
+                      // Check if previous bar was the HIGH anchor
+                      if (sessionHighBarIdx == CurrentBar - 1 && sessionHighVol > 0)
+                      {
+                          double finalPrice = Close[1];  // Definitive close
+                          if (VwapMethod == VwapPriceMethod.Typical)
+                              finalPrice = (High[1] + Low[1] + Close[1]) / 3.0;
+                          else if (VwapMethod == VwapPriceMethod.OHLC4)
+                              finalPrice = (Open[1] + High[1] + Low[1] + Close[1]) / 4.0;
+                          
+                          Print(string.Format("[VWAP DEBUG] RETROACTIVE HIGH: Bar={0} VwapMethod={1} Close[1]={2:F2} Typical={3:F2} FinalPrice={4:F2} Vol[1]={5}",
+                              CurrentBar, VwapMethod, Close[1], (High[1]+Low[1]+Close[1])/3.0, finalPrice, Volume[1]));
+                          
+                          // FIX: Reset the CORRECT accumulators (sessionHighPV/Vol, not highCumPV/Vol)
+                          sessionHighPV = finalPrice * Volume[1];
+                          sessionHighVol = Volume[1];
+                          
+                          // Update retroactively the visual value
+                          if (Values[0].IsValidDataPointAt(CurrentBar - 1))
+                              Values[0][1] = finalPrice;
+                      }
+                      
+                      // Check if previous bar was the LOW anchor
+                      if (sessionLowBarIdx == CurrentBar - 1 && sessionLowVol > 0)
+                      {
+                          double finalPrice = Close[1];  // Definitive close
+                          if (VwapMethod == VwapPriceMethod.Typical)
+                              finalPrice = (High[1] + Low[1] + Close[1]) / 3.0;
+                          else if (VwapMethod == VwapPriceMethod.OHLC4)
+                              finalPrice = (Open[1] + High[1] + Low[1] + Close[1]) / 4.0;
+                          
+                          Print(string.Format("[VWAP DEBUG] RETROACTIVE LOW: Bar={0} VwapMethod={1} Close[1]={2:F2} Typical={3:F2} FinalPrice={4:F2} Vol[1]={5}",
+                              CurrentBar, VwapMethod, Close[1], (High[1]+Low[1]+Close[1])/3.0, finalPrice, Volume[1]));
+                          
+                          // FIX: Reset the CORRECT accumulators (sessionLowPV/Vol, not lowCumPV/Vol)
+                          sessionLowPV = finalPrice * Volume[1];
+                          sessionLowVol = Volume[1];
+                          
+                          // Update retroactively the visual value
+                          if (Values[1].IsValidDataPointAt(CurrentBar - 1))
+                              Values[1][1] = finalPrice;
+                      }
+                  }
               }
               else _isNewBar = false;
               
@@ -638,6 +688,15 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
              double high = High[0];
              double low = Low[0];
 
+             // Calculate price based on VwapMethod parameter (needed for reset logic)
+             double price = Close[0];  // Default: Close
+             if (VwapMethod == VwapPriceMethod.Typical)
+                 price = (High[0] + Low[0] + Close[0]) / 3.0;
+             else if (VwapMethod == VwapPriceMethod.OHLC4)
+                 price = (Open[0] + High[0] + Low[0] + Close[0]) / 4.0;
+             
+             double volume = Volume[0];
+
              if (high > currentDayHigh)
              {
                  // Save previous high anchor if it existed
@@ -651,7 +710,20 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                   // MANUAL FIX: Reset Signal State
                   highDetached = false;
                   
-                  highCumPV = 0; highCumVol = 0;
+                  Print(string.Format("[VWAP DEBUG] IMMEDIATE HIGH RESET: Bar={0} VwapMethod={1} price={2:F2} (Close={3:F2} Typical={4:F2}) Vol={5}",
+                      CurrentBar, VwapMethod, price, Close[0], (High[0]+Low[0]+Close[0])/3.0, volume));
+                  
+                  // v1.0.2: Initialize WITH first bar's volume (matching SessionLevels strategy)
+                  // This ensures VWAP starts at 'price' (Close/Typical/OHLC4) instead of fallback
+                  // FIX: Use sessionHighPV/Vol (the variables that Values[0][0] uses), not highCumPV/Vol
+                  sessionHighPV = price * volume;
+                  sessionHighVol = volume;
+                  _highJustReset = true;  // Flag to skip accumulation this bar
+                  
+                  // v1.0.3 FIX: Update Values[0][0] IMMEDIATELY after reset
+                  // (The display section ran BEFORE this reset, so it used old values)
+                  Values[0][0] = price;  // VWAP = price on anchor bar
+                  hasHighVWAP = true;
               }
 
              if (low < currentDayLow)
@@ -667,11 +739,16 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                   // MANUAL FIX: Reset Signal State
                   lowDetached = false;
 
-                  lowCumPV = 0; lowCumVol = 0;
+                  Print(string.Format("[VWAP DEBUG] IMMEDIATE LOW RESET: Bar={0} VwapMethod={1} price={2:F2} (Close={3:F2} Typical={4:F2}) Vol={5}",
+                      CurrentBar, VwapMethod, price, Close[0], (High[0]+Low[0]+Close[0])/3.0, volume));
+
+                  // v1.0.2: Initialize WITH first bar's volume (matching SessionLevels strategy)
+                  // FIX: Use sessionLowPV/Vol (the variables that Values[1][0] uses), not lowCumPV/Vol
+                  sessionLowPV = price * volume;
+                  sessionLowVol = volume;
+                  _lowJustReset = true;  // Flag to skip accumulation this bar
               }
              
-             double typicalPrice = (High[0] + Low[0] + Close[0]) / 3.0; // Approximation for Historical
-             double volume = Volume[0];
             // For time-based bars, let the Timer handle the update in Realtime
             // For time-based bars, let the Timer handle the update in Realtime
             // if (isTimeBased && State == State.Realtime) return; // REMOVED to allow Signal Logic to run
@@ -684,38 +761,49 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
              {
                  // In Realtime, use Tick Logic: Close * TickVolume
                  // We calculate the delta volume since last tick
-                 // V_SYNC: Use Typical Price to match Strategy/Backtest precision
+                 // V_SYNC: Use selected price method
                  double tickVol = volume - _lastVol;
                  if (tickVol < 0) tickVol = volume; // New Bar
                  
-                  // Accumulate using Typical Price
-                  if (sessionHighBarIdx != -1) { highCumPV += typicalPrice * tickVol; highCumVol += tickVol; }
-                  if (sessionLowBarIdx != -1) { lowCumPV += typicalPrice * tickVol; lowCumVol += tickVol; }
+                  // v1.0.2: Skip if just reset (already initialized with this bar's volume)
+                  // FIX: Use sessionHighPV/Vol (the variables that Values[0][0] uses)
+                  if (sessionHighBarIdx != -1 && !_highJustReset) { sessionHighPV += price * tickVol; sessionHighVol += tickVol; }
+                  if (sessionLowBarIdx != -1 && !_lowJustReset) { sessionLowPV += price * tickVol; sessionLowVol += tickVol; }
+                 
+                 // Reset flags after use (each tick resets them)
+                 _highJustReset = false;
+                 _lowJustReset = false;
                  
                  _lastVol = volume;
              }
              else
              {
-                 // Historical: Use Bar Approximation (Typical * Vol)
+                 // Historical: Use Bar Approximation
                  // This runs once per bar Close
-                 if (sessionHighBarIdx != -1) {
-                     highCumPV += typicalPrice * volume;
-                     highCumVol += volume;
+                 // v1.0.2: Skip if just reset (already initialized with this bar's volume)
+                 // FIX: Use sessionHighPV/Vol (the variables that Values[0][0] uses)
+                 if (sessionHighBarIdx != -1 && !_highJustReset) {
+                     sessionHighPV += price * volume;
+                     sessionHighVol += volume;
                  }
-                 if (sessionLowBarIdx != -1) {
-                     lowCumPV += typicalPrice * volume;
-                     lowCumVol += volume;
+                 if (sessionLowBarIdx != -1 && !_lowJustReset) {
+                     sessionLowPV += price * volume;
+                     sessionLowVol += volume;
                  }
+                 
+                 // Reset flags after use
+                 _highJustReset = false;
+                 _lowJustReset = false;
                  
                 // V_VWAP: Session-Specific Anchored VWAPs (Historical) - REMOVED
              }
 
-               // 1. Calculate Current VWAP Values
-               currentHighVWAP = (highCumVol > 0) ? highCumPV / highCumVol : High[0];
-               currentLowVWAP = (lowCumVol > 0) ? lowCumPV / lowCumVol : Low[0];
+               // 1. Calculate Current VWAP Values (using session variables for display)
+               currentHighVWAP = (sessionHighVol > 0) ? sessionHighPV / sessionHighVol : High[0];
+               currentLowVWAP = (sessionLowVol > 0) ? sessionLowPV / sessionLowVol : Low[0];
               
-               hasHighVWAP = sessionHighBarIdx != -1 && highCumVol > 0;
-               hasLowVWAP = sessionLowBarIdx != -1 && lowCumVol > 0;
+               hasHighVWAP = sessionHighBarIdx != -1 && sessionHighVol > 0;
+               hasLowVWAP = sessionLowBarIdx != -1 && sessionLowVol > 0;
 
              // 2. Evaluate Signals (using calculated VWAPs)
              
@@ -867,58 +955,49 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                   // MANUAL FIX: Auto-Reset Detachment on Touch
                   if (high >= hVwap) 
                   {
-                      // V_SIGNAL_3: ENTRY TRIGGER (White Arrow on Touch) -- AUTOMATIC OFFSET
+                      // V_SIGNAL_3: ENTRY TRIGGER (Arrow on Touch) -- v1.0.5: Synced with SessionLevels ATR-based positioning
                       if (highSignal2Fired)
                       {
-                          // 1. Calculate Volatility (Avg Range of last 3 bars)
-                          double range0 = High[0] - Low[0];
-                          double range1 = CurrentBar > 0 ? High[1] - Low[1] : range0;
-                          double range2 = CurrentBar > 1 ? High[2] - Low[2] : range0;
-                          double avgRange = (range0 + range1 + range2) / 3.0;
-
-                          // 2. Configurable Offsets & Anti-Collision
-                          // Calculate Base Positions
-                          double proposedArrowY = hVwap + (SignalIconOffsetTicks * verticalUnit);
-                          double proposedLabelY = hVwap + (SignalTextOffsetTicks * verticalUnit);
-
-                          // STACK 1: Arrow (Pushes stack up)
-                          double arrowY = GetStackedHighY(proposedArrowY, 8 * verticalUnit);
+                          // v1.0.5: Use ATR-based offset (same as SessionLevels DrawTriggerLabel)
+                          double atrOffset = (atr != null && atr[0] > 0) ? atr[0] * LabelDistanceATR : TickSize * 10;
                           
-                          // STACK 2: Label (Pushes stack further up)
-                          double labelY = GetStackedHighY(Math.Max(proposedLabelY, arrowY + 2 * verticalUnit), 15 * verticalUnit); 
-                          
-                          // 3. Draw Visuals (Order: Line -> Text -> Arrow on Top)
-                          // Connector Line REMOVED
-                          // Draw.Line(this, "ConnH_" + CurrentBar, true, 0, arrowY, 0, labelY, Brushes.White, DashStyleHelper.Solid, 1);
-                          // Determine Brush
-                          Brush sigBrush = Brushes.White;
-                          if (lastUnlockedHighSession != null)
-                          {
-                               if (lastUnlockedHighSession.Name.StartsWith("Asia")) sigBrush = AsiaLineColor;
-                               else if (lastUnlockedHighSession.Name.StartsWith("Europe")) sigBrush = EuropeLineColor;
-                               else if (lastUnlockedHighSession.Name.StartsWith("USA")) sigBrush = USLineColor;
-                          }
+                          // v1.0.5: Position relative to candle High (not VWAP) + offset
+                          double arrowY = High[0] + atrOffset;
 
-                          if (lastUnlockedHighSession != null)
+                          // v1.0.8: Use configurable SignalColor instead of session colors
+                          Brush sigBrush = SignalColor;
+
+                          // Arrow (if ShowSignal3)
+                          if (ShowSignal3)
                           {
-                              string entryLabel = "3";
-                              if (!UseSimpleLabels)
+                              Draw.ArrowDown(this, "EntryH_" + CurrentBar, true, 0, arrowY, sigBrush);
+                              
+                              if (lastUnlockedHighSession != null && ShowSignalLabels)
                               {
-                                  entryLabel = GetSignalCode(lastUnlockedHighSession, "H");
-                                  if (lastUnlockedHighSession.IsInternalHigh) entryLabel = "i" + entryLabel;
-                                  entryLabel += "." + highAnchorSequence + ".1";
+                                   // Logic moved inside ShowSignal3 check
+                                   string entryLabel = "";
+                                   if (LabelDisplayMode == LabelMode.Simple) entryLabel = "3";
+                                   else if (LabelDisplayMode == LabelMode.Custom) entryLabel = CustomSignal3Text;
+                                   else 
+                                   {
+                                       entryLabel = GetSignalCode(lastUnlockedHighSession, "H");
+                                       if (lastUnlockedHighSession.IsInternalHigh) entryLabel = "i" + entryLabel;
+                                       entryLabel += "." + highAnchorSequence + ".1";
+                                   }
+
+                                   SimpleFont font = new SimpleFont("Arial", LabelFontSize);
+                                   Draw.Text(this, "Sig3H_Txt_" + CurrentBar, true, entryLabel, 0, arrowY, LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
                               }
-                              // Pass 'labelY' which accounts for ATR offset and Stacking calculated above
-                              AddSignal(CurrentBar, labelY, entryLabel, true, sigBrush, "Sig3");
                           }
-                          // Arrow (Last to draw on top of line start)
-                          Draw.ArrowDown(this, "EntryH_" + CurrentBar, true, 0, arrowY, sigBrush);
                       }
 
                       highDetached = false;
                       highSignal2Fired = false; // Reset Signal 2 on Touch
                       // If we reset, and we didn't just fire 'E' (dbgText != "E"), then we should NOT show 'D'.
                       if (dbgText == "D") dbgText = ""; 
+                      
+                      // v1.0.10 Fix: Unpaint yellow candle if it touched VWAP in the same bar
+                      if (BarBrushes[0] == Brushes.Yellow) BarBrushes[0] = null; 
                   }
                  
                   // FINAL DRAW CALL
@@ -934,39 +1013,54 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                   {
                       if (sessionHighBarIdx != lastSignaledHighAnchorBar)
                       {
-                          highAnchorSequence++; 
-                          
-                          // Determine Brush
-                          Brush sigBrush = HighVWAPColor; // Default
-                          if (lastUnlockedHighSession != null)
-                          {
-                               if (lastUnlockedHighSession.Name.StartsWith("Asia")) sigBrush = AsiaLineColor;
-                               else if (lastUnlockedHighSession.Name.StartsWith("Europe")) sigBrush = EuropeLineColor;
-                               else if (lastUnlockedHighSession.Name.StartsWith("USA")) sigBrush = USLineColor;
-                          }
+                          // v1.0.8: Paint Signal 2 candle yellow (only the first separation candle)
+                          // FIX: Store the Index for persistent painting in Live/Tick mode
+                          highSignal2BarIdx = CurrentBar;
 
-                          double proposedDotY = High[0] + (SignalIconOffsetTicks * verticalUnit);
-                          double dotY = GetStackedHighY(proposedDotY, 5 * verticalUnit);
-                          Draw.Dot(this, "Sig2H_" + CurrentBar, true, 0, dotY, sigBrush);
+                          highAnchorSequence++;
+
+                          // v1.0.8: Use configurable SignalColor instead of session colors
+                          Brush sigBrush = SignalColor;
+
+                          // v1.0.5: Use ATR-based offset (same as SessionLevels)
+                          double atrOffset = (atr != null && atr[0] > 0) ? atr[0] * LabelDistanceATR : TickSize * 10;
                           
-                          // Label: e.g. "UH1.1", "UH1.2"
-                          if (lastUnlockedHighSession != null)
+                          // v1.0.5: Position relative to candle High + offset
+                          double dotY = High[0] + atrOffset;
+                          
+                          // Arrow (if ShowSignal2)
+                          // Arrow (if ShowSignal2)
+                          if (ShowSignal2)
                           {
-                                  string code = "2";
-                              if (!UseSimpleLabels)
+                              Draw.ArrowDown(this, "Sig2H_" + CurrentBar, true, 0, dotY, sigBrush);
+
+                              // Label: e.g. "UH1.1", "UH1.2"
+                              if (lastUnlockedHighSession != null && ShowSignalLabels)
                               {
-                                  code = GetSignalCode(lastUnlockedHighSession, "H");
-                                  if (lastUnlockedHighSession.IsInternalHigh) code = "i" + code;
-                                  code += "." + highAnchorSequence;
+                                  string code = "";
+                                  if (LabelDisplayMode == LabelMode.Simple) code = "2";
+                                  else if (LabelDisplayMode == LabelMode.Custom) code = CustomSignal2Text;
+                                  else 
+                                  {
+                                      code = GetSignalCode(lastUnlockedHighSession, "H");
+                                      if (lastUnlockedHighSession.IsInternalHigh) code = "i" + code;
+                                      code += "." + highAnchorSequence;
+                                  }
+
+                                  SimpleFont font = new SimpleFont("Arial", LabelFontSize);
+                                  Draw.Text(this, "Sig2H_Txt_" + CurrentBar, true, code, 0, dotY, LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
                               }
-                              // Calculate Label Y for Sig2 (Dot)
-                              double label2Y = GetStackedHighY(High[0] + (SignalTextOffsetTicks * verticalUnit), 15 * verticalUnit);
-                              AddSignal(CurrentBar, label2Y, code, true, sigBrush, "Sig2");
                           }
                           
                           lastSignaledHighAnchorBar = sessionHighBarIdx; // Mark this anchor as USED
                           highSignal2Fired = true;
                       }
+                  }
+                  
+                  // V_FIX_LIVE: Persistent Painting Check (Outside One-Shot Block)
+                  if (highSignal2BarIdx == CurrentBar)
+                  {
+                      BarBrushes[0] = Brushes.Yellow;
                   }
               }
 
@@ -984,7 +1078,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                   // Initial (Pre-Calc)
                    if (lowDetached)
                    {
-                       dbgText = "D"; dbgBrush = Brushes.Cyan; dbgOffset = 40 * verticalUnit;
+                       dbgText = "D"; dbgBrush = Brushes.Cyan; dbgOffset = 40 * TickSize;
                    }
 
                   // UPDATED DETACHMENT LOGIC (Configurable Ticks)
@@ -995,7 +1089,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                   {
                        lowDetached = true;
                        // Update Debug State immediately
-                       dbgText = "D"; dbgBrush = Brushes.Cyan; dbgOffset = 40 * verticalUnit;
+                       dbgText = "D"; dbgBrush = Brushes.Cyan; dbgOffset = 40 * TickSize;
                    }
                       
                  // Trigger: Low <= VWAP
@@ -1005,7 +1099,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                      // Signal Fired -> Override Debug Label to 'E'
                      // Use Code if available
                       string sigCode = (lastUnlockedLowSession != null) ? GetSignalCode(lastUnlockedLowSession, "L") : "E";
-                      dbgText = sigCode; dbgBrush = Brushes.Lime; dbgOffset = 60 * verticalUnit;
+                      dbgText = sigCode; dbgBrush = Brushes.Lime; dbgOffset = 60 * TickSize;
 
                      bool isVisible = lowHasTakenRelevant;
                      bool isTrendAllowed = true;
@@ -1102,60 +1196,50 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                   // MANUAL FIX: Auto-Reset Detachment on Touch for Lows
                   if (low <= lVwap) 
                   {
-                      // V_SIGNAL_3: ENTRY TRIGGER (White Arrow on Touch) -- AUTOMATIC OFFSET
+                      // V_SIGNAL_3: ENTRY TRIGGER (Arrow on Touch) -- v1.0.5: Synced with SessionLevels ATR-based positioning
                       if (lowSignal2Fired)
                       {
-                          // 1. Calculate Volatility (Avg Range of last 3 bars)
-                          double range0 = High[0] - Low[0];
-                          double range1 = CurrentBar > 0 ? High[1] - Low[1] : range0;
-                          double range2 = CurrentBar > 1 ? High[2] - Low[2] : range0;
-                          double avgRange = (range0 + range1 + range2) / 3.0;
+                          // v1.0.5: Use ATR-based offset (same as SessionLevels DrawTriggerLabel)
+                          double atrOffset = (atr != null && atr[0] > 0) ? atr[0] * LabelDistanceATR : TickSize * 10;
+                          
+                          // v1.0.5: Position relative to candle Low (not VWAP) + offset
+                          double arrowY = Low[0] - atrOffset;
 
-                          // 2. Configurable Offsets & Anti-Collision
-                          // Calculate Base Positions (Below Low)
-                          double proposedArrowY = lVwap - (SignalIconOffsetTicks * verticalUnit);
-                          double proposedTextY = lVwap - (SignalTextOffsetTicks * verticalUnit);
-                          
-                          // STACK 1: Arrow (Pushes stack DOWN)
-                          double arrowY = GetStackedLowY(proposedArrowY, 8 * verticalUnit);
-                          
-                          // STACK 2: Label (Pushes stack further DOWN)
-                          // Ensure label is at least below the arrow
-                          double labelY = GetStackedLowY(Math.Min(proposedTextY, arrowY - 2 * verticalUnit), 15 * verticalUnit);
-                          
-                          // 3. Draw Visuals (Order: Line -> Text -> Arrow on Top)
-                          // Connector Line REMOVED
-                          // Draw.Line(this, "ConnL_" + CurrentBar, true, 0, arrowY, 0, labelY, Brushes.White, DashStyleHelper.Solid, 1);
-                          // Label
-                          // Determine Brush
-                          Brush sigBrush = Brushes.White;
-                          if (lastUnlockedLowSession != null)
-                          {
-                               if (lastUnlockedLowSession.Name.StartsWith("Asia")) sigBrush = AsiaLineColor;
-                               else if (lastUnlockedLowSession.Name.StartsWith("Europe")) sigBrush = EuropeLineColor;
-                               else if (lastUnlockedLowSession.Name.StartsWith("USA")) sigBrush = USLineColor;
-                          }
+                          // v1.0.8: Use configurable SignalColor instead of session colors
+                          Brush sigBrush = SignalColor;
 
                           // Label
-                          if (lastUnlockedLowSession != null)
+                          // Arrow (if ShowSignal3)
+                          if (ShowSignal3)
                           {
-                              string entryLabel = "3";
-                              if (!UseSimpleLabels)
+                              Draw.ArrowUp(this, "EntryL_" + CurrentBar, true, 0, arrowY, sigBrush);
+                              
+                              if (lastUnlockedLowSession != null && ShowSignalLabels)
                               {
-                                  entryLabel = GetSignalCode(lastUnlockedLowSession, "L");
-                                  if (lastUnlockedLowSession.IsInternalLow) entryLabel = "i" + entryLabel;
-                                  entryLabel += "." + lowAnchorSequence + ".1";
+                                   // Logic moved inside ShowSignal3 check
+                                   string entryLabel = "";
+                                   if (LabelDisplayMode == LabelMode.Simple) entryLabel = "3";
+                                   else if (LabelDisplayMode == LabelMode.Custom) entryLabel = CustomSignal3Text;
+                                   else 
+                                   {
+                                       entryLabel = GetSignalCode(lastUnlockedLowSession, "L");
+                                       if (lastUnlockedLowSession.IsInternalLow) entryLabel = "i" + entryLabel;
+                                       entryLabel += "." + lowAnchorSequence + ".1";
+                                   }
+
+                                   SimpleFont font = new SimpleFont("Arial", LabelFontSize);
+                                   Draw.Text(this, "Sig3L_Txt_" + CurrentBar, true, entryLabel, 0, arrowY, -LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
                               }
-                              AddSignal(CurrentBar, labelY, entryLabel, false, sigBrush, "Sig3");
                           }
-                          // Arrow (Last)
-                          Draw.ArrowUp(this, "EntryL_" + CurrentBar, true, 0, arrowY, sigBrush);
                       }
 
                       lowDetached = false;
                       lowSignal2Fired = false; // Reset Signal 2 on Touch
                       // If we reset, and we didn't just fire 'E' (dbgText != "E"), then we should NOT show 'D'.
                       if (dbgText == "D") dbgText = ""; 
+                      
+                      // v1.0.10 Fix: Unpaint yellow candle if it touched VWAP in the same bar
+                      if (BarBrushes[0] == Brushes.Yellow) BarBrushes[0] = null; 
                   }
                  
                  // FINAL DRAW CALL
@@ -1171,38 +1255,54 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                   {
                       if (sessionLowBarIdx != lastSignaledLowAnchorBar)
                       {
-                          lowAnchorSequence++;
-                          
-                          // Determine Brush
-                          Brush sigBrush = LowVWAPColor; // Default
-                          if (lastUnlockedLowSession != null)
-                          {
-                               if (lastUnlockedLowSession.Name.StartsWith("Asia")) sigBrush = AsiaLineColor;
-                               else if (lastUnlockedLowSession.Name.StartsWith("Europe")) sigBrush = EuropeLineColor;
-                               else if (lastUnlockedLowSession.Name.StartsWith("USA")) sigBrush = USLineColor;
-                          }
+                          // v1.0.8: Paint Signal 2 candle yellow (only the first separation candle)
+                          // FIX: Store the Index for persistent painting in Live/Tick mode
+                          lowSignal2BarIdx = CurrentBar;
 
-                          double proposedDotY = Low[0] - (SignalIconOffsetTicks * verticalUnit);
-                          double dotY = GetStackedLowY(proposedDotY, 5 * verticalUnit);
-                          Draw.Dot(this, "Sig2L_" + CurrentBar, true, 0, dotY, sigBrush);
+                          lowAnchorSequence++;
+
+                          // v1.0.8: Use configurable SignalColor instead of session colors
+                          Brush sigBrush = SignalColor;
+
+                          // v1.0.5: Use ATR-based offset (same as SessionLevels)
+                          double atrOffset = (atr != null && atr[0] > 0) ? atr[0] * LabelDistanceATR : TickSize * 10;
                           
-                          // Label: e.g. "UL1.1", "UL1.2"
-                          if (lastUnlockedLowSession != null)
+                          // v1.0.5: Position relative to candle Low + offset
+                          double dotY = Low[0] - atrOffset;
+                          
+                          // Arrow (if ShowSignal2)
+                          // Arrow (if ShowSignal2)
+                          if (ShowSignal2)
                           {
-                               string code = "2";
-                               if (!UseSimpleLabels)
-                               {
-                                   code = GetSignalCode(lastUnlockedLowSession, "L");
-                                   if (lastUnlockedLowSession.IsInternalLow) code = "i" + code;
-                                   code += "." + lowAnchorSequence;
-                               }
-                               double label2Y = GetStackedLowY(Low[0] - (SignalTextOffsetTicks * verticalUnit), 15 * verticalUnit);
-                               AddSignal(CurrentBar, label2Y, code, false, sigBrush, "Sig2");
+                              Draw.ArrowUp(this, "Sig2L_" + CurrentBar, true, 0, dotY, sigBrush);
+
+                              // Label: e.g. "UL1.1", "UL1.2"
+                              if (lastUnlockedLowSession != null && ShowSignalLabels)
+                              {
+                                  string code = "";
+                                  if (LabelDisplayMode == LabelMode.Simple) code = "2";
+                                  else if (LabelDisplayMode == LabelMode.Custom) code = CustomSignal2Text;
+                                  else 
+                                  {
+                                      code = GetSignalCode(lastUnlockedLowSession, "L");
+                                      if (lastUnlockedLowSession.IsInternalLow) code = "i" + code;
+                                      code += "." + lowAnchorSequence;
+                                  }
+
+                                  SimpleFont font = new SimpleFont("Arial", LabelFontSize);
+                                  Draw.Text(this, "Sig2L_Txt_" + CurrentBar, true, code, 0, dotY, -LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
+                              }
                           }
                           
                           lastSignaledLowAnchorBar = sessionLowBarIdx; // Mark this anchor as USED
                           lowSignal2Fired = true;
                       }
+                  }
+                  
+                  // V_FIX_LIVE: Persistent Painting Check (Outside One-Shot Block)
+                  if (lowSignal2BarIdx == CurrentBar)
+                  {
+                      BarBrushes[0] = Brushes.Yellow;
                   }
               }
 
@@ -1441,6 +1541,24 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             */
         }
 
+        private int GetBusinessDays(DateTime start, DateTime end)
+        {
+            if (start.Date > end.Date) return 0;
+            
+            int count = 0;
+            DateTime d = start.Date;
+            while (d < end.Date)
+            {
+                d = d.AddDays(1);
+                // Count if it's a weekday (Mon-Fri)
+                if (d.DayOfWeek != DayOfWeek.Saturday && d.DayOfWeek != DayOfWeek.Sunday)
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+
         private string GetSignalCode(SessionLevelInfo session, string levelType)
         {
             if (session == null) return "";
@@ -1451,11 +1569,31 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             else if (session.Name.StartsWith("Europe")) r = "E";
             else if (session.Name.StartsWith("USA")) r = "U";
             
-            // Days Ago
-            // Use Time[0].Date as reference 'Today'
-            int days = (int)(Time[0].Date - session.SessionDate.Date).TotalDays;
-            if (days < 0) days = 0; // Should not happen
+            // Days Ago - Weekday Logic (Business Days)
+            // 1. Resolve Trading Days (Normalize Sunday -> Monday)
+            DateTime currentTradingDay = Time[0].Date;
+            DateTime sessionTradingDay = session.SessionDate.Date;
+
+            if (sessionIterator != null)
+            {
+                 // Try to normalize to Trading Day (handles Sunday 19:00 -> Monday)
+                 try { currentTradingDay = sessionIterator.GetTradingDay(Time[0]); } catch {}
+                 
+                 if (session.StartBarIdx >= 0 && session.StartBarIdx < Bars.Count)
+                 {
+                     try { sessionTradingDay = sessionIterator.GetTradingDay(Bars.GetTime(session.StartBarIdx)); } catch {}
+                 }
+            }
             
+            // 2. Count Business Days
+            int days = GetBusinessDays(sessionTradingDay, currentTradingDay);
+            
+            // Debug check for the user's "UH0" report
+            if (ShowDebugLabels && days == 0 && (currentTradingDay - sessionTradingDay).TotalDays > 1)
+            {
+                Print(string.Format("GetSignalCode DEBUG: Days=0 but diff>1? Curr={0} Sess={1}", currentTradingDay, sessionTradingDay));
+            }
+
             return string.Format("{0}{1}{2}", r, levelType, days);
         }
 
@@ -1522,25 +1660,38 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                         session.HighTradeCount++; // Increment Counter
                         
                         // Generate Code
-                        string code = GetSignalCode(session, "H");
-                        // if (session.IsInternalHigh) code = "i" + code; // REMOVED
-                        
-                        if (UseSimpleLabels) code = "1"; // OVERRIDE
+                        string code = "";
+                        if (LabelDisplayMode == LabelMode.Custom) code = CustomSignal1Text;
+                        else if (LabelDisplayMode == LabelMode.Simple) code = "1";
+                        else 
+                        {
+                            code = GetSignalCode(session, "H");
+                            // if (session.IsInternalHigh) code = "i" + code; // REMOVED
+                        }
 
                         LastSignalCode = code;
 
-                        // Determine Brush
-                        Brush sigBrush = Brushes.Yellow;
-                        if (session.Name.StartsWith("Asia")) sigBrush = AsiaLineColor;
-                        else if (session.Name.StartsWith("Europe")) sigBrush = EuropeLineColor;
-                        else if (session.Name.StartsWith("USA")) sigBrush = USLineColor;
+                        // v1.0.8: Use configurable SignalColor instead of session colors
+                        Brush sigBrush = SignalColor;
 
-                        // V_VISUAL: SIGNAL 1 - TAKE LEVEL (RESISTANCE) - DEV MODE
-                        double triY = GetStackedHighY(high + SignalIconOffsetTicks * verticalUnit, 5 * verticalUnit);
-                        Draw.TriangleDown(this, "TakeHigh_" + session.Name + CurrentBar, true, 0, triY, sigBrush);
-                        // V_VISUAL: Label Code - Route to Direct2D
-                        double label1Y = GetStackedHighY(high + SignalTextOffsetTicks * verticalUnit, 15 * verticalUnit);
-                        AddSignal(CurrentBar, label1Y, code, true, sigBrush, "Sig1");
+                        // V_VISUAL: SIGNAL 1 - TAKE LEVEL (RESISTANCE) - v1.0.5: Synced with SessionLevels ATR-based positioning
+                        double atrOffset = (atr != null && atr[0] > 0) ? atr[0] * LabelDistanceATR : TickSize * 10;
+                        
+                        // v1.0.5: Position relative to candle High + offset
+                        double triY = high + atrOffset;
+                        
+                        // Triangle (if ShowSignal1)
+                        if (ShowSignal1)
+                        {
+                            Draw.TriangleDown(this, "TakeHigh_" + session.Name + CurrentBar, true, 0, triY, sigBrush);
+                            
+                            // Label (if ShowSignalLabels)
+                            if (ShowSignalLabels)
+                            {
+                                SimpleFont font = new SimpleFont("Arial", LabelFontSize);
+                                Draw.Text(this, "Sig1H_Txt_" + session.Name + CurrentBar, true, code, 0, triY, LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
+                            }
+                        }
 
 
                 // V_VISUAL: ADD TRADE LINE
@@ -1605,27 +1756,38 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                          session.LowTradeCount++; // Increment Counter
                          
                          // Generate Code
-                         string code = GetSignalCode(session, "L");
-                         // if (session.IsInternalLow) code = "i" + code; // REMOVED
-                         
-                         if (UseSimpleLabels) code = "1"; // OVERRIDE
+                         string code = "";
+                         if (LabelDisplayMode == LabelMode.Custom) code = CustomSignal1Text;
+                         else if (LabelDisplayMode == LabelMode.Simple) code = "1";
+                         else 
+                         {
+                             code = GetSignalCode(session, "L");
+                             // if (session.IsInternalLow) code = "i" + code; // REMOVED
+                         }
 
                          LastSignalCode = code;
 
-                         // Determine Brush
-                         Brush sigBrush = Brushes.Yellow;
-                         if (session.Name.StartsWith("Asia")) sigBrush = AsiaLineColor;
-                         else if (session.Name.StartsWith("Europe")) sigBrush = EuropeLineColor;
-                         else if (session.Name.StartsWith("USA")) sigBrush = USLineColor;
+                         // v1.0.8: Use configurable SignalColor instead of session colors
+                         Brush sigBrush = SignalColor;
 
-                         // V_VISUAL: SIGNAL 1 - TAKE LEVEL (SUPPORT) - DEV MODE
-                         // V_VISUAL: SIGNAL 1 - TAKE LEVEL (SUPPORT) - DEV MODE
-                         double triY = GetStackedLowY(low - SignalIconOffsetTicks * verticalUnit, 5 * verticalUnit);
-                         Draw.TriangleUp(this, "TakeLow_" + session.Name + CurrentBar, true, 0, triY, sigBrush);
+                         // V_VISUAL: SIGNAL 1 - TAKE LEVEL (SUPPORT) - v1.0.5: Synced with SessionLevels ATR-based positioning
+                         double atrOffset = (atr != null && atr[0] > 0) ? atr[0] * LabelDistanceATR : TickSize * 10;
                          
-                         // V_VISUAL: Label Code - Route to Direct2D
-                         double label1Y = GetStackedLowY(low - SignalTextOffsetTicks * verticalUnit, 15 * verticalUnit);
-                         AddSignal(CurrentBar, label1Y, code, false, sigBrush, "Sig1");
+                         // v1.0.5: Position relative to candle Low + offset
+                         double triY = low - atrOffset;
+                         
+                         // Triangle (if ShowSignal1)
+                         if (ShowSignal1)
+                         {
+                             Draw.TriangleUp(this, "TakeLow_" + session.Name + CurrentBar, true, 0, triY, sigBrush);
+                             
+                             // Label (if ShowSignalLabels)
+                             if (ShowSignalLabels)
+                             {
+                                 SimpleFont font = new SimpleFont("Arial", LabelFontSize);
+                                 Draw.Text(this, "Sig1L_Txt_" + session.Name + CurrentBar, true, code, 0, triY, -LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
+                             }
+                         }
 
 
                  // V_VISUAL: ADD TRADE LINE
@@ -1817,28 +1979,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         }
         #endregion
 
-        #region Properties
-        [NinjaScriptProperty]
-        [Display(Name="Use Exchange Time", Description="If true, start/end times are interpreted as New York Time and converted to Local Time.", Order=0, GroupName="Parameters")]
-        public bool UseExchangeTime
-        { get; set; }
-        
-        [Range(0, 50)]
-        [Display(Name = "Detachment Ticks", Description = "Min ticks required between Candle High/Low and VWAP to consider it 'Detached'.", GroupName = "Parameters", Order = 10)]
-        public int DetachmentTicks { get; set; } = 2; // Default 2
 
-        [Range(0, 200)]
-        [Display(Name = "Execution Plot Offset", Description = "Vertical distance (ticks) for signal arrows and text from the candle.", GroupName = "Visual", Order = 11)]
-        public int ExecutionPlotOffsetTicks { get; set; } = 2;
-
-        [Range(0, 200)]
-        [Display(Name = "Text Separation", Description = "Vertical distance (ticks) between arrow and text.", GroupName = "Visual", Order = 12)]
-        public int TextSeparationTicks { get; set; } = 30;
-
-        [Range(0, 50)]
-        [Display(Name = "Signal 2 Threshold", Description = "Ticks required for candle to close Inside VWAP for 2nd signal.", GroupName = "Visual", Order = 13)]
-        public int Signal2ThresholdTicks { get; set; } = 1;
-        #endregion
 
         #region Smart Label Rendering
         private SharpDX.DirectWrite.Factory dwFactory;
@@ -2132,11 +2273,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
               // 1. Calculate and Draw Anchored VWAPs (High/Low)
               if (hasHighVWAP)
               {
-                  DrawAnchoredLine(sessionHighBarIdx, HighVWAPColor, "High VWAP", chartControl, chartScale);
+                  DrawAnchoredLine(sessionHighBarIdx, HighVWAPColor, HighVwapLabel, chartControl, chartScale);
               }
               if (hasLowVWAP)
               {
-                  DrawAnchoredLine(sessionLowBarIdx, LowVWAPColor, "Low VWAP", chartControl, chartScale);
+                  DrawAnchoredLine(sessionLowBarIdx, LowVWAPColor, LowVwapLabel, chartControl, chartScale);
               }
 
               // V_HIST: Draw Historical VWAP Segments (Gray, 1px, No Label)
@@ -2492,229 +2633,294 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         }
 
         #region Properties
-        [XmlIgnore]
-        [Display(Name = "High VWAP Color", GroupName = "3. Visuals", Order = 1)]
-        public Brush HighVWAPColor { get; set; }
-
-        [Browsable(false)]
-        public string HighVWAPColorSerializable
-        {
-            get { return Serialize.BrushToString(HighVWAPColor); }
-            set { HighVWAPColor = Serialize.StringToBrush(value); }
-        }
-
-        [XmlIgnore]
-        [Display(Name = "Low VWAP Color", GroupName = "3. Visuals", Order = 3)]
-        public Brush LowVWAPColor { get; set; }
+        
+        // ========================================================================
+        // 01. Configuración Principal
+        // ========================================================================
+        [NinjaScriptProperty]
+        [Display(Name = "Método VWAP", Description = "Precio usado para el cálculo del VWAP: Cierre (default), Típico (H+L+C)/3, u OHLC4", GroupName = "01. Configuración Principal", Order = 1)]
+        public VwapPriceMethod VwapMethod { get; set; } = VwapPriceMethod.Close;
 
         [NinjaScriptProperty]
-        [Display(Name = "Show Days Ago", Description = "Show 'X days' instead of date for past levels", GroupName = "3. Visuals", Order = 9)]
-        public bool ShowDaysAgo { get; set; }
+        [Range(1, 365)]
+        [Display(Name = "Días de Historia Máx", Description = "Ignorar niveles más antiguos de X días para optimizar rendimiento", GroupName = "01. Configuración Principal", Order = 2)]
+        public int MaxHistoryDays { get; set; }
 
-        [Browsable(false)]
-        public string LowVWAPColorSerializable
-        {
-            get { return Serialize.BrushToString(LowVWAPColor); }
-            set { LowVWAPColor = Serialize.StringToBrush(value); }
-        }
+        [NinjaScriptProperty]
+        [Display(Name = "Usar Hora Exchange", Description = "Si es true, usa los horarios del Exchange. Si es false, usa hora local.", GroupName = "01. Configuración Principal", Order = 3)]
+        public bool UseExchangeTime { get; set; } = true;
+
+        // ========================================================================
+        // 02. Sesiones de Tiempo
+        // ========================================================================
+        
+        // ASIA
+        [NinjaScriptProperty]
+        [Display(Name = "Mostrar Asia", GroupName = "02. Sesiones de Tiempo", Order = 1)]
+        public bool ShowAsia { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Asia Inicio", GroupName = "02. Sesiones de Tiempo", Order = 2)]
+        public string AsiaStartTime { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Asia Fin", GroupName = "02. Sesiones de Tiempo", Order = 3)]
+        public string AsiaEndTime { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Mostrar High Asia", GroupName = "02. Sesiones de Tiempo", Order = 4)]
+        public bool ShowAsiaHigh { get; set; }
+        
+        [NinjaScriptProperty]
+        [Display(Name = "Mostrar Low Asia", GroupName = "02. Sesiones de Tiempo", Order = 5)]
+        public bool ShowAsiaLow { get; set; }
 
         [XmlIgnore]
-        [Display(Name = "Historical VWAP Color", GroupName = "3. Visuals", Order = 4)]
-        public Brush HistoricalVWAPColor { get; set; }
+        [Display(Name = "Color Línea Asia", GroupName = "02. Sesiones de Tiempo", Order = 6)]
+        public Brush AsiaLineColor { get; set; }
+        [Browsable(false)] public string AsiaLineColorSerializable { get { return Serialize.BrushToString(AsiaLineColor); } set { AsiaLineColor = Serialize.StringToBrush(value); } }
 
-        [Browsable(false)]
-        public string HistoricalVWAPColorSerializable
-        {
-            get { return Serialize.BrushToString(HistoricalVWAPColor); }
-            set { HistoricalVWAPColor = Serialize.StringToBrush(value); }
-        }
+        [XmlIgnore]
+        [Display(Name = "Color Etiqueta Asia", GroupName = "02. Sesiones de Tiempo", Order = 7)]
+        public Brush AsiaLabelColor { get; set; }
+        [Browsable(false)] public string AsiaLabelColorSerializable { get { return Serialize.BrushToString(AsiaLabelColor); } set { AsiaLabelColor = Serialize.StringToBrush(value); } }
+
+
+        // EUROPE
+        [NinjaScriptProperty]
+        [Display(Name = "Mostrar Europa", GroupName = "02. Sesiones de Tiempo", Order = 10)]
+        public bool ShowEurope { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Europa Inicio", GroupName = "02. Sesiones de Tiempo", Order = 11)]
+        public string EuropeStartTime { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Europa Fin", GroupName = "02. Sesiones de Tiempo", Order = 12)]
+        public string EuropeEndTime { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Mostrar High Europa", GroupName = "02. Sesiones de Tiempo", Order = 13)]
+        public bool ShowEuropeHigh { get; set; }
+        
+        [NinjaScriptProperty]
+        [Display(Name = "Mostrar Low Europa", GroupName = "02. Sesiones de Tiempo", Order = 14)]
+        public bool ShowEuropeLow { get; set; }
+
+        [XmlIgnore]
+        [Display(Name = "Color Línea Europa", GroupName = "02. Sesiones de Tiempo", Order = 15)]
+        public Brush EuropeLineColor { get; set; }
+        [Browsable(false)] public string EuropeLineColorSerializable { get { return Serialize.BrushToString(EuropeLineColor); } set { EuropeLineColor = Serialize.StringToBrush(value); } }
+
+        [XmlIgnore]
+        [Display(Name = "Color Etiqueta Europa", GroupName = "02. Sesiones de Tiempo", Order = 16)]
+        public Brush EuropeLabelColor { get; set; }
+        [Browsable(false)] public string EuropeLabelColorSerializable { get { return Serialize.BrushToString(EuropeLabelColor); } set { EuropeLabelColor = Serialize.StringToBrush(value); } }
+
+        // USA
+        [NinjaScriptProperty]
+        [Display(Name = "Mostrar USA", GroupName = "02. Sesiones de Tiempo", Order = 20)]
+        public bool ShowUS { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "USA Inicio", GroupName = "02. Sesiones de Tiempo", Order = 21)]
+        public string USStartTime { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "USA Fin", GroupName = "02. Sesiones de Tiempo", Order = 22)]
+        public string USEndTime { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Mostrar High USA", GroupName = "02. Sesiones de Tiempo", Order = 23)]
+        public bool ShowUSHigh { get; set; }
+        
+        [NinjaScriptProperty]
+        [Display(Name = "Mostrar Low USA", GroupName = "02. Sesiones de Tiempo", Order = 24)]
+        public bool ShowUSLow { get; set; }
+
+        [XmlIgnore]
+        [Display(Name = "Color Línea USA", GroupName = "02. Sesiones de Tiempo", Order = 25)]
+        public Brush USLineColor { get; set; }
+        [Browsable(false)] public string USLineColorSerializable { get { return Serialize.BrushToString(USLineColor); } set { USLineColor = Serialize.StringToBrush(value); } }
+
+        [XmlIgnore]
+        [Display(Name = "Color Etiqueta USA", GroupName = "02. Sesiones de Tiempo", Order = 26)]
+        public Brush USLabelColor { get; set; }
+        [Browsable(false)] public string USLabelColorSerializable { get { return Serialize.BrushToString(USLabelColor); } set { USLabelColor = Serialize.StringToBrush(value); } }
+
+
+        // ========================================================================
+        // 03. Visuales VWAP
+        // ========================================================================
+        [XmlIgnore]
+        [Display(Name = "Color VWAP High", GroupName = "03. Visuales VWAP", Order = 1)]
+        public Brush HighVWAPColor { get; set; }
+        [Browsable(false)] public string HighVWAPColorSerializable { get { return Serialize.BrushToString(HighVWAPColor); } set { HighVWAPColor = Serialize.StringToBrush(value); } }
+
+        [XmlIgnore]
+        [Display(Name = "Color VWAP Low", GroupName = "03. Visuales VWAP", Order = 2)]
+        public Brush LowVWAPColor { get; set; }
+        [Browsable(false)] public string LowVWAPColorSerializable { get { return Serialize.BrushToString(LowVWAPColor); } set { LowVWAPColor = Serialize.StringToBrush(value); } }
+
+        [XmlIgnore]
+        [Display(Name = "Color VWAP Histórico", GroupName = "03. Visuales VWAP", Order = 3)]
+        public Brush HistoricalVWAPColor { get; set; }
+        [Browsable(false)] public string HistoricalVWAPColorSerializable { get { return Serialize.BrushToString(HistoricalVWAPColor); } set { HistoricalVWAPColor = Serialize.StringToBrush(value); } }
 
         [NinjaScriptProperty]
         [Range(1.0f, 10.0f)]
-        [Display(Name = "Historical VWAP Thickness", GroupName = "3. Visuals", Order = 4)]
+        [Display(Name = "Grosor VWAP Histórico", GroupName = "03. Visuales VWAP", Order = 4)]
         public float HistoricalVWAPThickness { get; set; }
 
-
-
-
-        
         [NinjaScriptProperty]
-        [Display(Name = "Show Labels", GroupName = "3. Visuals", Order = 5)]
+        [Display(Name = "Extender Líneas Infinitas", Description = "Extender líneas hasta que sean tocadas", GroupName = "03. Visuales VWAP", Order = 5)]
+        public bool ExtendLinesUntilTouch { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Etiqueta VWAP High", Description = "Texto para la línea VWAP superior (ej. Supply)", GroupName = "03. Visuales VWAP", Order = 6)]
+        public string HighVwapLabel { get; set; } = "Supply";
+
+        [NinjaScriptProperty]
+        [Display(Name = "Etiqueta VWAP Low", Description = "Texto para la línea VWAP inferior (ej. Demand)", GroupName = "03. Visuales VWAP", Order = 7)]
+        public string LowVwapLabel { get; set; } = "Demand";
+
+        [NinjaScriptProperty]
+        [Display(Name = "Mostrar Días Atrás", Description = "Muestra 'X days' en lugar de fecha", GroupName = "03. Visuales VWAP", Order = 6)]
+        public bool ShowDaysAgo { get; set; }
+
+        // ========================================================================
+        // 04. Señales y Textos
+        // ========================================================================
+        [NinjaScriptProperty]
+        [Display(Name = "Dirección de Trades", GroupName = "04. Señales y Textos", Order = 1)]
+        public TradeDirectionMode TradeDirection { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Mostrar Etiquetas", GroupName = "04. Señales y Textos", Order = 2)]
         public bool ShowLabels { get; set; }
 
         [NinjaScriptProperty]
-        [Display(Name = "Use Simple Labels (1, 2, 3)", Description = "If true, shows '1', '2', '3' instead of full codes", GroupName = "3. Visuals", Order = 5)]
-        public bool UseSimpleLabels { get; set; }
+        [Display(Name = "Modo Etiquetas", Description = "Selecciona el modo de visualización de etiquetas", GroupName = "04. Señales y Textos", Order = 3)]
+        public LabelMode LabelDisplayMode { get; set; } = LabelMode.Default;
 
         [NinjaScriptProperty]
-        [Range(1, 200)]
-        [Display(Name = "Signal Icon Offset (Ticks)", Description = "Distance from candle/price to the Icon (Arrow/Dot)", GroupName = "3. Visuals", Order = 6)]
-        public int SignalIconOffsetTicks { get; set; } = 15;
+        [Display(Name = "Texto Señal 1", Description = "Texto para señal de ruptura (ej. 'Liquidity Grabbed')", GroupName = "04. Señales y Textos", Order = 31)]
+        public string CustomSignal1Text { get; set; } = "Liquidity Grabbed";
 
         [NinjaScriptProperty]
-        [Range(1, 200)]
-        [Display(Name = "Signal Text Offset (Ticks)", Description = "Distance from candle/price to the Text Label", GroupName = "3. Visuals", Order = 7)]
-        public int SignalTextOffsetTicks { get; set; } = 30;
+        [Display(Name = "Texto Señal 2", Description = "Texto para señal confirmada (ej. 'Entry 1')", GroupName = "04. Señales y Textos", Order = 32)]
+        public string CustomSignal2Text { get; set; } = "Entry 1";
 
-
-        
         [NinjaScriptProperty]
-        [Display(Name = "Extend Lines Until Touch", GroupName = "3. Visuals", Order = 10)]
-        public bool ExtendLinesUntilTouch { get; set; }
-        
+        [Display(Name = "Texto Señal 3", Description = "Texto para señal de re-test (ej. 'Entry 2')", GroupName = "04. Señales y Textos", Order = 33)]
+        public string CustomSignal3Text { get; set; } = "Entry 2";
+
         [NinjaScriptProperty]
-        [Range(1, 365)]
-        [Display(Name = "Max History Days", Description = "Ignore levels older than X days", GroupName = "1. General", Order = 2)]
-        public int MaxHistoryDays { get; set; }
-        
+        [Display(Name = "Mostrar Etiquetas Señal", Description = "Muestra texto en señales (AH.1, etc)", GroupName = "04. Señales y Textos", Order = 4)]
+        public bool ShowSignalLabels { get; set; } = true;
+
         [NinjaScriptProperty]
-        [Display(Name = "Show Debug Labels", Description = "Show text when a level is broken", GroupName = "4. Alerts", Order = 3)]
-        public bool ShowDebugLabels { get; set; }
+        [Display(Name = "Mostrar Señal 1 (Ruptura)", Description = "Muestra la señal de toma de liquidez", GroupName = "04. Señales y Textos", Order = 40)]
+        public bool ShowSignal1 { get; set; } = true;
 
-
-        
         [NinjaScriptProperty]
-        [Display(Name = "Enable Alerts", Description = "Play sound on signal", GroupName = "4. Alerts", Order = 1)]
-        public bool EnableAlerts { get; set; }
-        
+        [Display(Name = "Mostrar Señal 2 (Confir.)", Description = "Muestra la señal de entrada 1", GroupName = "04. Señales y Textos", Order = 41)]
+        public bool ShowSignal2 { get; set; } = true;
+
         [NinjaScriptProperty]
-        [Display(Name = "Alert Sound", Description = "Sound file for alerts", GroupName = "4. Alerts", Order = 2)]
-        public string AlertSound { get; set; }
-        
+        [Display(Name = "Mostrar Señal 3 (Re-test)", Description = "Muestra la señal de entrada 2", GroupName = "04. Señales y Textos", Order = 42)]
+        public bool ShowSignal3 { get; set; } = true;
 
-
-
-
-        
-        [NinjaScriptProperty]
-        [Display(Name = "Trade Direction", GroupName = "5. Strategy", Order = 1)]
-        public TradeDirectionMode TradeDirection { get; set; }
-        
-        // Session Properties
-        
-        // Asia
-        [Display(Name = "Asia Start Time", GroupName = "2. Sessions", Order = 1)]
-        public string AsiaStartTime { get; set; }
-        [Display(Name = "Asia End Time", GroupName = "2. Sessions", Order = 2)]
-        public string AsiaEndTime { get; set; }
-        [Display(Name = "Show Asia", GroupName = "2. Sessions", Order = 3)]
-        public bool ShowAsia { get; set; }
         [XmlIgnore]
-        [Display(Name = "Asia Line Color", GroupName = "2. Sessions", Order = 6)]
-        public Brush AsiaLineColor { get; set; }
-        [Browsable(false)]
-        public string AsiaLineColorSerializable
-        {
-            get { return Serialize.BrushToString(AsiaLineColor); }
-            set { AsiaLineColor = Serialize.StringToBrush(value); }
-        }
-        [XmlIgnore]
-        [Display(Name = "Asia Label Color", GroupName = "2. Sessions", Order = 7)]
-        public Brush AsiaLabelColor { get; set; }
-        [Browsable(false)]
-        public string AsiaLabelColorSerializable
-        {
-            get { return Serialize.BrushToString(AsiaLabelColor); }
-            set { AsiaLabelColor = Serialize.StringToBrush(value); }
-        }
-        [Display(Name = "Show Asia High", GroupName = "2. Sessions", Order = 4)]
-        public bool ShowAsiaHigh { get; set; }
-        [Display(Name = "Show Asia Low", GroupName = "2. Sessions", Order = 5)]
-        public bool ShowAsiaLow { get; set; }
+        [Display(Name = "Color Señales", Description = "Color para flechas y textos de señal", GroupName = "04. Señales y Textos", Order = 6)]
+        public Brush SignalColor { get; set; } = Brushes.White;
+        [Browsable(false)] public string SignalColorSerializable { get { return Serialize.BrushToString(SignalColor); } set { SignalColor = Serialize.StringToBrush(value); } }
 
-        // Europe
-        [Display(Name = "Europe Start Time", GroupName = "2. Sessions", Order = 8)]
-        public string EuropeStartTime { get; set; }
-        [Display(Name = "Europe End Time", GroupName = "2. Sessions", Order = 9)]
-        public string EuropeEndTime { get; set; }
-        [Display(Name = "Show Europe", GroupName = "2. Sessions", Order = 10)]
-        public bool ShowEurope { get; set; }
         [XmlIgnore]
-        [Display(Name = "Europe Line Color", GroupName = "2. Sessions", Order = 13)]
-        public Brush EuropeLineColor { get; set; }
-        [Browsable(false)]
-        public string EuropeLineColorSerializable
-        {
-            get { return Serialize.BrushToString(EuropeLineColor); }
-            set { EuropeLineColor = Serialize.StringToBrush(value); }
-        }
-        [XmlIgnore]
-        [Display(Name = "Europe Label Color", GroupName = "2. Sessions", Order = 14)]
-        public Brush EuropeLabelColor { get; set; }
-        [Browsable(false)]
-        public string EuropeLabelColorSerializable
-        {
-            get { return Serialize.BrushToString(EuropeLabelColor); }
-            set { EuropeLabelColor = Serialize.StringToBrush(value); }
-        }
-        [Display(Name = "Show Europe High", GroupName = "2. Sessions", Order = 11)]
-        public bool ShowEuropeHigh { get; set; }
-        [Display(Name = "Show Europe Low", GroupName = "2. Sessions", Order = 12)]
-        public bool ShowEuropeLow { get; set; }
-
-        // US
-        [Display(Name = "US Start Time", GroupName = "2. Sessions", Order = 15)]
-        public string USStartTime { get; set; }
-        [Display(Name = "US End Time", GroupName = "2. Sessions", Order = 16)]
-        public string USEndTime { get; set; }
-        [Display(Name = "Show US", GroupName = "2. Sessions", Order = 17)]
-        public bool ShowUS { get; set; }
-        [XmlIgnore]
-        [Display(Name = "US Line Color", GroupName = "2. Sessions", Order = 20)]
-        public Brush USLineColor { get; set; }
-        [Browsable(false)]
-        public string USLineColorSerializable
-        {
-            get { return Serialize.BrushToString(USLineColor); }
-            set { USLineColor = Serialize.StringToBrush(value); }
-        }
-        [XmlIgnore]
-        [Display(Name = "US Label Color", GroupName = "2. Sessions", Order = 21)]
-        public Brush USLabelColor { get; set; }
-        [Browsable(false)]
-        public string USLabelColorSerializable
-        {
-            get { return Serialize.BrushToString(USLabelColor); }
-            set { USLabelColor = Serialize.StringToBrush(value); }
-        }
-        [Display(Name = "Show US High", GroupName = "2. Sessions", Order = 18)]
-        public bool ShowUSHigh { get; set; }
-        [Display(Name = "Show US Low", GroupName = "2. Sessions", Order = 19)]
-        public bool ShowUSLow { get; set; }
-
-        [XmlIgnore] [Display(Name = "Label Background Color", GroupName = "3. Visuals", Order = 6)]
+        [Display(Name = "Color Fondo Etiquetas", GroupName = "04. Señales y Textos", Order = 7)]
         public Brush LabelBackgroundColor { get; set; } = Brushes.Black;
         [Browsable(false)] public string LabelBackgroundColorSerializable { get { return Serialize.BrushToString(LabelBackgroundColor); } set { LabelBackgroundColor = Serialize.StringToBrush(value); } }
 
-        #endregion
-        // Countdown Properties
-        [Display(Name = "Show Countdown", GroupName = "7. Countdown", Order = 1)]
-        public bool ShowCountdown { get; set; }
+        [NinjaScriptProperty]
+        [Range(6, 24)]
+        [Display(Name = "Tamaño Fuente Señal", GroupName = "04. Señales y Textos", Order = 8)]
+        public int LabelFontSize { get; set; } = 12;
 
-        [Display(Name = "Count Down Mode", GroupName = "7. Countdown", Order = 2)]
-        public bool CountDown { get; set; }
+        [NinjaScriptProperty]
+        [Range(-50, 50)]
+        [Display(Name = "Offset Texto (px)", GroupName = "04. Señales y Textos", Order = 9)]
+        public int LabelTextOffset { get; set; } = 10;
 
-        [Display(Name = "Show Percent", GroupName = "7. Countdown", Order = 3)]
-        public bool ShowPercent { get; set; }
+        [NinjaScriptProperty]
+        [Range(0.1, 5.0)]
+        [Display(Name = "Distancia Etiqueta ATR", Description = "Multiplicador ATR para distancia desde precio", GroupName = "04. Señales y Textos", Order = 10)]
+        public double LabelDistanceATR { get; set; } = 0.3;
 
-        [Display(Name = "Font Size", GroupName = "7. Countdown", Order = 4)]
-        public int CountdownFontSize { get; set; }
+        [NinjaScriptProperty]
+        [Range(0.5, 5.0)]
+        [Display(Name = "Espaciado Colisión", GroupName = "04. Señales y Textos", Order = 11)]
+        public double LabelCollisionSpacing { get; set; } = 1.5;
 
-        [Display(Name = "Offset X (Pixels)", GroupName = "7. Countdown", Order = 5)]
-        public int CountdownOffsetX { get; set; }
+        [NinjaScriptProperty]
+        [Range(0, 50)]
+        [Display(Name = "Ticks de Separación", Description = "Ticks mínimos requeridos entre High/Low y VWAP para considerar 'Detached'", GroupName = "04. Señales y Textos", Order = 12)]
+        public int DetachmentTicks { get; set; } = 2;
 
-        [Display(Name = "Offset Y (Ticks)", GroupName = "7. Countdown", Order = 6)]
-        public int CountdownOffsetY { get; set; }
+        [NinjaScriptProperty]
+        [Range(0, 50)]
+        [Display(Name = "Umbral Señal 2", Description = "Ticks requeridos para cierre dentro del VWAP", GroupName = "04. Señales y Textos", Order = 13)]
+        public int Signal2ThresholdTicks { get; set; } = 1;
+
+
+        // ========================================================================
+        // 05. Alertas & Debug
+        // ========================================================================
+        [NinjaScriptProperty]
+        [Display(Name = "Habilitar Alertas", GroupName = "05. Alertas & Debug", Order = 1)]
+        public bool EnableAlerts { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Sonido Alerta", GroupName = "05. Alertas & Debug", Order = 2)]
+        public string AlertSound { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Mostrar Labels Debug", GroupName = "05. Alertas & Debug", Order = 3)]
+        public bool ShowDebugLabels { get; set; }
+
+
+        // ========================================================================
+        // 06. Contador (Countdown)
+        // ========================================================================
+        [NinjaScriptProperty]
+        [Display(Name = "Mostrar Contador", GroupName = "06. Contador", Order = 1)]
+        public bool ShowCountdown { get; set; } = true;
+
+        [NinjaScriptProperty]
+        [Display(Name = "Modo Cuenta Regresiva", GroupName = "06. Contador", Order = 2)]
+        public bool CountDown { get; set; } = true;
+
+        [NinjaScriptProperty]
+        [Display(Name = "Mostrar Porcentaje", GroupName = "06. Contador", Order = 3)]
+        public bool ShowPercent { get; set; } = false;
+
+        [NinjaScriptProperty]
+        [Display(Name = "Tamaño Fuente", GroupName = "06. Contador", Order = 4)]
+        public int CountdownFontSize { get; set; } = 12;
 
         [XmlIgnore]
-        [Display(Name = "Text Color", GroupName = "7. Countdown", Order = 7)]
-        public Brush CountdownTextColor { get; set; }
-        [Browsable(false)]
-        public string CountdownTextColorSerializable
-        {
-            get { return Serialize.BrushToString(CountdownTextColor); }
-            set { CountdownTextColor = Serialize.StringToBrush(value); }
-        }
+        [Display(Name = "Color Texto", GroupName = "06. Contador", Order = 5)]
+        public Brush CountdownTextColor { get; set; } = Brushes.White;
+        [Browsable(false)] public string CountdownTextColorSerializable { get { return Serialize.BrushToString(CountdownTextColor); } set { CountdownTextColor = Serialize.StringToBrush(value); } }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Offset X (px)", GroupName = "06. Contador", Order = 6)]
+        public int CountdownOffsetX { get; set; } = 20;
+
+        [NinjaScriptProperty]
+        [Display(Name = "Offset Y (ticks)", GroupName = "06. Contador", Order = 7)]
+        public int CountdownOffsetY { get; set; } = 10;
+
+        #endregion
         
         // Countdown Helpers
         private void OnTimerTick(object sender, System.Timers.ElapsedEventArgs e)
@@ -2821,18 +3027,18 @@ namespace NinjaTrader.NinjaScript.Indicators
 	public partial class Indicator : NinjaTrader.Gui.NinjaScript.IndicatorRenderBase
 	{
 		private RelativeIndicators.RelativeVwap[] cacheRelativeVwap;
-		public RelativeIndicators.RelativeVwap RelativeVwap(bool useExchangeTime, bool showDaysAgo, float historicalVWAPThickness, bool showLabels, bool useSimpleLabels, int signalIconOffsetTicks, int signalTextOffsetTicks, bool extendLinesUntilTouch, int maxHistoryDays, bool showDebugLabels, bool enableAlerts, string alertSound, TradeDirectionMode tradeDirection)
+		public RelativeIndicators.RelativeVwap RelativeVwap(VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, float historicalVWAPThickness, bool extendLinesUntilTouch, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, bool enableAlerts, string alertSound, bool showDebugLabels, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY)
 		{
-			return RelativeVwap(Input, useExchangeTime, showDaysAgo, historicalVWAPThickness, showLabels, useSimpleLabels, signalIconOffsetTicks, signalTextOffsetTicks, extendLinesUntilTouch, maxHistoryDays, showDebugLabels, enableAlerts, alertSound, tradeDirection);
+			return RelativeVwap(Input, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, historicalVWAPThickness, extendLinesUntilTouch, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, enableAlerts, alertSound, showDebugLabels, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY);
 		}
 
-		public RelativeIndicators.RelativeVwap RelativeVwap(ISeries<double> input, bool useExchangeTime, bool showDaysAgo, float historicalVWAPThickness, bool showLabels, bool useSimpleLabels, int signalIconOffsetTicks, int signalTextOffsetTicks, bool extendLinesUntilTouch, int maxHistoryDays, bool showDebugLabels, bool enableAlerts, string alertSound, TradeDirectionMode tradeDirection)
+		public RelativeIndicators.RelativeVwap RelativeVwap(ISeries<double> input, VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, float historicalVWAPThickness, bool extendLinesUntilTouch, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, bool enableAlerts, string alertSound, bool showDebugLabels, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY)
 		{
 			if (cacheRelativeVwap != null)
 				for (int idx = 0; idx < cacheRelativeVwap.Length; idx++)
-					if (cacheRelativeVwap[idx] != null && cacheRelativeVwap[idx].UseExchangeTime == useExchangeTime && cacheRelativeVwap[idx].ShowDaysAgo == showDaysAgo && cacheRelativeVwap[idx].HistoricalVWAPThickness == historicalVWAPThickness && cacheRelativeVwap[idx].ShowLabels == showLabels && cacheRelativeVwap[idx].UseSimpleLabels == useSimpleLabels && cacheRelativeVwap[idx].SignalIconOffsetTicks == signalIconOffsetTicks && cacheRelativeVwap[idx].SignalTextOffsetTicks == signalTextOffsetTicks && cacheRelativeVwap[idx].ExtendLinesUntilTouch == extendLinesUntilTouch && cacheRelativeVwap[idx].MaxHistoryDays == maxHistoryDays && cacheRelativeVwap[idx].ShowDebugLabels == showDebugLabels && cacheRelativeVwap[idx].EnableAlerts == enableAlerts && cacheRelativeVwap[idx].AlertSound == alertSound && cacheRelativeVwap[idx].TradeDirection == tradeDirection && cacheRelativeVwap[idx].EqualsInput(input))
+					if (cacheRelativeVwap[idx] != null && cacheRelativeVwap[idx].VwapMethod == vwapMethod && cacheRelativeVwap[idx].MaxHistoryDays == maxHistoryDays && cacheRelativeVwap[idx].UseExchangeTime == useExchangeTime && cacheRelativeVwap[idx].ShowAsia == showAsia && cacheRelativeVwap[idx].AsiaStartTime == asiaStartTime && cacheRelativeVwap[idx].AsiaEndTime == asiaEndTime && cacheRelativeVwap[idx].ShowAsiaHigh == showAsiaHigh && cacheRelativeVwap[idx].ShowAsiaLow == showAsiaLow && cacheRelativeVwap[idx].ShowEurope == showEurope && cacheRelativeVwap[idx].EuropeStartTime == europeStartTime && cacheRelativeVwap[idx].EuropeEndTime == europeEndTime && cacheRelativeVwap[idx].ShowEuropeHigh == showEuropeHigh && cacheRelativeVwap[idx].ShowEuropeLow == showEuropeLow && cacheRelativeVwap[idx].ShowUS == showUS && cacheRelativeVwap[idx].USStartTime == uSStartTime && cacheRelativeVwap[idx].USEndTime == uSEndTime && cacheRelativeVwap[idx].ShowUSHigh == showUSHigh && cacheRelativeVwap[idx].ShowUSLow == showUSLow && cacheRelativeVwap[idx].HistoricalVWAPThickness == historicalVWAPThickness && cacheRelativeVwap[idx].ExtendLinesUntilTouch == extendLinesUntilTouch && cacheRelativeVwap[idx].HighVwapLabel == highVwapLabel && cacheRelativeVwap[idx].LowVwapLabel == lowVwapLabel && cacheRelativeVwap[idx].ShowDaysAgo == showDaysAgo && cacheRelativeVwap[idx].TradeDirection == tradeDirection && cacheRelativeVwap[idx].ShowLabels == showLabels && cacheRelativeVwap[idx].LabelDisplayMode == labelDisplayMode && cacheRelativeVwap[idx].CustomSignal1Text == customSignal1Text && cacheRelativeVwap[idx].CustomSignal2Text == customSignal2Text && cacheRelativeVwap[idx].CustomSignal3Text == customSignal3Text && cacheRelativeVwap[idx].ShowSignalLabels == showSignalLabels && cacheRelativeVwap[idx].ShowSignal1 == showSignal1 && cacheRelativeVwap[idx].ShowSignal2 == showSignal2 && cacheRelativeVwap[idx].ShowSignal3 == showSignal3 && cacheRelativeVwap[idx].LabelFontSize == labelFontSize && cacheRelativeVwap[idx].LabelTextOffset == labelTextOffset && cacheRelativeVwap[idx].LabelDistanceATR == labelDistanceATR && cacheRelativeVwap[idx].LabelCollisionSpacing == labelCollisionSpacing && cacheRelativeVwap[idx].DetachmentTicks == detachmentTicks && cacheRelativeVwap[idx].Signal2ThresholdTicks == signal2ThresholdTicks && cacheRelativeVwap[idx].EnableAlerts == enableAlerts && cacheRelativeVwap[idx].AlertSound == alertSound && cacheRelativeVwap[idx].ShowDebugLabels == showDebugLabels && cacheRelativeVwap[idx].ShowCountdown == showCountdown && cacheRelativeVwap[idx].CountDown == countDown && cacheRelativeVwap[idx].ShowPercent == showPercent && cacheRelativeVwap[idx].CountdownFontSize == countdownFontSize && cacheRelativeVwap[idx].CountdownOffsetX == countdownOffsetX && cacheRelativeVwap[idx].CountdownOffsetY == countdownOffsetY && cacheRelativeVwap[idx].EqualsInput(input))
 						return cacheRelativeVwap[idx];
-			return CacheIndicator<RelativeIndicators.RelativeVwap>(new RelativeIndicators.RelativeVwap(){ UseExchangeTime = useExchangeTime, ShowDaysAgo = showDaysAgo, HistoricalVWAPThickness = historicalVWAPThickness, ShowLabels = showLabels, UseSimpleLabels = useSimpleLabels, SignalIconOffsetTicks = signalIconOffsetTicks, SignalTextOffsetTicks = signalTextOffsetTicks, ExtendLinesUntilTouch = extendLinesUntilTouch, MaxHistoryDays = maxHistoryDays, ShowDebugLabels = showDebugLabels, EnableAlerts = enableAlerts, AlertSound = alertSound, TradeDirection = tradeDirection }, input, ref cacheRelativeVwap);
+			return CacheIndicator<RelativeIndicators.RelativeVwap>(new RelativeIndicators.RelativeVwap(){ VwapMethod = vwapMethod, MaxHistoryDays = maxHistoryDays, UseExchangeTime = useExchangeTime, ShowAsia = showAsia, AsiaStartTime = asiaStartTime, AsiaEndTime = asiaEndTime, ShowAsiaHigh = showAsiaHigh, ShowAsiaLow = showAsiaLow, ShowEurope = showEurope, EuropeStartTime = europeStartTime, EuropeEndTime = europeEndTime, ShowEuropeHigh = showEuropeHigh, ShowEuropeLow = showEuropeLow, ShowUS = showUS, USStartTime = uSStartTime, USEndTime = uSEndTime, ShowUSHigh = showUSHigh, ShowUSLow = showUSLow, HistoricalVWAPThickness = historicalVWAPThickness, ExtendLinesUntilTouch = extendLinesUntilTouch, HighVwapLabel = highVwapLabel, LowVwapLabel = lowVwapLabel, ShowDaysAgo = showDaysAgo, TradeDirection = tradeDirection, ShowLabels = showLabels, LabelDisplayMode = labelDisplayMode, CustomSignal1Text = customSignal1Text, CustomSignal2Text = customSignal2Text, CustomSignal3Text = customSignal3Text, ShowSignalLabels = showSignalLabels, ShowSignal1 = showSignal1, ShowSignal2 = showSignal2, ShowSignal3 = showSignal3, LabelFontSize = labelFontSize, LabelTextOffset = labelTextOffset, LabelDistanceATR = labelDistanceATR, LabelCollisionSpacing = labelCollisionSpacing, DetachmentTicks = detachmentTicks, Signal2ThresholdTicks = signal2ThresholdTicks, EnableAlerts = enableAlerts, AlertSound = alertSound, ShowDebugLabels = showDebugLabels, ShowCountdown = showCountdown, CountDown = countDown, ShowPercent = showPercent, CountdownFontSize = countdownFontSize, CountdownOffsetX = countdownOffsetX, CountdownOffsetY = countdownOffsetY }, input, ref cacheRelativeVwap);
 		}
 	}
 }
@@ -2841,14 +3047,14 @@ namespace NinjaTrader.NinjaScript.MarketAnalyzerColumns
 {
 	public partial class MarketAnalyzerColumn : MarketAnalyzerColumnBase
 	{
-		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(bool useExchangeTime, bool showDaysAgo, float historicalVWAPThickness, bool showLabels, bool useSimpleLabels, int signalIconOffsetTicks, int signalTextOffsetTicks, bool extendLinesUntilTouch, int maxHistoryDays, bool showDebugLabels, bool enableAlerts, string alertSound, TradeDirectionMode tradeDirection)
+		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, float historicalVWAPThickness, bool extendLinesUntilTouch, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, bool enableAlerts, string alertSound, bool showDebugLabels, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY)
 		{
-			return indicator.RelativeVwap(Input, useExchangeTime, showDaysAgo, historicalVWAPThickness, showLabels, useSimpleLabels, signalIconOffsetTicks, signalTextOffsetTicks, extendLinesUntilTouch, maxHistoryDays, showDebugLabels, enableAlerts, alertSound, tradeDirection);
+			return indicator.RelativeVwap(Input, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, historicalVWAPThickness, extendLinesUntilTouch, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, enableAlerts, alertSound, showDebugLabels, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY);
 		}
 
-		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(ISeries<double> input , bool useExchangeTime, bool showDaysAgo, float historicalVWAPThickness, bool showLabels, bool useSimpleLabels, int signalIconOffsetTicks, int signalTextOffsetTicks, bool extendLinesUntilTouch, int maxHistoryDays, bool showDebugLabels, bool enableAlerts, string alertSound, TradeDirectionMode tradeDirection)
+		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(ISeries<double> input , VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, float historicalVWAPThickness, bool extendLinesUntilTouch, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, bool enableAlerts, string alertSound, bool showDebugLabels, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY)
 		{
-			return indicator.RelativeVwap(input, useExchangeTime, showDaysAgo, historicalVWAPThickness, showLabels, useSimpleLabels, signalIconOffsetTicks, signalTextOffsetTicks, extendLinesUntilTouch, maxHistoryDays, showDebugLabels, enableAlerts, alertSound, tradeDirection);
+			return indicator.RelativeVwap(input, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, historicalVWAPThickness, extendLinesUntilTouch, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, enableAlerts, alertSound, showDebugLabels, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY);
 		}
 	}
 }
@@ -2857,14 +3063,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public partial class Strategy : NinjaTrader.Gui.NinjaScript.StrategyRenderBase
 	{
-		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(bool useExchangeTime, bool showDaysAgo, float historicalVWAPThickness, bool showLabels, bool useSimpleLabels, int signalIconOffsetTicks, int signalTextOffsetTicks, bool extendLinesUntilTouch, int maxHistoryDays, bool showDebugLabels, bool enableAlerts, string alertSound, TradeDirectionMode tradeDirection)
+		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, float historicalVWAPThickness, bool extendLinesUntilTouch, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, bool enableAlerts, string alertSound, bool showDebugLabels, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY)
 		{
-			return indicator.RelativeVwap(Input, useExchangeTime, showDaysAgo, historicalVWAPThickness, showLabels, useSimpleLabels, signalIconOffsetTicks, signalTextOffsetTicks, extendLinesUntilTouch, maxHistoryDays, showDebugLabels, enableAlerts, alertSound, tradeDirection);
+			return indicator.RelativeVwap(Input, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, historicalVWAPThickness, extendLinesUntilTouch, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, enableAlerts, alertSound, showDebugLabels, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY);
 		}
 
-		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(ISeries<double> input , bool useExchangeTime, bool showDaysAgo, float historicalVWAPThickness, bool showLabels, bool useSimpleLabels, int signalIconOffsetTicks, int signalTextOffsetTicks, bool extendLinesUntilTouch, int maxHistoryDays, bool showDebugLabels, bool enableAlerts, string alertSound, TradeDirectionMode tradeDirection)
+		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(ISeries<double> input , VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, float historicalVWAPThickness, bool extendLinesUntilTouch, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, bool enableAlerts, string alertSound, bool showDebugLabels, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY)
 		{
-			return indicator.RelativeVwap(input, useExchangeTime, showDaysAgo, historicalVWAPThickness, showLabels, useSimpleLabels, signalIconOffsetTicks, signalTextOffsetTicks, extendLinesUntilTouch, maxHistoryDays, showDebugLabels, enableAlerts, alertSound, tradeDirection);
+			return indicator.RelativeVwap(input, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, historicalVWAPThickness, extendLinesUntilTouch, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, enableAlerts, alertSound, showDebugLabels, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY);
 		}
 	}
 }

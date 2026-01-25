@@ -10,6 +10,8 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Xml.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Net.Http;
 using System.IO;
 using System.Xml.Serialization;
@@ -54,8 +56,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		}
 
         private DateTime _selectedEventTime = DateTime.MinValue;  // Track currently selected event
-
-        public override void OnRenderTargetChanged()
+        private HashSet<string> _sentEmailKeys = new HashSet<string>();  // Track sent emails to avoid duplicates
+          public override void OnRenderTargetChanged()
         {
             // Subscribe to mouse events when the control is ready
             if (ChartControl != null)
@@ -85,6 +87,15 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                 LineColor = Brushes.Red; // Uses for Region Area
                 TextColor = Brushes.White;
                 IsOverlay = true;       // Force Overlay on Main Chart
+                
+                // Email defaults
+                EnableEmailAlerts = false;
+                EmailAlertMinutes = 15;
+                SmtpServer = "smtp.gmail.com";
+                SmtpPort = 587;
+                EmailFrom = "";
+                EmailTo = "";
+                EmailPassword = "";
             }
             else if (State == State.Configure)
             {
@@ -93,6 +104,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             }
             else if (State == State.DataLoaded)
             {
+                // Clean old cache files first
+                CleanOldCacheFiles();
+                
                 if (!_downloaded)
                 {
                     _downloaded = true;
@@ -171,6 +185,12 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                     TimeSpan diff = ev.Time - currentBarTime;
                     double totalMinutes = diff.TotalMinutes; 
                     
+                    // Send email if approaching and within alert window
+                    if (totalMinutes > 0 && totalMinutes <= EmailAlertMinutes)
+                    {
+                        SendNewsEmail(ev, totalMinutes);
+                    }
+                    
                     if (totalMinutes <= PauseBeforeMinutes && totalMinutes >= -PauseAfterMinutes)
                     {
                         imminent = true;
@@ -187,6 +207,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             // Visual Update Trigger
             if (_needsDrawing)
             {
+                Print("OnBarUpdate: _needsDrawing is TRUE, calling DrawNewsLines()");
                 _needsDrawing = false;
                 DrawNewsLines();
                 ForceRefresh();
@@ -315,6 +336,12 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                 
                 _needsDrawing = true;
                 Print("RelativeNewsFilter: Loaded " + allEvents.Count + " unique events (History: " + ShowHistoricalNews + ")");
+                
+                // DEBUG: Print each event details
+                foreach (var ev in allEvents)
+                {
+                    Print("  Event: " + ev.Title + " | " + ev.Country + " | " + ev.Impact + " | Time: " + ev.Time.ToString("yyyy-MM-dd HH:mm"));
+                }
             }
             catch (Exception ex)
             {
@@ -324,10 +351,18 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
         private void DrawNewsLines()
         {
-            if (!ShowLines) return;
+            Print("DrawNewsLines() called - ShowLines: " + ShowLines + " Events: " + (_events != null ? _events.Count.ToString() : "null"));
+            
+            if (!ShowLines)
+            {
+                Print("  ShowLines is FALSE, returning");
+                return;
+            }
             
             lock (_lock)
             {
+                Print("  Drawing " + _events.Count + " event zones...");
+                
                 foreach (var ev in _events)
                 {
                     string tag = "NewsRegion_" + ev.Title + "_" + ev.Time.Ticks;
@@ -344,8 +379,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                     NinjaTrader.NinjaScript.DrawingTools.Rectangle rect = Draw.Rectangle(this, tag, false, start, double.MaxValue, end, double.MinValue, Brushes.Transparent, LineColor, 30);
                     rect.IsAutoScale = false; 
 
-                    // Debug text to confirm drawing (temporary, can remove later)
-                    // Print("Drawing News Strip: " + ev.Title + " " + start + " to " + end);
+                    // Debug text to confirm drawing
+                    Print("  Drawing News Strip: " + ev.Title + " from " + start.ToString("yyyy-MM-dd HH:mm") + " to " + end.ToString("yyyy-MM-dd HH:mm"));
 
                     // 2. Draw Text (Only if Selected)
                     if (ev.Time == _selectedEventTime)
@@ -368,32 +403,81 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                 }
             }
         }
-		
-		private string[] GetTargetCurrencies()
+	
+	private string[] GetTargetCurrencies()
+	{
+		if (!string.IsNullOrEmpty(CustomCurrencies))
 		{
-			if (!string.IsNullOrEmpty(CustomCurrencies))
-			{
-				return CustomCurrencies.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-									   .Select(s => s.Trim().ToUpper()).ToArray();
-			}
-			
-			// Auto-Detect based on Instrument
-			if (Instrument == null) return new string[] { "USD" };
-			
-			string name = Instrument.MasterInstrument.Name;
-			string currency = "USD"; // Default
-			
-			if (name.StartsWith("6E") || name.Contains("Euro")) return new string[] { "EUR", "USD" }; // Pairs often affect both
-            if (name.StartsWith("6A") || name.Contains("Aud")) return new string[] { "AUD", "USD" };
-            if (name.StartsWith("6J") || name.Contains("Yen")) return new string[] { "JPY", "USD" };
-            if (name.StartsWith("6B") || name.Contains("Pound")) return new string[] { "GBP", "USD" };
-            if (name.StartsWith("GC") || name.Contains("Gold")) return new string[] { "USD" };
-            if (name.StartsWith("CL") || name.Contains("Crude")) return new string[] { "USD" };
-            if (name.StartsWith("ES") || name.StartsWith("NQ") || name.StartsWith("YM") || name.StartsWith("RTY")) return new string[] { "USD" };
-            if (name.StartsWith("FDAX") || name.StartsWith("FESX")) return new string[] { "EUR" };
-            
-			return new string[] { currency };
+			return CustomCurrencies.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+							   .Select(s => s.Trim().ToUpper()).ToArray();
 		}
+		
+		// Auto-Detect based on Instrument
+		if (Instrument == null) return new string[] { "USD" };
+		
+		string name = Instrument.MasterInstrument.Name;
+		
+		// ===== EQUITY INDICES =====
+		// Standard E-mini
+		if (name.StartsWith("ES") || name.Contains("S&P")) return new string[] { "USD" };
+		if (name.StartsWith("NQ") || name.Contains("NASDAQ")) return new string[] { "USD" };
+		if (name.StartsWith("YM") || name.Contains("Dow")) return new string[] { "USD" };
+		if (name.StartsWith("RTY") || name.Contains("Russell")) return new string[] { "USD" };
+		
+		// Micro E-mini
+		if (name.StartsWith("MES")) return new string[] { "USD" }; // Micro S&P
+		if (name.StartsWith("MNQ")) return new string[] { "USD" }; // Micro NASDAQ
+		if (name.StartsWith("MYM")) return new string[] { "USD" }; // Micro Dow
+		if (name.StartsWith("M2K")) return new string[] { "USD" }; // Micro Russell
+		
+		// European Indices
+		if (name.StartsWith("FDAX") || name.Contains("DAX")) return new string[] { "EUR" };
+		if (name.StartsWith("FESX") || name.Contains("STOXX")) return new string[] { "EUR" };
+		
+		// ===== FOREX =====
+		if (name.StartsWith("6E") || name.Contains("Euro")) return new string[] { "EUR", "USD" };
+		if (name.StartsWith("6A") || name.Contains("Aud")) return new string[] { "AUD", "USD" };
+		if (name.StartsWith("6J") || name.Contains("Yen")) return new string[] { "JPY", "USD" };
+		if (name.StartsWith("6B") || name.Contains("Pound")) return new string[] { "GBP", "USD" };
+		if (name.StartsWith("6C") || name.Contains("CAD")) return new string[] { "CAD", "USD" };
+		if (name.StartsWith("6S") || name.Contains("CHF") || name.Contains("Franc")) return new string[] { "CHF", "USD" };
+		if (name.StartsWith("6M") || name.Contains("MXN") || name.Contains("Peso")) return new string[] { "MXN", "USD" };
+		if (name.StartsWith("6N") || name.Contains("NZD")) return new string[] { "NZD", "USD" };
+		
+		// ===== COMMODITIES =====
+		// Metals
+		if (name.StartsWith("GC") || name.Contains("Gold")) return new string[] { "USD" };
+		if (name.StartsWith("SI") || name.Contains("Silver")) return new string[] { "USD" };
+		if (name.StartsWith("HG") || name.Contains("Copper")) return new string[] { "USD" };
+		if (name.StartsWith("PL") || name.Contains("Platinum")) return new string[] { "USD" };
+		
+		// Energy
+		if (name.StartsWith("CL") || name.Contains("Crude")) return new string[] { "USD" };
+		if (name.StartsWith("NG") || name.Contains("Natural Gas")) return new string[] { "USD" };
+		if (name.StartsWith("RB") || name.Contains("Gasoline")) return new string[] { "USD" };
+		if (name.StartsWith("HO") || name.Contains("Heating Oil")) return new string[] { "USD" };
+		
+		// Agriculture
+		if (name.StartsWith("ZC") || name.Contains("Corn")) return new string[] { "USD" };
+		if (name.StartsWith("ZW") || name.Contains("Wheat")) return new string[] { "USD" };
+		if (name.StartsWith("ZS") || name.Contains("Soybean")) return new string[] { "USD" };
+		if (name.StartsWith("ZL") || name.Contains("Soy Oil")) return new string[] { "USD" };
+		if (name.StartsWith("ZM") || name.Contains("Soy Meal")) return new string[] { "USD" };
+		if (name.StartsWith("KC") || name.Contains("Coffee")) return new string[] { "USD" };
+		if (name.StartsWith("SB") || name.Contains("Sugar")) return new string[] { "USD" };
+		if (name.StartsWith("CT") || name.Contains("Cotton")) return new string[] { "USD" };
+		if (name.StartsWith("CC") || name.Contains("Cocoa")) return new string[] { "USD" };
+		
+		// ===== TREASURIES =====
+		if (name.StartsWith("ZB") || name.Contains("30-Year")) return new string[] { "USD" };
+		if (name.StartsWith("ZN") || name.Contains("10-Year")) return new string[] { "USD" };
+		if (name.StartsWith("ZF") || name.Contains("5-Year")) return new string[] { "USD" };
+		if (name.StartsWith("ZT") || name.Contains("2-Year")) return new string[] { "USD" };
+		if (name.StartsWith("UB") || name.Contains("Ultra")) return new string[] { "USD" };
+		
+		// Default
+		return new string[] { "USD" };
+	}
 		
 		private bool IsImpactRelevant(string impact)
 		{
@@ -413,7 +497,100 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 			// If Low, allow all
 			return true;
 		}
-
+	
+	// ===== CACHE MANAGEMENT =====
+	private void CleanOldCacheFiles()
+	{
+		try
+		{
+			string cacheDir = System.IO.Path.Combine(NinjaTrader.Core.Globals.UserDataDir, "NewsCache");
+			if (!System.IO.Directory.Exists(cacheDir)) return;
+			
+			DateTime threshold = DateTime.Now.AddDays(-7);
+			var oldFiles = System.IO.Directory.GetFiles(cacheDir, "*.xml")
+				.Where(f => System.IO.File.GetLastWriteTime(f) < threshold)
+				.ToList();
+			
+			foreach (var file in oldFiles)
+			{
+				System.IO.File.Delete(file);
+				Print($"RelativeNewsFilter: Deleted old cache file: {System.IO.Path.GetFileName(file)}");
+			}
+			
+			if (oldFiles.Count > 0)
+				Print($"RelativeNewsFilter: Cleaned {oldFiles.Count} old cache files");
+		}
+		catch (Exception ex)
+		{
+			Print($"RelativeNewsFilter: Cache cleanup error: {ex.Message}");
+		}
+	}
+	
+	private bool IsValidCacheFile(string path)
+	{
+		try
+		{
+			if (!System.IO.File.Exists(path)) return false;
+			
+			System.IO.FileInfo info = new System.IO.FileInfo(path);
+			if (info.Length == 0) return false; // Empty file
+			if (info.Length > 10 * 1024 * 1024) return false; // > 10MB suspicious
+			
+			// Try to parse as XML
+			string content = System.IO.File.ReadAllText(path);
+			XDocument.Parse(content);
+			return true;
+		}
+		catch
+		{
+			return false;
+		}
+	}
+	
+	// ===== EMAIL ALERTS =====
+	private string GetEmailKey(NewsEvent ev)
+	{
+		return ev.Time.ToString("yyyyMMddHHmm") + "_" + ev.Title;
+	}
+	
+	private void SendNewsEmail(NewsEvent ev, double minutesUntil)
+	{
+		if (!EnableEmailAlerts) return;
+		if (string.IsNullOrEmpty(EmailTo) || string.IsNullOrEmpty(SmtpServer)) return;
+		
+		string key = GetEmailKey(ev);
+		if (_sentEmailKeys.Contains(key)) return; // Already sent
+		
+		try
+		{
+			using (var client = new System.Net.Mail.SmtpClient(SmtpServer, SmtpPort))
+			{
+				client.EnableSsl = true;
+				client.Credentials = new System.Net.NetworkCredential(EmailFrom, EmailPassword);
+				
+				string subject = $"📰 NEWS ALERT: {ev.Title} in {Math.Abs(minutesUntil):F0} min";
+				string body = $"=== NEWS ALERT ===\n" +
+							 $"Event: {ev.Title}\n" +
+							 $"Country: {ev.Country}\n" +
+							 $"Impact: {ev.Impact}\n" +
+							 $"Time: {ev.Time:yyyy-MM-dd HH:mm}\n" +
+							 $"Minutes Until: {minutesUntil:F0}\n" +
+							 $"==================\n" +
+							 $"Avoid trading during this period.";
+				
+				var message = new System.Net.Mail.MailMessage(EmailFrom, EmailTo, subject, body);
+				client.Send(message);
+				
+				_sentEmailKeys.Add(key);
+				Print($"RelativeNewsFilter: Email sent for {ev.Title}");
+			}
+		}
+		catch (Exception ex)
+		{
+			Print($"RelativeNewsFilter: Email error: {ex.Message}");
+		}
+	}
+	
 		#region Properties
 		[NinjaScriptProperty]
 		[Range(0, 120)]
@@ -461,14 +638,38 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		public Brush TextColor
 		{ get; set; }
 		
-		/*
-		[Browsable(false)]
-		public string TextColorSerializable
-		{
-			get { return Serialize.BrushToString(TextColor); }
-			set { TextColor = Serialize.BrushFromString(value); }
-		}
-		*/
+		
+		// ===== EMAIL CONFIGURATION =====
+		[NinjaScriptProperty]
+		[Display(Name="Enable Email Alerts", Order=10, GroupName="Email")]
+		public bool EnableEmailAlerts { get; set; }
+
+		[NinjaScriptProperty]
+		[Display(Name="Email Alert Minutes Before", Description="Send email X minutes before event", Order=11, GroupName="Email")]
+		[Range(1, 60)]
+		public int EmailAlertMinutes { get; set; }
+
+		[NinjaScriptProperty]
+		[Display(Name="SMTP Server", Description="Example: smtp.gmail.com", Order=12, GroupName="Email")]
+		public string SmtpServer { get; set; }
+
+		[NinjaScriptProperty]
+		[Display(Name="SMTP Port", Order=13, GroupName="Email")]
+		[Range(1, 65535)]
+		public int SmtpPort { get; set; }
+
+		[NinjaScriptProperty]
+		[Display(Name="Email From", Description="Your email address", Order=14, GroupName="Email")]
+		public string EmailFrom { get; set; }
+
+		[NinjaScriptProperty]
+		[Display(Name="Email To", Description="Recipient email address", Order=15, GroupName="Email")]
+		public string EmailTo { get; set; }
+
+		[NinjaScriptProperty]
+		[Display(Name="Email Password", Description="Your email password or app password", Order=16, GroupName="Email")]
+		public string EmailPassword { get; set; }
+		
 		#endregion
 	}
 }
@@ -480,18 +681,18 @@ namespace NinjaTrader.NinjaScript.Indicators
 	public partial class Indicator : NinjaTrader.Gui.NinjaScript.IndicatorRenderBase
 	{
 		private RelativeIndicators.RelativeNewsFilter[] cacheRelativeNewsFilter;
-		public RelativeIndicators.RelativeNewsFilter RelativeNewsFilter(int pauseBeforeMinutes, int pauseAfterMinutes, string filterImpact, string customCurrencies, bool showLines)
+		public RelativeIndicators.RelativeNewsFilter RelativeNewsFilter(int pauseBeforeMinutes, int pauseAfterMinutes, string filterImpact, string customCurrencies, bool showLines, bool enableEmailAlerts, int emailAlertMinutes, string smtpServer, int smtpPort, string emailFrom, string emailTo, string emailPassword)
 		{
-			return RelativeNewsFilter(Input, pauseBeforeMinutes, pauseAfterMinutes, filterImpact, customCurrencies, showLines);
+			return RelativeNewsFilter(Input, pauseBeforeMinutes, pauseAfterMinutes, filterImpact, customCurrencies, showLines, enableEmailAlerts, emailAlertMinutes, smtpServer, smtpPort, emailFrom, emailTo, emailPassword);
 		}
 
-		public RelativeIndicators.RelativeNewsFilter RelativeNewsFilter(ISeries<double> input, int pauseBeforeMinutes, int pauseAfterMinutes, string filterImpact, string customCurrencies, bool showLines)
+		public RelativeIndicators.RelativeNewsFilter RelativeNewsFilter(ISeries<double> input, int pauseBeforeMinutes, int pauseAfterMinutes, string filterImpact, string customCurrencies, bool showLines, bool enableEmailAlerts, int emailAlertMinutes, string smtpServer, int smtpPort, string emailFrom, string emailTo, string emailPassword)
 		{
 			if (cacheRelativeNewsFilter != null)
 				for (int idx = 0; idx < cacheRelativeNewsFilter.Length; idx++)
-					if (cacheRelativeNewsFilter[idx] != null && cacheRelativeNewsFilter[idx].PauseBeforeMinutes == pauseBeforeMinutes && cacheRelativeNewsFilter[idx].PauseAfterMinutes == pauseAfterMinutes && cacheRelativeNewsFilter[idx].FilterImpact == filterImpact && cacheRelativeNewsFilter[idx].CustomCurrencies == customCurrencies && cacheRelativeNewsFilter[idx].ShowLines == showLines && cacheRelativeNewsFilter[idx].EqualsInput(input))
+					if (cacheRelativeNewsFilter[idx] != null && cacheRelativeNewsFilter[idx].PauseBeforeMinutes == pauseBeforeMinutes && cacheRelativeNewsFilter[idx].PauseAfterMinutes == pauseAfterMinutes && cacheRelativeNewsFilter[idx].FilterImpact == filterImpact && cacheRelativeNewsFilter[idx].CustomCurrencies == customCurrencies && cacheRelativeNewsFilter[idx].ShowLines == showLines && cacheRelativeNewsFilter[idx].EnableEmailAlerts == enableEmailAlerts && cacheRelativeNewsFilter[idx].EmailAlertMinutes == emailAlertMinutes && cacheRelativeNewsFilter[idx].SmtpServer == smtpServer && cacheRelativeNewsFilter[idx].SmtpPort == smtpPort && cacheRelativeNewsFilter[idx].EmailFrom == emailFrom && cacheRelativeNewsFilter[idx].EmailTo == emailTo && cacheRelativeNewsFilter[idx].EmailPassword == emailPassword && cacheRelativeNewsFilter[idx].EqualsInput(input))
 						return cacheRelativeNewsFilter[idx];
-			return CacheIndicator<RelativeIndicators.RelativeNewsFilter>(new RelativeIndicators.RelativeNewsFilter(){ PauseBeforeMinutes = pauseBeforeMinutes, PauseAfterMinutes = pauseAfterMinutes, FilterImpact = filterImpact, CustomCurrencies = customCurrencies, ShowLines = showLines }, input, ref cacheRelativeNewsFilter);
+			return CacheIndicator<RelativeIndicators.RelativeNewsFilter>(new RelativeIndicators.RelativeNewsFilter(){ PauseBeforeMinutes = pauseBeforeMinutes, PauseAfterMinutes = pauseAfterMinutes, FilterImpact = filterImpact, CustomCurrencies = customCurrencies, ShowLines = showLines, EnableEmailAlerts = enableEmailAlerts, EmailAlertMinutes = emailAlertMinutes, SmtpServer = smtpServer, SmtpPort = smtpPort, EmailFrom = emailFrom, EmailTo = emailTo, EmailPassword = emailPassword }, input, ref cacheRelativeNewsFilter);
 		}
 	}
 }
@@ -500,14 +701,14 @@ namespace NinjaTrader.NinjaScript.MarketAnalyzerColumns
 {
 	public partial class MarketAnalyzerColumn : MarketAnalyzerColumnBase
 	{
-		public Indicators.RelativeIndicators.RelativeNewsFilter RelativeNewsFilter(int pauseBeforeMinutes, int pauseAfterMinutes, string filterImpact, string customCurrencies, bool showLines)
+		public Indicators.RelativeIndicators.RelativeNewsFilter RelativeNewsFilter(int pauseBeforeMinutes, int pauseAfterMinutes, string filterImpact, string customCurrencies, bool showLines, bool enableEmailAlerts, int emailAlertMinutes, string smtpServer, int smtpPort, string emailFrom, string emailTo, string emailPassword)
 		{
-			return indicator.RelativeNewsFilter(Input, pauseBeforeMinutes, pauseAfterMinutes, filterImpact, customCurrencies, showLines);
+			return indicator.RelativeNewsFilter(Input, pauseBeforeMinutes, pauseAfterMinutes, filterImpact, customCurrencies, showLines, enableEmailAlerts, emailAlertMinutes, smtpServer, smtpPort, emailFrom, emailTo, emailPassword);
 		}
 
-		public Indicators.RelativeIndicators.RelativeNewsFilter RelativeNewsFilter(ISeries<double> input , int pauseBeforeMinutes, int pauseAfterMinutes, string filterImpact, string customCurrencies, bool showLines)
+		public Indicators.RelativeIndicators.RelativeNewsFilter RelativeNewsFilter(ISeries<double> input , int pauseBeforeMinutes, int pauseAfterMinutes, string filterImpact, string customCurrencies, bool showLines, bool enableEmailAlerts, int emailAlertMinutes, string smtpServer, int smtpPort, string emailFrom, string emailTo, string emailPassword)
 		{
-			return indicator.RelativeNewsFilter(input, pauseBeforeMinutes, pauseAfterMinutes, filterImpact, customCurrencies, showLines);
+			return indicator.RelativeNewsFilter(input, pauseBeforeMinutes, pauseAfterMinutes, filterImpact, customCurrencies, showLines, enableEmailAlerts, emailAlertMinutes, smtpServer, smtpPort, emailFrom, emailTo, emailPassword);
 		}
 	}
 }
@@ -516,14 +717,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public partial class Strategy : NinjaTrader.Gui.NinjaScript.StrategyRenderBase
 	{
-		public Indicators.RelativeIndicators.RelativeNewsFilter RelativeNewsFilter(int pauseBeforeMinutes, int pauseAfterMinutes, string filterImpact, string customCurrencies, bool showLines)
+		public Indicators.RelativeIndicators.RelativeNewsFilter RelativeNewsFilter(int pauseBeforeMinutes, int pauseAfterMinutes, string filterImpact, string customCurrencies, bool showLines, bool enableEmailAlerts, int emailAlertMinutes, string smtpServer, int smtpPort, string emailFrom, string emailTo, string emailPassword)
 		{
-			return indicator.RelativeNewsFilter(Input, pauseBeforeMinutes, pauseAfterMinutes, filterImpact, customCurrencies, showLines);
+			return indicator.RelativeNewsFilter(Input, pauseBeforeMinutes, pauseAfterMinutes, filterImpact, customCurrencies, showLines, enableEmailAlerts, emailAlertMinutes, smtpServer, smtpPort, emailFrom, emailTo, emailPassword);
 		}
 
-		public Indicators.RelativeIndicators.RelativeNewsFilter RelativeNewsFilter(ISeries<double> input , int pauseBeforeMinutes, int pauseAfterMinutes, string filterImpact, string customCurrencies, bool showLines)
+		public Indicators.RelativeIndicators.RelativeNewsFilter RelativeNewsFilter(ISeries<double> input , int pauseBeforeMinutes, int pauseAfterMinutes, string filterImpact, string customCurrencies, bool showLines, bool enableEmailAlerts, int emailAlertMinutes, string smtpServer, int smtpPort, string emailFrom, string emailTo, string emailPassword)
 		{
-			return indicator.RelativeNewsFilter(input, pauseBeforeMinutes, pauseAfterMinutes, filterImpact, customCurrencies, showLines);
+			return indicator.RelativeNewsFilter(input, pauseBeforeMinutes, pauseAfterMinutes, filterImpact, customCurrencies, showLines, enableEmailAlerts, emailAlertMinutes, smtpServer, smtpPort, emailFrom, emailTo, emailPassword);
 		}
 	}
 }

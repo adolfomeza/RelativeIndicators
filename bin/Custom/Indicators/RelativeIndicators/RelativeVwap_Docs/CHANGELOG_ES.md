@@ -1,72 +1,64 @@
-# Registro de Cambios (Changelog) - RelativeVwap
+# RelativeVwap - Historial de Cambios
 
-Todos los cambios notables en **RelativeVwap** serán documentados en este archivo.
+Este documento registra todos los cambios notables en el proyecto **RelativeVwap**.
 
-El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/), y este proyecto adhiere a [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
+y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
----
+## [1.0.11] - 2026-01-25
+### Corregido
+- **Pintado en Vivo de Señal 2**: Se solucionó un error visual donde la vela amarilla (Señal 2) parpadeaba o desaparecía en tiempo real (Playback/Live) debido al ciclo de ticks de NinjaTrader.
+  - Se implementó persistencia de estado por vela (`highSignal2BarIdx`) para asegurar que el color se mantenga en cada tick de la barra activa.
 
-## [1.0.0] - 2025-12-28
-### 🎉 Versión Inicial
-Primera versión oficialmente versionada del indicador RelativeVwap.
+## [1.0.10] - 2026-01-23
+### Añadido
+- **Etiquetas Personalizadas**: Implementado sistema de etiquetas personalizables para las señales.
+  - Nuevo parámetro `LabelDisplayMode` con opciones: Default, Simple, Custom.
+  - Nuevos campos de texto `CustomSignal1Text`, `CustomSignal2Text`, `CustomSignal3Text` para definir textos propios.
+### Corregido
+- **Cálculo de Días en Etiquetas (Trading Days)**: Se perfeccionó el cálculo para que ignore fines de semana (días hábiles).
+  - Ejemplo: Un setup el Lunes (o Domingo noche) vs una sesión del Viernes ahora se mostrará correctamente como **1 día** de diferencia (ej. `UH1`), en lugar de 3 días calendario o 0 días erróneos.
+  - Se implementó lógica de "Días Hábiles" (Business Days) para contar solo de Lunes a Viernes.
+- **Persistencia Color Señal 2**: Se corrigió un error donde la vela amarilla (Señal 2) permanecía pintada incluso si el precio tocaba el VWAP posteriormente en la misma barra (lo cual debería invalidar la señal visual). Ahora el color se elimina correctamente si ocurre el toque.
+  
+### Cambiado
+- **Icono Señal 2**: Se reemplazó el icono de "Punto" (Dot) por una "Flecha" (Arrow), igualando el estilo visual de la Señal 3.
+- **Visibilidad Granular de Señales**: Se reemplazó la opción global "Mostrar Iconos Señal" por 3 opciones individuales:
+  - `Mostrar Señal 1`: Controla la visibilidad del Triángulo y su Texto (Ruptura/Liquidez).
+  - `Mostrar Señal 2`: Controla la visibilidad de la Flecha y su Texto (Entrada 1).
+  - `Mostrar Señal 3`: Controla la visibilidad de la Flecha y su Texto (Entrada 2).
+  - `Mostrar Señal 3`: Controla la visibilidad de la Flecha y su Texto (Entrada 2).
+  - **Corrección**: Se aseguró que al ocultar una señal, también se oculte su etiqueta de texto asociada.
+  - Defaults: "Supply" (antes High VWAP) y "Demand" (antes Low VWAP).
+  - Configurable en el grupo "03. Visuales VWAP".
+- **Relative Delta 2.0 (Mejoras Mayores)**:
+  - **Línea Cero Sesión USA**: Proyecta una línea de referencia desde el inicio de la sesión (Default 10:30).
+    - **Histórico**: Las líneas de días anteriores permanecen visibles.
+    - **Lógica Exacta**: Corrección para detectar el inicio de sesión exacto ignorando datos overnight.
+  - **Optimización Gráfica**: Reescritura del motor de renderizado usando Caché de Direct2D. Elimina el lag completamente.
+  - **Persistencia de Colores**: Los colores personalizados (Texto, Líneas) ahora se guardan correctamente en los Templates.
+  - **Estilo Por Defecto**: Configuración inicial ajustada a "Limpio" (Velas transparentes/blancas, Textos blancos).
 
-### Funcionalidades Incluidas
+### Eliminado
+- **UseSimpleLabels**: Propiedad obsoleta eliminada en favor del nuevo sistema `LabelMode`.
 
-#### VWAP Anclado
-- VWAP calculado desde el **High del día** (Short Setup)
-- VWAP calculado desde el **Low del día** (Long Setup)
-- Re-anclaje automático cuando se hacen nuevos extremos
-- Historial de anclas previas (configurable hasta 365 días)
+## [1.0.9] - 2026-01-23
+### Mejoras (UI)
+- **Organización de Propiedades**: Se han reorganizado todas las propiedades del indicador en grupos lógicos y numerados para una apariencia más profesional en el panel de configuración.
+  - 01. Configuración Principal
+  - 02. Sesiones de Tiempo
+  - 03. Visuales VWAP
+  - 04. Señales y Textos
+  - 05. Alertas & Debug
+  - 06. Contador
+- **Etiquetas**: Se añadieron descripciones (tooltips) a varias propiedades para mejor claridad.
 
-#### Niveles de Sesión
-- **Asia**: Configurable (default 18:00 - 03:00 ET)
-- **Europe**: Configurable (default 03:00 - 09:30 ET)
-- **USA**: Configurable (default 09:30 - 16:00 ET)
-- High/Low de cada sesión dibujados como líneas horizontales
-- Líneas "ghost" extendidas hasta que el precio toque el nivel
-- Clasificación de niveles internos vs extremos
+## [1.0.8] - 2026-01-23
+### Añadido
+- **Pintado de Señal 2**: Se ha añadido la funcionalidad para pintar la vela de color amarillo cuando ocurre una "Signal 2" (Rebote en VWAP opuesto).
 
-#### Señales de Trading
-- **Señal 1 (Entry)**: Detachment del VWAP + retorno al nivel
-- Detachment configurable en ticks (`DetachmentTicks`)
-- Soporte para `UseExchangeTime` (conversión automática NY → Local)
-
-#### Visuales
-- Colores configurables para VWAP High/Low
-- Colores configurables para cada sesión (Asia/Europe/USA)
-- Labels con códigos de señal (ej: "AH.1", "EL.2")
-- Modo simple de labels (1, 2, 3)
-- Offset configurable para iconos y texto
-- Label background color configurable
-
-#### Countdown
-- Countdown para barras basadas en tiempo
-- Countdown para barras basadas en volumen
-- Posición configurable (X/Y offset)
-- Color y tamaño de fuente configurables
-
-#### Integración
-- Plots públicos `Values[0]` (High VWAP) y `Values[1]` (Low VWAP)
-- Listas públicas de sesiones (`AsiaSessions`, `EuropeSessions`, `USSessions`)
-- Propiedad `LastSignalCode` para lectura por estrategias
-- Propiedad `CurrentCountdownText` para display externo
-
-#### Técnico
-- Normalización ATR para spacing visual consistente entre instrumentos
-- Anti-collision stacking para labels superpuestos
-- Timer de actualización 4Hz para countdown en tiempo real
-- Cache de timezone para optimización de rendimiento
-
-### Configuración
-| Parámetro | Default | Descripción |
-|-----------|---------|-------------|
-| `UseExchangeTime` | `true` | Interpretar tiempos como NY y convertir a local |
-| `DetachmentTicks` | `2` | Ticks de separación para señal de detachment |
-| `MaxHistoryDays` | `5` | Días máximos de historial a mostrar |
-| `ShowLabels` | `true` | Mostrar labels de señales |
-| `ShowCountdown` | `true` | Mostrar countdown de barra |
-
----
-
-> **Nota**: Este changelog se creó el 2025-12-28. Cambios anteriores no están documentados.
-> A partir de ahora, cada modificación será registrada con su versión correspondiente.
+## [1.0.7] - 2026-01-20
+### Añadido
+- Versión anterior estable con cálculo de VWAP anclado a extremos de sesión.
+- Lógica de señales de trading básica.
+- Integración inicial para SessionLevelsStrategy.
