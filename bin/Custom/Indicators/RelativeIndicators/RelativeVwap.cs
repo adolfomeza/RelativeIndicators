@@ -1024,8 +1024,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           highSignal2BarIdx = CurrentBar;
 
                           // CRITICAL LOGGING: Confirming why this fired if user sees High > VWAP
-                          Print(string.Format("[RelativeVwap SIG2 SHORT FIRED] Bar:{0} Time:{1} High:{2:F2} VWAP:{3:F2} Threshold:{4} Condition(H<=V-T):{5} AnchorBar:{6}",
-                              CurrentBar, Time[0], High[0], hVwap, Signal2ThresholdTicks, (High[0] <= (hVwap - Signal2ThresholdTicks * TickSize)), sessionHighBarIdx));
+                          Print(string.Format("[RelativeVwap-INDICATOR] SIG2 SHORT FIRED | NOW:{0} | CHART:{1} | Bar:{2} | High:{3:F2} | VWAP:{4:F2} | Thresh:{5} | Cond(H<=V-T):{6} | AnchorBar:{7}",
+                              DateTime.Now, Time[0], CurrentBar, High[0], hVwap, Signal2ThresholdTicks, (High[0] <= (hVwap - Signal2ThresholdTicks * TickSize)), sessionHighBarIdx));
 
                           highAnchorSequence++;
 
@@ -1270,8 +1270,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           lowSignal2BarIdx = CurrentBar;
                           
                           // CRITICAL LOGGING: Confirming why this fired
-                          Print(string.Format("[RelativeVwap SIG2 LONG FIRED] Bar:{0} Time:{1} Low:{2:F2} VWAP:{3:F2} Threshold:{4} Condition(L>=V+T):{5} AnchorBar:{6}",
-                              CurrentBar, Time[0], Low[0], lVwap, Signal2ThresholdTicks, (Low[0] >= (lVwap + Signal2ThresholdTicks * TickSize)), sessionLowBarIdx));
+                          Print(string.Format("[RelativeVwap-INDICATOR] SIG2 LONG FIRED | NOW:{0} | CHART:{1} | Bar:{2} | Low:{3:F2} | VWAP:{4:F2} | Thresh:{5} | Cond(L>=V+T):{6} | AnchorBar:{7}",
+                              DateTime.Now, Time[0], CurrentBar, Low[0], lVwap, Signal2ThresholdTicks, (Low[0] >= (lVwap + Signal2ThresholdTicks * TickSize)), sessionLowBarIdx));
 
                           lowAnchorSequence++;
 
