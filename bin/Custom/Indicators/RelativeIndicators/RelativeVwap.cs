@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.35";  // v1.0.35: Reset tracker al cancelar señal para permitir nueva señal
+        private const string VERSION = "1.0.36";  // v1.0.36: UNA señal por anchor - Reset solo en nivel opuesto o nuevo anchor
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -1138,10 +1138,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                       }
 
                       highDetached = false;
-                      Print(string.Format("[DEBUG FLAG] Bar:{0} | RESETTING highSignal2Fired + lastSignaled (Touch VWAP) | high:{1:F2} >= hVwap:{2:F2}",
-                          CurrentBar, high, hVwap));
-                      highSignal2Fired = false; // Reset Signal 2 on Touch
-                      lastSignaledHighAnchorBar = -1; // v1.0.35: Reset tracker to allow new signal after cancellation
+                      Print(string.Format("[DEBUG FLAG] Bar:{0} | RESETTING highSignal2Fired ONLY (Touch VWAP) | high:{1:F2} >= hVwap:{2:F2} | Tracker:{3} stays set",
+                          CurrentBar, high, hVwap, lastSignaledHighAnchorBar));
+                      highSignal2Fired = false; // Reset Signal 2 on Touch (allows signal to reappear if bar closes without touching)
+                      // v1.0.36: DO NOT reset lastSignaledHighAnchorBar - Signal 2 appears only ONCE per anchor
+                      // Tracker only resets on: new anchor, price hits opposite session level, or breaks anchor bar
                       // If we reset, and we didn't just fire 'E' (dbgText != "E"), then we should NOT show 'D'.
                       if (dbgText == "D") dbgText = "";
 
@@ -1436,10 +1437,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                       }
 
                       lowDetached = false;
-                      Print(string.Format("[DEBUG FLAG] Bar:{0} | RESETTING lowSignal2Fired + lastSignaled (Touch VWAP) | low:{1:F2} <= lVwap:{2:F2}",
-                          CurrentBar, low, lVwap));
-                      lowSignal2Fired = false; // Reset Signal 2 on Touch
-                      lastSignaledLowAnchorBar = -1; // v1.0.35: Reset tracker to allow new signal after cancellation
+                      Print(string.Format("[DEBUG FLAG] Bar:{0} | RESETTING lowSignal2Fired ONLY (Touch VWAP) | low:{1:F2} <= lVwap:{2:F2} | Tracker:{3} stays set",
+                          CurrentBar, low, lVwap, lastSignaledLowAnchorBar));
+                      lowSignal2Fired = false; // Reset Signal 2 on Touch (allows signal to reappear if bar closes without touching)
+                      // v1.0.36: DO NOT reset lastSignaledLowAnchorBar - Signal 2 appears only ONCE per anchor
+                      // Tracker only resets on: new anchor, price hits opposite session level, or breaks anchor bar
                       // If we reset, and we didn't just fire 'E' (dbgText != "E"), then we should NOT show 'D'.
                       if (dbgText == "D") dbgText = "";
 
@@ -1892,11 +1894,13 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                         highSignalFired = false; // UNLOCK SIGNAL (New Level Hit)
                         lastUnlockedHighSession = session; // FIX: Store session for TP2 Logic
                         highAnchorSequence = 0; // RESET SEQUENCE TO 0
-                        // v1.0.29: REMOVED - lastSignaledHighAnchorBar = -1; // ONLY reset on new VWAP anchor, NOT on session break
+                        // v1.0.36: Reset OPPOSITE tracker when hitting session level (allows new signals on opposite side)
+                        lastSignaledLowAnchorBar = -1; // Reset LONG tracker when hitting HIGH level
+                        Print(string.Format("[DEBUG RESET] Bar:{0} | Session HIGH broken | Reset lastSignaledLowAnchorBar to -1", CurrentBar));
 
                         // V_LOGIC: Hierarchy Check (Type A vs Type B) -> REMOVED (All signals are standard)
-                        // session.IsInternalHigh = ... 
-                        
+                        // session.IsInternalHigh = ...
+
                         highDetached = false; // SYNC: Reset Detachment on Break
                         
                         // V_LOGIC: Strategy Filters (High Break = Long?)
@@ -1996,11 +2000,13 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                          lowSignalFired = false; // UNLOCK SIGNAL
                          lastUnlockedLowSession = session; // FIX: Store session for TP2 Logic
                          lowAnchorSequence = 0; // RESET
-                         // v1.0.29: REMOVED - lastSignaledLowAnchorBar = -1; // ONLY reset on new VWAP anchor, NOT on session break
+                         // v1.0.36: Reset OPPOSITE tracker when hitting session level (allows new signals on opposite side)
+                         lastSignaledHighAnchorBar = -1; // Reset SHORT tracker when hitting LOW level
+                         Print(string.Format("[DEBUG RESET] Bar:{0} | Session LOW broken | Reset lastSignaledHighAnchorBar to -1", CurrentBar));
 
                          // V_LOGIC: Hierarchy Check (Type A vs Type B) -> REMOVED
                          // session.IsInternalLow = ...
-                         
+
                          lowDetached = false; // SYNC: Reset Detachment
 
                          // V_LOGIC: Strategy Filters (Low Break = Short?)

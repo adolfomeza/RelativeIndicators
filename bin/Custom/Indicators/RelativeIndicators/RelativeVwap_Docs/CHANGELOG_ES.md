@@ -5,7 +5,23 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.0.36] - 2026-01-26
+### Corregido
+- **UNA Señal por VWAP Anchor (CORRECCIÓN DE v1.0.35)**: Implementación correcta de la lógica "una señal por anchor VWAP".
+  - **Comportamiento Deseado**: La Señal 2 (vela amarilla) debe aparecer SOLO UNA VEZ por cada VWAP anclado, sin importar cuántas veces el precio toque y se separe del VWAP.
+  - **Condiciones de Reset** (cuando se permite nueva señal):
+    1. **Nuevo Anchor VWAP**: Cuando el precio crea un nuevo HIGH/LOW del día (ya implementado en v1.0.33)
+    2. **Nivel Opuesto**: Cuando el precio llega al nivel de sesión OPUESTO (ej: si está trabajando con VWAP anclado a LOW, resetea cuando llega al session HIGH)
+    3. **Rompe Anchor**: Cuando el precio rompe 1 tick por encima/debajo de la barra de anclaje del VWAP (pendiente implementación)
+  - **Problema con v1.0.35**: Reseteaba el tracker cuando tocaba VWAP, permitiendo múltiples señales para el mismo anchor (comportamiento INCORRECTO).
+  - **Solución**:
+    1. **Revertir v1.0.35**: NO resetear tracker cuando toca VWAP (líneas ~1144, ~1443). Solo resetear el FLAG para permitir que la señal reaparezca si la vela cierra sin tocar.
+    2. **Reset en Nivel Opuesto**: Cuando se rompe session HIGH (línea ~1897), resetear `lastSignaledLowAnchorBar = -1`. Cuando se rompe session LOW (línea ~2003), resetear `lastSignaledHighAnchorBar = -1`.
+  - **Resultado**: Ahora la Señal 2 aparece SOLO UNA VEZ por anchor, y solo se resetea cuando el precio llega al nivel opuesto o crea nuevo anchor.
+
 ## [1.0.35] - 2026-01-26
+### Nota
+- **Versión Incorrecta**: Esta versión reseteaba el tracker al tocar VWAP, permitiendo múltiples señales para el mismo anchor (comportamiento NO deseado por el usuario). Revertido en v1.0.36.
 ### Corregido
 - **Nueva Señal No Aparece Después de Cancelación**: Se corrigió el bug donde después de que una señal se cancelaba (por tocar VWAP), las siguientes barras separadas NO generaban nueva señal amarilla.
   - **Síntoma**:
