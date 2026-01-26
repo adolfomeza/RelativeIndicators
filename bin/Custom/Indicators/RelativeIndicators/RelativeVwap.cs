@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.39";  // v1.0.39: Paint all brush types (BarBrushes, BackBrushes, CandleOutline) for visibility
+        private const string VERSION = "1.0.40";  // v1.0.40: Remove BackBrushes (causes vertical bars) - keep only BarBrushes and CandleOutline
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -1160,15 +1160,13 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           if (barsAgo >= 0 && barsAgo < CurrentBar)
                           {
                               BarBrushes[barsAgo] = null; // Unpaint that bar
-                              BackBrushes[barsAgo] = null;
                               CandleOutlineBrushes[barsAgo] = null;
                           }
                           highSignal2BarIdx = -1;
 
                           // v1.0.37: Only unpaint current bar if signal was THIS bar
-                          // v1.0.39: Clear all brush types
+                          // v1.0.40: Remove BackBrushes (causes vertical bars)
                           BarBrushes[0] = null;
-                          BackBrushes[0] = null;
                           CandleOutlineBrushes[0] = null;
                       }
 
@@ -1206,8 +1204,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           // FIX: Store the Index for persistent painting in Live/Tick mode
                           highSignal2BarIdx = CurrentBar;
                           // v1.0.39: Paint all brush types for guaranteed visibility
+                          // v1.0.40: Remove BackBrushes (causes vertical bars covering chart)
                           BarBrushes[0] = Brushes.Yellow;
-                          BackBrushes[0] = Brushes.Yellow;
                           CandleOutlineBrushes[0] = Brushes.Yellow;
 
                           // CRITICAL LOGGING: Confirming why this fired if user sees High > VWAP
@@ -1270,13 +1268,13 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                   // v1.0.29: Persistent Painting - paint the signal bar even after it closes
                   // v1.0.38: Enhanced with refresh to ensure visibility in OnEachTick mode
                   // v1.0.39: Paint all brush types for guaranteed visibility
+                  // v1.0.40: Remove BackBrushes (causes vertical bars)
                   if (highSignal2BarIdx >= 0)
                   {
                       int barsAgo = CurrentBar - highSignal2BarIdx;
                       if (barsAgo >= 0 && barsAgo < Bars.Count)
                       {
                           BarBrushes[barsAgo] = Brushes.Yellow;
-                          BackBrushes[barsAgo] = Brushes.Yellow;
                           CandleOutlineBrushes[barsAgo] = Brushes.Yellow;
 
                           // v1.0.38: Force refresh also in persistent painting for current bar
@@ -1480,15 +1478,13 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           if (barsAgo >= 0 && barsAgo < CurrentBar)
                           {
                               BarBrushes[barsAgo] = null; // Unpaint that bar
-                              BackBrushes[barsAgo] = null;
                               CandleOutlineBrushes[barsAgo] = null;
                           }
                           lowSignal2BarIdx = -1;
 
                           // v1.0.37: Only unpaint current bar if signal was THIS bar
-                          // v1.0.39: Clear all brush types
+                          // v1.0.40: Remove BackBrushes (causes vertical bars)
                           BarBrushes[0] = null;
-                          BackBrushes[0] = null;
                           CandleOutlineBrushes[0] = null;
                       }
 
@@ -1520,8 +1516,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           // FIX: Store the Index for persistent painting in Live/Tick mode
                           lowSignal2BarIdx = CurrentBar;
                           // v1.0.39: Paint all brush types for guaranteed visibility
+                          // v1.0.40: Remove BackBrushes (causes vertical bars covering chart)
                           BarBrushes[0] = Brushes.Yellow;
-                          BackBrushes[0] = Brushes.Yellow;
                           CandleOutlineBrushes[0] = Brushes.Yellow;
 
                           // CRITICAL LOGGING: Confirming why this fired
@@ -1584,13 +1580,13 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                   // v1.0.29: Persistent Painting - paint the signal bar even after it closes
                   // v1.0.38: Enhanced with refresh to ensure visibility in OnEachTick mode
                   // v1.0.39: Paint all brush types for guaranteed visibility
+                  // v1.0.40: Remove BackBrushes (causes vertical bars)
                   if (lowSignal2BarIdx >= 0)
                   {
                       int barsAgo = CurrentBar - lowSignal2BarIdx;
                       if (barsAgo >= 0 && barsAgo < Bars.Count)
                       {
                           BarBrushes[barsAgo] = Brushes.Yellow;
-                          BackBrushes[barsAgo] = Brushes.Yellow;
                           CandleOutlineBrushes[barsAgo] = Brushes.Yellow;
 
                           // v1.0.38: Force refresh also in persistent painting for current bar

@@ -5,6 +5,14 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.0.40] - 2026-01-26
+### Corregido
+- **Barras Verticales Amarillas**: Se corrigió el bug introducido en v1.0.39 donde aparecían barras verticales amarillas cubriendo todo el chart.
+  - **Causa**: `BackBrushes` pinta el FONDO completo detrás de la vela (toda la altura del chart), no la vela en sí.
+  - **Solución**: Removido completamente `BackBrushes` de todas las ubicaciones (líneas ~1163, ~1171, ~1208, ~1277, ~1481, ~1489, ~1520, ~1589).
+  - **Mantiene**: Solo `BarBrushes` (color de vela) y `CandleOutlineBrushes` (contorno de vela).
+  - **Resultado**: Las barras verticales desaparecen, volviendo a comportamiento esperado.
+
 ## [1.0.39] - 2026-01-26
 ### Corregido
 - **Vela Amarilla No Aparece Hasta F5 (Intento 2)**: Solución alternativa pintando todos los tipos de brush para garantizar visibilidad.
