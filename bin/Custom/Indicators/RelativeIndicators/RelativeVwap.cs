@@ -34,7 +34,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.11";  // v1.0.11: Fix Live Painting Signal 2
+        private const string VERSION = "1.0.25";  // v1.0.25: Fix Señal 2 para nuevos anchors VWAP
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -84,7 +84,15 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         // V_FIX_LIVE: Persistent Signal 2 Painting State
         private int highSignal2BarIdx = -1; // Tracks specific bar index for High Signal 2
         private int lowSignal2BarIdx = -1;  // Tracks specific bar index for Low Signal 2
-        
+
+        // v1.0.24: Tracking for movable "Liquidity Grabbed" label
+        private int highLiqGrabBarIdx = -1;      // Bar where High liquidity grab label is drawn
+        private double highLiqGrabExtreme = 0;   // Highest price reached since liquidity grab
+        private string highLiqGrabSessionName = ""; // Session name for the label tag
+        private int lowLiqGrabBarIdx = -1;       // Bar where Low liquidity grab label is drawn
+        private double lowLiqGrabExtreme = 0;    // Lowest price reached since liquidity grab
+        private string lowLiqGrabSessionName = ""; // Session name for the label tag
+
         // Session Levels Tracking
         public class SessionLevelInfo
         {
@@ -254,7 +262,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             if (State == State.SetDefaults)
             {
                 Description = $"RelativeVwap v{VERSION}: VWAP anclado a extremos de sesión con señales de trading y niveles relativos.";
-                Name = "RelativeVwap";
+                Name = "RelativeVwap"; // Restore Production Name
                 Calculate = Calculate.OnEachTick;
                 IsOverlay = true;
                 DisplayInDataBox = true;
@@ -292,8 +300,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                 Print("RelativeVwap Indicator: OnStateChange (SetDefaults) Reached");
 
                 // V_FIX: Add Plots to ensure Values[0] (High) and Values[1] (Low) exist for Strategy Hookup
-                AddPlot(new Stroke(Brushes.Transparent, 1), PlotStyle.Line, "HighVWAP"); // Values[0]
-                AddPlot(new Stroke(Brushes.Transparent, 1), PlotStyle.Line, "LowVWAP");  // Values[1]
+                // v1.0.24: PlotStyle.Dot = small markers (nearly invisible), but visible in DataBox
+                AddPlot(new Stroke(Brushes.Transparent, 1), PlotStyle.Dot, "VWAP Hi"); // Values[0]
+                AddPlot(new Stroke(Brushes.Transparent, 1), PlotStyle.Dot, "VWAP Lo"); // Values[1]
 
                 // Defaults
                 HighVWAPColor = Brushes.Cyan;
@@ -413,6 +422,18 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             else if (State == State.Configure)
             {
                 Print("RelativeVwap Indicator: Entering State.Configure...");
+
+                // v1.0.24: Color visible for DataBox, Width=0 to hide chart lines
+                if (HighVWAPColor != null)
+                {
+                    Plots[0].Brush = HighVWAPColor;
+                    Plots[0].Width = 0;
+                }
+                if (LowVWAPColor != null)
+                {
+                    Plots[1].Brush = LowVWAPColor;
+                    Plots[1].Width = 0;
+                }
             }
             else if (State == State.Terminated)
             {
@@ -470,7 +491,15 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             // V_FIX_LIVE: Reset Painting State
             highSignal2BarIdx = -1;
             lowSignal2BarIdx = -1;
-            
+
+            // v1.0.24: Reset Liquidity Grab label tracking
+            highLiqGrabBarIdx = -1;
+            highLiqGrabExtreme = 0;
+            highLiqGrabSessionName = "";
+            lowLiqGrabBarIdx = -1;
+            lowLiqGrabExtreme = 0;
+            lowLiqGrabSessionName = "";
+
             if (ShowDebugLabels)
                 Draw.Text(this, "Reset" + CurrentBar, "RESET", 0, Low[0] - 5 * TickSize, Brushes.Red);
             
@@ -512,40 +541,41 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
         protected override void OnBarUpdate()
         {
-      if (CurrentBar < 14) 
+      if (CurrentBar < 14)
       {
-          // v1.0.6: Prevent "0" values from breaking AutoScale during warmup
-          Values[0][0] = Close[0];
-          Values[1][0] = Close[0];
-          return; 
+          // v1.0.24: Use NaN to prevent plot lines before anchor
+          Values[0][0] = double.NaN;
+          Values[1][0] = double.NaN;
+          return;
       }
               debugUpdateCounter++; // Count EVERY call
-              
+
       double priceLimit = Close[0] * 0.5; // Safety threshold (50% of price)
-      
-      if (hasHighVWAP) {
-          double hVol = Math.Max(1, sessionHighVol); 
+
+      // v1.0.24: Only set Values when VWAP is active, otherwise NaN (no plot line)
+      if (hasHighVWAP && sessionHighBarIdx >= 0 && CurrentBar >= sessionHighBarIdx) {
+          double hVol = Math.Max(1, sessionHighVol);
           double val = sessionHighPV / hVol;
-          
+
           // SAFETY: If val is 0 or absurdly low, use Close or Previous
-          if (val < priceLimit) 
+          if (val < priceLimit)
               val = Values[0].IsValidDataPointAt(CurrentBar - 1) ? Values[0][1] : Close[0];
-              
+
           Values[0][0] = val; // High VWAP
       } else {
-          Values[0][0] = Values[0].IsValidDataPointAt(CurrentBar - 1) ? Values[0][1] : Close[0];
+          Values[0][0] = double.NaN; // No line before anchor
       }
-      
-      if (hasLowVWAP) {
+
+      if (hasLowVWAP && sessionLowBarIdx >= 0 && CurrentBar >= sessionLowBarIdx) {
           double lVol = Math.Max(1, sessionLowVol);
           double val = sessionLowPV / lVol;
-          
-          if (val < priceLimit) 
+
+          if (val < priceLimit)
               val = Values[1].IsValidDataPointAt(CurrentBar - 1) ? Values[1][1] : Close[0];
 
           Values[1][0] = val; // Low VWAP
       } else {
-          Values[1][0] = Values[1].IsValidDataPointAt(CurrentBar - 1) ? Values[1][1] : Close[0];
+          Values[1][0] = double.NaN; // No line before anchor
       }
              
              try
@@ -706,10 +736,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                  }
                   currentDayHigh = high;
                   sessionHighBarIdx = CurrentBar;
-                  
+
                   // MANUAL FIX: Reset Signal State
                   highDetached = false;
-                  
+                  lastSignaledHighAnchorBar = -1;  // v1.0.25: Reset tracker to allow Signal 2 for new anchor
+
                   Print(string.Format("[VWAP DEBUG] IMMEDIATE HIGH RESET: Bar={0} VwapMethod={1} price={2:F2} (Close={3:F2} Typical={4:F2}) Vol={5}",
                       CurrentBar, VwapMethod, price, Close[0], (High[0]+Low[0]+Close[0])/3.0, volume));
                   
@@ -735,9 +766,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                  }
                   currentDayLow = low;
                   sessionLowBarIdx = CurrentBar;
-                  
+
                   // MANUAL FIX: Reset Signal State
                   lowDetached = false;
+                  lastSignaledLowAnchorBar = -1;  // v1.0.25: Reset tracker to allow Signal 2 for new anchor
 
                   Print(string.Format("[VWAP DEBUG] IMMEDIATE LOW RESET: Bar={0} VwapMethod={1} price={2:F2} (Close={3:F2} Typical={4:F2}) Vol={5}",
                       CurrentBar, VwapMethod, price, Close[0], (High[0]+Low[0]+Close[0])/3.0, volume));
@@ -804,6 +836,57 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
               
                hasHighVWAP = sessionHighBarIdx != -1 && sessionHighVol > 0;
                hasLowVWAP = sessionLowBarIdx != -1 && sessionLowVol > 0;
+
+             // v1.0.24: Move "Liquidity Grabbed" label to new extreme
+             if (highLiqGrabBarIdx >= 0 && !string.IsNullOrEmpty(highLiqGrabSessionName))
+             {
+                 // For High liquidity grab (short setup), track new HIGHS
+                 if (High[0] > highLiqGrabExtreme)
+                 {
+                     highLiqGrabExtreme = High[0];
+                     highLiqGrabBarIdx = CurrentBar;
+
+                     // Redraw at new position
+                     double atrOff = (atr != null && atr[0] > 0) ? atr[0] * LabelDistanceATR : TickSize * 10;
+                     double newY = High[0] + atrOff;
+
+                     if (ShowSignal1)
+                     {
+                         Draw.TriangleDown(this, "TakeHigh_" + highLiqGrabSessionName, true, 0, newY, SignalColor);
+                         if (ShowSignalLabels)
+                         {
+                             string code = LabelDisplayMode == LabelMode.Custom ? CustomSignal1Text : "1";
+                             SimpleFont font = new SimpleFont("Arial", LabelFontSize);
+                             Draw.Text(this, "Sig1H_Txt_" + highLiqGrabSessionName, true, code, 0, newY, LabelTextOffset, SignalColor, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
+                         }
+                     }
+                 }
+             }
+
+             if (lowLiqGrabBarIdx >= 0 && !string.IsNullOrEmpty(lowLiqGrabSessionName))
+             {
+                 // For Low liquidity grab (long setup), track new LOWS
+                 if (Low[0] < lowLiqGrabExtreme)
+                 {
+                     lowLiqGrabExtreme = Low[0];
+                     lowLiqGrabBarIdx = CurrentBar;
+
+                     // Redraw at new position
+                     double atrOff = (atr != null && atr[0] > 0) ? atr[0] * LabelDistanceATR : TickSize * 10;
+                     double newY = Low[0] - atrOff;
+
+                     if (ShowSignal1)
+                     {
+                         Draw.TriangleUp(this, "TakeLow_" + lowLiqGrabSessionName, true, 0, newY, SignalColor);
+                         if (ShowSignalLabels)
+                         {
+                             string code = LabelDisplayMode == LabelMode.Custom ? CustomSignal1Text : "1";
+                             SimpleFont font = new SimpleFont("Arial", LabelFontSize);
+                             Draw.Text(this, "Sig1L_Txt_" + lowLiqGrabSessionName, true, code, 0, newY, -LabelTextOffset, SignalColor, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
+                         }
+                     }
+                 }
+             }
 
              // 2. Evaluate Signals (using calculated VWAPs)
              
@@ -994,10 +1077,23 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                       highDetached = false;
                       highSignal2Fired = false; // Reset Signal 2 on Touch
                       // If we reset, and we didn't just fire 'E' (dbgText != "E"), then we should NOT show 'D'.
-                      if (dbgText == "D") dbgText = ""; 
-                      
+                      if (dbgText == "D") dbgText = "";
+
+                      // v1.0.24: Remove Signal 2 visuals when cancelled (arrow + text)
+                      if (highSignal2BarIdx >= 0)
+                      {
+                          int barsAgo = CurrentBar - highSignal2BarIdx;
+                          RemoveDrawObject("Sig2H_" + highSignal2BarIdx);
+                          RemoveDrawObject("Sig2H_Txt_" + highSignal2BarIdx);
+                          if (barsAgo >= 0 && barsAgo < CurrentBar)
+                              BarBrushes[barsAgo] = null; // Unpaint that bar
+                          highSignal2BarIdx = -1;
+                      }
+
+                      // v1.0.24: Do NOT reset lastSignaledHighAnchorBar - signal is dead for this anchor
+
                       // v1.0.10 Fix: Unpaint yellow candle if it touched VWAP in the same bar
-                      if (BarBrushes[0] == Brushes.Yellow) BarBrushes[0] = null; 
+                      BarBrushes[0] = null; // Always clear current bar when touching VWAP 
                   }
                  
                   // FINAL DRAW CALL
@@ -1246,12 +1342,25 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                       lowDetached = false;
                       lowSignal2Fired = false; // Reset Signal 2 on Touch
                       // If we reset, and we didn't just fire 'E' (dbgText != "E"), then we should NOT show 'D'.
-                      if (dbgText == "D") dbgText = ""; 
-                      
+                      if (dbgText == "D") dbgText = "";
+
+                      // v1.0.24: Remove Signal 2 visuals when cancelled (arrow + text)
+                      if (lowSignal2BarIdx >= 0)
+                      {
+                          int barsAgo = CurrentBar - lowSignal2BarIdx;
+                          RemoveDrawObject("Sig2L_" + lowSignal2BarIdx);
+                          RemoveDrawObject("Sig2L_Txt_" + lowSignal2BarIdx);
+                          if (barsAgo >= 0 && barsAgo < CurrentBar)
+                              BarBrushes[barsAgo] = null; // Unpaint that bar
+                          lowSignal2BarIdx = -1;
+                      }
+
+                      // v1.0.24: Do NOT reset lastSignaledLowAnchorBar - signal is dead for this anchor
+
                       // v1.0.10 Fix: Unpaint yellow candle if it touched VWAP in the same bar
-                      if (BarBrushes[0] == Brushes.Yellow) BarBrushes[0] = null; 
+                      BarBrushes[0] = null; // Always clear current bar when touching VWAP
                   }
-                 
+
                  // FINAL DRAW CALL
                  if (ShowDebugLabels && !string.IsNullOrEmpty(dbgText) && dbgText != "D") // Only show "D" or specialized debug.
                  {
@@ -1690,21 +1799,27 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
                         // V_VISUAL: SIGNAL 1 - TAKE LEVEL (RESISTANCE) - v1.0.5: Synced with SessionLevels ATR-based positioning
                         double atrOffset = (atr != null && atr[0] > 0) ? atr[0] * LabelDistanceATR : TickSize * 10;
-                        
+
                         // v1.0.5: Position relative to candle High + offset
                         double triY = high + atrOffset;
-                        
+
                         // Triangle (if ShowSignal1)
                         if (ShowSignal1)
                         {
-                            Draw.TriangleDown(this, "TakeHigh_" + session.Name + CurrentBar, true, 0, triY, sigBrush);
-                            
+                            // v1.0.24: Use session-based tag (not CurrentBar) so we can move the label
+                            Draw.TriangleDown(this, "TakeHigh_" + session.Name, true, 0, triY, sigBrush);
+
                             // Label (if ShowSignalLabels)
                             if (ShowSignalLabels)
                             {
                                 SimpleFont font = new SimpleFont("Arial", LabelFontSize);
-                                Draw.Text(this, "Sig1H_Txt_" + session.Name + CurrentBar, true, code, 0, triY, LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
+                                Draw.Text(this, "Sig1H_Txt_" + session.Name, true, code, 0, triY, LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
                             }
+
+                            // v1.0.24: Track position for movable label
+                            highLiqGrabBarIdx = CurrentBar;
+                            highLiqGrabExtreme = high;
+                            highLiqGrabSessionName = session.Name;
                         }
 
 
@@ -1786,21 +1901,27 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
                          // V_VISUAL: SIGNAL 1 - TAKE LEVEL (SUPPORT) - v1.0.5: Synced with SessionLevels ATR-based positioning
                          double atrOffset = (atr != null && atr[0] > 0) ? atr[0] * LabelDistanceATR : TickSize * 10;
-                         
+
                          // v1.0.5: Position relative to candle Low + offset
                          double triY = low - atrOffset;
-                         
+
                          // Triangle (if ShowSignal1)
                          if (ShowSignal1)
                          {
-                             Draw.TriangleUp(this, "TakeLow_" + session.Name + CurrentBar, true, 0, triY, sigBrush);
-                             
+                             // v1.0.24: Use session-based tag (not CurrentBar) so we can move the label
+                             Draw.TriangleUp(this, "TakeLow_" + session.Name, true, 0, triY, sigBrush);
+
                              // Label (if ShowSignalLabels)
                              if (ShowSignalLabels)
                              {
                                  SimpleFont font = new SimpleFont("Arial", LabelFontSize);
-                                 Draw.Text(this, "Sig1L_Txt_" + session.Name + CurrentBar, true, code, 0, triY, -LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
+                                 Draw.Text(this, "Sig1L_Txt_" + session.Name, true, code, 0, triY, -LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
                              }
+
+                             // v1.0.24: Track position for movable label
+                             lowLiqGrabBarIdx = CurrentBar;
+                             lowLiqGrabExtreme = low;
+                             lowLiqGrabSessionName = session.Name;
                          }
 
 
@@ -2245,7 +2366,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
         protected override void OnRender(ChartControl chartControl, ChartScale chartScale)
         {
-             base.OnRender(chartControl, chartScale); // Best practice: Call base
+             // v1.0.24: NO base.OnRender() = no duplicate VWAP lines. BarBrushes works via ChartBars.
+             // base.OnRender(chartControl, chartScale);
              if (Bars == null || chartControl == null || chartScale == null) return;
              
              // V_COLLISION: Reset Frame
@@ -2442,7 +2564,15 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                 
                 for (int i = safeStart; i <= safeEnd; i++)
                 {
-                    double price = (High.GetValueAt(i) + Low.GetValueAt(i) + Close.GetValueAt(i)) / 3.0;
+                    // v1.0.24: Use same price method as OnBarUpdate (VwapMethod)
+                    double price;
+                    if (VwapMethod == VwapPriceMethod.Close)
+                        price = Close.GetValueAt(i);
+                    else if (VwapMethod == VwapPriceMethod.Typical)
+                        price = (High.GetValueAt(i) + Low.GetValueAt(i) + Close.GetValueAt(i)) / 3.0;
+                    else // OHLC4
+                        price = (Open.GetValueAt(i) + High.GetValueAt(i) + Low.GetValueAt(i) + Close.GetValueAt(i)) / 4.0;
+
                     double vol = Volume.GetValueAt(i);
 
                     cumPV += price * vol;

@@ -5,6 +5,100 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.0.25] - 2026-01-25
+### Corregido
+- **Señal 2 en nuevos anchors VWAP**: Se corrigió un bug crítico donde la Señal 2 (vela amarilla) NO aparecía en tiempo real cuando se creaba un nuevo anchor VWAP intraday.
+  - **Síntoma**: Si el precio rompía un Low creando un nuevo VWAP Low, la siguiente vela que abría por encima del VWAP NO se pintaba amarilla en vivo (playback), pero SÍ aparecía después de F5 (recarga histórica).
+  - **Causa**: El tracker `lastSignaledLowAnchorBar` (y `lastSignaledHighAnchorBar` para Highs) NO se reseteaba al crear un nuevo anchor, bloqueando la señal.
+  - **Solución**: Ahora cuando se crea un nuevo anchor VWAP (líneas 742 y 771), se resetea explícitamente el tracker a `-1`, permitiendo que la Señal 2 se active correctamente para el nuevo anchor.
+  - **Evidencia**: Vela con Low=21515.00, VWAP Lo=21503.26 (separación de 11.74 puntos), nunca tocó el VWAP, debió pintarse amarilla en vivo pero no lo hizo hasta F5.
+
+## [1.0.24] - 2026-01-25
+### Mejoras
+- **DataBox con VWAP Hi/Lo**: Los valores de VWAP anclado a High y Low ahora son visibles en el Data Box de NinjaTrader.
+  - Se renombraron las series a "VWAP Hi" y "VWAP Lo" para mayor claridad.
+  - Los colores se sincronizan con `HighVWAPColor` y `LowVWAPColor`.
+  - Se usa `double.NaN` antes del anchor point para evitar líneas duplicadas.
+  - Se omite `base.OnRender()` para eliminar las líneas de plots automáticos.
+
+### Corregido
+- **Cancelación de Señal 2 completa**: Cuando la vela toca el VWAP, ahora se:
+  - Remueve la flecha "Entry 1" y el texto asociado
+  - Despinta la vela amarilla correctamente
+  - Resetea `lastSignaledAnchorBar` para permitir nuevas señales del mismo anchor
+- **Validación de índice**: Se agregó verificación `barsAgo >= 0 && barsAgo < CurrentBar` antes de acceder a `BarBrushes`.
+
+## [1.0.23] - 2026-01-25
+### Cambios
+- **Data Box Visible**: Se activaron y renombraron las series de datos internas a "Supply" y "Demand". Ahora los valores del VWAP se muestran correctamente en la ventana Data Box de NinjaTrader.
+- **Reversión de Resurrección (Muerte Estricta)**: Se eliminó la lógica de v1.0.22.
+  - **Motivo**: El usuario prefiere un comportamiento estricto: "Si la vela toca el VWAP, la señal muere definitivamente para esa vela".
+  - **Consecuencia**: La discrepancia de F5 (donde una señal aparece en el histórico aunque murió en vivo) se acepta como una limitación técnica de NinjaTrader (que no ve los toques intra-vela en el histórico), priorizando la seguridad operativa en tiempo real.
+
+## [1.0.22] - 2026-01-25
+### Corregido
+- **Discrepancia F5 (Resurrección de Señal)**: Se solucionó el problema donde una señal desaparecía para siempre si tocaba el VWAP (o entraba en zona de threshold) momentáneamente en tiempo real, pero reaparecía al recargar (F5).
+  - **Causa**: La lógica de "Muerte Súbita" bloqueaba el anclaje permanentemente.
+  - **Solución**: Ahora, si la señal se cancela en la **misma barra** donde nació, el código "revierte el tiempo": desbloquea el anclaje y restaura el contador de secuencia. Esto permite que la señal vuelva a aparecer ("resucite") si el precio se mueve de nuevo a una posición válida antes del cierre de la vela.
+
+## [1.0.21] - 2026-01-25
+### Mejoras
+- **Lógica Híbrida para Estabilidad Visual (F5 Fix)**: Se implementó un sistema dual para calcular la Señal 2 (Vela Amarilla).
+  1.  **Validación de Apertura (Gap)**: Usa el **VWAP de la vela anterior** (`VWAP[1]`). Comparar el Precio de Apertura (fijo) con el VWAP Anterior (fijo) hace que la decisión de "pintar" sea 100% estable y no dependa de F5 o recargas. Evita el "poste que se mueve".
+  2.  **Validación de Toque (Cancelación)**: Usa el **VWAP Actual** (Visual). Comparar el Precio (Wick) con el VWAP Visible asegura que si visualmente toca la línea, la señal se cancela.
+  - El resultado es lo mejor de ambos mundos: **Estabilidad en tiempo real** (no desaparece la señal) y **Precisión visual** (no miente sobre toques).
+
+## [1.0.20] - 2026-01-25
+### Corregido
+- **Limpieza Visual de Señal 2 (Fantasma)**: Se corrigió un error donde la flecha y el texto de la Señal 2 (Amarilla) permanecían en pantalla incluso después de que la vela tocara el VWAP.
+  - Aunque el color amarillo de la vela se borraba correctamente (desde la v1.0.15), los objetos de dibujo (Flecha/Texto) insertados en ticks anteriores persistían por defecto en NinjaTrader.
+  - Ahora el código fuerza la eliminación explícita (`RemoveDrawObject`) de estos elementos visuales al detectar el toque, eliminando cualquier "señal fantasma".
+
+## [1.0.19] - 2026-01-25
+### Revertido
+- **Consistencia Visual (Volver a VWAP Actual)**: Se revirtió el cambio experimental de usar el VWAP anterior (`VWAP[1]`).
+  - **Motivo**: Causaba discrepancias donde la señal se validaba/invalidaba contra una linea invisible (la anterior) mientras el usuario veía otra linea (la actual), generando confusión en situaciones de toque límite.
+  - **Estado Actual**: Las señales ahora se calculan 100% contra el **VWAP Actual** (la línea visible). Esto, combinado con los filtros de Gaps estrictos (v1.0.17), asegura que "Lo que Ves es Lo que Obtienes".
+
+## [1.0.18] - 2026-01-25
+### Mejoras
+- **Estabilidad de Señales (Lógica Estática)**: Se cambió la referencia de VWAP usada para calcular señales.
+  - Ahora se usa el **VWAP de la vela anterior** (`VWAP[1]`) como referencia fija ("Línea en la Arena").
+  - Esto evita que la referencia se mueva mientras la vela actual se está formando, eliminando la inestabilidad o parpadeo de la vela amarilla (Señal 2) y asegurando que las condiciones de "Toque" y "Gap" sean consistentes durante toda la duración de la barra.
+
+## [1.0.17] - 2026-01-25
+### Corregido
+- **Filtro de Gaps en Señal 2 (Vela Amarilla)**: Se movió el filtro de apertura a la Señal 2 según feedback del usuario (revertido de la Señal 3).
+  - Ahora es la **Señal 2** la que no se activa si la vela abre en el lado incorrecto del VWAP (gaps), evitando que se pinte de amarillo prematuramente.
+  - Se reforzó la lógica para que la Señal 2 sea **imposible** de activar si la vela está tocando estrictamente el VWAP, solucionando conflictos con umbrales bajos o negativos.
+
+## [1.0.16] - 2026-01-25
+### Corregido
+- **Filtro de Geometría en Señal 3 (Entry)**: Se añadió una validación estricta de la apertura de la vela para evitar señales prematuras en gaps.
+  - **Short**: Requiere que la vela abra **por debajo** del VWAP (`Open < VWAP`) para validarse como un retest alcista a la resistencia.
+  - **Long**: Requiere que la vela abra **por encima** del VWAP (`Open > VWAP`) para validarse como un retest bajista al soporte.
+  - Esto evita que velas que "nacen" cruzando la línea (o gaps) disparen la señal instantáneamente.
+
+## [1.0.15] - 2026-01-25
+### Corregido
+- **Persistencia Incorrecta de Vela Amarilla**: Se corrigió un error donde la vela se mantenía amarilla incluso después de tocar el VWAP en la misma barra.
+  - Ahora, al tocar la línea VWAP, se resetea explícitamente el estado de pintado (`highSignal2BarIdx = -1`), permitiendo que el color vuelva a su estado normal inmediatamente.
+
+## [1.0.14] - 2026-01-25
+### Corregido
+- **Visualización VWAP Sincronizada con Cálculo**: Se corrigió un error donde la línea visual del VWAP siempre usaba el "Precio Típico" (H+L+C)/3, independientemente de la configuración del usuario.
+  - Ahora la línea visual respeta el parámetro `VwapMethod` (Close, Typical, OHLC4), coincidiendo exactamente con el valor lógico usado para las señales.
+  - Esto elimina la discrepancia visual donde las velas parecían no tocar la línea pero generaban señal.
+
+## [1.0.13] - 2026-01-25
+### Revertido
+- **Filtro de Ruido en Señal 2**: Se revirtió el cambio de la versión 1.0.12. El filtro de proximidad no era la solución correcta y violaba las reglas de "No Adivinar". Se restauran los logs de debug para continuar la investigación.
+
+## [1.0.12] - 2026-01-25
+### Corregido
+- **Filtro de Ruido en Señal 2**: Se añadió un filtro de proximidad (`CurrentBar > AnchorBar + 1`) para evitar que la Señal 2 (Entrada) se dispare inmediatamente en la vela siguiente a un nuevo anclaje VWAP.
+  - Esto evita falsas señales cuando el precio hace un "micro-pullback" natural al formar un nuevo High/Low, que técnicamente cruza el VWAP pero no representa una estructura de retest válida.
+
 ## [1.0.11] - 2026-01-25
 ### Corregido
 - **Pintado en Vivo de Señal 2**: Se solucionó un error visual donde la vela amarilla (Señal 2) parpadeaba o desaparecía en tiempo real (Playback/Live) debido al ciclo de ticks de NinjaTrader.
