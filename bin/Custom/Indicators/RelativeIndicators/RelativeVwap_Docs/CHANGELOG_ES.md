@@ -5,6 +5,14 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.0.37] - 2026-01-26
+### Corregido
+- **Vela Amarilla Despintada Incorrectamente**: Se corrigió el bug donde la vela amarilla se despintaba cuando el precio tocaba VWAP en barras posteriores.
+  - **Síntoma**: Señal disparada en Bar 3588, pero cuando el precio tocaba VWAP en Bar 3687 (barra actual), la vela amarilla desaparecía.
+  - **Causa**: `BarBrushes[0] = null` estaba FUERA del bloque `if (highSignal2BarIdx == CurrentBar)`, ejecutándose SIEMPRE que tocaba VWAP, despintando la barra actual incluso si la señal estaba en una barra anterior.
+  - **Solución**: Movido `BarBrushes[0] = null` DENTRO del condicional que verifica si es la misma barra (líneas ~1165, ~1464).
+  - **Resultado**: Ahora solo despinta la barra actual si la señal fue generada EN esa misma barra.
+
 ## [1.0.36] - 2026-01-26
 ### Corregido
 - **UNA Señal por VWAP Anchor (CORRECCIÓN DE v1.0.35)**: Implementación correcta de la lógica "una señal por anchor VWAP".

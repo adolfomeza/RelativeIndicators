@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.36";  // v1.0.36: UNA señal por anchor - Reset solo en nivel opuesto o nuevo anchor
+        private const string VERSION = "1.0.37";  // v1.0.37: Fix vela despintada incorrectamente - BarBrushes[0]=null solo en same bar
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -1160,12 +1160,12 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           if (barsAgo >= 0 && barsAgo < CurrentBar)
                               BarBrushes[barsAgo] = null; // Unpaint that bar
                           highSignal2BarIdx = -1;
+
+                          // v1.0.37: Only unpaint current bar if signal was THIS bar
+                          BarBrushes[0] = null;
                       }
 
-                      // v1.0.24: Do NOT reset lastSignaledHighAnchorBar - signal is dead for this anchor
-
-                      // v1.0.10 Fix: Unpaint yellow candle if it touched VWAP in the same bar
-                      BarBrushes[0] = null; // Always clear current bar when touching VWAP 
+                      // v1.0.24: DO NOT reset lastSignaledHighAnchorBar - signal is dead for this anchor 
                   }
                  
                   // FINAL DRAW CALL
@@ -1459,12 +1459,12 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           if (barsAgo >= 0 && barsAgo < CurrentBar)
                               BarBrushes[barsAgo] = null; // Unpaint that bar
                           lowSignal2BarIdx = -1;
+
+                          // v1.0.37: Only unpaint current bar if signal was THIS bar
+                          BarBrushes[0] = null;
                       }
 
-                      // v1.0.24: Do NOT reset lastSignaledLowAnchorBar - signal is dead for this anchor
-
-                      // v1.0.10 Fix: Unpaint yellow candle if it touched VWAP in the same bar
-                      BarBrushes[0] = null; // Always clear current bar when touching VWAP
+                      // v1.0.24: DO NOT reset lastSignaledLowAnchorBar - signal is dead for this anchor
                   }
 
                  // FINAL DRAW CALL
