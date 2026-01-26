@@ -5,6 +5,19 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.0.41] - 2026-01-26
+### Corregido
+- **Velas Subsecuentes No Se Pintan + Ralentización Severa**: Se corrigieron dos bugs críticos reportados por el usuario.
+  - **Problema 1 - Velas subsecuentes no aparecen**: Después de que una señal se cancelaba (tocaba VWAP), no se permitían más señales para el mismo anchor.
+    - **Causa**: Cuando se cancelaba la señal, `lastSignaledHighAnchorBar` / `lastSignaledLowAnchorBar` NO se reseteaban, bloqueando futuras señales.
+    - **Solución**: Resetear el tracker a `-1` cuando la señal se cancela (líneas ~1176, ~1497).
+    - **Resultado**: Ahora permite múltiples señales para el mismo anchor, siempre que las anteriores hayan sido canceladas por tocar VWAP.
+  - **Problema 2 - Ralentización severa en playback**: El playback se ralentizaba drásticamente al llegar a la vela amarilla, luego volvía a velocidad normal.
+    - **Causa**: `ChartControl.Dispatcher.Invoke()` es sincrónico y bloquea OnBarUpdate en cada tick, causando lag acumulativo.
+    - **Solución**: Removido completamente todos los `Dispatcher.Invoke` (líneas ~1256-1262, ~1278-1281, ~1560-1566, ~1587-1590).
+    - **Razón**: `BarBrushes` se actualiza automáticamente en NinjaTrader - no necesita refresh manual forzado.
+    - **Resultado**: Playback vuelve a velocidad normal sin ralentizaciones.
+
 ## [1.0.40] - 2026-01-26
 ### Corregido
 - **Barras Verticales Amarillas**: Se corrigió el bug introducido en v1.0.39 donde aparecían barras verticales amarillas cubriendo todo el chart.

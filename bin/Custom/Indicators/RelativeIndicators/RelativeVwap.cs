@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.40";  // v1.0.40: Remove BackBrushes (causes vertical bars) - keep only BarBrushes and CandleOutline
+        private const string VERSION = "1.0.41";  // v1.0.41: Reset tracker on cancel + remove sync Dispatcher causing slowdown
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -1168,9 +1168,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           // v1.0.40: Remove BackBrushes (causes vertical bars)
                           BarBrushes[0] = null;
                           CandleOutlineBrushes[0] = null;
-                      }
 
-                      // v1.0.24: DO NOT reset lastSignaledHighAnchorBar - signal is dead for this anchor 
+                          // v1.0.41: RESET tracker when signal is cancelled - allows new signal for same anchor
+                          lastSignaledHighAnchorBar = -1;
+                          Print(string.Format("[DEBUG FLAG] Bar:{0} | CANCELLED → Reset lastSignaledHighAnchorBar to -1 (allows new signal)", CurrentBar));
+                      } 
                   }
                  
                   // FINAL DRAW CALL
@@ -1251,13 +1253,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                               }
                           }
 
-                          // v1.0.28: Force refresh to show signal immediately in playback/realtime
-                          // v1.0.32: Fix threading error - must call from UI thread
-                          // v1.0.38: Change to synchronous Invoke for immediate rendering
-                          if (ChartControl != null)
-                          {
-                              ChartControl.Dispatcher.Invoke(() => ChartControl.InvalidateVisual(), System.Windows.Threading.DispatcherPriority.Render);
-                          }
+                          // v1.0.41: REMOVED - Dispatcher.Invoke causes severe slowdown in playback
+                          // Chart refresh not needed - BarBrushes updates automatically
 
                           highSignal2Fired = true; // v1.0.31: Mark signal as fired (prevents multiple signals)
                           lastSignaledHighAnchorBar = sessionHighBarIdx; // v1.0.33: Track which anchor was signaled
@@ -1276,12 +1273,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                       {
                           BarBrushes[barsAgo] = Brushes.Yellow;
                           CandleOutlineBrushes[barsAgo] = Brushes.Yellow;
-
-                          // v1.0.38: Force refresh also in persistent painting for current bar
-                          if (barsAgo == 0 && ChartControl != null)
-                          {
-                              ChartControl.Dispatcher.Invoke(() => ChartControl.InvalidateVisual(), System.Windows.Threading.DispatcherPriority.Render);
-                          }
+                          // v1.0.41: Removed Dispatcher.Invoke - causes severe slowdown
                       }
                   }
               }
@@ -1486,9 +1478,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           // v1.0.40: Remove BackBrushes (causes vertical bars)
                           BarBrushes[0] = null;
                           CandleOutlineBrushes[0] = null;
-                      }
 
-                      // v1.0.24: DO NOT reset lastSignaledLowAnchorBar - signal is dead for this anchor
+                          // v1.0.41: RESET tracker when signal is cancelled - allows new signal for same anchor
+                          lastSignaledLowAnchorBar = -1;
+                          Print(string.Format("[DEBUG FLAG] Bar:{0} | CANCELLED → Reset lastSignaledLowAnchorBar to -1 (allows new signal)", CurrentBar));
+                      }
                   }
 
                  // FINAL DRAW CALL
@@ -1563,13 +1557,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                               }
                           }
 
-                          // v1.0.28: Force refresh to show signal immediately in playback/realtime
-                          // v1.0.32: Fix threading error - must call from UI thread
-                          // v1.0.38: Change to synchronous Invoke for immediate rendering
-                          if (ChartControl != null)
-                          {
-                              ChartControl.Dispatcher.Invoke(() => ChartControl.InvalidateVisual(), System.Windows.Threading.DispatcherPriority.Render);
-                          }
+                          // v1.0.41: REMOVED - Dispatcher.Invoke causes severe slowdown in playback
+                          // Chart refresh not needed - BarBrushes updates automatically
 
                           lowSignal2Fired = true; // v1.0.31: Mark signal as fired (prevents multiple signals)
                           lastSignaledLowAnchorBar = sessionLowBarIdx; // v1.0.33: Track which anchor was signaled
@@ -1588,12 +1577,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                       {
                           BarBrushes[barsAgo] = Brushes.Yellow;
                           CandleOutlineBrushes[barsAgo] = Brushes.Yellow;
-
-                          // v1.0.38: Force refresh also in persistent painting for current bar
-                          if (barsAgo == 0 && ChartControl != null)
-                          {
-                              ChartControl.Dispatcher.Invoke(() => ChartControl.InvalidateVisual(), System.Windows.Threading.DispatcherPriority.Render);
-                          }
+                          // v1.0.41: Removed Dispatcher.Invoke - causes severe slowdown
                       }
                   }
               }
