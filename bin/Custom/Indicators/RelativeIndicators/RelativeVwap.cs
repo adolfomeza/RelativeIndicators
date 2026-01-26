@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.31";  // v1.0.31: Fix señales en TODAS las velas - Usar flag lowSignal2Fired
+        private const string VERSION = "1.0.32";  // v1.0.32: Fix threading error + debug logging para flags
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -1136,6 +1136,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                       }
 
                       highDetached = false;
+                      Print(string.Format("[DEBUG FLAG] Bar:{0} | RESETTING highSignal2Fired (Touch VWAP) | high:{1:F2} >= hVwap:{2:F2}",
+                          CurrentBar, high, hVwap));
                       highSignal2Fired = false; // Reset Signal 2 on Touch
                       // If we reset, and we didn't just fire 'E' (dbgText != "E"), then we should NOT show 'D'.
                       if (dbgText == "D") dbgText = "";
@@ -1180,6 +1182,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                        */
 
                       // v1.0.31: Use highSignal2Fired flag to allow ONLY ONE signal until cancelled/reset
+                      Print(string.Format("[DEBUG FLAG] Bar:{0} | Checking Signal 2 | highSignal2Fired:{1} | Will Fire:{2}",
+                          CurrentBar, highSignal2Fired, !highSignal2Fired));
+
                       if (!highSignal2Fired)
                       {
                           // v1.0.8: Paint Signal 2 candle yellow (only the first separation candle)
@@ -1230,9 +1235,14 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           }
 
                           // v1.0.28: Force refresh to show signal immediately in playback/realtime
-                          ChartControl?.InvalidateVisual();
+                          // v1.0.32: Fix threading error - must call from UI thread
+                          if (ChartControl != null)
+                          {
+                              ChartControl.Dispatcher.InvokeAsync(() => ChartControl.InvalidateVisual());
+                          }
 
                           highSignal2Fired = true; // v1.0.31: Mark signal as fired (prevents multiple signals)
+                          Print(string.Format("[DEBUG FLAG] Bar:{0} | SET highSignal2Fired = TRUE after firing signal", CurrentBar));
                       }
                   }
                   
@@ -1417,6 +1427,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                       }
 
                       lowDetached = false;
+                      Print(string.Format("[DEBUG FLAG] Bar:{0} | RESETTING lowSignal2Fired (Touch VWAP) | low:{1:F2} <= lVwap:{2:F2}",
+                          CurrentBar, low, lVwap));
                       lowSignal2Fired = false; // Reset Signal 2 on Touch
                       // If we reset, and we didn't just fire 'E' (dbgText != "E"), then we should NOT show 'D'.
                       if (dbgText == "D") dbgText = "";
@@ -1455,6 +1467,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                   if (lowHasTakenRelevant && Low[0] >= (lVwap + Signal2ThresholdTicks * TickSize))
                   {
                       // v1.0.31: Use lowSignal2Fired flag to allow ONLY ONE signal until cancelled/reset
+                      Print(string.Format("[DEBUG FLAG] Bar:{0} | Checking Signal 2 LONG | lowSignal2Fired:{1} | Will Fire:{2}",
+                          CurrentBar, lowSignal2Fired, !lowSignal2Fired));
+
                       if (!lowSignal2Fired)
                       {
                           // v1.0.8: Paint Signal 2 candle yellow (only the first separation candle)
@@ -1505,9 +1520,14 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           }
 
                           // v1.0.28: Force refresh to show signal immediately in playback/realtime
-                          ChartControl?.InvalidateVisual();
+                          // v1.0.32: Fix threading error - must call from UI thread
+                          if (ChartControl != null)
+                          {
+                              ChartControl.Dispatcher.InvokeAsync(() => ChartControl.InvalidateVisual());
+                          }
 
                           lowSignal2Fired = true; // v1.0.31: Mark signal as fired (prevents multiple signals)
+                          Print(string.Format("[DEBUG FLAG] Bar:{0} | SET lowSignal2Fired = TRUE after firing signal", CurrentBar));
                       }
                   }
                   
