@@ -389,6 +389,12 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             {
                 atr = ATR(14); // V_NORM: Correct Initialization
 
+                // Version Info (Always Print)
+                Print("======================================");
+                Print("RelativeVwap LOADED - Version: " + VERSION);
+                Print("Instrument: " + Instrument.FullName);
+                Print("======================================");
+
                 // v1.0.26: Initialize Log File Path
                 if (EnableFileLogging)
                 {
@@ -1520,7 +1526,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
              // Version Label (Always Visible)
              if (CurrentBar == Bars.Count - 1)
              {
-                 Draw.TextFixed(this, "VersionLabel", "RelativeVwap v" + VERSION, TextPosition.TopLeft, Brushes.Gray, new SimpleFont("Arial", 10), Brushes.Transparent, Brushes.Transparent, 0);
+                 Draw.TextFixed(this, "VersionLabel", "RelativeVwap v" + VERSION, TextPosition.TopLeft, Brushes.White, new SimpleFont("Arial", 12), Brushes.Black, Brushes.Transparent, 100);
              }
 
              // Status Overlay
