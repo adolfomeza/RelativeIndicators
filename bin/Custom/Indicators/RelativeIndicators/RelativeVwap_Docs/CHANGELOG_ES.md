@@ -5,6 +5,21 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.0.30] - 2026-01-25
+### Corregido
+- **Señales Múltiples en la Misma Barra (OnEachTick)**: Se eliminó el bug crítico donde aparecían múltiples señales "Entry 1" y múltiples velas amarillas para el mismo VWAP anchor debido a resets repetidos en modo Calculate.OnEachTick.
+  - **Síntoma**: En una barra volátil con muchos ticks, cada vez que el LOW (o HIGH) de la barra cambiaba, se generaba una nueva señal "Entry 1" con su propia vela amarilla y etiqueta, resultando en 5-10+ señales duplicadas en la misma barra.
+  - **Causa Raíz**: En Calculate.OnEachTick, el LOW/HIGH de la barra actual puede cambiar con cada tick. El código de líneas 789 y 823 reseteaba `lastSignaledHighAnchorBar = -1` y `lastSignaledLowAnchorBar = -1` CADA VEZ que detectaba un nuevo extremo, incluso si era dentro de la MISMA barra (CurrentBar no cambiaba). Esto causaba que la condición `sessionLowBarIdx != lastSignaledLowAnchorBar` se volviera verdadera repetidamente en la misma barra.
+  - **Ejemplo de Flujo Problemático**:
+    1. Tick 1: LOW=100 → Nuevo mínimo → `sessionLowBarIdx=105`, `lastSignaledLowAnchorBar=-1` → Precio separado → **Genera Signal 2** → `lastSignaledLowAnchorBar=105`
+    2. Tick 2: LOW=99 → Nuevo mínimo OTRA VEZ (mismo CurrentBar) → `sessionLowBarIdx=105`, **`lastSignaledLowAnchorBar=-1`** (resetea!) → Precio separado → **Genera Signal 2 OTRA VEZ**
+    3. Tick 3-N: Se repite el ciclo...
+  - **Solución**: Se modificó la lógica para SOLO resetear el tracker si el anchor está cambiando a una **BARRA DIFERENTE**. Ahora se verifica `if (sessionLowBarIdx != CurrentBar)` antes de resetear, evitando resets múltiples en la misma barra.
+  - **Cambios Técnicos**:
+    - Línea ~789 (HIGH): `if (sessionHighBarIdx != CurrentBar) lastSignaledHighAnchorBar = -1;`
+    - Línea ~823 (LOW): `if (sessionLowBarIdx != CurrentBar) lastSignaledLowAnchorBar = -1;`
+  - **Resultado**: Ahora aparece exactamente UNA señal "Entry 1" y UNA vela amarilla por cada anchor VWAP, incluso en barras extremadamente volátiles con muchos cambios de tick.
+
 ## [1.0.29] - 2026-01-25
 ### Corregido
 - **Señales Múltiples para el Mismo Anchor VWAP**: Se eliminó el bug donde aparecían múltiples señales "Entry 1" para el mismo VWAP (debería ser solo UNA señal por anchor).

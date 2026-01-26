@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.29";  // v1.0.29: Fix señales múltiples + pintado persistente velas amarillas
+        private const string VERSION = "1.0.30";  // v1.0.30: Fix señales múltiples en misma barra (OnEachTick resets)
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -782,11 +782,15 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                      historicalHighs.Add(new HistoricalAnchor { StartIdx = sessionHighBarIdx, EndIdx = CurrentBar, WasRelevant = highHasTakenRelevant });
                  }
                   currentDayHigh = high;
+
+                  // v1.0.30: Only reset tracker if anchor is moving to DIFFERENT bar (prevent multiple resets in same bar during OnEachTick)
+                  if (sessionHighBarIdx != CurrentBar)
+                      lastSignaledHighAnchorBar = -1;
+
                   sessionHighBarIdx = CurrentBar;
 
                   // MANUAL FIX: Reset Signal State
                   highDetached = false;
-                  lastSignaledHighAnchorBar = -1;  // v1.0.25: Reset tracker to allow Signal 2 for new anchor
 
                   Print(string.Format("[VWAP DEBUG] IMMEDIATE HIGH RESET: Bar={0} VwapMethod={1} price={2:F2} (Close={3:F2} Typical={4:F2}) Vol={5}",
                       CurrentBar, VwapMethod, price, Close[0], (High[0]+Low[0]+Close[0])/3.0, volume));
@@ -816,11 +820,15 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                      historicalLows.Add(new HistoricalAnchor { StartIdx = sessionLowBarIdx, EndIdx = CurrentBar, WasRelevant = lowHasTakenRelevant });
                  }
                   currentDayLow = low;
+
+                  // v1.0.30: Only reset tracker if anchor is moving to DIFFERENT bar (prevent multiple resets in same bar during OnEachTick)
+                  if (sessionLowBarIdx != CurrentBar)
+                      lastSignaledLowAnchorBar = -1;
+
                   sessionLowBarIdx = CurrentBar;
 
                   // MANUAL FIX: Reset Signal State
                   lowDetached = false;
-                  lastSignaledLowAnchorBar = -1;  // v1.0.25: Reset tracker to allow Signal 2 for new anchor
 
                   Print(string.Format("[VWAP DEBUG] IMMEDIATE LOW RESET: Bar={0} VwapMethod={1} price={2:F2} (Close={3:F2} Typical={4:F2}) Vol={5}",
                       CurrentBar, VwapMethod, price, Close[0], (High[0]+Low[0]+Close[0])/3.0, volume));
