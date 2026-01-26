@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.27";  // v1.0.27: Fix permanencia de Señal 2 (solo cancela en misma barra)
+        private const string VERSION = "1.0.28";  // v1.0.28: Force refresh para visualización inmediata de Señal 2
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -1221,7 +1221,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                                   Draw.Text(this, "Sig2H_Txt_" + CurrentBar, true, code, 0, dotY, LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
                               }
                           }
-                          
+
+                          // v1.0.28: Force refresh to show signal immediately in playback/realtime
+                          ChartControl?.InvalidateVisual();
+
                           lastSignaledHighAnchorBar = sessionHighBarIdx; // Mark this anchor as USED
                           highSignal2Fired = true;
                       }
@@ -1489,7 +1492,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                                   Draw.Text(this, "Sig2L_Txt_" + CurrentBar, true, code, 0, dotY, -LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
                               }
                           }
-                          
+
+                          // v1.0.28: Force refresh to show signal immediately in playback/realtime
+                          ChartControl?.InvalidateVisual();
+
                           lastSignaledLowAnchorBar = sessionLowBarIdx; // Mark this anchor as USED
                           lowSignal2Fired = true;
                       }

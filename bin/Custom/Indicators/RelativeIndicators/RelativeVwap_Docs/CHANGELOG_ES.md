@@ -5,6 +5,14 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.0.28] - 2026-01-25
+### Corregido
+- **Visualización Inmediata de Señal 2**: Se corrigió el bug donde la vela amarilla y las flechas/etiquetas de la Señal 2 NO aparecían inmediatamente en playback/realtime, requiriendo presionar F5 para verlas.
+  - **Síntoma**: La lógica funcionaba correctamente (logs mostraban señal disparada), pero la visualización NO se actualizaba hasta refrescar el gráfico con F5.
+  - **Causa**: Los objetos `Draw.ArrowUp/ArrowDown` y `Draw.Text` se creaban correctamente, pero el gráfico no se refrescaba automáticamente en playback tick-a-tick.
+  - **Solución**: Se agregó `ChartControl?.InvalidateVisual()` inmediatamente después de crear los objetos Draw de la Señal 2, forzando el refresh inmediato del gráfico.
+  - **Cambio Técnico**: Agregado después de líneas 1491 (LONG) y 1223 (SHORT).
+
 ## [1.0.27] - 2026-01-25
 ### Corregido
 - **Permanencia de Señal 2 (Vela Amarilla)**: Se corrigió el bug crítico donde las señales amarillas desaparecían cuando el precio tocaba el VWAP en barras futuras.
