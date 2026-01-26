@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.34";  // v1.0.34: Fix vela amarilla no aparece en playback - Pintar inmediatamente
+        private const string VERSION = "1.0.35";  // v1.0.35: Reset tracker al cancelar señal para permitir nueva señal
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -1138,9 +1138,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                       }
 
                       highDetached = false;
-                      Print(string.Format("[DEBUG FLAG] Bar:{0} | RESETTING highSignal2Fired (Touch VWAP) | high:{1:F2} >= hVwap:{2:F2}",
+                      Print(string.Format("[DEBUG FLAG] Bar:{0} | RESETTING highSignal2Fired + lastSignaled (Touch VWAP) | high:{1:F2} >= hVwap:{2:F2}",
                           CurrentBar, high, hVwap));
                       highSignal2Fired = false; // Reset Signal 2 on Touch
+                      lastSignaledHighAnchorBar = -1; // v1.0.35: Reset tracker to allow new signal after cancellation
                       // If we reset, and we didn't just fire 'E' (dbgText != "E"), then we should NOT show 'D'.
                       if (dbgText == "D") dbgText = "";
 
@@ -1435,9 +1436,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                       }
 
                       lowDetached = false;
-                      Print(string.Format("[DEBUG FLAG] Bar:{0} | RESETTING lowSignal2Fired (Touch VWAP) | low:{1:F2} <= lVwap:{2:F2}",
+                      Print(string.Format("[DEBUG FLAG] Bar:{0} | RESETTING lowSignal2Fired + lastSignaled (Touch VWAP) | low:{1:F2} <= lVwap:{2:F2}",
                           CurrentBar, low, lVwap));
                       lowSignal2Fired = false; // Reset Signal 2 on Touch
+                      lastSignaledLowAnchorBar = -1; // v1.0.35: Reset tracker to allow new signal after cancellation
                       // If we reset, and we didn't just fire 'E' (dbgText != "E"), then we should NOT show 'D'.
                       if (dbgText == "D") dbgText = "";
 

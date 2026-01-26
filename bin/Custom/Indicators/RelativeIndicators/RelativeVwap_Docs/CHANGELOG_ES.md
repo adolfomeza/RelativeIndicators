@@ -5,6 +5,19 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.0.35] - 2026-01-26
+### Corregido
+- **Nueva Señal No Aparece Después de Cancelación**: Se corrigió el bug donde después de que una señal se cancelaba (por tocar VWAP), las siguientes barras separadas NO generaban nueva señal amarilla.
+  - **Síntoma**:
+    1. Vela 1 abre por debajo del VWAP → Se pinta amarilla ✓
+    2. Vela 1 toca el VWAP → Se cancela, vuelve a color normal ✓
+    3. Vela 2 abre separada del VWAP → NO se pinta amarilla ✗
+    4. Vela 2 cierra separada del VWAP → Sigue sin pintarse ✗
+  - **Causa**: Cuando se cancelaba la señal (líneas ~1143 SHORT, ~1440 LONG), solo se reseteaba `highSignal2Fired = false`, pero NO se reseteaba `lastSignaledHighAnchorBar`. La doble verificación de v1.0.33 bloqueaba la nueva señal porque `sessionHighBarIdx == lastSignaledHighAnchorBar` seguía siendo verdadero.
+  - **Solución**: Ahora cuando se cancela la señal por tocar VWAP, TAMBIÉN se resetea `lastSignaledHighAnchorBar = -1` y `lastSignaledLowAnchorBar = -1`, permitiendo que la siguiente barra separada genere una nueva señal.
+  - **Cambio Técnico**: Agregado `lastSignaledHighAnchorBar = -1;` en línea ~1144 y `lastSignaledLowAnchorBar = -1;` en línea ~1441.
+  - **Resultado**: Después de una cancelación, la siguiente barra separada del VWAP correctamente genera una nueva señal amarilla.
+
 ## [1.0.34] - 2026-01-26
 ### Corregido
 - **Vela Amarilla No Aparece en Playback (REGRESIÓN)**: Se corrigió el bug recurrente donde la vela amarilla (Señal 2) no aparecía en playback tick-a-tick, pero sí aparecía después de presionar F5.
