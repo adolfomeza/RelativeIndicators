@@ -5,6 +5,29 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.0.33] - 2026-01-26
+### Corregido
+- **Múltiples Señales por VWAP Anchor (DEFINITIVO)**: Implementación de doble verificación (flag + tracker) para garantizar UNA SOLA señal por anchor VWAP.
+  - **Síntoma**: A pesar de los fixes en v1.0.31-32, seguían apareciendo múltiples señales "Entry 1" para el mismo anchor VWAP.
+  - **Causa**: El flag `highSignal2Fired` no se estaba reseteando cuando se creaba un nuevo anchor, Y no se estaba verificando el tracker `lastSignaledHighAnchorBar` junto con el flag.
+  - **Solución**:
+    1. **Reset en Nuevo Anchor**: Ahora cuando se crea un nuevo HIGH/LOW anchor (líneas ~795, ~832), se resetea explícitamente `highSignal2Fired = false` y `lowSignal2Fired = false`.
+    2. **Doble Verificación**: Antes de disparar señal, se verifica AMBOS: `!highSignal2Fired` Y `sessionHighBarIdx != lastSignaledHighAnchorBar`. Solo si AMBAS condiciones son verdaderas, se permite la señal.
+    3. **Set Tracker**: Después de disparar señal, se setea AMBOS: `highSignal2Fired = true` Y `lastSignaledHighAnchorBar = sessionHighBarIdx`.
+  - **Debug Mejorado**: Los logs ahora muestran ambos valores (Flag y AnchorSignaled) para facilitar diagnóstico.
+  - **Resultado**: GARANTÍA ABSOLUTA de UNA señal por anchor VWAP. Imposible disparar segunda señal para el mismo anchor.
+
+## [1.0.32] - 2026-01-26
+### Corregido
+- **Threading Error en ChartControl.InvalidateVisual()**: Eliminado el error "The calling thread cannot access this object because a different thread owns it".
+  - **Causa**: `ChartControl.InvalidateVisual()` se llamaba directamente desde `OnBarUpdate()`, que puede ejecutarse en thread diferente al UI thread.
+  - **Solución**: Ahora se ejecuta en el Dispatcher del UI thread: `ChartControl.Dispatcher.InvokeAsync(() => ChartControl.InvalidateVisual())`.
+### Añadido
+- **Debug Logging para Flags**: Se agregaron logs `[DEBUG FLAG]` para diagnosticar el estado de `highSignal2Fired` y `lowSignal2Fired`:
+  - Cuando se verifica el flag antes de disparar señal
+  - Cuando se setea el flag después de disparar señal
+  - Cuando se resetea el flag al tocar VWAP
+
 ## [1.0.31] - 2026-01-26
 ### Corregido
 - **Señales en TODAS las Velas**: Se corrigió el bug crítico donde se generaba una señal "Entry 1" y vela amarilla en CADA barra que cumplía la condición de separación, en lugar de generar SOLO UNA señal por ciclo.

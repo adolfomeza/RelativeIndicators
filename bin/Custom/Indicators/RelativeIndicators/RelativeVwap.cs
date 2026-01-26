@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.32";  // v1.0.32: Fix threading error + debug logging para flags
+        private const string VERSION = "1.0.33";  // v1.0.33: Doble verificación flag+tracker para UNA señal por anchor
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -792,6 +792,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
                   // MANUAL FIX: Reset Signal State
                   highDetached = false;
+                  highSignal2Fired = false;  // v1.0.33: Reset flag to allow Signal 2 for new anchor
                   lastSignaledHighAnchorBar = -1;  // v1.0.25: Reset tracker to allow Signal 2 for new anchor
 
                   Print(string.Format("[VWAP DEBUG] IMMEDIATE HIGH RESET: Bar={0} VwapMethod={1} price={2:F2} (Close={3:F2} Typical={4:F2}) Vol={5}",
@@ -826,6 +827,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
                   // MANUAL FIX: Reset Signal State
                   lowDetached = false;
+                  lowSignal2Fired = false;  // v1.0.33: Reset flag to allow Signal 2 for new anchor
                   lastSignaledLowAnchorBar = -1;  // v1.0.25: Reset tracker to allow Signal 2 for new anchor
 
                   Print(string.Format("[VWAP DEBUG] IMMEDIATE LOW RESET: Bar={0} VwapMethod={1} price={2:F2} (Close={3:F2} Typical={4:F2}) Vol={5}",
@@ -1181,11 +1183,15 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                            CurrentBar, High[0], hVwap, Signal2ThresholdTicks * TickSize, hVwap - High[0]));
                        */
 
-                      // v1.0.31: Use highSignal2Fired flag to allow ONLY ONE signal until cancelled/reset
-                      Print(string.Format("[DEBUG FLAG] Bar:{0} | Checking Signal 2 | highSignal2Fired:{1} | Will Fire:{2}",
-                          CurrentBar, highSignal2Fired, !highSignal2Fired));
+                      // v1.0.33: DOUBLE CHECK - Both flag AND anchor tracker must allow signal
+                      bool alreadyFired = highSignal2Fired;
+                      bool alreadySignaledThisAnchor = (sessionHighBarIdx == lastSignaledHighAnchorBar);
+                      bool canFire = !alreadyFired && !alreadySignaledThisAnchor;
 
-                      if (!highSignal2Fired)
+                      Print(string.Format("[DEBUG FLAG] Bar:{0} | SHORT Check | Flag:{1} | AnchorSignaled:{2} | AnchorBar:{3} | LastSignaled:{4} | CanFire:{5}",
+                          CurrentBar, alreadyFired, alreadySignaledThisAnchor, sessionHighBarIdx, lastSignaledHighAnchorBar, canFire));
+
+                      if (canFire)
                       {
                           // v1.0.8: Paint Signal 2 candle yellow (only the first separation candle)
                           // FIX: Store the Index for persistent painting in Live/Tick mode
@@ -1242,7 +1248,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           }
 
                           highSignal2Fired = true; // v1.0.31: Mark signal as fired (prevents multiple signals)
-                          Print(string.Format("[DEBUG FLAG] Bar:{0} | SET highSignal2Fired = TRUE after firing signal", CurrentBar));
+                          lastSignaledHighAnchorBar = sessionHighBarIdx; // v1.0.33: Track which anchor was signaled
+                          Print(string.Format("[DEBUG FLAG] Bar:{0} | SET highSignal2Fired=TRUE + lastSignaledHighAnchorBar={1}", CurrentBar, sessionHighBarIdx));
                       }
                   }
                   
@@ -1466,11 +1473,15 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                   // CHECK: Have we signaled for THIS specific anchor yet?
                   if (lowHasTakenRelevant && Low[0] >= (lVwap + Signal2ThresholdTicks * TickSize))
                   {
-                      // v1.0.31: Use lowSignal2Fired flag to allow ONLY ONE signal until cancelled/reset
-                      Print(string.Format("[DEBUG FLAG] Bar:{0} | Checking Signal 2 LONG | lowSignal2Fired:{1} | Will Fire:{2}",
-                          CurrentBar, lowSignal2Fired, !lowSignal2Fired));
+                      // v1.0.33: DOUBLE CHECK - Both flag AND anchor tracker must allow signal
+                      bool alreadyFired = lowSignal2Fired;
+                      bool alreadySignaledThisAnchor = (sessionLowBarIdx == lastSignaledLowAnchorBar);
+                      bool canFire = !alreadyFired && !alreadySignaledThisAnchor;
 
-                      if (!lowSignal2Fired)
+                      Print(string.Format("[DEBUG FLAG] Bar:{0} | LONG Check | Flag:{1} | AnchorSignaled:{2} | AnchorBar:{3} | LastSignaled:{4} | CanFire:{5}",
+                          CurrentBar, alreadyFired, alreadySignaledThisAnchor, sessionLowBarIdx, lastSignaledLowAnchorBar, canFire));
+
+                      if (canFire)
                       {
                           // v1.0.8: Paint Signal 2 candle yellow (only the first separation candle)
                           // FIX: Store the Index for persistent painting in Live/Tick mode
@@ -1527,7 +1538,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           }
 
                           lowSignal2Fired = true; // v1.0.31: Mark signal as fired (prevents multiple signals)
-                          Print(string.Format("[DEBUG FLAG] Bar:{0} | SET lowSignal2Fired = TRUE after firing signal", CurrentBar));
+                          lastSignaledLowAnchorBar = sessionLowBarIdx; // v1.0.33: Track which anchor was signaled
+                          Print(string.Format("[DEBUG FLAG] Bar:{0} | SET lowSignal2Fired=TRUE + lastSignaledLowAnchorBar={1}", CurrentBar, sessionLowBarIdx));
                       }
                   }
                   
