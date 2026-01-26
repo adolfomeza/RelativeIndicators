@@ -19,6 +19,7 @@ using NinjaTrader.Data;
 using NinjaTrader.NinjaScript;
 using NinjaTrader.Core.FloatingPoint;
 using System.Timers; // Required for Timer
+using System.IO;     // v1.0.26: File logging
 
 using NinjaTrader.NinjaScript.DrawingTools;
 using System.Globalization;
@@ -34,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.25";  // v1.0.25: Fix Señal 2 para nuevos anchors VWAP
+        private const string VERSION = "1.0.26";  // v1.0.26: Sistema de logging a archivo para debug
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -163,7 +164,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         
         // V_NORM: ATR-based Normalization for consistent spacing across instruments
         private NinjaTrader.NinjaScript.Indicators.ATR atr;
-        
+
+        // v1.0.26: File Logging System
+        private string logFilePath = "";
+        private object logLock = new object();
+
         // v1.0.5: Anti-Collision System for Labels (SIMPLIFIED)
         // NOTE: Returns proposedY directly - collision avoidance removed due to visual issues
         private double _highLabelY = double.MinValue;
@@ -231,6 +236,29 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         public string CurrentCountdownText
         {
             get { return _currentCountdownText; }
+        }
+
+        // v1.0.26: File Logging Helper
+        private void LogToFile(string message, string category = "INFO")
+        {
+            if (!EnableFileLogging) return;
+
+            try
+            {
+                lock (logLock)
+                {
+                    string timestamp = DateTime.Now.ToString("HH:mm:ss.fff");
+                    string barTime = (Bars != null && CurrentBar >= 0) ? Time[0].ToString("HH:mm:ss") : "N/A";
+                    string logLine = string.Format("[{0}] [{1}] Bar:{2} Time:{3} | {4}",
+                        timestamp, category, CurrentBar, barTime, message);
+
+                    File.AppendAllText(logFilePath, logLine + Environment.NewLine);
+                }
+            }
+            catch (Exception ex)
+            {
+                Print("RelativeVwap LogToFile ERROR: " + ex.Message);
+            }
         }
 
         // Helper for safely adding signals
@@ -360,6 +388,25 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             else if (State == State.DataLoaded)
             {
                 atr = ATR(14); // V_NORM: Correct Initialization
+
+                // v1.0.26: Initialize Log File Path
+                if (EnableFileLogging)
+                {
+                    string dateStamp = DateTime.Now.ToString("yyyyMMdd");
+                    string traceFolder = Path.Combine(
+                        Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                        "NinjaTrader 8", "trace");
+
+                    if (!Directory.Exists(traceFolder))
+                        Directory.CreateDirectory(traceFolder);
+
+                    logFilePath = Path.Combine(traceFolder, $"RelativeVwap_Debug_{dateStamp}.txt");
+
+                    // Write header
+                    LogToFile("=== RelativeVwap Debug Log Started ===", "SYSTEM");
+                    LogToFile($"Version: {VERSION}", "SYSTEM");
+                    LogToFile($"Instrument: {Instrument.FullName}", "SYSTEM");
+                }
 
                 // Initialize Countdown Logic
                 if (ShowCountdown)
@@ -743,7 +790,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
                   Print(string.Format("[VWAP DEBUG] IMMEDIATE HIGH RESET: Bar={0} VwapMethod={1} price={2:F2} (Close={3:F2} Typical={4:F2}) Vol={5}",
                       CurrentBar, VwapMethod, price, Close[0], (High[0]+Low[0]+Close[0])/3.0, volume));
-                  
+
+                  // v1.0.26: File Log
+                  LogToFile(string.Format("NEW HIGH ANCHOR | Price:{0:F2} | High:{1:F2} | VWAP:{2:F2} | PrevAnchor:{3} | TrackerReset:-1",
+                      price, high, price, sessionHighBarIdx - 1), "ANCHOR");
+
                   // v1.0.2: Initialize WITH first bar's volume (matching SessionLevels strategy)
                   // This ensures VWAP starts at 'price' (Close/Typical/OHLC4) instead of fallback
                   // FIX: Use sessionHighPV/Vol (the variables that Values[0][0] uses), not highCumPV/Vol
@@ -773,6 +824,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
                   Print(string.Format("[VWAP DEBUG] IMMEDIATE LOW RESET: Bar={0} VwapMethod={1} price={2:F2} (Close={3:F2} Typical={4:F2}) Vol={5}",
                       CurrentBar, VwapMethod, price, Close[0], (High[0]+Low[0]+Close[0])/3.0, volume));
+
+                  // v1.0.26: File Log
+                  LogToFile(string.Format("NEW LOW ANCHOR | Price:{0:F2} | Low:{1:F2} | VWAP:{2:F2} | PrevAnchor:{3} | TrackerReset:-1",
+                      price, low, price, sessionLowBarIdx - 1), "ANCHOR");
 
                   // v1.0.2: Initialize WITH first bar's volume (matching SessionLevels strategy)
                   // FIX: Use sessionLowPV/Vol (the variables that Values[1][0] uses), not lowCumPV/Vol
@@ -1083,6 +1138,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                       if (highSignal2BarIdx >= 0)
                       {
                           int barsAgo = CurrentBar - highSignal2BarIdx;
+
+                          // v1.0.26: File Log
+                          LogToFile(string.Format("SIG2 SHORT CANCELLED | TouchedVWAP | High:{0:F2} | VWAP:{1:F2} | SignalBar:{2} | BarsAgo:{3}",
+                              High[0], hVwap, highSignal2BarIdx, barsAgo), "CANCEL");
+
                           RemoveDrawObject("Sig2H_" + highSignal2BarIdx);
                           RemoveDrawObject("Sig2H_Txt_" + highSignal2BarIdx);
                           if (barsAgo >= 0 && barsAgo < CurrentBar)
@@ -1122,6 +1182,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           // CRITICAL LOGGING: Confirming why this fired if user sees High > VWAP
                           Print(string.Format("[RelativeVwap-INDICATOR] SIG2 SHORT FIRED | NOW:{0} | CHART:{1} | Bar:{2} | High:{3:F2} | VWAP:{4:F2} | Thresh:{5} | Cond(H<=V-T):{6} | AnchorBar:{7}",
                               DateTime.Now, Time[0], CurrentBar, High[0], hVwap, Signal2ThresholdTicks, (High[0] <= (hVwap - Signal2ThresholdTicks * TickSize)), sessionHighBarIdx));
+
+                          // v1.0.26: File Log
+                          LogToFile(string.Format("SIG2 SHORT FIRED | High:{0:F2} | VWAP:{1:F2} | Sep:{2:F2} | Thresh:{3} | AnchorBar:{4} | LastSignaled:{5}",
+                              High[0], hVwap, hVwap - High[0], Signal2ThresholdTicks, sessionHighBarIdx, lastSignaledHighAnchorBar), "SIGNAL2");
 
                           highAnchorSequence++;
 
@@ -1348,6 +1412,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                       if (lowSignal2BarIdx >= 0)
                       {
                           int barsAgo = CurrentBar - lowSignal2BarIdx;
+
+                          // v1.0.26: File Log
+                          LogToFile(string.Format("SIG2 LONG CANCELLED | TouchedVWAP | Low:{0:F2} | VWAP:{1:F2} | SignalBar:{2} | BarsAgo:{3}",
+                              Low[0], lVwap, lowSignal2BarIdx, barsAgo), "CANCEL");
+
                           RemoveDrawObject("Sig2L_" + lowSignal2BarIdx);
                           RemoveDrawObject("Sig2L_Txt_" + lowSignal2BarIdx);
                           if (barsAgo >= 0 && barsAgo < CurrentBar)
@@ -1381,6 +1450,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           // CRITICAL LOGGING: Confirming why this fired
                           Print(string.Format("[RelativeVwap-INDICATOR] SIG2 LONG FIRED | NOW:{0} | CHART:{1} | Bar:{2} | Low:{3:F2} | VWAP:{4:F2} | Thresh:{5} | Cond(L>=V+T):{6} | AnchorBar:{7}",
                               DateTime.Now, Time[0], CurrentBar, Low[0], lVwap, Signal2ThresholdTicks, (Low[0] >= (lVwap + Signal2ThresholdTicks * TickSize)), sessionLowBarIdx));
+
+                          // v1.0.26: File Log
+                          LogToFile(string.Format("SIG2 LONG FIRED | Low:{0:F2} | VWAP:{1:F2} | Sep:{2:F2} | Thresh:{3} | AnchorBar:{4} | LastSignaled:{5}",
+                              Low[0], lVwap, Low[0] - lVwap, Signal2ThresholdTicks, sessionLowBarIdx, lastSignaledLowAnchorBar), "SIGNAL2");
 
                           lowAnchorSequence++;
 
@@ -3031,6 +3104,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         [Display(Name = "Mostrar Labels Debug", GroupName = "05. Alertas & Debug", Order = 3)]
         public bool ShowDebugLabels { get; set; }
 
+        [NinjaScriptProperty]
+        [Display(Name = "Logging a Archivo", Description = "Escribe logs detallados a trace/RelativeVwap_Debug_YYYYMMDD.txt", GroupName = "05. Alertas & Debug", Order = 4)]
+        public bool EnableFileLogging { get; set; }
+
 
         // ========================================================================
         // 06. Contador (Countdown)
@@ -3171,18 +3248,18 @@ namespace NinjaTrader.NinjaScript.Indicators
 	public partial class Indicator : NinjaTrader.Gui.NinjaScript.IndicatorRenderBase
 	{
 		private RelativeIndicators.RelativeVwap[] cacheRelativeVwap;
-		public RelativeIndicators.RelativeVwap RelativeVwap(VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, float historicalVWAPThickness, bool extendLinesUntilTouch, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, bool enableAlerts, string alertSound, bool showDebugLabels, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY)
+		public RelativeIndicators.RelativeVwap RelativeVwap(VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, float historicalVWAPThickness, bool extendLinesUntilTouch, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, bool enableAlerts, string alertSound, bool showDebugLabels, bool enableFileLogging, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY)
 		{
-			return RelativeVwap(Input, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, historicalVWAPThickness, extendLinesUntilTouch, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, enableAlerts, alertSound, showDebugLabels, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY);
+			return RelativeVwap(Input, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, historicalVWAPThickness, extendLinesUntilTouch, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, enableAlerts, alertSound, showDebugLabels, enableFileLogging, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY);
 		}
 
-		public RelativeIndicators.RelativeVwap RelativeVwap(ISeries<double> input, VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, float historicalVWAPThickness, bool extendLinesUntilTouch, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, bool enableAlerts, string alertSound, bool showDebugLabels, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY)
+		public RelativeIndicators.RelativeVwap RelativeVwap(ISeries<double> input, VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, float historicalVWAPThickness, bool extendLinesUntilTouch, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, bool enableAlerts, string alertSound, bool showDebugLabels, bool enableFileLogging, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY)
 		{
 			if (cacheRelativeVwap != null)
 				for (int idx = 0; idx < cacheRelativeVwap.Length; idx++)
-					if (cacheRelativeVwap[idx] != null && cacheRelativeVwap[idx].VwapMethod == vwapMethod && cacheRelativeVwap[idx].MaxHistoryDays == maxHistoryDays && cacheRelativeVwap[idx].UseExchangeTime == useExchangeTime && cacheRelativeVwap[idx].ShowAsia == showAsia && cacheRelativeVwap[idx].AsiaStartTime == asiaStartTime && cacheRelativeVwap[idx].AsiaEndTime == asiaEndTime && cacheRelativeVwap[idx].ShowAsiaHigh == showAsiaHigh && cacheRelativeVwap[idx].ShowAsiaLow == showAsiaLow && cacheRelativeVwap[idx].ShowEurope == showEurope && cacheRelativeVwap[idx].EuropeStartTime == europeStartTime && cacheRelativeVwap[idx].EuropeEndTime == europeEndTime && cacheRelativeVwap[idx].ShowEuropeHigh == showEuropeHigh && cacheRelativeVwap[idx].ShowEuropeLow == showEuropeLow && cacheRelativeVwap[idx].ShowUS == showUS && cacheRelativeVwap[idx].USStartTime == uSStartTime && cacheRelativeVwap[idx].USEndTime == uSEndTime && cacheRelativeVwap[idx].ShowUSHigh == showUSHigh && cacheRelativeVwap[idx].ShowUSLow == showUSLow && cacheRelativeVwap[idx].HistoricalVWAPThickness == historicalVWAPThickness && cacheRelativeVwap[idx].ExtendLinesUntilTouch == extendLinesUntilTouch && cacheRelativeVwap[idx].HighVwapLabel == highVwapLabel && cacheRelativeVwap[idx].LowVwapLabel == lowVwapLabel && cacheRelativeVwap[idx].ShowDaysAgo == showDaysAgo && cacheRelativeVwap[idx].TradeDirection == tradeDirection && cacheRelativeVwap[idx].ShowLabels == showLabels && cacheRelativeVwap[idx].LabelDisplayMode == labelDisplayMode && cacheRelativeVwap[idx].CustomSignal1Text == customSignal1Text && cacheRelativeVwap[idx].CustomSignal2Text == customSignal2Text && cacheRelativeVwap[idx].CustomSignal3Text == customSignal3Text && cacheRelativeVwap[idx].ShowSignalLabels == showSignalLabels && cacheRelativeVwap[idx].ShowSignal1 == showSignal1 && cacheRelativeVwap[idx].ShowSignal2 == showSignal2 && cacheRelativeVwap[idx].ShowSignal3 == showSignal3 && cacheRelativeVwap[idx].LabelFontSize == labelFontSize && cacheRelativeVwap[idx].LabelTextOffset == labelTextOffset && cacheRelativeVwap[idx].LabelDistanceATR == labelDistanceATR && cacheRelativeVwap[idx].LabelCollisionSpacing == labelCollisionSpacing && cacheRelativeVwap[idx].DetachmentTicks == detachmentTicks && cacheRelativeVwap[idx].Signal2ThresholdTicks == signal2ThresholdTicks && cacheRelativeVwap[idx].EnableAlerts == enableAlerts && cacheRelativeVwap[idx].AlertSound == alertSound && cacheRelativeVwap[idx].ShowDebugLabels == showDebugLabels && cacheRelativeVwap[idx].ShowCountdown == showCountdown && cacheRelativeVwap[idx].CountDown == countDown && cacheRelativeVwap[idx].ShowPercent == showPercent && cacheRelativeVwap[idx].CountdownFontSize == countdownFontSize && cacheRelativeVwap[idx].CountdownOffsetX == countdownOffsetX && cacheRelativeVwap[idx].CountdownOffsetY == countdownOffsetY && cacheRelativeVwap[idx].EqualsInput(input))
+					if (cacheRelativeVwap[idx] != null && cacheRelativeVwap[idx].VwapMethod == vwapMethod && cacheRelativeVwap[idx].MaxHistoryDays == maxHistoryDays && cacheRelativeVwap[idx].UseExchangeTime == useExchangeTime && cacheRelativeVwap[idx].ShowAsia == showAsia && cacheRelativeVwap[idx].AsiaStartTime == asiaStartTime && cacheRelativeVwap[idx].AsiaEndTime == asiaEndTime && cacheRelativeVwap[idx].ShowAsiaHigh == showAsiaHigh && cacheRelativeVwap[idx].ShowAsiaLow == showAsiaLow && cacheRelativeVwap[idx].ShowEurope == showEurope && cacheRelativeVwap[idx].EuropeStartTime == europeStartTime && cacheRelativeVwap[idx].EuropeEndTime == europeEndTime && cacheRelativeVwap[idx].ShowEuropeHigh == showEuropeHigh && cacheRelativeVwap[idx].ShowEuropeLow == showEuropeLow && cacheRelativeVwap[idx].ShowUS == showUS && cacheRelativeVwap[idx].USStartTime == uSStartTime && cacheRelativeVwap[idx].USEndTime == uSEndTime && cacheRelativeVwap[idx].ShowUSHigh == showUSHigh && cacheRelativeVwap[idx].ShowUSLow == showUSLow && cacheRelativeVwap[idx].HistoricalVWAPThickness == historicalVWAPThickness && cacheRelativeVwap[idx].ExtendLinesUntilTouch == extendLinesUntilTouch && cacheRelativeVwap[idx].HighVwapLabel == highVwapLabel && cacheRelativeVwap[idx].LowVwapLabel == lowVwapLabel && cacheRelativeVwap[idx].ShowDaysAgo == showDaysAgo && cacheRelativeVwap[idx].TradeDirection == tradeDirection && cacheRelativeVwap[idx].ShowLabels == showLabels && cacheRelativeVwap[idx].LabelDisplayMode == labelDisplayMode && cacheRelativeVwap[idx].CustomSignal1Text == customSignal1Text && cacheRelativeVwap[idx].CustomSignal2Text == customSignal2Text && cacheRelativeVwap[idx].CustomSignal3Text == customSignal3Text && cacheRelativeVwap[idx].ShowSignalLabels == showSignalLabels && cacheRelativeVwap[idx].ShowSignal1 == showSignal1 && cacheRelativeVwap[idx].ShowSignal2 == showSignal2 && cacheRelativeVwap[idx].ShowSignal3 == showSignal3 && cacheRelativeVwap[idx].LabelFontSize == labelFontSize && cacheRelativeVwap[idx].LabelTextOffset == labelTextOffset && cacheRelativeVwap[idx].LabelDistanceATR == labelDistanceATR && cacheRelativeVwap[idx].LabelCollisionSpacing == labelCollisionSpacing && cacheRelativeVwap[idx].DetachmentTicks == detachmentTicks && cacheRelativeVwap[idx].Signal2ThresholdTicks == signal2ThresholdTicks && cacheRelativeVwap[idx].EnableAlerts == enableAlerts && cacheRelativeVwap[idx].AlertSound == alertSound && cacheRelativeVwap[idx].ShowDebugLabels == showDebugLabels && cacheRelativeVwap[idx].EnableFileLogging == enableFileLogging && cacheRelativeVwap[idx].ShowCountdown == showCountdown && cacheRelativeVwap[idx].CountDown == countDown && cacheRelativeVwap[idx].ShowPercent == showPercent && cacheRelativeVwap[idx].CountdownFontSize == countdownFontSize && cacheRelativeVwap[idx].CountdownOffsetX == countdownOffsetX && cacheRelativeVwap[idx].CountdownOffsetY == countdownOffsetY && cacheRelativeVwap[idx].EqualsInput(input))
 						return cacheRelativeVwap[idx];
-			return CacheIndicator<RelativeIndicators.RelativeVwap>(new RelativeIndicators.RelativeVwap(){ VwapMethod = vwapMethod, MaxHistoryDays = maxHistoryDays, UseExchangeTime = useExchangeTime, ShowAsia = showAsia, AsiaStartTime = asiaStartTime, AsiaEndTime = asiaEndTime, ShowAsiaHigh = showAsiaHigh, ShowAsiaLow = showAsiaLow, ShowEurope = showEurope, EuropeStartTime = europeStartTime, EuropeEndTime = europeEndTime, ShowEuropeHigh = showEuropeHigh, ShowEuropeLow = showEuropeLow, ShowUS = showUS, USStartTime = uSStartTime, USEndTime = uSEndTime, ShowUSHigh = showUSHigh, ShowUSLow = showUSLow, HistoricalVWAPThickness = historicalVWAPThickness, ExtendLinesUntilTouch = extendLinesUntilTouch, HighVwapLabel = highVwapLabel, LowVwapLabel = lowVwapLabel, ShowDaysAgo = showDaysAgo, TradeDirection = tradeDirection, ShowLabels = showLabels, LabelDisplayMode = labelDisplayMode, CustomSignal1Text = customSignal1Text, CustomSignal2Text = customSignal2Text, CustomSignal3Text = customSignal3Text, ShowSignalLabels = showSignalLabels, ShowSignal1 = showSignal1, ShowSignal2 = showSignal2, ShowSignal3 = showSignal3, LabelFontSize = labelFontSize, LabelTextOffset = labelTextOffset, LabelDistanceATR = labelDistanceATR, LabelCollisionSpacing = labelCollisionSpacing, DetachmentTicks = detachmentTicks, Signal2ThresholdTicks = signal2ThresholdTicks, EnableAlerts = enableAlerts, AlertSound = alertSound, ShowDebugLabels = showDebugLabels, ShowCountdown = showCountdown, CountDown = countDown, ShowPercent = showPercent, CountdownFontSize = countdownFontSize, CountdownOffsetX = countdownOffsetX, CountdownOffsetY = countdownOffsetY }, input, ref cacheRelativeVwap);
+			return CacheIndicator<RelativeIndicators.RelativeVwap>(new RelativeIndicators.RelativeVwap(){ VwapMethod = vwapMethod, MaxHistoryDays = maxHistoryDays, UseExchangeTime = useExchangeTime, ShowAsia = showAsia, AsiaStartTime = asiaStartTime, AsiaEndTime = asiaEndTime, ShowAsiaHigh = showAsiaHigh, ShowAsiaLow = showAsiaLow, ShowEurope = showEurope, EuropeStartTime = europeStartTime, EuropeEndTime = europeEndTime, ShowEuropeHigh = showEuropeHigh, ShowEuropeLow = showEuropeLow, ShowUS = showUS, USStartTime = uSStartTime, USEndTime = uSEndTime, ShowUSHigh = showUSHigh, ShowUSLow = showUSLow, HistoricalVWAPThickness = historicalVWAPThickness, ExtendLinesUntilTouch = extendLinesUntilTouch, HighVwapLabel = highVwapLabel, LowVwapLabel = lowVwapLabel, ShowDaysAgo = showDaysAgo, TradeDirection = tradeDirection, ShowLabels = showLabels, LabelDisplayMode = labelDisplayMode, CustomSignal1Text = customSignal1Text, CustomSignal2Text = customSignal2Text, CustomSignal3Text = customSignal3Text, ShowSignalLabels = showSignalLabels, ShowSignal1 = showSignal1, ShowSignal2 = showSignal2, ShowSignal3 = showSignal3, LabelFontSize = labelFontSize, LabelTextOffset = labelTextOffset, LabelDistanceATR = labelDistanceATR, LabelCollisionSpacing = labelCollisionSpacing, DetachmentTicks = detachmentTicks, Signal2ThresholdTicks = signal2ThresholdTicks, EnableAlerts = enableAlerts, AlertSound = alertSound, ShowDebugLabels = showDebugLabels, EnableFileLogging = enableFileLogging, ShowCountdown = showCountdown, CountDown = countDown, ShowPercent = showPercent, CountdownFontSize = countdownFontSize, CountdownOffsetX = countdownOffsetX, CountdownOffsetY = countdownOffsetY }, input, ref cacheRelativeVwap);
 		}
 	}
 }
@@ -3191,14 +3268,14 @@ namespace NinjaTrader.NinjaScript.MarketAnalyzerColumns
 {
 	public partial class MarketAnalyzerColumn : MarketAnalyzerColumnBase
 	{
-		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, float historicalVWAPThickness, bool extendLinesUntilTouch, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, bool enableAlerts, string alertSound, bool showDebugLabels, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY)
+		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, float historicalVWAPThickness, bool extendLinesUntilTouch, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, bool enableAlerts, string alertSound, bool showDebugLabels, bool enableFileLogging, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY)
 		{
-			return indicator.RelativeVwap(Input, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, historicalVWAPThickness, extendLinesUntilTouch, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, enableAlerts, alertSound, showDebugLabels, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY);
+			return indicator.RelativeVwap(Input, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, historicalVWAPThickness, extendLinesUntilTouch, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, enableAlerts, alertSound, showDebugLabels, enableFileLogging, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY);
 		}
 
-		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(ISeries<double> input , VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, float historicalVWAPThickness, bool extendLinesUntilTouch, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, bool enableAlerts, string alertSound, bool showDebugLabels, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY)
+		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(ISeries<double> input , VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, float historicalVWAPThickness, bool extendLinesUntilTouch, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, bool enableAlerts, string alertSound, bool showDebugLabels, bool enableFileLogging, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY)
 		{
-			return indicator.RelativeVwap(input, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, historicalVWAPThickness, extendLinesUntilTouch, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, enableAlerts, alertSound, showDebugLabels, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY);
+			return indicator.RelativeVwap(input, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, historicalVWAPThickness, extendLinesUntilTouch, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, enableAlerts, alertSound, showDebugLabels, enableFileLogging, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY);
 		}
 	}
 }
@@ -3207,14 +3284,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public partial class Strategy : NinjaTrader.Gui.NinjaScript.StrategyRenderBase
 	{
-		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, float historicalVWAPThickness, bool extendLinesUntilTouch, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, bool enableAlerts, string alertSound, bool showDebugLabels, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY)
+		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, float historicalVWAPThickness, bool extendLinesUntilTouch, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, bool enableAlerts, string alertSound, bool showDebugLabels, bool enableFileLogging, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY)
 		{
-			return indicator.RelativeVwap(Input, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, historicalVWAPThickness, extendLinesUntilTouch, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, enableAlerts, alertSound, showDebugLabels, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY);
+			return indicator.RelativeVwap(Input, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, historicalVWAPThickness, extendLinesUntilTouch, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, enableAlerts, alertSound, showDebugLabels, enableFileLogging, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY);
 		}
 
-		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(ISeries<double> input , VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, float historicalVWAPThickness, bool extendLinesUntilTouch, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, bool enableAlerts, string alertSound, bool showDebugLabels, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY)
+		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(ISeries<double> input , VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, float historicalVWAPThickness, bool extendLinesUntilTouch, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, bool enableAlerts, string alertSound, bool showDebugLabels, bool enableFileLogging, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY)
 		{
-			return indicator.RelativeVwap(input, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, historicalVWAPThickness, extendLinesUntilTouch, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, enableAlerts, alertSound, showDebugLabels, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY);
+			return indicator.RelativeVwap(input, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, historicalVWAPThickness, extendLinesUntilTouch, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, enableAlerts, alertSound, showDebugLabels, enableFileLogging, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY);
 		}
 	}
 }

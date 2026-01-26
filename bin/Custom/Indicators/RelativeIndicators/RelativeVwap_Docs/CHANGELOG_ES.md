@@ -5,6 +5,19 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.0.26] - 2026-01-25
+### Añadido
+- **Sistema de Logging a Archivo**: Se implementó un sistema completo de logging para facilitar el debugging y diagnóstico de problemas.
+  - **Parámetro**: `Logging a Archivo` en grupo "05. Alertas & Debug" (default: false)
+  - **Ubicación**: Los logs se escriben en `Documents/NinjaTrader 8/trace/RelativeVwap_Debug_YYYYMMDD.txt`
+  - **Contenido**: Cada log incluye timestamp, categoría, CurrentBar, hora de la vela y mensaje detallado
+  - **Categorías implementadas**:
+    - `SYSTEM`: Inicio del sistema, versión, instrumento
+    - `ANCHOR`: Creación de nuevos anchors VWAP (High/Low)
+    - `SIGNAL2`: Activación de Señal 2 (vela amarilla) con datos de separación
+    - `CANCEL`: Cancelación de Señal 2 cuando toca el VWAP
+  - **Uso**: Activar el parámetro, ejecutar playback, y revisar el archivo de log para análisis detallado de por qué las señales se activan o cancelan
+
 ## [1.0.25] - 2026-01-25
 ### Corregido
 - **Señal 2 en nuevos anchors VWAP**: Se corrigió un bug crítico donde la Señal 2 (vela amarilla) NO aparecía en tiempo real cuando se creaba un nuevo anchor VWAP intraday.
