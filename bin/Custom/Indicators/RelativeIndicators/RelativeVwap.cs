@@ -1516,12 +1516,18 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                   }
               }
 
-             
+
+             // Version Label (Always Visible)
+             if (CurrentBar == Bars.Count - 1)
+             {
+                 Draw.TextFixed(this, "VersionLabel", "RelativeVwap v" + VERSION, TextPosition.TopLeft, Brushes.Gray, new SimpleFont("Arial", 10), Brushes.Transparent, Brushes.Transparent, 0);
+             }
+
              // Status Overlay
              if (ShowDebugLabels && (CurrentBar == Bars.Count - 1))
              {
-                 string status = string.Format("DEBUG STATUS\nTime: {0}\nHigh Active: {1} Locked: {2}\nLow Active: {3} Locked: {4}", Time[0], highHasTakenRelevant, highSignalFired, lowHasTakenRelevant, lowSignalFired);
-                 Draw.TextFixed(this, "DebugStatus", status, TextPosition.BottomRight, Brushes.White, new SimpleFont("Arial", 12), Brushes.Black, Brushes.Transparent, 100);  
+                 string status = string.Format("RelativeVwap v{0}\nDEBUG STATUS\nTime: {1}\nHigh Active: {2} Locked: {3}\nLow Active: {4} Locked: {5}", VERSION, Time[0], highHasTakenRelevant, highSignalFired, lowHasTakenRelevant, lowSignalFired);
+                 Draw.TextFixed(this, "DebugStatus", status, TextPosition.BottomRight, Brushes.White, new SimpleFont("Arial", 12), Brushes.Black, Brushes.Transparent, 100);
              }
              
              }
