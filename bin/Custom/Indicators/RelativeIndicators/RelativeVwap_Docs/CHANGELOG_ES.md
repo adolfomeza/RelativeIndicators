@@ -5,6 +5,18 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.0.27] - 2026-01-25
+### Corregido
+- **Permanencia de Señal 2 (Vela Amarilla)**: Se corrigió el bug crítico donde las señales amarillas desaparecían cuando el precio tocaba el VWAP en barras futuras.
+  - **Comportamiento Anterior (INCORRECTO)**: Si una vela se pintaba amarilla (Señal 2) y cerraba sin tocar el VWAP, pero 15 barras después el precio tocaba el VWAP, la señal amarilla desaparecía retroactivamente.
+  - **Comportamiento Nuevo (CORRECTO)**:
+    - La Señal 2 se **CANCELA** SOLO si la vela que abrió separada del VWAP **toca el VWAP en la MISMA barra** antes de cerrar.
+    - Si la vela **cierra sin tocar** el VWAP, la señal amarilla es **PERMANENTE** y se mantiene visible para siempre.
+    - Toques del VWAP en barras futuras **NO afectan** la señal existente.
+  - **Reset**: La señal solo se resetea cuando el precio crea un nuevo anchor VWAP (nuevo High para shorts, nuevo Low para longs).
+  - **Evidencia del Bug**: Log mostraba cancelación en Bar:7128 (15 barras después de la señal en Bar:7113).
+  - **Cambio Técnico**: Se agregó la condición `&& lowSignal2BarIdx == CurrentBar` y `&& highSignal2BarIdx == CurrentBar` para limitar la cancelación solo a la misma barra donde se generó la señal.
+
 ## [1.0.26] - 2026-01-25
 ### Añadido
 - **Sistema de Logging a Archivo**: Se implementó un sistema completo de logging para facilitar el debugging y diagnóstico de problemas.

@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.26";  // v1.0.26: Sistema de logging a archivo para debug
+        private const string VERSION = "1.0.27";  // v1.0.27: Fix permanencia de Señal 2 (solo cancela en misma barra)
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -1134,13 +1134,13 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                       // If we reset, and we didn't just fire 'E' (dbgText != "E"), then we should NOT show 'D'.
                       if (dbgText == "D") dbgText = "";
 
-                      // v1.0.24: Remove Signal 2 visuals when cancelled (arrow + text)
-                      if (highSignal2BarIdx >= 0)
+                      // v1.0.27: Remove Signal 2 visuals ONLY if touched in SAME bar (permanence fix)
+                      if (highSignal2BarIdx >= 0 && highSignal2BarIdx == CurrentBar)
                       {
                           int barsAgo = CurrentBar - highSignal2BarIdx;
 
                           // v1.0.26: File Log
-                          LogToFile(string.Format("SIG2 SHORT CANCELLED | TouchedVWAP | High:{0:F2} | VWAP:{1:F2} | SignalBar:{2} | BarsAgo:{3}",
+                          LogToFile(string.Format("SIG2 SHORT CANCELLED | TouchedVWAP SAME BAR | High:{0:F2} | VWAP:{1:F2} | SignalBar:{2} | BarsAgo:{3}",
                               High[0], hVwap, highSignal2BarIdx, barsAgo), "CANCEL");
 
                           RemoveDrawObject("Sig2H_" + highSignal2BarIdx);
@@ -1408,13 +1408,13 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                       // If we reset, and we didn't just fire 'E' (dbgText != "E"), then we should NOT show 'D'.
                       if (dbgText == "D") dbgText = "";
 
-                      // v1.0.24: Remove Signal 2 visuals when cancelled (arrow + text)
-                      if (lowSignal2BarIdx >= 0)
+                      // v1.0.27: Remove Signal 2 visuals ONLY if touched in SAME bar (permanence fix)
+                      if (lowSignal2BarIdx >= 0 && lowSignal2BarIdx == CurrentBar)
                       {
                           int barsAgo = CurrentBar - lowSignal2BarIdx;
 
                           // v1.0.26: File Log
-                          LogToFile(string.Format("SIG2 LONG CANCELLED | TouchedVWAP | Low:{0:F2} | VWAP:{1:F2} | SignalBar:{2} | BarsAgo:{3}",
+                          LogToFile(string.Format("SIG2 LONG CANCELLED | TouchedVWAP SAME BAR | Low:{0:F2} | VWAP:{1:F2} | SignalBar:{2} | BarsAgo:{3}",
                               Low[0], lVwap, lowSignal2BarIdx, barsAgo), "CANCEL");
 
                           RemoveDrawObject("Sig2L_" + lowSignal2BarIdx);
