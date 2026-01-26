@@ -5,6 +5,16 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.0.38] - 2026-01-26
+### Corregido
+- **Vela Amarilla No Aparece Hasta F5**: Se corrigió el bug donde la vela amarilla no aparecía en tiempo real en playback, requiriendo presionar F5 para verla.
+  - **Síntoma**: La señal se disparaba correctamente (visible en logs) pero la vela amarilla no se pintaba hasta refrescar con F5.
+  - **Causa Raíz**: El refresh del chart era asincrónico (`InvokeAsync`), causando delay en el renderizado. Además, el persistent painting no forzaba refresh para la barra actual.
+  - **Solución**:
+    1. Cambiado `ChartControl.Dispatcher.InvokeAsync()` → `ChartControl.Dispatcher.Invoke()` con `DispatcherPriority.Render` para forzar refresh sincrónico e inmediato (líneas ~1250, ~1542).
+    2. Agregado refresh también en persistent painting cuando `barsAgo == 0` (barra actual) para garantizar visibilidad en Calculate.OnEachTick mode (líneas ~1270, ~1563).
+  - **Resultado**: La vela amarilla ahora aparece inmediatamente cuando la señal se dispara, sin necesidad de F5.
+
 ## [1.0.37] - 2026-01-26
 ### Corregido
 - **Vela Amarilla Despintada Incorrectamente**: Se corrigió el bug donde la vela amarilla se despintaba cuando el precio tocaba VWAP en barras posteriores.

@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.37";  // v1.0.37: Fix vela despintada incorrectamente - BarBrushes[0]=null solo en same bar
+        private const string VERSION = "1.0.38";  // v1.0.38: Force synchronous chart refresh for immediate vela painting
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -1245,9 +1245,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
                           // v1.0.28: Force refresh to show signal immediately in playback/realtime
                           // v1.0.32: Fix threading error - must call from UI thread
+                          // v1.0.38: Change to synchronous Invoke for immediate rendering
                           if (ChartControl != null)
                           {
-                              ChartControl.Dispatcher.InvokeAsync(() => ChartControl.InvalidateVisual());
+                              ChartControl.Dispatcher.Invoke(() => ChartControl.InvalidateVisual(), System.Windows.Threading.DispatcherPriority.Render);
                           }
 
                           highSignal2Fired = true; // v1.0.31: Mark signal as fired (prevents multiple signals)
@@ -1255,14 +1256,21 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           Print(string.Format("[DEBUG FLAG] Bar:{0} | SET highSignal2Fired=TRUE + lastSignaledHighAnchorBar={1}", CurrentBar, sessionHighBarIdx));
                       }
                   }
-                  
+
                   // v1.0.29: Persistent Painting - paint the signal bar even after it closes
+                  // v1.0.38: Enhanced with refresh to ensure visibility in OnEachTick mode
                   if (highSignal2BarIdx >= 0)
                   {
                       int barsAgo = CurrentBar - highSignal2BarIdx;
                       if (barsAgo >= 0 && barsAgo < Bars.Count)
                       {
                           BarBrushes[barsAgo] = Brushes.Yellow;
+
+                          // v1.0.38: Force refresh also in persistent painting for current bar
+                          if (barsAgo == 0 && ChartControl != null)
+                          {
+                              ChartControl.Dispatcher.Invoke(() => ChartControl.InvalidateVisual(), System.Windows.Threading.DispatcherPriority.Render);
+                          }
                       }
                   }
               }
@@ -1538,9 +1546,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
                           // v1.0.28: Force refresh to show signal immediately in playback/realtime
                           // v1.0.32: Fix threading error - must call from UI thread
+                          // v1.0.38: Change to synchronous Invoke for immediate rendering
                           if (ChartControl != null)
                           {
-                              ChartControl.Dispatcher.InvokeAsync(() => ChartControl.InvalidateVisual());
+                              ChartControl.Dispatcher.Invoke(() => ChartControl.InvalidateVisual(), System.Windows.Threading.DispatcherPriority.Render);
                           }
 
                           lowSignal2Fired = true; // v1.0.31: Mark signal as fired (prevents multiple signals)
@@ -1548,14 +1557,21 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           Print(string.Format("[DEBUG FLAG] Bar:{0} | SET lowSignal2Fired=TRUE + lastSignaledLowAnchorBar={1}", CurrentBar, sessionLowBarIdx));
                       }
                   }
-                  
+
                   // v1.0.29: Persistent Painting - paint the signal bar even after it closes
+                  // v1.0.38: Enhanced with refresh to ensure visibility in OnEachTick mode
                   if (lowSignal2BarIdx >= 0)
                   {
                       int barsAgo = CurrentBar - lowSignal2BarIdx;
                       if (barsAgo >= 0 && barsAgo < Bars.Count)
                       {
                           BarBrushes[barsAgo] = Brushes.Yellow;
+
+                          // v1.0.38: Force refresh also in persistent painting for current bar
+                          if (barsAgo == 0 && ChartControl != null)
+                          {
+                              ChartControl.Dispatcher.Invoke(() => ChartControl.InvalidateVisual(), System.Windows.Threading.DispatcherPriority.Render);
+                          }
                       }
                   }
               }
