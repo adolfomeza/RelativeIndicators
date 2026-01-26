@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.33";  // v1.0.33: Doble verificación flag+tracker para UNA señal por anchor
+        private const string VERSION = "1.0.34";  // v1.0.34: Fix vela amarilla no aparece en playback - Pintar inmediatamente
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -1196,6 +1196,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           // v1.0.8: Paint Signal 2 candle yellow (only the first separation candle)
                           // FIX: Store the Index for persistent painting in Live/Tick mode
                           highSignal2BarIdx = CurrentBar;
+                          BarBrushes[0] = Brushes.Yellow; // v1.0.34: Paint immediately when signal fires
 
                           // CRITICAL LOGGING: Confirming why this fired if user sees High > VWAP
                           Print(string.Format("[RelativeVwap-INDICATOR] SIG2 SHORT FIRED | NOW:{0} | CHART:{1} | Bar:{2} | High:{3:F2} | VWAP:{4:F2} | Thresh:{5} | Cond(H<=V-T):{6} | AnchorBar:{7}",
@@ -1486,7 +1487,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           // v1.0.8: Paint Signal 2 candle yellow (only the first separation candle)
                           // FIX: Store the Index for persistent painting in Live/Tick mode
                           lowSignal2BarIdx = CurrentBar;
-                          
+                          BarBrushes[0] = Brushes.Yellow; // v1.0.34: Paint immediately when signal fires
+
                           // CRITICAL LOGGING: Confirming why this fired
                           Print(string.Format("[RelativeVwap-INDICATOR] SIG2 LONG FIRED | NOW:{0} | CHART:{1} | Bar:{2} | Low:{3:F2} | VWAP:{4:F2} | Thresh:{5} | Cond(L>=V+T):{6} | AnchorBar:{7}",
                               DateTime.Now, Time[0], CurrentBar, Low[0], lVwap, Signal2ThresholdTicks, (Low[0] >= (lVwap + Signal2ThresholdTicks * TickSize)), sessionLowBarIdx));

@@ -5,6 +5,15 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.0.34] - 2026-01-26
+### Corregido
+- **Vela Amarilla No Aparece en Playback (REGRESIÓN)**: Se corrigió el bug recurrente donde la vela amarilla (Señal 2) no aparecía en playback tick-a-tick, pero sí aparecía después de presionar F5.
+  - **Síntoma**: Al ejecutar playback, cuando se disparaba la Señal 2, la flecha y etiqueta "Entry 1" aparecían correctamente, pero la vela NO se pintaba amarilla. Al presionar F5 (recarga histórica), la vela sí aparecía amarilla.
+  - **Causa**: Cuando se disparaba la señal (líneas ~1199 SHORT, ~1490 LONG), el código solo seteaba `highSignal2BarIdx = CurrentBar` pero NO ejecutaba `BarBrushes[0] = Brushes.Yellow`. El código de "Persistent Painting" (líneas ~1256, ~1546) sí pintaba la barra, pero se ejecuta DESPUÉS en el ciclo de OnBarUpdate, y en algunos casos no se ejecutaba en el mismo tick.
+  - **Solución**: Agregado `BarBrushes[0] = Brushes.Yellow` INMEDIATAMENTE después de setear `highSignal2BarIdx = CurrentBar` cuando se dispara la señal. Esto garantiza que la barra se pinte amarilla en el mismo tick donde se crea la flecha y etiqueta.
+  - **Referencia Histórica**: Este es el mismo problema que se intentó resolver en v1.0.28 (InvalidateVisual) y v1.0.29 (Persistent Painting). La solución correcta es pintar INMEDIATAMENTE cuando se dispara la señal, NO solo en el código de pintado persistente.
+  - **Resultado**: Ahora la vela se pinta amarilla INMEDIATAMENTE en playback, sin necesidad de presionar F5.
+
 ## [1.0.33] - 2026-01-26
 ### Corregido
 - **Múltiples Señales por VWAP Anchor (DEFINITIVO)**: Implementación de doble verificación (flag + tracker) para garantizar UNA SOLA señal por anchor VWAP.
