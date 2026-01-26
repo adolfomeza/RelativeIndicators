@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.30";  // v1.0.30: Fix señales múltiples en misma barra (OnEachTick resets)
+        private const string VERSION = "1.0.31";  // v1.0.31: Fix señales en TODAS las velas - Usar flag lowSignal2Fired
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -782,15 +782,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                      historicalHighs.Add(new HistoricalAnchor { StartIdx = sessionHighBarIdx, EndIdx = CurrentBar, WasRelevant = highHasTakenRelevant });
                  }
                   currentDayHigh = high;
-
-                  // v1.0.30: Only reset tracker if anchor is moving to DIFFERENT bar (prevent multiple resets in same bar during OnEachTick)
-                  if (sessionHighBarIdx != CurrentBar)
-                      lastSignaledHighAnchorBar = -1;
-
                   sessionHighBarIdx = CurrentBar;
 
                   // MANUAL FIX: Reset Signal State
                   highDetached = false;
+                  lastSignaledHighAnchorBar = -1;  // v1.0.25: Reset tracker to allow Signal 2 for new anchor
 
                   Print(string.Format("[VWAP DEBUG] IMMEDIATE HIGH RESET: Bar={0} VwapMethod={1} price={2:F2} (Close={3:F2} Typical={4:F2}) Vol={5}",
                       CurrentBar, VwapMethod, price, Close[0], (High[0]+Low[0]+Close[0])/3.0, volume));
@@ -820,15 +816,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                      historicalLows.Add(new HistoricalAnchor { StartIdx = sessionLowBarIdx, EndIdx = CurrentBar, WasRelevant = lowHasTakenRelevant });
                  }
                   currentDayLow = low;
-
-                  // v1.0.30: Only reset tracker if anchor is moving to DIFFERENT bar (prevent multiple resets in same bar during OnEachTick)
-                  if (sessionLowBarIdx != CurrentBar)
-                      lastSignaledLowAnchorBar = -1;
-
                   sessionLowBarIdx = CurrentBar;
 
                   // MANUAL FIX: Reset Signal State
                   lowDetached = false;
+                  lastSignaledLowAnchorBar = -1;  // v1.0.25: Reset tracker to allow Signal 2 for new anchor
 
                   Print(string.Format("[VWAP DEBUG] IMMEDIATE LOW RESET: Bar={0} VwapMethod={1} price={2:F2} (Close={3:F2} Typical={4:F2}) Vol={5}",
                       CurrentBar, VwapMethod, price, Close[0], (High[0]+Low[0]+Close[0])/3.0, volume));
@@ -1177,11 +1169,12 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                   {
                        // LOG DIAGNOSTICS FOR SIGNAL 2 SHORT
                        /*
-                       Print(string.Format("DEBUG SIG2 SHORT: Bar={0} High={1} hVwap={2} Thresh={3} Diff={4}", 
+                       Print(string.Format("DEBUG SIG2 SHORT: Bar={0} High={1} hVwap={2} Thresh={3} Diff={4}",
                            CurrentBar, High[0], hVwap, Signal2ThresholdTicks * TickSize, hVwap - High[0]));
                        */
-                       
-                      if (sessionHighBarIdx != lastSignaledHighAnchorBar)
+
+                      // v1.0.31: Use highSignal2Fired flag to allow ONLY ONE signal until cancelled/reset
+                      if (!highSignal2Fired)
                       {
                           // v1.0.8: Paint Signal 2 candle yellow (only the first separation candle)
                           // FIX: Store the Index for persistent painting in Live/Tick mode
@@ -1233,8 +1226,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           // v1.0.28: Force refresh to show signal immediately in playback/realtime
                           ChartControl?.InvalidateVisual();
 
-                          lastSignaledHighAnchorBar = sessionHighBarIdx; // Mark this anchor as USED
-                          highSignal2Fired = true;
+                          highSignal2Fired = true; // v1.0.31: Mark signal as fired (prevents multiple signals)
                       }
                   }
                   
@@ -1456,7 +1448,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                   // CHECK: Have we signaled for THIS specific anchor yet?
                   if (lowHasTakenRelevant && Low[0] >= (lVwap + Signal2ThresholdTicks * TickSize))
                   {
-                      if (sessionLowBarIdx != lastSignaledLowAnchorBar)
+                      // v1.0.31: Use lowSignal2Fired flag to allow ONLY ONE signal until cancelled/reset
+                      if (!lowSignal2Fired)
                       {
                           // v1.0.8: Paint Signal 2 candle yellow (only the first separation candle)
                           // FIX: Store the Index for persistent painting in Live/Tick mode
@@ -1508,8 +1501,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           // v1.0.28: Force refresh to show signal immediately in playback/realtime
                           ChartControl?.InvalidateVisual();
 
-                          lastSignaledLowAnchorBar = sessionLowBarIdx; // Mark this anchor as USED
-                          lowSignal2Fired = true;
+                          lowSignal2Fired = true; // v1.0.31: Mark signal as fired (prevents multiple signals)
                       }
                   }
                   

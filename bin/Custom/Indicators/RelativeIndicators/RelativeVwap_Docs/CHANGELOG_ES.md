@@ -5,7 +5,21 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
-## [1.0.30] - 2026-01-25
+## [1.0.31] - 2026-01-26
+### Corregido
+- **Señales en TODAS las Velas**: Se corrigió el bug crítico donde se generaba una señal "Entry 1" y vela amarilla en CADA barra que cumplía la condición de separación, en lugar de generar SOLO UNA señal por ciclo.
+  - **Síntoma**: Si el precio estaba separado del VWAP por el threshold, cada nueva barra generaba una etiqueta "Entry 1" y se pintaba amarilla, creando docenas de señales para el mismo "swing" de precios.
+  - **Causa**: La lógica de v1.0.30 verificaba `sessionLowBarIdx != lastSignaledLowAnchorBar`, pero cuando el LOW del día bajaba gradualmente (cada barra era un nuevo anchor), esta condición siempre era verdadera, permitiendo señales infinitas.
+  - **Solución**: Cambio a usar el flag booleano `lowSignal2Fired` (y `highSignal2Fired` para shorts). La señal SOLO se genera si `!lowSignal2Fired`, garantizando UNA señal por ciclo.
+  - **Ciclo de Señal**: La señal se resetea (permitiendo una nueva) cuando:
+    1. El precio toca el VWAP (cancelación - línea 1414: `lowSignal2Fired = false`)
+    2. Nueva sesión/día (reset completo en `ResetSession()`)
+  - **Cambio Técnico**: Líneas ~1459 (LONG) y ~1184 (SHORT) - Cambio de condición `if (sessionLowBarIdx != lastSignaledLowAnchorBar)` a `if (!lowSignal2Fired)`.
+  - **Resultado**: Ahora aparece exactamente UNA señal "Entry 1" y UNA vela amarilla por cada "ciclo" de separación del VWAP, sin importar cuántas barras permanezca separado.
+
+## [1.0.30] - 2026-01-26
+### Nota
+- **Versión Obsoleta**: Esta versión intentó resolver el problema de señales múltiples verificando `sessionLowBarIdx != CurrentBar` antes de resetear el tracker, pero no solucionó el caso donde el LOW/HIGH baja gradualmente en barras consecutivas. La v1.0.31 implementa la solución correcta usando flags booleanos.
 ### Corregido
 - **Señales Múltiples en la Misma Barra (OnEachTick)**: Se eliminó el bug crítico donde aparecían múltiples señales "Entry 1" y múltiples velas amarillas para el mismo VWAP anchor debido a resets repetidos en modo Calculate.OnEachTick.
   - **Síntoma**: En una barra volátil con muchos ticks, cada vez que el LOW (o HIGH) de la barra cambiaba, se generaba una nueva señal "Entry 1" con su propia vela amarilla y etiqueta, resultando en 5-10+ señales duplicadas en la misma barra.
