@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.38";  // v1.0.38: Force synchronous chart refresh for immediate vela painting
+        private const string VERSION = "1.0.39";  // v1.0.39: Paint all brush types (BarBrushes, BackBrushes, CandleOutline) for visibility
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -1158,11 +1158,18 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           RemoveDrawObject("Sig2H_" + highSignal2BarIdx);
                           RemoveDrawObject("Sig2H_Txt_" + highSignal2BarIdx);
                           if (barsAgo >= 0 && barsAgo < CurrentBar)
+                          {
                               BarBrushes[barsAgo] = null; // Unpaint that bar
+                              BackBrushes[barsAgo] = null;
+                              CandleOutlineBrushes[barsAgo] = null;
+                          }
                           highSignal2BarIdx = -1;
 
                           // v1.0.37: Only unpaint current bar if signal was THIS bar
+                          // v1.0.39: Clear all brush types
                           BarBrushes[0] = null;
+                          BackBrushes[0] = null;
+                          CandleOutlineBrushes[0] = null;
                       }
 
                       // v1.0.24: DO NOT reset lastSignaledHighAnchorBar - signal is dead for this anchor 
@@ -1198,7 +1205,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           // v1.0.8: Paint Signal 2 candle yellow (only the first separation candle)
                           // FIX: Store the Index for persistent painting in Live/Tick mode
                           highSignal2BarIdx = CurrentBar;
-                          BarBrushes[0] = Brushes.Yellow; // v1.0.34: Paint immediately when signal fires
+                          // v1.0.39: Paint all brush types for guaranteed visibility
+                          BarBrushes[0] = Brushes.Yellow;
+                          BackBrushes[0] = Brushes.Yellow;
+                          CandleOutlineBrushes[0] = Brushes.Yellow;
 
                           // CRITICAL LOGGING: Confirming why this fired if user sees High > VWAP
                           Print(string.Format("[RelativeVwap-INDICATOR] SIG2 SHORT FIRED | NOW:{0} | CHART:{1} | Bar:{2} | High:{3:F2} | VWAP:{4:F2} | Thresh:{5} | Cond(H<=V-T):{6} | AnchorBar:{7}",
@@ -1259,12 +1269,15 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
                   // v1.0.29: Persistent Painting - paint the signal bar even after it closes
                   // v1.0.38: Enhanced with refresh to ensure visibility in OnEachTick mode
+                  // v1.0.39: Paint all brush types for guaranteed visibility
                   if (highSignal2BarIdx >= 0)
                   {
                       int barsAgo = CurrentBar - highSignal2BarIdx;
                       if (barsAgo >= 0 && barsAgo < Bars.Count)
                       {
                           BarBrushes[barsAgo] = Brushes.Yellow;
+                          BackBrushes[barsAgo] = Brushes.Yellow;
+                          CandleOutlineBrushes[barsAgo] = Brushes.Yellow;
 
                           // v1.0.38: Force refresh also in persistent painting for current bar
                           if (barsAgo == 0 && ChartControl != null)
@@ -1465,11 +1478,18 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           RemoveDrawObject("Sig2L_" + lowSignal2BarIdx);
                           RemoveDrawObject("Sig2L_Txt_" + lowSignal2BarIdx);
                           if (barsAgo >= 0 && barsAgo < CurrentBar)
+                          {
                               BarBrushes[barsAgo] = null; // Unpaint that bar
+                              BackBrushes[barsAgo] = null;
+                              CandleOutlineBrushes[barsAgo] = null;
+                          }
                           lowSignal2BarIdx = -1;
 
                           // v1.0.37: Only unpaint current bar if signal was THIS bar
+                          // v1.0.39: Clear all brush types
                           BarBrushes[0] = null;
+                          BackBrushes[0] = null;
+                          CandleOutlineBrushes[0] = null;
                       }
 
                       // v1.0.24: DO NOT reset lastSignaledLowAnchorBar - signal is dead for this anchor
@@ -1499,7 +1519,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           // v1.0.8: Paint Signal 2 candle yellow (only the first separation candle)
                           // FIX: Store the Index for persistent painting in Live/Tick mode
                           lowSignal2BarIdx = CurrentBar;
-                          BarBrushes[0] = Brushes.Yellow; // v1.0.34: Paint immediately when signal fires
+                          // v1.0.39: Paint all brush types for guaranteed visibility
+                          BarBrushes[0] = Brushes.Yellow;
+                          BackBrushes[0] = Brushes.Yellow;
+                          CandleOutlineBrushes[0] = Brushes.Yellow;
 
                           // CRITICAL LOGGING: Confirming why this fired
                           Print(string.Format("[RelativeVwap-INDICATOR] SIG2 LONG FIRED | NOW:{0} | CHART:{1} | Bar:{2} | Low:{3:F2} | VWAP:{4:F2} | Thresh:{5} | Cond(L>=V+T):{6} | AnchorBar:{7}",
@@ -1560,12 +1583,15 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
                   // v1.0.29: Persistent Painting - paint the signal bar even after it closes
                   // v1.0.38: Enhanced with refresh to ensure visibility in OnEachTick mode
+                  // v1.0.39: Paint all brush types for guaranteed visibility
                   if (lowSignal2BarIdx >= 0)
                   {
                       int barsAgo = CurrentBar - lowSignal2BarIdx;
                       if (barsAgo >= 0 && barsAgo < Bars.Count)
                       {
                           BarBrushes[barsAgo] = Brushes.Yellow;
+                          BackBrushes[barsAgo] = Brushes.Yellow;
+                          CandleOutlineBrushes[barsAgo] = Brushes.Yellow;
 
                           // v1.0.38: Force refresh also in persistent painting for current bar
                           if (barsAgo == 0 && ChartControl != null)

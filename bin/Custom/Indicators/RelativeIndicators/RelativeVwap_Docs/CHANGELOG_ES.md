@@ -5,6 +5,17 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.0.39] - 2026-01-26
+### Corregido
+- **Vela Amarilla No Aparece Hasta F5 (Intento 2)**: Solución alternativa pintando todos los tipos de brush para garantizar visibilidad.
+  - **Problema Persistente**: v1.0.38 no resolvió el problema - la vela amarilla sigue sin aparecer hasta F5.
+  - **Nueva Estrategia**: En Calculate.OnEachTick mode, `BarBrushes` puede no renderizarse inmediatamente. Pintando también `BackBrushes` y `CandleOutlineBrushes`.
+  - **Cambios**:
+    1. Cuando señal se dispara: Pintar BarBrushes[0], BackBrushes[0] y CandleOutlineBrushes[0] (líneas ~1201-1204, ~1504-1507)
+    2. En persistent painting: Pintar los 3 tipos de brush (líneas ~1267-1269, ~1570-1572)
+    3. Al cancelar señal: Limpiar los 3 tipos de brush (líneas ~1161-1169, ~1468-1476)
+  - **Objetivo**: Garantizar que al menos uno de los brushes se renderice en tiempo real durante playback.
+
 ## [1.0.38] - 2026-01-26
 ### Corregido
 - **Vela Amarilla No Aparece Hasta F5**: Se corrigió el bug donde la vela amarilla no aparecía en tiempo real en playback, requiriendo presionar F5 para verla.
