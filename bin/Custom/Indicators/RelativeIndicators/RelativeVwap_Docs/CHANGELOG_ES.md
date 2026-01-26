@@ -5,6 +5,20 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.0.29] - 2026-01-25
+### Corregido
+- **Señales Múltiples para el Mismo Anchor VWAP**: Se eliminó el bug donde aparecían múltiples señales "Entry 1" para el mismo VWAP (debería ser solo UNA señal por anchor).
+  - **Síntoma**: Cada vez que una vela se separaba del VWAP, generaba una nueva flecha y etiqueta "Entry 1", incluso para el mismo anchor VWAP.
+  - **Causa**: El código reseteaba `lastSignaledLowAnchorBar = -1` cuando el precio rompía un **nivel de sesión** (Asia Low, Europe Low, etc.), permitiendo señales duplicadas del mismo anchor VWAP.
+  - **Solución**: Se eliminaron los resets de `lastSignaledLowAnchorBar` y `lastSignaledHighAnchorBar` de la sección CheckTouches (líneas 1839 y 1943). Ahora estos trackers SOLO se resetean cuando se crea un **nuevo anchor VWAP** (nuevo High/Low), no cuando se rompe una sesión.
+  - **Resultado**: Ahora aparece exactamente UNA señal "Entry 1" por cada anchor VWAP, independientemente de cuántos niveles de sesión se rompan.
+
+- **Velas Amarillas NO Persistían**: Se corrigió el bug donde las velas amarillas (Señal 2) desaparecían después de cerrar.
+  - **Síntoma**: Las flechas y etiquetas permanecían visibles, pero la vela amarilla solo se veía mientras era la barra actual. Cuando cerraba, volvía al color normal.
+  - **Causa**: El código solo pintaba cuando `lowSignal2BarIdx == CurrentBar`, lo cual solo es verdadero para la barra actual. Al avanzar a la siguiente barra, la condición era falsa y no se repintaba.
+  - **Solución**: Se modificó la lógica para calcular `barsAgo` y pintar la barra correcta usando `BarBrushes[barsAgo] = Brushes.Yellow` en cada OnBarUpdate, independientemente de si es la barra actual o histórica.
+  - **Cambio Técnico**: Líneas ~1234 (SHORT) y ~1505 (LONG).
+
 ## [1.0.28] - 2026-01-25
 ### Corregido
 - **Visualización Inmediata de Señal 2**: Se corrigió el bug donde la vela amarilla y las flechas/etiquetas de la Señal 2 NO aparecían inmediatamente en playback/realtime, requiriendo presionar F5 para verlas.

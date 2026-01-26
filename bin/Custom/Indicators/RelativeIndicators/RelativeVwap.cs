@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.28";  // v1.0.28: Force refresh para visualización inmediata de Señal 2
+        private const string VERSION = "1.0.29";  // v1.0.29: Fix señales múltiples + pintado persistente velas amarillas
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -1230,10 +1230,14 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                       }
                   }
                   
-                  // V_FIX_LIVE: Persistent Painting Check (Outside One-Shot Block)
-                  if (highSignal2BarIdx == CurrentBar)
+                  // v1.0.29: Persistent Painting - paint the signal bar even after it closes
+                  if (highSignal2BarIdx >= 0)
                   {
-                      BarBrushes[0] = Brushes.Yellow;
+                      int barsAgo = CurrentBar - highSignal2BarIdx;
+                      if (barsAgo >= 0 && barsAgo < Bars.Count)
+                      {
+                          BarBrushes[barsAgo] = Brushes.Yellow;
+                      }
                   }
               }
 
@@ -1501,10 +1505,14 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                       }
                   }
                   
-                  // V_FIX_LIVE: Persistent Painting Check (Outside One-Shot Block)
-                  if (lowSignal2BarIdx == CurrentBar)
+                  // v1.0.29: Persistent Painting - paint the signal bar even after it closes
+                  if (lowSignal2BarIdx >= 0)
                   {
-                      BarBrushes[0] = Brushes.Yellow;
+                      int barsAgo = CurrentBar - lowSignal2BarIdx;
+                      if (barsAgo >= 0 && barsAgo < Bars.Count)
+                      {
+                          BarBrushes[barsAgo] = Brushes.Yellow;
+                      }
                   }
               }
 
@@ -1836,8 +1844,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                         highSignalFired = false; // UNLOCK SIGNAL (New Level Hit)
                         lastUnlockedHighSession = session; // FIX: Store session for TP2 Logic
                         highAnchorSequence = 0; // RESET SEQUENCE TO 0
-                        lastSignaledHighAnchorBar = -1; // FORCE RESET TRACKER
-                        
+                        // v1.0.29: REMOVED - lastSignaledHighAnchorBar = -1; // ONLY reset on new VWAP anchor, NOT on session break
+
                         // V_LOGIC: Hierarchy Check (Type A vs Type B) -> REMOVED (All signals are standard)
                         // session.IsInternalHigh = ... 
                         
@@ -1940,8 +1948,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                          lowSignalFired = false; // UNLOCK SIGNAL
                          lastUnlockedLowSession = session; // FIX: Store session for TP2 Logic
                          lowAnchorSequence = 0; // RESET
-                         lastSignaledLowAnchorBar = -1; // RESET
-                         
+                         // v1.0.29: REMOVED - lastSignaledLowAnchorBar = -1; // ONLY reset on new VWAP anchor, NOT on session break
+
                          // V_LOGIC: Hierarchy Check (Type A vs Type B) -> REMOVED
                          // session.IsInternalLow = ...
                          
