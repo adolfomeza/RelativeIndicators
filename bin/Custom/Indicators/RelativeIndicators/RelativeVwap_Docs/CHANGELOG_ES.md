@@ -21,14 +21,33 @@ y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
     - NO resetea por estar arriba del mismo nivel múltiples barras
   - **Resultado**: Entry labels ahora incrementan correctamente: 01, 02, 03, 04...
 
+### Agregado
+- **Detección Automática de Niveles Internos**: Las etiquetas "Liquidity Grabbed" ahora muestran "(i)" cuando el nivel no es el extremo del día.
+  - **Nivel Interno**: Cuando el High/Low de una sesión NO es el máximo/mínimo del día
+    - Ejemplo: Europe High = 25900 pero USA High = 26000 → Europe es interno
+  - **Etiquetas**:
+    - `"Liquidity\nGrabbed 01\nEurope High (i)"` - nivel interno (tiene "(i)")
+    - `"Liquidity\nGrabbed 02\nUSA High"` - extremo del día (sin marcador)
+  - **Lógica**:
+    - HIGH interno: `session.High < currentDayHigh`
+    - LOW interno: `session.Low > currentDayLow`
+  - **Variables nuevas** (línea ~107-108):
+    - `highLiqGrabIsInternal`: true si es nivel interno
+    - `lowLiqGrabIsInternal`: true si es nivel interno
+  - **Ubicaciones actualizadas** (4 total):
+    - Línea ~957: HIGH movable label
+    - Línea ~987: LOW movable label
+    - Línea ~2096: HIGH CheckTouches label
+    - Línea ~2216: LOW CheckTouches label
+
 ### Cambiado
 - **Simplificación de Etiquetas - Un Solo Formato**: Se eliminaron los 3 modos de etiquetas (Default, Simple, Custom) y se dejó solo el formato con secuencias.
   - **Antes**: LabelDisplayMode con 3 opciones (Default, Simple, Custom)
   - **Ahora**: Solo un formato fijo para todas las etiquetas:
-    - Liquidity Grabbed: 3 líneas mostrando "Liquidity\nGrabbed 01\nUSA High" o "Liquidity\nGrabbed 02\nAsia Low"
+    - Liquidity Grabbed: 3 líneas mostrando "Liquidity\nGrabbed 01\nUSA High" o "Liquidity\nGrabbed 02\nAsia Low (i)"
       - Línea 1: "Liquidity"
       - Línea 2: "Grabbed 01" (con número de secuencia)
-      - Línea 3: "USA High" (sesión + tipo de nivel)
+      - Línea 3: "USA High" o "Europe High (i)" (sesión + tipo de nivel + marcador interno si aplica)
     - Entry: "Entry 01", "Entry 02", "Entry 03"...
     - Confirm: "Confirm" (Signal 3 - confirmación)
   - **Ubicaciones simplificadas** (6 total):
