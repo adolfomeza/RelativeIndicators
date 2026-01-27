@@ -5,6 +5,25 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.0.47] - 2026-01-26
+### Corregido
+- **Entry Seguía Mostrando Solo "01" (Bug en v1.0.46)**: Se corrigió el lugar donde se resetea la secuencia de Entry.
+  - **Problema**: v1.0.46 intentó arreglar resetendo en CheckTouches (nivel opuesto), pero seguía mostrando solo "01"
+  - **Causa Raíz Real**:
+    - La secuencia `highAnchorSequence` / `lowAnchorSequence` NO se reseteaba cuando se creaba NUEVO ANCHOR (nuevo día max/min)
+    - CheckTouches valida si un nivel fue tocado (para desbloquear señales), pero NO crea nuevos anchors
+    - Crear nuevo anchor sucede en líneas ~795, ~835 cuando `high > currentDayHigh` o `low < currentDayLow`
+  - **Solución Correcta**:
+    - Resetear `highAnchorSequence = 0` cuando se crea nuevo HIGH anchor (línea ~814)
+    - Resetear `lowAnchorSequence = 0` cuando se crea nuevo LOW anchor (línea ~854)
+    - NO resetear en CheckTouches (removido código incorrecto de v1.0.46)
+  - **Comportamiento Correcto Ahora**:
+    1. Se crea nuevo anchor (nuevo día max/min) → secuencia = 0
+    2. Primera Señal 2 → incrementa a 1 → "Entry 01"
+    3. Precio barre anchor (o se cancela y vuelve) → Señal 2 → incrementa a 2 → "Entry 02"
+    4. Continúa incrementando: 03, 04, etc.
+    5. Se crea NUEVO anchor → resetea a 0 → siguiente Señal 2 → "Entry 01"
+
 ## [1.0.46] - 2026-01-26
 ### Corregido
 - **Entry Siempre Mostraba "01" (Bug en v1.0.45)**: Se corrigió el bug donde todas las etiquetas Entry mostraban "01" en lugar de incrementar secuencialmente.

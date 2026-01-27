@@ -35919,3 +35919,261 @@
 [21:16:20.630] [ANCHOR] Bar:3869 Time:13:30:00 | NEW LOW ANCHOR | Price:21191.00 | Low:21177.00 | VWAP:21191.00 | PrevAnchor:3868 | TrackerReset:-1
 [21:16:20.631] [ANCHOR] Bar:3871 Time:13:32:00 | NEW LOW ANCHOR | Price:21195.75 | Low:21166.00 | VWAP:21195.75 | PrevAnchor:3870 | TrackerReset:-1
 [21:16:20.632] [SIGNAL2] Bar:3873 Time:13:34:00 | SIG2 LONG FIRED | Low:21207.00 | VWAP:21204.56 | Sep:2.44 | Thresh:1 | AnchorBar:3871 | LastSignaled:-1
+[21:23:36.058] [SYSTEM] Bar:-1 Time:N/A | === RelativeVwap Debug Log Started ===
+[21:23:36.062] [SYSTEM] Bar:-1 Time:N/A | Version: 1.0.46
+[21:23:36.063] [SYSTEM] Bar:-1 Time:N/A | Instrument: MNQ 03-25
+[21:23:36.105] [ANCHOR] Bar:14 Time:19:15:00 | NEW HIGH ANCHOR | Price:21533.25 | High:21536.00 | VWAP:21533.25 | PrevAnchor:13 | TrackerReset:-1
+[21:23:36.106] [ANCHOR] Bar:14 Time:19:15:00 | NEW LOW ANCHOR | Price:21533.25 | Low:21531.00 | VWAP:21533.25 | PrevAnchor:13 | TrackerReset:-1
+[21:23:36.110] [ANCHOR] Bar:15 Time:19:16:00 | NEW HIGH ANCHOR | Price:21533.00 | High:21537.50 | VWAP:21533.00 | PrevAnchor:14 | TrackerReset:-1
+[21:23:36.111] [ANCHOR] Bar:18 Time:19:19:00 | NEW LOW ANCHOR | Price:21525.25 | Low:21521.75 | VWAP:21525.25 | PrevAnchor:17 | TrackerReset:-1
+[21:23:36.111] [ANCHOR] Bar:19 Time:19:20:00 | NEW LOW ANCHOR | Price:21519.25 | Low:21519.25 | VWAP:21519.25 | PrevAnchor:18 | TrackerReset:-1
+[21:23:36.112] [ANCHOR] Bar:20 Time:19:21:00 | NEW LOW ANCHOR | Price:21523.50 | Low:21516.25 | VWAP:21523.50 | PrevAnchor:19 | TrackerReset:-1
+[21:23:36.112] [ANCHOR] Bar:21 Time:19:22:00 | NEW LOW ANCHOR | Price:21519.75 | Low:21515.00 | VWAP:21519.75 | PrevAnchor:20 | TrackerReset:-1
+[21:23:36.114] [ANCHOR] Bar:32 Time:19:33:00 | NEW LOW ANCHOR | Price:21510.75 | Low:21507.00 | VWAP:21510.75 | PrevAnchor:31 | TrackerReset:-1
+[21:23:36.114] [ANCHOR] Bar:33 Time:19:34:00 | NEW LOW ANCHOR | Price:21507.75 | Low:21506.25 | VWAP:21507.75 | PrevAnchor:32 | TrackerReset:-1
+[21:23:36.114] [ANCHOR] Bar:34 Time:19:35:00 | NEW LOW ANCHOR | Price:21502.50 | Low:21502.25 | VWAP:21502.50 | PrevAnchor:33 | TrackerReset:-1
+[21:23:36.115] [ANCHOR] Bar:35 Time:19:36:00 | NEW LOW ANCHOR | Price:21508.50 | Low:21502.00 | VWAP:21508.50 | PrevAnchor:34 | TrackerReset:-1
+[21:23:36.118] [ANCHOR] Bar:77 Time:20:18:00 | NEW LOW ANCHOR | Price:21502.75 | Low:21498.25 | VWAP:21502.75 | PrevAnchor:76 | TrackerReset:-1
+[21:23:36.118] [ANCHOR] Bar:80 Time:20:21:00 | NEW LOW ANCHOR | Price:21494.75 | Low:21493.00 | VWAP:21494.75 | PrevAnchor:79 | TrackerReset:-1
+[21:23:36.119] [ANCHOR] Bar:93 Time:20:34:00 | NEW LOW ANCHOR | Price:21490.75 | Low:21485.75 | VWAP:21490.75 | PrevAnchor:92 | TrackerReset:-1
+[21:23:36.119] [ANCHOR] Bar:99 Time:20:40:00 | NEW LOW ANCHOR | Price:21486.00 | Low:21485.00 | VWAP:21486.00 | PrevAnchor:98 | TrackerReset:-1
+[21:23:36.119] [ANCHOR] Bar:100 Time:20:41:00 | NEW LOW ANCHOR | Price:21481.75 | Low:21479.00 | VWAP:21481.75 | PrevAnchor:99 | TrackerReset:-1
+[21:23:36.121] [ANCHOR] Bar:101 Time:20:42:00 | NEW LOW ANCHOR | Price:21485.75 | Low:21478.75 | VWAP:21485.75 | PrevAnchor:100 | TrackerReset:-1
+[21:23:36.142] [ANCHOR] Bar:384 Time:01:25:00 | NEW HIGH ANCHOR | Price:21538.50 | High:21540.50 | VWAP:21538.50 | PrevAnchor:383 | TrackerReset:-1
+[21:23:36.143] [ANCHOR] Bar:385 Time:01:26:00 | NEW HIGH ANCHOR | Price:21540.00 | High:21541.25 | VWAP:21540.00 | PrevAnchor:384 | TrackerReset:-1
+[21:23:36.143] [ANCHOR] Bar:390 Time:01:31:00 | NEW HIGH ANCHOR | Price:21542.00 | High:21542.25 | VWAP:21542.00 | PrevAnchor:389 | TrackerReset:-1
+[21:23:36.144] [ANCHOR] Bar:391 Time:01:32:00 | NEW HIGH ANCHOR | Price:21550.75 | High:21551.50 | VWAP:21550.75 | PrevAnchor:390 | TrackerReset:-1
+[21:23:36.148] [ANCHOR] Bar:457 Time:02:38:00 | NEW HIGH ANCHOR | Price:21552.25 | High:21553.50 | VWAP:21552.25 | PrevAnchor:456 | TrackerReset:-1
+[21:23:36.149] [ANCHOR] Bar:465 Time:02:46:00 | NEW HIGH ANCHOR | Price:21552.50 | High:21554.50 | VWAP:21552.50 | PrevAnchor:464 | TrackerReset:-1
+[21:23:36.149] [ANCHOR] Bar:466 Time:02:47:00 | NEW HIGH ANCHOR | Price:21555.00 | High:21555.75 | VWAP:21555.00 | PrevAnchor:465 | TrackerReset:-1
+[21:23:36.151] [ANCHOR] Bar:491 Time:03:12:00 | NEW HIGH ANCHOR | Price:21554.00 | High:21557.50 | VWAP:21554.00 | PrevAnchor:490 | TrackerReset:-1
+[21:23:36.151] [ANCHOR] Bar:493 Time:03:14:00 | NEW HIGH ANCHOR | Price:21559.50 | High:21563.50 | VWAP:21559.50 | PrevAnchor:492 | TrackerReset:-1
+[21:23:36.152] [ANCHOR] Bar:508 Time:03:29:00 | NEW HIGH ANCHOR | Price:21564.00 | High:21564.75 | VWAP:21564.00 | PrevAnchor:507 | TrackerReset:-1
+[21:23:36.153] [ANCHOR] Bar:509 Time:03:30:00 | NEW HIGH ANCHOR | Price:21567.25 | High:21570.50 | VWAP:21567.25 | PrevAnchor:508 | TrackerReset:-1
+[21:23:36.153] [ANCHOR] Bar:510 Time:03:31:00 | NEW HIGH ANCHOR | Price:21569.00 | High:21571.75 | VWAP:21569.00 | PrevAnchor:509 | TrackerReset:-1
+[21:23:36.154] [ANCHOR] Bar:514 Time:03:35:00 | NEW HIGH ANCHOR | Price:21574.75 | High:21574.75 | VWAP:21574.75 | PrevAnchor:513 | TrackerReset:-1
+[21:23:36.154] [ANCHOR] Bar:515 Time:03:36:00 | NEW HIGH ANCHOR | Price:21573.75 | High:21576.75 | VWAP:21573.75 | PrevAnchor:514 | TrackerReset:-1
+[21:23:36.164] [ANCHOR] Bar:544 Time:04:05:00 | NEW HIGH ANCHOR | Price:21579.00 | High:21579.25 | VWAP:21579.00 | PrevAnchor:543 | TrackerReset:-1
+[21:23:36.164] [ANCHOR] Bar:545 Time:04:06:00 | NEW HIGH ANCHOR | Price:21577.75 | High:21584.50 | VWAP:21577.75 | PrevAnchor:544 | TrackerReset:-1
+[21:23:36.166] [ANCHOR] Bar:549 Time:04:10:00 | NEW HIGH ANCHOR | Price:21586.75 | High:21587.00 | VWAP:21586.75 | PrevAnchor:548 | TrackerReset:-1
+[21:23:36.166] [ANCHOR] Bar:550 Time:04:11:00 | NEW HIGH ANCHOR | Price:21589.75 | High:21590.50 | VWAP:21589.75 | PrevAnchor:549 | TrackerReset:-1
+[21:23:36.166] [ANCHOR] Bar:551 Time:04:12:00 | NEW HIGH ANCHOR | Price:21590.75 | High:21593.00 | VWAP:21590.75 | PrevAnchor:550 | TrackerReset:-1
+[21:23:36.167] [ANCHOR] Bar:552 Time:04:13:00 | NEW HIGH ANCHOR | Price:21589.75 | High:21593.25 | VWAP:21589.75 | PrevAnchor:551 | TrackerReset:-1
+[21:23:36.168] [ANCHOR] Bar:554 Time:04:15:00 | NEW HIGH ANCHOR | Price:21594.00 | High:21594.75 | VWAP:21594.00 | PrevAnchor:553 | TrackerReset:-1
+[21:23:36.168] [ANCHOR] Bar:555 Time:04:16:00 | NEW HIGH ANCHOR | Price:21594.25 | High:21595.00 | VWAP:21594.25 | PrevAnchor:554 | TrackerReset:-1
+[21:23:36.169] [SIGNAL2] Bar:557 Time:04:18:00 | SIG2 SHORT FIRED | High:21589.00 | VWAP:21589.51 | Sep:0.51 | Thresh:1 | AnchorBar:555 | LastSignaled:-1
+[21:23:36.175] [ANCHOR] Bar:581 Time:04:42:00 | NEW HIGH ANCHOR | Price:21593.50 | High:21596.00 | VWAP:21593.50 | PrevAnchor:580 | TrackerReset:-1
+[21:23:36.175] [ANCHOR] Bar:583 Time:04:44:00 | NEW HIGH ANCHOR | Price:21595.50 | High:21597.00 | VWAP:21595.50 | PrevAnchor:582 | TrackerReset:-1
+[21:23:36.176] [ANCHOR] Bar:584 Time:04:45:00 | NEW HIGH ANCHOR | Price:21597.50 | High:21598.50 | VWAP:21597.50 | PrevAnchor:583 | TrackerReset:-1
+[21:23:36.176] [ANCHOR] Bar:585 Time:04:46:00 | NEW HIGH ANCHOR | Price:21603.75 | High:21604.75 | VWAP:21603.75 | PrevAnchor:584 | TrackerReset:-1
+[21:23:36.177] [ANCHOR] Bar:586 Time:04:47:00 | NEW HIGH ANCHOR | Price:21606.50 | High:21607.00 | VWAP:21606.50 | PrevAnchor:585 | TrackerReset:-1
+[21:23:36.178] [ANCHOR] Bar:587 Time:04:48:00 | NEW HIGH ANCHOR | Price:21613.75 | High:21613.75 | VWAP:21613.75 | PrevAnchor:586 | TrackerReset:-1
+[21:23:36.178] [ANCHOR] Bar:588 Time:04:49:00 | NEW HIGH ANCHOR | Price:21614.75 | High:21617.00 | VWAP:21614.75 | PrevAnchor:587 | TrackerReset:-1
+[21:23:36.178] [ANCHOR] Bar:589 Time:04:50:00 | NEW HIGH ANCHOR | Price:21612.50 | High:21617.75 | VWAP:21612.50 | PrevAnchor:588 | TrackerReset:-1
+[21:23:36.179] [ANCHOR] Bar:590 Time:04:51:00 | NEW HIGH ANCHOR | Price:21616.00 | High:21620.25 | VWAP:21616.00 | PrevAnchor:589 | TrackerReset:-1
+[21:23:36.179] [ANCHOR] Bar:596 Time:04:57:00 | NEW HIGH ANCHOR | Price:21621.25 | High:21622.75 | VWAP:21621.25 | PrevAnchor:595 | TrackerReset:-1
+[21:23:36.180] [ANCHOR] Bar:597 Time:04:58:00 | NEW HIGH ANCHOR | Price:21623.25 | High:21625.00 | VWAP:21623.25 | PrevAnchor:596 | TrackerReset:-1
+[21:23:36.180] [ANCHOR] Bar:600 Time:05:01:00 | NEW HIGH ANCHOR | Price:21626.50 | High:21627.50 | VWAP:21626.50 | PrevAnchor:599 | TrackerReset:-1
+[21:23:36.198] [ANCHOR] Bar:601 Time:05:02:00 | NEW HIGH ANCHOR | Price:21629.25 | High:21630.75 | VWAP:21629.25 | PrevAnchor:600 | TrackerReset:-1
+[21:23:36.199] [ANCHOR] Bar:602 Time:05:03:00 | NEW HIGH ANCHOR | Price:21632.00 | High:21640.75 | VWAP:21632.00 | PrevAnchor:601 | TrackerReset:-1
+[21:23:36.199] [SIGNAL2] Bar:604 Time:05:05:00 | SIG2 SHORT FIRED | High:21629.75 | VWAP:21630.07 | Sep:0.32 | Thresh:1 | AnchorBar:602 | LastSignaled:-1
+[21:23:36.201] [ANCHOR] Bar:611 Time:05:12:00 | NEW HIGH ANCHOR | Price:21639.00 | High:21641.75 | VWAP:21639.00 | PrevAnchor:610 | TrackerReset:-1
+[21:23:36.201] [ANCHOR] Bar:612 Time:05:13:00 | NEW HIGH ANCHOR | Price:21642.50 | High:21644.75 | VWAP:21642.50 | PrevAnchor:611 | TrackerReset:-1
+[21:23:36.202] [ANCHOR] Bar:613 Time:05:14:00 | NEW HIGH ANCHOR | Price:21645.75 | High:21646.25 | VWAP:21645.75 | PrevAnchor:612 | TrackerReset:-1
+[21:23:36.202] [ANCHOR] Bar:614 Time:05:15:00 | NEW HIGH ANCHOR | Price:21640.25 | High:21646.75 | VWAP:21640.25 | PrevAnchor:613 | TrackerReset:-1
+[21:23:36.203] [ANCHOR] Bar:622 Time:05:23:00 | NEW HIGH ANCHOR | Price:21646.25 | High:21652.25 | VWAP:21646.25 | PrevAnchor:621 | TrackerReset:-1
+[21:23:36.203] [ANCHOR] Bar:624 Time:05:25:00 | NEW HIGH ANCHOR | Price:21650.50 | High:21654.25 | VWAP:21650.50 | PrevAnchor:623 | TrackerReset:-1
+[21:23:36.204] [SIGNAL2] Bar:629 Time:05:30:00 | SIG2 SHORT FIRED | High:21645.25 | VWAP:21645.84 | Sep:0.59 | Thresh:1 | AnchorBar:624 | LastSignaled:-1
+[21:23:36.206] [ANCHOR] Bar:647 Time:05:48:00 | NEW HIGH ANCHOR | Price:21654.25 | High:21656.50 | VWAP:21654.25 | PrevAnchor:646 | TrackerReset:-1
+[21:23:36.207] [ANCHOR] Bar:649 Time:05:50:00 | NEW HIGH ANCHOR | Price:21658.75 | High:21659.00 | VWAP:21658.75 | PrevAnchor:648 | TrackerReset:-1
+[21:23:36.207] [ANCHOR] Bar:652 Time:05:53:00 | NEW HIGH ANCHOR | Price:21660.25 | High:21660.25 | VWAP:21660.25 | PrevAnchor:651 | TrackerReset:-1
+[21:23:36.207] [ANCHOR] Bar:653 Time:05:54:00 | NEW HIGH ANCHOR | Price:21660.50 | High:21661.25 | VWAP:21660.50 | PrevAnchor:652 | TrackerReset:-1
+[21:23:36.207] [ANCHOR] Bar:654 Time:05:55:00 | NEW HIGH ANCHOR | Price:21660.25 | High:21665.50 | VWAP:21660.25 | PrevAnchor:653 | TrackerReset:-1
+[21:23:36.208] [ANCHOR] Bar:658 Time:05:59:00 | NEW HIGH ANCHOR | Price:21668.00 | High:21673.00 | VWAP:21668.00 | PrevAnchor:657 | TrackerReset:-1
+[21:23:36.208] [SIGNAL2] Bar:662 Time:06:03:00 | SIG2 SHORT FIRED | High:21662.25 | VWAP:21664.50 | Sep:2.25 | Thresh:1 | AnchorBar:658 | LastSignaled:-1
+[21:23:36.210] [ANCHOR] Bar:671 Time:06:12:00 | NEW HIGH ANCHOR | Price:21675.75 | High:21679.50 | VWAP:21675.75 | PrevAnchor:670 | TrackerReset:-1
+[21:23:36.210] [ANCHOR] Bar:673 Time:06:14:00 | NEW HIGH ANCHOR | Price:21680.00 | High:21680.75 | VWAP:21680.00 | PrevAnchor:672 | TrackerReset:-1
+[21:23:36.210] [ANCHOR] Bar:674 Time:06:15:00 | NEW HIGH ANCHOR | Price:21678.00 | High:21683.25 | VWAP:21678.00 | PrevAnchor:673 | TrackerReset:-1
+[21:23:36.212] [ANCHOR] Bar:678 Time:06:19:00 | NEW HIGH ANCHOR | Price:21684.25 | High:21685.00 | VWAP:21684.25 | PrevAnchor:677 | TrackerReset:-1
+[21:23:36.212] [ANCHOR] Bar:679 Time:06:20:00 | NEW HIGH ANCHOR | Price:21688.00 | High:21691.00 | VWAP:21688.00 | PrevAnchor:678 | TrackerReset:-1
+[21:23:36.212] [ANCHOR] Bar:681 Time:06:22:00 | NEW HIGH ANCHOR | Price:21690.25 | High:21691.50 | VWAP:21690.25 | PrevAnchor:680 | TrackerReset:-1
+[21:23:36.213] [ANCHOR] Bar:682 Time:06:23:00 | NEW HIGH ANCHOR | Price:21689.00 | High:21692.75 | VWAP:21689.00 | PrevAnchor:681 | TrackerReset:-1
+[21:23:36.214] [SIGNAL2] Bar:687 Time:06:28:00 | SIG2 SHORT FIRED | High:21680.00 | VWAP:21684.75 | Sep:4.75 | Thresh:1 | AnchorBar:682 | LastSignaled:-1
+[21:23:36.216] [ANCHOR] Bar:730 Time:07:11:00 | NEW HIGH ANCHOR | Price:21689.75 | High:21695.50 | VWAP:21689.75 | PrevAnchor:729 | TrackerReset:-1
+[21:23:36.217] [ANCHOR] Bar:734 Time:07:15:00 | NEW HIGH ANCHOR | Price:21690.00 | High:21696.75 | VWAP:21690.00 | PrevAnchor:733 | TrackerReset:-1
+[21:23:36.218] [ANCHOR] Bar:735 Time:07:16:00 | NEW HIGH ANCHOR | Price:21697.50 | High:21699.00 | VWAP:21697.50 | PrevAnchor:734 | TrackerReset:-1
+[21:23:36.218] [ANCHOR] Bar:736 Time:07:17:00 | NEW HIGH ANCHOR | Price:21691.00 | High:21700.00 | VWAP:21691.00 | PrevAnchor:735 | TrackerReset:-1
+[21:23:36.218] [ANCHOR] Bar:740 Time:07:21:00 | NEW HIGH ANCHOR | Price:21696.00 | High:21701.00 | VWAP:21696.00 | PrevAnchor:739 | TrackerReset:-1
+[21:23:36.219] [ANCHOR] Bar:742 Time:07:23:00 | NEW HIGH ANCHOR | Price:21702.00 | High:21704.00 | VWAP:21702.00 | PrevAnchor:741 | TrackerReset:-1
+[21:23:36.219] [ANCHOR] Bar:744 Time:07:25:00 | NEW HIGH ANCHOR | Price:21705.25 | High:21706.75 | VWAP:21705.25 | PrevAnchor:743 | TrackerReset:-1
+[21:23:36.219] [ANCHOR] Bar:745 Time:07:26:00 | NEW HIGH ANCHOR | Price:21709.25 | High:21714.75 | VWAP:21709.25 | PrevAnchor:744 | TrackerReset:-1
+[21:23:36.221] [ANCHOR] Bar:746 Time:07:27:00 | NEW HIGH ANCHOR | Price:21724.25 | High:21724.50 | VWAP:21724.25 | PrevAnchor:745 | TrackerReset:-1
+[21:23:36.221] [ANCHOR] Bar:747 Time:07:28:00 | NEW HIGH ANCHOR | Price:21725.00 | High:21727.25 | VWAP:21725.00 | PrevAnchor:746 | TrackerReset:-1
+[21:23:36.222] [ANCHOR] Bar:750 Time:07:31:00 | NEW HIGH ANCHOR | Price:21732.25 | High:21736.75 | VWAP:21732.25 | PrevAnchor:749 | TrackerReset:-1
+[21:23:36.223] [SIGNAL2] Bar:754 Time:07:35:00 | SIG2 SHORT FIRED | High:21728.00 | VWAP:21729.51 | Sep:1.51 | Thresh:1 | AnchorBar:750 | LastSignaled:-1
+[21:23:36.223] [ANCHOR] Bar:757 Time:07:38:00 | NEW HIGH ANCHOR | Price:21738.50 | High:21738.75 | VWAP:21738.50 | PrevAnchor:756 | TrackerReset:-1
+[21:23:36.223] [ANCHOR] Bar:758 Time:07:39:00 | NEW HIGH ANCHOR | Price:21741.25 | High:21745.00 | VWAP:21741.25 | PrevAnchor:757 | TrackerReset:-1
+[21:23:36.224] [SIGNAL2] Bar:761 Time:07:42:00 | SIG2 SHORT FIRED | High:21736.50 | VWAP:21737.57 | Sep:1.07 | Thresh:1 | AnchorBar:758 | LastSignaled:-1
+[21:23:36.230] [ANCHOR] Bar:826 Time:08:47:00 | NEW HIGH ANCHOR | Price:21746.75 | High:21747.50 | VWAP:21746.75 | PrevAnchor:825 | TrackerReset:-1
+[21:23:36.230] [ANCHOR] Bar:827 Time:08:48:00 | NEW HIGH ANCHOR | Price:21753.75 | High:21758.00 | VWAP:21753.75 | PrevAnchor:826 | TrackerReset:-1
+[21:23:36.231] [ANCHOR] Bar:828 Time:08:49:00 | NEW HIGH ANCHOR | Price:21751.50 | High:21761.00 | VWAP:21751.50 | PrevAnchor:827 | TrackerReset:-1
+[21:23:36.231] [SIGNAL2] Bar:833 Time:08:54:00 | SIG2 SHORT FIRED | High:21749.25 | VWAP:21749.64 | Sep:0.39 | Thresh:1 | AnchorBar:828 | LastSignaled:-1
+[21:23:36.240] [ANCHOR] Bar:930 Time:10:31:00 | NEW HIGH ANCHOR | Price:21755.25 | High:21769.50 | VWAP:21755.25 | PrevAnchor:929 | TrackerReset:-1
+[21:23:36.241] [ANCHOR] Bar:932 Time:10:33:00 | NEW HIGH ANCHOR | Price:21744.00 | High:21773.50 | VWAP:21744.00 | PrevAnchor:931 | TrackerReset:-1
+[21:23:36.242] [ANCHOR] Bar:933 Time:10:34:00 | NEW HIGH ANCHOR | Price:21769.50 | High:21783.50 | VWAP:21769.50 | PrevAnchor:932 | TrackerReset:-1
+[21:23:36.242] [ANCHOR] Bar:934 Time:10:35:00 | NEW HIGH ANCHOR | Price:21779.75 | High:21785.75 | VWAP:21779.75 | PrevAnchor:933 | TrackerReset:-1
+[21:23:36.243] [ANCHOR] Bar:935 Time:10:36:00 | NEW HIGH ANCHOR | Price:21762.25 | High:21793.75 | VWAP:21762.25 | PrevAnchor:934 | TrackerReset:-1
+[21:23:36.243] [ANCHOR] Bar:937 Time:10:38:00 | NEW HIGH ANCHOR | Price:21782.25 | High:21800.00 | VWAP:21782.25 | PrevAnchor:936 | TrackerReset:-1
+[21:23:36.244] [ANCHOR] Bar:940 Time:10:41:00 | NEW HIGH ANCHOR | Price:21796.75 | High:21808.00 | VWAP:21796.75 | PrevAnchor:939 | TrackerReset:-1
+[21:23:36.244] [ANCHOR] Bar:941 Time:10:42:00 | NEW HIGH ANCHOR | Price:21811.50 | High:21812.00 | VWAP:21811.50 | PrevAnchor:940 | TrackerReset:-1
+[21:23:36.245] [ANCHOR] Bar:942 Time:10:43:00 | NEW HIGH ANCHOR | Price:21808.00 | High:21817.00 | VWAP:21808.00 | PrevAnchor:941 | TrackerReset:-1
+[21:23:36.245] [ANCHOR] Bar:943 Time:10:44:00 | NEW HIGH ANCHOR | Price:21809.25 | High:21828.75 | VWAP:21809.25 | PrevAnchor:942 | TrackerReset:-1
+[21:23:36.245] [ANCHOR] Bar:946 Time:10:47:00 | NEW HIGH ANCHOR | Price:21824.00 | High:21837.00 | VWAP:21824.00 | PrevAnchor:945 | TrackerReset:-1
+[21:23:36.246] [ANCHOR] Bar:950 Time:10:51:00 | NEW HIGH ANCHOR | Price:21810.00 | High:21839.50 | VWAP:21810.00 | PrevAnchor:949 | TrackerReset:-1
+[21:23:36.247] [ANCHOR] Bar:953 Time:10:54:00 | NEW HIGH ANCHOR | Price:21824.75 | High:21848.00 | VWAP:21824.75 | PrevAnchor:952 | TrackerReset:-1
+[21:23:36.248] [SIGNAL2] Bar:958 Time:10:59:00 | SIG2 SHORT FIRED | High:21817.00 | VWAP:21819.22 | Sep:2.22 | Thresh:1 | AnchorBar:953 | LastSignaled:-1
+[21:23:36.249] [ANCHOR] Bar:974 Time:11:15:00 | NEW HIGH ANCHOR | Price:21852.50 | High:21855.25 | VWAP:21852.50 | PrevAnchor:973 | TrackerReset:-1
+[21:23:36.250] [ANCHOR] Bar:975 Time:11:16:00 | NEW HIGH ANCHOR | Price:21856.00 | High:21858.00 | VWAP:21856.00 | PrevAnchor:974 | TrackerReset:-1
+[21:23:36.250] [ANCHOR] Bar:978 Time:11:19:00 | NEW HIGH ANCHOR | Price:21859.00 | High:21864.25 | VWAP:21859.00 | PrevAnchor:977 | TrackerReset:-1
+[21:23:36.250] [ANCHOR] Bar:979 Time:11:20:00 | NEW HIGH ANCHOR | Price:21860.00 | High:21865.50 | VWAP:21860.00 | PrevAnchor:978 | TrackerReset:-1
+[21:23:36.251] [ANCHOR] Bar:982 Time:11:23:00 | NEW HIGH ANCHOR | Price:21871.50 | High:21875.50 | VWAP:21871.50 | PrevAnchor:981 | TrackerReset:-1
+[21:23:36.251] [ANCHOR] Bar:983 Time:11:24:00 | NEW HIGH ANCHOR | Price:21863.00 | High:21881.00 | VWAP:21863.00 | PrevAnchor:982 | TrackerReset:-1
+[21:23:36.252] [ANCHOR] Bar:988 Time:11:29:00 | NEW HIGH ANCHOR | Price:21878.25 | High:21885.00 | VWAP:21878.25 | PrevAnchor:987 | TrackerReset:-1
+[21:23:36.252] [ANCHOR] Bar:989 Time:11:30:00 | NEW HIGH ANCHOR | Price:21876.75 | High:21886.75 | VWAP:21876.75 | PrevAnchor:988 | TrackerReset:-1
+[21:23:36.254] [SIGNAL2] Bar:995 Time:11:36:00 | SIG2 SHORT FIRED | High:21860.25 | VWAP:21864.54 | Sep:4.29 | Thresh:1 | AnchorBar:989 | LastSignaled:-1
+[21:23:36.255] [ANCHOR] Bar:1006 Time:11:47:00 | NEW HIGH ANCHOR | Price:21884.25 | High:21892.25 | VWAP:21884.25 | PrevAnchor:1005 | TrackerReset:-1
+[21:23:36.255] [SIGNAL2] Bar:1009 Time:11:50:00 | SIG2 SHORT FIRED | High:21878.00 | VWAP:21878.78 | Sep:0.78 | Thresh:1 | AnchorBar:1006 | LastSignaled:-1
+[21:23:36.257] [ANCHOR] Bar:1030 Time:12:11:00 | NEW HIGH ANCHOR | Price:21893.50 | High:21895.00 | VWAP:21893.50 | PrevAnchor:1029 | TrackerReset:-1
+[21:23:36.257] [ANCHOR] Bar:1031 Time:12:12:00 | NEW HIGH ANCHOR | Price:21885.50 | High:21897.00 | VWAP:21885.50 | PrevAnchor:1030 | TrackerReset:-1
+[21:23:36.258] [SIGNAL2] Bar:1037 Time:12:18:00 | SIG2 SHORT FIRED | High:21879.00 | VWAP:21881.39 | Sep:2.39 | Thresh:1 | AnchorBar:1031 | LastSignaled:-1
+[21:23:36.282] [ANCHOR] Bar:1380 Time:19:01:00 | NEW HIGH ANCHOR | Price:21783.75 | High:21788.50 | VWAP:21783.75 | PrevAnchor:1379 | TrackerReset:-1
+[21:23:36.283] [ANCHOR] Bar:1380 Time:19:01:00 | NEW LOW ANCHOR | Price:21783.75 | Low:21778.25 | VWAP:21783.75 | PrevAnchor:1379 | TrackerReset:-1
+[21:23:36.283] [ANCHOR] Bar:1381 Time:19:02:00 | NEW HIGH ANCHOR | Price:21793.00 | High:21796.75 | VWAP:21793.00 | PrevAnchor:1380 | TrackerReset:-1
+[21:23:36.285] [ANCHOR] Bar:1397 Time:19:18:00 | NEW LOW ANCHOR | Price:21779.75 | Low:21777.50 | VWAP:21779.75 | PrevAnchor:1396 | TrackerReset:-1
+[21:23:36.286] [ANCHOR] Bar:1400 Time:19:21:00 | NEW LOW ANCHOR | Price:21777.00 | Low:21771.50 | VWAP:21777.00 | PrevAnchor:1399 | TrackerReset:-1
+[21:23:36.286] [ANCHOR] Bar:1401 Time:19:22:00 | NEW LOW ANCHOR | Price:21775.50 | Low:21770.50 | VWAP:21775.50 | PrevAnchor:1400 | TrackerReset:-1
+[21:23:36.287] [ANCHOR] Bar:1416 Time:19:37:00 | NEW LOW ANCHOR | Price:21770.75 | Low:21770.00 | VWAP:21770.75 | PrevAnchor:1415 | TrackerReset:-1
+[21:23:36.287] [ANCHOR] Bar:1417 Time:19:38:00 | NEW LOW ANCHOR | Price:21771.75 | Low:21768.50 | VWAP:21771.75 | PrevAnchor:1416 | TrackerReset:-1
+[21:23:36.289] [ANCHOR] Bar:1438 Time:19:59:00 | NEW LOW ANCHOR | Price:21770.50 | Low:21767.75 | VWAP:21770.50 | PrevAnchor:1437 | TrackerReset:-1
+[21:23:36.289] [ANCHOR] Bar:1443 Time:20:04:00 | NEW LOW ANCHOR | Price:21766.75 | Low:21764.00 | VWAP:21766.75 | PrevAnchor:1442 | TrackerReset:-1
+[21:23:36.290] [ANCHOR] Bar:1444 Time:20:05:00 | NEW LOW ANCHOR | Price:21764.25 | Low:21763.25 | VWAP:21764.25 | PrevAnchor:1443 | TrackerReset:-1
+[21:23:36.290] [ANCHOR] Bar:1445 Time:20:06:00 | NEW LOW ANCHOR | Price:21766.00 | Low:21760.00 | VWAP:21766.00 | PrevAnchor:1444 | TrackerReset:-1
+[21:23:36.301] [ANCHOR] Bar:1495 Time:20:56:00 | NEW LOW ANCHOR | Price:21755.25 | Low:21751.00 | VWAP:21755.25 | PrevAnchor:1494 | TrackerReset:-1
+[21:23:36.303] [ANCHOR] Bar:1503 Time:21:04:00 | NEW LOW ANCHOR | Price:21750.25 | Low:21748.75 | VWAP:21750.25 | PrevAnchor:1502 | TrackerReset:-1
+[21:23:36.305] [ANCHOR] Bar:1519 Time:21:20:00 | NEW LOW ANCHOR | Price:21752.50 | Low:21747.00 | VWAP:21752.50 | PrevAnchor:1518 | TrackerReset:-1
+[21:23:36.306] [ANCHOR] Bar:1529 Time:21:30:00 | NEW LOW ANCHOR | Price:21749.75 | Low:21746.25 | VWAP:21749.75 | PrevAnchor:1528 | TrackerReset:-1
+[21:23:36.311] [ANCHOR] Bar:1610 Time:22:51:00 | NEW LOW ANCHOR | Price:21745.50 | Low:21738.50 | VWAP:21745.50 | PrevAnchor:1609 | TrackerReset:-1
+[21:23:36.312] [ANCHOR] Bar:1611 Time:22:52:00 | NEW LOW ANCHOR | Price:21735.50 | Low:21734.25 | VWAP:21735.50 | PrevAnchor:1610 | TrackerReset:-1
+[21:23:36.312] [ANCHOR] Bar:1612 Time:22:53:00 | NEW LOW ANCHOR | Price:21740.50 | Low:21734.00 | VWAP:21740.50 | PrevAnchor:1611 | TrackerReset:-1
+[21:23:36.313] [ANCHOR] Bar:1620 Time:23:01:00 | NEW LOW ANCHOR | Price:21719.50 | Low:21719.25 | VWAP:21719.50 | PrevAnchor:1619 | TrackerReset:-1
+[21:23:36.313] [ANCHOR] Bar:1621 Time:23:02:00 | NEW LOW ANCHOR | Price:21725.75 | Low:21715.75 | VWAP:21725.75 | PrevAnchor:1620 | TrackerReset:-1
+[21:23:36.322] [ANCHOR] Bar:1747 Time:01:08:00 | NEW LOW ANCHOR | Price:21712.50 | Low:21711.50 | VWAP:21712.50 | PrevAnchor:1746 | TrackerReset:-1
+[21:23:36.322] [ANCHOR] Bar:1748 Time:01:09:00 | NEW LOW ANCHOR | Price:21715.00 | Low:21708.00 | VWAP:21715.00 | PrevAnchor:1747 | TrackerReset:-1
+[21:23:36.323] [ANCHOR] Bar:1760 Time:01:21:00 | NEW LOW ANCHOR | Price:21700.25 | Low:21693.25 | VWAP:21700.25 | PrevAnchor:1759 | TrackerReset:-1
+[21:23:36.324] [ANCHOR] Bar:1761 Time:01:22:00 | NEW LOW ANCHOR | Price:21694.00 | Low:21686.25 | VWAP:21694.00 | PrevAnchor:1760 | TrackerReset:-1
+[21:23:36.325] [ANCHOR] Bar:1762 Time:01:23:00 | NEW LOW ANCHOR | Price:21684.25 | Low:21682.75 | VWAP:21684.25 | PrevAnchor:1761 | TrackerReset:-1
+[21:23:36.325] [ANCHOR] Bar:1763 Time:01:24:00 | NEW LOW ANCHOR | Price:21677.75 | Low:21674.50 | VWAP:21677.75 | PrevAnchor:1762 | TrackerReset:-1
+[21:23:36.325] [ANCHOR] Bar:1764 Time:01:25:00 | NEW LOW ANCHOR | Price:21674.50 | Low:21659.00 | VWAP:21674.50 | PrevAnchor:1763 | TrackerReset:-1
+[21:23:36.359] [ANCHOR] Bar:2289 Time:10:10:00 | NEW HIGH ANCHOR | Price:21789.00 | High:21797.50 | VWAP:21789.00 | PrevAnchor:2288 | TrackerReset:-1
+[21:23:36.361] [SIGNAL2] Bar:2296 Time:10:17:00 | SIG2 SHORT FIRED | High:21789.75 | VWAP:21790.18 | Sep:0.43 | Thresh:1 | AnchorBar:2289 | LastSignaled:-1
+[21:23:36.364] [ANCHOR] Bar:2310 Time:10:31:00 | NEW HIGH ANCHOR | Price:21793.75 | High:21806.25 | VWAP:21793.75 | PrevAnchor:2309 | TrackerReset:-1
+[21:23:36.364] [SIGNAL2] Bar:2314 Time:10:35:00 | SIG2 SHORT FIRED | High:21774.00 | VWAP:21775.44 | Sep:1.44 | Thresh:1 | AnchorBar:2310 | LastSignaled:-1
+[21:23:36.370] [ANCHOR] Bar:2340 Time:11:01:00 | NEW LOW ANCHOR | Price:21653.25 | Low:21650.25 | VWAP:21653.25 | PrevAnchor:2339 | TrackerReset:-1
+[21:23:36.372] [ANCHOR] Bar:2341 Time:11:02:00 | NEW LOW ANCHOR | Price:21622.00 | Low:21613.00 | VWAP:21622.00 | PrevAnchor:2340 | TrackerReset:-1
+[21:23:36.372] [ANCHOR] Bar:2342 Time:11:03:00 | NEW LOW ANCHOR | Price:21635.75 | Low:21598.75 | VWAP:21635.75 | PrevAnchor:2341 | TrackerReset:-1
+[21:23:36.372] [ANCHOR] Bar:2345 Time:11:06:00 | NEW LOW ANCHOR | Price:21621.25 | Low:21592.00 | VWAP:21621.25 | PrevAnchor:2344 | TrackerReset:-1
+[21:23:36.373] [ANCHOR] Bar:2347 Time:11:08:00 | NEW LOW ANCHOR | Price:21589.25 | Low:21586.25 | VWAP:21589.25 | PrevAnchor:2346 | TrackerReset:-1
+[21:23:36.373] [ANCHOR] Bar:2348 Time:11:09:00 | NEW LOW ANCHOR | Price:21596.50 | Low:21564.75 | VWAP:21596.50 | PrevAnchor:2347 | TrackerReset:-1
+[21:23:36.374] [ANCHOR] Bar:2349 Time:11:10:00 | NEW LOW ANCHOR | Price:21567.00 | Low:21552.00 | VWAP:21567.00 | PrevAnchor:2348 | TrackerReset:-1
+[21:23:36.374] [ANCHOR] Bar:2350 Time:11:11:00 | NEW LOW ANCHOR | Price:21560.75 | Low:21550.25 | VWAP:21560.75 | PrevAnchor:2349 | TrackerReset:-1
+[21:23:36.375] [SIGNAL2] Bar:2353 Time:11:14:00 | SIG2 LONG FIRED | Low:21578.75 | VWAP:21578.38 | Sep:0.37 | Thresh:1 | AnchorBar:2350 | LastSignaled:-1
+[21:23:36.377] [ANCHOR] Bar:2357 Time:11:18:00 | NEW LOW ANCHOR | Price:21535.25 | Low:21532.00 | VWAP:21535.25 | PrevAnchor:2356 | TrackerReset:-1
+[21:23:36.378] [ANCHOR] Bar:2358 Time:11:19:00 | NEW LOW ANCHOR | Price:21541.00 | Low:21524.75 | VWAP:21541.00 | PrevAnchor:2357 | TrackerReset:-1
+[21:23:36.379] [SIGNAL2] Bar:2360 Time:11:21:00 | SIG2 LONG FIRED | Low:21559.25 | VWAP:21557.89 | Sep:1.36 | Thresh:1 | AnchorBar:2358 | LastSignaled:-1
+[21:23:36.381] [ANCHOR] Bar:2371 Time:11:32:00 | NEW LOW ANCHOR | Price:21517.75 | Low:21516.00 | VWAP:21517.75 | PrevAnchor:2370 | TrackerReset:-1
+[21:23:36.381] [ANCHOR] Bar:2372 Time:11:33:00 | NEW LOW ANCHOR | Price:21507.00 | Low:21486.75 | VWAP:21507.00 | PrevAnchor:2371 | TrackerReset:-1
+[21:23:36.382] [ANCHOR] Bar:2376 Time:11:37:00 | NEW LOW ANCHOR | Price:21503.75 | Low:21481.25 | VWAP:21503.75 | PrevAnchor:2375 | TrackerReset:-1
+[21:23:36.382] [ANCHOR] Bar:2378 Time:11:39:00 | NEW LOW ANCHOR | Price:21462.25 | Low:21458.00 | VWAP:21462.25 | PrevAnchor:2377 | TrackerReset:-1
+[21:23:36.382] [ANCHOR] Bar:2379 Time:11:40:00 | NEW LOW ANCHOR | Price:21432.00 | Low:21420.25 | VWAP:21432.00 | PrevAnchor:2378 | TrackerReset:-1
+[21:23:36.384] [ANCHOR] Bar:2387 Time:11:48:00 | NEW LOW ANCHOR | Price:21418.00 | Low:21399.25 | VWAP:21418.00 | PrevAnchor:2386 | TrackerReset:-1
+[21:23:36.384] [SIGNAL2] Bar:2391 Time:11:52:00 | SIG2 LONG FIRED | Low:21448.50 | VWAP:21439.85 | Sep:8.65 | Thresh:1 | AnchorBar:2387 | LastSignaled:-1
+[21:23:36.393] [ANCHOR] Bar:2506 Time:13:47:00 | NEW LOW ANCHOR | Price:21398.75 | Low:21391.50 | VWAP:21398.75 | PrevAnchor:2505 | TrackerReset:-1
+[21:23:36.394] [ANCHOR] Bar:2511 Time:13:52:00 | NEW LOW ANCHOR | Price:21393.00 | Low:21389.00 | VWAP:21393.00 | PrevAnchor:2510 | TrackerReset:-1
+[21:23:36.395] [ANCHOR] Bar:2512 Time:13:53:00 | NEW LOW ANCHOR | Price:21399.75 | Low:21386.75 | VWAP:21399.75 | PrevAnchor:2511 | TrackerReset:-1
+[21:23:36.395] [SIGNAL2] Bar:2515 Time:13:56:00 | SIG2 LONG FIRED | Low:21412.00 | VWAP:21407.72 | Sep:4.28 | Thresh:1 | AnchorBar:2512 | LastSignaled:-1
+[21:23:36.414] [ANCHOR] Bar:2649 Time:16:10:00 | NEW LOW ANCHOR | Price:21385.00 | Low:21377.75 | VWAP:21385.00 | PrevAnchor:2648 | TrackerReset:-1
+[21:23:36.414] [ANCHOR] Bar:2650 Time:16:11:00 | NEW LOW ANCHOR | Price:21377.00 | Low:21371.75 | VWAP:21377.00 | PrevAnchor:2649 | TrackerReset:-1
+[21:23:36.414] [ANCHOR] Bar:2651 Time:16:12:00 | NEW LOW ANCHOR | Price:21370.75 | Low:21365.25 | VWAP:21370.75 | PrevAnchor:2650 | TrackerReset:-1
+[21:23:36.414] [ANCHOR] Bar:2652 Time:16:13:00 | NEW LOW ANCHOR | Price:21369.75 | Low:21357.75 | VWAP:21369.75 | PrevAnchor:2651 | TrackerReset:-1
+[21:23:36.416] [ANCHOR] Bar:2660 Time:16:21:00 | NEW LOW ANCHOR | Price:21351.50 | Low:21348.25 | VWAP:21351.50 | PrevAnchor:2659 | TrackerReset:-1
+[21:23:36.417] [ANCHOR] Bar:2661 Time:16:22:00 | NEW LOW ANCHOR | Price:21348.50 | Low:21344.25 | VWAP:21348.50 | PrevAnchor:2660 | TrackerReset:-1
+[21:23:36.417] [ANCHOR] Bar:2662 Time:16:23:00 | NEW LOW ANCHOR | Price:21334.50 | Low:21330.00 | VWAP:21334.50 | PrevAnchor:2661 | TrackerReset:-1
+[21:23:36.418] [ANCHOR] Bar:2667 Time:16:28:00 | NEW LOW ANCHOR | Price:21340.00 | Low:21326.00 | VWAP:21340.00 | PrevAnchor:2666 | TrackerReset:-1
+[21:23:36.419] [ANCHOR] Bar:2669 Time:16:30:00 | NEW LOW ANCHOR | Price:21326.75 | Low:21323.75 | VWAP:21326.75 | PrevAnchor:2668 | TrackerReset:-1
+[21:23:36.420] [ANCHOR] Bar:2671 Time:16:32:00 | NEW LOW ANCHOR | Price:21327.75 | Low:21318.50 | VWAP:21327.75 | PrevAnchor:2670 | TrackerReset:-1
+[21:23:36.420] [ANCHOR] Bar:2674 Time:16:35:00 | NEW LOW ANCHOR | Price:21302.25 | Low:21300.50 | VWAP:21302.25 | PrevAnchor:2673 | TrackerReset:-1
+[21:23:36.421] [ANCHOR] Bar:2675 Time:16:36:00 | NEW LOW ANCHOR | Price:21285.50 | Low:21283.75 | VWAP:21285.50 | PrevAnchor:2674 | TrackerReset:-1
+[21:23:36.421] [ANCHOR] Bar:2676 Time:16:37:00 | NEW LOW ANCHOR | Price:21284.50 | Low:21281.25 | VWAP:21284.50 | PrevAnchor:2675 | TrackerReset:-1
+[21:23:36.422] [ANCHOR] Bar:2677 Time:16:38:00 | NEW LOW ANCHOR | Price:21285.25 | Low:21279.50 | VWAP:21285.25 | PrevAnchor:2676 | TrackerReset:-1
+[21:23:36.422] [SIGNAL2] Bar:2681 Time:16:42:00 | SIG2 LONG FIRED | Low:21334.75 | VWAP:21326.19 | Sep:8.56 | Thresh:1 | AnchorBar:2677 | LastSignaled:-1
+[21:23:36.428] [ANCHOR] Bar:2760 Time:19:01:00 | NEW HIGH ANCHOR | Price:21364.75 | High:21386.25 | VWAP:21364.75 | PrevAnchor:2759 | TrackerReset:-1
+[21:23:36.429] [ANCHOR] Bar:2760 Time:19:01:00 | NEW LOW ANCHOR | Price:21364.75 | Low:21362.75 | VWAP:21364.75 | PrevAnchor:2759 | TrackerReset:-1
+[21:23:36.429] [ANCHOR] Bar:2762 Time:19:03:00 | NEW LOW ANCHOR | Price:21360.50 | Low:21358.00 | VWAP:21360.50 | PrevAnchor:2761 | TrackerReset:-1
+[21:23:36.429] [ANCHOR] Bar:2765 Time:19:06:00 | NEW LOW ANCHOR | Price:21358.25 | Low:21356.50 | VWAP:21358.25 | PrevAnchor:2764 | TrackerReset:-1
+[21:23:36.430] [ANCHOR] Bar:2767 Time:19:08:00 | NEW LOW ANCHOR | Price:21344.75 | Low:21344.75 | VWAP:21344.75 | PrevAnchor:2766 | TrackerReset:-1
+[21:23:36.434] [ANCHOR] Bar:2813 Time:19:54:00 | NEW HIGH ANCHOR | Price:21384.00 | High:21387.50 | VWAP:21384.00 | PrevAnchor:2812 | TrackerReset:-1
+[21:23:36.434] [ANCHOR] Bar:2815 Time:19:56:00 | NEW HIGH ANCHOR | Price:21387.50 | High:21388.25 | VWAP:21387.50 | PrevAnchor:2814 | TrackerReset:-1
+[21:23:36.435] [ANCHOR] Bar:2817 Time:19:58:00 | NEW HIGH ANCHOR | Price:21393.00 | High:21393.25 | VWAP:21393.00 | PrevAnchor:2816 | TrackerReset:-1
+[21:23:36.435] [ANCHOR] Bar:2818 Time:19:59:00 | NEW HIGH ANCHOR | Price:21394.25 | High:21396.00 | VWAP:21394.25 | PrevAnchor:2817 | TrackerReset:-1
+[21:23:36.436] [ANCHOR] Bar:2820 Time:20:01:00 | NEW HIGH ANCHOR | Price:21391.75 | High:21397.00 | VWAP:21391.75 | PrevAnchor:2819 | TrackerReset:-1
+[21:23:36.436] [ANCHOR] Bar:2822 Time:20:03:00 | NEW HIGH ANCHOR | Price:21398.50 | High:21400.00 | VWAP:21398.50 | PrevAnchor:2821 | TrackerReset:-1
+[21:23:36.436] [ANCHOR] Bar:2830 Time:20:11:00 | NEW HIGH ANCHOR | Price:21399.50 | High:21401.25 | VWAP:21399.50 | PrevAnchor:2829 | TrackerReset:-1
+[21:23:36.437] [ANCHOR] Bar:2831 Time:20:12:00 | NEW HIGH ANCHOR | Price:21403.00 | High:21404.75 | VWAP:21403.00 | PrevAnchor:2830 | TrackerReset:-1
+[21:23:36.438] [ANCHOR] Bar:2832 Time:20:13:00 | NEW HIGH ANCHOR | Price:21405.50 | High:21405.50 | VWAP:21405.50 | PrevAnchor:2831 | TrackerReset:-1
+[21:23:36.438] [ANCHOR] Bar:2833 Time:20:14:00 | NEW HIGH ANCHOR | Price:21405.75 | High:21406.25 | VWAP:21405.75 | PrevAnchor:2832 | TrackerReset:-1
+[21:23:36.440] [ANCHOR] Bar:2834 Time:20:15:00 | NEW HIGH ANCHOR | Price:21404.00 | High:21406.50 | VWAP:21404.00 | PrevAnchor:2833 | TrackerReset:-1
+[21:23:36.441] [ANCHOR] Bar:2858 Time:20:39:00 | NEW HIGH ANCHOR | Price:21408.75 | High:21411.25 | VWAP:21408.75 | PrevAnchor:2857 | TrackerReset:-1
+[21:23:36.442] [ANCHOR] Bar:2859 Time:20:40:00 | NEW HIGH ANCHOR | Price:21411.75 | High:21412.50 | VWAP:21411.75 | PrevAnchor:2858 | TrackerReset:-1
+[21:23:36.442] [ANCHOR] Bar:2860 Time:20:41:00 | NEW HIGH ANCHOR | Price:21413.00 | High:21413.00 | VWAP:21413.00 | PrevAnchor:2859 | TrackerReset:-1
+[21:23:36.443] [ANCHOR] Bar:2861 Time:20:42:00 | NEW HIGH ANCHOR | Price:21410.75 | High:21413.75 | VWAP:21410.75 | PrevAnchor:2860 | TrackerReset:-1
+[21:23:36.444] [ANCHOR] Bar:2868 Time:20:49:00 | NEW HIGH ANCHOR | Price:21412.75 | High:21414.00 | VWAP:21412.75 | PrevAnchor:2867 | TrackerReset:-1
+[21:23:36.444] [ANCHOR] Bar:2869 Time:20:50:00 | NEW HIGH ANCHOR | Price:21410.75 | High:21414.25 | VWAP:21410.75 | PrevAnchor:2868 | TrackerReset:-1
+[21:23:36.445] [ANCHOR] Bar:2881 Time:21:02:00 | NEW HIGH ANCHOR | Price:21412.75 | High:21415.25 | VWAP:21412.75 | PrevAnchor:2880 | TrackerReset:-1
+[21:23:36.448] [ANCHOR] Bar:2914 Time:21:35:00 | NEW HIGH ANCHOR | Price:21418.50 | High:21419.00 | VWAP:21418.50 | PrevAnchor:2913 | TrackerReset:-1
+[21:23:36.448] [ANCHOR] Bar:2915 Time:21:36:00 | NEW HIGH ANCHOR | Price:21419.25 | High:21420.25 | VWAP:21419.25 | PrevAnchor:2914 | TrackerReset:-1
+[21:23:36.449] [ANCHOR] Bar:2916 Time:21:37:00 | NEW HIGH ANCHOR | Price:21423.50 | High:21423.75 | VWAP:21423.50 | PrevAnchor:2915 | TrackerReset:-1
+[21:23:36.449] [ANCHOR] Bar:2918 Time:21:39:00 | NEW HIGH ANCHOR | Price:21421.75 | High:21424.25 | VWAP:21421.75 | PrevAnchor:2917 | TrackerReset:-1
+[21:23:36.450] [ANCHOR] Bar:2925 Time:21:46:00 | NEW HIGH ANCHOR | Price:21425.75 | High:21427.00 | VWAP:21425.75 | PrevAnchor:2924 | TrackerReset:-1
+[21:23:36.450] [ANCHOR] Bar:2926 Time:21:47:00 | NEW HIGH ANCHOR | Price:21424.00 | High:21428.75 | VWAP:21424.00 | PrevAnchor:2925 | TrackerReset:-1
+[21:23:36.451] [ANCHOR] Bar:2928 Time:21:49:00 | NEW HIGH ANCHOR | Price:21427.75 | High:21429.25 | VWAP:21427.75 | PrevAnchor:2927 | TrackerReset:-1
+[21:23:36.451] [ANCHOR] Bar:2930 Time:21:51:00 | NEW HIGH ANCHOR | Price:21428.50 | High:21429.50 | VWAP:21428.50 | PrevAnchor:2929 | TrackerReset:-1
+[21:23:36.451] [ANCHOR] Bar:2931 Time:21:52:00 | NEW HIGH ANCHOR | Price:21430.50 | High:21431.50 | VWAP:21430.50 | PrevAnchor:2930 | TrackerReset:-1
+[21:23:36.451] [ANCHOR] Bar:2932 Time:21:53:00 | NEW HIGH ANCHOR | Price:21433.75 | High:21434.75 | VWAP:21433.75 | PrevAnchor:2931 | TrackerReset:-1
+[21:23:36.453] [ANCHOR] Bar:2946 Time:22:07:00 | NEW HIGH ANCHOR | Price:21433.00 | High:21437.00 | VWAP:21433.00 | PrevAnchor:2945 | TrackerReset:-1
+[21:23:36.484] [ANCHOR] Bar:3420 Time:06:01:00 | NEW HIGH ANCHOR | Price:21436.75 | High:21443.75 | VWAP:21436.75 | PrevAnchor:3419 | TrackerReset:-1
+[21:23:36.485] [SIGNAL2] Bar:3425 Time:06:06:00 | SIG2 SHORT FIRED | High:21436.25 | VWAP:21436.59 | Sep:0.34 | Thresh:1 | AnchorBar:3420 | LastSignaled:-1
+[21:23:36.489] [ANCHOR] Bar:3451 Time:06:32:00 | NEW HIGH ANCHOR | Price:21441.00 | High:21444.00 | VWAP:21441.00 | PrevAnchor:3450 | TrackerReset:-1
+[21:23:36.489] [SIGNAL2] Bar:3453 Time:06:34:00 | SIG2 SHORT FIRED | High:21431.25 | VWAP:21432.00 | Sep:0.75 | Thresh:1 | AnchorBar:3451 | LastSignaled:-1
+[21:23:36.502] [ANCHOR] Bar:3471 Time:06:52:00 | NEW HIGH ANCHOR | Price:21445.50 | High:21447.25 | VWAP:21445.50 | PrevAnchor:3470 | TrackerReset:-1
+[21:23:36.503] [ANCHOR] Bar:3472 Time:06:53:00 | NEW HIGH ANCHOR | Price:21446.25 | High:21448.00 | VWAP:21446.25 | PrevAnchor:3471 | TrackerReset:-1
+[21:23:36.503] [SIGNAL2] Bar:3474 Time:06:55:00 | SIG2 SHORT FIRED | High:21444.25 | VWAP:21444.94 | Sep:0.69 | Thresh:1 | AnchorBar:3472 | LastSignaled:-1
+[21:23:36.505] [ANCHOR] Bar:3478 Time:06:59:00 | NEW HIGH ANCHOR | Price:21445.00 | High:21448.25 | VWAP:21445.00 | PrevAnchor:3477 | TrackerReset:-1
+[21:23:36.506] [SIGNAL2] Bar:3488 Time:07:09:00 | SIG2 SHORT FIRED | High:21443.50 | VWAP:21444.47 | Sep:0.97 | Thresh:1 | AnchorBar:3478 | LastSignaled:-1
+[21:23:36.508] [ANCHOR] Bar:3511 Time:07:32:00 | NEW LOW ANCHOR | Price:21335.25 | Low:21329.75 | VWAP:21335.25 | PrevAnchor:3510 | TrackerReset:-1
+[21:23:36.509] [ANCHOR] Bar:3512 Time:07:33:00 | NEW LOW ANCHOR | Price:21322.75 | Low:21316.50 | VWAP:21322.75 | PrevAnchor:3511 | TrackerReset:-1
+[21:23:36.509] [ANCHOR] Bar:3513 Time:07:34:00 | NEW LOW ANCHOR | Price:21329.25 | Low:21295.75 | VWAP:21329.25 | PrevAnchor:3512 | TrackerReset:-1
+[21:23:36.509] [ANCHOR] Bar:3520 Time:07:41:00 | NEW LOW ANCHOR | Price:21294.50 | Low:21293.00 | VWAP:21294.50 | PrevAnchor:3519 | TrackerReset:-1
+[21:23:36.511] [ANCHOR] Bar:3521 Time:07:42:00 | NEW LOW ANCHOR | Price:21287.50 | Low:21284.75 | VWAP:21287.50 | PrevAnchor:3520 | TrackerReset:-1
+[21:23:36.511] [SIGNAL2] Bar:3523 Time:07:44:00 | SIG2 LONG FIRED | Low:21299.25 | VWAP:21298.78 | Sep:0.47 | Thresh:1 | AnchorBar:3521 | LastSignaled:-1
+[21:23:36.514] [ANCHOR] Bar:3559 Time:08:20:00 | NEW LOW ANCHOR | Price:21277.50 | Low:21272.00 | VWAP:21277.50 | PrevAnchor:3558 | TrackerReset:-1
+[21:23:36.514] [ANCHOR] Bar:3560 Time:08:21:00 | NEW LOW ANCHOR | Price:21263.75 | Low:21255.75 | VWAP:21263.75 | PrevAnchor:3559 | TrackerReset:-1
+[21:23:36.515] [ANCHOR] Bar:3565 Time:08:26:00 | NEW LOW ANCHOR | Price:21254.25 | Low:21243.50 | VWAP:21254.25 | PrevAnchor:3564 | TrackerReset:-1
+[21:23:36.517] [ANCHOR] Bar:3569 Time:08:30:00 | NEW LOW ANCHOR | Price:21251.25 | Low:21238.75 | VWAP:21251.25 | PrevAnchor:3568 | TrackerReset:-1
+[21:23:36.517] [ANCHOR] Bar:3571 Time:08:32:00 | NEW LOW ANCHOR | Price:21228.50 | Low:21227.00 | VWAP:21228.50 | PrevAnchor:3570 | TrackerReset:-1
+[21:23:36.518] [ANCHOR] Bar:3573 Time:08:34:00 | NEW LOW ANCHOR | Price:21227.50 | Low:21221.25 | VWAP:21227.50 | PrevAnchor:3572 | TrackerReset:-1
+[21:23:36.519] [SIGNAL2] Bar:3576 Time:08:37:00 | SIG2 LONG FIRED | Low:21249.75 | VWAP:21243.62 | Sep:6.13 | Thresh:1 | AnchorBar:3573 | LastSignaled:-1
+[21:23:36.541] [ANCHOR] Bar:3867 Time:13:28:00 | NEW LOW ANCHOR | Price:21221.75 | Low:21215.50 | VWAP:21221.75 | PrevAnchor:3866 | TrackerReset:-1
+[21:23:36.541] [ANCHOR] Bar:3868 Time:13:29:00 | NEW LOW ANCHOR | Price:21200.75 | Low:21198.00 | VWAP:21200.75 | PrevAnchor:3867 | TrackerReset:-1
+[21:23:36.541] [ANCHOR] Bar:3869 Time:13:30:00 | NEW LOW ANCHOR | Price:21191.00 | Low:21177.00 | VWAP:21191.00 | PrevAnchor:3868 | TrackerReset:-1
+[21:23:36.543] [ANCHOR] Bar:3871 Time:13:32:00 | NEW LOW ANCHOR | Price:21195.75 | Low:21166.00 | VWAP:21195.75 | PrevAnchor:3870 | TrackerReset:-1
+[21:23:36.544] [SIGNAL2] Bar:3873 Time:13:34:00 | SIG2 LONG FIRED | Low:21207.00 | VWAP:21204.56 | Sep:2.44 | Thresh:1 | AnchorBar:3871 | LastSignaled:-1
