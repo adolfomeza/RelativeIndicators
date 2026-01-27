@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.43";  // v1.0.43: Validate Signal 2 uses VWAP from same session as last Signal 1
+        private const string VERSION = "1.0.44";  // v1.0.44: Fix anchor session tracking - save when anchor created, not in CheckTouches
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -792,6 +792,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                   currentDayHigh = high;
                   sessionHighBarIdx = CurrentBar;
 
+                  // v1.0.44: Save session that created this anchor (for Signal 2 validation)
+                  currentHighAnchorSession = lastUnlockedHighSession;
+                  Print(string.Format("[DEBUG ANCHOR] Bar:{0} | NEW HIGH ANCHOR | Session:{1}", CurrentBar,
+                      (currentHighAnchorSession != null ? currentHighAnchorSession.Name : "null")));
+
                   // MANUAL FIX: Reset Signal State
                   highDetached = false;
                   highSignal2Fired = false;  // v1.0.33: Reset flag to allow Signal 2 for new anchor
@@ -826,6 +831,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                  }
                   currentDayLow = low;
                   sessionLowBarIdx = CurrentBar;
+
+                  // v1.0.44: Save session that created this anchor (for Signal 2 validation)
+                  currentLowAnchorSession = lastUnlockedLowSession;
+                  Print(string.Format("[DEBUG ANCHOR] Bar:{0} | NEW LOW ANCHOR | Session:{1}", CurrentBar,
+                      (currentLowAnchorSession != null ? currentLowAnchorSession.Name : "null")));
 
                   // MANUAL FIX: Reset Signal State
                   lowDetached = false;
@@ -1915,14 +1925,6 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
                         session.HighBrokenBarIdx = CurrentBar;
 
-                        // v1.0.43: If this level will become the new day high, save session
-                        // This allows Signal 2 to verify it's using VWAP from correct session
-                        if (session.High > currentDayHigh)
-                        {
-                            currentHighAnchorSession = session;
-                            Print(string.Format("[DEBUG ANCHOR] Bar:{0} | HIGH anchor session set: {1} (will create VWAP anchor)", CurrentBar, session.Name));
-                        }
-
                         // If this is the FIRST time we detect a High break for this VWAP session
                         if (!highHasTakenRelevant) highFirstBreakIdx = CurrentBar;
 
@@ -2028,14 +2030,6 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                              session.Name, CurrentBar, low, session.Low, (activeTrades != null ? activeTrades.Count : -1)));
 
                          session.LowBrokenBarIdx = CurrentBar;
-
-                         // v1.0.43: If this level will become the new day low, save session
-                         // This allows Signal 2 to verify it's using VWAP from correct session
-                         if (session.Low < currentDayLow)
-                         {
-                             currentLowAnchorSession = session;
-                             Print(string.Format("[DEBUG ANCHOR] Bar:{0} | LOW anchor session set: {1} (will create VWAP anchor)", CurrentBar, session.Name));
-                         }
 
                          if (!lowHasTakenRelevant) lowFirstBreakIdx = CurrentBar;
 

@@ -5,6 +5,20 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.0.44] - 2026-01-26
+### Corregido
+- **Bloqueaba Trades Válidos (Regresión v1.0.43)**: Se corrigió el bug donde v1.0.43 bloqueaba trades válidos.
+  - **Problema**: Usuario reportó "dejó de tomar trades válidos los que estudiamos recientemente".
+  - **Causa Raíz**: En v1.0.43, se guardaba `currentHighAnchorSession` en CheckTouches con condición `if (session.High > currentDayHigh)`.
+    - CheckTouches se ejecuta ANTES de actualizar `currentDayHigh` (línea 792)
+    - Entonces `currentDayHigh` tiene el valor VIEJO durante CheckTouches
+    - La condición `session.High > currentDayHigh` usaba el valor incorrecto
+    - Resultado: `currentHighAnchorSession` no se guardaba cuando debía
+  - **Solución**: Mover el guardado a donde realmente se CREA el nuevo anchor (líneas ~795-798, ~835-838)
+    - Cuando `high > currentDayHigh` → crea nuevo anchor → guardar `currentHighAnchorSession = lastUnlockedHighSession`
+    - Removido código incorrecto de CheckTouches (líneas ~1928-1934, ~2034-2040)
+  - **Resultado**: Ahora guarda el session correcto cuando el anchor se crea realmente, restaurando trades válidos.
+
 ## [1.0.43] - 2026-01-26
 ### Corregido
 - **Señal 2 Usa VWAP de Nivel Diferente al Último Liquidity Grab**: Se corrigió el bug donde la Señal 2 usaba VWAP de un nivel diferente al que disparó la última Señal 1.
