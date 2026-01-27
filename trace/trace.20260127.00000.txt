@@ -151,3 +151,10 @@
 2026-01-27 06:29:27:019 Cbi.Instrument.RequestBars (to Provider): instrument='NQ 03-26' from='27/1/26 6:00:00 a. m.' to='27/1/26 11:59:59 p. m.' period='1 Tick'
 2026-01-27 06:29:35:483 Cbi.Instrument.RequestBars (to Provider): instrument='NQ 03-26' from='27/1/26 6:00:00 a. m.' to='27/1/26 11:59:59 p. m.' period='1 Tick'
 2026-01-27 06:29:40:625 Cbi.Instrument.RequestBars (to Provider): instrument='NQ 03-26' from='27/1/26 6:00:00 a. m.' to='27/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-27 06:36:34:547 Cbi.Instrument.RequestBars (to Provider): instrument='NQ 03-26' from='27/1/26 6:00:00 a. m.' to='27/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-27 06:42:24:980 Cbi.Instrument.RequestBars (to Provider): instrument='NQ 03-26' from='27/1/26 6:00:00 a. m.' to='27/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-27 07:04:38:934 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-27 07:04:38:938 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-27 07:04:39:774 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-27 07:04:39:774 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.8449774' renewSecs='2399.9224887'
+2026-01-27 07:05:55:797 Cbi.Instrument.RequestBars (to Provider): instrument='NQ 03-26' from='27/1/26 6:00:00 a. m.' to='27/1/26 11:59:59 p. m.' period='1 Tick'

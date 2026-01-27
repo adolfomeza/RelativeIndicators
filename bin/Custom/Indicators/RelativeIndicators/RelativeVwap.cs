@@ -1301,10 +1301,13 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                               DateTime.Now, Time[0], CurrentBar, High[0], hVwap, Signal2ThresholdTicks, (High[0] <= (hVwap - Signal2ThresholdTicks * TickSize)), sessionHighBarIdx));
 
                           // v1.0.26: File Log
-                          LogToFile(string.Format("SIG2 SHORT FIRED | High:{0:F2} | VWAP:{1:F2} | Sep:{2:F2} | Thresh:{3} | AnchorBar:{4} | LastSignaled:{5}",
-                              High[0], hVwap, hVwap - High[0], Signal2ThresholdTicks, sessionHighBarIdx, lastSignaledHighAnchorBar), "SIGNAL2");
+                          // v1.0.48: Added Sequence to log
+                          LogToFile(string.Format("SIG2 SHORT FIRED | High:{0:F2} | VWAP:{1:F2} | Sep:{2:F2} | Thresh:{3} | AnchorBar:{4} | LastSignaled:{5} | Seq BEFORE:{6}",
+                              High[0], hVwap, hVwap - High[0], Signal2ThresholdTicks, sessionHighBarIdx, lastSignaledHighAnchorBar, highAnchorSequence), "SIGNAL2");
 
                           highAnchorSequence++;
+
+                          LogToFile(string.Format("→ Seq AFTER increment: {0} → Will show as Entry {1:00}", highAnchorSequence, highAnchorSequence), "SIGNAL2");
 
                           // v1.0.8: Use configurable SignalColor instead of session colors
                           Brush sigBrush = SignalColor;
@@ -1608,10 +1611,13 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                               DateTime.Now, Time[0], CurrentBar, Low[0], lVwap, Signal2ThresholdTicks, (Low[0] >= (lVwap + Signal2ThresholdTicks * TickSize)), sessionLowBarIdx));
 
                           // v1.0.26: File Log
-                          LogToFile(string.Format("SIG2 LONG FIRED | Low:{0:F2} | VWAP:{1:F2} | Sep:{2:F2} | Thresh:{3} | AnchorBar:{4} | LastSignaled:{5}",
-                              Low[0], lVwap, Low[0] - lVwap, Signal2ThresholdTicks, sessionLowBarIdx, lastSignaledLowAnchorBar), "SIGNAL2");
+                          // v1.0.48: Added Sequence to log
+                          LogToFile(string.Format("SIG2 LONG FIRED | Low:{0:F2} | VWAP:{1:F2} | Sep:{2:F2} | Thresh:{3} | AnchorBar:{4} | LastSignaled:{5} | Seq BEFORE:{6}",
+                              Low[0], lVwap, Low[0] - lVwap, Signal2ThresholdTicks, sessionLowBarIdx, lastSignaledLowAnchorBar, lowAnchorSequence), "SIGNAL2");
 
                           lowAnchorSequence++;
+
+                          LogToFile(string.Format("→ Seq AFTER increment: {0} → Will show as Entry {1:00}", lowAnchorSequence, lowAnchorSequence), "SIGNAL2");
 
                           // v1.0.8: Use configurable SignalColor instead of session colors
                           Brush sigBrush = SignalColor;
@@ -1683,6 +1689,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                      highLiqGrabSequence = 1;
                      highLiqGrabLocked = false;
                      highLiqGrabBarIdx = -1;
+                     LogToFile(string.Format("RESET highAnchorSequence=0 | Reason: Touched LOW VWAP | Low:{0:F2} <= VWAP:{1:F2}",
+                         Low[0], lVwap), "SEQ_RESET");
                      Print(string.Format("[DEBUG VWAP CROSS] Bar:{0} | Touched LOW VWAP | Low:{1:F2} <= VWAP:{2:F2} | Reset highAnchorSequence=0",
                          CurrentBar, Low[0], lVwap));
                  }
@@ -1698,6 +1706,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                      lowLiqGrabSequence = 1;
                      lowLiqGrabLocked = false;
                      lowLiqGrabBarIdx = -1;
+                     LogToFile(string.Format("RESET lowAnchorSequence=0 | Reason: Touched HIGH VWAP | High:{0:F2} >= VWAP:{1:F2}",
+                         High[0], hVwap), "SEQ_RESET");
                      Print(string.Format("[DEBUG VWAP CROSS] Bar:{0} | Touched HIGH VWAP | High:{1:F2} >= VWAP:{2:F2} | Reset lowAnchorSequence=0",
                          CurrentBar, High[0], hVwap));
                  }
@@ -2037,6 +2047,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                         lastUnlockedHighSession = session; // FIX: Store session for TP2 Logic
                         // v1.0.47: Reset OPPOSITE sequence (LOW Entry resets when touches HIGH level)
                         lowAnchorSequence = 0;
+                        LogToFile(string.Format("RESET lowAnchorSequence=0 | Reason: Touched HIGH level | Session:{0} | High:{1:F2}",
+                            session.Name, high), "SEQ_RESET");
                         // v1.0.45: Reset Liquidity Grab sequence and state
                         highLiqGrabSequence = 1;
                         highLiqGrabLocked = false;
