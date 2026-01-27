@@ -21,8 +21,6 @@ using NinjaTrader.Data;
 using NinjaTrader.NinjaScript;
 using NinjaTrader.Core.FloatingPoint;
 using NinjaTrader.NinjaScript.DrawingTools;
-using System.Windows.Controls;
-using NinjaTrader.Gui.Chart;
 
 #endregion
 
