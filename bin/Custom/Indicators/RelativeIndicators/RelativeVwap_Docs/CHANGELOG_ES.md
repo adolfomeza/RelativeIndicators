@@ -5,6 +5,48 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.0.48] - 2026-01-27
+### Corregido
+- **CRÍTICO: Lógica de Reset Invertida (Bug en v1.0.47)**: Se corrigió el bug donde se reseteaba la secuencia del lado OPUESTO en lugar del MISMO lado.
+  - **Problema**: A pesar del fix de v1.0.47, Entry seguía mostrando 03, 04 en lugar de 01
+  - **Causa Raíz (Descubierta con Logs Detallados)**:
+    - Cuando precio tocaba HIGH level → código reseteaba `lowAnchorSequence = 0` (OPUESTO/MAL)
+    - Pero señales SHORT usan `highAnchorSequence` → reset no tenía EFECTO en lado SHORT
+    - Resultado: `highAnchorSequence` seguía incrementando (6, 7, 8...) → Entry 07, Entry 08...
+    - Ejemplo del log: `RESET lowAnchorSequence=0 | Touched HIGH` seguido de `SIG2 SHORT FIRED | Seq BEFORE:6 → Entry 07`
+  - **Lógica Correcta**:
+    - HIGH level crea HIGH VWAP → usado por señales SHORT (highAnchorSequence)
+    - LOW level crea LOW VWAP → usado por señales LONG (lowAnchorSequence)
+    - Por lo tanto: HIGH level touch → reset `highAnchorSequence` (MISMO lado)
+  - **Solución**:
+    - CheckTouches HIGH first break (línea ~2048): reset `highAnchorSequence = 0` (era lowAnchorSequence)
+    - CheckTouches HIGH touched again (línea ~2152): reset `highAnchorSequence = 0` (era lowAnchorSequence)
+    - CheckTouches LOW first break (línea ~2172): reset `lowAnchorSequence = 0` (era highAnchorSequence)
+    - CheckTouches LOW touched again (línea ~2276): reset `lowAnchorSequence = 0` (era highAnchorSequence)
+
+- **CRÍTICO: Múltiples Resets por Barra en Modo OnEachTick**: Se corrigió el bug donde todas las Entry mostraban "01" debido a resets constantes.
+  - **Problema**: Usuario reportó "todas las entradas dicen Entry 01" después del primer fix
+  - **Causa Raíz (Descubierta con Logs)**:
+    - Log mostraba CIENTOS de resets en la misma barra: Bar:2180 Time:08:21:00
+    - En modo Calculate.OnEachTick, lógica "touched again" se ejecutaba en CADA TICK
+    - Condición `if (high >= session.High)` era true para CADA TICK mientras precio arriba del nivel
+    - Resultado: `highAnchorSequence` reseteado a 0 constantemente → siempre Entry 01
+  - **Solución**:
+    - Agregadas variables de tracking: `lastHighSeqResetBar`, `lastLowSeqResetBar` (línea ~105-106)
+    - Verificación `CurrentBar != lastHighSeqResetBar` antes de resetear
+    - Aplicado a TODAS las ubicaciones de reset (6 total):
+      1. HIGH level first break (línea ~2052)
+      2. HIGH level touched again (línea ~2153)
+      3. LOW level first break (línea ~2178)
+      4. LOW level touched again (línea ~2283)
+      5. Cruzó LOW VWAP (línea ~1691)
+      6. Cruzó HIGH VWAP (línea ~1708)
+  - **Resultado**: Ahora resetea MÁXIMO UNA VEZ por barra → Entry secuencia incrementa correctamente: 01, 02, 03...
+
+- **Agregado Logging Detallado para Diagnóstico**: Se agregaron logs de "Seq BEFORE" y "Seq AFTER" para rastrear incrementos de secuencia.
+  - Ayudó a identificar ambos bugs críticos
+  - Categorías: [SIGNAL2] y [SEQ_RESET]
+
 ## [1.0.47] - 2026-01-26
 ### Corregido
 - **Entry Seguía Mostrando Solo "01" (Bug en v1.0.46)**: Se corrigió el lugar donde se resetea la secuencia de Entry.
