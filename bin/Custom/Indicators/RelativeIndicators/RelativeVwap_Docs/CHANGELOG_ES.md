@@ -25,7 +25,10 @@ y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - **Simplificación de Etiquetas - Un Solo Formato**: Se eliminaron los 3 modos de etiquetas (Default, Simple, Custom) y se dejó solo el formato con secuencias.
   - **Antes**: LabelDisplayMode con 3 opciones (Default, Simple, Custom)
   - **Ahora**: Solo un formato fijo para todas las etiquetas:
-    - Liquidity Grabbed: "Liquidity\nGrabbed 01", "02", "03"...
+    - Liquidity Grabbed: 3 líneas mostrando "Liquidity\nGrabbed 01\nUSA High" o "Liquidity\nGrabbed 02\nAsia Low"
+      - Línea 1: "Liquidity"
+      - Línea 2: "Grabbed 01" (con número de secuencia)
+      - Línea 3: "USA High" (sesión + tipo de nivel)
     - Entry: "Entry 01", "Entry 02", "Entry 03"...
     - Confirm: "Confirm" (Signal 3 - confirmación)
   - **Ubicaciones simplificadas** (6 total):
