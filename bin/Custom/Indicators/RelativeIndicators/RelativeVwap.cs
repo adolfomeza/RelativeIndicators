@@ -694,6 +694,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
           if (iHVal < priceLimit)
               iHVal = Values[2].IsValidDataPointAt(CurrentBar - 1) ? Values[2][1] : Close[0];
           Values[2][0] = iHVal; // Internal High VWAP
+          // v1.0.49: Debug logging for internal VWAP
+          if (CurrentBar >= internalHighBarIdx && CurrentBar <= internalHighBarIdx + 5) {
+              LogToFile(string.Format("INTERNAL HIGH VWAP CALC | Bar:{0} | AnchorBar:{1} | PV:{2:F2} | Vol:{3:F2} | VWAP:{4:F2}",
+                  CurrentBar, internalHighBarIdx, internalHighPV, internalHighVol, iHVal), "INTERNAL_VWAP");
+          }
       } else {
           Values[2][0] = double.NaN;
       }
@@ -704,6 +709,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
           if (iLVal < priceLimit)
               iLVal = Values[3].IsValidDataPointAt(CurrentBar - 1) ? Values[3][1] : Close[0];
           Values[3][0] = iLVal; // Internal Low VWAP
+          // v1.0.49: Debug logging for internal VWAP
+          if (CurrentBar >= internalLowBarIdx && CurrentBar <= internalLowBarIdx + 5) {
+              LogToFile(string.Format("INTERNAL LOW VWAP CALC | Bar:{0} | AnchorBar:{1} | PV:{2:F2} | Vol:{3:F2} | VWAP:{4:F2}",
+                  CurrentBar, internalLowBarIdx, internalLowPV, internalLowVol, iLVal), "INTERNAL_VWAP");
+          }
       } else {
           Values[3][0] = double.NaN;
       }
