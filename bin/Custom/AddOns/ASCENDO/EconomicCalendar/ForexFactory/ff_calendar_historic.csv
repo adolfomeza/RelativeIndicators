@@ -100123,7 +100123,7 @@ Date,Country,Impact,Title,Forecast,Previous
 2026-01-26 13:30:00,USD,Medium,Durable Goods Orders m/m,3.1%,-2.2%
 2026-01-26 13:33:00,EUR,Low,Belgian NBB Business Climate,-10.2,-11.9
 2026-01-26 23:50:00,JPY,Low,SPPI y/y,2.7%,2.7%
-2026-01-27 00:01:00,GBP,Low,BRC Shop Price Index y/y,0.7%,0.6%
+2026-01-27 00:01:00,GBP,Low,BRC Shop Price Index y/y,0.7%,0.7%
 2026-01-27 00:30:00,AUD,Low,NAB Business Confidence,,1
 2026-01-27 02:00:00,NZD,Low,Credit Card Spending y/y,,4.7%
 2026-01-27 05:00:00,JPY,Low,BOJ Core CPI y/y,2.0%,2.2%
@@ -100159,13 +100159,12 @@ Date,Country,Impact,Title,Forecast,Previous
 2026-01-29 07:00:00,CHF,Low,Trade Balance,4.85B,3.84B
 2026-01-29 09:00:00,EUR,Low,M3 Money Supply y/y,3.0%,3.0%
 2026-01-29 09:00:00,EUR,Low,Private Loans y/y,2.9%,2.9%
-2026-01-29 10:33:00,EUR,Low,Italian 10-y Bond Auction,,
 2026-01-29 13:30:00,CAD,Low,Trade Balance,-0.7B,-0.6B
-2026-01-29 13:30:00,USD,High,Unemployment Claims,202K,200K
+2026-01-29 13:30:00,USD,High,Unemployment Claims,206K,200K
 2026-01-29 13:30:00,USD,Low,Revised Nonfarm Productivity q/q,4.9%,4.9%
 2026-01-29 13:30:00,USD,Low,Revised Unit Labor Costs q/q,-1.9%,-1.9%
-2026-01-29 13:30:00,USD,Low,Trade Balance,-44.5B,-29.4B
-2026-01-29 15:00:00,USD,Low,Factory Orders m/m,0.5%,-1.3%
+2026-01-29 13:30:00,USD,Low,Trade Balance,-43.4B,-29.4B
+2026-01-29 15:00:00,USD,Low,Factory Orders m/m,1.7%,-1.3%
 2026-01-29 15:00:00,USD,Low,Final Wholesale Inventories m/m,0.2%,0.2%
 2026-01-29 15:30:00,USD,Low,Natural Gas Storage,,-120B
 2026-01-29 23:30:00,JPY,Low,Unemployment Rate,2.6%,2.6%
@@ -100180,10 +100179,10 @@ Date,Country,Impact,Title,Forecast,Previous
 2026-01-30 07:00:00,EUR,Low,German Import Prices m/m,-0.4%,0.5%
 2026-01-30 07:29:00,EUR,Medium,German Prelim CPI m/m,0.0%,0.0%
 2026-01-30 07:45:00,EUR,Low,French Prelim Private Payrolls q/q,0.1%,-0.1%
-2026-01-30 08:00:00,CHF,Low,KOF Economic Barometer,103.2,103.4
+2026-01-30 08:00:00,CHF,Low,KOF Economic Barometer,103.1,103.4
 2026-01-30 08:00:00,EUR,Low,Spanish Flash CPI y/y,2.4%,2.9%
 2026-01-30 08:00:00,EUR,Low,Spanish Flash GDP q/q,0.6%,0.6%
-2026-01-30 08:55:00,EUR,Low,German Unemployment Change,5K,3K
+2026-01-30 08:55:00,EUR,Low,German Unemployment Change,4K,3K
 2026-01-30 09:00:00,EUR,Low,Italian Prelim GDP q/q,0.2%,0.0%
 2026-01-30 09:00:00,EUR,Medium,German Prelim GDP q/q,0.2%,0.0%
 2026-01-30 09:30:00,GBP,Low,M4 Money Supply m/m,0.3%,0.8%
@@ -100193,9 +100192,9 @@ Date,Country,Impact,Title,Forecast,Previous
 2026-01-30 10:00:00,EUR,Low,Prelim Flash GDP q/q,0.2%,0.2%
 2026-01-30 10:00:00,EUR,Low,Unemployment Rate,6.3%,6.3%
 2026-01-30 13:30:00,CAD,High,GDP m/m,0.1%,-0.3%
-2026-01-30 13:30:00,USD,High,Core PPI m/m,0.3%,0.0%
+2026-01-30 13:30:00,USD,High,Core PPI m/m,0.2%,0.0%
 2026-01-30 13:30:00,USD,High,PPI m/m,0.2%,0.2%
-2026-01-30 14:45:00,USD,Low,Chicago PMI,43.3,43.5
+2026-01-30 14:45:00,USD,Low,Chicago PMI,43.5,43.5
 2026-01-30 17:30:00,USD,Low,FOMC Member Musalem Speaks,,
-2026-01-31 01:30:00,CNY,Low,Non-Manufacturing PMI,50.8,50.2
-2026-01-31 01:30:00,CNY,Medium,Manufacturing PMI,50.2,50.1
+2026-01-31 01:30:00,CNY,Low,Non-Manufacturing PMI,50.3,50.2
+2026-01-31 01:30:00,CNY,Medium,Manufacturing PMI,50.1,50.1

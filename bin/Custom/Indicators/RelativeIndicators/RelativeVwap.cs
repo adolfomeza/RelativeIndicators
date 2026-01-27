@@ -997,7 +997,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                          highLiqGrabBarIdx = CurrentBar;
                          highLiqGrabExtreme = High[0];
 
-                         Print(string.Format("[DEBUG LG] Bar:{0} | HIGH Anchor Swept | NewSeq:{1} | AnchorBar:{2} | AnchorHigh:{3:F2} | CurrentHigh:{4:F2}",
+                         // v1.0.47: Reset tracker to allow new Signal 2 for this sweep
+                         lastSignaledHighAnchorBar = -1;
+                         highSignal2Fired = false;
+
+                         Print(string.Format("[DEBUG LG] Bar:{0} | HIGH Anchor Swept | NewSeq:{1} | AnchorBar:{2} | AnchorHigh:{3:F2} | CurrentHigh:{4:F2} | Tracker RESET",
                              CurrentBar, highLiqGrabSequence, sessionHighBarIdx, anchorHigh, High[0]));
                      }
                  }
@@ -1018,7 +1022,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                          lowLiqGrabBarIdx = CurrentBar;
                          lowLiqGrabExtreme = Low[0];
 
-                         Print(string.Format("[DEBUG LG] Bar:{0} | LOW Anchor Swept | NewSeq:{1} | AnchorBar:{2} | AnchorLow:{3:F2} | CurrentLow:{4:F2}",
+                         // v1.0.47: Reset tracker to allow new Signal 2 for this sweep
+                         lastSignaledLowAnchorBar = -1;
+                         lowSignal2Fired = false;
+
+                         Print(string.Format("[DEBUG LG] Bar:{0} | LOW Anchor Swept | NewSeq:{1} | AnchorBar:{2} | AnchorLow:{3:F2} | CurrentLow:{4:F2} | Tracker RESET",
                              CurrentBar, lowLiqGrabSequence, sessionLowBarIdx, anchorLow, Low[0]));
                      }
                  }

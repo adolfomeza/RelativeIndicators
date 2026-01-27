@@ -440,3 +440,12 @@
 2026-01-26 20:23:19:632|1|2|Simulation account 'Playback101' reset
 2026-01-26 20:28:25:580|1|2|Simulation account 'Playback101' reset
 2026-01-26 20:29:17:529|1|2|Simulation account 'Playback101' reset
+2026-01-26 21:55:48:968|1|2|Playback: Primary connection=Disconnecting, Price feed=Disconnecting
+2026-01-26 21:55:48:970|1|2|Playback: Primary connection=Disconnected, Price feed=Disconnected
+2026-01-26 21:55:51:215|1|2|Simulation: Primary connection=Connecting, Price feed=Connecting
+2026-01-26 21:56:28:042|1|2|Simulation: Primary connection=Connected, Price feed=Connected
+2026-01-26 21:56:28:111|1|2|Time to auto close position='12:00:00 a. m.', Enabled=False
+2026-01-26 21:56:28:111|1|2|Using HDS (hds-us-nt-020.ninjatrader.com/31655)
+2026-01-26 22:28:19:752|1|4|Workspace Relative Trading Software saved
+2026-01-26 22:28:20:438|1|2|Simulation: Primary connection=Disconnecting, Price feed=Disconnecting
+2026-01-26 22:28:21:949|1|2|Simulation: Primary connection=Disconnected, Price feed=Disconnected
