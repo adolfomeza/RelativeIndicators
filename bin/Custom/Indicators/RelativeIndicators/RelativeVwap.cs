@@ -949,7 +949,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                          if (ShowSignalLabels)
                          {
                              // v1.0.45: Format with sequence number: "Liquidity\nGrabbed 01"
-                             string code = string.Format("Liquidity\nGrabbed {0:00}", highLiqGrabSequence);
+                             // v1.0.49: 3 lines - add session name and HIGH/LOW
+                             string code = string.Format("Liquidity\nGrabbed {0:00}\n{1} High", highLiqGrabSequence, highLiqGrabSessionName);
                              SimpleFont font = new SimpleFont("Arial", LabelFontSize);
                              // v1.0.45: Use sequence in tag to allow multiple labels
                              Draw.Text(this, "Sig1H_Txt_" + highLiqGrabSessionName + "_" + highLiqGrabSequence, true, code, 0, newY, LabelTextOffset, SignalColor, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
@@ -977,7 +978,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                          if (ShowSignalLabels)
                          {
                              // v1.0.45: Format with sequence number: "Liquidity\nGrabbed 01"
-                             string code = string.Format("Liquidity\nGrabbed {0:00}", lowLiqGrabSequence);
+                             // v1.0.49: 3 lines - add session name and HIGH/LOW
+                             string code = string.Format("Liquidity\nGrabbed {0:00}\n{1} Low", lowLiqGrabSequence, lowLiqGrabSessionName);
                              SimpleFont font = new SimpleFont("Arial", LabelFontSize);
                              // v1.0.45: Use sequence in tag to allow multiple labels
                              Draw.Text(this, "Sig1L_Txt_" + lowLiqGrabSessionName + "_" + lowLiqGrabSequence, true, code, 0, newY, -LabelTextOffset, SignalColor, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
@@ -2085,8 +2087,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                             // Label (if ShowSignalLabels)
                             if (ShowSignalLabels)
                             {
-                                // v1.0.45: Format with sequence number: "Liquidity\nGrabbed 01"
-                                string labelCode = string.Format("Liquidity\nGrabbed {0:00}", highLiqGrabSequence);
+                                // v1.0.49: 3 lines - add session name and HIGH/LOW
+                                string labelCode = string.Format("Liquidity\nGrabbed {0:00}\n{1} High", highLiqGrabSequence, session.Name);
                                 SimpleFont font = new SimpleFont("Arial", LabelFontSize);
                                 // v1.0.45: Use sequence in tag to allow multiple labels
                                 Draw.Text(this, "Sig1H_Txt_" + session.Name + "_" + highLiqGrabSequence, true, labelCode, 0, triY, LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
@@ -2202,8 +2204,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                              // Label (if ShowSignalLabels)
                              if (ShowSignalLabels)
                              {
-                                 // v1.0.45: Format with sequence number: "Liquidity\nGrabbed 01"
-                                 string labelCode = string.Format("Liquidity\nGrabbed {0:00}", lowLiqGrabSequence);
+                                 // v1.0.49: 3 lines - add session name and HIGH/LOW
+                                 string labelCode = string.Format("Liquidity\nGrabbed {0:00}\n{1} Low", lowLiqGrabSequence, session.Name);
                                  SimpleFont font = new SimpleFont("Arial", LabelFontSize);
                                  // v1.0.45: Use sequence in tag to allow multiple labels
                                  Draw.Text(this, "Sig1L_Txt_" + session.Name + "_" + lowLiqGrabSequence, true, labelCode, 0, triY, -LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
