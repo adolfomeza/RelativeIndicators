@@ -2045,9 +2045,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                         highHasTakenRelevant = true;
                         highSignalFired = false; // UNLOCK SIGNAL (New Level Hit)
                         lastUnlockedHighSession = session; // FIX: Store session for TP2 Logic
-                        // v1.0.47: Reset OPPOSITE sequence (LOW Entry resets when touches HIGH level)
-                        lowAnchorSequence = 0;
-                        LogToFile(string.Format("RESET lowAnchorSequence=0 | Reason: Touched HIGH level | Session:{0} | High:{1:F2}",
+                        // v1.0.48: Reset SAME SIDE sequence (HIGH level break → SHORT signals will use this VWAP)
+                        highAnchorSequence = 0;
+                        LogToFile(string.Format("RESET highAnchorSequence=0 | Reason: Touched HIGH level | Session:{0} | High:{1:F2}",
                             session.Name, high), "SEQ_RESET");
                         // v1.0.45: Reset Liquidity Grab sequence and state
                         highLiqGrabSequence = 1;
@@ -2146,12 +2146,14 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                 // } REMOVED ORPHAN BRACE
 
                     }
-                    // v1.0.47: Reset sequence when touches level AGAIN (not first time)
+                    // v1.0.48: Reset sequence when touches level AGAIN (not first time)
                     else if (session.HighBrokenBarIdx != -1 && high >= session.High)
                     {
-                        // Already broken before, but touching again - reset opposite sequence
-                        lowAnchorSequence = 0;
-                        Print(string.Format("[DEBUG SEQ] Bar:{0} | Touched HIGH again (already broken) | Session:{1} | Reset lowAnchorSequence=0",
+                        // Already broken before, but touching again - reset SAME SIDE sequence
+                        highAnchorSequence = 0;
+                        LogToFile(string.Format("RESET highAnchorSequence=0 | Reason: Touched HIGH level again | Session:{0}",
+                            session.Name), "SEQ_RESET");
+                        Print(string.Format("[DEBUG SEQ] Bar:{0} | Touched HIGH again (already broken) | Session:{1} | Reset highAnchorSequence=0",
                             CurrentBar, session.Name));
                     }
 
@@ -2169,8 +2171,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                          lowHasTakenRelevant = true;
                          lowSignalFired = false; // UNLOCK SIGNAL
                          lastUnlockedLowSession = session; // FIX: Store session for TP2 Logic
-                         // v1.0.47: Reset OPPOSITE sequence (HIGH Entry resets when touches LOW level)
-                         highAnchorSequence = 0;
+                         // v1.0.48: Reset SAME SIDE sequence (LOW level break → LONG signals will use this VWAP)
+                         lowAnchorSequence = 0;
+                         LogToFile(string.Format("RESET lowAnchorSequence=0 | Reason: Touched LOW level | Session:{0} | Low:{1:F2}",
+                             session.Name, low), "SEQ_RESET");
                          // v1.0.45: Reset Liquidity Grab sequence and state
                          lowLiqGrabSequence = 1;
                          lowLiqGrabLocked = false;
@@ -2268,10 +2272,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                     // v1.0.47: Reset sequence when touches level AGAIN (not first time)
                     else if (session.LowBrokenBarIdx != -1 && low <= session.Low)
                     {
-                        // Already broken before, but touching again - reset opposite sequence
-                        highAnchorSequence = 0;
-                        Print(string.Format("[DEBUG SEQ] Bar:{0} | Touched LOW again (already broken) | Session:{1} | Reset highAnchorSequence=0",
-                            CurrentBar, session.Name));
+                        // v1.0.48: Reset SAME SIDE sequence (LOW level → LONG signals use this VWAP)
+                        lowAnchorSequence = 0;
+                        LogToFile(string.Format("RESET lowAnchorSequence=0 | Reason: Touched LOW level again | Session:{0}",
+                            session.Name), "SEQ_RESET");
                     }
                 }
             }
