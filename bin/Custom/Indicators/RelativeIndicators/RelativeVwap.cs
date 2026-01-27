@@ -100,6 +100,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         private bool lowLiqGrabLocked = false;   // Locked when Signal 2 fires
         private int highLiqGrabSequence = 1;     // Sequence number (01, 02, 03, etc.)
         private int lowLiqGrabSequence = 1;      // Sequence number
+        // v1.0.48: Track last bar where sequence was reset to prevent multiple resets per bar
+        private int lastHighSeqResetBar = -1;    // Last bar where highAnchorSequence was reset
+        private int lastLowSeqResetBar = -1;     // Last bar where lowAnchorSequence was reset
 
         // Session Levels Tracking
         public class SessionLevelInfo
@@ -1680,7 +1683,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
              // v1.0.47: Reset sequence when price crosses OPPOSITE VWAP
              // If SHORT side (highAnchorSequence > 0) and price touches LOW VWAP → reset SHORT sequence
-             if (highAnchorSequence > 0 && sessionLowBarIdx >= 0 && lowHasTakenRelevant)
+             // v1.0.48: Only reset once per bar to avoid spam in OnEachTick mode
+             if (highAnchorSequence > 0 && sessionLowBarIdx >= 0 && lowHasTakenRelevant && CurrentBar != lastHighSeqResetBar)
              {
                  double lVwap = Values[1][0];
                  if (Low[0] <= lVwap)
@@ -1689,6 +1693,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                      highLiqGrabSequence = 1;
                      highLiqGrabLocked = false;
                      highLiqGrabBarIdx = -1;
+                     lastHighSeqResetBar = CurrentBar; // Track this bar to prevent multiple resets
                      LogToFile(string.Format("RESET highAnchorSequence=0 | Reason: Touched LOW VWAP | Low:{0:F2} <= VWAP:{1:F2}",
                          Low[0], lVwap), "SEQ_RESET");
                      Print(string.Format("[DEBUG VWAP CROSS] Bar:{0} | Touched LOW VWAP | Low:{1:F2} <= VWAP:{2:F2} | Reset highAnchorSequence=0",
@@ -1697,7 +1702,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
              }
 
              // If LONG side (lowAnchorSequence > 0) and price touches HIGH VWAP → reset LONG sequence
-             if (lowAnchorSequence > 0 && sessionHighBarIdx >= 0 && highHasTakenRelevant)
+             // v1.0.48: Only reset once per bar to avoid spam in OnEachTick mode
+             if (lowAnchorSequence > 0 && sessionHighBarIdx >= 0 && highHasTakenRelevant && CurrentBar != lastLowSeqResetBar)
              {
                  double hVwap = Values[0][0];
                  if (High[0] >= hVwap)
@@ -1706,6 +1712,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                      lowLiqGrabSequence = 1;
                      lowLiqGrabLocked = false;
                      lowLiqGrabBarIdx = -1;
+                     lastLowSeqResetBar = CurrentBar; // Track this bar to prevent multiple resets
                      LogToFile(string.Format("RESET lowAnchorSequence=0 | Reason: Touched HIGH VWAP | High:{0:F2} >= VWAP:{1:F2}",
                          High[0], hVwap), "SEQ_RESET");
                      Print(string.Format("[DEBUG VWAP CROSS] Bar:{0} | Touched HIGH VWAP | High:{1:F2} >= VWAP:{2:F2} | Reset lowAnchorSequence=0",
@@ -2047,6 +2054,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                         lastUnlockedHighSession = session; // FIX: Store session for TP2 Logic
                         // v1.0.48: Reset SAME SIDE sequence (HIGH level break → SHORT signals will use this VWAP)
                         highAnchorSequence = 0;
+                        lastHighSeqResetBar = CurrentBar; // Track this bar to prevent multiple resets
                         LogToFile(string.Format("RESET highAnchorSequence=0 | Reason: Touched HIGH level | Session:{0} | High:{1:F2}",
                             session.Name, high), "SEQ_RESET");
                         // v1.0.45: Reset Liquidity Grab sequence and state
@@ -2147,10 +2155,12 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
                     }
                     // v1.0.48: Reset sequence when touches level AGAIN (not first time)
-                    else if (session.HighBrokenBarIdx != -1 && high >= session.High)
+                    // Only reset once per bar to avoid spam in OnEachTick mode
+                    else if (session.HighBrokenBarIdx != -1 && high >= session.High && CurrentBar != lastHighSeqResetBar)
                     {
                         // Already broken before, but touching again - reset SAME SIDE sequence
                         highAnchorSequence = 0;
+                        lastHighSeqResetBar = CurrentBar; // Track this bar to prevent multiple resets
                         LogToFile(string.Format("RESET highAnchorSequence=0 | Reason: Touched HIGH level again | Session:{0}",
                             session.Name), "SEQ_RESET");
                         Print(string.Format("[DEBUG SEQ] Bar:{0} | Touched HIGH again (already broken) | Session:{1} | Reset highAnchorSequence=0",
@@ -2173,6 +2183,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                          lastUnlockedLowSession = session; // FIX: Store session for TP2 Logic
                          // v1.0.48: Reset SAME SIDE sequence (LOW level break → LONG signals will use this VWAP)
                          lowAnchorSequence = 0;
+                         lastLowSeqResetBar = CurrentBar; // Track this bar to prevent multiple resets
                          LogToFile(string.Format("RESET lowAnchorSequence=0 | Reason: Touched LOW level | Session:{0} | Low:{1:F2}",
                              session.Name, low), "SEQ_RESET");
                          // v1.0.45: Reset Liquidity Grab sequence and state
@@ -2270,10 +2281,12 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
                     }
                     // v1.0.47: Reset sequence when touches level AGAIN (not first time)
-                    else if (session.LowBrokenBarIdx != -1 && low <= session.Low)
+                    // v1.0.48: Only reset once per bar to avoid spam in OnEachTick mode
+                    else if (session.LowBrokenBarIdx != -1 && low <= session.Low && CurrentBar != lastLowSeqResetBar)
                     {
                         // v1.0.48: Reset SAME SIDE sequence (LOW level → LONG signals use this VWAP)
                         lowAnchorSequence = 0;
+                        lastLowSeqResetBar = CurrentBar; // Track this bar to prevent multiple resets
                         LogToFile(string.Format("RESET lowAnchorSequence=0 | Reason: Touched LOW level again | Session:{0}",
                             session.Name), "SEQ_RESET");
                     }
