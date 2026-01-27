@@ -103,6 +103,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         // v1.0.48: Track last bar where sequence was reset to prevent multiple resets per bar
         private int lastHighSeqResetBar = -1;    // Last bar where highAnchorSequence was reset
         private int lastLowSeqResetBar = -1;     // Last bar where lowAnchorSequence was reset
+        // v1.0.49: Track if grabbed level is internal (not day extreme)
+        private bool highLiqGrabIsInternal = false;  // True if session.High < currentDayHigh (internal level)
+        private bool lowLiqGrabIsInternal = false;   // True if session.Low > currentDayLow (internal level)
 
         // Session Levels Tracking
         public class SessionLevelInfo
@@ -570,6 +573,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             lowLiqGrabLocked = false;
             highLiqGrabSequence = 1;
             lowLiqGrabSequence = 1;
+            // v1.0.49: Reset internal level tracking
+            highLiqGrabIsInternal = false;
+            lowLiqGrabIsInternal = false;
 
             if (ShowDebugLabels)
                 Draw.Text(this, "Reset" + CurrentBar, "RESET", 0, Low[0] - 5 * TickSize, Brushes.Red);
@@ -951,9 +957,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                          Draw.TriangleDown(this, "TakeHigh_" + highLiqGrabSessionName, true, 0, newY, SignalColor);
                          if (ShowSignalLabels)
                          {
-                             // v1.0.45: Format with sequence number: "Liquidity\nGrabbed 01"
-                             // v1.0.49: 3 lines - add session name and HIGH/LOW
-                             string code = string.Format("Liquidity\nGrabbed {0:00}\n{1} High", highLiqGrabSequence, highLiqGrabSessionName);
+                             // v1.0.49: 3 lines - add session name, HIGH/LOW, and internal marker
+                             string internalMarker = highLiqGrabIsInternal ? " (i)" : "";
+                             string code = string.Format("Liquidity\nGrabbed {0:00}\n{1} High{2}", highLiqGrabSequence, highLiqGrabSessionName, internalMarker);
                              SimpleFont font = new SimpleFont("Arial", LabelFontSize);
                              // v1.0.45: Use sequence in tag to allow multiple labels
                              Draw.Text(this, "Sig1H_Txt_" + highLiqGrabSessionName + "_" + highLiqGrabSequence, true, code, 0, newY, LabelTextOffset, SignalColor, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
@@ -980,9 +986,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                          Draw.TriangleUp(this, "TakeLow_" + lowLiqGrabSessionName, true, 0, newY, SignalColor);
                          if (ShowSignalLabels)
                          {
-                             // v1.0.45: Format with sequence number: "Liquidity\nGrabbed 01"
-                             // v1.0.49: 3 lines - add session name and HIGH/LOW
-                             string code = string.Format("Liquidity\nGrabbed {0:00}\n{1} Low", lowLiqGrabSequence, lowLiqGrabSessionName);
+                             // v1.0.49: 3 lines - add session name, HIGH/LOW, and internal marker
+                             string internalMarker = lowLiqGrabIsInternal ? " (i)" : "";
+                             string code = string.Format("Liquidity\nGrabbed {0:00}\n{1} Low{2}", lowLiqGrabSequence, lowLiqGrabSessionName, internalMarker);
                              SimpleFont font = new SimpleFont("Arial", LabelFontSize);
                              // v1.0.45: Use sequence in tag to allow multiple labels
                              Draw.Text(this, "Sig1L_Txt_" + lowLiqGrabSessionName + "_" + lowLiqGrabSequence, true, code, 0, newY, -LabelTextOffset, SignalColor, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
@@ -2088,12 +2094,15 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                             Draw.TriangleDown(this, "TakeHigh_" + session.Name, true, 0, triY, sigBrush);
 
                             // Label (if ShowSignalLabels)
+                            // v1.0.49: Determine if this is an internal level (not day extreme)
+                            highLiqGrabIsInternal = (session.High < currentDayHigh);
+
                             if (ShowSignalLabels)
                             {
-                                // v1.0.49: 3 lines - add session name and HIGH/LOW
-                                string labelCode = string.Format("Liquidity\nGrabbed {0:00}\n{1} High", highLiqGrabSequence, session.Name);
+                                // v1.0.49: 3 lines - add session name, HIGH/LOW, and internal marker
+                                string internalMarker = highLiqGrabIsInternal ? " (i)" : "";
+                                string labelCode = string.Format("Liquidity\nGrabbed {0:00}\n{1} High{2}", highLiqGrabSequence, session.Name, internalMarker);
                                 SimpleFont font = new SimpleFont("Arial", LabelFontSize);
-                                // v1.0.45: Use sequence in tag to allow multiple labels
                                 Draw.Text(this, "Sig1H_Txt_" + session.Name + "_" + highLiqGrabSequence, true, labelCode, 0, triY, LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
                             }
 
@@ -2204,13 +2213,16 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                              // v1.0.24: Use session-based tag (not CurrentBar) so we can move the label
                              Draw.TriangleUp(this, "TakeLow_" + session.Name, true, 0, triY, sigBrush);
 
+                             // v1.0.49: Determine if this is an internal level (not day extreme)
+                             lowLiqGrabIsInternal = (session.Low > currentDayLow);
+
                              // Label (if ShowSignalLabels)
                              if (ShowSignalLabels)
                              {
-                                 // v1.0.49: 3 lines - add session name and HIGH/LOW
-                                 string labelCode = string.Format("Liquidity\nGrabbed {0:00}\n{1} Low", lowLiqGrabSequence, session.Name);
+                                 // v1.0.49: 3 lines - add session name, HIGH/LOW, and internal marker
+                                 string internalMarker = lowLiqGrabIsInternal ? " (i)" : "";
+                                 string labelCode = string.Format("Liquidity\nGrabbed {0:00}\n{1} Low{2}", lowLiqGrabSequence, session.Name, internalMarker);
                                  SimpleFont font = new SimpleFont("Arial", LabelFontSize);
-                                 // v1.0.45: Use sequence in tag to allow multiple labels
                                  Draw.Text(this, "Sig1L_Txt_" + session.Name + "_" + lowLiqGrabSequence, true, labelCode, 0, triY, -LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
                              }
 
