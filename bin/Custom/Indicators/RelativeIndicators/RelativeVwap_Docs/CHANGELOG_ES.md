@@ -40,6 +40,13 @@ y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
     - Línea ~1509: LONG Confirm (Signal 3)
   - **Removidas**: Propiedades CustomSignal1Text, CustomSignal2Text, CustomSignal3Text, LabelDisplayMode (ya no se usan)
 
+- **Organización de Logs en Carpeta Dedicada**: Los archivos de log ahora se guardan en una subcarpeta para mejor organización.
+  - **Antes**: `trace/RelativeVwap_Debug_YYYYMMDD.txt`
+  - **Ahora**: `trace/RelativeVwap/RelativeVwap_Debug_YYYYMMDD.txt`
+  - La carpeta `RelativeVwap` se crea automáticamente si no existe
+  - Mantiene los logs del indicador organizados separadamente de otros logs de NinjaTrader
+  - Actualizada la descripción del parámetro "Logging a Archivo" con la nueva ruta
+
 ## [1.0.48] - 2026-01-27
 ### Corregido
 - **CRÍTICO: Lógica de Reset Invertida (Bug en v1.0.47)**: Se corrigió el bug donde se reseteaba la secuencia del lado OPUESTO en lugar del MISMO lado.
