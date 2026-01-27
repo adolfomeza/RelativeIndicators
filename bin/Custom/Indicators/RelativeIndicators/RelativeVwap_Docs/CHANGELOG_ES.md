@@ -22,6 +22,37 @@ y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
   - **Resultado**: Entry labels ahora incrementan correctamente: 01, 02, 03, 04...
 
 ### Agregado
+- **VWAP Interno para Trades de Continuación**: Cuando se toma liquidez de un nivel interno, se crea un VWAP adicional específico para ese nivel.
+  - **Propósito**: Permite detectar señales de continuación en niveles internos independientemente del VWAP principal
+  - **Funcionamiento**:
+    1. Precio toma liquidez de nivel interno (ejemplo: Europe High cuando USA High > Europe High)
+    2. Se crea un VWAP anclado específicamente a ese nivel interno (Europe High)
+    3. Cuando precio se separa de ese VWAP interno → Signal 2 dispara
+    4. Entry labels para trades de continuación usan el VWAP interno
+  - **Visual**:
+    - VWAP Interno HIGH: Línea naranja punteada (Values[2])
+    - VWAP Interno LOW: Línea naranja punteada (Values[3])
+    - VWAP Principal: Líneas cyan (sin cambios)
+  - **Variables nuevas** (línea ~56-67):
+    - `internalHighPV`, `internalHighVol`, `internalHighBarIdx`, `internalHighPrice`
+    - `internalLowPV`, `internalLowVol`, `internalLowBarIdx`, `internalLowPrice`
+    - `hasInternalHighVWAP`, `hasInternalLowVWAP` (banderas de activación)
+  - **Creación** (CheckTouches):
+    - Línea ~2142: Crea VWAP interno HIGH cuando `highLiqGrabIsInternal=true`
+    - Línea ~2277: Crea VWAP interno LOW cuando `lowLiqGrabIsInternal=true`
+    - Anclado al precio del nivel de sesión (session.High/Low)
+    - Inicializado con volumen de la barra actual
+  - **Cálculo** (acumulación en cada barra):
+    - Línea ~933-934: Acumulación Realtime (OnEachTick)
+    - Línea ~955-962: Acumulación Historical (OnBarClose)
+    - Línea ~685-705: Actualización de Values[2] y Values[3]
+  - **Señales Signal 2**:
+    - Línea ~1117: Señales SHORT usan VWAP interno HIGH si existe
+    - Línea ~1433: Señales LONG usan VWAP interno LOW si existe
+    - Lógica: `hasInternalHighVWAP ? Values[2][0] : currentHighVWAP`
+  - **Reset**: ResetSession (línea ~594-605)
+  - **Resultado**: Los traders obtienen señales de continuación válidas en niveles internos que antes no tenían VWAP propio
+
 - **Detección Automática de Niveles Internos**: Las etiquetas "Liquidity Grabbed" ahora muestran "(i)" cuando el nivel no es el extremo del día.
   - **Nivel Interno**: Cuando el High/Low de una sesión NO es el máximo/mínimo del día
     - Ejemplo: Europe High = 25900 pero USA High = 26000 → Europe es interno
