@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.41";  // v1.0.41: Reset tracker on cancel + remove sync Dispatcher causing slowdown
+        private const string VERSION = "1.0.42";  // v1.0.42: Remove tracker reset on opposite level - requires new liquidity grab
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -1916,9 +1916,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                         highSignalFired = false; // UNLOCK SIGNAL (New Level Hit)
                         lastUnlockedHighSession = session; // FIX: Store session for TP2 Logic
                         highAnchorSequence = 0; // RESET SEQUENCE TO 0
-                        // v1.0.36: Reset OPPOSITE tracker when hitting session level (allows new signals on opposite side)
-                        lastSignaledLowAnchorBar = -1; // Reset LONG tracker when hitting HIGH level
-                        Print(string.Format("[DEBUG RESET] Bar:{0} | Session HIGH broken | Reset lastSignaledLowAnchorBar to -1", CurrentBar));
+                        // v1.0.42: REMOVED reset of opposite tracker - new Signal 2 requires new liquidity grab (new anchor), not just touching opposite level
+                        // Signal 2 tracker only resets when: 1) new anchor created, 2) signal cancelled (touched VWAP same bar)
 
                         // V_LOGIC: Hierarchy Check (Type A vs Type B) -> REMOVED (All signals are standard)
                         // session.IsInternalHigh = ...
@@ -2022,9 +2021,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                          lowSignalFired = false; // UNLOCK SIGNAL
                          lastUnlockedLowSession = session; // FIX: Store session for TP2 Logic
                          lowAnchorSequence = 0; // RESET
-                         // v1.0.36: Reset OPPOSITE tracker when hitting session level (allows new signals on opposite side)
-                         lastSignaledHighAnchorBar = -1; // Reset SHORT tracker when hitting LOW level
-                         Print(string.Format("[DEBUG RESET] Bar:{0} | Session LOW broken | Reset lastSignaledHighAnchorBar to -1", CurrentBar));
+                         // v1.0.42: REMOVED reset of opposite tracker - new Signal 2 requires new liquidity grab (new anchor), not just touching opposite level
+                         // Signal 2 tracker only resets when: 1) new anchor created, 2) signal cancelled (touched VWAP same bar)
 
                          // V_LOGIC: Hierarchy Check (Type A vs Type B) -> REMOVED
                          // session.IsInternalLow = ...

@@ -5,6 +5,27 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.0.42] - 2026-01-26
+### Corregido
+- **Señal 2 Aparece Sin Nuevo Liquidity Grab**: Se corrigió el bug donde aparecía una nueva Señal 2 inmediatamente después de que la anterior tocara el nivel opuesto, sin esperar un nuevo liquidity grab.
+  - **Problema Reportado**: Señal a las 10:35 toca nivel opuesto → inmediatamente aparece nueva señal a las 10:40 para el **mismo anchor** (Bar 5070).
+  - **Comportamiento Incorrecto**: Cuando se toca nivel opuesto, se reseteaba el tracker permitiendo nueva Señal 2 sin nuevo liquidity grab.
+  - **Causa**: En v1.0.36 se agregó reset de tracker opuesto al tocar nivel (líneas ~1920, ~2026): "Reset lastSignaledLowAnchorBar = -1 cuando toca session HIGH".
+  - **Secuencia Incorrecta**:
+    1. Liquidity Grab → Señal 2 (vela amarilla)
+    2. Toca nivel opuesto → Reset tracker
+    3. ❌ Nueva Señal 2 aparece inmediatamente (mismo anchor)
+  - **Secuencia Correcta**:
+    1. Liquidity Grab → Señal 2 (vela amarilla)
+    2. Toca nivel opuesto → NO resetear tracker
+    3. Solo permitir nueva Señal 2 cuando haya **NUEVO liquidity grab** (nuevo anchor)
+  - **Solución**: Removido reset de tracker opuesto en CheckTouches (líneas ~1919-1921, ~2024-2026).
+  - **Condiciones Reset Tracker** (actualizadas):
+    1. ✅ **Nuevo anchor** creado (nuevo liquidity grab)
+    2. ✅ **Señal cancelada** (tocó VWAP en misma barra)
+    3. ❌ ~~Toca nivel opuesto~~ (REMOVIDO - no resetea tracker)
+  - **Resultado**: Ahora nueva Señal 2 solo aparece después de nuevo liquidity grab, no solo por tocar nivel opuesto.
+
 ## [1.0.41] - 2026-01-26
 ### Corregido
 - **Velas Subsecuentes No Se Pintan + Ralentización Severa**: Se corrigieron dos bugs críticos reportados por el usuario.
