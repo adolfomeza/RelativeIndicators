@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.42";  // v1.0.42: Remove tracker reset on opposite level - requires new liquidity grab
+        private const string VERSION = "1.0.43";  // v1.0.43: Validate Signal 2 uses VWAP from same session as last Signal 1
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -81,6 +81,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         private int lastSignaledLowAnchorBar = -1;  // V_SIGNAL_2 Anchor Tracker
         private SessionLevelInfo lastUnlockedHighSession = null;
         private SessionLevelInfo lastUnlockedLowSession = null;
+        private SessionLevelInfo currentHighAnchorSession = null; // v1.0.43: Session that created current HIGH anchor
+        private SessionLevelInfo currentLowAnchorSession = null;  // v1.0.43: Session that created current LOW anchor
         
         // V_FIX_LIVE: Persistent Signal 2 Painting State
         private int highSignal2BarIdx = -1; // Tracks specific bar index for High Signal 2
@@ -1195,10 +1197,12 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                       // v1.0.33: DOUBLE CHECK - Both flag AND anchor tracker must allow signal
                       bool alreadyFired = highSignal2Fired;
                       bool alreadySignaledThisAnchor = (sessionHighBarIdx == lastSignaledHighAnchorBar);
-                      bool canFire = !alreadyFired && !alreadySignaledThisAnchor;
+                      // v1.0.43: TRIPLE CHECK - VWAP anchor must be from same session as last Signal 1
+                      bool sameLevelAsVwap = (lastUnlockedHighSession == currentHighAnchorSession);
+                      bool canFire = !alreadyFired && !alreadySignaledThisAnchor && sameLevelAsVwap;
 
-                      Print(string.Format("[DEBUG FLAG] Bar:{0} | SHORT Check | Flag:{1} | AnchorSignaled:{2} | AnchorBar:{3} | LastSignaled:{4} | CanFire:{5}",
-                          CurrentBar, alreadyFired, alreadySignaledThisAnchor, sessionHighBarIdx, lastSignaledHighAnchorBar, canFire));
+                      Print(string.Format("[DEBUG FLAG] Bar:{0} | SHORT Check | Flag:{1} | AnchorSignaled:{2} | AnchorBar:{3} | LastSignaled:{4} | SameLevel:{5} | CanFire:{6}",
+                          CurrentBar, alreadyFired, alreadySignaledThisAnchor, sessionHighBarIdx, lastSignaledHighAnchorBar, sameLevelAsVwap, canFire));
 
                       if (canFire)
                       {
@@ -1499,10 +1503,12 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                       // v1.0.33: DOUBLE CHECK - Both flag AND anchor tracker must allow signal
                       bool alreadyFired = lowSignal2Fired;
                       bool alreadySignaledThisAnchor = (sessionLowBarIdx == lastSignaledLowAnchorBar);
-                      bool canFire = !alreadyFired && !alreadySignaledThisAnchor;
+                      // v1.0.43: TRIPLE CHECK - VWAP anchor must be from same session as last Signal 1
+                      bool sameLevelAsVwap = (lastUnlockedLowSession == currentLowAnchorSession);
+                      bool canFire = !alreadyFired && !alreadySignaledThisAnchor && sameLevelAsVwap;
 
-                      Print(string.Format("[DEBUG FLAG] Bar:{0} | LONG Check | Flag:{1} | AnchorSignaled:{2} | AnchorBar:{3} | LastSignaled:{4} | CanFire:{5}",
-                          CurrentBar, alreadyFired, alreadySignaledThisAnchor, sessionLowBarIdx, lastSignaledLowAnchorBar, canFire));
+                      Print(string.Format("[DEBUG FLAG] Bar:{0} | LONG Check | Flag:{1} | AnchorSignaled:{2} | AnchorBar:{3} | LastSignaled:{4} | SameLevel:{5} | CanFire:{6}",
+                          CurrentBar, alreadyFired, alreadySignaledThisAnchor, sessionLowBarIdx, lastSignaledLowAnchorBar, sameLevelAsVwap, canFire));
 
                       if (canFire)
                       {
@@ -1908,10 +1914,18 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                             session.Name, CurrentBar, high, session.High, (activeTrades != null ? activeTrades.Count : -1)));
 
                         session.HighBrokenBarIdx = CurrentBar;
-                        
+
+                        // v1.0.43: If this level will become the new day high, save session
+                        // This allows Signal 2 to verify it's using VWAP from correct session
+                        if (session.High > currentDayHigh)
+                        {
+                            currentHighAnchorSession = session;
+                            Print(string.Format("[DEBUG ANCHOR] Bar:{0} | HIGH anchor session set: {1} (will create VWAP anchor)", CurrentBar, session.Name));
+                        }
+
                         // If this is the FIRST time we detect a High break for this VWAP session
                         if (!highHasTakenRelevant) highFirstBreakIdx = CurrentBar;
-                        
+
                         highHasTakenRelevant = true;
                         highSignalFired = false; // UNLOCK SIGNAL (New Level Hit)
                         lastUnlockedHighSession = session; // FIX: Store session for TP2 Logic
@@ -2014,9 +2028,17 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                              session.Name, CurrentBar, low, session.Low, (activeTrades != null ? activeTrades.Count : -1)));
 
                          session.LowBrokenBarIdx = CurrentBar;
-                         
+
+                         // v1.0.43: If this level will become the new day low, save session
+                         // This allows Signal 2 to verify it's using VWAP from correct session
+                         if (session.Low < currentDayLow)
+                         {
+                             currentLowAnchorSession = session;
+                             Print(string.Format("[DEBUG ANCHOR] Bar:{0} | LOW anchor session set: {1} (will create VWAP anchor)", CurrentBar, session.Name));
+                         }
+
                          if (!lowHasTakenRelevant) lowFirstBreakIdx = CurrentBar;
-                         
+
                          lowHasTakenRelevant = true;
                          lowSignalFired = false; // UNLOCK SIGNAL
                          lastUnlockedLowSession = session; // FIX: Store session for TP2 Logic

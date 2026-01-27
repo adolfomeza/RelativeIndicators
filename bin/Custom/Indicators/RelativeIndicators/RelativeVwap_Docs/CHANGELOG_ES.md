@@ -5,6 +5,29 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.0.43] - 2026-01-26
+### Corregido
+- **Señal 2 Usa VWAP de Nivel Diferente al Último Liquidity Grab**: Se corrigió el bug donde la Señal 2 usaba VWAP de un nivel diferente al que disparó la última Señal 1.
+  - **Problema Reportado**: Señal 2 a las 10:45 usa VWAP de **Asia Low** (AnchorBar:1764), pero la última Señal 1 fue de **Europa Low** (~21705).
+  - **Causa**: No había validación para verificar que el VWAP anchor correspondiera al mismo nivel (session) que disparó la última Señal 1.
+  - **Comportamiento Incorrecto**:
+    1. Señal 1: Toma **Europa Low** (~21705) - nivel interno, NO hay VWAP (solo se crean en máx/mín del día)
+    2. VWAP disponible: **Asia Low** (~21658) - mínimo del día
+    3. Señal 2: Usa VWAP de **Asia Low** ❌ (nivel diferente)
+  - **Comportamiento Correcto**:
+    1. Señal 1: Toma **Europa Low** - NO hay VWAP
+    2. Señal 2: NO debe dispararse (VWAP es de otro nivel)
+    3. Solo disparar Señal 2 cuando último nivel roto == nivel del VWAP
+  - **Solución Implementada**:
+    1. Nuevas variables `currentHighAnchorSession` / `currentLowAnchorSession` (líneas ~85-86)
+    2. Cuando se rompe nivel que será máx/mín del día, guardar session (líneas ~1920-1924, ~2030-2034)
+    3. Al disparar Señal 2, validar: `lastUnlockedHighSession == currentHighAnchorSession` (líneas ~1201, ~1507)
+    4. Si son diferentes → NO disparar Señal 2
+  - **Logging agregado**:
+    - `[DEBUG ANCHOR]` cuando se guarda session del anchor
+    - `[DEBUG FLAG]` ahora muestra `SameLevel` en validación Señal 2
+  - **Resultado**: Señal 2 solo se dispara si el VWAP corresponde al MISMO nivel que disparó la última Señal 1.
+
 ## [1.0.42] - 2026-01-26
 ### Corregido
 - **Señal 2 Aparece Sin Nuevo Liquidity Grab**: Se corrigió el bug donde aparecía una nueva Señal 2 inmediatamente después de que la anterior tocara el nivel opuesto, sin esperar un nuevo liquidity grab.
