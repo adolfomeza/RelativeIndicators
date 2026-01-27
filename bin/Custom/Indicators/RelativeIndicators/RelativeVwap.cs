@@ -518,6 +518,13 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                     Plots[1].Brush = LowVWAPColor;
                     Plots[1].Width = 0;
                 }
+                // v1.0.49: Configure internal VWAP plots (visible as orange dashed lines)
+                Plots[2].Brush = Brushes.Orange;
+                Plots[2].DashStyle = DashStyleHelper.Dash;
+                Plots[2].Width = 2;
+                Plots[3].Brush = Brushes.Orange;
+                Plots[3].DashStyle = DashStyleHelper.Dash;
+                Plots[3].Width = 2;
             }
             else if (State == State.Terminated)
             {
