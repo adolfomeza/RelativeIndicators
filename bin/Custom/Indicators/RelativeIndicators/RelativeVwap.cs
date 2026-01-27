@@ -1114,7 +1114,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                  ALL SIGNAL LOGIC (High/Low/Detachment) DELETED
               */
               {
-                  double hVwap = currentHighVWAP;
+                  // v1.0.49: Use internal VWAP if it exists, otherwise use main VWAP
+                  double hVwap = (hasInternalHighVWAP && internalHighBarIdx >= 0 && Values[2].IsValidDataPointAt(0))
+                      ? Values[2][0]  // Internal HIGH VWAP
+                      : currentHighVWAP;  // Main HIGH VWAP
                   // V_VWAP: Use Session-Specific VWAP for Internal Signals - REMOVED
                  
                   // DEBUG STATE VARIABLES
@@ -1427,7 +1430,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
              // --- Low VWAP Logic (Support -> Long Signal) ---
              if (hasLowVWAP && (TradeDirection == TradeDirectionMode.Both || TradeDirection == TradeDirectionMode.LongOnly))
              {
-                  double lVwap = currentLowVWAP;
+                  // v1.0.49: Use internal VWAP if it exists, otherwise use main VWAP
+                  double lVwap = (hasInternalLowVWAP && internalLowBarIdx >= 0 && Values[3].IsValidDataPointAt(0))
+                      ? Values[3][0]  // Internal LOW VWAP
+                      : currentLowVWAP;  // Main LOW VWAP
                   // V_VWAP: Use Session-Specific VWAP for Internal Signals - REMOVED
 
                   // DEBUG STATE VARIABLES
