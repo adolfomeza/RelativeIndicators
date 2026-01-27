@@ -5,6 +5,38 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.0.49] - 2026-01-27
+### Corregido
+- **CRÍTICO: Lógica "Touched Again" Causaba Resets Constantes**: Se eliminó completamente la lógica que reseteaba secuencia al tocar el mismo nivel múltiples veces.
+  - **Problema**: A pesar de los fixes en v1.0.48, todas las Entry seguían mostrando "01"
+  - **Causa Raíz (Descubierta con Logs)**:
+    - Logs mostraban resets en CADA BARRA mientras precio arriba del nivel: Bar:2480, 2481, 2482... hasta 2509 (30 barras consecutivas)
+    - Lógica "touched again" (líneas ~2157-2167 HIGH, ~2273-2282 LOW) verificaba: `if (high >= session.High)` → true en CADA BARRA
+    - Resultado: `highAnchorSequence` se reseteaba a 0 constantemente → siempre "Entry 01"
+  - **Solución**:
+    - ELIMINADA completamente la lógica "touched again"
+    - Secuencia ahora SOLO resetea cuando:
+      1. Toca un NUEVO nivel por primera vez (Asia → Europe → USA)
+      2. Precio cruza al VWAP OPUESTO
+    - NO resetea por estar arriba del mismo nivel múltiples barras
+  - **Resultado**: Entry labels ahora incrementan correctamente: 01, 02, 03, 04...
+
+### Cambiado
+- **Simplificación de Etiquetas - Un Solo Formato**: Se eliminaron los 3 modos de etiquetas (Default, Simple, Custom) y se dejó solo el formato con secuencias.
+  - **Antes**: LabelDisplayMode con 3 opciones (Default, Simple, Custom)
+  - **Ahora**: Solo un formato fijo para todas las etiquetas:
+    - Liquidity Grabbed: "Liquidity\nGrabbed 01", "02", "03"...
+    - Entry: "Entry 01", "Entry 02", "Entry 03"...
+    - Confirm: "Confirm" (Signal 3 - confirmación)
+  - **Ubicaciones simplificadas** (6 total):
+    - Línea ~952: HIGH Liquidity Grabbed
+    - Línea ~980: LOW Liquidity Grabbed
+    - Línea ~1332: SHORT Entry (Signal 2)
+    - Línea ~1634: LONG Entry (Signal 2)
+    - Línea ~1209: SHORT Confirm (Signal 3)
+    - Línea ~1509: LONG Confirm (Signal 3)
+  - **Removidas**: Propiedades CustomSignal1Text, CustomSignal2Text, CustomSignal3Text, LabelDisplayMode (ya no se usan)
+
 ## [1.0.48] - 2026-01-27
 ### Corregido
 - **CRÍTICO: Lógica de Reset Invertida (Bug en v1.0.47)**: Se corrigió el bug donde se reseteaba la secuencia del lado OPUESTO en lugar del MISMO lado.

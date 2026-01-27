@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.48";  // v1.0.48: Reset sequence when price crosses opposite VWAP
+        private const string VERSION = "1.0.49";  // v1.0.49: Remove "touched again" logic + simplify labels to single format
         // ==============================
         
         private SessionIterator sessionIterator;
