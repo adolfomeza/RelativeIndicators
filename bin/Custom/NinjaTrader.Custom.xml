@@ -5816,6 +5816,18 @@
             </summary>
             
         </member>
+        <member name="M:NinjaTrader.NinjaScript.Indicators.RelativeIndicators.RelativeVwap.GetNonCollidingHighY(System.Double,System.Double)">
+            <summary>
+            Simply returns the proposed Y position.
+            The LabelCollisionSpacing parameter now only affects the base offset from price.
+            </summary>
+        </member>
+        <member name="M:NinjaTrader.NinjaScript.Indicators.RelativeIndicators.RelativeVwap.GetNonCollidingLowY(System.Double,System.Double)">
+            <summary>
+            Simply returns the proposed Y position.
+            The LabelCollisionSpacing parameter now only affects the base offset from price.
+            </summary>
+        </member>
         <member name="T:NinjaTrader.NinjaScript.Strategies.VirginLevelType">
             <summary>
             Define los tipos de niveles soportados.
@@ -5836,6 +5848,12 @@
             Elimina niveles más antiguos que 'cutoffDate' y niveles duplicados cercanos.
             </summary>
         </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.SessionLevelsStrategy.TrackIgnoredEntry(System.String,System.String,System.Double,System.String)">
+            <summary>
+            Records an entry that was ignored by filters for display in the state panel.
+            Sends email alert if enabled.
+            </summary>
+        </member>
         <member name="M:NinjaTrader.NinjaScript.Strategies.SessionLevelsStrategy.SubmitOrderUnmanagedWrapper(System.Int32,NinjaTrader.Cbi.OrderAction,NinjaTrader.Cbi.OrderType,System.Int32,System.Double,System.Double,System.String,System.String)">
             <summary>
             Wrapper for SubmitOrderUnmanaged to allow calling from helper classes.
@@ -5854,6 +5872,26 @@
         <member name="M:NinjaTrader.NinjaScript.Strategies.SessionLevelsStrategy.ReadMaxSharedRisk">
             <summary>
             Reads the maximum risk from the shared file to prevent over-leveraging across instruments.
+            </summary>
+        </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.SessionLevelsStrategy.SendTradeEntryEmail">
+            <summary>
+            Sends a detailed email when a trade entry is filled (once per trade, ignores partial fills)
+            </summary>
+        </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.SessionLevelsStrategy.SendTradeExitEmail(System.Double,System.Double,System.String)">
+            <summary>
+            Sends a detailed email when a trade exits (with PnL details)
+            </summary>
+        </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.SessionLevelsStrategy.SendCriticalAlert(System.String,System.String)">
+            <summary>
+            Sends an email for critical/emergency events
+            </summary>
+        </member>
+        <member name="M:NinjaTrader.NinjaScript.Strategies.SessionLevelsStrategy.SendEmailText(System.String,System.String)">
+            <summary>
+            Sends a plain text email (no attachment)
             </summary>
         </member>
         <member name="T:NinjaTrader.NinjaScript.Strategies.SessionLevels.EntryStateMachine">

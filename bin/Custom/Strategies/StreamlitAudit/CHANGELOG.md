@@ -2,7 +2,21 @@
 
 
 
-### [v2.12.1] - 2026-01-22
+### [v2.12.4] - 2026-01-22
+### Corrección de Layout
+- **Optimización de Espacio**: Se revirtió el margen excesivo y se activó `cliponaxis=False`.
+- **Beneficio**: Los gráficos recuperan su tamaño original y las etiquetas de texto ahora pueden "flotar" libremente en los márgenes sin cortar ni comprimir las barras.
+
+## [v2.12.3] - 2026-01-22
+### Mejora Visual
+- **Márgenes de Gráficos**: Aumentado margen derecho a 130px para evitar cortes en las nuevas anotaciones de texto.
+
+## [v2.12.2] - 2026-01-22
+### Mejora Visual
+- **Anotaciones en Gráficos (Estandarización Completa)**: Agregado conteo de trades y Win Rate `(#Trades (WR%))` a **TODOS** los gráficos de barras de PnL: Setup, Antigüedad, Long/Short, Hora y Día.
+- **Accesibilidad**: Mejorada la visibilidad de los textos en los gráficos y agregado borde gris a las barras para mayor contraste.
+
+### [v2.12.1] - 2026-01-212
 
 ### Added: Exit Tier Filters 🎯
 - **Filtro de Tipo de Salida**: Nuevo selector en el panel de control para filtrar trades según cómo terminaron:

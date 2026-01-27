@@ -1,1 +1,4 @@
 ID,Instrument,EntryTime,Type,EntryPrice,ExitTime,ExitPrice,Result,PnL,Commission,NetPnL,MAE,MFE,Setup,Attempt,RiskReward,DeltaAtEntry,DeltaDirection,SessionDelta,DeltaAtTP1
+20260126_1,MHG 03-26,2026-01-26 08:33:03,Short,5.9945,2026-01-26 08:36:42,6.0055,SL_Short_01,-55.00,0.00,-55.00,-47.50,0.00,Asia High,1,-1.00,-841,1,-841,0,1,2,363062136965_1,Anticipado,Standard,Dynamic_ATR,363,389,-1230,70,15,10,25,20
+20260126_2,MHG 03-26,2026-01-26 08:40:00,Short,6,2026-01-26 08:54:19,6.007,SL_Short_02,-35.00,0.00,-35.00,-32.50,35.00,Asia High,2,-1.00,-835,1,-835,0,1,2,363062136993_1,Anticipado,Standard,Dynamic_ATR,363,389,-1224,70,15,10,25,20
+20260126_3.1,MHG 03-26,2026-01-26 08:58:04,Short,5.99,2026-01-26 09:30:50,5.958,TP1_Short_03,80.00,0.00,80.00,-25.00,75.00,Asia High,3,1.78,-891,1,-891,-1312,1,1,363062137036_1,Anticipado,Standard,Dynamic_ATR,363,389,-1280,70,15,10,25,20

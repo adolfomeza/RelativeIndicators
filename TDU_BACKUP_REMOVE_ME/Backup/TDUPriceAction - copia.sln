@@ -1,0 +1,20 @@
+
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TDUPriceAction", "TDUPriceAction - copia.csproj", "{A083144F-414D-41B9-99A8-32961D6D029F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A083144F-414D-41B9-99A8-32961D6D029F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A083144F-414D-41B9-99A8-32961D6D029F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A083144F-414D-41B9-99A8-32961D6D029F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A083144F-414D-41B9-99A8-32961D6D029F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,613 @@
+=== MHG Strategy Log - Started 2026-01-25 22:08:26 ===
+
+22:08:26.347 [22:09:00.000] DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
+22:08:26.347 [22:09:00.000] DEBUG_RECONNECT: Total Account.Positions count = 0
+22:08:26.347 [22:09:00.000] 25/1/26 10:09:00 p. m. v1.15.60 RESTART EVAL: Checking for pending orders or valid setup to continue...
+22:08:26.348 [22:09:00.000] 25/1/26 10:09:00 p. m. v1.15.60 RESTART: No valid setup found. Starting fresh.
+23:01:07.219 [23:02:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.934 (Resetting IsMitigated=false, JustReset=true)
+23:01:07.222 [23:02:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9335 (Resetting IsMitigated=false, JustReset=true)
+23:01:07.223 [23:02:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.933 (Resetting IsMitigated=false, JustReset=true)
+23:01:07.223 [23:02:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9325 (Resetting IsMitigated=false, JustReset=true)
+23:01:07.224 [23:02:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.932 (Resetting IsMitigated=false, JustReset=true)
+23:01:07.225 [23:02:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9315 (Resetting IsMitigated=false, JustReset=true)
+23:01:07.226 [23:02:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.931 (Resetting IsMitigated=false, JustReset=true)
+01:30:02.796 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9305 (Resetting IsMitigated=false, JustReset=true)
+01:30:02.797 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.93 (Resetting IsMitigated=false, JustReset=true)
+01:30:02.805 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9295 (Resetting IsMitigated=false, JustReset=true)
+01:30:02.806 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.929 (Resetting IsMitigated=false, JustReset=true)
+01:30:02.807 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9285 (Resetting IsMitigated=false, JustReset=true)
+01:30:02.808 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.928 (Resetting IsMitigated=false, JustReset=true)
+01:30:02.809 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9275 (Resetting IsMitigated=false, JustReset=true)
+01:30:02.811 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.927 (Resetting IsMitigated=false, JustReset=true)
+01:30:02.812 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.926 (Resetting IsMitigated=false, JustReset=true)
+01:30:15.103 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9255 (Resetting IsMitigated=false, JustReset=true)
+01:30:15.297 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.925 (Resetting IsMitigated=false, JustReset=true)
+01:30:15.298 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9245 (Resetting IsMitigated=false, JustReset=true)
+01:30:15.298 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.924 (Resetting IsMitigated=false, JustReset=true)
+01:30:15.299 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9235 (Resetting IsMitigated=false, JustReset=true)
+01:30:15.299 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.923 (Resetting IsMitigated=false, JustReset=true)
+01:30:15.300 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9225 (Resetting IsMitigated=false, JustReset=true)
+01:30:15.301 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.922 (Resetting IsMitigated=false, JustReset=true)
+01:30:15.301 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9215 (Resetting IsMitigated=false, JustReset=true)
+01:30:15.303 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.921 (Resetting IsMitigated=false, JustReset=true)
+01:30:15.304 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9205 (Resetting IsMitigated=false, JustReset=true)
+01:30:15.305 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.92 (Resetting IsMitigated=false, JustReset=true)
+01:30:15.307 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9195 (Resetting IsMitigated=false, JustReset=true)
+01:30:15.310 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.919 (Resetting IsMitigated=false, JustReset=true)
+01:30:15.311 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9185 (Resetting IsMitigated=false, JustReset=true)
+01:30:16.821 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.918 (Resetting IsMitigated=false, JustReset=true)
+01:30:16.822 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9175 (Resetting IsMitigated=false, JustReset=true)
+01:30:16.822 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.917 (Resetting IsMitigated=false, JustReset=true)
+01:30:16.823 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9165 (Resetting IsMitigated=false, JustReset=true)
+01:30:20.292 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.916 (Resetting IsMitigated=false, JustReset=true)
+01:30:20.293 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9155 (Resetting IsMitigated=false, JustReset=true)
+01:30:20.293 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.915 (Resetting IsMitigated=false, JustReset=true)
+01:30:20.294 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9145 (Resetting IsMitigated=false, JustReset=true)
+01:30:24.376 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.914 (Resetting IsMitigated=false, JustReset=true)
+01:30:24.377 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9135 (Resetting IsMitigated=false, JustReset=true)
+01:30:24.377 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.913 (Resetting IsMitigated=false, JustReset=true)
+01:30:24.378 [01:31:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.912 (Resetting IsMitigated=false, JustReset=true)
+01:37:02.555 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9115 (Resetting IsMitigated=false, JustReset=true)
+01:37:02.674 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.911 (Resetting IsMitigated=false, JustReset=true)
+01:37:02.675 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9105 (Resetting IsMitigated=false, JustReset=true)
+01:37:03.752 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.91 (Resetting IsMitigated=false, JustReset=true)
+01:37:03.754 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9095 (Resetting IsMitigated=false, JustReset=true)
+01:37:03.755 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.909 (Resetting IsMitigated=false, JustReset=true)
+01:37:03.814 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9085 (Resetting IsMitigated=false, JustReset=true)
+01:37:08.546 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.908 (Resetting IsMitigated=false, JustReset=true)
+01:37:12.377 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9075 (Resetting IsMitigated=false, JustReset=true)
+01:37:12.681 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.907 (Resetting IsMitigated=false, JustReset=true)
+01:37:12.682 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9065 (Resetting IsMitigated=false, JustReset=true)
+01:37:12.682 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.906 (Resetting IsMitigated=false, JustReset=true)
+01:37:17.266 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9055 (Resetting IsMitigated=false, JustReset=true)
+01:37:17.283 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.905 (Resetting IsMitigated=false, JustReset=true)
+01:37:17.307 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9045 (Resetting IsMitigated=false, JustReset=true)
+01:37:17.395 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.904 (Resetting IsMitigated=false, JustReset=true)
+01:37:19.172 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.903 (Resetting IsMitigated=false, JustReset=true)
+01:37:19.173 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9025 (Resetting IsMitigated=false, JustReset=true)
+01:37:19.174 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.902 (Resetting IsMitigated=false, JustReset=true)
+01:37:21.735 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9015 (Resetting IsMitigated=false, JustReset=true)
+01:37:21.736 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.901 (Resetting IsMitigated=false, JustReset=true)
+01:37:21.740 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.9 (Resetting IsMitigated=false, JustReset=true)
+01:37:21.740 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.8995 (Resetting IsMitigated=false, JustReset=true)
+01:37:21.742 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.899 (Resetting IsMitigated=false, JustReset=true)
+01:37:21.743 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.8985 (Resetting IsMitigated=false, JustReset=true)
+01:37:21.744 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.898 (Resetting IsMitigated=false, JustReset=true)
+01:37:21.745 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.8975 (Resetting IsMitigated=false, JustReset=true)
+01:37:21.746 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.8955 (Resetting IsMitigated=false, JustReset=true)
+01:37:21.751 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.895 (Resetting IsMitigated=false, JustReset=true)
+01:37:21.751 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.8945 (Resetting IsMitigated=false, JustReset=true)
+01:37:21.752 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.893 (Resetting IsMitigated=false, JustReset=true)
+01:37:21.753 [01:38:00.000] ==========================================================================================
+01:37:21.754 [01:38:00.000]    TRIGGER: USA Low @ 5.8945 (Deepest Selection)
+01:37:21.754 [01:38:00.000] ==========================================================================================
+01:37:21.754 [01:38:00.000] 26/1/26 1:38:00 a. m. LEVEL TRIGGERED: USA Low (Deepest Selection)
+01:37:21.754 [01:38:00.000] EXTERNAL LEVEL (HISTORICAL): USA Low @ 5.8945 (Date=23/1/26) -> Uses Global VWAP
+01:37:21.758 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.8925 (Resetting IsMitigated=false, JustReset=true)
+01:37:21.760 [01:38:00.000] RE-ANCHOR: New Low @ 5.8925 (Setup: USA Low)
+01:37:21.762 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.892 (Resetting IsMitigated=false, JustReset=true)
+01:37:21.763 [01:38:00.000] RE-ANCHOR: New Low @ 5.892 (Setup: USA Low)
+01:37:21.764 [01:38:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.89 (Resetting IsMitigated=false, JustReset=true)
+01:37:21.764 [01:38:00.000] RE-ANCHOR: New Low @ 5.89 (Setup: USA Low)
+01:38:05.041 [01:39:00.000] 26/1/26 1:39:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.89 VWAP=5.90 Threshold=5.90 Valid=False
+01:38:05.041 [01:39:00.000] 26/1/26 1:39:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.89 VWAP=5.90 Threshold=5.90 Valid=False
+01:39:02.718 [01:40:00.000] 26/1/26 1:40:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.90 Threshold=5.90 Valid=False
+01:39:02.718 [01:40:00.000] 26/1/26 1:40:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.90 Threshold=5.90 Valid=False
+01:40:00.833 [01:41:00.000] 26/1/26 1:41:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.90 Threshold=5.90 Valid=True
+01:40:00.834 [01:41:00.000] 26/1/26 1:41:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.8995 (Raw: 5.89965131578947). Bid=5.9045 Ask=5.9055
+01:40:00.834 [01:41:00.000] 26/1/26 1:41:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9055
+01:40:00.836 [01:41:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:40:00.837 [01:41:00.000] RISK_DEBUG_ATR: ATR=$17.47 | ScaledRisk=$34.94
+01:40:00.837 [01:41:00.000] RISK_DEBUG_POST: Written=$34.94 | ReadFromFile=$91.23 | Using=$91.23
+01:40:00.837 [01:41:00.000] QTY_DEBUG: Risk=$91.23 | SL_Ticks=32.00 | TickVal=$1.25 | CalcQty=2.28 | MaxQty=1000 | MinQty=1
+01:40:00.839 [01:41:00.000] 26/1/26 1:41:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:40:00.839 [01:41:00.000] 26/1/26 1:41:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.90 Threshold=5.90 Valid=True
+01:40:00.840 [01:41:00.000] 26/1/26 1:41:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.8995 (Raw: 5.89965131578947). Bid=5.9045 Ask=5.9055
+01:40:00.840 [01:41:00.000] 26/1/26 1:41:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9055
+01:40:00.840 [01:41:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:40:00.840 [01:41:00.000] RISK_DEBUG_ATR: ATR=$17.47 | ScaledRisk=$34.94
+01:40:00.840 [01:41:00.000] RISK_DEBUG_POST: Written=$34.94 | ReadFromFile=$91.23 | Using=$91.23
+01:40:00.841 [01:41:00.000] QTY_DEBUG: Risk=$91.23 | SL_Ticks=32.00 | TickVal=$1.25 | CalcQty=2.28 | MaxQty=1000 | MinQty=1
+01:40:00.841 [01:41:00.000] 26/1/26 1:41:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:41:01.570 [01:42:00.000] 26/1/26 1:42:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.90 Threshold=5.90 Valid=False
+01:41:01.570 [01:42:00.000] 26/1/26 1:42:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.90 Threshold=5.90 Valid=False
+01:42:00.705 [01:43:00.000] 26/1/26 1:43:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.90 Threshold=5.90 Valid=False
+01:42:00.706 [01:43:00.000] 26/1/26 1:43:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.90 Threshold=5.90 Valid=False
+01:43:01.776 [01:44:00.000] 26/1/26 1:44:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.89 VWAP=5.90 Threshold=5.90 Valid=False
+01:43:01.776 [01:44:00.000] 26/1/26 1:44:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.89 VWAP=5.90 Threshold=5.90 Valid=False
+01:43:09.304 [01:44:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.889 (Resetting IsMitigated=false, JustReset=true)
+01:43:09.306 [01:44:00.000] RE-ANCHOR: New Low @ 5.889 (Setup: USA Low)
+01:43:19.615 [01:44:00.000] DIAG_RE_ANCHOR: Asia Low Expanded to 5.8885 (Resetting IsMitigated=false, JustReset=true)
+01:43:19.616 [01:44:00.000] RE-ANCHOR: New Low @ 5.8885 (Setup: USA Low)
+01:44:04.262 [01:45:00.000] 26/1/26 1:45:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.89 VWAP=5.90 Threshold=5.90 Valid=False
+01:44:04.262 [01:45:00.000] 26/1/26 1:45:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.89 VWAP=5.90 Threshold=5.90 Valid=False
+01:45:00.806 [01:46:00.000] 26/1/26 1:46:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.90 Threshold=5.90 Valid=False
+01:45:00.806 [01:46:00.000] 26/1/26 1:46:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.90 Threshold=5.90 Valid=False
+01:46:03.250 [01:47:00.000] 26/1/26 1:47:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.89 VWAP=5.90 Threshold=5.90 Valid=False
+01:46:03.250 [01:47:00.000] 26/1/26 1:47:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.89 VWAP=5.90 Threshold=5.90 Valid=False
+01:47:05.606 [01:48:00.000] 26/1/26 1:48:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.90 Threshold=5.90 Valid=False
+01:47:05.606 [01:48:00.000] 26/1/26 1:48:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.90 Threshold=5.90 Valid=False
+01:48:00.319 [01:49:00.000] 26/1/26 1:49:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.90 Threshold=5.90 Valid=True
+01:48:00.319 [01:49:00.000] 26/1/26 1:49:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.9 (Raw: 5.90010514018691). Bid=5.9045 Ask=5.9055
+01:48:00.320 [01:49:00.000] 26/1/26 1:49:00 a. m. | ANTICIPATED ENTRY: Market @ 5.905
+01:48:00.320 [01:49:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:48:00.321 [01:49:00.000] RISK_DEBUG_ATR: ATR=$17.34 | ScaledRisk=$34.68
+01:48:00.321 [01:49:00.000] RISK_DEBUG_POST: Written=$34.68 | ReadFromFile=$85.99 | Using=$85.99
+01:48:00.321 [01:49:00.000] QTY_DEBUG: Risk=$85.99 | SL_Ticks=34.00 | TickVal=$1.25 | CalcQty=2.02 | MaxQty=1000 | MinQty=1
+01:48:00.322 [01:49:00.000] 26/1/26 1:49:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:48:00.322 [01:49:00.000] 26/1/26 1:49:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.90 Threshold=5.90 Valid=True
+01:48:00.322 [01:49:00.000] 26/1/26 1:49:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.9 (Raw: 5.90010514018691). Bid=5.9045 Ask=5.9055
+01:48:00.323 [01:49:00.000] 26/1/26 1:49:00 a. m. | ANTICIPATED ENTRY: Market @ 5.905
+01:48:00.323 [01:49:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:48:00.323 [01:49:00.000] RISK_DEBUG_ATR: ATR=$17.34 | ScaledRisk=$34.68
+01:48:00.323 [01:49:00.000] RISK_DEBUG_POST: Written=$34.68 | ReadFromFile=$85.99 | Using=$85.99
+01:48:00.323 [01:49:00.000] QTY_DEBUG: Risk=$85.99 | SL_Ticks=34.00 | TickVal=$1.25 | CalcQty=2.02 | MaxQty=1000 | MinQty=1
+01:48:00.323 [01:49:00.000] 26/1/26 1:49:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:49:03.390 [01:50:00.000] 26/1/26 1:50:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.90 Threshold=5.90 Valid=True
+01:49:03.390 [01:50:00.000] 26/1/26 1:50:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.901 (Raw: 5.90079338842975). Bid=5.9075 Ask=5.9085
+01:49:03.392 [01:50:00.000] 26/1/26 1:50:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9085
+01:49:03.392 [01:50:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:49:03.392 [01:50:00.000] RISK_DEBUG_ATR: ATR=$16.52 | ScaledRisk=$33.04
+01:49:03.392 [01:50:00.000] RISK_DEBUG_POST: Written=$33.04 | ReadFromFile=$84.11 | Using=$84.11
+01:49:03.392 [01:50:00.000] QTY_DEBUG: Risk=$84.11 | SL_Ticks=41.00 | TickVal=$1.25 | CalcQty=1.64 | MaxQty=1000 | MinQty=1
+01:49:03.392 [01:50:00.000] 26/1/26 1:50:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:49:03.392 [01:50:00.000] 26/1/26 1:50:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.90 Threshold=5.90 Valid=True
+01:49:03.392 [01:50:00.000] 26/1/26 1:50:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.901 (Raw: 5.90079338842975). Bid=5.9075 Ask=5.9085
+01:49:03.393 [01:50:00.000] 26/1/26 1:50:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9085
+01:49:03.393 [01:50:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:49:03.393 [01:50:00.000] RISK_DEBUG_ATR: ATR=$16.52 | ScaledRisk=$33.04
+01:49:03.393 [01:50:00.000] RISK_DEBUG_POST: Written=$33.04 | ReadFromFile=$84.11 | Using=$84.11
+01:49:03.393 [01:50:00.000] QTY_DEBUG: Risk=$84.11 | SL_Ticks=41.00 | TickVal=$1.25 | CalcQty=1.64 | MaxQty=1000 | MinQty=1
+01:49:03.393 [01:50:00.000] 26/1/26 1:50:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:50:00.360 [01:51:00.000] 26/1/26 1:51:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.90 Threshold=5.90 Valid=True
+01:50:00.360 [01:51:00.000] 26/1/26 1:51:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.9025 (Raw: 5.90229757785467). Bid=5.9115 Ask=5.9125
+01:50:00.360 [01:51:00.000] 26/1/26 1:51:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9115
+01:50:00.361 [01:51:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:50:00.361 [01:51:00.000] RISK_DEBUG_ATR: ATR=$16.52 | ScaledRisk=$33.04
+01:50:00.361 [01:51:00.000] RISK_DEBUG_POST: Written=$33.04 | ReadFromFile=$86.82 | Using=$86.82
+01:50:00.364 [01:51:00.000] QTY_DEBUG: Risk=$86.82 | SL_Ticks=47.00 | TickVal=$1.25 | CalcQty=1.48 | MaxQty=1000 | MinQty=1
+01:50:00.365 [01:51:00.000] 26/1/26 1:51:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:50:00.366 [01:51:00.000] 26/1/26 1:51:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.90 Threshold=5.90 Valid=True
+01:50:00.366 [01:51:00.000] 26/1/26 1:51:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.9025 (Raw: 5.90229757785467). Bid=5.9115 Ask=5.9125
+01:50:00.366 [01:51:00.000] 26/1/26 1:51:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9115
+01:50:00.367 [01:51:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:50:00.367 [01:51:00.000] RISK_DEBUG_ATR: ATR=$16.52 | ScaledRisk=$33.04
+01:50:00.367 [01:51:00.000] RISK_DEBUG_POST: Written=$33.04 | ReadFromFile=$86.82 | Using=$86.82
+01:50:00.368 [01:51:00.000] QTY_DEBUG: Risk=$86.82 | SL_Ticks=47.00 | TickVal=$1.25 | CalcQty=1.48 | MaxQty=1000 | MinQty=1
+01:50:00.368 [01:51:00.000] 26/1/26 1:51:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:51:01.266 [01:52:00.000] 26/1/26 1:52:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.90 Threshold=5.90 Valid=True
+01:51:01.266 [01:52:00.000] 26/1/26 1:52:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.903 (Raw: 5.90304588607595). Bid=5.913 Ask=5.9145
+01:51:01.266 [01:52:00.000] 26/1/26 1:52:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9145
+01:51:01.266 [01:52:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:51:01.267 [01:52:00.000] RISK_DEBUG_ATR: ATR=$16.01 | ScaledRisk=$32.03
+01:51:01.267 [01:52:00.000] RISK_DEBUG_POST: Written=$32.03 | ReadFromFile=$79.70 | Using=$79.70
+01:51:01.267 [01:52:00.000] QTY_DEBUG: Risk=$79.70 | SL_Ticks=53.00 | TickVal=$1.25 | CalcQty=1.20 | MaxQty=1000 | MinQty=1
+01:51:01.267 [01:52:00.000] 26/1/26 1:52:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:51:01.267 [01:52:00.000] 26/1/26 1:52:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.90 Threshold=5.90 Valid=True
+01:51:01.268 [01:52:00.000] 26/1/26 1:52:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.903 (Raw: 5.90304588607595). Bid=5.913 Ask=5.9145
+01:51:01.268 [01:52:00.000] 26/1/26 1:52:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9145
+01:51:01.268 [01:52:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:51:01.268 [01:52:00.000] RISK_DEBUG_ATR: ATR=$16.01 | ScaledRisk=$32.03
+01:51:01.268 [01:52:00.000] RISK_DEBUG_POST: Written=$32.03 | ReadFromFile=$79.70 | Using=$79.70
+01:51:01.269 [01:52:00.000] QTY_DEBUG: Risk=$79.70 | SL_Ticks=53.00 | TickVal=$1.25 | CalcQty=1.20 | MaxQty=1000 | MinQty=1
+01:51:01.269 [01:52:00.000] 26/1/26 1:52:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:52:01.832 [01:53:00.000] 26/1/26 1:53:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.90 Threshold=5.90 Valid=True
+01:52:01.832 [01:53:00.000] 26/1/26 1:53:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.9035 (Raw: 5.90353422619048). Bid=5.914 Ask=5.9145
+01:52:01.833 [01:53:00.000] 26/1/26 1:53:00 a. m. | ANTICIPATED ENTRY: Market @ 5.914
+01:52:01.833 [01:53:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:52:01.833 [01:53:00.000] RISK_DEBUG_ATR: ATR=$15.63 | ScaledRisk=$31.26
+01:52:01.833 [01:53:00.000] RISK_DEBUG_POST: Written=$31.26 | ReadFromFile=$76.28 | Using=$76.28
+01:52:01.834 [01:53:00.000] QTY_DEBUG: Risk=$76.28 | SL_Ticks=52.00 | TickVal=$1.25 | CalcQty=1.17 | MaxQty=1000 | MinQty=1
+01:52:01.834 [01:53:00.000] 26/1/26 1:53:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:52:01.834 [01:53:00.000] 26/1/26 1:53:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.90 Threshold=5.90 Valid=True
+01:52:01.834 [01:53:00.000] 26/1/26 1:53:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.9035 (Raw: 5.90353422619048). Bid=5.914 Ask=5.9145
+01:52:01.834 [01:53:00.000] 26/1/26 1:53:00 a. m. | ANTICIPATED ENTRY: Market @ 5.914
+01:52:01.835 [01:53:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:52:01.835 [01:53:00.000] RISK_DEBUG_ATR: ATR=$15.63 | ScaledRisk=$31.26
+01:52:01.835 [01:53:00.000] RISK_DEBUG_POST: Written=$31.26 | ReadFromFile=$76.28 | Using=$76.28
+01:52:01.835 [01:53:00.000] QTY_DEBUG: Risk=$76.28 | SL_Ticks=52.00 | TickVal=$1.25 | CalcQty=1.17 | MaxQty=1000 | MinQty=1
+01:52:01.835 [01:53:00.000] 26/1/26 1:53:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:53:02.833 [01:54:00.000] 26/1/26 1:54:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.90 Threshold=5.90 Valid=True
+01:53:02.833 [01:54:00.000] 26/1/26 1:54:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.904 (Raw: 5.90413098591549). Bid=5.9135 Ask=5.915
+01:53:02.833 [01:54:00.000] 26/1/26 1:54:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9145
+01:53:02.833 [01:54:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:53:02.834 [01:54:00.000] RISK_DEBUG_ATR: ATR=$14.93 | ScaledRisk=$29.87
+01:53:02.834 [01:54:00.000] RISK_DEBUG_POST: Written=$29.87 | ReadFromFile=$76.33 | Using=$76.33
+01:53:02.834 [01:54:00.000] QTY_DEBUG: Risk=$76.33 | SL_Ticks=53.00 | TickVal=$1.25 | CalcQty=1.15 | MaxQty=1000 | MinQty=1
+01:53:02.834 [01:54:00.000] 26/1/26 1:54:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:53:02.835 [01:54:00.000] 26/1/26 1:54:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.90 Threshold=5.90 Valid=True
+01:53:02.835 [01:54:00.000] 26/1/26 1:54:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.904 (Raw: 5.90413098591549). Bid=5.9135 Ask=5.915
+01:53:02.835 [01:54:00.000] 26/1/26 1:54:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9145
+01:53:02.835 [01:54:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:53:02.835 [01:54:00.000] RISK_DEBUG_ATR: ATR=$14.93 | ScaledRisk=$29.87
+01:53:02.836 [01:54:00.000] RISK_DEBUG_POST: Written=$29.87 | ReadFromFile=$76.33 | Using=$76.33
+01:53:02.836 [01:54:00.000] QTY_DEBUG: Risk=$76.33 | SL_Ticks=53.00 | TickVal=$1.25 | CalcQty=1.15 | MaxQty=1000 | MinQty=1
+01:53:02.836 [01:54:00.000] 26/1/26 1:54:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:54:05.033 [01:55:00.000] 26/1/26 1:55:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.90 Threshold=5.91 Valid=True
+01:54:05.034 [01:55:00.000] 26/1/26 1:55:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.9045 (Raw: 5.90466756756757). Bid=5.9155 Ask=5.9165
+01:54:05.034 [01:55:00.000] 26/1/26 1:55:00 a. m. | ANTICIPATED ENTRY: Market @ 5.916
+01:54:05.035 [01:55:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:54:05.035 [01:55:00.000] RISK_DEBUG_ATR: ATR=$14.80 | ScaledRisk=$29.60
+01:54:05.035 [01:55:00.000] RISK_DEBUG_POST: Written=$29.60 | ReadFromFile=$71.81 | Using=$71.81
+01:54:05.036 [01:55:00.000] QTY_DEBUG: Risk=$71.81 | SL_Ticks=56.00 | TickVal=$1.25 | CalcQty=1.03 | MaxQty=1000 | MinQty=1
+01:54:05.036 [01:55:00.000] 26/1/26 1:55:00 a. m. IGNORED ENTRY: Long USA Low @ 5.92 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:54:05.036 [01:55:00.000] 26/1/26 1:55:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.90 Threshold=5.91 Valid=True
+01:54:05.037 [01:55:00.000] 26/1/26 1:55:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.9045 (Raw: 5.90466756756757). Bid=5.9155 Ask=5.9165
+01:54:05.037 [01:55:00.000] 26/1/26 1:55:00 a. m. | ANTICIPATED ENTRY: Market @ 5.916
+01:54:05.037 [01:55:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:54:05.038 [01:55:00.000] RISK_DEBUG_ATR: ATR=$14.80 | ScaledRisk=$29.60
+01:54:05.039 [01:55:00.000] RISK_DEBUG_POST: Written=$29.60 | ReadFromFile=$71.81 | Using=$71.81
+01:54:05.039 [01:55:00.000] QTY_DEBUG: Risk=$71.81 | SL_Ticks=56.00 | TickVal=$1.25 | CalcQty=1.03 | MaxQty=1000 | MinQty=1
+01:54:05.039 [01:55:00.000] 26/1/26 1:55:00 a. m. IGNORED ENTRY: Long USA Low @ 5.92 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:55:02.032 [01:56:00.000] 26/1/26 1:56:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+01:55:02.033 [01:56:00.000] 26/1/26 1:56:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.905 (Raw: 5.9051038961039). Bid=5.9175 Ask=5.9185
+01:55:02.033 [01:56:00.000] 26/1/26 1:56:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9185
+01:55:02.033 [01:56:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:55:02.033 [01:56:00.000] RISK_DEBUG_ATR: ATR=$14.17 | ScaledRisk=$28.34
+01:55:02.033 [01:56:00.000] RISK_DEBUG_POST: Written=$28.34 | ReadFromFile=$73.82 | Using=$73.82
+01:55:02.034 [01:56:00.000] QTY_DEBUG: Risk=$73.82 | SL_Ticks=61.00 | TickVal=$1.25 | CalcQty=0.97 | MaxQty=1000 | MinQty=1
+01:55:02.034 [01:56:00.000] 26/1/26 1:56:00 a. m. IGNORED ENTRY: Long USA Low @ 5.92 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:55:02.034 [01:56:00.000] 26/1/26 1:56:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+01:55:02.034 [01:56:00.000] 26/1/26 1:56:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.905 (Raw: 5.9051038961039). Bid=5.9175 Ask=5.9185
+01:55:02.034 [01:56:00.000] 26/1/26 1:56:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9185
+01:55:02.034 [01:56:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:55:02.035 [01:56:00.000] RISK_DEBUG_ATR: ATR=$14.17 | ScaledRisk=$28.34
+01:55:02.035 [01:56:00.000] RISK_DEBUG_POST: Written=$28.34 | ReadFromFile=$73.82 | Using=$73.82
+01:55:02.035 [01:56:00.000] QTY_DEBUG: Risk=$73.82 | SL_Ticks=61.00 | TickVal=$1.25 | CalcQty=0.97 | MaxQty=1000 | MinQty=1
+01:55:02.035 [01:56:00.000] 26/1/26 1:56:00 a. m. IGNORED ENTRY: Long USA Low @ 5.92 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:56:03.455 [01:57:00.000] 26/1/26 1:57:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+01:56:03.455 [01:57:00.000] 26/1/26 1:57:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.906 (Raw: 5.90596208530806). Bid=5.913 Ask=5.9135
+01:56:03.455 [01:57:00.000] 26/1/26 1:57:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9135
+01:56:03.456 [01:57:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:56:03.456 [01:57:00.000] RISK_DEBUG_ATR: ATR=$14.07 | ScaledRisk=$28.15
+01:56:03.456 [01:57:00.000] RISK_DEBUG_POST: Written=$28.15 | ReadFromFile=$70.01 | Using=$70.01
+01:56:03.456 [01:57:00.000] QTY_DEBUG: Risk=$70.01 | SL_Ticks=51.00 | TickVal=$1.25 | CalcQty=1.10 | MaxQty=1000 | MinQty=1
+01:56:03.456 [01:57:00.000] 26/1/26 1:57:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:56:03.457 [01:57:00.000] 26/1/26 1:57:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+01:56:03.457 [01:57:00.000] 26/1/26 1:57:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.906 (Raw: 5.90596208530806). Bid=5.913 Ask=5.9135
+01:56:03.457 [01:57:00.000] 26/1/26 1:57:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9135
+01:56:03.458 [01:57:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:56:03.458 [01:57:00.000] RISK_DEBUG_ATR: ATR=$14.07 | ScaledRisk=$28.15
+01:56:03.458 [01:57:00.000] RISK_DEBUG_POST: Written=$28.15 | ReadFromFile=$70.01 | Using=$70.01
+01:56:03.458 [01:57:00.000] QTY_DEBUG: Risk=$70.01 | SL_Ticks=51.00 | TickVal=$1.25 | CalcQty=1.10 | MaxQty=1000 | MinQty=1
+01:56:03.459 [01:57:00.000] 26/1/26 1:57:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:57:34.755 [01:58:00.000] 26/1/26 1:58:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+01:57:34.755 [01:58:00.000] 26/1/26 1:58:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.906 (Raw: 5.90611252900232). Bid=5.915 Ask=5.9155
+01:57:34.756 [01:58:00.000] 26/1/26 1:58:00 a. m. | ANTICIPATED ENTRY: Market @ 5.915
+01:57:34.756 [01:58:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:57:34.756 [01:58:00.000] RISK_DEBUG_ATR: ATR=$14.29 | ScaledRisk=$28.58
+01:57:34.756 [01:58:00.000] RISK_DEBUG_POST: Written=$28.58 | ReadFromFile=$72.54 | Using=$72.54
+01:57:34.756 [01:58:00.000] QTY_DEBUG: Risk=$72.54 | SL_Ticks=54.00 | TickVal=$1.25 | CalcQty=1.07 | MaxQty=1000 | MinQty=1
+01:57:34.757 [01:58:00.000] 26/1/26 1:58:00 a. m. IGNORED ENTRY: Long USA Low @ 5.92 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:57:34.757 [01:58:00.000] 26/1/26 1:58:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+01:57:34.757 [01:58:00.000] 26/1/26 1:58:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.906 (Raw: 5.90611252900232). Bid=5.915 Ask=5.9155
+01:57:34.757 [01:58:00.000] 26/1/26 1:58:00 a. m. | ANTICIPATED ENTRY: Market @ 5.915
+01:57:34.758 [01:58:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:57:34.758 [01:58:00.000] RISK_DEBUG_ATR: ATR=$14.29 | ScaledRisk=$28.58
+01:57:34.758 [01:58:00.000] RISK_DEBUG_POST: Written=$28.58 | ReadFromFile=$72.54 | Using=$72.54
+01:57:34.758 [01:58:00.000] QTY_DEBUG: Risk=$72.54 | SL_Ticks=54.00 | TickVal=$1.25 | CalcQty=1.07 | MaxQty=1000 | MinQty=1
+01:57:34.758 [01:58:00.000] 26/1/26 1:58:00 a. m. IGNORED ENTRY: Long USA Low @ 5.92 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:58:02.742 [01:59:00.000] 26/1/26 1:59:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.92 VWAP=5.91 Threshold=5.91 Valid=True
+01:58:02.743 [01:59:00.000] 26/1/26 1:59:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.9065 (Raw: 5.90632653061225). Bid=5.9165 Ask=5.9175
+01:58:02.743 [01:59:00.000] 26/1/26 1:59:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9175
+01:58:02.743 [01:59:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:58:02.743 [01:59:00.000] RISK_DEBUG_ATR: ATR=$13.70 | ScaledRisk=$27.40
+01:58:02.744 [01:59:00.000] RISK_DEBUG_POST: Written=$27.40 | ReadFromFile=$72.54 | Using=$72.54
+01:58:02.744 [01:59:00.000] QTY_DEBUG: Risk=$72.54 | SL_Ticks=59.00 | TickVal=$1.25 | CalcQty=0.98 | MaxQty=1000 | MinQty=1
+01:58:02.744 [01:59:00.000] 26/1/26 1:59:00 a. m. IGNORED ENTRY: Long USA Low @ 5.92 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:58:02.744 [01:59:00.000] 26/1/26 1:59:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.92 VWAP=5.91 Threshold=5.91 Valid=True
+01:58:02.745 [01:59:00.000] 26/1/26 1:59:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.9065 (Raw: 5.90632653061225). Bid=5.9165 Ask=5.9175
+01:58:02.745 [01:59:00.000] 26/1/26 1:59:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9175
+01:58:02.745 [01:59:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:58:02.745 [01:59:00.000] RISK_DEBUG_ATR: ATR=$13.70 | ScaledRisk=$27.40
+01:58:02.745 [01:59:00.000] RISK_DEBUG_POST: Written=$27.40 | ReadFromFile=$72.54 | Using=$72.54
+01:58:02.746 [01:59:00.000] QTY_DEBUG: Risk=$72.54 | SL_Ticks=59.00 | TickVal=$1.25 | CalcQty=0.98 | MaxQty=1000 | MinQty=1
+01:58:02.746 [01:59:00.000] 26/1/26 1:59:00 a. m. IGNORED ENTRY: Long USA Low @ 5.92 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:59:05.898 [02:00:00.000] 26/1/26 2:00:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.92 VWAP=5.91 Threshold=5.91 Valid=True
+01:59:05.899 [02:00:00.000] 26/1/26 2:00:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.9065 (Raw: 5.90661589403974). Bid=5.917 Ask=5.918
+01:59:05.899 [02:00:00.000] 26/1/26 2:00:00 a. m. | ANTICIPATED ENTRY: Market @ 5.918
+01:59:05.899 [02:00:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:59:05.899 [02:00:00.000] RISK_DEBUG_ATR: ATR=$13.25 | ScaledRisk=$26.49
+01:59:05.899 [02:00:00.000] RISK_DEBUG_POST: Written=$26.49 | ReadFromFile=$67.29 | Using=$67.29
+01:59:05.900 [02:00:00.000] QTY_DEBUG: Risk=$67.29 | SL_Ticks=60.00 | TickVal=$1.25 | CalcQty=0.90 | MaxQty=1000 | MinQty=1
+01:59:05.900 [02:00:00.000] 26/1/26 2:00:00 a. m. IGNORED ENTRY: Long USA Low @ 5.92 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+01:59:05.900 [02:00:00.000] 26/1/26 2:00:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.92 VWAP=5.91 Threshold=5.91 Valid=True
+01:59:05.900 [02:00:00.000] 26/1/26 2:00:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.9065 (Raw: 5.90661589403974). Bid=5.917 Ask=5.918
+01:59:05.901 [02:00:00.000] 26/1/26 2:00:00 a. m. | ANTICIPATED ENTRY: Market @ 5.918
+01:59:05.901 [02:00:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+01:59:05.901 [02:00:00.000] RISK_DEBUG_ATR: ATR=$13.25 | ScaledRisk=$26.49
+01:59:05.901 [02:00:00.000] RISK_DEBUG_POST: Written=$26.49 | ReadFromFile=$67.29 | Using=$67.29
+01:59:05.901 [02:00:00.000] QTY_DEBUG: Risk=$67.29 | SL_Ticks=60.00 | TickVal=$1.25 | CalcQty=0.90 | MaxQty=1000 | MinQty=1
+01:59:05.901 [02:00:00.000] 26/1/26 2:00:00 a. m. IGNORED ENTRY: Long USA Low @ 5.92 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:00:01.387 [02:01:00.000] 26/1/26 2:01:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.92 VWAP=5.91 Threshold=5.91 Valid=True
+02:00:01.388 [02:01:00.000] 26/1/26 2:01:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.907 (Raw: 5.90716033755275). Bid=5.9165 Ask=5.9175
+02:00:01.388 [02:01:00.000] 26/1/26 2:01:00 a. m. | ANTICIPATED ENTRY: Market @ 5.917
+02:00:01.388 [02:01:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:00:01.388 [02:01:00.000] RISK_DEBUG_ATR: ATR=$12.63 | ScaledRisk=$25.26
+02:00:01.388 [02:01:00.000] RISK_DEBUG_POST: Written=$25.26 | ReadFromFile=$63.56 | Using=$63.56
+02:00:01.388 [02:01:00.000] QTY_DEBUG: Risk=$63.56 | SL_Ticks=58.00 | TickVal=$1.25 | CalcQty=0.88 | MaxQty=1000 | MinQty=1
+02:00:01.389 [02:01:00.000] 26/1/26 2:01:00 a. m. IGNORED ENTRY: Long USA Low @ 5.92 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:00:01.389 [02:01:00.000] 26/1/26 2:01:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.92 VWAP=5.91 Threshold=5.91 Valid=True
+02:00:01.389 [02:01:00.000] 26/1/26 2:01:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.907 (Raw: 5.90716033755275). Bid=5.9165 Ask=5.9175
+02:00:01.389 [02:01:00.000] 26/1/26 2:01:00 a. m. | ANTICIPATED ENTRY: Market @ 5.917
+02:00:01.389 [02:01:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:00:01.390 [02:01:00.000] RISK_DEBUG_ATR: ATR=$12.63 | ScaledRisk=$25.26
+02:00:01.390 [02:01:00.000] RISK_DEBUG_POST: Written=$25.26 | ReadFromFile=$63.56 | Using=$63.56
+02:00:01.391 [02:01:00.000] QTY_DEBUG: Risk=$63.56 | SL_Ticks=58.00 | TickVal=$1.25 | CalcQty=0.88 | MaxQty=1000 | MinQty=1
+02:00:01.391 [02:01:00.000] 26/1/26 2:01:00 a. m. IGNORED ENTRY: Long USA Low @ 5.92 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:01:11.557 [02:02:00.000] 26/1/26 2:02:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:01:11.557 [02:02:00.000] 26/1/26 2:02:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.9075 (Raw: 5.90742008196721). Bid=5.915 Ask=5.9155
+02:01:11.557 [02:02:00.000] 26/1/26 2:02:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9165
+02:01:11.558 [02:02:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:01:11.558 [02:02:00.000] RISK_DEBUG_ATR: ATR=$12.74 | ScaledRisk=$25.49
+02:01:11.558 [02:02:00.000] RISK_DEBUG_POST: Written=$25.49 | ReadFromFile=$65.13 | Using=$65.13
+02:01:11.558 [02:02:00.000] QTY_DEBUG: Risk=$65.13 | SL_Ticks=57.00 | TickVal=$1.25 | CalcQty=0.91 | MaxQty=1000 | MinQty=1
+02:01:11.558 [02:02:00.000] 26/1/26 2:02:00 a. m. IGNORED ENTRY: Long USA Low @ 5.92 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:01:11.559 [02:02:00.000] 26/1/26 2:02:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:01:11.559 [02:02:00.000] 26/1/26 2:02:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.9075 (Raw: 5.90742008196721). Bid=5.915 Ask=5.9155
+02:01:11.559 [02:02:00.000] 26/1/26 2:02:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9165
+02:01:11.559 [02:02:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:01:11.559 [02:02:00.000] RISK_DEBUG_ATR: ATR=$12.74 | ScaledRisk=$25.49
+02:01:11.559 [02:02:00.000] RISK_DEBUG_POST: Written=$25.49 | ReadFromFile=$65.13 | Using=$65.13
+02:01:11.560 [02:02:00.000] QTY_DEBUG: Risk=$65.13 | SL_Ticks=57.00 | TickVal=$1.25 | CalcQty=0.91 | MaxQty=1000 | MinQty=1
+02:01:11.560 [02:02:00.000] 26/1/26 2:02:00 a. m. IGNORED ENTRY: Long USA Low @ 5.92 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:02:09.424 [02:03:00.000] 26/1/26 2:03:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:02:09.424 [02:03:00.000] 26/1/26 2:03:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.9075 (Raw: 5.90756036217304). Bid=5.916 Ask=5.9175
+02:02:09.425 [02:03:00.000] 26/1/26 2:03:00 a. m. | ANTICIPATED ENTRY: Market @ 5.917
+02:02:09.425 [02:03:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:02:09.425 [02:03:00.000] RISK_DEBUG_ATR: ATR=$12.59 | ScaledRisk=$25.18
+02:02:09.425 [02:03:00.000] RISK_DEBUG_POST: Written=$25.18 | ReadFromFile=$69.67 | Using=$69.67
+02:02:09.426 [02:03:00.000] QTY_DEBUG: Risk=$69.67 | SL_Ticks=58.00 | TickVal=$1.25 | CalcQty=0.96 | MaxQty=1000 | MinQty=1
+02:02:09.426 [02:03:00.000] 26/1/26 2:03:00 a. m. IGNORED ENTRY: Long USA Low @ 5.92 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:02:09.426 [02:03:00.000] 26/1/26 2:03:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:02:09.426 [02:03:00.000] 26/1/26 2:03:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.9075 (Raw: 5.90756036217304). Bid=5.916 Ask=5.9175
+02:02:09.426 [02:03:00.000] 26/1/26 2:03:00 a. m. | ANTICIPATED ENTRY: Market @ 5.917
+02:02:09.426 [02:03:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:02:09.427 [02:03:00.000] RISK_DEBUG_ATR: ATR=$12.59 | ScaledRisk=$25.18
+02:02:09.427 [02:03:00.000] RISK_DEBUG_POST: Written=$25.18 | ReadFromFile=$69.67 | Using=$69.67
+02:02:09.427 [02:03:00.000] QTY_DEBUG: Risk=$69.67 | SL_Ticks=58.00 | TickVal=$1.25 | CalcQty=0.96 | MaxQty=1000 | MinQty=1
+02:02:09.427 [02:03:00.000] 26/1/26 2:03:00 a. m. IGNORED ENTRY: Long USA Low @ 5.92 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:03:38.602 [02:04:00.000] 26/1/26 2:04:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:03:38.602 [02:04:00.000] 26/1/26 2:04:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.908 (Raw: 5.90776125244619). Bid=5.9115 Ask=5.9125
+02:03:38.603 [02:04:00.000] 26/1/26 2:04:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9125
+02:03:38.603 [02:04:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:03:38.603 [02:04:00.000] RISK_DEBUG_ATR: ATR=$12.27 | ScaledRisk=$24.54
+02:03:38.603 [02:04:00.000] RISK_DEBUG_POST: Written=$24.54 | ReadFromFile=$75.60 | Using=$75.60
+02:03:38.603 [02:04:00.000] QTY_DEBUG: Risk=$75.60 | SL_Ticks=49.00 | TickVal=$1.25 | CalcQty=1.23 | MaxQty=1000 | MinQty=1
+02:03:38.604 [02:04:00.000] 26/1/26 2:04:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:03:38.604 [02:04:00.000] 26/1/26 2:04:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:03:38.604 [02:04:00.000] 26/1/26 2:04:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.908 (Raw: 5.90776125244619). Bid=5.9115 Ask=5.9125
+02:03:38.604 [02:04:00.000] 26/1/26 2:04:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9125
+02:03:38.604 [02:04:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:03:38.605 [02:04:00.000] RISK_DEBUG_ATR: ATR=$12.27 | ScaledRisk=$24.54
+02:03:38.605 [02:04:00.000] RISK_DEBUG_POST: Written=$24.54 | ReadFromFile=$75.60 | Using=$75.60
+02:03:38.605 [02:04:00.000] QTY_DEBUG: Risk=$75.60 | SL_Ticks=49.00 | TickVal=$1.25 | CalcQty=1.23 | MaxQty=1000 | MinQty=1
+02:03:38.605 [02:04:00.000] 26/1/26 2:04:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:04:03.853 [02:05:00.000] 26/1/26 2:05:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:04:03.854 [02:05:00.000] 26/1/26 2:05:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.908 (Raw: 5.90779239766082). Bid=5.9165 Ask=5.9175
+02:04:03.854 [02:05:00.000] 26/1/26 2:05:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9165
+02:04:03.854 [02:05:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:04:03.854 [02:05:00.000] RISK_DEBUG_ATR: ATR=$12.08 | ScaledRisk=$24.16
+02:04:03.854 [02:05:00.000] RISK_DEBUG_POST: Written=$24.16 | ReadFromFile=$72.74 | Using=$72.74
+02:04:03.855 [02:05:00.000] QTY_DEBUG: Risk=$72.74 | SL_Ticks=57.00 | TickVal=$1.25 | CalcQty=1.02 | MaxQty=1000 | MinQty=1
+02:04:03.855 [02:05:00.000] 26/1/26 2:05:00 a. m. IGNORED ENTRY: Long USA Low @ 5.92 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:04:03.855 [02:05:00.000] 26/1/26 2:05:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:04:03.855 [02:05:00.000] 26/1/26 2:05:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.908 (Raw: 5.90779239766082). Bid=5.9165 Ask=5.9175
+02:04:03.855 [02:05:00.000] 26/1/26 2:05:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9165
+02:04:03.856 [02:05:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:04:03.856 [02:05:00.000] RISK_DEBUG_ATR: ATR=$12.08 | ScaledRisk=$24.16
+02:04:03.856 [02:05:00.000] RISK_DEBUG_POST: Written=$24.16 | ReadFromFile=$72.74 | Using=$72.74
+02:04:03.856 [02:05:00.000] QTY_DEBUG: Risk=$72.74 | SL_Ticks=57.00 | TickVal=$1.25 | CalcQty=1.02 | MaxQty=1000 | MinQty=1
+02:04:03.856 [02:05:00.000] 26/1/26 2:05:00 a. m. IGNORED ENTRY: Long USA Low @ 5.92 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:05:20.558 [02:06:00.000] 26/1/26 2:06:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:05:20.558 [02:06:00.000] 26/1/26 2:06:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.908 (Raw: 5.90790403071017). Bid=5.9115 Ask=5.9125
+02:05:20.558 [02:06:00.000] 26/1/26 2:06:00 a. m. | ANTICIPATED ENTRY: Market @ 5.912
+02:05:20.558 [02:06:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:05:20.558 [02:06:00.000] RISK_DEBUG_ATR: ATR=$11.98 | ScaledRisk=$23.96
+02:05:20.559 [02:06:00.000] RISK_DEBUG_POST: Written=$23.96 | ReadFromFile=$76.60 | Using=$76.60
+02:05:20.559 [02:06:00.000] QTY_DEBUG: Risk=$76.60 | SL_Ticks=48.00 | TickVal=$1.25 | CalcQty=1.28 | MaxQty=1000 | MinQty=1
+02:05:20.559 [02:06:00.000] 26/1/26 2:06:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:05:20.559 [02:06:00.000] 26/1/26 2:06:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:05:20.559 [02:06:00.000] 26/1/26 2:06:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.908 (Raw: 5.90790403071017). Bid=5.9115 Ask=5.9125
+02:05:20.560 [02:06:00.000] 26/1/26 2:06:00 a. m. | ANTICIPATED ENTRY: Market @ 5.912
+02:05:20.560 [02:06:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:05:20.560 [02:06:00.000] RISK_DEBUG_ATR: ATR=$11.98 | ScaledRisk=$23.96
+02:05:20.560 [02:06:00.000] RISK_DEBUG_POST: Written=$23.96 | ReadFromFile=$76.60 | Using=$76.60
+02:05:20.560 [02:06:00.000] QTY_DEBUG: Risk=$76.60 | SL_Ticks=48.00 | TickVal=$1.25 | CalcQty=1.28 | MaxQty=1000 | MinQty=1
+02:05:20.560 [02:06:00.000] 26/1/26 2:06:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:06:03.523 [02:07:00.000] 26/1/26 2:07:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:06:03.523 [02:07:00.000] 26/1/26 2:07:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.908 (Raw: 5.90795754716981). Bid=5.9115 Ask=5.9125
+02:06:03.523 [02:07:00.000] 26/1/26 2:07:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9125
+02:06:03.524 [02:07:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:06:03.524 [02:07:00.000] RISK_DEBUG_ATR: ATR=$11.73 | ScaledRisk=$23.46
+02:06:03.524 [02:07:00.000] RISK_DEBUG_POST: Written=$23.46 | ReadFromFile=$73.14 | Using=$73.14
+02:06:03.524 [02:07:00.000] QTY_DEBUG: Risk=$73.14 | SL_Ticks=49.00 | TickVal=$1.25 | CalcQty=1.19 | MaxQty=1000 | MinQty=1
+02:06:03.524 [02:07:00.000] 26/1/26 2:07:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:06:03.525 [02:07:00.000] 26/1/26 2:07:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:06:03.525 [02:07:00.000] 26/1/26 2:07:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.908 (Raw: 5.90795754716981). Bid=5.9115 Ask=5.9125
+02:06:03.525 [02:07:00.000] 26/1/26 2:07:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9125
+02:06:03.525 [02:07:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:06:03.526 [02:07:00.000] RISK_DEBUG_ATR: ATR=$11.73 | ScaledRisk=$23.46
+02:06:03.526 [02:07:00.000] RISK_DEBUG_POST: Written=$23.46 | ReadFromFile=$73.14 | Using=$73.14
+02:06:03.526 [02:07:00.000] QTY_DEBUG: Risk=$73.14 | SL_Ticks=49.00 | TickVal=$1.25 | CalcQty=1.19 | MaxQty=1000 | MinQty=1
+02:06:03.526 [02:07:00.000] 26/1/26 2:07:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:07:15.931 [02:08:00.000] 26/1/26 2:08:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=False
+02:07:15.931 [02:08:00.000] 26/1/26 2:08:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=False
+02:08:22.341 [02:09:00.000] 26/1/26 2:09:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=False
+02:08:22.341 [02:09:00.000] 26/1/26 2:09:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=False
+02:09:01.280 [02:10:00.000] 26/1/26 2:10:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:09:01.281 [02:10:00.000] 26/1/26 2:10:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.908 (Raw: 5.90809685863875). Bid=5.9115 Ask=5.912
+02:09:01.281 [02:10:00.000] 26/1/26 2:10:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9115
+02:09:01.281 [02:10:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:09:01.281 [02:10:00.000] RISK_DEBUG_ATR: ATR=$11.18 | ScaledRisk=$22.36
+02:09:01.282 [02:10:00.000] RISK_DEBUG_POST: Written=$22.36 | ReadFromFile=$80.55 | Using=$80.55
+02:09:01.282 [02:10:00.000] QTY_DEBUG: Risk=$80.55 | SL_Ticks=47.00 | TickVal=$1.25 | CalcQty=1.37 | MaxQty=1000 | MinQty=1
+02:09:01.282 [02:10:00.000] 26/1/26 2:10:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:09:01.282 [02:10:00.000] 26/1/26 2:10:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:09:01.283 [02:10:00.000] 26/1/26 2:10:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.908 (Raw: 5.90809685863875). Bid=5.9105 Ask=5.9115
+02:09:01.285 [02:10:00.000] 26/1/26 2:10:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9115
+02:09:01.285 [02:10:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:09:01.285 [02:10:00.000] RISK_DEBUG_ATR: ATR=$11.18 | ScaledRisk=$22.36
+02:09:01.285 [02:10:00.000] RISK_DEBUG_POST: Written=$22.36 | ReadFromFile=$80.55 | Using=$80.55
+02:09:01.285 [02:10:00.000] QTY_DEBUG: Risk=$80.55 | SL_Ticks=47.00 | TickVal=$1.25 | CalcQty=1.37 | MaxQty=1000 | MinQty=1
+02:09:01.286 [02:10:00.000] 26/1/26 2:10:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:10:00.903 [02:11:00.000] 26/1/26 2:11:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.91 Threshold=5.91 Valid=False
+02:10:00.903 [02:11:00.000] 26/1/26 2:11:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.91 Threshold=5.91 Valid=False
+02:11:01.738 [02:12:00.000] 26/1/26 2:12:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.91 Threshold=5.91 Valid=False
+02:11:01.738 [02:12:00.000] 26/1/26 2:12:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.91 Threshold=5.91 Valid=False
+02:12:10.242 [02:13:00.000] 26/1/26 2:13:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=False
+02:12:10.242 [02:13:00.000] 26/1/26 2:13:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=False
+02:13:04.573 [02:14:00.000] 26/1/26 2:14:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=False
+02:13:04.573 [02:14:00.000] 26/1/26 2:14:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=False
+02:14:04.453 [02:15:00.000] 26/1/26 2:15:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.91 Threshold=5.91 Valid=False
+02:14:04.453 [02:15:00.000] 26/1/26 2:15:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.91 Threshold=5.91 Valid=False
+02:15:03.811 [02:16:00.000] 26/1/26 2:16:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.91 Threshold=5.91 Valid=False
+02:15:03.811 [02:16:00.000] 26/1/26 2:16:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.91 Threshold=5.91 Valid=False
+02:16:12.733 [02:17:00.000] 26/1/26 2:17:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.91 Threshold=5.91 Valid=False
+02:16:12.733 [02:17:00.000] 26/1/26 2:17:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.91 Threshold=5.91 Valid=False
+02:17:12.675 [02:18:00.000] 26/1/26 2:18:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.91 Threshold=5.91 Valid=False
+02:17:12.675 [02:18:00.000] 26/1/26 2:18:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.91 Threshold=5.91 Valid=False
+02:18:05.128 [02:19:00.000] 26/1/26 2:19:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.91 Threshold=5.91 Valid=False
+02:18:05.129 [02:19:00.000] 26/1/26 2:19:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.91 Threshold=5.91 Valid=False
+02:19:13.304 [02:20:00.000] 26/1/26 2:20:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:19:13.305 [02:20:00.000] 26/1/26 2:20:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.907 (Raw: 5.90713032258065). Bid=5.91 Ask=5.9115
+02:19:13.305 [02:20:00.000] 26/1/26 2:20:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9115
+02:19:13.305 [02:20:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:19:13.305 [02:20:00.000] RISK_DEBUG_ATR: ATR=$12.30 | ScaledRisk=$24.60
+02:19:13.306 [02:20:00.000] RISK_DEBUG_POST: Written=$24.60 | ReadFromFile=$78.28 | Using=$78.28
+02:19:13.306 [02:20:00.000] QTY_DEBUG: Risk=$78.28 | SL_Ticks=47.00 | TickVal=$1.25 | CalcQty=1.33 | MaxQty=1000 | MinQty=1
+02:19:13.306 [02:20:00.000] 26/1/26 2:20:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:19:13.306 [02:20:00.000] 26/1/26 2:20:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:19:13.306 [02:20:00.000] 26/1/26 2:20:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.907 (Raw: 5.90713032258065). Bid=5.91 Ask=5.9115
+02:19:13.307 [02:20:00.000] 26/1/26 2:20:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9115
+02:19:13.307 [02:20:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:19:13.307 [02:20:00.000] RISK_DEBUG_ATR: ATR=$12.30 | ScaledRisk=$24.60
+02:19:13.307 [02:20:00.000] RISK_DEBUG_POST: Written=$24.60 | ReadFromFile=$78.28 | Using=$78.28
+02:19:13.307 [02:20:00.000] QTY_DEBUG: Risk=$78.28 | SL_Ticks=47.00 | TickVal=$1.25 | CalcQty=1.33 | MaxQty=1000 | MinQty=1
+02:19:13.308 [02:20:00.000] 26/1/26 2:20:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:20:03.813 [02:21:00.000] 26/1/26 2:21:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:20:03.813 [02:21:00.000] 26/1/26 2:21:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.907 (Raw: 5.90720238095239). Bid=5.908 Ask=5.9095
+02:20:03.813 [02:21:00.000] 26/1/26 2:21:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9095
+02:20:03.814 [02:21:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:20:03.814 [02:21:00.000] RISK_DEBUG_ATR: ATR=$12.19 | ScaledRisk=$24.37
+02:20:03.814 [02:21:00.000] RISK_DEBUG_POST: Written=$24.37 | ReadFromFile=$73.90 | Using=$73.90
+02:20:03.814 [02:21:00.000] QTY_DEBUG: Risk=$73.90 | SL_Ticks=43.00 | TickVal=$1.25 | CalcQty=1.37 | MaxQty=1000 | MinQty=1
+02:20:03.814 [02:21:00.000] 26/1/26 2:21:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:20:03.815 [02:21:00.000] 26/1/26 2:21:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:20:03.815 [02:21:00.000] 26/1/26 2:21:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.907 (Raw: 5.90720238095239). Bid=5.908 Ask=5.9095
+02:20:03.815 [02:21:00.000] 26/1/26 2:21:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9095
+02:20:03.815 [02:21:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:20:03.815 [02:21:00.000] RISK_DEBUG_ATR: ATR=$12.19 | ScaledRisk=$24.37
+02:20:03.816 [02:21:00.000] RISK_DEBUG_POST: Written=$24.37 | ReadFromFile=$73.90 | Using=$73.90
+02:20:03.816 [02:21:00.000] QTY_DEBUG: Risk=$73.90 | SL_Ticks=43.00 | TickVal=$1.25 | CalcQty=1.37 | MaxQty=1000 | MinQty=1
+02:20:03.816 [02:21:00.000] 26/1/26 2:21:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:21:01.122 [02:22:00.000] 26/1/26 2:22:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:21:01.122 [02:22:00.000] 26/1/26 2:22:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.907 (Raw: 5.90720947630923). Bid=5.9075 Ask=5.908
+02:21:01.123 [02:22:00.000] 26/1/26 2:22:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9075
+02:21:01.123 [02:22:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:21:01.123 [02:22:00.000] RISK_DEBUG_ATR: ATR=$11.66 | ScaledRisk=$23.32
+02:21:01.123 [02:22:00.000] RISK_DEBUG_POST: Written=$23.32 | ReadFromFile=$77.04 | Using=$77.04
+02:21:01.123 [02:22:00.000] QTY_DEBUG: Risk=$77.04 | SL_Ticks=39.00 | TickVal=$1.25 | CalcQty=1.58 | MaxQty=1000 | MinQty=1
+02:21:01.124 [02:22:00.000] 26/1/26 2:22:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:21:01.124 [02:22:00.000] 26/1/26 2:22:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:21:01.124 [02:22:00.000] 26/1/26 2:22:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.907 (Raw: 5.90720947630923). Bid=5.9075 Ask=5.908
+02:21:01.124 [02:22:00.000] 26/1/26 2:22:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9075
+02:21:01.124 [02:22:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:21:01.124 [02:22:00.000] RISK_DEBUG_ATR: ATR=$11.66 | ScaledRisk=$23.32
+02:21:01.125 [02:22:00.000] RISK_DEBUG_POST: Written=$23.32 | ReadFromFile=$77.04 | Using=$77.04
+02:21:01.125 [02:22:00.000] QTY_DEBUG: Risk=$77.04 | SL_Ticks=39.00 | TickVal=$1.25 | CalcQty=1.58 | MaxQty=1000 | MinQty=1
+02:21:01.125 [02:22:00.000] 26/1/26 2:22:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:22:01.871 [02:23:00.000] 26/1/26 2:23:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=False
+02:22:01.871 [02:23:00.000] 26/1/26 2:23:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=False
+02:23:03.301 [02:24:00.000] 26/1/26 2:24:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.91 Threshold=5.91 Valid=False
+02:23:03.301 [02:24:00.000] 26/1/26 2:24:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.91 Threshold=5.91 Valid=False
+02:24:13.312 [02:25:00.000] 26/1/26 2:25:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.91 Threshold=5.91 Valid=False
+02:24:13.312 [02:25:00.000] 26/1/26 2:25:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.90 VWAP=5.91 Threshold=5.91 Valid=False
+02:25:00.779 [02:26:00.000] 26/1/26 2:26:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=False
+02:25:00.780 [02:26:00.000] 26/1/26 2:26:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=False
+02:26:07.552 [02:27:00.000] 26/1/26 2:27:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:26:07.553 [02:27:00.000] 26/1/26 2:27:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.907 (Raw: 5.90709331797235). Bid=5.9135 Ask=5.9145
+02:26:07.553 [02:27:00.000] 26/1/26 2:27:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9135
+02:26:07.553 [02:27:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:26:07.553 [02:27:00.000] RISK_DEBUG_ATR: ATR=$11.57 | ScaledRisk=$23.14
+02:26:07.554 [02:27:00.000] RISK_DEBUG_POST: Written=$23.14 | ReadFromFile=$68.24 | Using=$68.24
+02:26:07.554 [02:27:00.000] QTY_DEBUG: Risk=$68.24 | SL_Ticks=51.00 | TickVal=$1.25 | CalcQty=1.07 | MaxQty=1000 | MinQty=1
+02:26:07.555 [02:27:00.000] 26/1/26 2:27:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:26:07.555 [02:27:00.000] 26/1/26 2:27:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:26:07.555 [02:27:00.000] 26/1/26 2:27:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.907 (Raw: 5.90709331797235). Bid=5.9135 Ask=5.9145
+02:26:07.555 [02:27:00.000] 26/1/26 2:27:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9135
+02:26:07.556 [02:27:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:26:07.556 [02:27:00.000] RISK_DEBUG_ATR: ATR=$11.57 | ScaledRisk=$23.14
+02:26:07.556 [02:27:00.000] RISK_DEBUG_POST: Written=$23.14 | ReadFromFile=$68.24 | Using=$68.24
+02:26:07.556 [02:27:00.000] QTY_DEBUG: Risk=$68.24 | SL_Ticks=51.00 | TickVal=$1.25 | CalcQty=1.07 | MaxQty=1000 | MinQty=1
+02:26:07.556 [02:27:00.000] 26/1/26 2:27:00 a. m. IGNORED ENTRY: Long USA Low @ 5.91 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:27:03.337 [02:28:00.000] 26/1/26 2:28:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:27:03.338 [02:28:00.000] 26/1/26 2:28:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.907 (Raw: 5.90716287015945). Bid=5.9155 Ask=5.917
+02:27:03.338 [02:28:00.000] 26/1/26 2:28:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9155
+02:27:03.338 [02:28:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:27:03.339 [02:28:00.000] RISK_DEBUG_ATR: ATR=$11.45 | ScaledRisk=$22.90
+02:27:03.339 [02:28:00.000] RISK_DEBUG_POST: Written=$22.90 | ReadFromFile=$70.26 | Using=$70.26
+02:27:03.339 [02:28:00.000] QTY_DEBUG: Risk=$70.26 | SL_Ticks=55.00 | TickVal=$1.25 | CalcQty=1.02 | MaxQty=1000 | MinQty=1
+02:27:03.339 [02:28:00.000] 26/1/26 2:28:00 a. m. IGNORED ENTRY: Long USA Low @ 5.92 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:27:03.339 [02:28:00.000] 26/1/26 2:28:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.91 VWAP=5.91 Threshold=5.91 Valid=True
+02:27:03.340 [02:28:00.000] 26/1/26 2:28:00 a. m. | EXEC_DEBUG: Submitting Long Limit @ 5.907 (Raw: 5.90716287015945). Bid=5.9155 Ask=5.917
+02:27:03.340 [02:28:00.000] 26/1/26 2:28:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9155
+02:27:03.340 [02:28:00.000] RISK_DEBUG_PRE: Capital=$20482.15 | RiskPct=0.06% | CalcRisk=$12.29 | UseATR=True | ATRFactor=2
+02:27:03.340 [02:28:00.000] RISK_DEBUG_ATR: ATR=$11.45 | ScaledRisk=$22.90
+02:27:03.340 [02:28:00.000] RISK_DEBUG_POST: Written=$22.90 | ReadFromFile=$70.26 | Using=$70.26
+02:27:03.340 [02:28:00.000] QTY_DEBUG: Risk=$70.26 | SL_Ticks=55.00 | TickVal=$1.25 | CalcQty=1.02 | MaxQty=1000 | MinQty=1
+02:27:03.341 [02:28:00.000] 26/1/26 2:28:00 a. m. IGNORED ENTRY: Long USA Low @ 5.92 - Skipped: Low Delta Score 20 < 40 (F1=0 F2=30 F3=0 F4=-10)
+02:28:00.428 [02:29:00.000] 26/1/26 2:29:00 a. m. | DIAG_CONFIRM_LONG: Low[1]=5.92 VWAP=5.91 Threshold=5.91 Valid=True
+02:28:00.428 [02:29:00.000] R/R REJECTED (Long): Entry=5.9195 SL=5.888 | TP1(VWAP)=5.94928899619549 TP2(Level)=5.94928899619549 | Selected=5.94928899619549 | Risk=0.0315 Reward=0.0298 Ratio=0.95 | Reason: R:R 0.95 < Min 1
+02:28:00.428 [02:29:00.000] 26/1/26 2:29:00 a. m. RR_ABANDON: R:R 0.95 invalid. Abandoning setup immediately to search for better opportunities.
+03:59:10.953 [04:00:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9405 (Resetting IsMitigated=false, JustReset=true)
+03:59:10.953 [04:00:00.000] DIAG_RE_ANCHOR: Europe Low Expanded to 5.9405 (Resetting IsMitigated=false, JustReset=true)
+03:59:15.936 [04:00:00.000] DIAG_RE_ANCHOR: Europe Low Expanded to 5.94 (Resetting IsMitigated=false, JustReset=true)
+03:59:23.180 [04:00:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9425 (Resetting IsMitigated=false, JustReset=true)
+03:59:23.189 [04:00:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.943 (Resetting IsMitigated=false, JustReset=true)
+04:00:02.077 [04:01:00.000] DIAG_RE_ANCHOR: Europe Low Expanded to 5.9395 (Resetting IsMitigated=false, JustReset=true)
+04:00:05.527 [04:01:00.000] DIAG_RE_ANCHOR: Europe Low Expanded to 5.937 (Resetting IsMitigated=false, JustReset=true)
+04:00:06.493 [04:01:00.000] DIAG_RE_ANCHOR: Europe Low Expanded to 5.9365 (Resetting IsMitigated=false, JustReset=true)
+04:00:13.499 [04:01:00.000] DIAG_RE_ANCHOR: Europe Low Expanded to 5.936 (Resetting IsMitigated=false, JustReset=true)
+04:00:18.731 [04:01:00.000] DIAG_RE_ANCHOR: Europe Low Expanded to 5.9355 (Resetting IsMitigated=false, JustReset=true)
+04:00:20.651 [04:01:00.000] DIAG_RE_ANCHOR: Europe Low Expanded to 5.935 (Resetting IsMitigated=false, JustReset=true)
+04:00:23.508 [04:01:00.000] DIAG_RE_ANCHOR: Europe Low Expanded to 5.934 (Resetting IsMitigated=false, JustReset=true)
+04:00:39.406 [04:01:00.000] DIAG_RE_ANCHOR: Europe Low Expanded to 5.9335 (Resetting IsMitigated=false, JustReset=true)
+04:00:40.526 [04:01:00.000] DIAG_RE_ANCHOR: Europe Low Expanded to 5.9325 (Resetting IsMitigated=false, JustReset=true)
+04:00:48.930 [04:01:00.000] DIAG_RE_ANCHOR: Europe Low Expanded to 5.93 (Resetting IsMitigated=false, JustReset=true)
+04:00:48.931 [04:01:00.000] DIAG_RE_ANCHOR: Europe Low Expanded to 5.9295 (Resetting IsMitigated=false, JustReset=true)
+04:09:33.436 [04:10:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.944 (Resetting IsMitigated=false, JustReset=true)
+04:09:33.496 [04:10:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9445 (Resetting IsMitigated=false, JustReset=true)
+04:09:33.714 [04:10:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.945 (Resetting IsMitigated=false, JustReset=true)
+04:13:33.652 [04:14:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9455 (Resetting IsMitigated=false, JustReset=true)
+04:13:46.565 [04:14:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.946 (Resetting IsMitigated=false, JustReset=true)
+04:13:48.162 [04:14:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.947 (Resetting IsMitigated=false, JustReset=true)
+04:14:30.671 [04:15:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9475 (Resetting IsMitigated=false, JustReset=true)
+04:14:30.672 [04:15:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.948 (Resetting IsMitigated=false, JustReset=true)
+04:14:35.187 [04:15:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9485 (Resetting IsMitigated=false, JustReset=true)
+04:14:44.874 [04:15:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.949 (Resetting IsMitigated=false, JustReset=true)
+04:14:48.014 [04:15:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9495 (Resetting IsMitigated=false, JustReset=true)
+04:51:54.037 [04:52:00.000] DIAG_RE_ANCHOR: Europe Low Expanded to 5.929 (Resetting IsMitigated=false, JustReset=true)
+04:51:54.038 [04:52:00.000] DIAG_RE_ANCHOR: Europe Low Expanded to 5.9285 (Resetting IsMitigated=false, JustReset=true)
+04:51:54.048 [04:52:00.000] DIAG_RE_ANCHOR: Europe Low Expanded to 5.928 (Resetting IsMitigated=false, JustReset=true)
+04:54:16.411 [04:55:00.000] DIAG_RE_ANCHOR: Europe Low Expanded to 5.9275 (Resetting IsMitigated=false, JustReset=true)
+04:54:39.388 [04:55:00.000] DIAG_RE_ANCHOR: Europe Low Expanded to 5.927 (Resetting IsMitigated=false, JustReset=true)
+04:58:02.465 [04:59:00.000] DIAG_RE_ANCHOR: Europe Low Expanded to 5.926 (Resetting IsMitigated=false, JustReset=true)
+04:58:02.473 [04:59:00.000] DIAG_RE_ANCHOR: Europe Low Expanded to 5.9255 (Resetting IsMitigated=false, JustReset=true)
+05:02:23.175 [05:03:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.95 (Resetting IsMitigated=false, JustReset=true)
+05:02:23.177 [05:03:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.951 (Resetting IsMitigated=false, JustReset=true)
+05:02:23.179 [05:03:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9515 (Resetting IsMitigated=false, JustReset=true)
+05:02:23.229 [05:03:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9525 (Resetting IsMitigated=false, JustReset=true)
+05:02:23.447 [05:03:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.953 (Resetting IsMitigated=false, JustReset=true)
+05:02:23.451 [05:03:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.954 (Resetting IsMitigated=false, JustReset=true)
+05:03:12.852 [05:04:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.955 (Resetting IsMitigated=false, JustReset=true)
+05:03:17.858 [05:04:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9555 (Resetting IsMitigated=false, JustReset=true)
+05:03:17.859 [05:04:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9565 (Resetting IsMitigated=false, JustReset=true)
+05:03:17.918 [05:04:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.957 (Resetting IsMitigated=false, JustReset=true)
+05:03:17.919 [05:04:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9575 (Resetting IsMitigated=false, JustReset=true)
+05:05:33.121 [05:06:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.958 (Resetting IsMitigated=false, JustReset=true)
+05:05:34.465 [05:06:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9585 (Resetting IsMitigated=false, JustReset=true)
+05:05:41.807 [05:06:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9595 (Resetting IsMitigated=false, JustReset=true)
+05:05:43.323 [05:06:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.96 (Resetting IsMitigated=false, JustReset=true)
+05:09:32.177 [05:10:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9605 (Resetting IsMitigated=false, JustReset=true)
+05:09:37.144 [05:10:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9615 (Resetting IsMitigated=false, JustReset=true)

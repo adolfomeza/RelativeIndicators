@@ -111,6 +111,11 @@ namespace NinjaTrader.NinjaScript.Strategies
                         else if (lvl.Name.Contains("Europe")) lvl.Color = Brushes.Yellow;
                         else if (lvl.Name.Contains("USA")) lvl.Color = Brushes.RoyalBlue;
                         else lvl.Color = Brushes.Gray;
+
+                        // v1.15.50 Regression Fix: Reset EntryAttempts to 0 on load.
+                        // The strategy will rebuild the count from historical executions via OnExecutionUpdate.
+                        // If we don't reset, we get double counting (Persisted Value + Historical Increments).
+                        lvl.EntryAttempts = 0;
                     }
                 }
                 

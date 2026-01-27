@@ -1,0 +1,4 @@
+09:29:23.633 [10:51:00.000] SCAN IGNORE: Level Asia Low Max Retries Reached (20/20)
+09:29:23.634 [10:51:00.000] SCAN IGNORE: Level Europe High Max Retries Reached (20/20)
+09:30:02.029 [10:52:00.000] SCAN IGNORE: Level Asia Low Max Retries Reached (20/20)
+09:30:02.029 [10:52:00.000] SCAN IGNORE: Level Europe High Max Retries Reached (20/20)

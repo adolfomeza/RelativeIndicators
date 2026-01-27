@@ -1,0 +1,34 @@
+﻿// Decompiled with JetBrains decompiler
+// Type: NinjaTrader.NinjaScript.DrawingTools.FibonacciCircleTimeTypeConverter
+// Assembly: TDUPriceAction, Version=1.0.0.6, Culture=neutral
+// MVID: F406B208-2A90-48DE-B68A-47FB4C68C1DB
+// Assembly location: C:\Dropbox\Adolfo\Trading Software\TDU NT8 New\bin\Custom\TDUPriceAction - copia.dll
+
+using NinjaTrader.Gui.DrawingTools;
+using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
+#nullable disable
+namespace NinjaTrader.NinjaScript.DrawingTools;
+
+public class FibonacciCircleTimeTypeConverter : DrawingToolPropertiesConverter
+{
+  public virtual bool GetPropertiesSupported(ITypeDescriptorContext context) => true;
+
+  [MethodImpl(MethodImplOptions.NoInlining)]
+  public virtual PropertyDescriptorCollection GetProperties(
+    ITypeDescriptorContext context,
+    object value,
+    Attribute[] attributes)
+  {
+    return (PropertyDescriptorCollection) null;
+  }
+
+  [MethodImpl(MethodImplOptions.NoInlining)]
+  static FibonacciCircleTimeTypeConverter()
+  {
+    \u003CAgileDotNetRTPro\u003E.Initialize();
+    \u003CAgileDotNetRTPro\u003E.PostInitialize();
+  }
+}

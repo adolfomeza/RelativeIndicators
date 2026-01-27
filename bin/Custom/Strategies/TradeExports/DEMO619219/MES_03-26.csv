@@ -1,1 +1,2 @@
 ID,Instrument,EntryTime,Type,EntryPrice,ExitTime,ExitPrice,Result,PnL,Commission,NetPnL,MAE,MFE,Setup,Attempt,RiskReward,DeltaAtEntry,DeltaDirection,SessionDelta,DeltaAtTP1
+20260125_5.1,MES 03-26,2026-01-25 20:10:00,Long,6920.75,2026-01-25 22:00:00,6930.25,TP1_Long_01,47.50,0.00,47.50,-35.00,120.00,Europe Low,1,0.21,3718,1,3718,3394,2,1,NT-00010-76,Anticipado,Standard,Dynamic_ATR,-4059,-4616,8334,55,0,0,25,30

@@ -1,0 +1,1 @@
+ID,Instrument,EntryTime,Type,EntryPrice,ExitTime,ExitPrice,Result,PnL,Commission,NetPnL,MAE,MFE,Setup,Attempt,RiskReward,DeltaAtEntry,DeltaDirection,SessionDelta,DeltaAtTP1,LevelAge,Quantity,ExecutionId,EntryMode,ExitStrategy,RiskModel,DeltaPush,DeltaFormation,DeltaDespegue,DeltaScore,Phase1,Phase2,Phase3,Phase4

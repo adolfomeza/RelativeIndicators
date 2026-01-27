@@ -1,0 +1,429 @@
+=== MHG Strategy Log - Started 2026-01-26 06:29:18 ===
+
+06:29:18.366 [06:30:00.000] DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
+06:29:18.366 [06:30:00.000] DEBUG_RECONNECT: Account.Position[1] Instrument=MYM 03-26 Qty=2 Dir=Short
+06:29:18.367 [06:30:00.000] DEBUG_RECONNECT: Total Account.Positions count = 1
+06:29:18.367 [06:30:00.000] 26/1/26 6:30:00 a. m. v1.15.60 RESTART EVAL: Checking for pending orders or valid setup to continue...
+06:29:18.367 [06:30:00.000] 26/1/26 6:30:00 a. m. v1.15.60 RESTART: No valid setup found. Starting fresh.
+07:38:57.300 [07:39:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.962 (Resetting IsMitigated=false, JustReset=true)
+07:38:57.301 [07:39:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.963 (Resetting IsMitigated=false, JustReset=true)
+07:38:57.301 [07:39:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9635 (Resetting IsMitigated=false, JustReset=true)
+07:38:57.515 [07:39:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.964 (Resetting IsMitigated=false, JustReset=true)
+07:39:04.807 [07:40:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9645 (Resetting IsMitigated=false, JustReset=true)
+07:39:04.809 [07:40:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.965 (Resetting IsMitigated=false, JustReset=true)
+07:39:28.095 [07:40:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9655 (Resetting IsMitigated=false, JustReset=true)
+07:39:28.096 [07:40:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.966 (Resetting IsMitigated=false, JustReset=true)
+07:39:34.401 [07:40:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9665 (Resetting IsMitigated=false, JustReset=true)
+07:40:43.728 [07:41:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.967 (Resetting IsMitigated=false, JustReset=true)
+07:40:43.729 [07:41:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9675 (Resetting IsMitigated=false, JustReset=true)
+07:41:18.191 [07:42:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.968 (Resetting IsMitigated=false, JustReset=true)
+07:41:43.806 [07:42:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9685 (Resetting IsMitigated=false, JustReset=true)
+07:42:08.839 [07:43:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.969 (Resetting IsMitigated=false, JustReset=true)
+07:42:20.387 [07:43:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9695 (Resetting IsMitigated=false, JustReset=true)
+07:42:20.761 [07:43:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.97 (Resetting IsMitigated=false, JustReset=true)
+07:42:26.236 [07:43:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9705 (Resetting IsMitigated=false, JustReset=true)
+07:42:26.244 [07:43:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.971 (Resetting IsMitigated=false, JustReset=true)
+07:54:34.161 [07:55:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9715 (Resetting IsMitigated=false, JustReset=true)
+07:54:34.162 [07:55:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.972 (Resetting IsMitigated=false, JustReset=true)
+07:55:20.463 [07:56:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9725 (Resetting IsMitigated=false, JustReset=true)
+07:56:42.666 [07:57:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.973 (Resetting IsMitigated=false, JustReset=true)
+07:59:34.987 [08:00:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9735 (Resetting IsMitigated=false, JustReset=true)
+07:59:34.988 [08:00:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.974 (Resetting IsMitigated=false, JustReset=true)
+07:59:35.162 [08:00:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9745 (Resetting IsMitigated=false, JustReset=true)
+08:01:43.461 [08:02:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.975 (Resetting IsMitigated=false, JustReset=true)
+08:02:04.226 [08:03:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9755 (Resetting IsMitigated=false, JustReset=true)
+08:02:04.638 [08:03:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.976 (Resetting IsMitigated=false, JustReset=true)
+08:02:04.638 [08:03:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9765 (Resetting IsMitigated=false, JustReset=true)
+08:04:30.821 [08:05:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.977 (Resetting IsMitigated=false, JustReset=true)
+08:04:37.687 [08:05:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9775 (Resetting IsMitigated=false, JustReset=true)
+08:04:37.697 [08:05:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.978 (Resetting IsMitigated=false, JustReset=true)
+08:04:37.699 [08:05:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9785 (Resetting IsMitigated=false, JustReset=true)
+08:04:37.700 [08:05:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.979 (Resetting IsMitigated=false, JustReset=true)
+08:14:44.128 [08:15:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9795 (Resetting IsMitigated=false, JustReset=true)
+08:14:44.144 [08:15:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.98 (Resetting IsMitigated=false, JustReset=true)
+08:14:55.607 [08:15:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.981 (Resetting IsMitigated=false, JustReset=true)
+08:14:55.616 [08:15:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9815 (Resetting IsMitigated=false, JustReset=true)
+08:14:55.616 [08:15:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.982 (Resetting IsMitigated=false, JustReset=true)
+08:14:58.113 [08:15:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9825 (Resetting IsMitigated=false, JustReset=true)
+08:15:14.921 [08:16:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.983 (Resetting IsMitigated=false, JustReset=true)
+08:15:16.450 [08:16:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9835 (Resetting IsMitigated=false, JustReset=true)
+08:16:25.678 [08:17:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.984 (Resetting IsMitigated=false, JustReset=true)
+08:16:25.679 [08:17:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9845 (Resetting IsMitigated=false, JustReset=true)
+08:16:26.085 [08:17:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.985 (Resetting IsMitigated=false, JustReset=true)
+08:16:26.096 [08:17:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.986 (Resetting IsMitigated=false, JustReset=true)
+08:16:26.097 [08:17:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9865 (Resetting IsMitigated=false, JustReset=true)
+08:16:30.242 [08:17:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.987 (Resetting IsMitigated=false, JustReset=true)
+08:16:40.067 [08:17:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9875 (Resetting IsMitigated=false, JustReset=true)
+08:16:47.266 [08:17:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.988 (Resetting IsMitigated=false, JustReset=true)
+08:16:47.905 [08:17:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9885 (Resetting IsMitigated=false, JustReset=true)
+08:16:57.735 [08:17:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.989 (Resetting IsMitigated=false, JustReset=true)
+08:20:40.740 [08:21:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9895 (Resetting IsMitigated=false, JustReset=true)
+08:20:56.386 [08:21:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.99 (Resetting IsMitigated=false, JustReset=true)
+08:21:02.666 [08:22:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.991 (Resetting IsMitigated=false, JustReset=true)
+08:21:05.489 [08:22:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9915 (Resetting IsMitigated=false, JustReset=true)
+08:21:11.443 [08:22:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.992 (Resetting IsMitigated=false, JustReset=true)
+08:21:11.443 [08:22:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9925 (Resetting IsMitigated=false, JustReset=true)
+08:21:11.444 [08:22:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.993 (Resetting IsMitigated=false, JustReset=true)
+08:21:11.445 [08:22:00.000] ==========================================================================================
+08:21:11.445 [08:22:00.000]    TRIGGER: Asia High @ 5.9925 (Deepest Selection)
+08:21:11.445 [08:22:00.000] ==========================================================================================
+08:21:11.446 [08:22:00.000] 26/1/26 8:22:00 a. m. LEVEL TRIGGERED: Asia High (Deepest Selection)
+08:21:11.446 [08:22:00.000] EXTERNAL LEVEL (HISTORICAL): Asia High @ 5.9925 (Date=25/1/26) -> Uses Global VWAP
+08:21:12.031 [08:22:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9935 (Resetting IsMitigated=false, JustReset=true)
+08:21:12.031 [08:22:00.000] RE-ANCHOR: New High @ 5.9935 (Setup: Asia High)
+08:21:12.287 [08:22:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.994 (Resetting IsMitigated=false, JustReset=true)
+08:21:12.288 [08:22:00.000] RE-ANCHOR: New High @ 5.994 (Setup: Asia High)
+08:21:12.289 [08:22:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9945 (Resetting IsMitigated=false, JustReset=true)
+08:21:12.289 [08:22:00.000] RE-ANCHOR: New High @ 5.9945 (Setup: Asia High)
+08:21:13.381 [08:22:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.995 (Resetting IsMitigated=false, JustReset=true)
+08:21:13.381 [08:22:00.000] RE-ANCHOR: New High @ 5.995 (Setup: Asia High)
+08:22:00.477 [08:23:00.000] 26/1/26 8:23:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=5.99 Threshold=5.99 Valid=False
+08:22:00.477 [08:23:00.000] 26/1/26 8:23:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=5.99 Threshold=5.99 Valid=False
+08:23:02.882 [08:24:00.000] 26/1/26 8:24:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=5.99 Threshold=5.99 Valid=False
+08:23:02.882 [08:24:00.000] 26/1/26 8:24:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=5.99 Threshold=5.99 Valid=False
+08:23:09.395 [08:24:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9955 (Resetting IsMitigated=false, JustReset=true)
+08:23:09.395 [08:24:00.000] RE-ANCHOR: New High @ 5.9955 (Setup: Asia High)
+08:23:09.396 [08:24:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.996 (Resetting IsMitigated=false, JustReset=true)
+08:23:09.396 [08:24:00.000] RE-ANCHOR: New High @ 5.996 (Setup: Asia High)
+08:23:09.396 [08:24:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9965 (Resetting IsMitigated=false, JustReset=true)
+08:23:09.397 [08:24:00.000] RE-ANCHOR: New High @ 5.9965 (Setup: Asia High)
+08:23:09.397 [08:24:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.997 (Resetting IsMitigated=false, JustReset=true)
+08:23:09.397 [08:24:00.000] RE-ANCHOR: New High @ 5.997 (Setup: Asia High)
+08:23:09.434 [08:24:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9975 (Resetting IsMitigated=false, JustReset=true)
+08:23:09.435 [08:24:00.000] RE-ANCHOR: New High @ 5.9975 (Setup: Asia High)
+08:23:09.647 [08:24:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.998 (Resetting IsMitigated=false, JustReset=true)
+08:23:09.649 [08:24:00.000] RE-ANCHOR: New High @ 5.998 (Setup: Asia High)
+08:23:12.662 [08:24:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9985 (Resetting IsMitigated=false, JustReset=true)
+08:23:12.662 [08:24:00.000] RE-ANCHOR: New High @ 5.9985 (Setup: Asia High)
+08:23:12.839 [08:24:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.999 (Resetting IsMitigated=false, JustReset=true)
+08:23:12.840 [08:24:00.000] RE-ANCHOR: New High @ 5.999 (Setup: Asia High)
+08:23:36.353 [08:24:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 5.9995 (Resetting IsMitigated=false, JustReset=true)
+08:23:36.353 [08:24:00.000] RE-ANCHOR: New High @ 5.9995 (Setup: Asia High)
+08:24:00.393 [08:25:00.000] 26/1/26 8:25:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=6.00 Threshold=6.00 Valid=False
+08:24:00.393 [08:25:00.000] 26/1/26 8:25:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=6.00 Threshold=6.00 Valid=False
+08:24:57.038 [08:25:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6 (Resetting IsMitigated=false, JustReset=true)
+08:24:57.047 [08:25:00.000] RE-ANCHOR: New High @ 6 (Setup: Asia High)
+08:25:00.406 [08:26:00.000] 26/1/26 8:26:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=6.00 Threshold=6.00 Valid=False
+08:25:00.406 [08:26:00.000] 26/1/26 8:26:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=6.00 Threshold=6.00 Valid=False
+08:25:07.665 [08:26:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6.0005 (Resetting IsMitigated=false, JustReset=true)
+08:25:07.665 [08:26:00.000] RE-ANCHOR: New High @ 6.0005 (Setup: Asia High)
+08:25:07.666 [08:26:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6.001 (Resetting IsMitigated=false, JustReset=true)
+08:25:07.666 [08:26:00.000] RE-ANCHOR: New High @ 6.001 (Setup: Asia High)
+08:25:07.666 [08:26:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6.002 (Resetting IsMitigated=false, JustReset=true)
+08:25:07.667 [08:26:00.000] RE-ANCHOR: New High @ 6.002 (Setup: Asia High)
+08:25:07.668 [08:26:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6.0025 (Resetting IsMitigated=false, JustReset=true)
+08:25:07.668 [08:26:00.000] RE-ANCHOR: New High @ 6.0025 (Setup: Asia High)
+08:25:20.506 [08:26:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6.003 (Resetting IsMitigated=false, JustReset=true)
+08:25:20.506 [08:26:00.000] RE-ANCHOR: New High @ 6.003 (Setup: Asia High)
+08:25:21.168 [08:26:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6.0035 (Resetting IsMitigated=false, JustReset=true)
+08:25:21.169 [08:26:00.000] RE-ANCHOR: New High @ 6.0035 (Setup: Asia High)
+08:25:21.323 [08:26:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6.004 (Resetting IsMitigated=false, JustReset=true)
+08:25:21.324 [08:26:00.000] RE-ANCHOR: New High @ 6.004 (Setup: Asia High)
+08:25:21.524 [08:26:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6.0045 (Resetting IsMitigated=false, JustReset=true)
+08:25:21.525 [08:26:00.000] RE-ANCHOR: New High @ 6.0045 (Setup: Asia High)
+08:25:22.630 [08:26:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6.005 (Resetting IsMitigated=false, JustReset=true)
+08:25:22.631 [08:26:00.000] RE-ANCHOR: New High @ 6.005 (Setup: Asia High)
+08:26:02.590 [08:27:00.000] 26/1/26 8:27:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.01 VWAP=6.00 Threshold=6.00 Valid=False
+08:26:02.591 [08:27:00.000] 26/1/26 8:27:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.01 VWAP=6.00 Threshold=6.00 Valid=False
+08:27:03.425 [08:28:00.000] 26/1/26 8:28:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=6.00 Threshold=6.00 Valid=False
+08:27:03.425 [08:28:00.000] 26/1/26 8:28:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=6.00 Threshold=6.00 Valid=False
+08:28:00.847 [08:29:00.000] 26/1/26 8:29:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=6.00 Threshold=6.00 Valid=False
+08:28:00.847 [08:29:00.000] 26/1/26 8:29:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=6.00 Threshold=6.00 Valid=False
+08:29:03.289 [08:30:00.000] 26/1/26 8:30:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=6.00 Threshold=6.00 Valid=False
+08:29:03.289 [08:30:00.000] 26/1/26 8:30:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=6.00 Threshold=6.00 Valid=False
+08:30:01.314 [08:31:00.000] 26/1/26 8:31:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=6.00 Threshold=6.00 Valid=False
+08:30:01.314 [08:31:00.000] 26/1/26 8:31:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=6.00 Threshold=6.00 Valid=False
+08:31:00.495 [08:32:00.000] 26/1/26 8:32:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=6.00 Threshold=6.00 Valid=False
+08:31:00.495 [08:32:00.000] 26/1/26 8:32:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=6.00 Threshold=6.00 Valid=False
+08:32:02.172 [08:33:00.000] 26/1/26 8:33:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=6.00 Threshold=6.00 Valid=False
+08:32:02.172 [08:33:00.000] 26/1/26 8:33:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=6.00 Threshold=6.00 Valid=False
+08:33:02.771 [08:34:00.000] 26/1/26 8:34:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=5.99 VWAP=6.00 Threshold=6.00 Valid=True
+08:33:02.772 [08:34:00.000] 26/1/26 8:34:00 a. m. | EXEC_DEBUG: Submitting Short Limit @ 5.9975 (Raw: 5.9973319467554). Bid=5.994 Ask=5.9945
+08:33:02.772 [08:34:00.000] 26/1/26 8:34:00 a. m. | ANTICIPATED ENTRY: Market @ 5.9945
+08:33:02.773 [08:34:00.000] RISK_DEBUG_PRE: Capital=$20608.81 | RiskPct=0.06% | CalcRisk=$12.37 | UseATR=True | ATRFactor=2
+08:33:02.773 [08:34:00.000] RISK_DEBUG_ATR: ATR=$11.02 | ScaledRisk=$22.04
+08:33:02.773 [08:34:00.000] RISK_DEBUG_POST: Written=$22.04 | ReadFromFile=$44.64 | Using=$44.64
+08:33:02.773 [08:34:00.000] QTY_DEBUG: Risk=$44.64 | SL_Ticks=22.00 | TickVal=$1.25 | CalcQty=1.62 | MaxQty=1000 | MinQty=1
+08:33:02.774 [08:34:00.000] 26/1/26 8:34:00 a. m. Order Submitted (Short). Mode=Anticipado Type=Market Qty=2
+08:33:03.318 [08:34:00.000] NinjaTrader.NinjaScript.TimeSeries Entry Filled (EntryAnticipado_Short_01) Qty=2. State -> PositionActive. TradeOriginalQty=2
+08:33:03.319 [08:34:00.000] 26/1/26 8:34:00 a. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:33:03.319 [08:34:00.000] PROTECTION_RESET: Cleared order references for new trade
+08:33:03.320 [08:34:00.000] TRADE FILL: Asia High (Start: 25/1/26 7:00:00 p. m.) EntryAttempts incremented to 1/20 (OID: 363062136957)
+08:33:03.320 [08:34:00.000] TRADE ATTEMPT: Asia High Attempt #1/20
+08:33:03.320 [08:34:00.000] NinjaTrader.NinjaScript.TimeSeries DELTA CAPTURE: Entry Delta=-841 Direction=1
+08:33:03.321 [08:34:00.000] DIAG_EXEC: Name=EntryAnticipado_Short_01 Qty=2 | Position.MP=Short Arg.MP=Short | State=PositionActive
+08:33:03.321 [08:34:00.000]    FILL: Trade #1 | Short @ 5.9945 | Qty=2
+08:33:03.321 [08:34:00.000] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #1 started - Short @ 5.9945
+08:33:03.322 [08:34:00.000] 26/1/26 8:34:00 a. m. REPLAY_SYNC_DELAY: Account.Positions=0 but Position.Quantity=2. Proceeding with protection (replay sync delay).
+08:33:03.322 [08:34:00.000] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Short FilledQty=2 Position.Qty=2 Position.MarketPosition=Short
+08:33:03.323 [08:34:00.000] 26/1/26 8:34:00 a. m. TRADE VWAP: Initialized (Managed)
+08:33:03.323 [08:34:00.000]    -> Protection Alloc: Filled=2 | ForTP1=1 (Need:1) | ForTP2=1 (Need:1)
+08:33:03.323 [08:34:00.000] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=5.94778457411133 | targetGlobalVWAP=5.94778457411133 | avgEntry=5.9945
+08:33:03.323 [08:34:00.000] 26/1/26 8:34:00 a. m. | SEARCH_OPPOSITE: Looking for 'Asia Low' on CURRENT Trading Day 2026-01-26 (Setup: Asia High, Session Start: 2026-01-25 19:00)
+08:33:03.324 [08:34:00.000] TP2_SELECTED: Asia Low @ 5.8885 for setup Asia High on trading day 2026-01-26
+08:33:03.324 [08:34:00.000] TP CALC (Short): Entry=5.9945 | GlobalVWAP=5.94778457411133 | ZoneOpp=5.8885 (ValTP=0) | TP1=5.94778457411133 TP2=5.8885 | Selected=5.948
+08:33:03.324 [08:34:00.000] SL_CREATE_DEBUG (MGR): Instrument=MHG 03-26 Direction=Short Tag=SL_Short_01 Action=BuyToCover Price=6.0055 Qty=2
+08:33:03.325 [08:34:00.000] SL CREATED: SL_Short_01 @ 6.0055 Qty=2 Risk=$55.00
+08:33:03.326 [08:34:00.000] TP1 CREATED: TP1_Short_01 @ 5.948 Qty=1
+08:33:03.326 [08:34:00.000] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=5.94778457411133 | targetGlobalVWAP=5.94778457411133 | avgEntry=5.9945
+08:33:03.326 [08:34:00.000] TP2_PERSIST: Saved validatedTp2Price=5.8885 to strategy
+08:33:03.327 [08:34:00.000] TP CALC (Short): Entry=5.9945 | GlobalVWAP=5.94778457411133 | ZoneOpp=5.8885 (ValTP=0) | TP1=5.94778457411133 TP2=5.8885 | Selected=5.8885
+08:33:03.327 [08:34:00.000] SL CLEANUP: Clearing stale reference (State=Initialized)
+08:33:03.327 [08:34:00.000] SL SKIPPED: Already created in current entry (duplicate prevention)
+08:33:03.344 [08:34:00.000] TP2 CREATED: TP2_Short_01 @ 5.8885 Qty=1
+08:33:03.344 [08:34:00.000] EXEC_FILL_DEBUG: Order=38756882 Name=EntryAnticipado_Short_01 State=Filled Price=5.9945 | tp1Order=9623405 tp1Name=TP1_Short_01
+08:33:03.842 [08:34:00.000] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Submitted Price=5.948 Qty=1
+08:33:03.842 [08:34:00.000]   -> Updated tp1Order reference (ID=363062136968)
+08:33:03.908 [08:34:00.000] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Submitted Price=5.8885 Qty=1
+08:33:03.908 [08:34:00.000]   -> Updated tp2Order reference (ID=363062136970)
+08:33:04.026 [08:34:00.000] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Accepted Price=5.948 Qty=1
+08:33:04.027 [08:34:00.000]   -> Updated tp1Order reference (ID=363062136968)
+08:33:04.027 [08:34:00.000] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Working Price=5.948 Qty=1
+08:33:04.027 [08:34:00.000]   -> Updated tp1Order reference (ID=363062136968)
+08:33:04.028 [08:34:00.000] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Accepted Price=5.8885 Qty=1
+08:33:04.028 [08:34:00.000]   -> Updated tp2Order reference (ID=363062136970)
+08:33:04.028 [08:34:00.000] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Working Price=5.8885 Qty=1
+08:33:04.029 [08:34:00.000]   -> Updated tp2Order reference (ID=363062136970)
+08:36:42.528 [08:37:00.000] NinjaTrader.NinjaScript.TimeSeries Exit Execution (SL_Short_01). Qty=2
+08:36:42.528 [08:37:00.000] EXEC_FILL_DEBUG: Order=60796374 Name=SL_Short_01 State=Filled Price=6.0055 | tp1Order=9623405 tp1Name=TP1_Short_01
+08:36:42.529 [08:37:00.000] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #20260126_1 closed - SL_Short_01 PnL=-55.00
+08:36:42.530 [08:37:00.000] NinjaTrader.NinjaScript.TimeSeries Position Closed (SL_Short_01). Resetting to Idle.
+08:36:42.530 [08:37:00.000] NinjaTrader.NinjaScript.TimeSeries VWAP RETRY: Waiting for price to break 6.01 for VWAP#2
+08:36:42.531 [08:37:00.000] ORDER_UPDATE_TP: Name='TP1_Short_01' State=CancelPending Price=5.948 Qty=1
+08:36:42.531 [08:37:00.000]   -> Updated tp1Order reference (ID=363062136968)
+08:36:42.532 [08:37:00.000] CLEANUP: Cancelled orphan tp1Order
+08:36:42.532 [08:37:00.000] ORDER_UPDATE_TP: Name='TP2_Short_01' State=CancelPending Price=5.8885 Qty=1
+08:36:42.537 [08:37:00.000]   -> Updated tp2Order reference (ID=363062136970)
+08:36:42.537 [08:37:00.000] CLEANUP: Cancelled orphan tp2Order
+08:36:42.642 [08:37:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6.0055 (Resetting IsMitigated=false, JustReset=true)
+08:36:42.643 [08:37:00.000] 26/1/26 8:37:00 a. m. VWAP RETRY TRIGGERED: Price broke 6.01. Starting attempt #2
+08:36:42.685 [08:37:00.000] 26/1/26 8:36:42 a. m. TRADE CLOSED: TR_SHORT at 5.9945, Exit at 6.0055, Profit: $-55,00
+08:36:42.802 [08:37:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6.006 (Resetting IsMitigated=false, JustReset=true)
+08:36:42.803 [08:37:00.000] RE-ANCHOR: New High @ 6.006 (Setup: Asia High)
+08:36:42.971 [08:37:00.000] ORDER_UPDATE_TP: Name='TP1_Short_01' State=CancelSubmitted Price=5.948 Qty=1
+08:36:42.971 [08:37:00.000]   -> Updated tp1Order reference (ID=363062136968)
+08:36:42.998 [08:37:00.000] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Cancelled Price=5.948 Qty=1
+08:36:42.999 [08:37:00.000]   -> Updated tp1Order reference (ID=363062136968)
+08:36:43.014 [08:37:00.000] ORDER_UPDATE_TP: Name='TP1_Short_01' State=Cancelled Price=5.948 Qty=1
+08:36:43.014 [08:37:00.000]   -> Updated tp1Order reference (ID=363062136968)
+08:36:43.015 [08:37:00.000] ORDER_UPDATE_TP: Name='TP2_Short_01' State=CancelSubmitted Price=5.8885 Qty=1
+08:36:43.015 [08:37:00.000]   -> Updated tp2Order reference (ID=363062136970)
+08:36:43.029 [08:37:00.000] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Cancelled Price=5.8885 Qty=1
+08:36:43.030 [08:37:00.000]   -> Updated tp2Order reference (ID=363062136970)
+08:36:43.040 [08:37:00.000] ORDER_UPDATE_TP: Name='TP2_Short_01' State=Cancelled Price=5.8885 Qty=1
+08:36:43.040 [08:37:00.000]   -> Updated tp2Order reference (ID=363062136970)
+08:37:03.205 [08:38:00.000] 26/1/26 8:38:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.01 VWAP=6.01 Threshold=6.00 Valid=False
+08:37:03.205 [08:38:00.000] 26/1/26 8:38:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.01 VWAP=6.01 Threshold=6.00 Valid=False
+08:37:07.771 [08:38:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6.0065 (Resetting IsMitigated=false, JustReset=true)
+08:37:07.772 [08:38:00.000] RE-ANCHOR: New High @ 6.0065 (Setup: Asia High)
+08:38:09.910 [08:39:00.000] 26/1/26 8:39:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.01 VWAP=6.00 Threshold=6.00 Valid=False
+08:38:09.911 [08:39:00.000] 26/1/26 8:39:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.01 VWAP=6.00 Threshold=6.00 Valid=False
+08:39:05.118 [08:40:00.000] 26/1/26 8:40:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=6.00 Threshold=6.00 Valid=False
+08:39:05.119 [08:40:00.000] 26/1/26 8:40:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=6.00 Threshold=6.00 Valid=False
+08:40:00.468 [08:41:00.000] 26/1/26 8:41:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=6.00 Threshold=6.00 Valid=True
+08:40:00.469 [08:41:00.000] 26/1/26 8:41:00 a. m. | SEARCH_OPPOSITE: Looking for 'Asia Low' on CURRENT Trading Day 2026-01-26 (Setup: Asia High, Session Start: 2026-01-25 19:00)
+08:40:00.469 [08:41:00.000] TP2_SELECTED: Asia Low @ 5.8885 for setup Asia High on trading day 2026-01-26
+08:40:00.469 [08:41:00.000] 26/1/26 8:41:00 a. m. | EXEC_DEBUG: Submitting Short Limit @ 6.003 (Raw: 6.00300387596899). Bid=5.999 Ask=6
+08:40:00.469 [08:41:00.000] 26/1/26 8:41:00 a. m. | ANTICIPATED ENTRY: Market @ 5.999
+08:40:00.469 [08:41:00.000] RISK_DEBUG_PRE: Capital=$20551.65 | RiskPct=0.06% | CalcRisk=$12.33 | UseATR=True | ATRFactor=2
+08:40:00.470 [08:41:00.000] RISK_DEBUG_ATR: ATR=$9.85 | ScaledRisk=$19.70
+08:40:00.470 [08:41:00.000] RISK_DEBUG_POST: Written=$19.70 | ReadFromFile=$42.90 | Using=$42.90
+08:40:00.470 [08:41:00.000] QTY_DEBUG: Risk=$42.90 | SL_Ticks=16.00 | TickVal=$1.25 | CalcQty=2.15 | MaxQty=1000 | MinQty=1
+08:40:00.470 [08:41:00.000] 26/1/26 8:41:00 a. m. Order Submitted (Short). Mode=Anticipado Type=Market Qty=2
+08:40:00.934 [08:41:00.000] NinjaTrader.NinjaScript.TimeSeries Entry Filled (EntryAnticipado_Short_02) Qty=2. State -> PositionActive. TradeOriginalQty=2
+08:40:00.935 [08:41:00.000] 26/1/26 8:41:00 a. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:40:00.935 [08:41:00.000] PROTECTION_RESET: Cleared order references for new trade
+08:40:00.936 [08:41:00.000] TRADE FILL: Asia High (Start: 25/1/26 7:00:00 p. m.) EntryAttempts incremented to 2/20 (OID: 363062136986)
+08:40:00.936 [08:41:00.000] TRADE ATTEMPT: Asia High Attempt #2/20
+08:40:00.936 [08:41:00.000] NinjaTrader.NinjaScript.TimeSeries DELTA CAPTURE: Entry Delta=-835 Direction=1
+08:40:00.936 [08:41:00.000] DIAG_EXEC: Name=EntryAnticipado_Short_02 Qty=2 | Position.MP=Short Arg.MP=Short | State=PositionActive
+08:40:00.937 [08:41:00.000]    FILL: Trade #2 | Short @ 6 | Qty=2
+08:40:00.937 [08:41:00.000] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #2 started - Short @ 6
+08:40:00.937 [08:41:00.000] 26/1/26 8:41:00 a. m. REPLAY_SYNC_DELAY: Account.Positions=0 but Position.Quantity=2. Proceeding with protection (replay sync delay).
+08:40:00.944 [08:41:00.000] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Short FilledQty=2 Position.Qty=2 Position.MarketPosition=Short
+08:40:00.944 [08:41:00.000] 26/1/26 8:41:00 a. m. TRADE VWAP: Initialized (Managed)
+08:40:00.945 [08:41:00.000]    -> Protection Alloc: Filled=2 | ForTP1=1 (Need:1) | ForTP2=1 (Need:1)
+08:40:00.945 [08:41:00.000] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=5.94951766463176 | targetGlobalVWAP=5.94951766463176 | avgEntry=6
+08:40:00.945 [08:41:00.000] 26/1/26 8:41:00 a. m. | SEARCH_OPPOSITE: Looking for 'Asia Low' on CURRENT Trading Day 2026-01-26 (Setup: Asia High, Session Start: 2026-01-25 19:00)
+08:40:00.946 [08:41:00.000] TP2_SELECTED: Asia Low @ 5.8885 for setup Asia High on trading day 2026-01-26
+08:40:00.946 [08:41:00.000] TP CALC (Short): Entry=6 | GlobalVWAP=5.94951766463176 | ZoneOpp=5.8885 (ValTP=0) | TP1=5.94951766463176 TP2=5.8885 | Selected=5.9495
+08:40:00.947 [08:41:00.000] SL_CREATE_DEBUG (MGR): Instrument=MHG 03-26 Direction=Short Tag=SL_Short_02 Action=BuyToCover Price=6.007 Qty=2
+08:40:00.956 [08:41:00.000] SL CREATED: SL_Short_02 @ 6.007 Qty=2 Risk=$35.00
+08:40:00.956 [08:41:00.000] TP1 CREATED: TP1_Short_02 @ 5.9495 Qty=1
+08:40:00.957 [08:41:00.000] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=5.94951766463176 | targetGlobalVWAP=5.94951766463176 | avgEntry=6
+08:40:00.957 [08:41:00.000] FORCE TARGET: Using Validated TP Price: 5.8885
+08:40:00.957 [08:41:00.000] TP CALC (Short): Entry=6 | GlobalVWAP=5.94951766463176 | ZoneOpp=5.8885 (ValTP=5.8885) | TP1=5.94951766463176 TP2=5.8885 | Selected=5.8885
+08:40:00.957 [08:41:00.000] SL CLEANUP: Clearing stale reference (State=Initialized)
+08:40:00.958 [08:41:00.000] SL SKIPPED: Already created in current entry (duplicate prevention)
+08:40:00.967 [08:41:00.000] TP2 CREATED: TP2_Short_02 @ 5.8885 Qty=1
+08:40:00.967 [08:41:00.000] EXEC_FILL_DEBUG: Order=42445263 Name=EntryAnticipado_Short_02 State=Filled Price=6 | tp1Order=38043164 tp1Name=TP1_Short_02
+08:40:01.403 [08:41:00.000] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Submitted Price=5.9495 Qty=1
+08:40:01.404 [08:41:00.000]   -> Updated tp1Order reference (ID=363062136996)
+08:40:01.468 [08:41:00.000] ORDER_UPDATE_TP: Name='TP2_Short_02' State=Submitted Price=5.8885 Qty=1
+08:40:01.468 [08:41:00.000]   -> Updated tp2Order reference (ID=363062136998)
+08:40:01.562 [08:41:00.000] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Accepted Price=5.9495 Qty=1
+08:40:01.562 [08:41:00.000]   -> Updated tp1Order reference (ID=363062136996)
+08:40:01.563 [08:41:00.000] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Working Price=5.9495 Qty=1
+08:40:01.563 [08:41:00.000]   -> Updated tp1Order reference (ID=363062136996)
+08:40:01.565 [08:41:00.000] ORDER_UPDATE_TP: Name='TP2_Short_02' State=Accepted Price=5.8885 Qty=1
+08:40:01.565 [08:41:00.000]   -> Updated tp2Order reference (ID=363062136998)
+08:40:01.565 [08:41:00.000] ORDER_UPDATE_TP: Name='TP2_Short_02' State=Working Price=5.8885 Qty=1
+08:40:01.565 [08:41:00.000]   -> Updated tp2Order reference (ID=363062136998)
+08:41:24.913 [08:42:00.000] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangePending Price=5.9495 Qty=1
+08:41:24.913 [08:42:00.000]   -> Updated tp1Order reference (ID=363062136996)
+08:41:25.209 [08:42:00.000] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangeSubmitted Price=5.95 Qty=1
+08:41:25.209 [08:42:00.000]   -> Updated tp1Order reference (ID=363062136996)
+08:41:25.379 [08:42:00.000] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Accepted Price=5.95 Qty=1
+08:41:25.380 [08:42:00.000]   -> Updated tp1Order reference (ID=363062136996)
+08:41:25.380 [08:42:00.000] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Working Price=5.95 Qty=1
+08:41:25.380 [08:42:00.000]   -> Updated tp1Order reference (ID=363062136996)
+08:46:44.553 [08:47:00.000] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangePending Price=5.95 Qty=1
+08:46:44.554 [08:47:00.000]   -> Updated tp1Order reference (ID=363062136996)
+08:46:44.841 [08:47:00.000] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangeSubmitted Price=5.951 Qty=1
+08:46:44.842 [08:47:00.000]   -> Updated tp1Order reference (ID=363062136996)
+08:46:45.048 [08:47:00.000] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Accepted Price=5.951 Qty=1
+08:46:45.049 [08:47:00.000]   -> Updated tp1Order reference (ID=363062136996)
+08:46:45.049 [08:47:00.000] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Working Price=5.951 Qty=1
+08:46:45.050 [08:47:00.000]   -> Updated tp1Order reference (ID=363062136996)
+08:51:39.825 [08:52:00.000] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangePending Price=5.951 Qty=1
+08:51:39.826 [08:52:00.000]   -> Updated tp1Order reference (ID=363062136996)
+08:51:40.114 [08:52:00.000] ORDER_UPDATE_TP: Name='TP1_Short_02' State=ChangeSubmitted Price=5.9515 Qty=1
+08:51:40.114 [08:52:00.000]   -> Updated tp1Order reference (ID=363062136996)
+08:51:40.285 [08:52:00.000] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Accepted Price=5.9515 Qty=1
+08:51:40.286 [08:52:00.000]   -> Updated tp1Order reference (ID=363062136996)
+08:51:40.287 [08:52:00.000] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Working Price=5.9515 Qty=1
+08:51:40.288 [08:52:00.000]   -> Updated tp1Order reference (ID=363062136996)
+08:54:19.900 [08:55:00.000] NinjaTrader.NinjaScript.TimeSeries Exit Execution (SL_Short_02). Qty=2
+08:54:19.901 [08:55:00.000] EXEC_FILL_DEBUG: Order=64763142 Name=SL_Short_02 State=Filled Price=6.007 | tp1Order=38043164 tp1Name=TP1_Short_02
+08:54:19.904 [08:55:00.000] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #20260126_2 closed - SL_Short_02 PnL=-35.00
+08:54:19.904 [08:55:00.000] NinjaTrader.NinjaScript.TimeSeries Position Closed (SL_Short_02). Resetting to Idle.
+08:54:19.904 [08:55:00.000] NinjaTrader.NinjaScript.TimeSeries VWAP RETRY: Waiting for price to break 6.01 for VWAP#3
+08:54:19.905 [08:55:00.000] ORDER_UPDATE_TP: Name='TP1_Short_02' State=CancelPending Price=5.9515 Qty=1
+08:54:19.905 [08:55:00.000]   -> Updated tp1Order reference (ID=363062136996)
+08:54:19.906 [08:55:00.000] CLEANUP: Cancelled orphan tp1Order
+08:54:19.906 [08:55:00.000] ORDER_UPDATE_TP: Name='TP2_Short_02' State=CancelPending Price=5.8885 Qty=1
+08:54:19.906 [08:55:00.000]   -> Updated tp2Order reference (ID=363062136998)
+08:54:19.907 [08:55:00.000] CLEANUP: Cancelled orphan tp2Order
+08:54:19.959 [08:55:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6.007 (Resetting IsMitigated=false, JustReset=true)
+08:54:19.960 [08:55:00.000] 26/1/26 8:55:00 a. m. VWAP RETRY TRIGGERED: Price broke 6.01. Starting attempt #3
+08:54:20.009 [08:55:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6.0075 (Resetting IsMitigated=false, JustReset=true)
+08:54:20.010 [08:55:00.000] RE-ANCHOR: New High @ 6.0075 (Setup: Asia High)
+08:54:20.180 [08:55:00.000] 26/1/26 8:54:20 a. m. TRADE CLOSED: TR_SHORT at 6, Exit at 6.007, Profit: $-35,00
+08:54:20.386 [08:55:00.000] ORDER_UPDATE_TP: Name='TP1_Short_02' State=CancelSubmitted Price=5.9515 Qty=1
+08:54:20.386 [08:55:00.000]   -> Updated tp1Order reference (ID=363062136996)
+08:54:20.403 [08:55:00.000] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Cancelled Price=5.9515 Qty=1
+08:54:20.403 [08:55:00.000]   -> Updated tp1Order reference (ID=363062136996)
+08:54:20.418 [08:55:00.000] ORDER_UPDATE_TP: Name='TP1_Short_02' State=Cancelled Price=5.9515 Qty=1
+08:54:20.418 [08:55:00.000]   -> Updated tp1Order reference (ID=363062136996)
+08:54:20.594 [08:55:00.000] ORDER_UPDATE_TP: Name='TP2_Short_02' State=CancelSubmitted Price=5.8885 Qty=1
+08:54:20.594 [08:55:00.000]   -> Updated tp2Order reference (ID=363062136998)
+08:54:20.608 [08:55:00.000] ORDER_UPDATE_TP: Name='TP2_Short_02' State=Cancelled Price=5.8885 Qty=1
+08:54:20.609 [08:55:00.000]   -> Updated tp2Order reference (ID=363062136998)
+08:54:20.620 [08:55:00.000] ORDER_UPDATE_TP: Name='TP2_Short_02' State=Cancelled Price=5.8885 Qty=1
+08:54:20.621 [08:55:00.000]   -> Updated tp2Order reference (ID=363062136998)
+08:55:01.316 [08:56:00.000] 26/1/26 8:56:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.01 VWAP=6.00 Threshold=6.00 Valid=False
+08:55:01.317 [08:56:00.000] 26/1/26 8:56:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.01 VWAP=6.00 Threshold=6.00 Valid=False
+08:56:00.726 [08:57:00.000] 26/1/26 8:57:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.01 VWAP=6.00 Threshold=6.00 Valid=False
+08:56:00.726 [08:57:00.000] 26/1/26 8:57:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.01 VWAP=6.00 Threshold=6.00 Valid=False
+08:57:04.891 [08:58:00.000] 26/1/26 8:58:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=6.00 Threshold=6.00 Valid=False
+08:57:04.892 [08:58:00.000] 26/1/26 8:58:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=6.00 Threshold=6.00 Valid=False
+08:58:03.981 [08:59:00.000] 26/1/26 8:59:00 a. m. | DIAG_CONFIRM_SHORT: High[1]=6.00 VWAP=6.00 Threshold=6.00 Valid=True
+08:58:03.981 [08:59:00.000] 26/1/26 8:59:00 a. m. | SEARCH_OPPOSITE: Looking for 'Asia Low' on CURRENT Trading Day 2026-01-26 (Setup: Asia High, Session Start: 2026-01-25 19:00)
+08:58:03.982 [08:59:00.000] TP2_SELECTED: Asia Low @ 5.8885 for setup Asia High on trading day 2026-01-26
+08:58:03.982 [08:59:00.000] 26/1/26 8:59:00 a. m. | EXEC_DEBUG: Submitting Short Limit @ 6 (Raw: 5.99993446601942). Bid=5.99 Ask=5.9905
+08:58:03.982 [08:59:00.000] 26/1/26 8:59:00 a. m. | ANTICIPATED ENTRY: Market @ 5.99
+08:58:03.982 [08:59:00.000] RISK_DEBUG_PRE: Capital=$20514.49 | RiskPct=0.06% | CalcRisk=$12.31 | UseATR=True | ATRFactor=2
+08:58:03.983 [08:59:00.000] RISK_DEBUG_ATR: ATR=$10.43 | ScaledRisk=$20.85
+08:58:03.983 [08:59:00.000] RISK_DEBUG_POST: Written=$20.85 | ReadFromFile=$51.73 | Using=$51.73
+08:58:03.983 [08:59:00.000] QTY_DEBUG: Risk=$51.73 | SL_Ticks=36.00 | TickVal=$1.25 | CalcQty=1.15 | MaxQty=1000 | MinQty=1
+08:58:03.984 [08:59:00.000] 26/1/26 8:59:00 a. m. Order Submitted (Short). Mode=Anticipado Type=Market Qty=1
+08:58:04.502 [08:59:00.000] RISK_DEBUG_PRE: Capital=$20514.49 | RiskPct=0.06% | CalcRisk=$12.31 | UseATR=True | ATRFactor=2
+08:58:04.502 [08:59:00.000] RISK_DEBUG_ATR: ATR=$10.43 | ScaledRisk=$20.85
+08:58:04.503 [08:59:00.000] RISK_DEBUG_POST: Written=$20.85 | ReadFromFile=$51.73 | Using=$51.73
+08:58:04.503 [08:59:00.000] QTY_DEBUG: Risk=$51.73 | SL_Ticks=17.31 | TickVal=$1.25 | CalcQty=2.39 | MaxQty=1000 | MinQty=1
+08:58:04.503 [08:59:00.000] 26/1/26 8:59:00 a. m. | DYNAMIC QTY ADJUST: Old=1 New=2 (Stop moved to 6.01)
+08:58:04.523 [08:59:00.000] NinjaTrader.NinjaScript.TimeSeries Entry Filled (EntryAnticipado_Short_03) Qty=1. State -> PositionActive. TradeOriginalQty=1
+08:58:04.523 [08:59:00.000] 26/1/26 8:59:00 a. m. [DEBUG] OrderProtectionManager: ResetEntryState CALLED (Clearing cached levels)
+08:58:04.523 [08:59:00.000] PROTECTION_RESET: Cleared order references for new trade
+08:58:04.523 [08:59:00.000] TRADE FILL: Asia High (Start: 25/1/26 7:00:00 p. m.) EntryAttempts incremented to 3/20 (OID: 363062137026)
+08:58:04.523 [08:59:00.000] TRADE ATTEMPT: Asia High Attempt #3/20
+08:58:04.524 [08:59:00.000] NinjaTrader.NinjaScript.TimeSeries DELTA CAPTURE: Entry Delta=-891 Direction=1
+08:58:04.524 [08:59:00.000] DIAG_EXEC: Name=EntryAnticipado_Short_03 Qty=1 | Position.MP=Short Arg.MP=Short | State=PositionActive
+08:58:04.524 [08:59:00.000]    FILL: Trade #3 | Short @ 5.99 | Qty=1
+08:58:04.524 [08:59:00.000] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #3 started - Short @ 5.99
+08:58:04.525 [08:59:00.000] 26/1/26 8:59:00 a. m. REPLAY_SYNC_DELAY: Account.Positions=0 but Position.Quantity=1. Proceeding with protection (replay sync delay).
+08:58:04.525 [08:59:00.000] DEBUG_PROTECTION: EnsureProtection CALLED - Direction=Short FilledQty=1 Position.Qty=1 Position.MarketPosition=Short
+08:58:04.525 [08:59:00.000] 26/1/26 8:59:00 a. m. TRADE VWAP: Initialized (Managed)
+08:58:04.525 [08:59:00.000]    -> Protection Alloc: Filled=1 | ForTP1=1 (Need:1) | ForTP2=0 (Need:0)
+08:58:04.526 [08:59:00.000] TP_DIAG (Short): IsTradeVwapActive=True | GetCurrentLowVWAP=5.95282788077062 | targetGlobalVWAP=5.95282788077062 | avgEntry=5.99
+08:58:04.526 [08:59:00.000] 26/1/26 8:59:00 a. m. | SEARCH_OPPOSITE: Looking for 'Asia Low' on CURRENT Trading Day 2026-01-26 (Setup: Asia High, Session Start: 2026-01-25 19:00)
+08:58:04.526 [08:59:00.000] TP2_SELECTED: Asia Low @ 5.8885 for setup Asia High on trading day 2026-01-26
+08:58:04.526 [08:59:00.000] TP CALC (Short): Entry=5.99 | GlobalVWAP=5.95282788077062 | ZoneOpp=5.8885 (ValTP=0) | TP1=5.95282788077062 TP2=5.8885 | Selected=5.953
+08:58:04.526 [08:59:00.000] SL_CREATE_DEBUG (MGR): Instrument=MHG 03-26 Direction=Short Tag=SL_Short_03 Action=BuyToCover Price=6.008 Qty=1
+08:58:04.527 [08:59:00.000] SL CREATED: SL_Short_03 @ 6.008 Qty=1 Risk=$45.00
+08:58:04.527 [08:59:00.000] TP1 CREATED: TP1_Short_03 @ 5.953 Qty=1
+08:58:04.528 [08:59:00.000] EXEC_FILL_DEBUG: Order=52271044 Name=EntryAnticipado_Short_03 State=Filled Price=5.99 | tp1Order=44944057 tp1Name=TP1_Short_03
+08:58:05.002 [08:59:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=Submitted Price=5.953 Qty=1
+08:58:05.003 [08:59:00.000]   -> Updated tp1Order reference (ID=363062137036)
+08:58:05.122 [08:59:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=Accepted Price=5.953 Qty=1
+08:58:05.122 [08:59:00.000]   -> Updated tp1Order reference (ID=363062137036)
+08:58:05.123 [08:59:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=Working Price=5.953 Qty=1
+08:58:05.123 [08:59:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:00:11.806 [09:01:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=ChangePending Price=5.953 Qty=1
+09:00:11.807 [09:01:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:00:12.111 [09:01:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=ChangeSubmitted Price=5.954 Qty=1
+09:00:12.111 [09:01:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:00:12.141 [09:01:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=Accepted Price=5.954 Qty=1
+09:00:12.142 [09:01:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:00:12.142 [09:01:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=Working Price=5.954 Qty=1
+09:00:12.142 [09:01:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:01:27.119 [09:02:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=ChangePending Price=5.954 Qty=1
+09:01:27.120 [09:02:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:01:27.591 [09:02:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=ChangeSubmitted Price=5.9545 Qty=1
+09:01:27.592 [09:02:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:01:27.765 [09:02:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=Accepted Price=5.9545 Qty=1
+09:01:27.765 [09:02:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:01:27.766 [09:02:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=Working Price=5.9545 Qty=1
+09:01:27.766 [09:02:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:05:24.543 [09:06:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=ChangePending Price=5.9545 Qty=1
+09:05:24.544 [09:06:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:05:24.847 [09:06:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=ChangeSubmitted Price=5.9555 Qty=1
+09:05:24.847 [09:06:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:05:25.000 [09:06:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=Accepted Price=5.9555 Qty=1
+09:05:25.001 [09:06:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:05:25.001 [09:06:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=Working Price=5.9555 Qty=1
+09:05:25.002 [09:06:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:11:07.463 [09:12:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=ChangePending Price=5.9555 Qty=1
+09:11:07.463 [09:12:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:11:07.921 [09:12:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=ChangeSubmitted Price=5.956 Qty=1
+09:11:07.922 [09:12:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:11:07.922 [09:12:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=Accepted Price=5.956 Qty=1
+09:11:07.923 [09:12:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:11:07.923 [09:12:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=Working Price=5.956 Qty=1
+09:11:07.924 [09:12:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:18:11.624 [09:19:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=ChangePending Price=5.956 Qty=1
+09:18:11.624 [09:19:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:18:12.088 [09:19:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=ChangeSubmitted Price=5.957 Qty=1
+09:18:12.089 [09:19:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:18:12.090 [09:19:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=Accepted Price=5.957 Qty=1
+09:18:12.091 [09:19:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:18:12.091 [09:19:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=Working Price=5.957 Qty=1
+09:18:12.091 [09:19:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:20:40.828 [09:21:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=ChangePending Price=5.957 Qty=1
+09:20:40.828 [09:21:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:20:41.121 [09:21:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=ChangeSubmitted Price=5.958 Qty=1
+09:20:41.122 [09:21:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:20:41.301 [09:21:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=Accepted Price=5.958 Qty=1
+09:20:41.302 [09:21:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:20:41.302 [09:21:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=Working Price=5.958 Qty=1
+09:20:41.302 [09:21:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:30:50.518 [09:31:00.000] ORDER_UPDATE_TP: Name='TP1_Short_03' State=Filled Price=5.958 Qty=1
+09:30:50.519 [09:31:00.000]   -> Updated tp1Order reference (ID=363062137036)
+09:30:50.520 [09:31:00.000] NinjaTrader.NinjaScript.TimeSeries Exit Execution (TP1_Short_03). Qty=1
+09:30:50.521 [09:31:00.000] 26/1/26 9:31:00 a. m. BE SKIP: Target Qty is 0, cancelling orphan SL
+09:30:50.521 [09:31:00.000] EXEC_FILL_DEBUG: Order=44944057 Name=TP1_Short_03 State=Filled Price=5.958 | tp1Order=44944057 tp1Name=TP1_Short_03
+09:30:50.523 [09:31:00.000] 26/1/26 9:31:00 a. m. DELTA CAPTURE: TP1 Delta=-1312
+09:30:50.524 [09:31:00.000] 26/1/26 9:31:00 a. m. BE SKIP: Target Qty is 0, cancelling orphan SL
+09:30:50.524 [09:31:00.000] NinjaTrader.NinjaScript.TimeSeries CSV EXPORT: Trade #20260126_3.1 closed - TP1_Short_03 PnL=80.00
+09:30:50.525 [09:31:00.000] NinjaTrader.NinjaScript.TimeSeries Position Closed (TP1_Short_03). Resetting to Idle.
+09:30:50.704 [09:31:00.000] 26/1/26 9:30:50 a. m. TRADE CLOSED: TR_SHORT at 5.99, Exit at 5.958, Profit: $80,00

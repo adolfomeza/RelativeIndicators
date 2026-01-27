@@ -156,6 +156,9 @@ namespace NinjaTrader.NinjaScript.Strategies
                     highLvl.JustReset = true;
                     highLvl.IsMitigated = false; // v1.15.55: Reset mitigation status on expansion
                     
+                    // v1.15.61: DIAGNOSTIC LOG (Rule 12)
+                    strategy.Log(string.Format("DIAG_RE_ANCHOR: {0} Expanded to {1} (Resetting IsMitigated=false, JustReset=true)", highLvl.Name, highLvl.Price));
+
                     // v1.15.54: Update Delta on Re-Anchor
                     if (strategy.relativeDelta != null)
                     {
@@ -176,6 +179,9 @@ namespace NinjaTrader.NinjaScript.Strategies
                     lowLvl.JustReset = true;
                     lowLvl.IsMitigated = false; // v1.15.55: Reset mitigation status on expansion
                     
+                    // v1.15.61: DIAGNOSTIC LOG (Rule 12)
+                    strategy.Log(string.Format("DIAG_RE_ANCHOR: {0} Expanded to {1} (Resetting IsMitigated=false, JustReset=true)", lowLvl.Name, lowLvl.Price));
+
                     // v1.15.54: Update Delta on Re-Anchor
                     if (strategy.relativeDelta != null)
                     {
@@ -425,7 +431,6 @@ namespace NinjaTrader.NinjaScript.Strategies
                         }
                     }
                 }
-
                 // Drawing Logic
                 if (strategy.ShowVisuals)
                 {

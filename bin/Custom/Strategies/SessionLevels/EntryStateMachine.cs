@@ -171,6 +171,13 @@ namespace NinjaTrader.NinjaScript.Strategies.SessionLevels
                 {
                      candidates.Add(lvl);
                 }
+                else if (lvl.JustReset)
+                {
+                    // v1.15.61: DIAGNOSTIC LOG (Rule 12)
+                    // Log levels that expanded (JustReset=true) but are NOT being added to candidates by current logic
+                    strategy.Log(string.Format("DIAG_SCAN_IGNORE: {0} JustReset=true (Expanded) but failed 'IsMitigated && MitigationTime==Now' check. IsMitigated={1} Time={2}", 
+                        lvl.Name, lvl.IsMitigated, lvl.MitigationTime));
+                }
             }
 
             // PROCESSING SELECTION

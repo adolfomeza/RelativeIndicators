@@ -1,0 +1,27 @@
+=== MES Strategy Log - Started 2026-01-26 06:29:35 ===
+
+06:29:35.766 [06:30:00.000] DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
+06:29:35.766 [06:30:00.000] DEBUG_RECONNECT: Account.Position[1] Instrument=MYM 03-26 Qty=2 Dir=Short
+06:29:35.767 [06:30:00.000] DEBUG_RECONNECT: Total Account.Positions count = 1
+06:29:35.767 [06:30:00.000] 26/1/26 6:30:00 a. m. v1.15.60 RESTART EVAL: Checking for pending orders or valid setup to continue...
+06:29:35.767 [06:30:00.000] 26/1/26 6:30:00 a. m. v1.15.60 RESTART: No valid setup found. Starting fresh.
+09:57:57.776 [09:58:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6950.5 (Resetting IsMitigated=false, JustReset=true)
+09:57:57.838 [09:58:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6950.75 (Resetting IsMitigated=false, JustReset=true)
+09:58:00.804 [09:59:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6951 (Resetting IsMitigated=false, JustReset=true)
+09:58:06.192 [09:59:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6951.25 (Resetting IsMitigated=false, JustReset=true)
+09:58:18.176 [09:59:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6951.5 (Resetting IsMitigated=false, JustReset=true)
+09:58:18.216 [09:59:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6951.75 (Resetting IsMitigated=false, JustReset=true)
+09:58:25.604 [09:59:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6952 (Resetting IsMitigated=false, JustReset=true)
+09:58:35.545 [09:59:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6952.25 (Resetting IsMitigated=false, JustReset=true)
+09:58:36.518 [09:59:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6952.5 (Resetting IsMitigated=false, JustReset=true)
+09:58:36.574 [09:59:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6952.75 (Resetting IsMitigated=false, JustReset=true)
+10:00:46.228 [10:01:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6953 (Resetting IsMitigated=false, JustReset=true)
+10:01:21.356 [10:02:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6953.25 (Resetting IsMitigated=false, JustReset=true)
+10:01:50.883 [10:02:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6953.5 (Resetting IsMitigated=false, JustReset=true)
+10:01:50.952 [10:02:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6953.75 (Resetting IsMitigated=false, JustReset=true)
+10:01:52.465 [10:02:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6954 (Resetting IsMitigated=false, JustReset=true)
+10:02:01.373 [10:03:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6954.25 (Resetting IsMitigated=false, JustReset=true)
+10:02:17.358 [10:03:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6954.5 (Resetting IsMitigated=false, JustReset=true)
+10:02:18.540 [10:03:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6954.75 (Resetting IsMitigated=false, JustReset=true)
+10:02:21.975 [10:03:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6955 (Resetting IsMitigated=false, JustReset=true)
+10:02:23.413 [10:03:00.000] DIAG_RE_ANCHOR: Europe High Expanded to 6955.25 (Resetting IsMitigated=false, JustReset=true)

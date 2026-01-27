@@ -1,0 +1,67 @@
+2026-01-25 19:44:45:030|2|4|Session Break (Version 8.1.6.3)
+2026-01-25 19:45:03:048|1|4|Global simulation mode disabled
+2026-01-25 19:45:04:288|1|4|Vendor assembly 'AddonSuiteManager.Addon.Standalone' version='1.0.0.1' loaded.
+2026-01-25 19:45:04:288|1|4|Vendor assembly 'AdvancedRiskRewardBrunoMezaV3' version='1.0.0.1' loaded.
+2026-01-25 19:45:05:490|1|4|Vendor assembly 'ASCENDO_NewsEvents' version='3.0.0.0' loaded.
+2026-01-25 19:45:05:490|1|4|Vendor assembly 'Newtonsoft.Json' version='12.0.0.0' loaded.
+2026-01-25 19:45:06:186|1|4|Vendor assembly 'ReplayDataPlusManager.Addon.Standalone' version='1.0.0.1' loaded.
+2026-01-25 19:45:06:186|1|4|Vendor assembly 'TDUPriceAction' version='1.0.2.4' loaded.
+2026-01-25 19:45:06:186|1|4|Vendor assembly 'WindowsInput' version='1.0.4.0' loaded.
+2026-01-25 19:45:07:384|1|2|Using IS (is-us-nt-005.ninjatrader.com/31658)
+2026-01-25 19:45:07:391|1|4|Automated trading disabled
+2026-01-25 19:45:07:645|1|32|Order entry hot keys disabled
+2026-01-25 19:45:07:648|1|4|Auto close enabled=False
+2026-01-25 19:45:10:937|1|4|Restoring workspace 'Relative Trading Software'...
+2026-01-25 19:45:34:289|1|2|Simulation: Primary connection=Connecting, Price feed=Connecting
+2026-01-25 19:45:36:418|1|2|Simulation: Primary connection=Connected, Price feed=Connected
+2026-01-25 19:45:36:528|1|2|Time to auto close position='12:00:00 a. m.', Enabled=False
+2026-01-25 19:45:36:535|1|2|Using HDS (hds-us-nt-009.ninjatrader.com/31655)
+2026-01-25 20:05:17:006|1|2|Simulation: Primary connection=Connected, Price feed=Connection lost
+2026-01-25 20:05:17:580|1|2|Simulation: Primary connection=Connection lost, Price feed=Connection lost
+2026-01-25 20:05:36:703|3|2|Connection lost to the NinjaTrader Historical Data Server: hds-us-nt-009.ninjatrader.com
+2026-01-25 20:05:40:192|1|2|Simulation: Primary connection=Connected, Price feed=Connected
+2026-01-25 20:05:46:714|1|2|Using HDS (hds-us-nt-004.ninjatrader.com/31655)
+2026-01-25 20:05:48:120|1|2|Connection restored to the NinjaTrader Historical Data Server: hds-us-nt-004.ninjatrader.com
+2026-01-25 20:07:54:786|1|2|Simulation: Primary connection=Disconnecting, Price feed=Disconnecting
+2026-01-25 20:07:56:359|1|2|Simulation: Primary connection=Disconnected, Price feed=Disconnected
+2026-01-25 20:07:59:724|1|2|Playback: Primary connection=Connecting, Price feed=Connecting
+2026-01-25 20:08:00:945|1|2|Playback: Primary connection=Connected, Price feed=Connected
+2026-01-25 20:08:00:945|1|2|Time to auto close position='12:00:00 a. m.', Enabled=False
+2026-01-25 20:08:00:946|1|2|Using HDS (hds-us-nt-014.ninjatrader.com/31655)
+2026-01-25 20:08:01:164|1|2|Simulation account 'Playback101' reset
+2026-01-25 20:10:19:386|1|2|Simulation account 'Playback101' reset
+2026-01-25 20:12:58:472|1|2|Simulation account 'Playback101' reset
+2026-01-25 20:13:37:785|1|2|Simulation account 'Playback101' reset
+2026-01-25 20:14:12:851|1|2|Simulation account 'Playback101' reset
+2026-01-25 21:58:06:255|1|2|Playback: Primary connection=Disconnecting, Price feed=Disconnecting
+2026-01-25 21:58:06:258|1|2|Playback: Primary connection=Disconnected, Price feed=Disconnected
+2026-01-25 21:58:07:875|1|2|Simulation: Primary connection=Connecting, Price feed=Connecting
+2026-01-25 21:58:12:217|1|2|Simulation: Primary connection=Connected, Price feed=Connected
+2026-01-25 21:58:12:261|1|2|Time to auto close position='12:00:00 a. m.', Enabled=False
+2026-01-25 21:58:12:261|1|2|Using HDS (hds-us-nt-016.ninjatrader.com/31655)
+2026-01-25 21:59:18:222|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378426639' : On starting a real-time strategy - StartBehavior=WaitUntilFlat Position=MNQ 03-26 1L, MNQ 03-26 1L EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=False SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2026-01-25 21:59:56:041|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378426640' : On starting a real-time strategy - StartBehavior=WaitUntilFlat Position=MES 03-26 2L, MES 03-26 2L EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=False SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2026-01-25 22:00:32:474|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378426641' : On starting a real-time strategy - StartBehavior=WaitUntilFlat Position=MYM 03-26 5L, MYM 03-26 5L EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=False SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2026-01-25 22:01:06:815|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378426642' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=False SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2026-01-25 22:01:28:174|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378426641'
+2026-01-25 22:01:43:191|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378426641' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=False SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2026-01-25 22:01:52:408|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378426640'
+2026-01-25 22:02:16:597|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378426640' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=False SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2026-01-25 22:02:29:154|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378426639'
+2026-01-25 22:02:43:840|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378426639' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=False SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2026-01-25 22:03:23:973|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378426643' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=False SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2026-01-25 22:04:03:579|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378426644' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=False SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2026-01-25 22:04:42:828|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378426645' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=False SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2026-01-25 22:05:20:978|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378426646' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=False SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2026-01-25 22:05:35:021|1|2|Using IS (is-us-nt-005.ninjatrader.com/31658)
+2026-01-25 22:06:29:451|1|4|Workspace Relative Trading Software saved
+2026-01-25 22:06:29:510|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378426641'
+2026-01-25 22:06:29:578|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378426640'
+2026-01-25 22:06:29:580|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378426642'
+2026-01-25 22:06:29:581|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378426643'
+2026-01-25 22:06:29:581|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378426639'
+2026-01-25 22:06:29:585|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378426645'
+2026-01-25 22:06:29:663|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378426646'
+2026-01-25 22:06:29:677|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378426644'
+2026-01-25 22:06:29:915|1|2|Simulation: Primary connection=Disconnecting, Price feed=Disconnecting
+2026-01-25 22:06:31:466|1|2|Simulation: Primary connection=Disconnected, Price feed=Disconnected

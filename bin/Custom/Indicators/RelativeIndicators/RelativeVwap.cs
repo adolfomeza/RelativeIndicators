@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.44";  // v1.0.44: Fix anchor session tracking - save when anchor created, not in CheckTouches
+        private const string VERSION = "1.0.45";  // v1.0.45: Liquidity Grabbed and Entry labels with numbered sequences (01, 02, etc.)
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -95,6 +95,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         private int lowLiqGrabBarIdx = -1;       // Bar where Low liquidity grab label is drawn
         private double lowLiqGrabExtreme = 0;    // Lowest price reached since liquidity grab
         private string lowLiqGrabSessionName = ""; // Session name for the label tag
+        // v1.0.45: Liquidity Grabbed sequence and lock state
+        private bool highLiqGrabLocked = false;  // Locked when Signal 2 fires (label freezes at pivot)
+        private bool lowLiqGrabLocked = false;   // Locked when Signal 2 fires
+        private int highLiqGrabSequence = 1;     // Sequence number (01, 02, 03, etc.)
+        private int lowLiqGrabSequence = 1;      // Sequence number
 
         // Session Levels Tracking
         public class SessionLevelInfo
@@ -554,6 +559,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             lowLiqGrabBarIdx = -1;
             lowLiqGrabExtreme = 0;
             lowLiqGrabSessionName = "";
+            // v1.0.45: Reset Liquidity Grab sequence and lock
+            highLiqGrabLocked = false;
+            lowLiqGrabLocked = false;
+            highLiqGrabSequence = 1;
+            lowLiqGrabSequence = 1;
 
             if (ShowDebugLabels)
                 Draw.Text(this, "Reset" + CurrentBar, "RESET", 0, Low[0] - 5 * TickSize, Brushes.Red);
@@ -913,7 +923,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                hasLowVWAP = sessionLowBarIdx != -1 && sessionLowVol > 0;
 
              // v1.0.24: Move "Liquidity Grabbed" label to new extreme
-             if (highLiqGrabBarIdx >= 0 && !string.IsNullOrEmpty(highLiqGrabSessionName))
+             // v1.0.45: Only move if NOT locked (locked when Signal 2 fires)
+             if (highLiqGrabBarIdx >= 0 && !string.IsNullOrEmpty(highLiqGrabSessionName) && !highLiqGrabLocked)
              {
                  // For High liquidity grab (short setup), track new HIGHS
                  if (High[0] > highLiqGrabExtreme)
@@ -930,15 +941,18 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                          Draw.TriangleDown(this, "TakeHigh_" + highLiqGrabSessionName, true, 0, newY, SignalColor);
                          if (ShowSignalLabels)
                          {
-                             string code = LabelDisplayMode == LabelMode.Custom ? CustomSignal1Text : "1";
+                             // v1.0.45: Format with sequence number: "Liquidity\nGrabbed 01"
+                             string code = LabelDisplayMode == LabelMode.Custom ? CustomSignal1Text : string.Format("Liquidity\nGrabbed {0:00}", highLiqGrabSequence);
                              SimpleFont font = new SimpleFont("Arial", LabelFontSize);
-                             Draw.Text(this, "Sig1H_Txt_" + highLiqGrabSessionName, true, code, 0, newY, LabelTextOffset, SignalColor, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
+                             // v1.0.45: Use sequence in tag to allow multiple labels
+                             Draw.Text(this, "Sig1H_Txt_" + highLiqGrabSessionName + "_" + highLiqGrabSequence, true, code, 0, newY, LabelTextOffset, SignalColor, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
                          }
                      }
                  }
              }
 
-             if (lowLiqGrabBarIdx >= 0 && !string.IsNullOrEmpty(lowLiqGrabSessionName))
+             // v1.0.45: Only move if NOT locked (locked when Signal 2 fires)
+             if (lowLiqGrabBarIdx >= 0 && !string.IsNullOrEmpty(lowLiqGrabSessionName) && !lowLiqGrabLocked)
              {
                  // For Low liquidity grab (long setup), track new LOWS
                  if (Low[0] < lowLiqGrabExtreme)
@@ -955,10 +969,55 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                          Draw.TriangleUp(this, "TakeLow_" + lowLiqGrabSessionName, true, 0, newY, SignalColor);
                          if (ShowSignalLabels)
                          {
-                             string code = LabelDisplayMode == LabelMode.Custom ? CustomSignal1Text : "1";
+                             // v1.0.45: Format with sequence number: "Liquidity\nGrabbed 01"
+                             string code = LabelDisplayMode == LabelMode.Custom ? CustomSignal1Text : string.Format("Liquidity\nGrabbed {0:00}", lowLiqGrabSequence);
                              SimpleFont font = new SimpleFont("Arial", LabelFontSize);
-                             Draw.Text(this, "Sig1L_Txt_" + lowLiqGrabSessionName, true, code, 0, newY, -LabelTextOffset, SignalColor, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
+                             // v1.0.45: Use sequence in tag to allow multiple labels
+                             Draw.Text(this, "Sig1L_Txt_" + lowLiqGrabSessionName + "_" + lowLiqGrabSequence, true, code, 0, newY, -LabelTextOffset, SignalColor, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
                          }
+                     }
+                 }
+             }
+
+             // v1.0.45: Detect when price sweeps anchor bar again after Signal 2 was locked
+             // HIGH: Check if locked and price breaks above anchor bar
+             if (highLiqGrabLocked && sessionHighBarIdx >= 0)
+             {
+                 int barsAgo = CurrentBar - sessionHighBarIdx;
+                 if (barsAgo >= 0 && barsAgo < Bars.Count)
+                 {
+                     double anchorHigh = High[barsAgo];
+                     if (High[0] > anchorHigh)
+                     {
+                         // Price swept the anchor bar - create new Liquidity Grabbed label
+                         highLiqGrabSequence++;
+                         highLiqGrabLocked = false; // Unlock so it can move again
+                         highLiqGrabBarIdx = CurrentBar;
+                         highLiqGrabExtreme = High[0];
+
+                         Print(string.Format("[DEBUG LG] Bar:{0} | HIGH Anchor Swept | NewSeq:{1} | AnchorBar:{2} | AnchorHigh:{3:F2} | CurrentHigh:{4:F2}",
+                             CurrentBar, highLiqGrabSequence, sessionHighBarIdx, anchorHigh, High[0]));
+                     }
+                 }
+             }
+
+             // LOW: Check if locked and price breaks below anchor bar
+             if (lowLiqGrabLocked && sessionLowBarIdx >= 0)
+             {
+                 int barsAgo = CurrentBar - sessionLowBarIdx;
+                 if (barsAgo >= 0 && barsAgo < Bars.Count)
+                 {
+                     double anchorLow = Low[barsAgo];
+                     if (Low[0] < anchorLow)
+                     {
+                         // Price swept the anchor bar - create new Liquidity Grabbed label
+                         lowLiqGrabSequence++;
+                         lowLiqGrabLocked = false; // Unlock so it can move again
+                         lowLiqGrabBarIdx = CurrentBar;
+                         lowLiqGrabExtreme = Low[0];
+
+                         Print(string.Format("[DEBUG LG] Bar:{0} | LOW Anchor Swept | NewSeq:{1} | AnchorBar:{2} | AnchorLow:{3:F2} | CurrentLow:{4:F2}",
+                             CurrentBar, lowLiqGrabSequence, sessionLowBarIdx, anchorLow, Low[0]));
                      }
                  }
              }
@@ -1183,6 +1242,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
                           // v1.0.41: RESET tracker when signal is cancelled - allows new signal for same anchor
                           lastSignaledHighAnchorBar = -1;
+                          highLiqGrabLocked = false; // v1.0.45: Unlock Liquidity Grab so label can move again
                           Print(string.Format("[DEBUG FLAG] Bar:{0} | CANCELLED → Reset lastSignaledHighAnchorBar to -1 (allows new signal)", CurrentBar));
                       } 
                   }
@@ -1249,17 +1309,16 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           {
                               Draw.ArrowDown(this, "Sig2H_" + CurrentBar, true, 0, dotY, sigBrush);
 
-                              // Label: e.g. "UH1.1", "UH1.2"
+                              // Label: e.g. "Entry 01", "Entry 02"
                               if (lastUnlockedHighSession != null && ShowSignalLabels)
                               {
                                   string code = "";
                                   if (LabelDisplayMode == LabelMode.Simple) code = "2";
                                   else if (LabelDisplayMode == LabelMode.Custom) code = CustomSignal2Text;
-                                  else 
+                                  else
                                   {
-                                      code = GetSignalCode(lastUnlockedHighSession, "H");
-                                      if (lastUnlockedHighSession.IsInternalHigh) code = "i" + code;
-                                      code += "." + highAnchorSequence;
+                                      // v1.0.45: Simple "Entry 01" format with sequence number
+                                      code = string.Format("Entry {0:00}", highAnchorSequence);
                                   }
 
                                   SimpleFont font = new SimpleFont("Arial", LabelFontSize);
@@ -1272,6 +1331,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
                           highSignal2Fired = true; // v1.0.31: Mark signal as fired (prevents multiple signals)
                           lastSignaledHighAnchorBar = sessionHighBarIdx; // v1.0.33: Track which anchor was signaled
+                          highLiqGrabLocked = true; // v1.0.45: Lock Liquidity Grab label (freezes at pivot)
                           Print(string.Format("[DEBUG FLAG] Bar:{0} | SET highSignal2Fired=TRUE + lastSignaledHighAnchorBar={1}", CurrentBar, sessionHighBarIdx));
                       }
                   }
@@ -1495,6 +1555,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
                           // v1.0.41: RESET tracker when signal is cancelled - allows new signal for same anchor
                           lastSignaledLowAnchorBar = -1;
+                          lowLiqGrabLocked = false; // v1.0.45: Unlock Liquidity Grab so label can move again
                           Print(string.Format("[DEBUG FLAG] Bar:{0} | CANCELLED → Reset lastSignaledLowAnchorBar to -1 (allows new signal)", CurrentBar));
                       }
                   }
@@ -1555,17 +1616,16 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                           {
                               Draw.ArrowUp(this, "Sig2L_" + CurrentBar, true, 0, dotY, sigBrush);
 
-                              // Label: e.g. "UL1.1", "UL1.2"
+                              // Label: e.g. "Entry 01", "Entry 02"
                               if (lastUnlockedLowSession != null && ShowSignalLabels)
                               {
                                   string code = "";
                                   if (LabelDisplayMode == LabelMode.Simple) code = "2";
                                   else if (LabelDisplayMode == LabelMode.Custom) code = CustomSignal2Text;
-                                  else 
+                                  else
                                   {
-                                      code = GetSignalCode(lastUnlockedLowSession, "L");
-                                      if (lastUnlockedLowSession.IsInternalLow) code = "i" + code;
-                                      code += "." + lowAnchorSequence;
+                                      // v1.0.45: Simple "Entry 01" format with sequence number
+                                      code = string.Format("Entry {0:00}", lowAnchorSequence);
                                   }
 
                                   SimpleFont font = new SimpleFont("Arial", LabelFontSize);
@@ -1578,6 +1638,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
                           lowSignal2Fired = true; // v1.0.31: Mark signal as fired (prevents multiple signals)
                           lastSignaledLowAnchorBar = sessionLowBarIdx; // v1.0.33: Track which anchor was signaled
+                          lowLiqGrabLocked = true; // v1.0.45: Lock Liquidity Grab label (freezes at pivot)
                           Print(string.Format("[DEBUG FLAG] Bar:{0} | SET lowSignal2Fired=TRUE + lastSignaledLowAnchorBar={1}", CurrentBar, sessionLowBarIdx));
                       }
                   }
@@ -1932,6 +1993,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                         highSignalFired = false; // UNLOCK SIGNAL (New Level Hit)
                         lastUnlockedHighSession = session; // FIX: Store session for TP2 Logic
                         highAnchorSequence = 0; // RESET SEQUENCE TO 0
+                        // v1.0.45: Reset Liquidity Grab sequence and state
+                        highLiqGrabSequence = 1;
+                        highLiqGrabLocked = false;
+                        highLiqGrabBarIdx = -1;
                         // v1.0.42: REMOVED reset of opposite tracker - new Signal 2 requires new liquidity grab (new anchor), not just touching opposite level
                         // Signal 2 tracker only resets when: 1) new anchor created, 2) signal cancelled (touched VWAP same bar)
 
@@ -1988,14 +2053,18 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                             // Label (if ShowSignalLabels)
                             if (ShowSignalLabels)
                             {
+                                // v1.0.45: Format with sequence number: "Liquidity\nGrabbed 01"
+                                string labelCode = string.Format("Liquidity\nGrabbed {0:00}", highLiqGrabSequence);
                                 SimpleFont font = new SimpleFont("Arial", LabelFontSize);
-                                Draw.Text(this, "Sig1H_Txt_" + session.Name, true, code, 0, triY, LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
+                                // v1.0.45: Use sequence in tag to allow multiple labels
+                                Draw.Text(this, "Sig1H_Txt_" + session.Name + "_" + highLiqGrabSequence, true, labelCode, 0, triY, LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
                             }
 
                             // v1.0.24: Track position for movable label
                             highLiqGrabBarIdx = CurrentBar;
                             highLiqGrabExtreme = high;
                             highLiqGrabSessionName = session.Name;
+                            highLiqGrabLocked = false; // v1.0.45: New grab is unlocked (can move)
                         }
 
 
@@ -2037,6 +2106,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                          lowSignalFired = false; // UNLOCK SIGNAL
                          lastUnlockedLowSession = session; // FIX: Store session for TP2 Logic
                          lowAnchorSequence = 0; // RESET
+                         // v1.0.45: Reset Liquidity Grab sequence and state
+                         lowLiqGrabSequence = 1;
+                         lowLiqGrabLocked = false;
+                         lowLiqGrabBarIdx = -1;
                          // v1.0.42: REMOVED reset of opposite tracker - new Signal 2 requires new liquidity grab (new anchor), not just touching opposite level
                          // Signal 2 tracker only resets when: 1) new anchor created, 2) signal cancelled (touched VWAP same bar)
 
@@ -2091,14 +2164,18 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                              // Label (if ShowSignalLabels)
                              if (ShowSignalLabels)
                              {
+                                 // v1.0.45: Format with sequence number: "Liquidity\nGrabbed 01"
+                                 string labelCode = string.Format("Liquidity\nGrabbed {0:00}", lowLiqGrabSequence);
                                  SimpleFont font = new SimpleFont("Arial", LabelFontSize);
-                                 Draw.Text(this, "Sig1L_Txt_" + session.Name, true, code, 0, triY, -LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
+                                 // v1.0.45: Use sequence in tag to allow multiple labels
+                                 Draw.Text(this, "Sig1L_Txt_" + session.Name + "_" + lowLiqGrabSequence, true, labelCode, 0, triY, -LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
                              }
 
                              // v1.0.24: Track position for movable label
                              lowLiqGrabBarIdx = CurrentBar;
                              lowLiqGrabExtreme = low;
                              lowLiqGrabSessionName = session.Name;
+                             lowLiqGrabLocked = false; // v1.0.45: New grab is unlocked (can move)
                          }
 
 

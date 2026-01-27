@@ -1,8 +1,8 @@
 # SessionLevelsStrategy - Guía Completa de Auditoría y Trading
 
-**Versión Estrategia**: v1.15.38 (16 Enero 2026)  
+**Versión Estrategia**: v1.15.60 (24 Enero 2026)  
 **Versión App**: v2.11.0 (17 Enero 2026)  
-**Última Actualización**: 17 Enero 2026
+**Última Actualización**: 24 Enero 2026
 
 ---
 
@@ -134,6 +134,15 @@ Centraliza toda la inteligencia crítica:
 
 ---
 
+## 📈 Indicador RelativeVwap (v1.0.10)
+Complemento visual esencial para el análisis discrecional:
+*   **Señales Personalizables**: Configura textos propios para las señales (Ruptura, Confirmación, Re-test) y oculta individualmente las que no uses.
+*   **Etiquetas de Día Inteligentes ("Business Days")**: Cálculo corregido para sesiones de Domingo/Lunes, ignorando fines de semana.
+*   **Visual Supply/Demand**: Renombra las líneas principales VWAP a "Supply", "Demand" o lo que prefieras.
+*   **Estilo Visual**: Iconos unificados (Flechas) y lógica de pintado de velas refinada para evitar persistencia de color.
+
+---
+
 ## 📅 Historial de Cambios Recientes
 
 | Fecha | Versión App | Cambio Clave |
@@ -143,6 +152,8 @@ Centraliza toda la inteligencia crítica:
 | 17/01 | v2.11.0 | **Fix Charts**: Soporte para PnL por Intento en IA. |
 | 16/01 | v2.10.x | **Smart Rollover**: Costura automática de contratos futuros. |
 | 16/01 | v1.15.38 (Strat) | **Fix Reset Viernes**: Lógica crítica de fin de semana corregida. |
+| 23/01 | v1.0.10 (Ind) | **Custom Labels**: Personalización total de textos y señales visuales. |
+| 24/01 | v1.15.60 (Strat) | **Fix Persistencia**: Corrección de contadores de entradas que se duplicaban al reiniciar. |
 
 ---
 

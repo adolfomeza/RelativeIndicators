@@ -46,7 +46,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 	[Gui.CategoryOrder("Risk Management", 2)]
 	public class SessionLevelsStrategy : Strategy
 	{
-		private const string StrategyVersion = "v1.15.59"; // v1.15.59: Fix Anticipated Entry RR Bug
+		private const string StrategyVersion = "v1.15.60"; // v1.15.60: Fix Persistence Double Counting
 		
 		// CONTROL BUTTONS (Delegated to StrategyHelpers)
 		[XmlIgnore] public TradingMode currentTradingMode = TradingMode.Normal;
@@ -845,7 +845,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 						true, true, Brushes.Gray, 100, true, Brushes.Gray, 1, 100, // Line2500 params
 						true, Brushes.Gray, 1, 100, true, Brushes.Gray, 1, 100, // Line5000 params
 						true, Brushes.Gray, 1, 100, true, Brushes.Gray, 1, 100, // Line10000 params
-						Brushes.Gray, Brushes.Black); // Label colors
+						Brushes.White, Brushes.Transparent, // Label colors (Updated to match user preference)
+						true, "10:30", Brushes.Yellow, 2, 100, DashStyleHelper.Dash); // V_ZERO_LINE: US Session Params (Updated to 10:30, 2px)
 				}
 				catch (Exception ex)
 				{

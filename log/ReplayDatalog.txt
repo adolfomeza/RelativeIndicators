@@ -22,3 +22,139 @@ Log Entry : 10:21:29 p. m. martes, 13 de enero de 2026
 Log Entry : 10:23:41 p. m. martes, 13 de enero de 2026
   :Selected Count is 185
 -------------------------------
+
+Log Entry : 6:52:32 a. m. miércoles, 14 de enero de 2026
+  :Logging started for Replay Data
+-------------------------------
+
+Log Entry : 7:01:00 a. m. miércoles, 14 de enero de 2026
+  :Selected Count is 185
+-------------------------------
+
+Log Entry : 11:00:52 p. m. jueves, 15 de enero de 2026
+  :Logging started for Replay Data
+-------------------------------
+
+Log Entry : 11:01:11 p. m. jueves, 15 de enero de 2026
+  :Selected Count is 27
+-------------------------------
+
+Log Entry : 9:45:01 a. m. viernes, 16 de enero de 2026
+  :Selected Count is 55
+-------------------------------
+
+Log Entry : 2:36:48 p. m. viernes, 16 de enero de 2026
+  :Logging started for Replay Data
+-------------------------------
+
+Log Entry : 1:23:26 a. m. sábado, 17 de enero de 2026
+  :Logging started for Replay Data
+-------------------------------
+
+Log Entry : 1:24:33 a. m. sábado, 17 de enero de 2026
+  :Selected Count is 27
+-------------------------------
+
+Log Entry : 1:34:51 a. m. sábado, 17 de enero de 2026
+  :Selected Count is 27
+-------------------------------
+
+Log Entry : 1:36:33 a. m. sábado, 17 de enero de 2026
+  :Selected Count is 27
+-------------------------------
+
+Log Entry : 8:27:59 p. m. sábado, 17 de enero de 2026
+  :Logging started for Replay Data
+-------------------------------
+
+Log Entry : 8:28:14 p. m. sábado, 17 de enero de 2026
+  :Selected Count is 24
+-------------------------------
+
+Log Entry : 4:53:16 p. m. domingo, 18 de enero de 2026
+  :Logging started for Replay Data
+-------------------------------
+
+Log Entry : 4:53:24 p. m. domingo, 18 de enero de 2026
+  :Logging started for Replay Data
+-------------------------------
+
+Log Entry : 4:53:44 p. m. domingo, 18 de enero de 2026
+  :Selected Count is 47
+-------------------------------
+
+Log Entry : 7:00:11 p. m. domingo, 18 de enero de 2026
+  :Logging started for Replay Data
+-------------------------------
+
+Log Entry : 7:00:22 p. m. domingo, 18 de enero de 2026
+  :Selected Count is 24
+-------------------------------
+
+Log Entry : 10:36:21 p. m. domingo, 18 de enero de 2026
+  :Logging started for Replay Data
+-------------------------------
+
+Log Entry : 10:36:45 p. m. domingo, 18 de enero de 2026
+  :Selected Count is 26
+-------------------------------
+
+Log Entry : 5:27:56 a. m. lunes, 19 de enero de 2026
+  :Logging started for Replay Data
+-------------------------------
+
+Log Entry : 5:29:25 a. m. lunes, 19 de enero de 2026
+  :Logging started for Replay Data
+-------------------------------
+
+Log Entry : 5:30:06 a. m. lunes, 19 de enero de 2026
+  :Selected Count is 41
+-------------------------------
+
+Log Entry : 10:42:08 a. m. lunes, 19 de enero de 2026
+  :Logging started for Replay Data
+-------------------------------
+
+Log Entry : 10:42:39 a. m. lunes, 19 de enero de 2026
+  :Selected Count is 46
+-------------------------------
+
+Log Entry : 7:36:37 p. m. lunes, 19 de enero de 2026
+  :Logging started for Replay Data
+-------------------------------
+
+Log Entry : 7:37:16 p. m. lunes, 19 de enero de 2026
+  :Selected Count is 31
+-------------------------------
+
+Log Entry : 9:00:40 p. m. martes, 20 de enero de 2026
+  :Logging started for Replay Data
+-------------------------------
+
+Log Entry : 9:01:12 p. m. martes, 20 de enero de 2026
+  :Selected Count is 27
+-------------------------------
+
+Log Entry : 10:10:02 p. m. martes, 20 de enero de 2026
+  :Selected Count is 27
+-------------------------------
+
+Log Entry : 10:10:09 p. m. martes, 20 de enero de 2026
+  :Selected Count is 27
+-------------------------------
+
+Log Entry : 10:42:13 p. m. martes, 20 de enero de 2026
+  :Logging started for Replay Data
+-------------------------------
+
+Log Entry : 10:42:34 p. m. martes, 20 de enero de 2026
+  :Selected Count is 27
+-------------------------------
+
+Log Entry : 8:35:28 a. m. viernes, 23 de enero de 2026
+  :Logging started for Replay Data
+-------------------------------
+
+Log Entry : 8:36:07 a. m. viernes, 23 de enero de 2026
+  :Selected Count is 27
+-------------------------------

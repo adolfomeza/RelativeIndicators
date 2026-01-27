@@ -668,9 +668,12 @@ def apply_premium_style(fig, title=None):
             xanchor="right",
             x=1
         ),
-        margin=dict(l=40, r=40, t=60, b=40),
+        # v2.12.4: Balanced margins + Top margin for vertical bars
+        margin=dict(l=50, r=50, t=80, b=50),
         height=450
     )
+    # v2.12.4: cliponaxis Removed globally to prevent Heatmap crash (Applied per-chart instead)
+    # fig.update_traces(cliponaxis=False)
     return fig
 
 
@@ -3029,9 +3032,11 @@ with tab1:
         st.markdown("### Rendimiento Long vs Short")
         # Ensure we aggregate by Trade ID first to avoid double counting mixed logic? 
         # Actually PnL is additive, so group by Type is fine.
-        type_perf = df.groupby('Type')['PnL'].sum().reset_index()
+        # v1.15.60: Add WR/Count info
+        type_perf = df.groupby('Type')['PnL'].agg(['sum', 'count', lambda x: (x > 0).mean() * 100]).reset_index()
+        type_perf.columns = ['Type', 'TotalPnL', 'TradeCount', 'WinRate']
         
-        # Calculate stats for AI
+        # Calculate stats for AI (Legacy vars kept for compatibility)
         long_data = df[df['Type'] == 'Long']
         short_data = df[df['Type'] == 'Short']
         pnl_long = long_data['PnL'].sum() if len(long_data) > 0 else 0
@@ -3044,13 +3049,14 @@ with tab1:
         # v2.9.2: Apply custom heatmap colors
         custom_scale = [(0, '#FF0000'), (0.5, '#161B22'), (1, '#32CD32')]
         
-        fig_type = px.bar(type_perf, x='Type', y='PnL',
-                          color='PnL',
+        fig_type = px.bar(type_perf, x='Type', y='TotalPnL',
+                          color='TotalPnL',
                           color_continuous_scale=custom_scale,
-                          color_continuous_midpoint=0)
+                          color_continuous_midpoint=0,
+                          text=type_perf.apply(lambda x: f"{int(x['TradeCount'])} ({x['WinRate']:.1f}%)", axis=1))
                           
         # v2.9.6: Accessibility
-        fig_type.update_traces(marker_line_color='#666666', marker_line_width=1.5)
+        fig_type.update_traces(textposition='outside', marker_line_color='#666666', marker_line_width=1.5, cliponaxis=False)
         fig_type = apply_premium_style(fig_type, title='Rendimiento Long vs Short')
         st.plotly_chart(fig_type, use_container_width=True)
         
@@ -3093,7 +3099,7 @@ with tab1:
                                  text=attempt_perf.apply(lambda x: f"{int(x['TradeCount'])} ({x['WinRate']:.1f}%)", axis=1))
             
             # v2.9.6: Accessibility
-            fig_attempt.update_traces(textposition='outside', marker_line_color='#666666', marker_line_width=1.5)
+            fig_attempt.update_traces(textposition='outside', marker_line_color='#666666', marker_line_width=1.5, cliponaxis=False)
             # Force categorical X axis if attempts are integers 1, 2, 3...
             fig_attempt.update_xaxes(type='category')
             
@@ -3113,18 +3119,23 @@ with tab1:
         
     with col2:
         st.markdown("### PnL por Setup")
-        setup_perf = df.groupby('SetupName')['PnL'].sum().sort_values().reset_index()
+        # v1.15.60: Add WinRate to Setup chart
+        setup_perf = df.groupby('SetupName')['PnL'].agg(['sum', 'count', lambda x: (x > 0).mean() * 100]).reset_index()
+        setup_perf.columns = ['SetupName', 'TotalPnL', 'TradeCount', 'WinRate']
+        setup_perf = setup_perf.sort_values('TotalPnL') # Sort by PnL
         
         # v2.9.2: Custom Scale
         custom_scale = [(0, '#FF0000'), (0.5, '#161B22'), (1, '#32CD32')]
         
-        fig_setup = px.bar(setup_perf, y='SetupName', x='PnL', orientation='h', 
-                           color='PnL', 
+        fig_setup = px.bar(setup_perf, y='SetupName', x='TotalPnL', orientation='h', 
+                           color='TotalPnL', 
                            color_continuous_scale=custom_scale,
-                           color_continuous_midpoint=0)
+                           color_continuous_midpoint=0,
+                           text=setup_perf.apply(lambda x: f"{int(x['TradeCount'])} ({x['WinRate']:.1f}%)", axis=1))
                            
         # v2.9.6: Accessibility - Add Gray Border
-        fig_setup.update_traces(marker_line_color='#666666', marker_line_width=1.5)
+        # v1.15.60: Ensure text is visible (outside)
+        fig_setup.update_traces(textposition='outside', marker_line_color='#666666', marker_line_width=1.5, cliponaxis=False)
         # Fixed Undefined Title Logic
         fig_setup.update_layout(title_text="PnL por Setup", transition_duration=500)
         fig_setup = apply_premium_style(fig_setup)
@@ -3147,8 +3158,16 @@ with tab1:
             
             # Group by Age
             # v1.15.37: Ensure numeric sorting
-            age_perf = df.groupby('LevelAge')['PnL'].agg(['sum', 'count']).reset_index()
-            age_perf.columns = ['LevelAge', 'TotalPnL', 'TradeCount']
+            # v1.15.60: Add WinRate to Age chart
+            try:
+                age_perf = df.groupby('LevelAge')['PnL'].agg(['sum', 'count', lambda x: (x > 0).mean() * 100]).reset_index()
+                age_perf.columns = ['LevelAge', 'TotalPnL', 'TradeCount', 'WinRate']
+            except:
+                # Fallback if lambda fails (shouldn't happen with numeric PnL)
+                age_perf = df.groupby('LevelAge')['PnL'].agg(['sum', 'count']).reset_index()
+                age_perf.columns = ['LevelAge', 'TotalPnL', 'TradeCount']
+                age_perf['WinRate'] = 0.0
+
             age_perf = age_perf.sort_values('LevelAge')
             
             # Bar Chart
@@ -3160,10 +3179,13 @@ with tab1:
                              color='TotalPnL', 
                              color_continuous_scale=custom_scale,
                              color_continuous_midpoint=0,
-                             text='TradeCount')
+                             text=age_perf.apply(lambda x: f"{int(x['TradeCount'])} ({x['WinRate']:.1f}%)", axis=1))
             
             # v2.9.6: Accessibility
-            fig_age.update_traces(texttemplate='%{text}', textposition='outside', marker_line_color='#666666', marker_line_width=1.5)
+            fig_age.update_traces(textposition='outside', marker_line_color='#666666', marker_line_width=1.5, cliponaxis=False)
+            # Force categorical X axis
+            fig_age.update_xaxes(type='category')
+            
             fig_age = apply_premium_style(fig_age)
             st.plotly_chart(fig_age, use_container_width=True)
             
@@ -3191,7 +3213,9 @@ with tab1:
         
         with col1_time:
             st.subheader("Rendimiento por Hora")
-            hour_stats = df.groupby('Hour')['PnL'].sum().reset_index()
+            # v1.15.60: Aggregate stats for chart annotations
+            hour_stats = df.groupby('Hour')['PnL'].agg(['sum', 'count', lambda x: (x > 0).mean() * 100]).reset_index()
+            hour_stats.columns = ['Hour', 'TotalPnL', 'TradeCount', 'WinRate']
             
             # v2.10.2: Premium Styling (Red/Lime Heatmap)
             custom_scale_time = [(0, '#FF0000'), (0.5, '#161B22'), (1, '#32CD32')]
@@ -3204,26 +3228,35 @@ with tab1:
             # Ensure all hours exist in stats to prevent Plotly skipping
             # (Optional, but good for consistent X-axis)
             
-            fig_hour = px.bar(hour_stats, x='Hour', y='PnL', color='PnL', 
+            fig_hour = px.bar(hour_stats, x='Hour', y='TotalPnL', color='TotalPnL', 
                               color_continuous_scale=custom_scale_time,
-                              color_continuous_midpoint=0) # Center at 0
+                              color_continuous_midpoint=0, # Center at 0
+                              text=hour_stats.apply(lambda x: f"{int(x['TradeCount'])} ({x['WinRate']:.0f}%)", axis=1)) 
+                              # WR rounded to 0 decimals for space saving on hourly bars
             
             # Apply Custom Sort Order
             fig_hour.update_xaxes(type='category', categoryorder='array', categoryarray=custom_hour_order)
                               
-            fig_hour.update_traces(marker_line_color='#666666', marker_line_width=1.5)
+            fig_hour.update_traces(textposition='outside', marker_line_color='#666666', marker_line_width=1.5, cliponaxis=False)
             fig_hour = apply_premium_style(fig_hour, "Distribución Horaria (Inicio 18:00 Asia)")
             st.plotly_chart(fig_hour, use_container_width=True)
             
         with col2_time:
             st.subheader("Rendimiento por Día")
-            day_stats = df.groupby('Weekday')['PnL'].sum().reindex(days_order).reset_index()
+            # v1.15.60: Daily stats with Annotations
+            # Group by Weekday first
+            day_stats_raw = df.groupby('Weekday')['PnL'].agg(['sum', 'count', lambda x: (x > 0).mean() * 100])
+            day_stats_raw.columns = ['TotalPnL', 'TradeCount', 'WinRate']
             
-            fig_day_bar = px.bar(day_stats, x='Weekday', y='PnL', color='PnL', 
+            # Reindex to force order
+            day_stats = day_stats_raw.reindex(days_order).reset_index()
+            
+            fig_day_bar = px.bar(day_stats, x='Weekday', y='TotalPnL', color='TotalPnL', 
                                  color_continuous_scale=custom_scale_time,
-                                 color_continuous_midpoint=0)
+                                 color_continuous_midpoint=0,
+                                 text=day_stats.apply(lambda x: f"{int(x['TradeCount']) if pd.notna(x['TradeCount']) else 0} ({x['WinRate']:.0f}%)" if pd.notna(x['WinRate']) else "", axis=1))
                                  
-            fig_day_bar.update_traces(marker_line_color='#666666', marker_line_width=1.5)
+            fig_day_bar.update_traces(textposition='outside', marker_line_color='#666666', marker_line_width=1.5, cliponaxis=False)
             fig_day_bar = apply_premium_style(fig_day_bar, "Distribución Semanal")
             st.plotly_chart(fig_day_bar, use_container_width=True)
             
@@ -3231,8 +3264,8 @@ with tab1:
         time_insight = ""
         
         # 1. Analyze Toxic Hours
-        toxic_hours = hour_stats[hour_stats['PnL'] < 0]
-        toxic_pnl_h = toxic_hours['PnL'].sum()
+        toxic_hours = hour_stats[hour_stats['TotalPnL'] < 0]
+        toxic_pnl_h = toxic_hours['TotalPnL'].sum()
         
         # 2. Analyze Toxic Days
         day_stats_calc = df.groupby('Weekday')['PnL'].sum() # Re-calc without reindex format for ease

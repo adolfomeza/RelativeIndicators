@@ -5,6 +5,52 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.0.45] - 2026-01-26
+### Agregado
+- **Secuencias Numeradas para Etiquetas de Liquidity Grabbed y Entry**: Las etiquetas ahora muestran el número de intento del nivel.
+  - **Liquidity Grabbed**: Formato de dos líneas "Liquidity\nGrabbed 01", "Liquidity\nGrabbed 02", etc.
+  - **Entry**: Formato simple "Entry 01", "Entry 02", etc.
+  - **Variables nuevas** (líneas ~98-101):
+    - `highLiqGrabLocked` / `lowLiqGrabLocked`: Estado de congelamiento cuando Señal 2 dispara
+    - `highLiqGrabSequence` / `lowLiqGrabSequence`: Contador de secuencia (01, 02, 03, ...)
+
+### Cambiado
+- **Liquidity Grabbed se Congela en Pivote cuando Señal 2 Dispara**: La etiqueta ya NO se mueve después de que Señal 2 se confirma.
+  - **Comportamiento Anterior**: Etiqueta se movía constantemente siguiendo el nuevo high/low
+  - **Comportamiento Nuevo**:
+    1. Nivel roto → "Liquidity Grabbed 01" aparece y se mueve mientras el precio continúa
+    2. Señal 2 dispara → Etiqueta se CONGELA en ese pivote (`locked = true`)
+    3. Si Señal 2 se cancela (toca VWAP misma barra) → Descongela (`locked = false`)
+    4. Si precio barre el anchor bar otra vez → Nueva etiqueta "Liquidity Grabbed 02"
+    5. Toca nivel opuesto virgen → Reset secuencia a 01
+  - **Implementación**:
+    - Movimiento de etiqueta solo si `!highLiqGrabLocked` (líneas ~918, ~950)
+    - Lock cuando Señal 2 dispara (líneas ~1336, ~1642)
+    - Unlock cuando Señal 2 se cancela (líneas ~1199, ~1512)
+    - Detectar nuevo barrido del anchor bar (líneas ~979-1018)
+    - Reset en CheckTouches cuando toca opuesto (líneas ~1944-1946, ~2052-2054)
+
+- **Formato de Etiquetas Simplificado**:
+  - **Signal 1 (Liquidity Grabbed)**:
+    - Antes: "1" (simple) o código complejo "AL0.1"
+    - Ahora: "Liquidity\nGrabbed 01" (con `\n` para dos líneas)
+    - Tags únicos por secuencia: `"Sig1H_Txt_" + session + "_" + sequence`
+  - **Signal 2 (Entry)**:
+    - Antes: "2" (simple) o código complejo "AL0.1.1"
+    - Ahora: "Entry 01" (simple con número de intento)
+    - Usa `highAnchorSequence` / `lowAnchorSequence` existente
+
+### Detalles Técnicos
+- **Detección de Nuevo Barrido** (líneas ~979-1018):
+  - Si `locked` && precio > anchor bar high (o < anchor bar low)
+  - Incrementar secuencia
+  - Descongelar para permitir movimiento
+  - Reiniciar tracking
+- **Reset de Secuencia** (líneas ~1944-1946, ~2052-2054):
+  - Cuando se rompe nivel opuesto relevante
+  - `sequence = 1`, `locked = false`, `barIdx = -1`
+- **Tags con Secuencia**: Permite múltiples etiquetas simultáneas (01, 02, 03) en el chart
+
 ## [1.0.44] - 2026-01-26
 ### Corregido
 - **Bloqueaba Trades Válidos (Regresión v1.0.43)**: Se corrigió el bug donde v1.0.43 bloqueaba trades válidos.

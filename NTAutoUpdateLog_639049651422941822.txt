@@ -1,0 +1,7 @@
+Arguments Length: 3
+Process ID: 38852
+msi path: C:\Users\prueba\AppData\Local\Temp\NinjaTrader.Install.msi
+NT executable path: C:\Program Files\NinjaTrader 8\bin\NinjaTrader.exe
+Installation was completed at 25/1/26 7:13:22 p. m.
+trying to start the app: 25/1/26 7:13:22 p. m.
+Exiting: 0

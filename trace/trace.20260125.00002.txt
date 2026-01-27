@@ -1,0 +1,592 @@
+******************* Session Start (Version 8.1.6.3) *******************
+2026-01-25 19:44:56:226 Cbi.Globals.MachineId: True/True 280CB754932A645C8D63C782E8605C43
+2026-01-25 19:44:56:249 NinjaTrader.Gui.LoginInternal user='joelbencomo' mode='Simulation'
+2026-01-25 19:44:56:504 Core.Instrumentation.ActivitySource: enabled=True randomPercent=28.85117 enabledSessionsPercent=100 chartMs=250 enabledTypes='ChartPerformance Application NinjaScript Adapter Login '
+2026-01-25 19:44:56:771 Core.Instrumentation.LogActivity: activityType=Login errorCode=NoError errorMessage=''
+2026-01-25 19:44:57:531 (Simulation) NinjaTrader.Core.Authentication.GetAccessToken6
+2026-01-25 19:44:57:538 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.8397695' renewSecs='2399.91988475'
+2026-01-25 19:44:58:207 Cbi.UserEntitlement.VerifyAsync.0 apiUrl='https://live.tradovateapi.com'
+2026-01-25 19:44:58:622 Cbi.UserEntitlement.VerifyAsync.98: Evaluation expiration=2026-12-31, Evaluation expiration=2026-12-31
+2026-01-25 19:44:59:004 PrimaryMonitorWPFDPIScale=1.00
+2026-01-25 19:44:59:408 Cbi.UserEntitlement.VerifyAsync.99: subscription=Free licensedProviders='Playback Simulator NinjaTrader NinjaTrader Continuum NinjaTrader FXCM IQFeed E-Signal External FOREX.com Interactive Brokers Barchart.com Kinetick FXCM Coinbase cTrader Schwab Rithmic for NinjaTrader Brokerage Custom0 Custom2 Custom3 Custom4 Custom6 Custom7 Custom8 Custom9 Custom10 Provider13 Custom14 Provider26 Custom15 Custom16 Custom17 Custom18 Custom19 Custom20 Custom21 Custom22 Custom23 Custom24 Custom25 Custom26 Custom27 Custom28 Custom29 Custom30 Custom31 Custom32 Custom33 Custom34 Custom35 Custom36 Custom37 Custom38 Custom39 Custom40'
+2026-01-25 19:44:59:469 InstallDir='C:\Program Files\NinjaTrader 8\'
+2026-01-25 19:44:59:469 UserDataDir='C:\Users\prueba\Documents\NinjaTrader 8\'
+2026-01-25 19:44:59:469 MachineID='280CB754932A645C8D63C782E8605C43'
+2026-01-25 19:44:59:469 OS='Microsoft Windows NT 10.0.26200.0'/'Win32NT'
+2026-01-25 19:44:59:469 OSLanguage='en-US'
+2026-01-25 19:44:59:469 OSEnvironment='64bit'
+2026-01-25 19:44:59:470 Processors=12
+2026-01-25 19:44:59:470 ThreadPool: minWorkerThreads=12 maxWorkerThreads=32767 minCompletionPortThreads=12 maxCompletionPortThreads=1000
+2026-01-25 19:45:00:535 ProcessorSpeed=2.6 GHz
+2026-01-25 19:45:00:535 PhysicalMemory=24576 MB
+2026-01-25 19:45:02:864 DisplayAdapters=2/NVIDIA GeForce GTX 1650|Intel(R) UHD Graphics
+2026-01-25 19:45:02:864 Monitors=2/1920x1080|1920x1080
+2026-01-25 19:45:02:864 .NET/CLR Version='4.8'/64bit
+2026-01-25 19:45:02:866 SQLiteVersion='1.0.116.0'
+2026-01-25 19:45:02:866 ApplicationTimezone=EST +1 hour(s)
+2026-01-25 19:45:02:866 ApplicationTimezone=UTC -4 hour(s)
+2026-01-25 19:45:02:866 LocalTimezone=EST +1 hour(s)
+2026-01-25 19:45:02:866 LocalTimezone=UTC -4 hour(s)
+2026-01-25 19:45:03:047 DirectXRenderingHW
+2026-01-25 19:45:03:048 Copying custom assemblies...
+2026-01-25 19:45:03:061 Loading custom assemblies...
+2026-01-25 19:45:03:062 Loading C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\NinjaTrader.Custom.dll...
+2026-01-25 19:45:03:274 Loading C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\NinjaTrader.Vendor.dll...
+2026-01-25 19:45:03:287 Deleting temporary files...
+2026-01-25 19:45:03:517 Creating directory 'C:\Users\prueba\Documents\NinjaTrader 8\db\cache'...
+2026-01-25 19:45:03:518 Creating directory 'C:\Users\prueba\Documents\NinjaTrader 8\db\day'...
+2026-01-25 19:45:03:518 Creating directory 'C:\Users\prueba\Documents\NinjaTrader 8\db\messages'...
+2026-01-25 19:45:03:519 Creating directory 'C:\Users\prueba\Documents\NinjaTrader 8\db\minute'...
+2026-01-25 19:45:03:520 Creating directory 'C:\Users\prueba\Documents\NinjaTrader 8\db\snapshot'...
+2026-01-25 19:45:03:520 Creating directory 'C:\Users\prueba\Documents\NinjaTrader 8\db\tick'...
+2026-01-25 19:45:03:521 Copying db and restoring templates...
+2026-01-25 19:45:03:531 Loading third party assemblies...
+2026-01-25 19:45:03:591 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\AddonSuiteManager.Addon.Standalone.dll...
+2026-01-25 19:45:04:288 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\AdvancedRiskRewardBrunoMezaV3.dll...
+2026-01-25 19:45:04:288 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\ASCENDO_NewsEvents.dll...
+2026-01-25 19:45:05:249 Cbi.VendorLicense.Verify.1: trying 'https://license.ninjatrader.com/vendorlicensenew/ASCENDO/IndicatorNewsEvents/2/R-280CB754932A645C8D63C782E8605C43.xml' ...
+2026-01-25 19:45:05:468 Cbi.VendorLicense.Verify.1: good
+2026-01-25 19:45:05:490 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\Newtonsoft.Json.dll...
+2026-01-25 19:45:05:490 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\ReplayDataPlusManager.Addon.Standalone.dll...
+2026-01-25 19:45:06:186 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\TDUPriceAction.dll...
+2026-01-25 19:45:06:186 Loading 3rd party C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\WindowsInput.dll...
+2026-01-25 19:45:06:187 Initializing database...
+2026-01-25 19:45:06:187 Loading master instruments...
+2026-01-25 19:45:06:358 (Db) Cbi.DB.get_Current.CreateConnection.Start
+2026-01-25 19:45:06:360 (Db) Cbi.DB: connectionString='Data Source="C:\Users\prueba\Documents\NinjaTrader 8\db\NinjaTrader.sqlite";Version=3;Synchronous=Full;Journal Mode=Off;Pooling=True;Max Pool Size=100;foreign keys=true;'
+2026-01-25 19:45:06:871 (Db) Cbi.DB.get_Current.CreateConnection.End
+2026-01-25 19:45:06:959 Loading instruments...
+2026-01-25 19:45:07:220 Loading accounts...
+2026-01-25 19:45:07:312 Loading users...
+2026-01-25 19:45:07:340 Downloading server info...
+2026-01-25 19:45:07:340 Starting instrument management...
+2026-01-25 19:45:07:360 Starting timer...
+2026-01-25 19:45:07:360 Creating file type watcher...
+2026-01-25 19:45:07:361 Setting ATI...
+2026-01-25 19:45:07:384 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-25 19:45:07:391 Connecting ATI server...
+2026-01-25 19:45:07:391 Server.AtiServer.Connect0
+2026-01-25 19:45:07:392 Starting adapter server...
+2026-01-25 19:45:07:395 Server.AtiServer.Connect1: Port='36973'
+2026-01-25 19:45:07:395 Server.AtiServer.Connect2
+2026-01-25 19:45:07:410 Starting bars dictionary...
+2026-01-25 19:45:07:411 Starting recorder...
+2026-01-25 19:45:07:416 Starting server(s)...
+2026-01-25 19:45:07:461 Core.Globals.ApplicationStart.Commission: minVersion=1 maxVersion=3156
+2026-01-25 19:45:07:461 Core.Globals.ApplicationStart.InstrumentList: minVersion=-475 maxVersion=475
+2026-01-25 19:45:07:461 Core.Globals.ApplicationStart.MasterInstrument: minVersion=-9897 maxVersion=9897
+2026-01-25 19:45:07:461 Core.Globals.ApplicationStart.Risk: minVersion=-14539 maxVersion=1
+2026-01-25 19:45:07:461 Core.Globals.ApplicationStart.TradingHours: minVersion=1 maxVersion=5111
+2026-01-25 19:45:07:632 ChartHotKeys: Alerts='' DisableAllAlerts='' EnableAllAlerts='' DataSeries='Ctrl+F' Indicators='Ctrl+I' Strategies='Ctrl+S' Properties='Ctrl+T' CrosshairPointer='Ctrl+R' CrosshairLocal='Ctrl+Q' CrosshairGlobal='Ctrl+G' CrosshairGlobal2='Ctrl+N' CrosshairLock='Ctrl+L' AutoScaleAndReturn='' CyclePlotExecutions='Ctrl+E' ReloadHistoricalData='Ctrl+Shift+R' ReloadNinjaScript='F5' SaveChartImage='Alt+S' ShowDataBox='Ctrl+D' ShowChartTrader='' ShowChartTraderHidden='' ShowIndicators='' ShowScrollBar='' SnapModeBar='Ctrl+Shift+F3' SnapModeBarTick='Ctrl+Shift+F4' SnapModeBarObject='' SnapModeDisabled='Ctrl+Shift+F5' SnapModeTick='Ctrl+Shift+F6' StayInDrawMode='Ctrl+Shift+F2' ZoomIn='Ctrl+Alt+Z' ZoomOut='Ctrl+Alt+O' BarSpacingPlus='Ctrl+Down' BarSpacingMinus='Ctrl+Up' BarWidthPlus='Alt+Down' BarWidthMinus='Alt+Up' Arc='Ctrl+F7' AndrewsPitchfork='Ctrl+F8' ArrowDown='Alt+F3' ArrowLine='Ctrl+F2' ArrowUp='Alt+F2' Diamond='Alt+F5' Dot='Alt+F6' Ellipse='Ctrl+F11' ExtendedLine='F4' FibonacciCircle='F11' FibonacciExtension='F9' FibonacciRetracement='F8' FibonacciTimeExtension='F10' GannFan='Ctrl+F9' HorizontalLine='F6' Line='F2' Path='' Polygon='' VolumeProfile='' VWAP='' Ray='F3' Rectangle='Ctrl+F12' RegressionChannel='Ctrl+F9' HideDrawingObjects='' RemoveDrawingObjects='Ctrl+Shift+F7' RegionHighlightX='Shift+F1' RegionHighlightY='Shift+F2' RiskReward='Ctrl+F4' Ruler='Ctrl+F3' Square='Alt+F7' Text='F12' TimeCycles='' TrendChannel='Ctrl+2' Triangle='Ctrl+F6' TriangleDown='Alt+F9' TriangleUp='Alt+F8' VerticalLine='F7'
+2026-01-25 19:45:07:635 GlobalHotKeys: CloseWorkspace='' NextWorkspace='Shift+F3' PreviousWorkspace='' SaveWorkspace='' SaveAllWorkspaces='' NewAccountData='' NewTradePerformance='' NewAlertsLog='' NewBasicEntry='' NewChart='' NewFxBoard='' NewFxPro='' NewHotListAnalyzer='' NewLevel2='' NewMarketAnalyzer='' NewMarketWatch='' NewNews='' NewNinjaScriptEditor='' NewNinjaScriptOutput='' NewOrderTicket='' NewStrategyAnalyzer='' NewDynamicDom='' NewStaticDom='' NewTimeAndSales='' CancelAllOrders='' FlattenEverything='' OpenInstrumentManager='' OpenInstrumentList='' OpenDatabase='' OpenHotKeyManager='' OpenHistoricalData='' OpenCommission='' OpenRisk='' OpenTradingHoursManager='' OpenRemoveNinjaScript='' CloseOtherTabs='' CloseTab='' DuplicateInNewTab='' DuplicateInNewWindow='' Export='' Find='Ctrl+F' MoveToNewWindow='' Print='Ctrl+P' Replace='Ctrl+H' Share='Ctrl+Shift+S' LoadTemplate='' SaveTemplate='' SaveTemplateAsDefault=''
+2026-01-25 19:45:07:635 MarketAnalyzerHotKeys: AddBlankRow='' AddLabelRow='' Columns='' Alerts='' EnableAllAlerts='' DisableAllAlerts='' AutoSort='' RowFilter='' ReloadHistorical='Ctrl+Shift+R' ReloadNinjaScript='F5'
+2026-01-25 19:45:07:643 NinjaScriptEditorHotKeys: InsertCodeSnippet='F2' FindNext='F3' Compile='F5' GoToLine='Ctrl+G' CommentSelection='Ctrl+K' InlineSyntaxChecking='Ctrl+Alt+S' CollapseToDefinitions='' ExpandAllOutlining='' StartOutlining='' StopOutlining='' HideSelection='' StopHidingSelection='' ToggleAllOutlining='' ToggleOutlining='' Save='Ctrl+S' Undo='Ctrl+Z' Redo='Ctrl+Y'
+2026-01-25 19:45:07:645 OrderEntryHotKeys: BuyAsk='' BuyBid='' BuyMarket='' SellAsk='' SellBid='' SellMarket='' BreakevenAtmStrategy='' BreakevenPosition='' CancelLastOrder='' CloseAtmStrategy='' ClosePosition='' DecreaseLastOrderPrice='' IncreaseLastOrderPrice='' ModifyLastOrder2Fill='' Reverse='' OcoOrder='' SimulatedOrder=''
+2026-01-25 19:45:07:645 SuperDomHotKeys: Center='' Columns='' Indicators='' ReloadAllHistoricalData='Ctrl+Shift+R' ReloadNinjaScript='F5'
+2026-01-25 19:45:07:645 OrderEntryHotKeys=disabled
+2026-01-25 19:45:07:648 AutoClose=disabled
+2026-01-25 19:45:08:293 Core.Instrumentation.LogActivity: activityType=Application errorCode=NoError errorMessage=''
+2026-01-25 19:45:14:697 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=9 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=263 TradingHours=0
+2026-01-25 19:45:15:238 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-25 19:45:15:643 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-25 19:45:16:821 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.01ms InstrumentLists=0.64ms MasterInstruments=0.10ms Messages=0.45ms Risks=0.20ms RolloverCollection=2122.45ms TradingHours=0.10ms
+2026-01-25 19:45:16:823 Starting server message polling timer with interval 3600 seconds...
+2026-01-25 19:45:18:401 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-25 19:45:21:635 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-25 19:45:21:769 Core.Instrumentation.LogActivity: activityType=NinjaScript errorCode=NoError errorMessage=''
+2026-01-25 19:45:23:049 2 Chart Chart1Tab1 1 Ser 5 Ind 0 DrawObj Chart2Tab1 1 Ser 5 Ind 0 DrawObj 
+2026-01-25 19:45:34:176 (Simulation) Gui.ControlCenter.OnConnect
+2026-01-25 19:45:34:274 (Simulation) Cbi.Connection.Connect0: status=Disconnected assembly=8.1.6.3 date=2026-01-25 runAsProcess=False
+2026-01-25 19:45:34:289 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2026-01-25 19:45:34:292 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2026-01-25 19:45:34:306 (Simulation) Cbi.Connection.Connect1
+2026-01-25 19:45:34:322 (Simulation) Cbi.Connection.Connect2
+2026-01-25 19:45:34:322 (Simulation) Cbi.Connection.Connect3
+2026-01-25 19:45:34:330 (Simulation) Cbi.Connection.CreateAccount: account='Sim101' displayName='Sim101' fcm='' denomination=UsDollar forexLotSize=10000
+2026-01-25 19:45:34:337 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connecting previousStatus=Disconnected message=''
+2026-01-25 19:45:34:340 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2026-01-25 19:45:34:341 (Simulation) Cbi.Account.OnConnectionStatus.PositionExecutions: account='Sim101'
+2026-01-25 19:45:34:342 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connecting priceStatus=Connecting
+2026-01-25 19:45:34:353 (Simulation) Cbi.Connection.Connect4
+2026-01-25 19:45:34:512 (Simulation) Cbi.Connection.Connect5
+2026-01-25 19:45:34:518 (Simulation) Tradovate.Adapter.Connect: user='joelbencomo' accountType='Simulation' useLocalOcoSimulation=True
+2026-01-25 19:45:34:550 (Simulation) Cbi.Connection.Connect9 ok
+2026-01-25 19:45:34:808 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=True foundConnected=False
+2026-01-25 19:45:34:822 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connecting
+2026-01-25 19:45:34:823 Core.Instrumentation.LogActivity: activityType=Adapter errorCode=NoError errorMessage=''
+2026-01-25 19:45:34:827 (Simulation) Tradovate.Adapter.StartTradeWebSocket
+2026-01-25 19:45:35:119 (Simulation) Tradovate.Adapter.StartTradeWebSocket1
+2026-01-25 19:45:35:120 (Simulation) Tradovate.Adapter.StartWebSocketTradeSendWorker
+2026-01-25 19:45:35:121 (Simulation) Tradovate.Adapter.StartWebSocketTradeReceiveWorker
+2026-01-25 19:45:35:127 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage
+2026-01-25 19:45:35:479 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-25 19:45:35:804 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-25 19:45:35:804 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-25 19:45:35:814 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-25 19:45:35:821 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-25 19:45:36:404 (Simulation) Cbi.Connection.CreateAccount: account='DEMO619219' displayName='DEMO' fcm='' denomination=UsDollar forexLotSize=1
+2026-01-25 19:45:36:404 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connecting previousStatus=Disconnected message=''
+2026-01-25 19:45:36:404 (Simulation) Cbi.Account.OnConnectionStatus.PositionExecutions: account='DEMO619219'
+2026-01-25 19:45:36:414 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=CashValue currency=UsDollar value=*****
+2026-01-25 19:45:36:417 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc0
+2026-01-25 19:45:36:418 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2026-01-25 19:45:36:419 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connected previousStatus=Connecting message=''
+2026-01-25 19:45:36:419 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connected previousStatus=Connecting message=''
+2026-01-25 19:45:36:424 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2026-01-25 19:45:36:449 (Simulation) Cbi.Account.Restore.Start: account='Sim101' fcm=''
+2026-01-25 19:45:36:451 (Simulation) Cbi.Account.Restore.Start: account='DEMO619219' fcm=''
+2026-01-25 19:45:36:459 SQLite error (17): statement aborts at 48: [SELECT Id,Account,BarIndex,Commission,Exchange,ExecutionId,Fee,Instrument,IsEntry,IsEntryStrategy,IsExit,IsExitStrategy,LotSize,MarketPosition,MaxPrice,MinPrice,Name,OrderId,Position,P
+2026-01-25 19:45:36:460 SQLite error (17): statement aborts at 39: [SELECT Account,Id,AvgFillPrice,Data,Filled,Gtd,Instrument,Name,LimitPrice,Oco,OrderAction,OrderEntry,OrderId,OrderState,OrderType,Quantity,StatementDate,StopPrice,Time,TimeInForce FROM
+2026-01-25 19:45:36:520 (Simulation) Cbi.Account.Restore.End: account='DEMO619219' fcm=''
+2026-01-25 19:45:36:527 (Simulation) Cbi.Account.Restore.End: account='Sim101' fcm=''
+2026-01-25 19:45:36:528 (Simulation) Core.Connection.Statistics: connectAttempts=1/2015.5ms
+2026-01-25 19:45:36:528 (Simulation) Cbi.Connection.ConnectionStatusCallback: autoClosePositionTime='12/17/2025 00:00:00' autoClosePosition=False
+2026-01-25 19:45:36:535 Server.HdsClient.Connect: type=HDS server='hds-us-nt-009.ninjatrader.com' port=31655 system='' useSsl=True
+2026-01-25 19:45:36:797 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2026-01-25 19:45:36:797 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2026-01-25 19:45:36:797 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2026-01-25 19:45:36:840 (Simulation) Tradovate.Adapter.QueryNotificationsAsync0
+2026-01-25 19:45:36:869 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-25 19:45:36:869 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2026-01-25 19:45:36:911 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='18/1/26 12:00:00 a. m.' to='25/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 19:45:36:913 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='18/1/26 12:00:00 a. m.' to='25/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 19:45:36:913 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='18/1/26 12:00:00 a. m.' to='25/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-25 19:45:36:913 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='18/1/26 12:00:00 a. m.' to='25/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-25 19:45:36:923 (Simulation) QueryNotificationResponse Live
+2026-01-25 19:45:37:149 (Simulation) QueryNotificationResponse Demo
+2026-01-25 19:45:37:593 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='Sim101' accountItem=CashValue currency=UsDollar value=*****
+2026-01-25 19:45:37:594 (Simulation) Cbi.Account.OnTimerTick.Simulator.Roll: account='Sim101' fcm='' fcmDate='2026-01-25'
+2026-01-25 19:46:33:423 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='18/1/26 12:00:00 a. m.' to='23/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-25 19:46:33:501 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='25/1/26 12:00:00 a. m.' to='25/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-25 19:46:43:703 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='25/1/26 12:00:00 a. m.' to='25/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-25 19:46:44:657 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='18/1/26 12:00:00 a. m.' to='23/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 19:46:53:001 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='25/1/26 12:00:00 a. m.' to='25/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 19:46:59:925 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='25/1/26 12:00:00 a. m.' to='25/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 19:53:38:942 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='25/12/25 12:00:00 a. m.' to='23/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-25 19:53:47:493 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='25/12/25 12:00:00 a. m.' to='23/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 19:54:19:144 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='25/1/26 12:00:00 a. m.' to='25/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 20:04:28:946 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='25/1/26 12:00:00 a. m.' to='25/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 20:05:16:993 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage exception='An internal WebSocket error occurred. Please see the innerException, if present, for more details.  Unable to read data from the transport connection: Se ha anulado una conexión establecida por el software en su equipo host.' webSocketErrorCode='Success'
+2026-01-25 20:05:17:006 (Simulation) Tradovate.Adapter.OnDisconnectMarketData errorMsg='An internal WebSocket error occurred. Please see the innerException, if present, for more details. ' tradeStatus='Connected' mdStatus='ConnectionLost'
+2026-01-25 20:05:17:006 (Simulation) Tradovate.Adapter.OnDisconnectMarketData: Milliseconds from last marketDataHeartbeatTime 2,347
+2026-01-25 20:05:17:006 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2026-01-25 20:05:17:007 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2026-01-25 20:05:17:007 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2026-01-25 20:05:17:007 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=ConnectionLost
+2026-01-25 20:05:17:007 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=True foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-25 20:05:17:007 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=ConnectionLost
+2026-01-25 20:05:17:508 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-25 20:05:17:569 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage exception='An internal WebSocket error occurred. Please see the innerException, if present, for more details.  Unable to read data from the transport connection: Se ha anulado una conexión establecida por el software en su equipo host.' webSocketErrorCode='Success'
+2026-01-25 20:05:17:580 (Simulation) Tradovate.Adapter.OnDisconnectTrade errorMsg='An internal WebSocket error occurred. Please see the innerException, if present, for more details. ' tradeStatus='ConnectionLost' mdStatus='ConnectionLost'
+2026-01-25 20:05:17:580 (Simulation) Tradovate.Adapter.OnDisconnectTrade: Milliseconds from last tradeHeartbeatTime: 11
+2026-01-25 20:05:17:580 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=ConnectionLost priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2026-01-25 20:05:17:580 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=ConnectionLost previousStatus=Connected message=''
+2026-01-25 20:05:17:580 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=ConnectionLost previousStatus=Connected message=''
+2026-01-25 20:05:17:684 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=ConnectionLost priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2026-01-25 20:05:17:687 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=ConnectionLost priceStatus=ConnectionLost previousStatus=Connected previousPriceStatus=ConnectionLost errorCode=NoError nativeError='An internal WebSocket error occurred. Please see the innerException, if present, for more details. '
+2026-01-25 20:05:17:687 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=ConnectionLost priceStatus=ConnectionLost
+2026-01-25 20:05:17:687 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=True foundTradeLoss=True foundConnectingStatus=False foundConnected=False
+2026-01-25 20:05:17:687 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Disconnecting
+2026-01-25 20:05:30:026 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2026-01-25 20:05:30:322 (Simulation) Tradovate.Adapter.StartTradeWebSocket
+2026-01-25 20:05:31:498 (Simulation) Tradovate.Adapter.StartTradeWebSocket1
+2026-01-25 20:05:31:498 (Simulation) Tradovate.Adapter.StartWebSocketTradeSendWorker
+2026-01-25 20:05:31:498 (Simulation) Tradovate.Adapter.StartWebSocketTradeReceiveWorker
+2026-01-25 20:05:31:498 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage
+2026-01-25 20:05:32:423 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc0
+2026-01-25 20:05:32:425 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2026-01-25 20:05:36:704 ERROR: Connection lost to the NinjaTrader Historical Data Server: hds-us-nt-009.ninjatrader.com
+2026-01-25 20:05:38:068 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2026-01-25 20:05:38:575 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-25 20:05:39:737 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-25 20:05:39:737 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-25 20:05:39:737 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-25 20:05:39:737 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-25 20:05:40:192 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-25 20:05:40:192 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connected previousStatus=ConnectionLost message=''
+2026-01-25 20:05:40:192 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connected previousStatus=ConnectionLost message=''
+2026-01-25 20:05:40:207 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-25 20:05:40:207 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=ConnectionLost previousPriceStatus=ConnectionLost errorCode=NoError nativeError=''
+2026-01-25 20:05:40:207 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2026-01-25 20:05:40:207 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-25 20:05:40:207 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2026-01-25 20:05:46:714 Server.HdsClient.Connect: type=HDS server='hds-us-nt-004.ninjatrader.com' port=31655 system='' useSsl=True
+2026-01-25 20:06:51:384 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='25/1/26 8:00:00 p. m.' to='25/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 20:07:54:771 (Simulation) Gui.ControlCenter.OnDisconnect
+2026-01-25 20:07:54:783 (Simulation) Cbi.Connection.Disconnect
+2026-01-25 20:07:54:785 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Disconnecting priceStatus=Disconnecting previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError=''
+2026-01-25 20:07:54:786 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Disconnecting previousStatus=Connected message=''
+2026-01-25 20:07:54:786 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Disconnecting previousStatus=Connected message=''
+2026-01-25 20:07:54:788 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Disconnecting priceStatus=Disconnecting previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError=''
+2026-01-25 20:07:54:788 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close1
+2026-01-25 20:07:54:792 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Disconnecting priceStatus=Disconnecting previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError=''
+2026-01-25 20:07:54:792 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Disconnecting priceStatus=Disconnecting
+2026-01-25 20:07:54:792 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=False
+2026-01-25 20:07:54:792 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Disconnected
+2026-01-25 20:07:54:796 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close3
+2026-01-25 20:07:54:802 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close4
+2026-01-25 20:07:54:802 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close5
+2026-01-25 20:07:54:802 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close6a
+2026-01-25 20:07:54:804 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close7
+2026-01-25 20:07:54:804 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close8
+2026-01-25 20:07:54:832 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2026-01-25 20:07:55:347 (Simulation) Tradovate.Adapter.DisposeTrade0
+2026-01-25 20:07:56:276 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2026-01-25 20:07:56:359 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Disconnected priceStatus=Disconnected previousStatus=Disconnecting previousPriceStatus=Disconnecting errorCode=NoError nativeError=''
+2026-01-25 20:07:56:359 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Disconnected previousStatus=Disconnecting message=''
+2026-01-25 20:07:56:359 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Disconnected previousStatus=Disconnecting message=''
+2026-01-25 20:07:56:364 Flushing DB thread
+2026-01-25 20:07:56:364 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Disconnected priceStatus=Disconnected previousStatus=Disconnecting previousPriceStatus=Disconnecting errorCode=NoError nativeError=''
+2026-01-25 20:07:56:365 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Disconnected priceStatus=Disconnected previousStatus=Disconnecting previousPriceStatus=Disconnecting errorCode=NoError nativeError=''
+2026-01-25 20:07:56:365 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Using args status=Disconnected
+2026-01-25 20:07:57:871 (Playback) Gui.ControlCenter.OnConnect
+2026-01-25 20:07:59:724 (Playback) Cbi.Connection.Connect0: status=Disconnected assembly=8.1.6.3 date=2026-01-25 runAsProcess=False
+2026-01-25 20:07:59:724 (Playback) Cbi.Connection.ConnectionStatusCallback: status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2026-01-25 20:07:59:729 (Playback) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Playback status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2026-01-25 20:07:59:729 (Playback) Cbi.Connection.Connect1
+2026-01-25 20:07:59:733 (Playback) Cbi.Connection.Connect2
+2026-01-25 20:07:59:733 (Playback) Cbi.Connection.Connect3
+2026-01-25 20:07:59:734 (Playback) Cbi.Connection.CreateAccount: account='Playback101' displayName='Playback101' fcm='' denomination=UsDollar forexLotSize=10000
+2026-01-25 20:07:59:734 (Playback) Cbi.Account.OnConnectionStatus: account='Playback101' fcm='' status=Connecting previousStatus=Disconnected message=''
+2026-01-25 20:07:59:734 (Playback) Cbi.Account.OnConnectionStatus.PositionExecutions: account='Playback101'
+2026-01-25 20:07:59:734 (Playback) Cbi.Connection.Connect4
+2026-01-25 20:07:59:734 (Playback) Cbi.Connection.Connect5
+2026-01-25 20:07:59:735 (Playback) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Playback status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2026-01-25 20:07:59:735 (Playback) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Playback status=Connecting priceStatus=Connecting
+2026-01-25 20:07:59:735 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=True foundConnected=False
+2026-01-25 20:07:59:735 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connecting
+2026-01-25 20:07:59:735 (Playback) Adapter.PlaybackAdapter.Connect
+2026-01-25 20:08:00:945 (Playback) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2026-01-25 20:08:00:945 (Playback) Cbi.Account.OnConnectionStatus: account='Playback101' fcm='' status=Connected previousStatus=Connecting message=''
+2026-01-25 20:08:00:945 (Playback) Core.Connection.Statistics: connectAttempts=2/1612.8ms
+2026-01-25 20:08:00:945 (Playback) Cbi.Connection.ConnectionStatusCallback: autoClosePositionTime='12/17/2025 00:00:00' autoClosePosition=False
+2026-01-25 20:08:00:945 Server.HdsClient.Connect: type=HDS server='hds-us-nt-014.ninjatrader.com' port=31655 system='' useSsl=True
+2026-01-25 20:08:00:961 (Playback) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Playback status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2026-01-25 20:08:00:961 (Playback) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Playback status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2026-01-25 20:08:00:961 (Playback) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Playback status=Connected priceStatus=Connected
+2026-01-25 20:08:00:961 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-25 20:08:00:961 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2026-01-25 20:08:00:963 (Playback) Cbi.Connection.Connect9 ok
+2026-01-25 20:08:01:128 (Playback) Cbi.Account.ResetSimulationAccount.Start: account='Playback101'
+2026-01-25 20:08:01:164 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=BuyingPower currency=UsDollar value=*****
+2026-01-25 20:08:01:164 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=CashValue currency=UsDollar value=*****
+2026-01-25 20:08:01:164 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Commission currency=UsDollar value=*****
+2026-01-25 20:08:01:164 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Fee currency=UsDollar value=*****
+2026-01-25 20:08:01:164 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=GrossRealizedProfitLoss currency=UsDollar value=*****
+2026-01-25 20:08:01:164 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-25 20:08:01:164 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=InitialMargin currency=UsDollar value=*****
+2026-01-25 20:08:01:164 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=IntradayMargin currency=UsDollar value=*****
+2026-01-25 20:08:01:164 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongOptionValue currency=UsDollar value=*****
+2026-01-25 20:08:01:164 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LookAheadMaintenanceMargin currency=UsDollar value=*****
+2026-01-25 20:08:01:164 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongStockValue currency=UsDollar value=*****
+2026-01-25 20:08:01:164 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=MaintenanceMargin currency=UsDollar value=*****
+2026-01-25 20:08:01:164 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=NetLiquidationByCurrency currency=UsDollar value=*****
+2026-01-25 20:08:01:164 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=PositionMargin currency=UsDollar value=*****
+2026-01-25 20:08:01:164 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-25 20:08:01:164 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortOptionValue currency=UsDollar value=*****
+2026-01-25 20:08:01:164 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortStockValue currency=UsDollar value=*****
+2026-01-25 20:08:01:164 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodCashValue currency=UsDollar value=*****
+2026-01-25 20:08:01:164 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodLiquidatingValue currency=UsDollar value=*****
+2026-01-25 20:08:01:164 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=TotalCashBalance currency=UsDollar value=*****
+2026-01-25 20:08:01:164 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-25 20:08:01:164 (Playback) Cbi.Account.ResetSimulationAccount.End: account='Playback101'
+2026-01-25 20:08:03:232 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='16/10/25 12:00:00 a. m.' to='24/10/25 12:00:00 a. m.' period='1 Minute'
+2026-01-25 20:08:03:292 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='23/9/25 12:00:00 a. m.' to='24/10/25 12:00:00 a. m.' period='1 Minute'
+2026-01-25 20:08:05:855 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='16/10/25 12:00:00 a. m.' to='24/10/25 11:59:59 p. m.' period='1 Tick'
+2026-01-25 20:08:06:807 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='23/9/25 12:00:00 a. m.' to='24/10/25 11:59:59 p. m.' period='1 Tick'
+2026-01-25 20:10:05:170 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='24/10/25 12:00:00 a. m.' to='24/10/25 12:00:00 a. m.' period='1 Minute'
+2026-01-25 20:10:08:107 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='16/10/25 12:00:00 a. m.' to='24/10/25 11:59:59 p. m.' period='1 Tick'
+2026-01-25 20:10:19:381 (Playback) Cbi.Account.ResetSimulationAccount.Start: account='Playback101'
+2026-01-25 20:10:19:386 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=BuyingPower currency=UsDollar value=*****
+2026-01-25 20:10:19:386 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=CashValue currency=UsDollar value=*****
+2026-01-25 20:10:19:386 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Commission currency=UsDollar value=*****
+2026-01-25 20:10:19:386 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Fee currency=UsDollar value=*****
+2026-01-25 20:10:19:386 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=GrossRealizedProfitLoss currency=UsDollar value=*****
+2026-01-25 20:10:19:386 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-25 20:10:19:386 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=InitialMargin currency=UsDollar value=*****
+2026-01-25 20:10:19:386 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=IntradayMargin currency=UsDollar value=*****
+2026-01-25 20:10:19:386 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongOptionValue currency=UsDollar value=*****
+2026-01-25 20:10:19:386 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LookAheadMaintenanceMargin currency=UsDollar value=*****
+2026-01-25 20:10:19:386 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongStockValue currency=UsDollar value=*****
+2026-01-25 20:10:19:386 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=MaintenanceMargin currency=UsDollar value=*****
+2026-01-25 20:10:19:386 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=NetLiquidationByCurrency currency=UsDollar value=*****
+2026-01-25 20:10:19:386 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=PositionMargin currency=UsDollar value=*****
+2026-01-25 20:10:19:386 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-25 20:10:19:386 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortOptionValue currency=UsDollar value=*****
+2026-01-25 20:10:19:386 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortStockValue currency=UsDollar value=*****
+2026-01-25 20:10:19:386 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodCashValue currency=UsDollar value=*****
+2026-01-25 20:10:19:386 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodLiquidatingValue currency=UsDollar value=*****
+2026-01-25 20:10:19:386 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=TotalCashBalance currency=UsDollar value=*****
+2026-01-25 20:10:19:386 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-25 20:10:19:386 (Playback) Cbi.Account.ResetSimulationAccount.End: account='Playback101'
+2026-01-25 20:10:21:422 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='16/10/25 12:00:00 a. m.' to='24/10/25 12:00:00 a. m.' period='1 Minute'
+2026-01-25 20:10:21:452 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 12-25' from='24/10/25 12:00:00 a. m.' to='24/10/25 12:00:00 a. m.' period='1 Minute'
+2026-01-25 20:10:31:074 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='16/10/25 12:00:00 a. m.' to='24/10/25 11:59:59 p. m.' period='1 Tick'
+2026-01-25 20:12:58:469 (Playback) Cbi.Account.ResetSimulationAccount.Start: account='Playback101'
+2026-01-25 20:12:58:471 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=BuyingPower currency=UsDollar value=*****
+2026-01-25 20:12:58:471 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=CashValue currency=UsDollar value=*****
+2026-01-25 20:12:58:471 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Commission currency=UsDollar value=*****
+2026-01-25 20:12:58:471 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Fee currency=UsDollar value=*****
+2026-01-25 20:12:58:472 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=GrossRealizedProfitLoss currency=UsDollar value=*****
+2026-01-25 20:12:58:472 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-25 20:12:58:472 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=InitialMargin currency=UsDollar value=*****
+2026-01-25 20:12:58:472 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=IntradayMargin currency=UsDollar value=*****
+2026-01-25 20:12:58:472 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongOptionValue currency=UsDollar value=*****
+2026-01-25 20:12:58:472 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LookAheadMaintenanceMargin currency=UsDollar value=*****
+2026-01-25 20:12:58:472 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongStockValue currency=UsDollar value=*****
+2026-01-25 20:12:58:472 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=MaintenanceMargin currency=UsDollar value=*****
+2026-01-25 20:12:58:472 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=NetLiquidationByCurrency currency=UsDollar value=*****
+2026-01-25 20:12:58:472 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=PositionMargin currency=UsDollar value=*****
+2026-01-25 20:12:58:472 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-25 20:12:58:472 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortOptionValue currency=UsDollar value=*****
+2026-01-25 20:12:58:472 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortStockValue currency=UsDollar value=*****
+2026-01-25 20:12:58:472 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodCashValue currency=UsDollar value=*****
+2026-01-25 20:12:58:472 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodLiquidatingValue currency=UsDollar value=*****
+2026-01-25 20:12:58:472 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=TotalCashBalance currency=UsDollar value=*****
+2026-01-25 20:12:58:472 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-25 20:12:58:472 (Playback) Cbi.Account.ResetSimulationAccount.End: account='Playback101'
+2026-01-25 20:13:00:495 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='19/1/25 12:00:00 a. m.' to='26/1/25 12:00:00 a. m.' period='1 Minute'
+2026-01-25 20:13:00:558 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='19/1/25 12:00:00 a. m.' to='26/1/25 12:00:00 a. m.' period='1 Minute'
+2026-01-25 20:13:03:667 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='19/1/25 12:00:00 a. m.' to='26/1/25 11:59:59 p. m.' period='1 Tick'
+2026-01-25 20:13:03:726 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='19/1/25 12:00:00 a. m.' to='26/1/25 11:59:59 p. m.' period='1 Tick'
+2026-01-25 20:13:37:782 (Playback) Cbi.Account.ResetSimulationAccount.Start: account='Playback101'
+2026-01-25 20:13:37:785 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=BuyingPower currency=UsDollar value=*****
+2026-01-25 20:13:37:785 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=CashValue currency=UsDollar value=*****
+2026-01-25 20:13:37:785 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Commission currency=UsDollar value=*****
+2026-01-25 20:13:37:785 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Fee currency=UsDollar value=*****
+2026-01-25 20:13:37:785 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=GrossRealizedProfitLoss currency=UsDollar value=*****
+2026-01-25 20:13:37:785 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-25 20:13:37:785 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=InitialMargin currency=UsDollar value=*****
+2026-01-25 20:13:37:785 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=IntradayMargin currency=UsDollar value=*****
+2026-01-25 20:13:37:785 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongOptionValue currency=UsDollar value=*****
+2026-01-25 20:13:37:785 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LookAheadMaintenanceMargin currency=UsDollar value=*****
+2026-01-25 20:13:37:785 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongStockValue currency=UsDollar value=*****
+2026-01-25 20:13:37:785 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=MaintenanceMargin currency=UsDollar value=*****
+2026-01-25 20:13:37:785 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=NetLiquidationByCurrency currency=UsDollar value=*****
+2026-01-25 20:13:37:785 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=PositionMargin currency=UsDollar value=*****
+2026-01-25 20:13:37:785 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-25 20:13:37:785 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortOptionValue currency=UsDollar value=*****
+2026-01-25 20:13:37:785 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortStockValue currency=UsDollar value=*****
+2026-01-25 20:13:37:785 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodCashValue currency=UsDollar value=*****
+2026-01-25 20:13:37:785 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodLiquidatingValue currency=UsDollar value=*****
+2026-01-25 20:13:37:785 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=TotalCashBalance currency=UsDollar value=*****
+2026-01-25 20:13:37:785 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-25 20:13:37:785 (Playback) Cbi.Account.ResetSimulationAccount.End: account='Playback101'
+2026-01-25 20:13:39:834 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='24/1/25 12:00:00 a. m.' to='26/1/25 12:00:00 a. m.' period='1 Minute'
+2026-01-25 20:13:39:842 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='24/1/25 12:00:00 a. m.' to='26/1/25 12:00:00 a. m.' period='1 Minute'
+2026-01-25 20:13:47:135 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='26/1/25 11:00:00 p. m.' to='26/1/25 11:59:59 p. m.' period='1 Tick'
+2026-01-25 20:13:51:340 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='26/1/25 11:00:00 p. m.' to='26/1/25 11:59:59 p. m.' period='1 Tick'
+2026-01-25 20:14:12:847 (Playback) Cbi.Account.ResetSimulationAccount.Start: account='Playback101'
+2026-01-25 20:14:12:851 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=BuyingPower currency=UsDollar value=*****
+2026-01-25 20:14:12:851 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=CashValue currency=UsDollar value=*****
+2026-01-25 20:14:12:851 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Commission currency=UsDollar value=*****
+2026-01-25 20:14:12:851 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Fee currency=UsDollar value=*****
+2026-01-25 20:14:12:851 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=GrossRealizedProfitLoss currency=UsDollar value=*****
+2026-01-25 20:14:12:851 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-25 20:14:12:851 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=InitialMargin currency=UsDollar value=*****
+2026-01-25 20:14:12:851 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=IntradayMargin currency=UsDollar value=*****
+2026-01-25 20:14:12:851 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongOptionValue currency=UsDollar value=*****
+2026-01-25 20:14:12:851 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LookAheadMaintenanceMargin currency=UsDollar value=*****
+2026-01-25 20:14:12:851 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongStockValue currency=UsDollar value=*****
+2026-01-25 20:14:12:851 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=MaintenanceMargin currency=UsDollar value=*****
+2026-01-25 20:14:12:851 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=NetLiquidationByCurrency currency=UsDollar value=*****
+2026-01-25 20:14:12:851 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=PositionMargin currency=UsDollar value=*****
+2026-01-25 20:14:12:851 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-25 20:14:12:851 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortOptionValue currency=UsDollar value=*****
+2026-01-25 20:14:12:851 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortStockValue currency=UsDollar value=*****
+2026-01-25 20:14:12:851 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodCashValue currency=UsDollar value=*****
+2026-01-25 20:14:12:851 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodLiquidatingValue currency=UsDollar value=*****
+2026-01-25 20:14:12:851 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=TotalCashBalance currency=UsDollar value=*****
+2026-01-25 20:14:12:851 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-25 20:14:12:851 (Playback) Cbi.Account.ResetSimulationAccount.End: account='Playback101'
+2026-01-25 20:14:14:925 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='24/1/25 12:00:00 a. m.' to='26/1/25 12:00:00 a. m.' period='1 Minute'
+2026-01-25 20:14:14:925 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='24/1/25 12:00:00 a. m.' to='26/1/25 12:00:00 a. m.' period='1 Minute'
+2026-01-25 20:14:21:325 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='26/1/25 11:00:00 p. m.' to='26/1/25 11:59:59 p. m.' period='1 Tick'
+2026-01-25 20:14:24:780 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='26/1/25 11:00:00 p. m.' to='26/1/25 11:59:59 p. m.' period='1 Tick'
+2026-01-25 20:24:57:472 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-25 20:24:57:474 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-25 20:24:58:489 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-25 20:24:58:489 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.8564174' renewSecs='2399.9282087'
+2026-01-25 20:45:16:837 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-25 20:45:18:679 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-25 20:45:18:682 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=2.02ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-25 21:04:58:448 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-25 21:04:58:448 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-25 21:04:59:275 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-25 21:04:59:275 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.8625537' renewSecs='2399.93127685'
+2026-01-25 21:44:59:236 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-25 21:44:59:236 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-25 21:45:00:068 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-25 21:45:00:068 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.860539' renewSecs='2399.9302695'
+2026-01-25 21:45:16:862 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-25 21:45:18:716 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-25 21:45:18:716 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.28ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-25 21:56:15:960 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='27/1/25 12:00:00 a. m.' to='27/1/25 12:00:00 a. m.' period='1 Minute'
+2026-01-25 21:56:22:605 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='26/1/25 11:00:00 p. m.' to='27/1/25 11:59:59 p. m.' period='1 Tick'
+2026-01-25 21:58:06:255 (Playback) Gui.ControlCenter.OnDisconnect
+2026-01-25 21:58:06:255 (Playback) Cbi.Connection.Disconnect
+2026-01-25 21:58:06:255 (Playback) Cbi.Connection.ConnectionStatusCallback: status=Disconnecting priceStatus=Disconnecting previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError=''
+2026-01-25 21:58:06:255 (Playback) Cbi.Account.OnConnectionStatus: account='Playback101' fcm='' status=Disconnecting previousStatus=Connected message=''
+2026-01-25 21:58:06:256 (Playback) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Playback status=Disconnecting priceStatus=Disconnecting previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError=''
+2026-01-25 21:58:06:256 (Playback) Cbi.Connection.ConnectionStatusCallback.Close1
+2026-01-25 21:58:06:256 (Playback) Cbi.Connection.ConnectionStatusCallback.Close3
+2026-01-25 21:58:06:257 (Playback) Cbi.Connection.ConnectionStatusCallback.Close4
+2026-01-25 21:58:06:257 (Playback) Cbi.Connection.ConnectionStatusCallback.Close5
+2026-01-25 21:58:06:257 (Playback) Cbi.Connection.ConnectionStatusCallback.Close6a
+2026-01-25 21:58:06:257 (Playback) Cbi.Connection.ConnectionStatusCallback.Close7
+2026-01-25 21:58:06:258 (Playback) Cbi.Connection.ConnectionStatusCallback: status=Disconnected priceStatus=Disconnected previousStatus=Disconnecting previousPriceStatus=Disconnecting errorCode=NoError nativeError=''
+2026-01-25 21:58:06:258 (Playback) Cbi.Account.OnConnectionStatus: account='Playback101' fcm='' status=Disconnected previousStatus=Disconnecting message=''
+2026-01-25 21:58:06:258 Flushing DB thread
+2026-01-25 21:58:06:258 (Playback) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Playback status=Disconnected priceStatus=Disconnected previousStatus=Disconnecting previousPriceStatus=Disconnecting errorCode=NoError nativeError=''
+2026-01-25 21:58:06:259 (Playback) Cbi.Connection.ConnectionStatusCallback.Close8
+2026-01-25 21:58:06:261 (Playback) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Playback status=Disconnecting priceStatus=Disconnecting previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError=''
+2026-01-25 21:58:06:261 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Using args status=Disconnecting
+2026-01-25 21:58:06:261 (Playback) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Playback status=Disconnected priceStatus=Disconnected previousStatus=Disconnecting previousPriceStatus=Disconnecting errorCode=NoError nativeError=''
+2026-01-25 21:58:06:261 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Using args status=Disconnected
+2026-01-25 21:58:07:872 (Simulation) Gui.ControlCenter.OnConnect
+2026-01-25 21:58:07:875 (Simulation) Cbi.Connection.Connect0: status=Disconnected assembly=8.1.6.3 date=2026-01-25 runAsProcess=False
+2026-01-25 21:58:07:875 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2026-01-25 21:58:07:875 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2026-01-25 21:58:07:875 (Simulation) Cbi.Connection.Connect1
+2026-01-25 21:58:07:875 (Simulation) Cbi.Connection.Connect2
+2026-01-25 21:58:07:876 (Simulation) Cbi.Connection.Connect3
+2026-01-25 21:58:07:876 (Simulation) Cbi.Connection.CreateAccount: account='Sim101' displayName='Sim101' fcm='' denomination=UsDollar forexLotSize=10000
+2026-01-25 21:58:07:876 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connecting previousStatus=Disconnected message=''
+2026-01-25 21:58:07:876 (Simulation) Cbi.Account.OnConnectionStatus.PositionExecutions: account='Sim101'
+2026-01-25 21:58:07:876 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connecting priceStatus=Connecting previousStatus=Disconnected previousPriceStatus=Disconnected errorCode=NoError nativeError=''
+2026-01-25 21:58:07:876 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connecting priceStatus=Connecting
+2026-01-25 21:58:07:876 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=True foundConnected=False
+2026-01-25 21:58:07:876 (Simulation) Cbi.Connection.Connect4
+2026-01-25 21:58:07:876 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connecting
+2026-01-25 21:58:07:876 (Simulation) Cbi.Connection.Connect5
+2026-01-25 21:58:07:876 (Simulation) Tradovate.Adapter.Connect: user='joelbencomo' accountType='Simulation' useLocalOcoSimulation=True
+2026-01-25 21:58:07:880 (Simulation) Cbi.Connection.Connect9 ok
+2026-01-25 21:58:08:740 (Simulation) Tradovate.Adapter.StartTradeWebSocket
+2026-01-25 21:58:09:562 (Simulation) Tradovate.Adapter.StartTradeWebSocket1
+2026-01-25 21:58:09:562 (Simulation) Tradovate.Adapter.StartWebSocketTradeSendWorker
+2026-01-25 21:58:09:562 (Simulation) Tradovate.Adapter.StartWebSocketTradeReceiveWorker
+2026-01-25 21:58:09:563 (Simulation) Tradovate.Adapter.ReceiveWebSocketTradeMessage
+2026-01-25 21:58:10:828 (Simulation) Cbi.Connection.CreateAccount: account='DEMO619219' displayName='DEMO' fcm='' denomination=UsDollar forexLotSize=1
+2026-01-25 21:58:10:829 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connecting previousStatus=Disconnected message=''
+2026-01-25 21:58:10:829 (Simulation) Cbi.Account.OnConnectionStatus.PositionExecutions: account='DEMO619219'
+2026-01-25 21:58:10:829 (Simulation) Cbi.Account.AccountItemUpdateCallback: account='DEMO619219' accountItem=CashValue currency=UsDollar value=*****
+2026-01-25 21:58:10:829 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc0
+2026-01-25 21:58:10:829 (Simulation) Tradovate.Adapter.SetupUnrealizedPnlCalc1
+2026-01-25 21:58:10:878 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket
+2026-01-25 21:58:11:720 (Simulation) Tradovate.Adapter.StartMarketDataWebSocket1
+2026-01-25 21:58:11:720 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataSendWorker
+2026-01-25 21:58:11:720 (Simulation) Tradovate.Adapter.StartWebSocketMarketDataReceiveWorker
+2026-01-25 21:58:11:720 (Simulation) Tradovate.Adapter.ReceiveWebSocketMarketDataMessage
+2026-01-25 21:58:12:217 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2026-01-25 21:58:12:217 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Connected previousStatus=Connecting message=''
+2026-01-25 21:58:12:217 (Simulation) Cbi.Account.Restore.Start: account='Sim101' fcm=''
+2026-01-25 21:58:12:217 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Connected previousStatus=Connecting message=''
+2026-01-25 21:58:12:217 (Simulation) Cbi.Account.Restore.Start: account='DEMO619219' fcm=''
+2026-01-25 21:58:12:217 (Simulation) Cbi.Account.Restore.End: account='Sim101' fcm=''
+2026-01-25 21:58:12:261 (Simulation) Cbi.Account.Restore.End: account='DEMO619219' fcm=''
+2026-01-25 21:58:12:261 (Simulation) Core.Connection.Statistics: connectAttempts=3/2537.1ms
+2026-01-25 21:58:12:261 (Simulation) Cbi.Connection.ConnectionStatusCallback: autoClosePositionTime='12/17/2025 00:00:00' autoClosePosition=False
+2026-01-25 21:58:12:261 Server.HdsClient.Connect: type=HDS server='hds-us-nt-016.ninjatrader.com' port=31655 system='' useSsl=True
+2026-01-25 21:58:12:270 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Provider31 status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2026-01-25 21:58:12:270 (Simulation) NinjaTrader.Gui.ControlCenter.OnConnectionStatus.DispatcherInvoke: Provider31 status=Connected priceStatus=Connected previousStatus=Connecting previousPriceStatus=Connecting errorCode=NoError nativeError=''
+2026-01-25 21:58:12:270 (Simulation) Gui.ControlCenter.OnConnectionStatus.Adding: provider=Provider31 status=Connected priceStatus=Connected
+2026-01-25 21:58:12:270 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: foundPriceLoss=False foundTradeLoss=False foundConnectingStatus=False foundConnected=True
+2026-01-25 21:58:12:270 NinjaTrader.Gui.ControlCenter.OnConnectionStatus: Status=Connected
+2026-01-25 21:58:12:270 (Simulation) Tradovate.Adapter.QueryNotificationsAsync0
+2026-01-25 21:58:12:289 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='25/1/26 12:00:00 a. m.' to='25/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-25 21:58:12:325 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='25/1/26 8:00:00 p. m.' to='25/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 21:58:12:601 (Simulation) QueryNotificationResponse Live
+2026-01-25 21:58:13:257 (Simulation) QueryNotificationResponse Demo
+2026-01-25 21:58:26:403 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='18/1/26 12:00:00 a. m.' to='25/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-25 21:58:27:210 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='25/1/26 12:00:00 a. m.' to='25/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-25 21:58:34:868 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='25/1/26 9:00:00 p. m.' to='25/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 21:58:43:212 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-26' from='25/1/26 9:00:00 p. m.' to='25/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 21:59:31:789 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-25 21:59:31:889 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-25 21:59:39:196 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='21/1/26 12:00:00 a. m.' to='23/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-25 21:59:39:962 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='25/1/26 12:00:00 a. m.' to='25/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-25 21:59:40:774 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='21/1/26 12:00:00 a. m.' to='23/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 21:59:45:415 Cbi.Instrument.RequestBars (to Provider): instrument='MES 03-26' from='25/1/26 12:00:00 a. m.' to='25/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 22:00:02:098 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-25 22:00:02:218 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-25 22:00:09:744 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='21/1/26 12:00:00 a. m.' to='23/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-25 22:00:10:774 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='25/1/26 12:00:00 a. m.' to='25/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-25 22:00:11:626 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='21/1/26 12:00:00 a. m.' to='23/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 22:00:21:274 Cbi.Instrument.RequestBars (to Provider): instrument='MYM 03-26' from='25/1/26 12:00:00 a. m.' to='25/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 22:00:34:279 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-25 22:00:34:402 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-25 22:00:44:016 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='21/1/26 12:00:00 a. m.' to='23/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-25 22:00:44:961 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='25/1/26 12:00:00 a. m.' to='25/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-25 22:00:45:822 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='21/1/26 12:00:00 a. m.' to='23/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 22:00:47:040 Cbi.Instrument.RequestBars (to Provider): instrument='M2K 03-26' from='25/1/26 12:00:00 a. m.' to='25/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 22:02:50:390 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-25 22:02:50:495 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-25 22:03:00:495 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='21/1/26 12:00:00 a. m.' to='23/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-25 22:03:01:448 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='25/1/26 12:00:00 a. m.' to='25/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-25 22:03:02:377 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='21/1/26 12:00:00 a. m.' to='23/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 22:03:06:558 Cbi.Instrument.RequestBars (to Provider): instrument='MGC 02-26' from='25/1/26 12:00:00 a. m.' to='25/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 22:03:27:281 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-25 22:03:27:449 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-25 22:03:41:282 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 03-26' from='21/1/26 12:00:00 a. m.' to='23/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-25 22:03:42:322 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 03-26' from='25/1/26 12:00:00 a. m.' to='25/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-25 22:03:43:292 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 03-26' from='21/1/26 12:00:00 a. m.' to='23/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 22:03:44:465 Cbi.Instrument.RequestBars (to Provider): instrument='MCL 03-26' from='25/1/26 12:00:00 a. m.' to='25/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 22:04:05:911 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-25 22:04:06:017 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-25 22:04:20:604 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='21/1/26 12:00:00 a. m.' to='23/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-25 22:04:22:042 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='25/1/26 12:00:00 a. m.' to='25/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-25 22:04:23:027 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='21/1/26 12:00:00 a. m.' to='23/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 22:04:24:340 Cbi.Instrument.RequestBars (to Provider): instrument='MHG 03-26' from='25/1/26 12:00:00 a. m.' to='25/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 22:04:47:444 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-25 22:04:47:568 Core.Instrumentation.LogActivity: activityType=ChartPerformance errorCode=NoError errorMessage=''
+2026-01-25 22:05:00:059 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 01-26' from='21/1/26 12:00:00 a. m.' to='23/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-25 22:05:00:997 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 01-26' from='25/1/26 12:00:00 a. m.' to='25/1/26 12:00:00 a. m.' period='1 Minute'
+2026-01-25 22:05:01:980 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 01-26' from='21/1/26 12:00:00 a. m.' to='23/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 22:05:03:167 Cbi.Instrument.RequestBars (to Provider): instrument='MBT 01-26' from='25/1/26 12:00:00 a. m.' to='25/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-25 22:05:35:020 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-25 22:05:38:037 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=1747 Messages=0 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-25 22:05:42:339 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=4302.80ms Messages=0.00ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-25 22:06:29:793 Finalizing addon 'AddonSuiteManager.Addon.Standalone.AddonSuiteManager'
+2026-01-25 22:06:29:793 Finalizing addon 'NinjaTrader.NinjaScript.AddOns.NewsUpdate'
+2026-01-25 22:06:29:793 Finalizing addon 'ReplayDataPlus.Addon.Standalone.ReplayDataPlusManager'
+2026-01-25 22:06:29:914 Shutting down NinjaTrader
+2026-01-25 22:06:29:915 Disconnecting 'Simulation'
+2026-01-25 22:06:29:915 (Simulation) Cbi.Connection.Disconnect
+2026-01-25 22:06:29:915 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Disconnecting priceStatus=Disconnecting previousStatus=Connected previousPriceStatus=Connected errorCode=NoError nativeError=''
+2026-01-25 22:06:29:915 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Disconnecting previousStatus=Connected message=''
+2026-01-25 22:06:29:915 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Disconnecting previousStatus=Connected message=''
+2026-01-25 22:06:29:915 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close1
+2026-01-25 22:06:29:915 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close3
+2026-01-25 22:06:29:940 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close4
+2026-01-25 22:06:29:940 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close5
+2026-01-25 22:06:29:940 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close6a
+2026-01-25 22:06:29:940 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close7
+2026-01-25 22:06:29:940 (Simulation) Cbi.Connection.ConnectionStatusCallback.Close8
+2026-01-25 22:06:29:941 (Simulation) Tradovate.Adapter.DisposeMarketData0
+2026-01-25 22:06:30:454 (Simulation) Tradovate.Adapter.DisposeTrade0
+2026-01-25 22:06:31:466 (Simulation) Cbi.Connection.ConnectionStatusCallback: status=Disconnected priceStatus=Disconnected previousStatus=Disconnecting previousPriceStatus=Disconnecting errorCode=NoError nativeError=''
+2026-01-25 22:06:31:466 (Simulation) Cbi.Account.OnConnectionStatus: account='Sim101' fcm='' status=Disconnected previousStatus=Disconnecting message=''
+2026-01-25 22:06:31:466 (Simulation) Cbi.Account.OnConnectionStatus: account='DEMO619219' fcm='' status=Disconnected previousStatus=Disconnecting message=''
+2026-01-25 22:06:31:466 Flushing DB thread
+2026-01-25 22:06:31:473 Shutting down instrument management
+2026-01-25 22:06:31:474 Shutting down instrument threads
+2026-01-25 22:06:31:487 Shutting down recorder
+2026-01-25 22:06:31:491 Shutting down file type watcher
+2026-01-25 22:06:31:491 Shutting down ATI server
+2026-01-25 22:06:31:492 Shutting down auto trade component
+2026-01-25 22:06:31:493 Shutting down SMTP server
+2026-01-25 22:06:31:508 Shutting down adapter server
+2026-01-25 22:06:31:536 Shutting down server(s)
+2026-01-25 22:06:31:539 Shutting down mail thread
+2026-01-25 22:06:31:539 Shutting down sound thread
+2026-01-25 22:06:31:539 Shutting down timer
+2026-01-25 22:06:31:539 Shutting down alerts timer
+2026-01-25 22:06:31:539 Shutting down message timer
+2026-01-25 22:06:31:539 Shutting down db
+2026-01-25 22:06:31:539 Flushing DB thread
+2026-01-25 22:06:31:635 Shutting down bars dictionary
+2026-01-25 22:06:31:650 Shutting down user entitlement threads
+2026-01-25 22:06:31:662 Shutting down logs
+2026-01-25 22:06:31:672 Shutting down bars types
+2026-01-25 22:06:31:675 Shutting down UI threads
+2026-01-25 22:06:31:700 ************************ Session End ************************

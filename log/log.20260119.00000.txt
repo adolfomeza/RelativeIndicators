@@ -1,0 +1,58 @@
+2026-01-19 00:02:03:036|0|16|Error on getting value for property 'EnabledZonesParam' for NinjaScript 'SessionLevelsStrategy': Object reference not set to an instance of an object.
+2026-01-19 00:02:06:437|3|16|There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2026-01-19 00:02:39:196|0|16|Error on getting value for property 'EnabledZonesParam' for NinjaScript 'SessionLevelsStrategy': Object reference not set to an instance of an object.
+2026-01-19 00:02:42:319|3|16|There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2026-01-19 00:03:12:543|0|16|Error on getting value for property 'EnabledZonesParam' for NinjaScript 'SessionLevelsStrategy': Object reference not set to an instance of an object.
+2026-01-19 00:03:15:565|3|16|There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2026-01-19 00:07:01:941|0|16|Error on getting value for property 'EnabledZonesParam' for NinjaScript 'SessionLevelsStrategy': Object reference not set to an instance of an object.
+2026-01-19 00:07:05:122|3|16|There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2026-01-19 00:10:58:578|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378426667' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=False SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2026-01-19 05:27:56:985|0|4|Unhandled exception: SelectedDate value is not valid. Parameter name: d
+2026-01-19 05:28:00:353|3|16|There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2026-01-19 06:20:25:887|1|2|Simulation: Primary connection=Connection lost, Price feed=Connected
+2026-01-19 06:20:26:316|1|2|Simulation: Primary connection=Connection lost, Price feed=Connection lost
+2026-01-19 06:20:32:490|3|2|Connection lost to the NinjaTrader Historical Data Server: hds-us-nt-008.ninjatrader.com
+2026-01-19 06:20:36:589|3|4|Strategy 'SessionLevelsStrategy/378426667' lost price connection for more than 10 seconds and will be restarted.
+2026-01-19 06:20:36:590|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378426667'
+2026-01-19 06:20:42:504|1|2|Using HDS (hds-us-nt-004.ninjatrader.com/31655)
+2026-01-19 06:21:26:478|1|2|Simulation: Primary connection=Connected, Price feed=Connected
+2026-01-19 06:21:27:517|1|2|Connection restored to the NinjaTrader Historical Data Server: hds-us-nt-013.ninjatrader.com
+2026-01-19 06:22:02:950|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378426667' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=False SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2026-01-19 06:22:19:036|1|2|Simulation: Primary connection=Connected, Price feed=Connection lost
+2026-01-19 06:22:23:514|2|2|Your connection is experiencing high latency: 21,219 ms. This may negatively impact trading and market data services.
+2026-01-19 06:22:23:968|1|2|Simulation: Primary connection=Connected, Price feed=Connected
+2026-01-19 06:22:26:910|1|2|Simulation: Primary connection=Connection lost, Price feed=Connected
+2026-01-19 06:22:29:086|1|2|Simulation: Primary connection=Connected, Price feed=Connected
+2026-01-19 06:23:41:738|1|2|Simulation: Primary connection=Connected, Price feed=Connection lost
+2026-01-19 06:23:43:618|1|2|Simulation: Primary connection=Connected, Price feed=Connected
+2026-01-19 06:42:03:955|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378426667'
+2026-01-19 06:42:41:401|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378426667' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=False SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2026-01-19 06:44:02:542|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378426667'
+2026-01-19 06:44:31:319|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378426667' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=False SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2026-01-19 06:45:46:181|2|2|Your connection is experiencing high latency: 14,174 ms. This may negatively impact trading and market data services.
+2026-01-19 06:46:17:711|1|2|Connection latency has been restored to acceptable levels.
+2026-01-19 13:44:22:483|0|16|Error on getting value for property 'EnabledZonesParam' for NinjaScript 'SessionLevelsStrategy': Object reference not set to an instance of an object.
+2026-01-19 13:44:26:275|3|16|There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2026-01-19 13:44:27:614|0|16|Error on getting value for property 'EnabledZonesParam' for NinjaScript 'SessionLevelsStrategy': Object reference not set to an instance of an object.
+2026-01-19 13:44:36:765|3|16|There was an error while sharing from the Share service Email: "The calling thread must be STA, because many UI components require this."
+2026-01-19 14:11:19:200|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378426667'
+2026-01-19 14:12:06:903|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378426667' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=False SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2026-01-19 15:44:39:796|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378426667'
+2026-01-19 15:56:59:007|1|2|Simulation: Primary connection=Disconnecting, Price feed=Disconnecting
+2026-01-19 15:57:00:549|1|2|Simulation: Primary connection=Disconnected, Price feed=Disconnected
+2026-01-19 15:57:03:261|1|2|Playback: Primary connection=Connecting, Price feed=Connecting
+2026-01-19 15:57:04:446|1|2|Playback: Primary connection=Connected, Price feed=Connected
+2026-01-19 15:57:04:449|1|2|Time to auto close position='12:00:00 a. m.', Enabled=False
+2026-01-19 15:57:04:449|1|2|Using HDS (hds-us-nt-007.ninjatrader.com/31655)
+2026-01-19 15:57:04:818|1|2|Simulation account 'Playback101' reset
+2026-01-19 15:58:31:369|1|2|Simulation account 'Playback101' reset
+2026-01-19 15:58:54:711|1|2|Simulation account 'Playback101' reset
+2026-01-19 15:59:22:509|1|2|Simulation account 'Playback101' reset
+2026-01-19 16:03:41:724|1|2|Simulation account 'Playback101' reset
+2026-01-19 16:04:14:049|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378426667' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=False SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2026-01-19 16:05:33:972|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378426667'
+2026-01-19 16:06:00:395|1|4|Enabling NinjaScript strategy 'SessionLevelsStrategy/378426667' : On starting a real-time strategy - StartBehavior=WaitUntilFlat EntryHandling=All entries EntriesPerDirection=1 StopTargetHandling=Per entry execution ErrorHandling=Stop strategy, cancel orders, close positions ExitOnSessionClose=False SetOrderQuantityBy=Strategy ConnectionLossHandling=Recalculate DisconnectDelaySeconds=10 CancelEntriesOnStrategyDisable=False CancelExitsOnStrategyDisable=False Calculate=On each tick IsUnmanaged=True MaxRestarts=2880 in 6 minutes
+2026-01-19 17:29:09:852|1|4|Workspace Relative Trading Software saved
+2026-01-19 17:29:10:258|1|4|Disabling NinjaScript strategy 'SessionLevelsStrategy/378426667'
+2026-01-19 17:29:11:053|1|2|Playback: Primary connection=Disconnecting, Price feed=Disconnecting
+2026-01-19 17:29:11:055|1|2|Playback: Primary connection=Disconnected, Price feed=Disconnected

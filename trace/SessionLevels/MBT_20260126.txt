@@ -1,0 +1,7 @@
+=== MBT Strategy Log - Started 2026-01-26 06:27:38 ===
+
+06:27:38.386 [06:28:00.000] DEBUG_RECONNECT: Checking Account.Positions. Strategy Position.Qty=0 MarketPosition=Flat
+06:27:38.386 [06:28:00.000] DEBUG_RECONNECT: Account.Position[1] Instrument=MYM 03-26 Qty=2 Dir=Short
+06:27:38.387 [06:28:00.000] DEBUG_RECONNECT: Total Account.Positions count = 1
+06:27:38.387 [06:28:00.000] 26/1/26 6:28:00 a. m. v1.15.60 RESTART EVAL: Checking for pending orders or valid setup to continue...
+06:27:38.387 [06:28:00.000] 26/1/26 6:28:00 a. m. v1.15.60 RESTART: No valid setup found. Starting fresh.

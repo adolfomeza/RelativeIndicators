@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push)",
+      "Bash(git push:*)",
+      "Bash(ls:*)",
+      "Bash(no hay vwap porque los vwap solo se crean en maximos y minimos del dia\"\n\nSolución Implementada:\n1. Nuevas variables currentHighAnchorSession/currentLowAnchorSession \\(líneas ~85-86\\)\n   - Guardan qué session creó el anchor VWAP actual\n\n2. Al romper nivel que será máx/mín día \\(líneas ~1920-1924, ~2030-2034\\):\n   - Verificar if \\(session.High > currentDayHigh\\)\n   - Guardar currentHighAnchorSession = session\n   - Log: [DEBUG ANCHOR] HIGH anchor session set\n\n3. Al disparar Señal 2 \\(líneas ~1201, ~1507\\):\n   - Triple verificación: flag + tracker + sameLevelAsVwap\n   - sameLevelAsVwap = \\(lastUnlockedHighSession == currentHighAnchorSession\\)\n   - Si diferentes → canFire = false\n\n4. Logging mejorado:\n   - [DEBUG FLAG] ahora muestra SameLevel\n   - Permite detectar cuando VWAP es de otro nivel\n\nResultado:\n- Señal 2 solo dispara si VWAP corresponde al MISMO nivel que Señal 1\n- Evita señales con VWAP de niveles internos no tomados\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
+    ]
+  }
+}

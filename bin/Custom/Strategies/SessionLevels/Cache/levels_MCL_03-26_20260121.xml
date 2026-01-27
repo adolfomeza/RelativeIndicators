@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfSessionLevel xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SessionLevel>
+    <Name>Asia High</Name>
+    <Price>60.63</Price>
+    <StartTime>2026-01-21T19:00:00</StartTime>
+    <EndTime>2026-01-21T19:02:00</EndTime>
+    <ActualSessionEnd>PT3H</ActualSessionEnd>
+    <MitigationTime>0001-01-01T00:00:00</MitigationTime>
+    <IsResistance>true</IsResistance>
+    <IsMitigated>false</IsMitigated>
+    <Tag>Asia_High_639046152000000000</Tag>
+    <VolSum>13</VolSum>
+    <PvSum>788.19</PvSum>
+    <JustReset>true</JustReset>
+    <EntryAttempts>0</EntryAttempts>
+    <DeltaAtFormation>0</DeltaAtFormation>
+    <DeltaHigh>0</DeltaHigh>
+    <DeltaLow>0</DeltaLow>
+    <DeltaAtSwingStart>0</DeltaAtSwingStart>
+    <AbsorptionDetected>false</AbsorptionDetected>
+  </SessionLevel>
+  <SessionLevel>
+    <Name>Asia Low</Name>
+    <Price>60.58</Price>
+    <StartTime>2026-01-21T19:00:00</StartTime>
+    <EndTime>2026-01-21T19:02:00</EndTime>
+    <ActualSessionEnd>PT3H</ActualSessionEnd>
+    <MitigationTime>0001-01-01T00:00:00</MitigationTime>
+    <IsResistance>false</IsResistance>
+    <IsMitigated>false</IsMitigated>
+    <Tag>Asia_Low_639046152000000000</Tag>
+    <VolSum>13</VolSum>
+    <PvSum>788.19</PvSum>
+    <JustReset>true</JustReset>
+    <EntryAttempts>0</EntryAttempts>
+    <DeltaAtFormation>0</DeltaAtFormation>
+    <DeltaHigh>0</DeltaHigh>
+    <DeltaLow>0</DeltaLow>
+    <DeltaAtSwingStart>0</DeltaAtSwingStart>
+    <AbsorptionDetected>false</AbsorptionDetected>
+  </SessionLevel>
+</ArrayOfSessionLevel>

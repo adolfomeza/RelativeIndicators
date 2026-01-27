@@ -7,6 +7,24 @@ y este proyecto sigue [Semantic Versioning](https://semver.org/lang/es/).
 
 ---
 
+## [v1.15.60] - 2026-01-24
+
+### 🐛 Fixed
+
+**1. Regresión: Agotamiento Prematuro de Niveles (20/20) por Doble Conteo en Persistencia**
+
+- **Problema**: Los niveles mostraban nuevamente "Max Retries Reached (20/20)" con pocos trades reales, similar al bug de v1.15.50.
+- **Causa Raíz**: Conflicto entre la Persistencia y el Procesamiento Histórico.
+  1. Al iniciar, la estrategia cargaba los niveles desde el archivo XML, incluyendo el contador de intentos previo (ej. 5 intentos).
+  2. Luego, NinjaTrader procesaba las ejecuciones históricas de esos mismos trades.
+  3. La lógica de `OnExecutionUpdate` volvía a sumar esos intentos al valor ya cargado (5 cargados + 5 procesados = 10).
+  4. En cada reinicio, el contador se inflaba artificialmente.
+- **Solución v1.15.60**: 
+  - Se modificó `SessionLevelPersistence.cs` para **resetear a 0** el contador `EntryAttempts` inmediatamente después de cargar los niveles del disco.
+  - Esto permite que `OnExecutionUpdate` reconstruya el contador exacto basándose únicamente en el historial de ejecuciones real, eliminando la duplicación.
+- **Impacto**:
+  - ✅ El contador de intentos es matemáticamente exacto y no se infla al reiniciar la estrategia.
+
 ## [v1.15.59] - 2026-01-22
 
 ### 🐛 Fixed

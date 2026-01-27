@@ -63,6 +63,9 @@
     <Reference Include="ASCENDO_NewsEvents">
       <HintPath>C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\ASCENDO_NewsEvents.dll</HintPath>
     </Reference>
+    <Reference Include="TDUPriceAction">
+      <HintPath>C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\TDUPriceAction.dll</HintPath>
+    </Reference>
     <Reference Include="NinjaTrader.Vendor">
       <HintPath>C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\NinjaTrader.Vendor.dll</HintPath>
     </Reference>
@@ -371,41 +374,47 @@
     <Compile Include="SuperDomColumns\%40Recent.cs" />
     <Compile Include="SuperDomColumns\%40Volume.cs" />
     <Compile Include="SuperDomColumns\%40PullingStacking.cs" />
-    <Compile Include="Indicators\RelativeIndicators\RelativeBarAdvisor.cs" />
-    <Compile Include="Indicators\RelativeIndicators\RelativeCounter.cs" />
-    <Compile Include="Indicators\RelativeIndicators\RelativeDelta.cs" />
-    <Compile Include="Indicators\RelativeIndicators\RelativeDVAPVA.cs" />
-    <Compile Include="Indicators\RelativeIndicators\RelativeLevels.cs" />
-    <Compile Include="Indicators\RelativeIndicators\RelativeVolumen.cs" />
-    <Compile Include="Indicators\RelativeIndicators\RelativeVwap.cs" />
-    <Compile Include="Strategies\RelativeVwapStrategy.cs" />
-    <Compile Include="NinjaTrader.Vendor.cs" />
     <Compile Include="DrawingTools\AngledLine.cs" />
     <Compile Include="DrawingTools\Arrows.cs" />
     <Compile Include="DrawingTools\Channel.cs" />
+    <Compile Include="DrawingTools\LabeledLines.cs" />
     <Compile Include="DrawingTools\Measure.cs" />
     <Compile Include="DrawingTools\MeasuredMove.cs" />
     <Compile Include="DrawingTools\Note.cs" />
     <Compile Include="DrawingTools\Range.cs" />
+    <Compile Include="DrawingTools\RelativeAnchoredVwap.cs" />
     <Compile Include="DrawingTools\SupportLine.cs" />
+    <Compile Include="Indicators\RelativeIndicators\amaCurrentMonthVWAP.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeBarAdvisor.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeCounter.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeDelta.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeDualConfluence.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeDVAPVA.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeLevels.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeNewsFilter.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeVolumen.cs" />
+    <Compile Include="Indicators\amaCurrentDayVWAP.cs" />
     <Compile Include="Indicators\PATSToolBar.cs" />
     <Compile Include="Indicators\RelativePnL.cs" />
-    <Compile Include="ASCENDO_NewsEvents.cs" />
-    <Compile Include="Indicators\RelativeIndicators\RelativeNewsFilter.cs" />
-    <Compile Include="DrawingTools\LabeledLines.cs" />
-    <Compile Include="Strategies\AxionValueProtocol.cs" />
-    <Compile Include="Strategies\RelativeLevelsData.cs" />
-    <Compile Include="Strategies\RelativeLevelsStrategy.cs" />
-    <Compile Include="Indicators\RelativeIndicators\amaCurrentMonthVWAP.cs" />
-    <Compile Include="Strategies\SessionLevelsStrategy.cs" />
-    <Compile Include="Strategies\SessionLevels\SessionLevelCore.cs" />
-    <Compile Include="Strategies\SessionLevels\VWAPCalculator.cs" />
-    <Compile Include="Strategies\SessionLevels\OrderProtectionManager.cs" />
     <Compile Include="Strategies\SessionLevels\EntryStateMachine.cs" />
-    <Compile Include="Indicators\amaCurrentDayVWAP.cs" />
-    <Compile Include="Indicators\RelativeIndicators\RelativeDualConfluence.cs" />
+    <Compile Include="Strategies\SessionLevels\OrderProtectionManager.cs" />
+    <Compile Include="Strategies\SessionLevels\RiskManager.cs" />
+    <Compile Include="Strategies\SessionLevels\SessionLevelCore.cs" />
+    <Compile Include="Strategies\SessionLevels\SessionLevelPersistence.cs" />
     <Compile Include="Strategies\SessionLevels\SessionManager.cs" />
     <Compile Include="Strategies\SessionLevels\StrategyHelpers.cs" />
+    <Compile Include="Strategies\SessionLevels\TargetDistributor.cs" />
+    <Compile Include="Strategies\SessionLevels\VWAPCalculator.cs" />
+    <Compile Include="Strategies\%40%40RelativeVwapStrategy.cs" />
+    <Compile Include="Strategies\AxionValueProtocol.cs" />
+    <Compile Include="Strategies\BidAskAnchoredVWAP.cs" />
+    <Compile Include="Strategies\RelativeLevelsData.cs" />
+    <Compile Include="Strategies\RelativeLevelsStrategy.cs" />
+    <Compile Include="Strategies\SessionLevelsStrategy.cs" />
+    <Compile Include="AdvancedRiskRewardBrunoMezaV3.cs" />
+    <Compile Include="ASCENDO_NewsEvents.cs" />
+    <Compile Include="NinjaTrader.Vendor.cs" />
+    <Compile Include="TDUPriceAction.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Resource.resx">
