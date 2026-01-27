@@ -413,10 +413,13 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                         Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                         "NinjaTrader 8", "trace");
 
-                    if (!Directory.Exists(traceFolder))
-                        Directory.CreateDirectory(traceFolder);
+                    // v1.0.49: Create RelativeVwap subfolder for organized logs
+                    string indicatorLogFolder = Path.Combine(traceFolder, "RelativeVwap");
 
-                    logFilePath = Path.Combine(traceFolder, $"RelativeVwap_Debug_{dateStamp}.txt");
+                    if (!Directory.Exists(indicatorLogFolder))
+                        Directory.CreateDirectory(indicatorLogFolder);
+
+                    logFilePath = Path.Combine(indicatorLogFolder, $"RelativeVwap_Debug_{dateStamp}.txt");
 
                     // Write header
                     LogToFile("=== RelativeVwap Debug Log Started ===", "SYSTEM");
@@ -3328,7 +3331,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         public bool ShowDebugLabels { get; set; }
 
         [NinjaScriptProperty]
-        [Display(Name = "Logging a Archivo", Description = "Escribe logs detallados a trace/RelativeVwap_Debug_YYYYMMDD.txt", GroupName = "05. Alertas & Debug", Order = 4)]
+        [Display(Name = "Logging a Archivo", Description = "Escribe logs detallados a trace/RelativeVwap/RelativeVwap_Debug_YYYYMMDD.txt", GroupName = "05. Alertas & Debug", Order = 4)]
         public bool EnableFileLogging { get; set; }
 
 
