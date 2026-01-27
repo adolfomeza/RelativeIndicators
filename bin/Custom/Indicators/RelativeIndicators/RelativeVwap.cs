@@ -949,7 +949,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                          if (ShowSignalLabels)
                          {
                              // v1.0.45: Format with sequence number: "Liquidity\nGrabbed 01"
-                             string code = LabelDisplayMode == LabelMode.Custom ? CustomSignal1Text : string.Format("Liquidity\nGrabbed {0:00}", highLiqGrabSequence);
+                             string code = string.Format("Liquidity\nGrabbed {0:00}", highLiqGrabSequence);
                              SimpleFont font = new SimpleFont("Arial", LabelFontSize);
                              // v1.0.45: Use sequence in tag to allow multiple labels
                              Draw.Text(this, "Sig1H_Txt_" + highLiqGrabSessionName + "_" + highLiqGrabSequence, true, code, 0, newY, LabelTextOffset, SignalColor, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
@@ -977,7 +977,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                          if (ShowSignalLabels)
                          {
                              // v1.0.45: Format with sequence number: "Liquidity\nGrabbed 01"
-                             string code = LabelDisplayMode == LabelMode.Custom ? CustomSignal1Text : string.Format("Liquidity\nGrabbed {0:00}", lowLiqGrabSequence);
+                             string code = string.Format("Liquidity\nGrabbed {0:00}", lowLiqGrabSequence);
                              SimpleFont font = new SimpleFont("Arial", LabelFontSize);
                              // v1.0.45: Use sequence in tag to allow multiple labels
                              Draw.Text(this, "Sig1L_Txt_" + lowLiqGrabSessionName + "_" + lowLiqGrabSequence, true, code, 0, newY, -LabelTextOffset, SignalColor, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
@@ -1206,17 +1206,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                               
                               if (lastUnlockedHighSession != null && ShowSignalLabels)
                               {
-                                   // Logic moved inside ShowSignal3 check
-                                   string entryLabel = "";
-                                   if (LabelDisplayMode == LabelMode.Simple) entryLabel = "3";
-                                   else if (LabelDisplayMode == LabelMode.Custom) entryLabel = CustomSignal3Text;
-                                   else 
-                                   {
-                                       entryLabel = GetSignalCode(lastUnlockedHighSession, "H");
-                                       if (lastUnlockedHighSession.IsInternalHigh) entryLabel = "i" + entryLabel;
-                                       entryLabel += "." + highAnchorSequence + ".1";
-                                   }
-
+                                   // v1.0.48: Simplified - only show confirmation marker
+                                   string entryLabel = "Confirm";
                                    SimpleFont font = new SimpleFont("Arial", LabelFontSize);
                                    Draw.Text(this, "Sig3H_Txt_" + CurrentBar, true, entryLabel, 0, arrowY, LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
                               }
@@ -1330,15 +1321,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                               // Label: e.g. "Entry 01", "Entry 02"
                               if (lastUnlockedHighSession != null && ShowSignalLabels)
                               {
-                                  string code = "";
-                                  if (LabelDisplayMode == LabelMode.Simple) code = "2";
-                                  else if (LabelDisplayMode == LabelMode.Custom) code = CustomSignal2Text;
-                                  else
-                                  {
-                                      // v1.0.45: Simple "Entry 01" format with sequence number
-                                      code = string.Format("Entry {0:00}", highAnchorSequence);
-                                  }
-
+                                  // v1.0.48: Simplified - only sequence format
+                                  string code = string.Format("Entry {0:00}", highAnchorSequence);
                                   SimpleFont font = new SimpleFont("Arial", LabelFontSize);
                                   Draw.Text(this, "Sig2H_Txt_" + CurrentBar, true, code, 0, dotY, LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
                               }
@@ -1522,17 +1506,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                               
                               if (lastUnlockedLowSession != null && ShowSignalLabels)
                               {
-                                   // Logic moved inside ShowSignal3 check
-                                   string entryLabel = "";
-                                   if (LabelDisplayMode == LabelMode.Simple) entryLabel = "3";
-                                   else if (LabelDisplayMode == LabelMode.Custom) entryLabel = CustomSignal3Text;
-                                   else 
-                                   {
-                                       entryLabel = GetSignalCode(lastUnlockedLowSession, "L");
-                                       if (lastUnlockedLowSession.IsInternalLow) entryLabel = "i" + entryLabel;
-                                       entryLabel += "." + lowAnchorSequence + ".1";
-                                   }
-
+                                   // v1.0.48: Simplified - only show confirmation marker
+                                   string entryLabel = "Confirm";
                                    SimpleFont font = new SimpleFont("Arial", LabelFontSize);
                                    Draw.Text(this, "Sig3L_Txt_" + CurrentBar, true, entryLabel, 0, arrowY, -LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
                               }
@@ -1640,15 +1615,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                               // Label: e.g. "Entry 01", "Entry 02"
                               if (lastUnlockedLowSession != null && ShowSignalLabels)
                               {
-                                  string code = "";
-                                  if (LabelDisplayMode == LabelMode.Simple) code = "2";
-                                  else if (LabelDisplayMode == LabelMode.Custom) code = CustomSignal2Text;
-                                  else
-                                  {
-                                      // v1.0.45: Simple "Entry 01" format with sequence number
-                                      code = string.Format("Entry {0:00}", lowAnchorSequence);
-                                  }
-
+                                  // v1.0.48: Simplified - only sequence format
+                                  string code = string.Format("Entry {0:00}", lowAnchorSequence);
                                   SimpleFont font = new SimpleFont("Arial", LabelFontSize);
                                   Draw.Text(this, "Sig2L_Txt_" + CurrentBar, true, code, 0, dotY, -LabelTextOffset, sigBrush, font, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
                               }
@@ -2154,18 +2122,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                 // } REMOVED ORPHAN BRACE
 
                     }
-                    // v1.0.48: Reset sequence when touches level AGAIN (not first time)
-                    // Only reset once per bar to avoid spam in OnEachTick mode
-                    else if (session.HighBrokenBarIdx != -1 && high >= session.High && CurrentBar != lastHighSeqResetBar)
-                    {
-                        // Already broken before, but touching again - reset SAME SIDE sequence
-                        highAnchorSequence = 0;
-                        lastHighSeqResetBar = CurrentBar; // Track this bar to prevent multiple resets
-                        LogToFile(string.Format("RESET highAnchorSequence=0 | Reason: Touched HIGH level again | Session:{0}",
-                            session.Name), "SEQ_RESET");
-                        Print(string.Format("[DEBUG SEQ] Bar:{0} | Touched HIGH again (already broken) | Session:{1} | Reset highAnchorSequence=0",
-                            CurrentBar, session.Name));
-                    }
+                    // v1.0.48: REMOVED "touched again" logic - was causing constant resets
+                    // Sequence should only reset when: 1) new level touched first time, 2) crossed opposite VWAP
 
                     // Check Low Break (Support)
                     // MANUAL FIX: Use STRICT inequality (<)
@@ -2280,16 +2238,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                  // } REMOVED ORPHAN BRACE
 
                     }
-                    // v1.0.47: Reset sequence when touches level AGAIN (not first time)
-                    // v1.0.48: Only reset once per bar to avoid spam in OnEachTick mode
-                    else if (session.LowBrokenBarIdx != -1 && low <= session.Low && CurrentBar != lastLowSeqResetBar)
-                    {
-                        // v1.0.48: Reset SAME SIDE sequence (LOW level → LONG signals use this VWAP)
-                        lowAnchorSequence = 0;
-                        lastLowSeqResetBar = CurrentBar; // Track this bar to prevent multiple resets
-                        LogToFile(string.Format("RESET lowAnchorSequence=0 | Reason: Touched LOW level again | Session:{0}",
-                            session.Name), "SEQ_RESET");
-                    }
+                    // v1.0.48: REMOVED "touched again" logic - was causing constant resets
+                    // Sequence should only reset when: 1) new level touched first time, 2) crossed opposite VWAP
                 }
             }
         }
