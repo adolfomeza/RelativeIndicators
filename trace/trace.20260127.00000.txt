@@ -146,3 +146,8 @@
 2026-01-27 06:25:56:607 Cbi.Instrument.RequestBars (to Provider): instrument='NQ 03-26' from='27/1/26 12:00:00 a. m.' to='27/1/26 12:00:00 a. m.' period='1 Minute'
 2026-01-27 06:25:57:453 SQLite error (17): statement aborts at 50: [SELECT Id,Account,BarIndex,Commission,Exchange,ExecutionId,Fee,Instrument,IsEntry,IsEntryStrategy,IsExit,IsExitStrategy,LotSize,MarketPosition,MaxPrice,MinPrice,Name,OrderId,Position,P
 2026-01-27 06:25:57:965 Cbi.Instrument.RequestBars (to Provider): instrument='NQ 03-26' from='27/1/26 6:00:00 a. m.' to='27/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-27 06:27:42:936 Cbi.Instrument.RequestBars (to Provider): instrument='NQ 03-26' from='27/1/26 6:00:00 a. m.' to='27/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-27 06:27:47:482 Cbi.Instrument.RequestBars (to Provider): instrument='NQ 03-26' from='27/1/26 6:00:00 a. m.' to='27/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-27 06:29:27:019 Cbi.Instrument.RequestBars (to Provider): instrument='NQ 03-26' from='27/1/26 6:00:00 a. m.' to='27/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-27 06:29:35:483 Cbi.Instrument.RequestBars (to Provider): instrument='NQ 03-26' from='27/1/26 6:00:00 a. m.' to='27/1/26 11:59:59 p. m.' period='1 Tick'
+2026-01-27 06:29:40:625 Cbi.Instrument.RequestBars (to Provider): instrument='NQ 03-26' from='27/1/26 6:00:00 a. m.' to='27/1/26 11:59:59 p. m.' period='1 Tick'

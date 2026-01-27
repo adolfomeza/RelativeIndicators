@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.47";  // v1.0.47: Fix Entry sequence - reset only in new anchor creation
+        private const string VERSION = "1.0.48";  // v1.0.48: Reset sequence when price crosses opposite VWAP
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -1672,6 +1672,37 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
               }
 
 
+             // v1.0.47: Reset sequence when price crosses OPPOSITE VWAP
+             // If SHORT side (highAnchorSequence > 0) and price touches LOW VWAP → reset SHORT sequence
+             if (highAnchorSequence > 0 && sessionLowBarIdx >= 0 && lowHasTakenRelevant)
+             {
+                 double lVwap = Values[1][0];
+                 if (Low[0] <= lVwap)
+                 {
+                     highAnchorSequence = 0;
+                     highLiqGrabSequence = 1;
+                     highLiqGrabLocked = false;
+                     highLiqGrabBarIdx = -1;
+                     Print(string.Format("[DEBUG VWAP CROSS] Bar:{0} | Touched LOW VWAP | Low:{1:F2} <= VWAP:{2:F2} | Reset highAnchorSequence=0",
+                         CurrentBar, Low[0], lVwap));
+                 }
+             }
+
+             // If LONG side (lowAnchorSequence > 0) and price touches HIGH VWAP → reset LONG sequence
+             if (lowAnchorSequence > 0 && sessionHighBarIdx >= 0 && highHasTakenRelevant)
+             {
+                 double hVwap = Values[0][0];
+                 if (High[0] >= hVwap)
+                 {
+                     lowAnchorSequence = 0;
+                     lowLiqGrabSequence = 1;
+                     lowLiqGrabLocked = false;
+                     lowLiqGrabBarIdx = -1;
+                     Print(string.Format("[DEBUG VWAP CROSS] Bar:{0} | Touched HIGH VWAP | High:{1:F2} >= VWAP:{2:F2} | Reset lowAnchorSequence=0",
+                         CurrentBar, High[0], hVwap));
+                 }
+             }
+
              // Version Label (Always Visible)
              if (CurrentBar == Bars.Count - 1)
              {
@@ -2103,7 +2134,15 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                 // } REMOVED ORPHAN BRACE
 
                     }
-                    
+                    // v1.0.47: Reset sequence when touches level AGAIN (not first time)
+                    else if (session.HighBrokenBarIdx != -1 && high >= session.High)
+                    {
+                        // Already broken before, but touching again - reset opposite sequence
+                        lowAnchorSequence = 0;
+                        Print(string.Format("[DEBUG SEQ] Bar:{0} | Touched HIGH again (already broken) | Session:{1} | Reset lowAnchorSequence=0",
+                            CurrentBar, session.Name));
+                    }
+
                     // Check Low Break (Support)
                     // MANUAL FIX: Use STRICT inequality (<)
                     if (session.LowBrokenBarIdx == -1 && low < session.Low) 
@@ -2213,6 +2252,14 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                      Print(string.Format("RelativeVwap: Visual Trade ADDED (Short) ID={0} at {1}", newTradeLow.ID, entryPxLow));
                  // } REMOVED ORPHAN BRACE
 
+                    }
+                    // v1.0.47: Reset sequence when touches level AGAIN (not first time)
+                    else if (session.LowBrokenBarIdx != -1 && low <= session.Low)
+                    {
+                        // Already broken before, but touching again - reset opposite sequence
+                        highAnchorSequence = 0;
+                        Print(string.Format("[DEBUG SEQ] Bar:{0} | Touched LOW again (already broken) | Session:{1} | Reset highAnchorSequence=0",
+                            CurrentBar, session.Name));
                     }
                 }
             }
