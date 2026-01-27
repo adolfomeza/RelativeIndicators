@@ -1,0 +1,18 @@
+2026-01-27 06:24:21:870|2|4|Session Break (Version 8.1.6.3)
+2026-01-27 06:24:45:207|1|4|Global simulation mode disabled
+2026-01-27 06:24:47:318|1|4|Vendor assembly 'AddonSuiteManager.Addon.Standalone' version='1.0.0.1' loaded.
+2026-01-27 06:24:47:318|1|4|Vendor assembly 'AdvancedRiskRewardBrunoMezaV3' version='1.0.0.1' loaded.
+2026-01-27 06:24:48:697|1|4|Vendor assembly 'ASCENDO_NewsEvents' version='3.0.0.0' loaded.
+2026-01-27 06:24:48:698|1|4|Vendor assembly 'Newtonsoft.Json' version='12.0.0.0' loaded.
+2026-01-27 06:24:49:423|1|4|Vendor assembly 'ReplayDataPlusManager.Addon.Standalone' version='1.0.0.1' loaded.
+2026-01-27 06:24:49:423|1|4|Vendor assembly 'TDUPriceAction' version='1.0.2.4' loaded.
+2026-01-27 06:24:49:423|1|4|Vendor assembly 'WindowsInput' version='1.0.4.0' loaded.
+2026-01-27 06:24:52:079|1|2|Using IS (is-us-nt-005.ninjatrader.com/31658)
+2026-01-27 06:24:52:085|1|4|Automated trading disabled
+2026-01-27 06:24:52:319|1|32|Order entry hot keys disabled
+2026-01-27 06:24:52:321|1|4|Auto close enabled=False
+2026-01-27 06:24:59:316|1|4|Restoring workspace 'Relative Trading Software'...
+2026-01-27 06:25:45:513|1|2|Simulation: Primary connection=Connecting, Price feed=Connecting
+2026-01-27 06:25:54:241|1|2|Simulation: Primary connection=Connected, Price feed=Connected
+2026-01-27 06:25:54:349|1|2|Time to auto close position='12:00:00 a. m.', Enabled=False
+2026-01-27 06:25:54:350|1|2|Using HDS (hds-us-nt-004.ninjatrader.com/31655)

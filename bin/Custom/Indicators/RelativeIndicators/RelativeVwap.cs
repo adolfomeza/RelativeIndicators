@@ -811,7 +811,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                   highDetached = false;
                   highSignal2Fired = false;  // v1.0.33: Reset flag to allow Signal 2 for new anchor
                   lastSignaledHighAnchorBar = -1;  // v1.0.25: Reset tracker to allow Signal 2 for new anchor
-                  highAnchorSequence = 0; // v1.0.46: Reset Entry sequence for new anchor
+                  // v1.0.47: DO NOT reset highAnchorSequence here - sequence is per SESSION LEVEL, not per anchor
+                  // Sequence only resets when touching opposite level in CheckTouches
 
                   Print(string.Format("[VWAP DEBUG] IMMEDIATE HIGH RESET: Bar={0} VwapMethod={1} price={2:F2} (Close={3:F2} Typical={4:F2}) Vol={5}",
                       CurrentBar, VwapMethod, price, Close[0], (High[0]+Low[0]+Close[0])/3.0, volume));
@@ -852,7 +853,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                   lowDetached = false;
                   lowSignal2Fired = false;  // v1.0.33: Reset flag to allow Signal 2 for new anchor
                   lastSignaledLowAnchorBar = -1;  // v1.0.25: Reset tracker to allow Signal 2 for new anchor
-                  lowAnchorSequence = 0; // v1.0.46: Reset Entry sequence for new anchor
+                  // v1.0.47: DO NOT reset lowAnchorSequence here - sequence is per SESSION LEVEL, not per anchor
+                  // Sequence only resets when touching opposite level in CheckTouches
 
                   Print(string.Format("[VWAP DEBUG] IMMEDIATE LOW RESET: Bar={0} VwapMethod={1} price={2:F2} (Close={3:F2} Typical={4:F2}) Vol={5}",
                       CurrentBar, VwapMethod, price, Close[0], (High[0]+Low[0]+Close[0])/3.0, volume));
@@ -2002,7 +2004,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                         highHasTakenRelevant = true;
                         highSignalFired = false; // UNLOCK SIGNAL (New Level Hit)
                         lastUnlockedHighSession = session; // FIX: Store session for TP2 Logic
-                        // v1.0.46: highAnchorSequence resets ONLY in new anchor creation (lines ~814, ~854), NOT here
+                        // v1.0.47: Reset OPPOSITE sequence (LOW Entry resets when touches HIGH level)
+                        lowAnchorSequence = 0;
                         // v1.0.45: Reset Liquidity Grab sequence and state
                         highLiqGrabSequence = 1;
                         highLiqGrabLocked = false;
@@ -2115,7 +2118,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                          lowHasTakenRelevant = true;
                          lowSignalFired = false; // UNLOCK SIGNAL
                          lastUnlockedLowSession = session; // FIX: Store session for TP2 Logic
-                         // v1.0.46: lowAnchorSequence resets ONLY in new anchor creation (lines ~814, ~854), NOT here
+                         // v1.0.47: Reset OPPOSITE sequence (HIGH Entry resets when touches LOW level)
+                         highAnchorSequence = 0;
                          // v1.0.45: Reset Liquidity Grab sequence and state
                          lowLiqGrabSequence = 1;
                          lowLiqGrabLocked = false;
