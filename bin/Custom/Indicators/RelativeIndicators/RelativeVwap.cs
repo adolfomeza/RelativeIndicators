@@ -51,7 +51,19 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         private double sessionLowVol;
         private int sessionLowBarIdx;
         private double sessionLowPrice;
-        
+
+        // v1.0.49: Tracking for Internal Level VWAPs (for continuation trades)
+        private double internalHighPV;       // PV for internal high VWAP
+        private double internalHighVol;      // Volume for internal high VWAP
+        private int internalHighBarIdx;      // Bar where internal high VWAP anchored
+        private double internalHighPrice;    // Price where internal high VWAP anchored
+        private bool hasInternalHighVWAP;    // True if internal high VWAP exists
+        private double internalLowPV;        // PV for internal low VWAP
+        private double internalLowVol;       // Volume for internal low VWAP
+        private int internalLowBarIdx;       // Bar where internal low VWAP anchored
+        private double internalLowPrice;     // Price where internal low VWAP anchored
+        private bool hasInternalLowVWAP;     // True if internal low VWAP exists
+
         private int tradeIdCounter = 0; // V_VISUAL: Trade Counter
         
         // Daily High/Low for finding anchor points
@@ -344,6 +356,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                 // v1.0.24: PlotStyle.Dot = small markers (nearly invisible), but visible in DataBox
                 AddPlot(new Stroke(Brushes.Transparent, 1), PlotStyle.Dot, "VWAP Hi"); // Values[0]
                 AddPlot(new Stroke(Brushes.Transparent, 1), PlotStyle.Dot, "VWAP Lo"); // Values[1]
+                // v1.0.49: Internal VWAPs for continuation trades on internal levels
+                AddPlot(new Stroke(Brushes.Orange, DashStyleHelper.Dash, 2), PlotStyle.Line, "Internal VWAP Hi"); // Values[2]
+                AddPlot(new Stroke(Brushes.Orange, DashStyleHelper.Dash, 2), PlotStyle.Line, "Internal VWAP Lo"); // Values[3]
 
                 // Defaults
                 HighVWAPColor = Brushes.Cyan;
@@ -576,6 +591,17 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             // v1.0.49: Reset internal level tracking
             highLiqGrabIsInternal = false;
             lowLiqGrabIsInternal = false;
+            // v1.0.49: Reset internal VWAPs
+            internalHighBarIdx = -1;
+            internalHighPV = 0;
+            internalHighVol = 0;
+            internalHighPrice = 0;
+            hasInternalHighVWAP = false;
+            internalLowBarIdx = -1;
+            internalLowPV = 0;
+            internalLowVol = 0;
+            internalLowPrice = 0;
+            hasInternalLowVWAP = false;
 
             if (ShowDebugLabels)
                 Draw.Text(this, "Reset" + CurrentBar, "RESET", 0, Low[0] - 5 * TickSize, Brushes.Red);
@@ -654,7 +680,28 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
       } else {
           Values[1][0] = double.NaN; // No line before anchor
       }
-             
+
+      // v1.0.49: Update internal VWAPs
+      if (hasInternalHighVWAP && internalHighBarIdx >= 0 && CurrentBar >= internalHighBarIdx) {
+          double iHVol = Math.Max(1, internalHighVol);
+          double iHVal = internalHighPV / iHVol;
+          if (iHVal < priceLimit)
+              iHVal = Values[2].IsValidDataPointAt(CurrentBar - 1) ? Values[2][1] : Close[0];
+          Values[2][0] = iHVal; // Internal High VWAP
+      } else {
+          Values[2][0] = double.NaN;
+      }
+
+      if (hasInternalLowVWAP && internalLowBarIdx >= 0 && CurrentBar >= internalLowBarIdx) {
+          double iLVol = Math.Max(1, internalLowVol);
+          double iLVal = internalLowPV / iLVol;
+          if (iLVal < priceLimit)
+              iLVal = Values[3].IsValidDataPointAt(CurrentBar - 1) ? Values[3][1] : Close[0];
+          Values[3][0] = iLVal; // Internal Low VWAP
+      } else {
+          Values[3][0] = double.NaN;
+      }
+
              try
              {
                  if (CurrentBar % 500 == 0) 
@@ -902,7 +949,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                   // FIX: Use sessionHighPV/Vol (the variables that Values[0][0] uses)
                   if (sessionHighBarIdx != -1 && !_highJustReset) { sessionHighPV += price * tickVol; sessionHighVol += tickVol; }
                   if (sessionLowBarIdx != -1 && !_lowJustReset) { sessionLowPV += price * tickVol; sessionLowVol += tickVol; }
-                 
+                  // v1.0.49: Accumulate internal VWAPs if they exist
+                  if (hasInternalHighVWAP && internalHighBarIdx != -1) { internalHighPV += price * tickVol; internalHighVol += tickVol; }
+                  if (hasInternalLowVWAP && internalLowBarIdx != -1) { internalLowPV += price * tickVol; internalLowVol += tickVol; }
+
                  // Reset flags after use (each tick resets them)
                  _highJustReset = false;
                  _lowJustReset = false;
@@ -923,7 +973,16 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                      sessionLowPV += price * volume;
                      sessionLowVol += volume;
                  }
-                 
+                 // v1.0.49: Accumulate internal VWAPs if they exist
+                 if (hasInternalHighVWAP && internalHighBarIdx != -1) {
+                     internalHighPV += price * volume;
+                     internalHighVol += volume;
+                 }
+                 if (hasInternalLowVWAP && internalLowBarIdx != -1) {
+                     internalLowPV += price * volume;
+                     internalLowVol += volume;
+                 }
+
                  // Reset flags after use
                  _highJustReset = false;
                  _lowJustReset = false;
@@ -2111,6 +2170,23 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                             highLiqGrabExtreme = high;
                             highLiqGrabSessionName = session.Name;
                             highLiqGrabLocked = false; // v1.0.45: New grab is unlocked (can move)
+
+                            // v1.0.49: Create internal VWAP if this is an internal level
+                            if (highLiqGrabIsInternal)
+                            {
+                                internalHighBarIdx = CurrentBar;
+                                internalHighPrice = session.High;
+                                // Initialize with this bar's volume
+                                double price = VwapMethod == VwapPriceMethod.Close ? Close[0] :
+                                             VwapMethod == VwapPriceMethod.Typical ? (High[0] + Low[0] + Close[0]) / 3.0 :
+                                             (High[0] + Low[0] + Close[0] + Open[0]) / 4.0;
+                                double volume = Volume[0];
+                                internalHighPV = price * volume;
+                                internalHighVol = volume;
+                                hasInternalHighVWAP = true;
+                                LogToFile(string.Format("INTERNAL HIGH VWAP CREATED | Session:{0} | Price:{1:F2} | CurrentDayHigh:{2:F2}",
+                                    session.Name, session.High, currentDayHigh), "INTERNAL_VWAP");
+                            }
                         }
 
 
@@ -2231,6 +2307,23 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                              lowLiqGrabExtreme = low;
                              lowLiqGrabSessionName = session.Name;
                              lowLiqGrabLocked = false; // v1.0.45: New grab is unlocked (can move)
+
+                             // v1.0.49: Create internal VWAP if this is an internal level
+                             if (lowLiqGrabIsInternal)
+                             {
+                                 internalLowBarIdx = CurrentBar;
+                                 internalLowPrice = session.Low;
+                                 // Initialize with this bar's volume
+                                 double price = VwapMethod == VwapPriceMethod.Close ? Close[0] :
+                                              VwapMethod == VwapPriceMethod.Typical ? (High[0] + Low[0] + Close[0]) / 3.0 :
+                                              (High[0] + Low[0] + Close[0] + Open[0]) / 4.0;
+                                 double volume = Volume[0];
+                                 internalLowPV = price * volume;
+                                 internalLowVol = volume;
+                                 hasInternalLowVWAP = true;
+                                 LogToFile(string.Format("INTERNAL LOW VWAP CREATED | Session:{0} | Price:{1:F2} | CurrentDayLow:{2:F2}",
+                                     session.Name, session.Low, currentDayLow), "INTERNAL_VWAP");
+                             }
                          }
 
 
