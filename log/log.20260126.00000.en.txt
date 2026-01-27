@@ -436,3 +436,7 @@
 2026-01-26 11:29:24:087|3|2|Connection lost to the NinjaTrader Historical Data Server: hds-us-nt-009.ninjatrader.com
 2026-01-26 11:29:34:096|1|2|Using HDS (hds-us-nt-019.ninjatrader.com/31655)
 2026-01-26 11:29:35:345|1|2|Connection restored to the NinjaTrader Historical Data Server: hds-us-nt-019.ninjatrader.com
+2026-01-26 20:01:06:611|1|2|Simulation account 'Playback101' reset
+2026-01-26 20:23:19:632|1|2|Simulation account 'Playback101' reset
+2026-01-26 20:28:25:580|1|2|Simulation account 'Playback101' reset
+2026-01-26 20:29:17:529|1|2|Simulation account 'Playback101' reset

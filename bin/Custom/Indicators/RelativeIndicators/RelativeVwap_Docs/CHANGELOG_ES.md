@@ -5,6 +5,21 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [1.0.46] - 2026-01-26
+### Corregido
+- **Entry Siempre Mostraba "01" (Bug en v1.0.45)**: Se corrigió el bug donde todas las etiquetas Entry mostraban "01" en lugar de incrementar secuencialmente.
+  - **Problema**: Usuario reportó "las etiquetas entry 01 entry 02 no veo que cambien de numeros secuanciales todas dicen Entry 01"
+  - **Causa Raíz**:
+    - En CheckTouches, cuando se rompía un nivel del MISMO lado, se reseteaba la secuencia a 0
+    - Ejemplo SHORT: Rompe Asia High → `highAnchorSequence = 0` → Señal 2 → `highAnchorSequence++` (ahora 1) → "Entry 01"
+    - Luego rompe Europa High → `highAnchorSequence = 0` otra vez → Señal 2 → "Entry 01" otra vez
+  - **Solución**:
+    - NO resetear secuencia cuando rompe nivel del MISMO lado
+    - Solo resetear cuando toca nivel OPUESTO virgen
+    - Cuando rompe HIGH → resetea `lowAnchorSequence = 0` (opuesto)
+    - Cuando rompe LOW → resetea `highAnchorSequence = 0` (opuesto)
+  - **Resultado**: Ahora Entry incrementa correctamente: 01, 02, 03... y resetea solo cuando toca nivel opuesto.
+
 ## [1.0.45] - 2026-01-26
 ### Agregado
 - **Secuencias Numeradas para Etiquetas de Liquidity Grabbed y Entry**: Las etiquetas ahora muestran el número de intento del nivel.

@@ -35,7 +35,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "1.0.45";  // v1.0.45: Liquidity Grabbed and Entry labels with numbered sequences (01, 02, etc.)
+        private const string VERSION = "1.0.46";  // v1.0.46: Fix Entry sequence - reset only when touch opposite level
         // ==============================
         
         private SessionIterator sessionIterator;
@@ -1992,7 +1992,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                         highHasTakenRelevant = true;
                         highSignalFired = false; // UNLOCK SIGNAL (New Level Hit)
                         lastUnlockedHighSession = session; // FIX: Store session for TP2 Logic
-                        highAnchorSequence = 0; // RESET SEQUENCE TO 0
+                        // v1.0.45: DO NOT reset highAnchorSequence here (same side) - only reset when touch opposite
+                        // v1.0.45: Reset OPPOSITE sequence (LONG Entry resets when touches HIGH)
+                        lowAnchorSequence = 0;
                         // v1.0.45: Reset Liquidity Grab sequence and state
                         highLiqGrabSequence = 1;
                         highLiqGrabLocked = false;
@@ -2105,7 +2107,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                          lowHasTakenRelevant = true;
                          lowSignalFired = false; // UNLOCK SIGNAL
                          lastUnlockedLowSession = session; // FIX: Store session for TP2 Logic
-                         lowAnchorSequence = 0; // RESET
+                         // v1.0.45: DO NOT reset lowAnchorSequence here (same side) - only reset when touch opposite
+                         // v1.0.45: Reset OPPOSITE sequence (SHORT Entry resets when touches LOW)
+                         highAnchorSequence = 0;
                          // v1.0.45: Reset Liquidity Grab sequence and state
                          lowLiqGrabSequence = 1;
                          lowLiqGrabLocked = false;

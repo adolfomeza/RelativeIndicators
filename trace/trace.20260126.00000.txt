@@ -11339,3 +11339,111 @@
 2026-01-26 19:27:13:182 (Simulation) NinjaTrader.Core.Authentication.RenewToken
 2026-01-26 19:27:14:013 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
 2026-01-26 19:27:14:013 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.8546293' renewSecs='2399.92731465'
+2026-01-26 20:01:06:607 (Playback) Cbi.Account.ResetSimulationAccount.Start: account='Playback101'
+2026-01-26 20:01:06:610 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=BuyingPower currency=UsDollar value=*****
+2026-01-26 20:01:06:610 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=CashValue currency=UsDollar value=*****
+2026-01-26 20:01:06:610 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Commission currency=UsDollar value=*****
+2026-01-26 20:01:06:610 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Fee currency=UsDollar value=*****
+2026-01-26 20:01:06:610 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=GrossRealizedProfitLoss currency=UsDollar value=*****
+2026-01-26 20:01:06:610 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-26 20:01:06:610 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=InitialMargin currency=UsDollar value=*****
+2026-01-26 20:01:06:610 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=IntradayMargin currency=UsDollar value=*****
+2026-01-26 20:01:06:610 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongOptionValue currency=UsDollar value=*****
+2026-01-26 20:01:06:610 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LookAheadMaintenanceMargin currency=UsDollar value=*****
+2026-01-26 20:01:06:610 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongStockValue currency=UsDollar value=*****
+2026-01-26 20:01:06:611 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=MaintenanceMargin currency=UsDollar value=*****
+2026-01-26 20:01:06:611 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=NetLiquidationByCurrency currency=UsDollar value=*****
+2026-01-26 20:01:06:611 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=PositionMargin currency=UsDollar value=*****
+2026-01-26 20:01:06:611 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-26 20:01:06:611 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortOptionValue currency=UsDollar value=*****
+2026-01-26 20:01:06:611 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortStockValue currency=UsDollar value=*****
+2026-01-26 20:01:06:611 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodCashValue currency=UsDollar value=*****
+2026-01-26 20:01:06:611 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodLiquidatingValue currency=UsDollar value=*****
+2026-01-26 20:01:06:611 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=TotalCashBalance currency=UsDollar value=*****
+2026-01-26 20:01:06:611 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-26 20:01:06:611 (Playback) Cbi.Account.ResetSimulationAccount.End: account='Playback101'
+2026-01-26 20:01:16:386 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='4/1/25 12:00:00 a. m.' to='7/1/25 12:00:00 a. m.' period='1 Minute'
+2026-01-26 20:07:03:809 Server.HdsClient.Connect: type=IS server='is-us-nt-006.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-26 20:07:05:669 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-26 20:07:05:669 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.33ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
+2026-01-26 20:07:13:968 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-26 20:07:13:968 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-26 20:07:14:799 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-26 20:07:14:799 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.8501461' renewSecs='2399.92507305'
+2026-01-26 20:23:19:631 (Playback) Cbi.Account.ResetSimulationAccount.Start: account='Playback101'
+2026-01-26 20:23:19:632 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=BuyingPower currency=UsDollar value=*****
+2026-01-26 20:23:19:632 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=CashValue currency=UsDollar value=*****
+2026-01-26 20:23:19:632 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Commission currency=UsDollar value=*****
+2026-01-26 20:23:19:632 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Fee currency=UsDollar value=*****
+2026-01-26 20:23:19:632 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=GrossRealizedProfitLoss currency=UsDollar value=*****
+2026-01-26 20:23:19:632 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-26 20:23:19:632 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=InitialMargin currency=UsDollar value=*****
+2026-01-26 20:23:19:632 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=IntradayMargin currency=UsDollar value=*****
+2026-01-26 20:23:19:632 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongOptionValue currency=UsDollar value=*****
+2026-01-26 20:23:19:632 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LookAheadMaintenanceMargin currency=UsDollar value=*****
+2026-01-26 20:23:19:632 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongStockValue currency=UsDollar value=*****
+2026-01-26 20:23:19:632 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=MaintenanceMargin currency=UsDollar value=*****
+2026-01-26 20:23:19:632 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=NetLiquidationByCurrency currency=UsDollar value=*****
+2026-01-26 20:23:19:632 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=PositionMargin currency=UsDollar value=*****
+2026-01-26 20:23:19:632 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-26 20:23:19:632 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortOptionValue currency=UsDollar value=*****
+2026-01-26 20:23:19:632 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortStockValue currency=UsDollar value=*****
+2026-01-26 20:23:19:632 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodCashValue currency=UsDollar value=*****
+2026-01-26 20:23:19:632 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodLiquidatingValue currency=UsDollar value=*****
+2026-01-26 20:23:19:632 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=TotalCashBalance currency=UsDollar value=*****
+2026-01-26 20:23:19:632 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-26 20:23:19:632 (Playback) Cbi.Account.ResetSimulationAccount.End: account='Playback101'
+2026-01-26 20:28:25:578 (Playback) Cbi.Account.ResetSimulationAccount.Start: account='Playback101'
+2026-01-26 20:28:25:580 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=BuyingPower currency=UsDollar value=*****
+2026-01-26 20:28:25:580 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=CashValue currency=UsDollar value=*****
+2026-01-26 20:28:25:580 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Commission currency=UsDollar value=*****
+2026-01-26 20:28:25:580 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Fee currency=UsDollar value=*****
+2026-01-26 20:28:25:580 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=GrossRealizedProfitLoss currency=UsDollar value=*****
+2026-01-26 20:28:25:580 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-26 20:28:25:580 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=InitialMargin currency=UsDollar value=*****
+2026-01-26 20:28:25:580 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=IntradayMargin currency=UsDollar value=*****
+2026-01-26 20:28:25:580 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongOptionValue currency=UsDollar value=*****
+2026-01-26 20:28:25:580 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LookAheadMaintenanceMargin currency=UsDollar value=*****
+2026-01-26 20:28:25:580 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongStockValue currency=UsDollar value=*****
+2026-01-26 20:28:25:580 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=MaintenanceMargin currency=UsDollar value=*****
+2026-01-26 20:28:25:580 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=NetLiquidationByCurrency currency=UsDollar value=*****
+2026-01-26 20:28:25:580 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=PositionMargin currency=UsDollar value=*****
+2026-01-26 20:28:25:580 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-26 20:28:25:580 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortOptionValue currency=UsDollar value=*****
+2026-01-26 20:28:25:580 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortStockValue currency=UsDollar value=*****
+2026-01-26 20:28:25:580 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodCashValue currency=UsDollar value=*****
+2026-01-26 20:28:25:580 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodLiquidatingValue currency=UsDollar value=*****
+2026-01-26 20:28:25:580 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=TotalCashBalance currency=UsDollar value=*****
+2026-01-26 20:28:25:580 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-26 20:28:25:580 (Playback) Cbi.Account.ResetSimulationAccount.End: account='Playback101'
+2026-01-26 20:29:17:528 (Playback) Cbi.Account.ResetSimulationAccount.Start: account='Playback101'
+2026-01-26 20:29:17:528 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=BuyingPower currency=UsDollar value=*****
+2026-01-26 20:29:17:528 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=CashValue currency=UsDollar value=*****
+2026-01-26 20:29:17:528 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Commission currency=UsDollar value=*****
+2026-01-26 20:29:17:528 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=Fee currency=UsDollar value=*****
+2026-01-26 20:29:17:528 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=GrossRealizedProfitLoss currency=UsDollar value=*****
+2026-01-26 20:29:17:528 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-26 20:29:17:528 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=InitialMargin currency=UsDollar value=*****
+2026-01-26 20:29:17:528 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=IntradayMargin currency=UsDollar value=*****
+2026-01-26 20:29:17:528 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongOptionValue currency=UsDollar value=*****
+2026-01-26 20:29:17:528 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LookAheadMaintenanceMargin currency=UsDollar value=*****
+2026-01-26 20:29:17:528 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=LongStockValue currency=UsDollar value=*****
+2026-01-26 20:29:17:528 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=MaintenanceMargin currency=UsDollar value=*****
+2026-01-26 20:29:17:528 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=NetLiquidationByCurrency currency=UsDollar value=*****
+2026-01-26 20:29:17:528 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=PositionMargin currency=UsDollar value=*****
+2026-01-26 20:29:17:528 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=RealizedProfitLoss currency=UsDollar value=*****
+2026-01-26 20:29:17:529 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortOptionValue currency=UsDollar value=*****
+2026-01-26 20:29:17:529 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=ShortStockValue currency=UsDollar value=*****
+2026-01-26 20:29:17:529 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodCashValue currency=UsDollar value=*****
+2026-01-26 20:29:17:529 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=SodLiquidatingValue currency=UsDollar value=*****
+2026-01-26 20:29:17:529 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=TotalCashBalance currency=UsDollar value=*****
+2026-01-26 20:29:17:529 (Playback) Cbi.Account.AccountItemUpdateCallback: account='Playback101' accountItem=WeeklyProfitLoss currency=UsDollar value=*****
+2026-01-26 20:29:17:529 (Playback) Cbi.Account.ResetSimulationAccount.End: account='Playback101'
+2026-01-26 20:29:21:744 Cbi.Instrument.RequestBars (to Provider): instrument='MNQ 03-25' from='4/1/25 12:00:00 a. m.' to='7/1/25 12:00:00 a. m.' period='1 Minute'
+2026-01-26 20:47:14:757 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal1
+2026-01-26 20:47:14:757 (Simulation) NinjaTrader.Core.Authentication.RenewToken
+2026-01-26 20:47:15:600 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal3
+2026-01-26 20:47:15:600 (Simulation) NinjaTrader.Core.Authentication.QueueAccessTokenRenewal0 expSpanSeconds='4799.854095' renewSecs='2399.9270475'
+2026-01-26 21:07:03:834 Server.HdsClient.Connect: type=IS server='is-us-nt-005.ninjatrader.com' port=31658 system='NT' useSsl=True
+2026-01-26 21:07:05:691 Server.HdsClient.ProcessStartupInfo.Info0: Commissions=0 InstrumentLists=0 MasterInstruments=0 Messages=4 Risks=0 RolloverCollection=0 TradingHours=0
+2026-01-26 21:07:05:691 Server.HdsClient.ProcessStartupInfo.Info1: Commissions=0.00ms InstrumentLists=0.00ms MasterInstruments=0.00ms Messages=0.34ms Risks=0.00ms RolloverCollection=0.00ms TradingHours=0.00ms
