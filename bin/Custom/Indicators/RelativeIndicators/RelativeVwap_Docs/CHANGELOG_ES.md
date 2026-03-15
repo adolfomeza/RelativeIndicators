@@ -5,6 +5,443 @@ Este documento registra todos los cambios notables en el proyecto **RelativeVwap
 El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto se adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [3.2.0] - 2026-03-14
+
+### Agregado
+- **Templates de Estudio de Toques**: Sistema de presets basados en estudio Big Data 2025 (87K toques MES)
+  - Nueva propiedad `StudyTemplate` en grupo "05. Estudio de Toques" con 5 opciones:
+    - **Custom**: Configuracion manual (comportamiento anterior, default)
+    - **Conservador**: SL=80, TP=150, Config C+D, ATR<2.5, Sep<20. WR~80%, +102.5 ticks/trade
+    - **Agresivo**: SL=100, TP=200, Config C+D, ATR<2.5, Sep<20. WR~85%, +153.8 ticks/trade
+    - **SesionAsia**: SL=100, TP=200, Config C+D, Sep<20. Hora 18-21, WR~95%
+    - **BajaVolatilidad**: SL=100, TP=200, Config C+D, ATR<1.5. WR~90.5%
+  - Seleccionar un template auto-aplica SL/TP, filtro de config, MaxATR y MaxSeparacion
+- **Filtro Max ATR** (`TouchStudyMaxATR`): Filtra toques donde ATR > valor (0=sin filtro). Estudio: ATR<2.5 sube WR de 64% a 81%
+- **Filtro Max Separacion** (`TouchStudyMaxSeparation`): Filtra toques con separacion > N ticks (0=sin filtro). Estudio: Sep<20 sube WR a 77%, Sep<10 a 93%
+- **Enum TouchStudyFilterMode ampliado**: Nuevos valores ConfigA, ConfigD, ConfigCD, ConfigAD para filtrar por tipo de setup
+  - ConfigCD (reversals) es el filtro usado por todos los templates — unico rentable segun estudio 2025
+- **Archivos**: `RelativeVwap.cs`, `RelativeVwap.Rendering.cs`
+
+### Hallazgos del Estudio Big Data 2025
+- Config A (LONG breakout) y B (SHORT breakout): Perdedoras en TODA combinacion SL/TP
+- Config C (SHORT reversal) y D (LONG reversal): Ganadoras consistentes
+- Mejor combo conservador: SL=80, TP=150 con filtros ATR<2.5 y Sep<20 → 0 meses negativos en 12 meses
+- Horas 18-21 (Asia): WR 91-100% con 58 trades/anio
+- ATR bajo (<1.5): WR 90.5% (171 ticks/trade de expectativa)
+- 96.7% de toques C+D nunca llegan a MAE >= 80 ticks → SL de 80 cubre casi todo
+
+## [3.1.1] - 2026-03-13
+
+### Cambiado
+- **Reorganización completa de grupos de propiedades**: 12 grupos limpios con numeración secuencial y sin conflictos
+  - **Grupo 05. Estudio de Toques** (NUEVO): 9 propiedades Touch Study extraídas del antiguo grupo 04
+  - **Grupo 07. Exportación y Delta** (NUEVO): 7 propiedades de exportación CSV y delta extraídas del antiguo grupo 06
+  - **Grupo 08. Alertas y Debug**: Reducido a solo alertas y debug (5 propiedades)
+  - **Grupo 06. Señales Internas**: Renumerado (era 05)
+  - **Grupo 09. Contador**: Renumerado (era 07)
+  - **Grupo 10. Period Personalities**: Renumerado (era 08, resuelve conflicto con Gestión de Riesgo)
+  - **Grupo 11. Gestión de Riesgo**: Renumerado (era 08, resuelve conflicto con Period Personalities)
+  - **Grupo 12. Visualización de Trades**: Renumerado (era 09)
+  - **Fix Orders duplicados**: Grupo 03 (Visuales VWAP) y Grupo 11 (Gestión de Riesgo) tenían Orders duplicados, ahora secuenciales
+  - **Archivos**: `RelativeVwap.cs`, `RelativeVwap.Trading.cs`
+
+### Corregido
+- **Limpieza de logs en Output Window**: Eliminados ~16 Print() de diagnóstico que inundaban el Output Window, y ~35+ Print() adicionales envueltos en guard `if (ShowDebugLogs)`
+  - `ShowDebugLogs` default cambiado a `false` (estaba forzado a `true` en SetDefaults y Configure)
+  - Print de versión condensado a una sola línea
+  - Prints de estado del ciclo de vida (DataLoaded, Historical, Configure) protegidos con ShowDebugLogs
+  - **Archivos**: `RelativeVwap.cs`, `RelativeVwap.Trading.cs`, `RelativeVwap.Utilities.cs`, `RelativeVwap.Sessions.cs`, `RelativeVwap.Rendering.cs`
+
+## [3.0.9] - 2026-03-12
+
+### Corregido
+- **Bug crítico: SL/TP nunca se activaban** — El guard `MFEComplete` en el loop de tracking saltaba toda la iteración (incluyendo detección SL/TP/EOD) cuando MFE llegaba a 2+ ticks y luego retrocedía. Resultado: trades quedaban zombis con ExitType=0 para siempre, sin salir por SL ni TP. Fix: reemplazado `if (t.MFEComplete) continue` por `if (t.ExitType != 0) continue` — ahora solo se skipean trades ya cerrados.
+  - **Archivo**: `RelativeVwap.Utilities.cs` línea 617
+- **Bug visual: trades abiertos fantasma** — Al re-anclar VWAP mid-session, los toques se copian al anchor histórico con ExitType=0 (snapshot stale que nunca se actualiza). Se renderizaba un trade "abierto" fantasma junto al trade real. Fix: skip ExitType=0 de copias históricas — `_activeFirstTouches` maneja los trades abiertos reales.
+  - **Archivo**: `RelativeVwap.Rendering.cs`
+
+## [3.0.8] - 2026-03-12
+
+### Cambiado
+- **Líneas diagonales entrada→salida**: Las líneas horizontales de SL/TP se reemplazaron por una línea diagonal desde el precio de entrada hasta el precio de salida, coloreada por resultado (verde=TP, roja=SL, gris=EOD). Las líneas SL/TP ahora son referencias sutiles muy tenues (alpha 80).
+  - **Archivo**: `RelativeVwap.Rendering.cs` — método `RenderTouchStudyLabels()`
+
+### Agregado
+- **Botones de Config en Toolbar**: 4 checkboxes (A, B, C, D) en la barra superior del chart para encender/apagar configs individualmente en tiempo real sin recompilar
+  - **A** (verde): LONG breakout
+  - **B** (naranja): SHORT breakout
+  - **C** (orquídea): SHORT reversal
+  - **D** (amarillo): LONG reversal
+  - Los toggles son visuales (no afectan CSV export, que sigue usando `TouchStudyFilter`)
+  - **Archivos**: `RelativeVwap.Toolbar.cs` (checkboxes, bools, cleanup), `RelativeVwap.Rendering.cs` (filtro toolbar)
+
+## [3.0.7] - 2026-03-12
+
+### Agregado
+- **Simulación de Trades por Config**: Cada primer toque de episodio genera un trade simulado con SL/TP/EOD exit tracking
+  - `TouchStudySLTicks` (default 24): Stop loss en ticks desde el precio de entrada
+  - `TouchStudyTPTicks` (default 38): Take profit en ticks desde el precio de entrada
+  - `TouchStudyEpisodeGap` (default 15): Barras mínimas entre toques del mismo config para contar nuevo episodio
+- **Campos de trade en `FirstTouchRecord`**: Config, IsEpisodeFirst, ExitBarIdx, ExitPrice, ExitType (0=pending, 1=TP, 2=SL, 3=EOD)
+- **Agrupación por episodios**: Toques consecutivos dentro de N barras = mismo episodio, solo el primero genera trade
+- **Visualización completa de trades** (Rendering.cs):
+  - Flecha de entrada (triángulo en dirección del trade)
+  - Línea SL horizontal roja punteada desde entrada hasta barra de salida
+  - Línea TP horizontal verde punteada desde entrada hasta barra de salida
+  - Marcador de salida: diamante=TP (verde), cuadrado=SL (rojo), círculo=EOD (gris)
+  - Modo All: episodio-first = trade viz completo, resto = punto pequeño
+- **CSV actualizado**: Columnas `EpisodeFirst` (0/1) y `ExitType` (TP/SL/EOD/Open) agregadas al export
+- **Helpers**: `ClassifyTouchConfig()`, `IsEpisodeFirstTouch()`, `UpdateLastConfigBar()` en Utilities.cs
+- **Archivos**: `RelativeVwap.cs` (struct, propiedades, defaults), `RelativeVwap.Utilities.cs` (detección, CSV), `RelativeVwap.Rendering.cs` (trade viz)
+
+## [3.0.6] - 2026-03-12
+
+### Agregado
+- **Filtro Visual Config (`TouchStudyFilter`)**: Nueva propiedad enum en grupo "04. Señales y Textos" para filtrar qué toques mostrar en el gráfico:
+  - `All` (default): Muestra todos los toques con labels "H:X.X L:X.X" (comportamiento original)
+  - `ConfigB`: Solo muestra SHORT breakout — toque a Demand VWAP + Supply fuerte (H≥3) + Demand débil (L<2)
+  - `ConfigC`: Solo muestra SHORT reversal — toque a Supply VWAP + Supply fuerte (H≥3) + Demand débil (L<2)
+  - `ConfigBC`: Muestra ambas configuraciones
+- **Flechas prominentes**: En modo ConfigB/C/BC, los toques se marcan con flechas DOWN grandes (18px) en lugar de labels de texto, para visualización limpia de setups SHORT
+  - Config B: Flecha naranja-roja (`#FF5722`)
+  - Config C: Flecha orquídea (`#BA55D3`)
+  - Contorno blanco semitransparente para visibilidad en cualquier fondo
+  - Mini-label con scores debajo de cada flecha
+- **Brushes cacheados**: `_cachedConfigBBrush` y `_cachedConfigCBrush` con disposal correcto
+  - **Archivos**: `RelativeVwap.cs` (enum, propiedad, default), `RelativeVwap.Rendering.cs` (brushes, método reescrito)
+
+## [3.0.4] - 2026-03-12
+
+### Agregado
+- **Filtro de Separación (`ApproachSeparationTicks`)**: Nueva propiedad (0-200, default 0) en grupo "06. Alertas & Debug". Después de registrar un toque al VWAP, el precio debe **cerrar lejos** del VWAP antes de contar otro toque en la misma curva:
+  - VWAP Low (Demand/soporte): Close debe subir a `vwap + SeparationTicks × TickSize`
+  - VWAP High (Supply/resistencia): Close debe bajar a `vwap - SeparationTicks × TickSize`
+  - Elimina toques ruido donde el precio oscila sobre el VWAP sin despegarse (~52 toques/día → toques reales)
+  - Se resetea automáticamente al cambiar de anchor (freeze/re-anchor) y al inicio de sesión
+  - Backward compatible: valor 0 = sin filtro (comportamiento original)
+  - **Archivos**: `RelativeVwap.cs` (propiedad), `RelativeVwap.Utilities.cs` (lógica en `TrackVwapApproaches()`)
+
+## [3.0.3] - 2026-03-11
+
+### Corregido
+- **Ghost Lines Visibles**: Las líneas dash grises que se extienden desde el punto de toque de un nivel de sesión hasta el fin de sesión ahora son visibles correctamente. El grosor mínimo se aumentó a `Math.Max(1.5f, SessionLevelThickness * 0.75f)` ya que el grosor anterior (`SessionLevelThickness * 0.5f = 1.0px`) era demasiado fino para el patrón dash.
+  - **Archivo**: `RelativeVwap.Rendering.cs` — método `RenderSessionLevels`, bloque `drawLevel`
+
+### Agregado
+- **PreviousVWAPColor (IsSessionEnd)**: El último par de VWAPs Hi/Lo de CADA sesión completada se pinta con `PreviousVWAPColor` (default: blanco) para diferenciarlo de los VWAPs re-anclados intermedios (que permanecen en `HistoricalVWAPColor` gris). Se agregó campo `IsSessionEnd` al struct `HistoricalAnchor`.
+  - **Archivo**: `RelativeVwap.cs` — struct `HistoricalAnchor`, 4 puntos de archive en session boundaries
+  - **Archivo**: `RelativeVwap.Rendering.cs` — rendering condicional por `anchor.IsSessionEnd`
+
+- **ShowTradeVisualization**: Nueva propiedad booleana en grupo "04. Señales y Textos" para activar/desactivar la visualización de trades simulados históricos (líneas, iconos, etiquetas). Default: `true`.
+  - **Archivo**: `RelativeVwap.Utilities.cs` — gate en `DrawStoredSignalVisualization()`
+
+## [3.0.1] - 2026-02-12
+
+### Corregido
+- **Reset Diario del VWAP en Modos de Período**: En personalidades Weekly/Monthly/Quarterly/Yearly, el VWAP ya no se resetea diariamente. Ahora solo se resetea al inicio de un nuevo período (semana/mes/trimestre/año), manteniendo el anclaje al High/Low del período completo.
+  - **Modificado**: Lógica en `OnBarUpdate()` líneas ~943 y ~1138-1177 para condicionar `ResetSession()` solo en modo `Intraday`.
+  - **Agregado**: Detección de cambio de período antes de resetear anchors en modos de período.
+  - **Archivo**: [`RelativeVwap.cs`](file:///c:/Users/prueba/Documents/NinjaTrader%208/bin/Custom/Indicators/RelativeIndicators/RelativeVwap.cs#L943)
+
+- **Fin de Período Alineado a Cierre USA**: Los períodos semanales/mensuales/trimestrales/anuales ahora terminan al cierre de la sesión USA (17:00 ET) en lugar de a medianoche (00:00). Esto corrige el problema donde los períodos se cortaban en mitad del día de trading en mercados de futuros 24h.
+  - **Modificado**: Método `GetPeriodStartDate()` en `RelativeVwap.Sessions.cs` para agregar hora de cierre USA (17:00 ET) al cálculo de inicio de período.
+  - **Impacto**: Ahora una semana termina viernes 17:00 ET y la siguiente comienza domingo 18:00 ET.
+  - **Archivo**: [`RelativeVwap.Sessions.cs`](file:///c:/Users/prueba/Documents/NinjaTrader%208/bin/Custom/Indicators/RelativeIndicators/RelativeVwap.Sessions.cs#L189-L226)
+
+### Agregado
+- **Mitigación Visual para Niveles de Período**: Los niveles de período (Weekly/Monthly/Quarterly/Yearly) ahora muestran el mismo comportamiento visual de mitigación que los niveles intradía.
+  - **Niveles NO mitigados**: Línea sólida de color desde su origen hasta la barra actual (continúan indefinidamente hasta ser tocados).
+  - **Niveles mitigados**: 
+    - Línea sólida de color desde el inicio hasta la primera vela donde el precio toca el nivel
+    - Línea gris dash (grosor 2) desde el punto de toque hasta el final del período (semana/mes/trimestre/año)
+  - **Implementación**: Modificado `RenderPeriodLevels()` en `RelativeVwap.Rendering.cs` para detectar `HighBrokenBarIdx`/`LowBrokenBarIdx` y renderizar segmentos diferenciados.
+  - **Archivo**: [`RelativeVwap.Rendering.cs`](file:///c:/Users/prueba/Documents/NinjaTrader%208/bin/Custom/Indicators/RelativeIndicators/RelativeVwap.Rendering.cs#L920-L1100)
+
+## [3.0.0] - 2026-02-12
+### Agregado - PERSONALIDADES DE PERIODO (MAJOR RELEASE)
+- **Sistema de Personalidades Multi-Periodo**: El indicador ahora soporta 5 modos de operación mediante el nuevo enum `PersonalityMode`:
+  - **Intraday** (default): Modo actual con sesiones Asia/Europa/USA (100% compatible con versiones anteriores).
+  - **Weekly**: Ancla VWAPs a máximos/mínimos semanales.
+  - **Monthly**: Ancla VWAPs a máximos/mínimos mensuales.
+  - **Quarterly**: Ancla VWAPs a máximos/mínimos trimestrales (Q1=Ene-Mar, Q2=Abr-Jun, Q3=Jul-Sep, Q4=Oct-Dic).
+  - **Yearly**: Ancla VWAPs a máximos/mínimos anuales.
+
+- **Nueva Propiedad Principal**:
+  - `Personality` (Personalidad): Selector de modo en grupo "01. Configuración Principal", Order 0 (primera propiedad visible).
+  - **Default**: `PersonalityMode.Intraday` - Garantiza compatibilidad hacia atrás.
+
+- **Nuevo Grupo de Propiedades: "08. Period Personalities"**:
+  - `WeekStartDay`: Configura día de inicio de semana (Monday/Sunday). Default: Monday (ISO 8601).
+  - `WeeklyHistoryWeeks`: Número de semanas a mostrar (1-52). Default: 8 semanas.
+  - `MonthlyHistoryMonths`: Número de meses a mostrar (1-24). Default: 6 meses.
+  - `QuarterlyHistoryQuarters`: Número de trimestres a mostrar (1-12). Default: 4 trimestres.
+  - `YearlyHistoryYears`: Número de años a mostrar (1-10). Default: 3 años.
+  - `ShowPeriodHigh` / `ShowPeriodLow`: Toggle para visualizar máximos/mínimos de periodo.
+  - `PeriodLineColor`: Color de líneas de periodo (default: Goldenrod).
+  - `PeriodLabelColor`: Color de etiquetas de periodo (default: White).
+
+- **Funcionalidad de Periodo**:
+  - **Detección automática de límites**: Identifica cambios de semana/mes/trimestre/año automáticamente.
+  - **Anclas de VWAP**: Cuando precio rompe máximo/mínimo del periodo, ancla VWAP igual que en modo Intraday.
+  - **Historial configurable**: Filtra periodos antiguos según configuración (ej. solo últimas 8 semanas en Weekly).
+  - **Visualización optimizada**: Líneas horizontales desde el bar del máximo/mínimo hasta barra actual.
+  - **Etiquetas compactas**:
+    - Weekly: "Wk 02/09 H" (semana iniciando 09 de febrero, máximo)
+    - Monthly: "Feb '26 L" (febrero 2026, mínimo)
+    - Quarterly: "Q1 '26 H" (Q1 2026, máximo)
+    - Yearly: "2026 L" (año 2026, mínimo)
+
+- **Arquitectura Técnica**:
+  - Nueva estructura `periodSessions`: Lista unificada para todos los periodos (Weekly, Monthly, Quarterly, Yearly).
+  - Funciones de detección: `IsNewWeek()`, `IsNewMonth()`, `IsNewQuarter()`, `IsNewYear()`.
+  - Helpers: `GetPeriodStartDate()`, `GetPeriodName()` para generar nombres consistentes.
+  - Método `UpdatePeriodSession()`: Gestiona creación y actualización de sesiones de periodo (date-based, no time-based).
+  - Filtrado inteligente: `ShouldSkipHistoricalPeriod()` aplica límites específicos por personalidad.
+  - Renderizado: Nuevo método `RenderPeriodLevels()` simplificado para periodos más largos.
+
+- **Gestión de Estado**:
+  - `OnPropertyChanged()`: Detecta cambios de personalidad y resetea estado automáticamente.
+  - `ResetPersonalityState()`: Limpia listas de sesiones, VWAPs, plots y estado al cambiar modo.
+  - **Transiciones limpias**: Sin crashes ni artefactos visuales al cambiar entre Intraday ↔ Weekly ↔ Monthly ↔ Quarterly ↔ Yearly.
+
+- **Señales de Trading**:
+  - Códigos de señal extendidos: Ahora soporta prefijos W (Weekly), M (Monthly), Q (Quarterly), Y (Yearly).
+  - Ejemplo: "WH2" = Weekly High roto, 2 semanas de antigüedad.
+  - CSV Export compatible: Columnas de señal y trades funcionan con nuevos prefijos.
+
+- **Divisorias de Periodo (Period Dividers)** - NUEVO:
+  - **Líneas verticales divisorias**: Marcan visualmente el inicio de cada nuevo periodo (semana, mes, trimestre, año).
+  - **Triángulos marcadores**: Icono triangular en la parte inferior del gráfico (apuntando hacia arriba) en cada línea divisoria.
+  - **Nuevas Propiedades**:
+    - `ShowPeriodDividers`: Habilita/deshabilita líneas divisorias verticales (default: true).
+    - `PeriodDividerColor`: Color de las líneas divisorias (default: DimGray).
+    - `ShowPeriodMarker`: Habilita/deshabilita triángulo marcador en parte inferior (default: true).
+  - **Estilo visual**: Línea discontinua (dashed) de tope a fondo del gráfico, triángulo relleno de 8px en parte inferior.
+  - **Propósito**: Facilita identificación rápida de cambios de periodo en el gráfico, especialmente útil en modo Weekly/Monthly.
+
+### Modificado
+- **OnBarUpdate()**: Lógica condicional basada en `Personality` para actualizar sesiones.
+  - Si `Personality == Intraday`: Usa `UpdateSession()` con Asia/Europe/USA (sin cambios).
+  - Si `Personality != Intraday`: Usa `UpdatePeriodSession()` para periodos.
+- **OnRender()**: Renderizado condicional de niveles.
+  - Modo Intraday: Renderiza sesiones Asia/Europe/USA (comportamiento actual).
+  - Modos Periodo: Renderiza `periodSessions` con `RenderPeriodLevels()`.
+- **CheckTouches()**: Filtro de historial ahora usa `ShouldSkipHistoricalPeriod()` (personality-aware).
+- **GetSignalCode()**: Actualizado para generar prefijos W/M/Q/Y según nombre de sesión.
+
+### Notas Técnicas
+- **Backward Compatible**: 100% compatible con versiones anteriores. `Personality` defaults a `Intraday`.
+- **Reutilización de Plots**: Values[0-3] se reutilizan automáticamente para todas las personalidades.
+- **Performance**: Overhead mínimo (~2x baseline) para periodos más largos gracias a filtrado eficiente.
+- **Calendario Estándar**: Usa ISO 8601 para semanas (lunes inicio por default), trimestres Q1-Q4 estándar.
+- **Manejo de Rollover**: Detecta correctamente cambios de año en semanas/trimestres.
+
+### Casos de Uso
+- **Weekly**: Swing trading, breaks de máximos/mínimos semanales.
+- **Monthly**: Niveles clave mensuales, análisis macro.
+- **Quarterly**: Niveles institucionales, earnings quarters.
+- **Yearly**: Niveles de largo plazo, soporte/resistencia anuales.
+
+---
+
+## [2.2.7] - 2026-02-09
+### Agregado
+- **Modo Tendencia Automático**: Nueva funcionalidad que detecta y opera tendencias además del modo reversal existente.
+  - **Detección automática**: El indicador evalúa `DeltaGlobal` y el delta de la sesión actual (Asia/Europe/USA) para determinar si hay tendencia.
+  - **Umbral configurable**: Nueva propiedad `TrendDeltaThreshold` (default: 500) define el valor mínimo de delta para activar modo tendencia.
+  - **Tendencia BAJISTA**: Cuando `DeltaGlobal < -Threshold` AND `SessionDelta < -Threshold`.
+  - **Tendencia ALCISTA**: Cuando `DeltaGlobal > Threshold` AND `SessionDelta > Threshold`.
+
+- **Entradas de Tendencia**:
+  - **TREND SHORT (bajista)**: Cuando precio cierra POR DEBAJO del Low VWAP → compradores perdieron → continuación bajista.
+  - **TREND LONG (alcista)**: Cuando precio cierra POR ENCIMA del High VWAP → vendedores perdieron → continuación alcista.
+  - **Diferencia vs Reversal**: En reversal entramos en dirección opuesta al break; en tendencia entramos en la misma dirección del break.
+
+- **Gestión de Trades de Tendencia**:
+  - **Sin TP1/TP2 fijos**: Los trades de tendencia solo salen por EOD (fin de sesión USA) o SL.
+  - **SL en VWAP origen**: El stop loss se coloca en el VWAP que generó la señal + offset configurable.
+
+- **Visualización diferenciada**:
+  - Nueva propiedad `TrendTradeColor` (default: Cyan) para distinguir trades de tendencia visualmente.
+  - Líneas de trade, iconos de entrada usan el color cyan para trades de tendencia.
+
+- **CSV Export actualizado**:
+  - Nueva columna `TradeMode`: "Trend" o "Reversal" para filtrar en Streamlit.
+  - Permite análisis separado de performance entre ambos modos de operación.
+
+- **Selección Manual de Modo de Trading** (`TradingMode`):
+  - **Ubicación**: Grupo "08. Gestión de Riesgo (Simulación & Trading)", Order 59.
+  - **Opciones disponibles**:
+    - `Auto` (default): Detecta tendencia automáticamente según deltas. Cuando hay tendencia, bloquea reversals.
+    - `TrendOnly`: Solo trades de tendencia (ignora reversals incluso cuando no hay tendencia detectada). La dirección se determina por el signo del delta.
+    - `ReversalOnly`: Solo trades de reversal (ignora señales de tendencia completamente).
+  - **Uso**: Permite al usuario "apagar" una personalidad u otra según preferencia o condiciones de mercado.
+
+### Notas Técnicas
+- **Prerequisito**: `CaptureDelta = true` debe estar activado para que funcione el modo tendencia (excepto en modo ReversalOnly).
+- **Backward compatible**: Si `CaptureDelta = false`, siempre usa modo Reversal (comportamiento anterior).
+- **Auto por defecto**: Si no se modifica la propiedad `TradingMode`, el indicador detecta automáticamente el modo según condiciones de delta.
+- **Modos Mutuamente Excluyentes**: Cuando el indicador detecta condiciones de tendencia (o está en TrendOnly), los trades de reversal se BLOQUEAN automáticamente. Esto evita tomar trades contra la tendencia predominante.
+
+---
+
+## [2.2.6] - 2026-02-09
+### Agregado
+- **Filtro MaxHistoryDays funcional**: La propiedad "Días de Historia Máx" ahora filtra activamente los niveles de sesión.
+  - **Funcionamiento**: Si un nivel de sesión tiene más días de antigüedad que el valor configurado, el indicador lo ignora completamente y no genera Signal 1 ni Signal 2 para ese nivel.
+  - **Ejemplo**: Con `MaxHistoryDays = 4`, un nivel de Asia creado hace 5 días será ignorado.
+  - **Cálculo de edad**: Días de sesión (excluyendo fines de semana) desde `SessionDate` hasta la fecha actual, usando `GetBusinessDays()`.
+  - **Debug**: Cuando `ShowDebugLabels = true`, imprime un mensaje indicando qué niveles se omitieron por antigüedad.
+
+- **Nueva propiedad `ShowSignalText`**: Controla solo los textos de señales, separado de los iconos.
+  - **Ubicación**: Grupo "04. Señales y Textos", Order 5.
+  - **Funcionamiento**: Cuando está desactivado, oculta los textos (Entry, TP1, TP2, SL, Qty, PnL, R:) pero mantiene visibles los iconos y líneas.
+  - **Iconos siempre visibles**: Entry (triángulo), TP1/TP2 (diamante), SL (cuadrado).
+
+- **Trailing SL a VWAP tras TP1** (`TrailSLToVwapAfterTP1`):
+  - **Ubicación**: Grupo "08. Gestión de Riesgo", Order 55.
+  - **Funcionamiento**: Cuando está activado, después de alcanzar TP1 el SL de la posición restante (Q2) se mueve al VWAP origen y hace trailing con él.
+  - **Para Long**: El SL sube siguiendo el LowVWAP (nunca baja).
+  - **Para Short**: El SL baja siguiendo el HighVWAP (nunca sube).
+  - **Default**: Desactivado.
+
+### Corregido
+- **Línea SL nivel corregida**: La línea horizontal del SL ahora inicia en la barra de entrada (señal) en lugar de la barra de ancla.
+  - **Problema anterior**: La línea SL comenzaba en la barra del ancla, creando confusión visual porque las líneas de trade (desde entrada) empezaban en una barra diferente.
+  - **Solución**: Ambas líneas (trade y nivel SL) ahora comienzan en el mismo punto (barra de entrada), mejorando la consistencia visual.
+
+- **Visualización de Trailing SL**: Cuando el trailing SL está activo y el trade sale a un precio diferente:
+  - La línea principal SL se dibuja al nivel real de salida (trailing SL).
+  - Una línea de referencia más tenue (DimGray, punteada) muestra el SL original.
+  - **Beneficio**: Se ve claramente dónde terminó la línea de trade vs. dónde estaba el SL original.
+
+### Cambiado
+- **Iconos de señales separados de textos**: Los iconos ahora se dibujan independientemente de `ShowSignalText`.
+  - Entry: Triángulo verde (Long) / rojo (Short)
+  - TP1/TP2: Diamante verde
+  - SL: Cuadrado rojo
+
+## [2.2.5] - 2026-02-08
+### Agregado
+- **Modo Análisis Completo (`AnalyzeAllSignals`)**: Nueva propiedad en grupo "06. Alertas & Debug".
+  - **Propósito**: Registra TODAS las señales Signal 2, incluso las superpuestas (overlapping), permitiendo un análisis estadístico completo del sistema.
+  - **Problema resuelto**: Antes, mientras el indicador estaba "en un trade" simulado, ignoraba otras señales que ocurrían durante ese período. Esto distorsionaba las estadísticas ya que no se analizaban todas las posibles entradas.
+  - **Funcionamiento**: Cuando está activado, el indicador NO bloquea señales futuras después de que una señal se dispara. Cada señal Signal 2 se registra independientemente.
+  - **Nueva columna CSV `Overlapping`**: Indica con 1/0 si el trade se superpuso temporalmente con otro trade anterior.
+  - **Detección automática**: El sistema compara `EntryTime` y `ExitTime` de todos los trades para identificar superposiciones.
+  - **Print de diagnóstico**: Al finalizar, muestra cuántos trades superpuestos se detectaron.
+- **Fix CSV Export**: Corregido el formato del CSV que no incluía correctamente las columnas `ATR_Value`, `VolumeRatio`, `DeltaAtEntry`, `DeltaDirection`, `SessionDelta`, `DeltaAtTP1`.
+
+### Cambiado
+- **Order de propiedades**: `Capturar Delta` movido a Order 5 para dar espacio a `AnalyzeAllSignals` en Order 4.
+
+## [2.2.4] - 2026-02-08
+### Agregado
+- **4 Acumuladores de Delta Internos** (sin dependencia de indicador externo):
+  - `DeltaGlobal`: Delta acumulado desde inicio Asia (6pm ET) hasta fin USA (4pm ET).
+  - `DeltaAsia`: Delta solo durante sesión Asia.
+  - `DeltaEurope`: Delta desde inicio Europa hasta inicio USA.
+  - `DeltaUSA`: Delta solo durante sesión USA (9:30am - 4pm ET).
+  - Cálculo: `(Close - Open) * Volume` por barra, DST-aware via `GetTimeByZone()`.
+  - Se exportan como columnas separadas en CSV para análisis de patrones en Streamlit.
+- **Exit End of Day (EOD)**: Los trades se cierran automáticamente 30 segundos antes del fin de sesión USA.
+  - Nuevo resultado: `EOD_Long_XX` / `EOD_Short_XX` en columna Result del CSV.
+  - Evita que posiciones abiertas queden overnight.
+- **LevelAge corregido**: Ahora muestra días desde la creación del nivel de sesión original (e.g., Asia Low de hace 5 días), no desde la creación del VWAP.
+
+### Corregido
+- **CS0103 eodExit**: Variable no declarada — agregadas `eodExit1` y `eodExit2` por posición.
+
+## [2.2.3] - 2026-02-07
+### Agregado
+- **Exportación CSV para Streamlit Audit**:
+  - Nueva propiedad `Exportar Simulación CSV` en grupo "06. Alertas & Debug".
+  - Cuando está activada, exporta los trades simulados (Signal 2) a `TradeExports/DEMO619219/VWAP_{SYMBOL}_{MM-yy}.csv`.
+  - Formato idéntico al CSV de la estrategia SessionLevels — compatible 100% con `StreamlitAudit/app.py`.
+  - Incluye: ID, Instrument, EntryTime, ExitTime, Type, PnL, MAE, MFE, Setup, Attempt, RiskReward, LevelAge, Trade_Clust_ID.
+  - Columnas delta (DeltaAtEntry, SessionDelta, etc.) se exportan como 0 (no disponibles en indicador).
+  - El CSV se escribe al final de `ProcessPendingSignals()` (transición Histórico → Realtime).
+- **Tracking MAE/MFE** en el loop de simulación para cada posición (TP1 / TP2).
+- **Clase `SimTradeRecord`** para estructurar los datos antes de escribir al disco.
+- **Helper `GetCommissionPerContract()`** con tasas por instrumento (MNQ, MES, MCL, MGC, NQ, ES, CL, GC).
+
+## [2.2.2] - 2026-02-07
+### Corregido
+- **CRÍTICO: Entry/SL/TP aparecían en Señal 1 (Liquidity Grabbed)**:
+  - **Problema**: Las etiquetas de Entry, Stop Loss y Target se dibujaban cuando el precio tomaba la liquidez de un nivel de sesión (Señal 1), cuando en realidad solo deben aparecer para la Señal 2 (donde el precio se separa del VWAP).
+  - **Causa Raíz**: `DrawSignalVisualization` y `activeTrades.Add` se llamaban desde `CheckTouches` (Sessions.cs) en los eventos de ruptura HIGH y LOW, que corresponden a Signal 1.
+  - **Solución**: Eliminados los bloques de trade visual de Sessions.cs. La visualización de trades ahora se genera exclusivamente desde los bloques de Signal 2 en `RelativeVwap.cs`.
+
+## [2.1.0] - 2026-01-28
+### Agregado
+- **Señal 2 Interna (Internal Signal 2)**: Ahora el indicador genera señales de entrada (vela naranja + etiqueta "Int (i)") cuando el precio rebota en un VWAP Interno.
+  - **Visualización**: Vela se pinta de color **NARANJA**.
+  - **Etiqueta**: Muestra "Int (i)" (o "Int (i)2", "Int (i)3" si hay múltiples re-entradas).
+  - **Condición**: El precio se separa del VWAP Interno (Threshold) y luego cierra recuperando el nivel.
+  - **Parámetro Nuevo**: `InternalSignal2MaxAttempts` (Default: 4). Permite configurar cuántas señales consecutivas se permiten por cada nivel interno.
+- **Interruptor Maestro**: Se agregó `EnableInternalLogic` (Habilitar Señales Internas).
+  - Permite activar/desactivar completamente toda la lógica interna (Velas naranjas, VWAPs punteados).
+  - Si se desactiva, el indicador funciona en modo "Lite" (solo niveles principales).
+
+### [2.2.1] - 2026-02-07
+### Agregado
+- **Mejoras en Visualización de Trades Históricos**:
+  - **Failsafe SL**: Se agregó un sistema de seguridad que fuerza la etiqueta de SL si el precio actual está más allá del nivel de Stop, incluso si la simulación histórica no detectó el toque por micro-segundos o precisión decimal.
+  - **Detección de "Fuzzy Touch"**: Implementada comparación de punto flotante con epsilon (1e-9) para asegurar que los "toques exactos" visuales se cuenten como aciertos en la simulación.
+  - **Fix de Ghost Lines**: Se corrigió error donde se dibujaban líneas de salida para una segunda posición (TP2) cuando la cantidad total era de solo 1 contrato.
+  - **Prevención de Solapamiento**: Lógica mejorada para evitar que las etiquetas de Stop Loss y Entrada se tapen entre sí cuando el SL se mueve a Breakeven.
+
+## [2.2.0] - 2026-01-28
+### Agregado (BETA)
+- **Ejecución Inteligente (Smart Execution)**: Módulo de trading integrado en el indicador.
+  - **Selector de Cuenta**: Permite elegir la cuenta (Sim101, etc.) desde las propiedades.
+  - **Botón "ARMAR ENTRADA"**: Sistema de disparo semiautomático.
+    - El usuario "Arma" el sistema.
+    - El trade se ejecuta AUTOMÁTICAMENTE solo si cierra una vela de Señal 2 confirmada.
+    - **Auto-Disarm**: Si el precio toca el VWAP mientras está armado, se cancela automáticamente por seguridad.
+  - **Gestión Avanzada**:
+    - **OCO Brackets**: Envío automático de Stop Loss y Take Profit vinculados al llenarse la orden.
+    - **Sticky TP**: El Take Profit persigue automáticamente al VWAP contrario.
+    - **Manual Override**: Si el usuario mueve el TP manualmente, el sistema deja de perseguir el VWAP y respeta el precio del usuario.
+    - **Stop Loss Dinámico**: Se coloca basado en el anclaje de la sesión +/- offset configurable.
+
+### Corregido
+- **Chart Congelado al Cargar (CRÍTICO)**: Se solucionó el bug que colgaba NinjaTrader al cargar el indicador en gráficos con mucho historial.
+  - **Causa**: El método `CalculateCountdown` y `InvalidateVisual` se ejecutaban para CADA barra histórica (miles de veces) innecesariamente.
+  - **Solución**: Restringido para ejecutarse solo en la última vela (tiempo real).
+- **Señal Naranja No Aparecía**: Se corrigió un error en la lógica de `CheckTouches` donde el estado de la señal interna no se reseteaba correctamente al ocurrir un nuevo Liquidity Grab Interno.
+  - Esto causaba que la señal interna se quedara "bloqueada" y no volviera a aparecer.
+- **Error de Compilación CS1513**: Corregidos errores de llaves faltantes en la lógica de señales internas.
+
+### Refactorización Mayor (Limpieza de Código y Estructura)
+- **Modularización del Código (Clases Parciales)**:
+  - Se dividió el archivo monolítico `RelativeVwap.cs` (>2600 líneas) en múltiples archivos lógicos para mejorar mantenibilidad y legibilidad:
+    - `RelativeVwap.cs`: Configuración principal, ciclo de vida (OnStateChange, OnBarUpdate), y datos compartidos.
+    - `RelativeVwap.Rendering.cs`: Toda la lógica de dibujo (OnRender, DrawInternalVWAP, etiquetas, líneas).
+    - `RelativeVwap.Sessions.cs`: Gestión de sesiones, zonas horarias, y método crítico `CheckTouches`.
+    - `RelativeVwap.Trading.cs`: Lógica de gestión de trades (visualización) y estructuras de datos.
+    - `RelativeVwap.Utilities.cs`: Funciones auxiliares, logging (deshabilitado), timers.
+  - **Beneficio**: Facilita futuras actualizaciones y reduce riesgo de conflictos.
+
+### Cambiado
+- **Sistema de Logging Eliminado**: Se eliminaron todas las llamadas a `LogToFile()` y la propiedad `EnableFileLogging`. El método `LogToFile` permanece vacío en Utilities para compatibilidad binaria pero no realiza acción alguna.
+- **Limpieza de Versiones Antiguas**: Se eliminaron cientos de comentarios de versiones antiguas ("// v1.0.XX: ...") para limpiar el código fuente.
+- **Visualización VWAP Interno**: Simplificada y mejorada la lógica de `DrawInternalVWAP` para renderizar correctamente líneas discontinuas naranjas.
+
+### Corregido
+- **Errores de Compilación**: Se corrigieron errores estructurales (CS8803, CS1022, CS0111) causados por bloques de código generados duplicados.
+- **Referencias Faltantes**: Se agregaron los `using` necesarios (`System.Windows`, `NinjaTrader.Data`) en las nuevas clases parciales.
+
+### Agregado
+- **Re-anclaje Dinámico para VWAP Interno**: El VWAP interno ahora se re-ancla automáticamente si el precio rompe el extremo (High/Low) de la barra de anclaje, persiguiendo el precio hasta alcanzar el extremo del día.
+  - **Comportamiento**:
+    - Si precio > High de anclaje interno (y < High del Día) → Re-ancla VWAP Interno al nuevo High.
+    - Si precio < Low de anclaje interno (y > Low del Día) → Re-ancla VWAP Interno al nuevo Low.
+  - **Objetivo**: Imitar el comportamiento del VWAP Global pero dentro de niveles internos.
+  - **Terminación Automática**: Si el precio alcanza un nivel extremo del día (Nuevo High o Low diario), el VWAP Interno correspondiente (si existe) se termina y deja de dibujarse, ya que el precio ha salido de la estructura interna.
+
+- **Estilo para VWAP Interno Histórico**: Los segmentos anteriores del VWAP interno (antes del re-anclaje) ahora se dibujan en **color GRIS** con estilo DASH y grosor 2, igual que el historial del VWAP Global, para diferenciar claramente la línea activa (Naranja) de la historia.
+
 ## [1.0.49] - 2026-01-27
 ### Corregido
 - **CRÍTICO: Lógica "Touched Again" Causaba Resets Constantes**: Se eliminó completamente la lógica que reseteaba secuencia al tocar el mismo nivel múltiples veces.
