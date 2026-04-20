@@ -160,7 +160,16 @@ namespace NinjaTrader.NinjaScript.AddOns
                 Timestamp = DateTime.UtcNow,
                 Level = level,
                 Message = msg,
-                Indicator = SafeGet(() => ns != null ? ns.Name : ""),
+                Indicator = SafeGet(() =>
+                {
+                    if (ns == null) return "";
+                    // Name puede venir vacío en runtime (resource lookup quirks).
+                    // Fallback a GetType().Name que siempre da el class name (ej. "RelativeVwap").
+                    string n = null;
+                    try { n = ns.Name; } catch { }
+                    if (!string.IsNullOrEmpty(n)) return n;
+                    return ns.GetType().Name;
+                }),
                 Instrument = SafeGet(() =>
                 {
                     var inst = ns != null ? GetProp(ns, "Instrument") : null;

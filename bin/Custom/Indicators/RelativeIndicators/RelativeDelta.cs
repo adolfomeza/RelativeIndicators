@@ -19,6 +19,7 @@ using NinjaTrader.Gui.SuperDom;
 using NinjaTrader.Gui.Tools;
 using NinjaTrader.Data;
 using NinjaTrader.NinjaScript;
+using NinjaTrader.NinjaScript.AddOns; // RelativeMCP — RLog + Registry
 using NinjaTrader.Core.FloatingPoint;
 using NinjaTrader.NinjaScript.DrawingTools;
 
@@ -56,10 +57,33 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		private Brush	divergeCandleup   = Brushes.Purple;  // Color body for Divergence Candle
 		private Brush	divergeCandledown   = Brushes.Pink;  // Color body for Divergence Candle
 		
+
 		private double usSessionAnchor = double.MinValue; // V_ZERO_LINE: Anchor Value
 		private int    usSessionAnchorIdx = -1; // V_ZERO_LINE: Anchor Bar Index
 		private bool   usSessionActive = false;
 		private TimeSpan usStartTimeTs; // Cached TimeSpan
+		private TimeSpan usEndTimeTs;
+        
+        // ASIA Session
+        private double asiaSessionAnchor = double.MinValue;
+        private int    asiaSessionAnchorIdx = -1;
+        private bool   asiaSessionActive = false;
+        private TimeSpan asiaStartTimeTs;
+        private TimeSpan asiaEndTimeTs;
+
+        // EU Session
+        private double euSessionAnchor = double.MinValue;
+        private int    euSessionAnchorIdx = -1;
+        private bool   euSessionActive = false;
+        private TimeSpan euStartTimeTs;
+        private TimeSpan euEndTimeTs;
+        
+        // GLOBAL Session
+        private double globalSessionAnchor = double.MinValue;
+        private int    globalSessionAnchorIdx = -1;
+        private bool   globalSessionActive = false;
+        private TimeSpan globalStartTimeTs;
+        private TimeSpan globalEndTimeTs;
 		
 		// V_HIST: Historical Lines Logic
 		private class HistoricalZeroLine
@@ -67,6 +91,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		    public int StartIdx;
 		    public int EndIdx;
 		    public double Value;
+            public int SessionType; // 0=US, 1=Asia, 2=EU, 3=Global
 		}
 		private List<HistoricalZeroLine> historicalLines = new List<HistoricalZeroLine>();
 		
@@ -84,8 +109,25 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		private SharpDX.Direct2D1.Brush dxBrushLine5000, dxBrushLineN5000;
 		private SharpDX.Direct2D1.Brush dxBrushLine10000, dxBrushLineN10000;
 		private SharpDX.Direct2D1.Brush dxBrushUSZeroLine;
+        private SharpDX.Direct2D1.Brush dxBrushAsiaZeroLine;
+        private SharpDX.Direct2D1.Brush dxBrushEUZeroLine;
+        private SharpDX.Direct2D1.Brush dxBrushGlobalZeroLine;
+        
 		private SharpDX.Direct2D1.StrokeStyle dxStrokeDash;
+        private SharpDX.Direct2D1.StrokeStyle dxStrokeDashAsia;
+        private SharpDX.Direct2D1.StrokeStyle dxStrokeDashEU;
+        private SharpDX.Direct2D1.StrokeStyle dxStrokeDashGlobal;
 		
+
+		
+// V_STRUCTURE: Market Structure Variables REMOVED
+		
+		// V_ADAPTIVE: Volatility Tracking
+		private Series<double> deltaRangeSeries;
+		// private SMA volatilitySMA; // Removed to avoid dependency issues
+		
+		// V_STRUCTURE: Visual State REMOVED
+
 		// Helper to safely dispose
 		private void SafeDispose(IDisposable obj)
 		{
@@ -130,6 +172,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				AddPlot(new Stroke(Brushes.Transparent),PlotStyle.PriceBox,"DeltaHigh");
 				AddPlot(new Stroke(Brushes.Transparent),PlotStyle.PriceBox,"DeltaLow");
 				AddPlot(new Stroke(Brushes.Orange),PlotStyle.PriceBox,"DeltaClose");
+				AddPlot(new Stroke(Brushes.Cyan),PlotStyle.PriceBox,"BarDelta"); // v1.15.63: New plot for per-bar delta verification
 				
 			}
 			else if (State == State.Configure)
@@ -140,12 +183,25 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 			{
 			    // Cache TimeSpan
 			    TimeSpan.TryParse(USStartTime, out usStartTimeTs);
+			    TimeSpan.TryParse(USEndTime, out usEndTimeTs);
+			    
+                TimeSpan.TryParse(AsiaStartTime, out asiaStartTimeTs);
+                TimeSpan.TryParse(AsiaEndTime, out asiaEndTimeTs);
+                
+                TimeSpan.TryParse(EUStartTime, out euStartTimeTs);
+                TimeSpan.TryParse(EUEndTime, out euEndTimeTs);
+                
+                TimeSpan.TryParse(GlobalStartTime, out globalStartTimeTs);
+                TimeSpan.TryParse(GlobalEndTime, out globalEndTimeTs);
 				delta_open = new Series<double>(this);
 				delta_close = new Series<double>(this);
 				delta_high = new Series<double>(this);
 				delta_low = new Series<double>(this);
 				
-// Redundant init removed
+				// V_ADAPTIVE: Init Volatility Series
+				deltaRangeSeries = new Series<double>(this);
+				
+
 				
 				stoch = this.Stochastics(3, 14, 3);
 				
@@ -228,43 +284,210 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				{
 // Debug removed
 					ResetValues(true,cdClose);
+					
+					// Force close potential open sessions at EOD (Safety)
+					if (usSessionActive) { historicalLines.Add(new HistoricalZeroLine { StartIdx = usSessionAnchorIdx, EndIdx = CurrentBars[0], Value = usSessionAnchor, SessionType = 0 }); }
+					if (asiaSessionActive) { historicalLines.Add(new HistoricalZeroLine { StartIdx = asiaSessionAnchorIdx, EndIdx = CurrentBars[0], Value = asiaSessionAnchor, SessionType = 1 }); }
+					if (euSessionActive) { historicalLines.Add(new HistoricalZeroLine { StartIdx = euSessionAnchorIdx, EndIdx = CurrentBars[0], Value = euSessionAnchor, SessionType = 2 }); }
+					// Global usually stays, but reset it here for new day calculation
+					if (globalSessionActive) { historicalLines.Add(new HistoricalZeroLine { StartIdx = globalSessionAnchorIdx, EndIdx = CurrentBars[0], Value = globalSessionAnchor, SessionType = 3 }); }
+					
 					usSessionAnchor = double.MinValue; // Reset Anchor
 					usSessionAnchorIdx = -1;
 					usSessionActive = false;
+                    
+                    asiaSessionAnchor = double.MinValue;
+                    asiaSessionAnchorIdx = -1;
+                    asiaSessionActive = false;
+
+                    euSessionAnchor = double.MinValue;
+                    euSessionAnchorIdx = -1;
+                    euSessionActive = false;
+                    
+                    globalSessionAnchor = double.MinValue;
+                    globalSessionAnchorIdx = -1;
+                    globalSessionActive = false;
 				}
 			
 				CalculateValues(false);
 				
+
+				
 				// V_ZERO_LINE: Capture Logic (Optimized Crossover)
-				if (ShowUSZeroLine && !usSessionActive && usSessionAnchor == double.MinValue)
+				if (CurrentBar > 0)
 				{
-					// Ensure we have at least 1 previous bar
-					if (CurrentBar > 0)
-					{
-						TimeSpan currentTs = Time[0].TimeOfDay;
-						TimeSpan previousTs = Time[1].TimeOfDay;
-						
-						// Handle Midnight Crossing Special Case
-						// If previous was large (e.g. 23:59) and current is small (00:00), we don't want to trigger "Crossover" 
-						// unless target is 00:00.
-						// Standard day: 09:29 < 09:30 AND 09:30 >= 09:30 -> Trigger
-						// Start at 18:00: 17:00 (prev) > 09:30 AND 18:00 (curr) > 09:30 -> No Trigger (Both True)
-						
-						bool isCrossover = (previousTs < usStartTimeTs && currentTs >= usStartTimeTs);
-						
-						if (isCrossover)
-						{
-							usSessionAnchor = cdClose;
-							usSessionAnchorIdx = CurrentBars[0]; 
-							usSessionActive = true;
-							// Print(string.Format("DEBUG CAPTURE: Time={0} Anchor={1} Idx={2}", Time[0], usSessionAnchor, usSessionAnchorIdx));
-						}
-					}
+				    TimeSpan currentTs = Time[0].TimeOfDay;
+				    TimeSpan previousTs = Time[1].TimeOfDay;
+
+				    // US Session Capture
+				    if (ShowUSZeroLine && !usSessionActive && usSessionAnchor == double.MinValue)
+				    {
+				        bool isCrossover = (previousTs < usStartTimeTs && currentTs >= usStartTimeTs);
+				        // Handle wrap-around (midnight) if start time is early (unlikely for US open but possible)
+                        // If start is 09:30, prev 09:29, curr 09:30 -> True.
+                        
+				        if (isCrossover)
+				        {
+				            usSessionAnchor = cdClose;
+				            usSessionAnchorIdx = CurrentBars[0]; 
+				            usSessionActive = true;
+				        }
+				    }
+
+                    // ASIA Session Capture
+                    if (DisplayAsiaZeroLine && !asiaSessionActive && asiaSessionAnchor == double.MinValue)
+                    {
+                        // Asia usually starts around 18:00 (Chicago) or 19:00.
+                        // If 18:00: prev 17:59, curr 18:00
+                        bool isCrossover = (previousTs < asiaStartTimeTs && currentTs >= asiaStartTimeTs);
+                         // Handle midnight wrap if needed. 
+                         // Logic: if start time is late (e.g. 18:00), simple compare works.
+                         // If start time is 00:00, prev 23:59, curr 00:00 -> simple compare works (0 < 0 is false, wait, 23:59 < 0 is false... wait. TS is 0-24.)
+                         // Wait: 23:59 is greater than 00:00.
+                         // If start time is 18:00. 17:59 < 18:00 (T), 18:00 >= 18:00 (T).
+                         
+                         // If we are wrapping around midnight for "Custom" times:
+                         // Simple check: Just check if we *crossed* the time.
+                         // For accurate daily reset, we rely on IsFirstBarOfSession above to reset anchors.
+                         // So we just need to detect T >= StartTime for the first time in the session.
+                         
+                         if (isCrossover)
+                        {
+                            asiaSessionAnchor = cdClose;
+                            asiaSessionAnchorIdx = CurrentBars[0];
+                            asiaSessionActive = true;
+                        }
+                    }
+
+                    // EU Session Capture
+                    if (ShowEUZeroLine && !euSessionActive && euSessionAnchor == double.MinValue)
+                    {
+                        bool isCrossover = (previousTs < euStartTimeTs && currentTs >= euStartTimeTs);
+                        if (isCrossover)
+                        {
+                            euSessionAnchor = cdClose;
+                            euSessionAnchorIdx = CurrentBars[0];
+                            euSessionActive = true;
+                        }
+                    }
+                    
+                    // GLOBAL Session Capture
+                    if (DisplayGlobalZeroLine && !globalSessionActive && globalSessionAnchor == double.MinValue)
+                    {
+                        bool isCrossover = (previousTs < globalStartTimeTs && currentTs >= globalStartTimeTs);
+                        if (isCrossover)
+                        {
+                            globalSessionAnchor = cdClose;
+                            globalSessionAnchorIdx = CurrentBars[0];
+                            globalSessionActive = true;
+                        }
+                    }
 				}
+				
+				// V_ZERO_LINE: End Time Logic (Truncate Lines)
+				if (CurrentBar > 0)
+				{
+				    TimeSpan currentTs = Time[0].TimeOfDay;
+				    TimeSpan previousTs = Time[1].TimeOfDay;
+				    
+				    // Helper to check time crossing
+				    // A simple check "Current >= EndTime" isn't enough if EndTime < StartTime (overnight).
+				    // But typically we just look for the transition.
+				    
+				    if (usSessionActive)
+				    {
+				        // Simple check: If we just passed the EndTime
+				        bool isEnd = (previousTs < usEndTimeTs && currentTs >= usEndTimeTs);
+				        // Optimization: If EndTime is 00:00, handle naturally via date change or explicit check if needed.
+				        // For now assume standard times.
+				        if (isEnd)
+				        {
+				            usSessionActive = false;
+				            historicalLines.Add(new HistoricalZeroLine { StartIdx = usSessionAnchorIdx, EndIdx = CurrentBars[0], Value = usSessionAnchor, SessionType = 0 }); 
+				        }
+				    }
+				    
+				    if (asiaSessionActive)
+				    {
+				        bool isEnd = (previousTs < asiaEndTimeTs && currentTs >= asiaEndTimeTs);
+				        // Asia often wraps (Start 18:00, End 03:00). 
+				        // If End is 03:00. Prev 02:59, Curr 03:00 -> TRUE.
+				        if (isEnd)
+				        {
+				            asiaSessionActive = false;
+                            historicalLines.Add(new HistoricalZeroLine { StartIdx = asiaSessionAnchorIdx, EndIdx = CurrentBars[0], Value = asiaSessionAnchor, SessionType = 1 });
+				        }
+				    }
+				    
+				    if (euSessionActive)
+				    {
+				        bool isEnd = (previousTs < euEndTimeTs && currentTs >= euEndTimeTs);
+				        if (isEnd)
+				        {
+				            euSessionActive = false;
+                            historicalLines.Add(new HistoricalZeroLine { StartIdx = euSessionAnchorIdx, EndIdx = CurrentBars[0], Value = euSessionAnchor, SessionType = 2 });
+				        }
+				    }
+				    
+				    // Global typically runs full session, so we might skip automatic end time or set it to session close.
+				    if (globalSessionActive && DisplayGlobalZeroLine)
+				    {
+				         // Optional: Use GlobalEndTime if configured to something other than start?
+				         // For now, let it run until Session Close (handled by IsFirstBarOfSession reset).
+                         bool isEnd = (previousTs < globalEndTimeTs && currentTs >= globalEndTimeTs);
+                         if (isEnd)
+                         {
+                            globalSessionActive = false;
+                            historicalLines.Add(new HistoricalZeroLine { StartIdx = globalSessionAnchorIdx, EndIdx = CurrentBars[0], Value = globalSessionAnchor, SessionType = 3 });
+                         }
+				    }
+				}
+
+				// --- RelativeMCP observability ---
+				// Publica siempre en BP==0 (sin filtrar State) — delta acumulativo + anchors de sesión.
+				if (CurrentBar >= 0)
+				{
+					try
+					{
+						RelativeIndicatorRegistry.Publish(
+							string.Format("{0}:{1}:{2}{3}", typeof(RelativeDelta).Name,
+								Instrument.FullName, BarsPeriod.Value, BarsPeriod.BarsPeriodType),
+							new Dictionary<string, object>
+							{
+								["bar"] = CurrentBar,
+								["bar_time"] = Time[0],
+								["close"] = Close[0],
+								["cumulative_delta"] = cdClose,
+								["bar_delta"] = cdClose - cdOpen,
+								["delta_open"] = cdOpen,
+								["delta_high"] = cdHigh,
+								["delta_low"] = cdLow,
+								["us_anchor"] = usSessionAnchor == double.MinValue ? double.NaN : usSessionAnchor,
+								["asia_anchor"] = asiaSessionAnchor == double.MinValue ? double.NaN : asiaSessionAnchor,
+								["eu_anchor"] = euSessionAnchor == double.MinValue ? double.NaN : euSessionAnchor,
+								["global_anchor"] = globalSessionAnchor == double.MinValue ? double.NaN : globalSessionAnchor,
+								["us_active"] = usSessionActive,
+								["asia_active"] = asiaSessionActive,
+								["eu_active"] = euSessionActive,
+								["global_active"] = globalSessionActive,
+							});
+
+						if (IsFirstTickOfBar && State == State.Realtime)
+							this.RLog("bar={0} close={1:F2} cd={2:F0} barD={3:F0} | O={4:F0} H={5:F0} L={6:F0} | anchors US={7} EU={8} A={9} G={10}",
+								CurrentBar, Close[0], cdClose, cdClose - cdOpen,
+								cdOpen, cdHigh, cdLow,
+								usSessionActive ? usSessionAnchor.ToString("F0") : "off",
+								euSessionActive ? euSessionAnchor.ToString("F0") : "off",
+								asiaSessionActive ? asiaSessionAnchor.ToString("F0") : "off",
+								globalSessionActive ? globalSessionAnchor.ToString("F0") : "off");
+					}
+					catch { }
+				}
+				// --- end RelativeMCP ---
 			}
 		}
-		
-				
+
+
 		private void CalculateValues(bool forceCurrentBar)
 		{
 			
@@ -279,10 +502,26 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 			double 	volume 			= BarsArray[1].GetVolume(whatBar);
 			double	price			= BarsArray[1].GetClose(whatBar);
 			
-			if (price >= BarsArray[1].GetAsk(whatBar) && volume>=MinSize)
-				buys += volume;	
-			else if (price <= BarsArray[1].GetBid(whatBar) && volume>=MinSize)
-				sells += volume;
+			// v1.15.65: Robust Delta Calculation (UpTick/DownTick Fallback)
+			// Check if Bid/Ask data is valid (Tick Replay Check)
+			double ask = BarsArray[1].GetAsk(whatBar);
+			double bid = BarsArray[1].GetBid(whatBar);
+			
+			if (ask > 0 && bid > 0)
+			{
+				// Accurate Volumetric Calculation (Requires Tick Replay)
+				if (price >= ask && volume >= MinSize) buys += volume;
+				else if (price <= bid && volume >= MinSize) sells += volume;
+			}
+			else
+			{
+				// Fallback: UpTick / DownTick (No Tick Replay)
+				// Use previous price to determine direction
+				double prevPrice = (whatBar > 0) ? BarsArray[1].GetClose(whatBar - 1) : price;
+				
+				if (price >= prevPrice && volume >= MinSize) buys += volume;
+				else if (volume >= MinSize) sells += volume;
+			}
 			
 			cdClose = buys - sells;
 	
@@ -305,6 +544,13 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 			Values[1][barsAgo] = delta_high[barsAgo] = cdHigh;
 			Values[2][barsAgo] = delta_low[barsAgo] = cdLow;
 			Values[3][barsAgo] = delta_close[barsAgo] = cdClose;
+			Values[3][barsAgo] = delta_close[barsAgo] = cdClose;
+			Values[4][barsAgo] = cdClose - cdOpen; // v1.15.63: Calculate Bar Delta (Close - Open)
+			
+			// V_ADAPTIVE: Update logic
+			double dH = (cdHigh > cdClose) ? cdHigh : cdClose; // Safety if high !updated
+			double dL = (cdLow < cdClose) ? cdLow : cdClose;
+			deltaRangeSeries[barsAgo] = Math.Abs(cdHigh - cdLow);
 			
 	
 		}
@@ -336,8 +582,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
 			barPaintWidth = Math.Max(1, (int)(ChartBars.Properties.ChartStyle.BarWidth * 2));
 	
-
-            for (int idx = ChartBars.FromIndex; idx <= ChartBars.ToIndex; idx++)
+			try
+			{
+				for (int idx = ChartBars.FromIndex; idx <= ChartBars.ToIndex; idx++)
             {
                 if (idx - Displacement < 0 || idx - Displacement >= BarsArray[0].Count || (idx - Displacement < BarsRequiredToPlot))
                     continue;
@@ -391,20 +638,35 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                         RenderTarget.DrawLine(reuseVector1, reuseVector2, dxmBrushes["wickColor"].DxBrush, WickWidth);
                     }
 
+					// Select Brush based on Structure State
+					SharpDX.Direct2D1.Brush activeBrush = dxmBrushes["barColorDown"].DxBrush;
+					
+					// Fallback to Up/Down standard logic if Structure logic disabled
+					if (y4 > y1) activeBrush = dxmBrushes["barColorDown"].DxBrush;
+					else activeBrush = dxmBrushes["barColorUp"].DxBrush;
+
+
 					if (y4 > y1) // Down Candle
 					{
 						UpdateRect(ref reuseRect, (x - barPaintWidth / 2), y1, barPaintWidth, (y4 - y1));
-						RenderTarget.FillRectangle(reuseRect, dxmBrushes["barColorDown"].DxBrush);
+						RenderTarget.FillRectangle(reuseRect, activeBrush);
 					}
 					else // Up Candle
 					{
 						UpdateRect(ref reuseRect, (x - barPaintWidth / 2), y4, barPaintWidth, (y1 - y4));
-						RenderTarget.FillRectangle(reuseRect, dxmBrushes["barColorUp"].DxBrush);
+						RenderTarget.FillRectangle(reuseRect, activeBrush);
 					}
-
-					UpdateRect(ref reuseRect, ((x - barPaintWidth / 2) + (ShadowWidth / 2)), Math.Min(y4, y1), (barPaintWidth - ShadowWidth + 2), Math.Abs(y4 - y1));
-					RenderTarget.DrawRectangle(reuseRect, dxmBrushes["shadowColor"].DxBrush);
 				}
+
+				UpdateRect(ref reuseRect, ((x - barPaintWidth / 2) + (ShadowWidth / 2)), Math.Min(y4, y1), (barPaintWidth - ShadowWidth + 2), Math.Abs(y4 - y1));
+				RenderTarget.DrawRectangle(reuseRect, dxmBrushes["shadowColor"].DxBrush);
+				
+
+            }
+		}  // Close for loop
+		catch (Exception ex)
+            {
+                Print("RelativeDelta Render Error: " + ex.Message);
             }
 
             // Dibuja la línea horizontal configurable
@@ -432,44 +694,98 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             DrawExtraLine(10000, ShowLine10000, dxBrushLine10000, Line10000Width, chartScale, chartControl);
             DrawExtraLine(-10000, ShowLineN10000, dxBrushLineN10000, LineN10000Width, chartScale, chartControl);
             
-            // V_ZERO_LINE: Draw US Session Anchor Line (OPTIMIZED)
-            if (ShowUSZeroLine && dxBrushUSZeroLine != null && dxStrokeDash != null)
-            {
-                 // 1. Draw Historical Lines
-                 foreach (var line in historicalLines)
+            
+            
+            // V_ZERO_LINE: Draw Historical Lines (Moved from loop to here for better management)
+             foreach (var line in historicalLines)
+             {
+                 if (line.EndIdx < ChartBars.FromIndex || line.StartIdx > ChartBars.ToIndex) continue;
+                 
+                 SharpDX.Direct2D1.Brush brush = null;
+                 SharpDX.Direct2D1.StrokeStyle stroke = null;
+                 int width = 1;
+                 
+                 switch(line.SessionType)
                  {
-                     // Optimization: Check visibility
-                     if (line.EndIdx < ChartBars.FromIndex || line.StartIdx > ChartBars.ToIndex) continue;
-                     
-                     // DaysToLoad Check (Visual approximation or strict?)
-                     // Already handled by data loading, but if chart has more data:
-                     // We can check time of the anchor. 
-                     
+                     case 0: // US
+                        if(!ShowUSZeroLine) continue;
+                        brush = dxBrushUSZeroLine; stroke = dxStrokeDash; width = USZeroLineWidth;
+                        break;
+                     case 1: // Asia
+                        if(!DisplayAsiaZeroLine) continue;
+                        brush = dxBrushAsiaZeroLine; stroke = dxStrokeDashAsia; width = AsiaZeroLineWidth;
+                        break;
+                     case 2: // EU
+                        if(!ShowEUZeroLine) continue;
+                        brush = dxBrushEUZeroLine; stroke = dxStrokeDashEU; width = EUZeroLineWidth;
+                        break;
+                     case 3: // Global
+                        if(!DisplayGlobalZeroLine) continue;
+                        brush = dxBrushGlobalZeroLine; stroke = dxStrokeDashGlobal; width = GlobalZeroLineWidth;
+                        break;
+                 }
+                 
+                 if (brush != null && stroke != null)
+                 {
                      double yVal = chartScale.GetYByValue(line.Value);
                      float x1 = chartControl.GetXByBarIndex(ChartBars, line.StartIdx);
                      float x2 = chartControl.GetXByBarIndex(ChartBars, line.EndIdx);
-                     
                      var p1 = new SharpDX.Vector2(x1, (float)yVal);
                      var p2 = new SharpDX.Vector2(x2, (float)yVal);
-                     RenderTarget.DrawLine(p1, p2, dxBrushUSZeroLine, USZeroLineWidth, dxStrokeDash);
+                     RenderTarget.DrawLine(p1, p2, brush, width, stroke);
                  }
+             }
+
+            // V_ZERO_LINE: Draw Session Lines using Helper
+            DrawSessionLine(usSessionAnchor, usSessionAnchorIdx, usSessionActive, ShowUSZeroLine, dxBrushUSZeroLine, USZeroLineWidth, dxStrokeDash, "Cero USA: ", chartControl, chartScale);
+            DrawSessionLine(asiaSessionAnchor, asiaSessionAnchorIdx, asiaSessionActive, DisplayAsiaZeroLine, dxBrushAsiaZeroLine, AsiaZeroLineWidth, dxStrokeDashAsia, "Cero Asia: ", chartControl, chartScale);
+            DrawSessionLine(euSessionAnchor, euSessionAnchorIdx, euSessionActive, ShowEUZeroLine, dxBrushEUZeroLine, EUZeroLineWidth, dxStrokeDashEU, "Cero EU: ", chartControl, chartScale);
+            DrawSessionLine(globalSessionAnchor, globalSessionAnchorIdx, globalSessionActive, DisplayGlobalZeroLine, dxBrushGlobalZeroLine, GlobalZeroLineWidth, dxStrokeDashGlobal, "Cero Global: ", chartControl, chartScale);
             
-                 // 2. Draw Current Active Line
-                 if (usSessionAnchor != double.MinValue && usSessionAnchorIdx != -1)
-                 {
-                     double yValue = chartScale.GetYByValue(usSessionAnchor);
-                     
-                     // Calculate Start X based on captured index
-                     float startX = chartControl.GetXByBarIndex(ChartBars, usSessionAnchorIdx);
-                     
-                     // Ensure we don't draw backwards if anchor is somehow ahead (unlikely)
-                     
-                     var start = new SharpDX.Vector2(startX, (float)yValue);
-                     var end = new SharpDX.Vector2((float)chartControl.PanelWidth, (float)yValue);
-                     RenderTarget.DrawLine(start, end, dxBrushUSZeroLine, USZeroLineWidth, dxStrokeDash);
-                 }
-            }
 		}
+        
+        // Helper for Drawing Session Lines with Labels
+        private void DrawSessionLine(double anchor, int anchorIdx, bool isActive, bool show, SharpDX.Direct2D1.Brush brush, int width, SharpDX.Direct2D1.StrokeStyle stroke, string labelPrefix, ChartControl chartControl, ChartScale chartScale)
+        {
+             if (!show || !isActive || anchor == double.MinValue || anchorIdx == -1 || brush == null || stroke == null)
+                 return;
+
+             double yValue = chartScale.GetYByValue(anchor);
+             float startX = chartControl.GetXByBarIndex(ChartBars, anchorIdx);
+             var start = new SharpDX.Vector2(startX, (float)yValue);
+             var end = new SharpDX.Vector2((float)chartControl.PanelWidth, (float)yValue);
+             
+             RenderTarget.DrawLine(start, end, brush, width, stroke);
+             
+             // Draw Label
+             if (LineLabelColor != null && dwFactory != null && dwTextFormat != null)
+             {
+                 DrawLineLabelText(labelPrefix + anchor.ToString("N2"), yValue, chartControl);
+             }
+        }
+        
+        private void DrawLineLabelText(string text, double y, ChartControl chartControl)
+        {
+            if (LineLabelColor == null || RenderTarget == null) return;
+            
+             var color = ((SolidColorBrush)LineLabelColor).Color;
+             var dxColor = new SharpDX.Color(color.R, color.G, color.B, color.A);
+             var bgColor = ((SolidColorBrush)LineLabelBackground).Color;
+             var dxBgColor = new SharpDX.Color(bgColor.R, bgColor.G, bgColor.B, bgColor.A);
+             
+             using (var textBrush = new SharpDX.Direct2D1.SolidColorBrush(RenderTarget, dxColor))
+             using (var bgBrush = new SharpDX.Direct2D1.SolidColorBrush(RenderTarget, dxBgColor))
+             {
+                 using (var layout = new SharpDX.DirectWrite.TextLayout(dwFactory, text, dwTextFormat, 200, 20))
+                 {
+                     float x = (float)chartControl.PanelWidth - layout.Metrics.Width - 4;
+                     float yText = (float)y - layout.Metrics.Height / 2;
+                     var rect = new SharpDX.RectangleF(x, yText, layout.Metrics.Width, layout.Metrics.Height);
+                     RenderTarget.FillRectangle(rect, bgBrush);
+                     RenderTarget.DrawText(text, dwTextFormat, rect, textBrush);
+                 }
+             }
+        }
 		
 		public override void OnRenderTargetChanged()
 		{		
@@ -493,14 +809,18 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		
 		private void DisposeD2DResources()
 		{
-		    SafeDispose(dxBrushLine2500); dxBrushLine2500 = null;
-		    SafeDispose(dxBrushLineN2500); dxBrushLineN2500 = null;
-		    SafeDispose(dxBrushLine5000); dxBrushLine5000 = null;
-		    SafeDispose(dxBrushLineN5000); dxBrushLineN5000 = null;
 		    SafeDispose(dxBrushLine10000); dxBrushLine10000 = null;
 		    SafeDispose(dxBrushLineN10000); dxBrushLineN10000 = null;
 		    SafeDispose(dxBrushUSZeroLine); dxBrushUSZeroLine = null;
+            SafeDispose(dxBrushAsiaZeroLine); dxBrushAsiaZeroLine = null;
+            SafeDispose(dxBrushEUZeroLine); dxBrushEUZeroLine = null;
+            SafeDispose(dxBrushGlobalZeroLine); dxBrushGlobalZeroLine = null;
+
 		    SafeDispose(dxStrokeDash); dxStrokeDash = null;
+            SafeDispose(dxStrokeDashAsia); dxStrokeDashAsia = null;
+            SafeDispose(dxStrokeDashEU); dxStrokeDashEU = null;
+            SafeDispose(dxStrokeDashGlobal); dxStrokeDashGlobal = null;
+            
 		    SafeDispose(dwTextFormat); dwTextFormat = null;
 		    SafeDispose(dwFactory); dwFactory = null;
 		}
@@ -527,6 +847,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		    dxBrushLine10000 = createBrush(Line10000Color, Line10000Alpha);
 		    dxBrushLineN10000 = createBrush(LineN10000Color, LineN10000Alpha);
 		    dxBrushUSZeroLine = createBrush(USZeroLineColor, USZeroLineAlpha);
+            dxBrushAsiaZeroLine = createBrush(AsiaZeroLineColor, AsiaZeroLineAlpha);
+            dxBrushEUZeroLine = createBrush(EUZeroLineColor, EUZeroLineAlpha);
+            dxBrushGlobalZeroLine = createBrush(GlobalZeroLineColor, GlobalZeroLineAlpha);
+			
+
 		    
 		    // Create Stroke Style (Dash) using RenderTarget's Factory (Crucial for performance/compat)
 		    try 
@@ -534,6 +859,18 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		        var strokeStyleProps = new SharpDX.Direct2D1.StrokeStyleProperties();
                 strokeStyleProps.DashStyle = (SharpDX.Direct2D1.DashStyle)USZeroLineDashStyle;
                 dxStrokeDash = new SharpDX.Direct2D1.StrokeStyle(RenderTarget.Factory, strokeStyleProps);
+                
+                var strokeStylePropsAsia = new SharpDX.Direct2D1.StrokeStyleProperties();
+                strokeStylePropsAsia.DashStyle = (SharpDX.Direct2D1.DashStyle)AsiaZeroLineDashStyle;
+                dxStrokeDashAsia = new SharpDX.Direct2D1.StrokeStyle(RenderTarget.Factory, strokeStylePropsAsia);
+
+                var strokeStylePropsEU = new SharpDX.Direct2D1.StrokeStyleProperties();
+                strokeStylePropsEU.DashStyle = (SharpDX.Direct2D1.DashStyle)EUZeroLineDashStyle;
+                dxStrokeDashEU = new SharpDX.Direct2D1.StrokeStyle(RenderTarget.Factory, strokeStylePropsEU);
+
+                var strokeStylePropsGlobal = new SharpDX.Direct2D1.StrokeStyleProperties();
+                strokeStylePropsGlobal.DashStyle = (SharpDX.Direct2D1.DashStyle)GlobalZeroLineDashStyle;
+                dxStrokeDashGlobal = new SharpDX.Direct2D1.StrokeStyle(RenderTarget.Factory, strokeStylePropsGlobal);
 		    }
 		    catch {}
 		    
@@ -780,6 +1117,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             get { return Serialize.BrushToString(LineN2500Color); }
             set { LineN2500Color = Serialize.StringToBrush(value); }
         }
+		
+
         [NinjaScriptProperty]
         [Range(1, 10)]
         [Display(Name="Grosor Línea -2500", Order=26, GroupName="Líneas Extra")]
@@ -909,8 +1248,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         public bool ShowUSZeroLine { get; set; } = true;
 
         [NinjaScriptProperty]
-        [Display(Name="Hora Inicio USA", Description="Hora formateada HH:mm (ej. 09:30)", Order=61, GroupName="Línea Cero USA")]
+        [Display(Name="Hora Inicio USA", Description="Hora formateada HH:mm (ej. 10:30)", Order=61, GroupName="Línea Cero USA")]
         public string USStartTime { get; set; } = "10:30";
+        [NinjaScriptProperty]
+        [Display(Name="Hora Fin USA", Description="Hora finalización (ej. 17:00)", Order=61, GroupName="Línea Cero USA")]
+        public string USEndTime { get; set; } = "17:00";
 
         [NinjaScriptProperty]
         [XmlIgnore]
@@ -936,6 +1278,103 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         [NinjaScriptProperty]
         [Display(Name="Estilo Dash Línea USA", Order=65, GroupName="Línea Cero USA")]
         public DashStyleHelper USZeroLineDashStyle { get; set; } = DashStyleHelper.Dash; 
+
+        // ASIA
+        [NinjaScriptProperty]
+        [Display(Name="Mostrar Línea Cero Asia", Order=70, GroupName="Línea Cero Asia")]
+        public bool DisplayAsiaZeroLine { get; set; } = false;
+        [NinjaScriptProperty]
+        [Display(Name="Hora Inicio Asia", Description="Hora formateada HH:mm (ej. 18:00)", Order=71, GroupName="Línea Cero Asia")]
+        public string AsiaStartTime { get; set; } = "18:00";
+        [NinjaScriptProperty]
+        [Display(Name="Hora Fin Asia", Description="Hora finalización (ej. 03:00)", Order=71, GroupName="Línea Cero Asia")]
+        public string AsiaEndTime { get; set; } = "03:00";
+        [NinjaScriptProperty]
+        [XmlIgnore]
+        [Display(Name="Color Línea Cero Asia", Order=72, GroupName="Línea Cero Asia")]
+        public Brush AsiaZeroLineColor { get; set; } = Brushes.Red;
+        [Browsable(false)]
+        public string AsiaZeroLineColorSerializable
+        {
+            get { return Serialize.BrushToString(AsiaZeroLineColor); }
+            set { AsiaZeroLineColor = Serialize.StringToBrush(value); }
+        }
+        [NinjaScriptProperty]
+        [Range(1, 10)]
+        [Display(Name="Grosor Línea Cero Asia", Order=73, GroupName="Línea Cero Asia")]
+        public int AsiaZeroLineWidth { get; set; } = 2;
+        [NinjaScriptProperty]
+        [Range(0, 100)]
+        [Display(Name="Transparencia Línea Cero Asia (%)", Order=74, GroupName="Línea Cero Asia")]
+        public int AsiaZeroLineAlpha { get; set; } = 100;
+        [NinjaScriptProperty]
+        [Display(Name="Estilo Dash Línea Asia", Order=75, GroupName="Línea Cero Asia")]
+        public DashStyleHelper AsiaZeroLineDashStyle { get; set; } = DashStyleHelper.Dash;
+
+        // EUROPE
+        [NinjaScriptProperty]
+        [Display(Name="Mostrar Línea Cero EU", Order=80, GroupName="Línea Cero EU")]
+        public bool ShowEUZeroLine { get; set; } = true;
+        [NinjaScriptProperty]
+        [Display(Name="Hora Inicio EU", Description="Hora formateada HH:mm (ej. 03:00)", Order=81, GroupName="Línea Cero EU")]
+        public string EUStartTime { get; set; } = "03:00";
+        [NinjaScriptProperty]
+        [Display(Name="Hora Fin EU", Description="Hora finalización (ej. 10:30)", Order=81, GroupName="Línea Cero EU")]
+        public string EUEndTime { get; set; } = "10:30";
+        [NinjaScriptProperty]
+        [XmlIgnore]
+        [Display(Name="Color Línea Cero EU", Order=82, GroupName="Línea Cero EU")]
+        public Brush EUZeroLineColor { get; set; } = Brushes.Cyan;
+        [Browsable(false)]
+        public string EUZeroLineColorSerializable
+        {
+            get { return Serialize.BrushToString(EUZeroLineColor); }
+            set { EUZeroLineColor = Serialize.StringToBrush(value); }
+        }
+        [NinjaScriptProperty]
+        [Range(1, 10)]
+        [Display(Name="Grosor Línea Cero EU", Order=83, GroupName="Línea Cero EU")]
+        public int EUZeroLineWidth { get; set; } = 2;
+        [NinjaScriptProperty]
+        [Range(0, 100)]
+        [Display(Name="Transparencia Línea Cero EU (%)", Order=84, GroupName="Línea Cero EU")]
+        public int EUZeroLineAlpha { get; set; } = 100;
+        [NinjaScriptProperty]
+        [Display(Name="Estilo Dash Línea EU", Order=85, GroupName="Línea Cero EU")]
+        public DashStyleHelper EUZeroLineDashStyle { get; set; } = DashStyleHelper.Dash;
+
+        // GLOBAL
+        [NinjaScriptProperty]
+        [Display(Name="Mostrar Línea Cero Global", Order=90, GroupName="Línea Cero Global")]
+        public bool DisplayGlobalZeroLine { get; set; } = false;
+        [NinjaScriptProperty]
+        [Display(Name="Hora Inicio Global", Description="Hora formateada HH:mm (ej. 17:00)", Order=91, GroupName="Línea Cero Global")]
+        public string GlobalStartTime { get; set; } = "17:00";
+        [NinjaScriptProperty]
+        [Display(Name="Hora Fin Global", Description="Hora finalización (ej. 16:59)", Order=91, GroupName="Línea Cero Global")]
+        public string GlobalEndTime { get; set; } = "16:59";
+        [NinjaScriptProperty]
+        [XmlIgnore]
+        [Display(Name="Color Línea Cero Global", Order=92, GroupName="Línea Cero Global")]
+        public Brush GlobalZeroLineColor { get; set; } = Brushes.Gold;
+        [Browsable(false)]
+        public string GlobalZeroLineColorSerializable
+        {
+            get { return Serialize.BrushToString(GlobalZeroLineColor); }
+            set { GlobalZeroLineColor = Serialize.StringToBrush(value); }
+        }
+        [NinjaScriptProperty]
+        [Range(1, 10)]
+        [Display(Name="Grosor Línea Cero Global", Order=93, GroupName="Línea Cero Global")]
+        public int GlobalZeroLineWidth { get; set; } = 2;
+        [NinjaScriptProperty]
+        [Range(0, 100)]
+        [Display(Name="Transparencia Línea Cero Global (%)", Order=94, GroupName="Línea Cero Global")]
+        public int GlobalZeroLineAlpha { get; set; } = 100;
+        [NinjaScriptProperty]
+        [Display(Name="Estilo Dash Línea Global", Order=95, GroupName="Línea Cero Global")]
+        public DashStyleHelper GlobalZeroLineDashStyle { get; set; } = DashStyleHelper.Solid;
+
 		#endregion
 		
 		// Método auxiliar para dibujar líneas extra (Optimized)
@@ -995,18 +1434,18 @@ namespace NinjaTrader.NinjaScript.Indicators
 	public partial class Indicator : NinjaTrader.Gui.NinjaScript.IndicatorRenderBase
 	{
 		private RelativeIndicators.RelativeDelta[] cacheRelativeDelta;
-		public RelativeIndicators.RelativeDelta RelativeDelta(Brush barColorDown, Brush barColorUp, Brush shadowColor, int shadowWidth, Brush wickColor, int wickWidth, int minSize, int daysToLoad, bool showDivs, Brush horizontalLineColor, int horizontalLineWidth, double horizontalLineValue, int horizontalLineAlphaPercent, bool showExtraLevels, bool showLine2500, Brush line2500Color, int line2500Alpha, bool showLineN2500, Brush lineN2500Color, int lineN2500Width, int lineN2500Alpha, bool showLine5000, Brush line5000Color, int line5000Width, int line5000Alpha, bool showLineN5000, Brush lineN5000Color, int lineN5000Width, int lineN5000Alpha, bool showLine10000, Brush line10000Color, int line10000Width, int line10000Alpha, bool showLineN10000, Brush lineN10000Color, int lineN10000Width, int lineN10000Alpha, Brush lineLabelColor, Brush lineLabelBackground, bool showUSZeroLine, string uSStartTime, Brush uSZeroLineColor, int uSZeroLineWidth, int uSZeroLineAlpha, DashStyleHelper uSZeroLineDashStyle)
+		public RelativeIndicators.RelativeDelta RelativeDelta(Brush barColorDown, Brush barColorUp, Brush shadowColor, int shadowWidth, Brush wickColor, int wickWidth, int minSize, int daysToLoad, bool showDivs, Brush horizontalLineColor, int horizontalLineWidth, double horizontalLineValue, int horizontalLineAlphaPercent, bool showExtraLevels, bool showLine2500, Brush line2500Color, int line2500Alpha, bool showLineN2500, Brush lineN2500Color, int lineN2500Width, int lineN2500Alpha, bool showLine5000, Brush line5000Color, int line5000Width, int line5000Alpha, bool showLineN5000, Brush lineN5000Color, int lineN5000Width, int lineN5000Alpha, bool showLine10000, Brush line10000Color, int line10000Width, int line10000Alpha, bool showLineN10000, Brush lineN10000Color, int lineN10000Width, int lineN10000Alpha, Brush lineLabelColor, Brush lineLabelBackground, bool showUSZeroLine, string uSStartTime, string uSEndTime, Brush uSZeroLineColor, int uSZeroLineWidth, int uSZeroLineAlpha, DashStyleHelper uSZeroLineDashStyle, bool displayAsiaZeroLine, string asiaStartTime, string asiaEndTime, Brush asiaZeroLineColor, int asiaZeroLineWidth, int asiaZeroLineAlpha, DashStyleHelper asiaZeroLineDashStyle, bool showEUZeroLine, string eUStartTime, string eUEndTime, Brush eUZeroLineColor, int eUZeroLineWidth, int eUZeroLineAlpha, DashStyleHelper eUZeroLineDashStyle, bool displayGlobalZeroLine, string globalStartTime, string globalEndTime, Brush globalZeroLineColor, int globalZeroLineWidth, int globalZeroLineAlpha, DashStyleHelper globalZeroLineDashStyle)
 		{
-			return RelativeDelta(Input, barColorDown, barColorUp, shadowColor, shadowWidth, wickColor, wickWidth, minSize, daysToLoad, showDivs, horizontalLineColor, horizontalLineWidth, horizontalLineValue, horizontalLineAlphaPercent, showExtraLevels, showLine2500, line2500Color, line2500Alpha, showLineN2500, lineN2500Color, lineN2500Width, lineN2500Alpha, showLine5000, line5000Color, line5000Width, line5000Alpha, showLineN5000, lineN5000Color, lineN5000Width, lineN5000Alpha, showLine10000, line10000Color, line10000Width, line10000Alpha, showLineN10000, lineN10000Color, lineN10000Width, lineN10000Alpha, lineLabelColor, lineLabelBackground, showUSZeroLine, uSStartTime, uSZeroLineColor, uSZeroLineWidth, uSZeroLineAlpha, uSZeroLineDashStyle);
+			return RelativeDelta(Input, barColorDown, barColorUp, shadowColor, shadowWidth, wickColor, wickWidth, minSize, daysToLoad, showDivs, horizontalLineColor, horizontalLineWidth, horizontalLineValue, horizontalLineAlphaPercent, showExtraLevels, showLine2500, line2500Color, line2500Alpha, showLineN2500, lineN2500Color, lineN2500Width, lineN2500Alpha, showLine5000, line5000Color, line5000Width, line5000Alpha, showLineN5000, lineN5000Color, lineN5000Width, lineN5000Alpha, showLine10000, line10000Color, line10000Width, line10000Alpha, showLineN10000, lineN10000Color, lineN10000Width, lineN10000Alpha, lineLabelColor, lineLabelBackground, showUSZeroLine, uSStartTime, uSEndTime, uSZeroLineColor, uSZeroLineWidth, uSZeroLineAlpha, uSZeroLineDashStyle, displayAsiaZeroLine, asiaStartTime, asiaEndTime, asiaZeroLineColor, asiaZeroLineWidth, asiaZeroLineAlpha, asiaZeroLineDashStyle, showEUZeroLine, eUStartTime, eUEndTime, eUZeroLineColor, eUZeroLineWidth, eUZeroLineAlpha, eUZeroLineDashStyle, displayGlobalZeroLine, globalStartTime, globalEndTime, globalZeroLineColor, globalZeroLineWidth, globalZeroLineAlpha, globalZeroLineDashStyle);
 		}
 
-		public RelativeIndicators.RelativeDelta RelativeDelta(ISeries<double> input, Brush barColorDown, Brush barColorUp, Brush shadowColor, int shadowWidth, Brush wickColor, int wickWidth, int minSize, int daysToLoad, bool showDivs, Brush horizontalLineColor, int horizontalLineWidth, double horizontalLineValue, int horizontalLineAlphaPercent, bool showExtraLevels, bool showLine2500, Brush line2500Color, int line2500Alpha, bool showLineN2500, Brush lineN2500Color, int lineN2500Width, int lineN2500Alpha, bool showLine5000, Brush line5000Color, int line5000Width, int line5000Alpha, bool showLineN5000, Brush lineN5000Color, int lineN5000Width, int lineN5000Alpha, bool showLine10000, Brush line10000Color, int line10000Width, int line10000Alpha, bool showLineN10000, Brush lineN10000Color, int lineN10000Width, int lineN10000Alpha, Brush lineLabelColor, Brush lineLabelBackground, bool showUSZeroLine, string uSStartTime, Brush uSZeroLineColor, int uSZeroLineWidth, int uSZeroLineAlpha, DashStyleHelper uSZeroLineDashStyle)
+		public RelativeIndicators.RelativeDelta RelativeDelta(ISeries<double> input, Brush barColorDown, Brush barColorUp, Brush shadowColor, int shadowWidth, Brush wickColor, int wickWidth, int minSize, int daysToLoad, bool showDivs, Brush horizontalLineColor, int horizontalLineWidth, double horizontalLineValue, int horizontalLineAlphaPercent, bool showExtraLevels, bool showLine2500, Brush line2500Color, int line2500Alpha, bool showLineN2500, Brush lineN2500Color, int lineN2500Width, int lineN2500Alpha, bool showLine5000, Brush line5000Color, int line5000Width, int line5000Alpha, bool showLineN5000, Brush lineN5000Color, int lineN5000Width, int lineN5000Alpha, bool showLine10000, Brush line10000Color, int line10000Width, int line10000Alpha, bool showLineN10000, Brush lineN10000Color, int lineN10000Width, int lineN10000Alpha, Brush lineLabelColor, Brush lineLabelBackground, bool showUSZeroLine, string uSStartTime, string uSEndTime, Brush uSZeroLineColor, int uSZeroLineWidth, int uSZeroLineAlpha, DashStyleHelper uSZeroLineDashStyle, bool displayAsiaZeroLine, string asiaStartTime, string asiaEndTime, Brush asiaZeroLineColor, int asiaZeroLineWidth, int asiaZeroLineAlpha, DashStyleHelper asiaZeroLineDashStyle, bool showEUZeroLine, string eUStartTime, string eUEndTime, Brush eUZeroLineColor, int eUZeroLineWidth, int eUZeroLineAlpha, DashStyleHelper eUZeroLineDashStyle, bool displayGlobalZeroLine, string globalStartTime, string globalEndTime, Brush globalZeroLineColor, int globalZeroLineWidth, int globalZeroLineAlpha, DashStyleHelper globalZeroLineDashStyle)
 		{
 			if (cacheRelativeDelta != null)
 				for (int idx = 0; idx < cacheRelativeDelta.Length; idx++)
-					if (cacheRelativeDelta[idx] != null && cacheRelativeDelta[idx].BarColorDown == barColorDown && cacheRelativeDelta[idx].BarColorUp == barColorUp && cacheRelativeDelta[idx].ShadowColor == shadowColor && cacheRelativeDelta[idx].ShadowWidth == shadowWidth && cacheRelativeDelta[idx].WickColor == wickColor && cacheRelativeDelta[idx].WickWidth == wickWidth && cacheRelativeDelta[idx].MinSize == minSize && cacheRelativeDelta[idx].DaysToLoad == daysToLoad && cacheRelativeDelta[idx].ShowDivs == showDivs && cacheRelativeDelta[idx].HorizontalLineColor == horizontalLineColor && cacheRelativeDelta[idx].HorizontalLineWidth == horizontalLineWidth && cacheRelativeDelta[idx].HorizontalLineValue == horizontalLineValue && cacheRelativeDelta[idx].HorizontalLineAlphaPercent == horizontalLineAlphaPercent && cacheRelativeDelta[idx].ShowExtraLevels == showExtraLevels && cacheRelativeDelta[idx].ShowLine2500 == showLine2500 && cacheRelativeDelta[idx].Line2500Color == line2500Color && cacheRelativeDelta[idx].Line2500Alpha == line2500Alpha && cacheRelativeDelta[idx].ShowLineN2500 == showLineN2500 && cacheRelativeDelta[idx].LineN2500Color == lineN2500Color && cacheRelativeDelta[idx].LineN2500Width == lineN2500Width && cacheRelativeDelta[idx].LineN2500Alpha == lineN2500Alpha && cacheRelativeDelta[idx].ShowLine5000 == showLine5000 && cacheRelativeDelta[idx].Line5000Color == line5000Color && cacheRelativeDelta[idx].Line5000Width == line5000Width && cacheRelativeDelta[idx].Line5000Alpha == line5000Alpha && cacheRelativeDelta[idx].ShowLineN5000 == showLineN5000 && cacheRelativeDelta[idx].LineN5000Color == lineN5000Color && cacheRelativeDelta[idx].LineN5000Width == lineN5000Width && cacheRelativeDelta[idx].LineN5000Alpha == lineN5000Alpha && cacheRelativeDelta[idx].ShowLine10000 == showLine10000 && cacheRelativeDelta[idx].Line10000Color == line10000Color && cacheRelativeDelta[idx].Line10000Width == line10000Width && cacheRelativeDelta[idx].Line10000Alpha == line10000Alpha && cacheRelativeDelta[idx].ShowLineN10000 == showLineN10000 && cacheRelativeDelta[idx].LineN10000Color == lineN10000Color && cacheRelativeDelta[idx].LineN10000Width == lineN10000Width && cacheRelativeDelta[idx].LineN10000Alpha == lineN10000Alpha && cacheRelativeDelta[idx].LineLabelColor == lineLabelColor && cacheRelativeDelta[idx].LineLabelBackground == lineLabelBackground && cacheRelativeDelta[idx].ShowUSZeroLine == showUSZeroLine && cacheRelativeDelta[idx].USStartTime == uSStartTime && cacheRelativeDelta[idx].USZeroLineColor == uSZeroLineColor && cacheRelativeDelta[idx].USZeroLineWidth == uSZeroLineWidth && cacheRelativeDelta[idx].USZeroLineAlpha == uSZeroLineAlpha && cacheRelativeDelta[idx].USZeroLineDashStyle == uSZeroLineDashStyle && cacheRelativeDelta[idx].EqualsInput(input))
+					if (cacheRelativeDelta[idx] != null && cacheRelativeDelta[idx].BarColorDown == barColorDown && cacheRelativeDelta[idx].BarColorUp == barColorUp && cacheRelativeDelta[idx].ShadowColor == shadowColor && cacheRelativeDelta[idx].ShadowWidth == shadowWidth && cacheRelativeDelta[idx].WickColor == wickColor && cacheRelativeDelta[idx].WickWidth == wickWidth && cacheRelativeDelta[idx].MinSize == minSize && cacheRelativeDelta[idx].DaysToLoad == daysToLoad && cacheRelativeDelta[idx].ShowDivs == showDivs && cacheRelativeDelta[idx].HorizontalLineColor == horizontalLineColor && cacheRelativeDelta[idx].HorizontalLineWidth == horizontalLineWidth && cacheRelativeDelta[idx].HorizontalLineValue == horizontalLineValue && cacheRelativeDelta[idx].HorizontalLineAlphaPercent == horizontalLineAlphaPercent && cacheRelativeDelta[idx].ShowExtraLevels == showExtraLevels && cacheRelativeDelta[idx].ShowLine2500 == showLine2500 && cacheRelativeDelta[idx].Line2500Color == line2500Color && cacheRelativeDelta[idx].Line2500Alpha == line2500Alpha && cacheRelativeDelta[idx].ShowLineN2500 == showLineN2500 && cacheRelativeDelta[idx].LineN2500Color == lineN2500Color && cacheRelativeDelta[idx].LineN2500Width == lineN2500Width && cacheRelativeDelta[idx].LineN2500Alpha == lineN2500Alpha && cacheRelativeDelta[idx].ShowLine5000 == showLine5000 && cacheRelativeDelta[idx].Line5000Color == line5000Color && cacheRelativeDelta[idx].Line5000Width == line5000Width && cacheRelativeDelta[idx].Line5000Alpha == line5000Alpha && cacheRelativeDelta[idx].ShowLineN5000 == showLineN5000 && cacheRelativeDelta[idx].LineN5000Color == lineN5000Color && cacheRelativeDelta[idx].LineN5000Width == lineN5000Width && cacheRelativeDelta[idx].LineN5000Alpha == lineN5000Alpha && cacheRelativeDelta[idx].ShowLine10000 == showLine10000 && cacheRelativeDelta[idx].Line10000Color == line10000Color && cacheRelativeDelta[idx].Line10000Width == line10000Width && cacheRelativeDelta[idx].Line10000Alpha == line10000Alpha && cacheRelativeDelta[idx].ShowLineN10000 == showLineN10000 && cacheRelativeDelta[idx].LineN10000Color == lineN10000Color && cacheRelativeDelta[idx].LineN10000Width == lineN10000Width && cacheRelativeDelta[idx].LineN10000Alpha == lineN10000Alpha && cacheRelativeDelta[idx].LineLabelColor == lineLabelColor && cacheRelativeDelta[idx].LineLabelBackground == lineLabelBackground && cacheRelativeDelta[idx].ShowUSZeroLine == showUSZeroLine && cacheRelativeDelta[idx].USStartTime == uSStartTime && cacheRelativeDelta[idx].USEndTime == uSEndTime && cacheRelativeDelta[idx].USZeroLineColor == uSZeroLineColor && cacheRelativeDelta[idx].USZeroLineWidth == uSZeroLineWidth && cacheRelativeDelta[idx].USZeroLineAlpha == uSZeroLineAlpha && cacheRelativeDelta[idx].USZeroLineDashStyle == uSZeroLineDashStyle && cacheRelativeDelta[idx].DisplayAsiaZeroLine == displayAsiaZeroLine && cacheRelativeDelta[idx].AsiaStartTime == asiaStartTime && cacheRelativeDelta[idx].AsiaEndTime == asiaEndTime && cacheRelativeDelta[idx].AsiaZeroLineColor == asiaZeroLineColor && cacheRelativeDelta[idx].AsiaZeroLineWidth == asiaZeroLineWidth && cacheRelativeDelta[idx].AsiaZeroLineAlpha == asiaZeroLineAlpha && cacheRelativeDelta[idx].AsiaZeroLineDashStyle == asiaZeroLineDashStyle && cacheRelativeDelta[idx].ShowEUZeroLine == showEUZeroLine && cacheRelativeDelta[idx].EUStartTime == eUStartTime && cacheRelativeDelta[idx].EUEndTime == eUEndTime && cacheRelativeDelta[idx].EUZeroLineColor == eUZeroLineColor && cacheRelativeDelta[idx].EUZeroLineWidth == eUZeroLineWidth && cacheRelativeDelta[idx].EUZeroLineAlpha == eUZeroLineAlpha && cacheRelativeDelta[idx].EUZeroLineDashStyle == eUZeroLineDashStyle && cacheRelativeDelta[idx].DisplayGlobalZeroLine == displayGlobalZeroLine && cacheRelativeDelta[idx].GlobalStartTime == globalStartTime && cacheRelativeDelta[idx].GlobalEndTime == globalEndTime && cacheRelativeDelta[idx].GlobalZeroLineColor == globalZeroLineColor && cacheRelativeDelta[idx].GlobalZeroLineWidth == globalZeroLineWidth && cacheRelativeDelta[idx].GlobalZeroLineAlpha == globalZeroLineAlpha && cacheRelativeDelta[idx].GlobalZeroLineDashStyle == globalZeroLineDashStyle && cacheRelativeDelta[idx].EqualsInput(input))
 						return cacheRelativeDelta[idx];
-			return CacheIndicator<RelativeIndicators.RelativeDelta>(new RelativeIndicators.RelativeDelta(){ BarColorDown = barColorDown, BarColorUp = barColorUp, ShadowColor = shadowColor, ShadowWidth = shadowWidth, WickColor = wickColor, WickWidth = wickWidth, MinSize = minSize, DaysToLoad = daysToLoad, ShowDivs = showDivs, HorizontalLineColor = horizontalLineColor, HorizontalLineWidth = horizontalLineWidth, HorizontalLineValue = horizontalLineValue, HorizontalLineAlphaPercent = horizontalLineAlphaPercent, ShowExtraLevels = showExtraLevels, ShowLine2500 = showLine2500, Line2500Color = line2500Color, Line2500Alpha = line2500Alpha, ShowLineN2500 = showLineN2500, LineN2500Color = lineN2500Color, LineN2500Width = lineN2500Width, LineN2500Alpha = lineN2500Alpha, ShowLine5000 = showLine5000, Line5000Color = line5000Color, Line5000Width = line5000Width, Line5000Alpha = line5000Alpha, ShowLineN5000 = showLineN5000, LineN5000Color = lineN5000Color, LineN5000Width = lineN5000Width, LineN5000Alpha = lineN5000Alpha, ShowLine10000 = showLine10000, Line10000Color = line10000Color, Line10000Width = line10000Width, Line10000Alpha = line10000Alpha, ShowLineN10000 = showLineN10000, LineN10000Color = lineN10000Color, LineN10000Width = lineN10000Width, LineN10000Alpha = lineN10000Alpha, LineLabelColor = lineLabelColor, LineLabelBackground = lineLabelBackground, ShowUSZeroLine = showUSZeroLine, USStartTime = uSStartTime, USZeroLineColor = uSZeroLineColor, USZeroLineWidth = uSZeroLineWidth, USZeroLineAlpha = uSZeroLineAlpha, USZeroLineDashStyle = uSZeroLineDashStyle }, input, ref cacheRelativeDelta);
+			return CacheIndicator<RelativeIndicators.RelativeDelta>(new RelativeIndicators.RelativeDelta(){ BarColorDown = barColorDown, BarColorUp = barColorUp, ShadowColor = shadowColor, ShadowWidth = shadowWidth, WickColor = wickColor, WickWidth = wickWidth, MinSize = minSize, DaysToLoad = daysToLoad, ShowDivs = showDivs, HorizontalLineColor = horizontalLineColor, HorizontalLineWidth = horizontalLineWidth, HorizontalLineValue = horizontalLineValue, HorizontalLineAlphaPercent = horizontalLineAlphaPercent, ShowExtraLevels = showExtraLevels, ShowLine2500 = showLine2500, Line2500Color = line2500Color, Line2500Alpha = line2500Alpha, ShowLineN2500 = showLineN2500, LineN2500Color = lineN2500Color, LineN2500Width = lineN2500Width, LineN2500Alpha = lineN2500Alpha, ShowLine5000 = showLine5000, Line5000Color = line5000Color, Line5000Width = line5000Width, Line5000Alpha = line5000Alpha, ShowLineN5000 = showLineN5000, LineN5000Color = lineN5000Color, LineN5000Width = lineN5000Width, LineN5000Alpha = lineN5000Alpha, ShowLine10000 = showLine10000, Line10000Color = line10000Color, Line10000Width = line10000Width, Line10000Alpha = line10000Alpha, ShowLineN10000 = showLineN10000, LineN10000Color = lineN10000Color, LineN10000Width = lineN10000Width, LineN10000Alpha = lineN10000Alpha, LineLabelColor = lineLabelColor, LineLabelBackground = lineLabelBackground, ShowUSZeroLine = showUSZeroLine, USStartTime = uSStartTime, USEndTime = uSEndTime, USZeroLineColor = uSZeroLineColor, USZeroLineWidth = uSZeroLineWidth, USZeroLineAlpha = uSZeroLineAlpha, USZeroLineDashStyle = uSZeroLineDashStyle, DisplayAsiaZeroLine = displayAsiaZeroLine, AsiaStartTime = asiaStartTime, AsiaEndTime = asiaEndTime, AsiaZeroLineColor = asiaZeroLineColor, AsiaZeroLineWidth = asiaZeroLineWidth, AsiaZeroLineAlpha = asiaZeroLineAlpha, AsiaZeroLineDashStyle = asiaZeroLineDashStyle, ShowEUZeroLine = showEUZeroLine, EUStartTime = eUStartTime, EUEndTime = eUEndTime, EUZeroLineColor = eUZeroLineColor, EUZeroLineWidth = eUZeroLineWidth, EUZeroLineAlpha = eUZeroLineAlpha, EUZeroLineDashStyle = eUZeroLineDashStyle, DisplayGlobalZeroLine = displayGlobalZeroLine, GlobalStartTime = globalStartTime, GlobalEndTime = globalEndTime, GlobalZeroLineColor = globalZeroLineColor, GlobalZeroLineWidth = globalZeroLineWidth, GlobalZeroLineAlpha = globalZeroLineAlpha, GlobalZeroLineDashStyle = globalZeroLineDashStyle }, input, ref cacheRelativeDelta);
 		}
 	}
 }
@@ -1015,14 +1454,14 @@ namespace NinjaTrader.NinjaScript.MarketAnalyzerColumns
 {
 	public partial class MarketAnalyzerColumn : MarketAnalyzerColumnBase
 	{
-		public Indicators.RelativeIndicators.RelativeDelta RelativeDelta(Brush barColorDown, Brush barColorUp, Brush shadowColor, int shadowWidth, Brush wickColor, int wickWidth, int minSize, int daysToLoad, bool showDivs, Brush horizontalLineColor, int horizontalLineWidth, double horizontalLineValue, int horizontalLineAlphaPercent, bool showExtraLevels, bool showLine2500, Brush line2500Color, int line2500Alpha, bool showLineN2500, Brush lineN2500Color, int lineN2500Width, int lineN2500Alpha, bool showLine5000, Brush line5000Color, int line5000Width, int line5000Alpha, bool showLineN5000, Brush lineN5000Color, int lineN5000Width, int lineN5000Alpha, bool showLine10000, Brush line10000Color, int line10000Width, int line10000Alpha, bool showLineN10000, Brush lineN10000Color, int lineN10000Width, int lineN10000Alpha, Brush lineLabelColor, Brush lineLabelBackground, bool showUSZeroLine, string uSStartTime, Brush uSZeroLineColor, int uSZeroLineWidth, int uSZeroLineAlpha, DashStyleHelper uSZeroLineDashStyle)
+		public Indicators.RelativeIndicators.RelativeDelta RelativeDelta(Brush barColorDown, Brush barColorUp, Brush shadowColor, int shadowWidth, Brush wickColor, int wickWidth, int minSize, int daysToLoad, bool showDivs, Brush horizontalLineColor, int horizontalLineWidth, double horizontalLineValue, int horizontalLineAlphaPercent, bool showExtraLevels, bool showLine2500, Brush line2500Color, int line2500Alpha, bool showLineN2500, Brush lineN2500Color, int lineN2500Width, int lineN2500Alpha, bool showLine5000, Brush line5000Color, int line5000Width, int line5000Alpha, bool showLineN5000, Brush lineN5000Color, int lineN5000Width, int lineN5000Alpha, bool showLine10000, Brush line10000Color, int line10000Width, int line10000Alpha, bool showLineN10000, Brush lineN10000Color, int lineN10000Width, int lineN10000Alpha, Brush lineLabelColor, Brush lineLabelBackground, bool showUSZeroLine, string uSStartTime, string uSEndTime, Brush uSZeroLineColor, int uSZeroLineWidth, int uSZeroLineAlpha, DashStyleHelper uSZeroLineDashStyle, bool displayAsiaZeroLine, string asiaStartTime, string asiaEndTime, Brush asiaZeroLineColor, int asiaZeroLineWidth, int asiaZeroLineAlpha, DashStyleHelper asiaZeroLineDashStyle, bool showEUZeroLine, string eUStartTime, string eUEndTime, Brush eUZeroLineColor, int eUZeroLineWidth, int eUZeroLineAlpha, DashStyleHelper eUZeroLineDashStyle, bool displayGlobalZeroLine, string globalStartTime, string globalEndTime, Brush globalZeroLineColor, int globalZeroLineWidth, int globalZeroLineAlpha, DashStyleHelper globalZeroLineDashStyle)
 		{
-			return indicator.RelativeDelta(Input, barColorDown, barColorUp, shadowColor, shadowWidth, wickColor, wickWidth, minSize, daysToLoad, showDivs, horizontalLineColor, horizontalLineWidth, horizontalLineValue, horizontalLineAlphaPercent, showExtraLevels, showLine2500, line2500Color, line2500Alpha, showLineN2500, lineN2500Color, lineN2500Width, lineN2500Alpha, showLine5000, line5000Color, line5000Width, line5000Alpha, showLineN5000, lineN5000Color, lineN5000Width, lineN5000Alpha, showLine10000, line10000Color, line10000Width, line10000Alpha, showLineN10000, lineN10000Color, lineN10000Width, lineN10000Alpha, lineLabelColor, lineLabelBackground, showUSZeroLine, uSStartTime, uSZeroLineColor, uSZeroLineWidth, uSZeroLineAlpha, uSZeroLineDashStyle);
+			return indicator.RelativeDelta(Input, barColorDown, barColorUp, shadowColor, shadowWidth, wickColor, wickWidth, minSize, daysToLoad, showDivs, horizontalLineColor, horizontalLineWidth, horizontalLineValue, horizontalLineAlphaPercent, showExtraLevels, showLine2500, line2500Color, line2500Alpha, showLineN2500, lineN2500Color, lineN2500Width, lineN2500Alpha, showLine5000, line5000Color, line5000Width, line5000Alpha, showLineN5000, lineN5000Color, lineN5000Width, lineN5000Alpha, showLine10000, line10000Color, line10000Width, line10000Alpha, showLineN10000, lineN10000Color, lineN10000Width, lineN10000Alpha, lineLabelColor, lineLabelBackground, showUSZeroLine, uSStartTime, uSEndTime, uSZeroLineColor, uSZeroLineWidth, uSZeroLineAlpha, uSZeroLineDashStyle, displayAsiaZeroLine, asiaStartTime, asiaEndTime, asiaZeroLineColor, asiaZeroLineWidth, asiaZeroLineAlpha, asiaZeroLineDashStyle, showEUZeroLine, eUStartTime, eUEndTime, eUZeroLineColor, eUZeroLineWidth, eUZeroLineAlpha, eUZeroLineDashStyle, displayGlobalZeroLine, globalStartTime, globalEndTime, globalZeroLineColor, globalZeroLineWidth, globalZeroLineAlpha, globalZeroLineDashStyle);
 		}
 
-		public Indicators.RelativeIndicators.RelativeDelta RelativeDelta(ISeries<double> input , Brush barColorDown, Brush barColorUp, Brush shadowColor, int shadowWidth, Brush wickColor, int wickWidth, int minSize, int daysToLoad, bool showDivs, Brush horizontalLineColor, int horizontalLineWidth, double horizontalLineValue, int horizontalLineAlphaPercent, bool showExtraLevels, bool showLine2500, Brush line2500Color, int line2500Alpha, bool showLineN2500, Brush lineN2500Color, int lineN2500Width, int lineN2500Alpha, bool showLine5000, Brush line5000Color, int line5000Width, int line5000Alpha, bool showLineN5000, Brush lineN5000Color, int lineN5000Width, int lineN5000Alpha, bool showLine10000, Brush line10000Color, int line10000Width, int line10000Alpha, bool showLineN10000, Brush lineN10000Color, int lineN10000Width, int lineN10000Alpha, Brush lineLabelColor, Brush lineLabelBackground, bool showUSZeroLine, string uSStartTime, Brush uSZeroLineColor, int uSZeroLineWidth, int uSZeroLineAlpha, DashStyleHelper uSZeroLineDashStyle)
+		public Indicators.RelativeIndicators.RelativeDelta RelativeDelta(ISeries<double> input , Brush barColorDown, Brush barColorUp, Brush shadowColor, int shadowWidth, Brush wickColor, int wickWidth, int minSize, int daysToLoad, bool showDivs, Brush horizontalLineColor, int horizontalLineWidth, double horizontalLineValue, int horizontalLineAlphaPercent, bool showExtraLevels, bool showLine2500, Brush line2500Color, int line2500Alpha, bool showLineN2500, Brush lineN2500Color, int lineN2500Width, int lineN2500Alpha, bool showLine5000, Brush line5000Color, int line5000Width, int line5000Alpha, bool showLineN5000, Brush lineN5000Color, int lineN5000Width, int lineN5000Alpha, bool showLine10000, Brush line10000Color, int line10000Width, int line10000Alpha, bool showLineN10000, Brush lineN10000Color, int lineN10000Width, int lineN10000Alpha, Brush lineLabelColor, Brush lineLabelBackground, bool showUSZeroLine, string uSStartTime, string uSEndTime, Brush uSZeroLineColor, int uSZeroLineWidth, int uSZeroLineAlpha, DashStyleHelper uSZeroLineDashStyle, bool displayAsiaZeroLine, string asiaStartTime, string asiaEndTime, Brush asiaZeroLineColor, int asiaZeroLineWidth, int asiaZeroLineAlpha, DashStyleHelper asiaZeroLineDashStyle, bool showEUZeroLine, string eUStartTime, string eUEndTime, Brush eUZeroLineColor, int eUZeroLineWidth, int eUZeroLineAlpha, DashStyleHelper eUZeroLineDashStyle, bool displayGlobalZeroLine, string globalStartTime, string globalEndTime, Brush globalZeroLineColor, int globalZeroLineWidth, int globalZeroLineAlpha, DashStyleHelper globalZeroLineDashStyle)
 		{
-			return indicator.RelativeDelta(input, barColorDown, barColorUp, shadowColor, shadowWidth, wickColor, wickWidth, minSize, daysToLoad, showDivs, horizontalLineColor, horizontalLineWidth, horizontalLineValue, horizontalLineAlphaPercent, showExtraLevels, showLine2500, line2500Color, line2500Alpha, showLineN2500, lineN2500Color, lineN2500Width, lineN2500Alpha, showLine5000, line5000Color, line5000Width, line5000Alpha, showLineN5000, lineN5000Color, lineN5000Width, lineN5000Alpha, showLine10000, line10000Color, line10000Width, line10000Alpha, showLineN10000, lineN10000Color, lineN10000Width, lineN10000Alpha, lineLabelColor, lineLabelBackground, showUSZeroLine, uSStartTime, uSZeroLineColor, uSZeroLineWidth, uSZeroLineAlpha, uSZeroLineDashStyle);
+			return indicator.RelativeDelta(input, barColorDown, barColorUp, shadowColor, shadowWidth, wickColor, wickWidth, minSize, daysToLoad, showDivs, horizontalLineColor, horizontalLineWidth, horizontalLineValue, horizontalLineAlphaPercent, showExtraLevels, showLine2500, line2500Color, line2500Alpha, showLineN2500, lineN2500Color, lineN2500Width, lineN2500Alpha, showLine5000, line5000Color, line5000Width, line5000Alpha, showLineN5000, lineN5000Color, lineN5000Width, lineN5000Alpha, showLine10000, line10000Color, line10000Width, line10000Alpha, showLineN10000, lineN10000Color, lineN10000Width, lineN10000Alpha, lineLabelColor, lineLabelBackground, showUSZeroLine, uSStartTime, uSEndTime, uSZeroLineColor, uSZeroLineWidth, uSZeroLineAlpha, uSZeroLineDashStyle, displayAsiaZeroLine, asiaStartTime, asiaEndTime, asiaZeroLineColor, asiaZeroLineWidth, asiaZeroLineAlpha, asiaZeroLineDashStyle, showEUZeroLine, eUStartTime, eUEndTime, eUZeroLineColor, eUZeroLineWidth, eUZeroLineAlpha, eUZeroLineDashStyle, displayGlobalZeroLine, globalStartTime, globalEndTime, globalZeroLineColor, globalZeroLineWidth, globalZeroLineAlpha, globalZeroLineDashStyle);
 		}
 	}
 }
@@ -1031,14 +1470,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public partial class Strategy : NinjaTrader.Gui.NinjaScript.StrategyRenderBase
 	{
-		public Indicators.RelativeIndicators.RelativeDelta RelativeDelta(Brush barColorDown, Brush barColorUp, Brush shadowColor, int shadowWidth, Brush wickColor, int wickWidth, int minSize, int daysToLoad, bool showDivs, Brush horizontalLineColor, int horizontalLineWidth, double horizontalLineValue, int horizontalLineAlphaPercent, bool showExtraLevels, bool showLine2500, Brush line2500Color, int line2500Alpha, bool showLineN2500, Brush lineN2500Color, int lineN2500Width, int lineN2500Alpha, bool showLine5000, Brush line5000Color, int line5000Width, int line5000Alpha, bool showLineN5000, Brush lineN5000Color, int lineN5000Width, int lineN5000Alpha, bool showLine10000, Brush line10000Color, int line10000Width, int line10000Alpha, bool showLineN10000, Brush lineN10000Color, int lineN10000Width, int lineN10000Alpha, Brush lineLabelColor, Brush lineLabelBackground, bool showUSZeroLine, string uSStartTime, Brush uSZeroLineColor, int uSZeroLineWidth, int uSZeroLineAlpha, DashStyleHelper uSZeroLineDashStyle)
+		public Indicators.RelativeIndicators.RelativeDelta RelativeDelta(Brush barColorDown, Brush barColorUp, Brush shadowColor, int shadowWidth, Brush wickColor, int wickWidth, int minSize, int daysToLoad, bool showDivs, Brush horizontalLineColor, int horizontalLineWidth, double horizontalLineValue, int horizontalLineAlphaPercent, bool showExtraLevels, bool showLine2500, Brush line2500Color, int line2500Alpha, bool showLineN2500, Brush lineN2500Color, int lineN2500Width, int lineN2500Alpha, bool showLine5000, Brush line5000Color, int line5000Width, int line5000Alpha, bool showLineN5000, Brush lineN5000Color, int lineN5000Width, int lineN5000Alpha, bool showLine10000, Brush line10000Color, int line10000Width, int line10000Alpha, bool showLineN10000, Brush lineN10000Color, int lineN10000Width, int lineN10000Alpha, Brush lineLabelColor, Brush lineLabelBackground, bool showUSZeroLine, string uSStartTime, string uSEndTime, Brush uSZeroLineColor, int uSZeroLineWidth, int uSZeroLineAlpha, DashStyleHelper uSZeroLineDashStyle, bool displayAsiaZeroLine, string asiaStartTime, string asiaEndTime, Brush asiaZeroLineColor, int asiaZeroLineWidth, int asiaZeroLineAlpha, DashStyleHelper asiaZeroLineDashStyle, bool showEUZeroLine, string eUStartTime, string eUEndTime, Brush eUZeroLineColor, int eUZeroLineWidth, int eUZeroLineAlpha, DashStyleHelper eUZeroLineDashStyle, bool displayGlobalZeroLine, string globalStartTime, string globalEndTime, Brush globalZeroLineColor, int globalZeroLineWidth, int globalZeroLineAlpha, DashStyleHelper globalZeroLineDashStyle)
 		{
-			return indicator.RelativeDelta(Input, barColorDown, barColorUp, shadowColor, shadowWidth, wickColor, wickWidth, minSize, daysToLoad, showDivs, horizontalLineColor, horizontalLineWidth, horizontalLineValue, horizontalLineAlphaPercent, showExtraLevels, showLine2500, line2500Color, line2500Alpha, showLineN2500, lineN2500Color, lineN2500Width, lineN2500Alpha, showLine5000, line5000Color, line5000Width, line5000Alpha, showLineN5000, lineN5000Color, lineN5000Width, lineN5000Alpha, showLine10000, line10000Color, line10000Width, line10000Alpha, showLineN10000, lineN10000Color, lineN10000Width, lineN10000Alpha, lineLabelColor, lineLabelBackground, showUSZeroLine, uSStartTime, uSZeroLineColor, uSZeroLineWidth, uSZeroLineAlpha, uSZeroLineDashStyle);
+			return indicator.RelativeDelta(Input, barColorDown, barColorUp, shadowColor, shadowWidth, wickColor, wickWidth, minSize, daysToLoad, showDivs, horizontalLineColor, horizontalLineWidth, horizontalLineValue, horizontalLineAlphaPercent, showExtraLevels, showLine2500, line2500Color, line2500Alpha, showLineN2500, lineN2500Color, lineN2500Width, lineN2500Alpha, showLine5000, line5000Color, line5000Width, line5000Alpha, showLineN5000, lineN5000Color, lineN5000Width, lineN5000Alpha, showLine10000, line10000Color, line10000Width, line10000Alpha, showLineN10000, lineN10000Color, lineN10000Width, lineN10000Alpha, lineLabelColor, lineLabelBackground, showUSZeroLine, uSStartTime, uSEndTime, uSZeroLineColor, uSZeroLineWidth, uSZeroLineAlpha, uSZeroLineDashStyle, displayAsiaZeroLine, asiaStartTime, asiaEndTime, asiaZeroLineColor, asiaZeroLineWidth, asiaZeroLineAlpha, asiaZeroLineDashStyle, showEUZeroLine, eUStartTime, eUEndTime, eUZeroLineColor, eUZeroLineWidth, eUZeroLineAlpha, eUZeroLineDashStyle, displayGlobalZeroLine, globalStartTime, globalEndTime, globalZeroLineColor, globalZeroLineWidth, globalZeroLineAlpha, globalZeroLineDashStyle);
 		}
 
-		public Indicators.RelativeIndicators.RelativeDelta RelativeDelta(ISeries<double> input , Brush barColorDown, Brush barColorUp, Brush shadowColor, int shadowWidth, Brush wickColor, int wickWidth, int minSize, int daysToLoad, bool showDivs, Brush horizontalLineColor, int horizontalLineWidth, double horizontalLineValue, int horizontalLineAlphaPercent, bool showExtraLevels, bool showLine2500, Brush line2500Color, int line2500Alpha, bool showLineN2500, Brush lineN2500Color, int lineN2500Width, int lineN2500Alpha, bool showLine5000, Brush line5000Color, int line5000Width, int line5000Alpha, bool showLineN5000, Brush lineN5000Color, int lineN5000Width, int lineN5000Alpha, bool showLine10000, Brush line10000Color, int line10000Width, int line10000Alpha, bool showLineN10000, Brush lineN10000Color, int lineN10000Width, int lineN10000Alpha, Brush lineLabelColor, Brush lineLabelBackground, bool showUSZeroLine, string uSStartTime, Brush uSZeroLineColor, int uSZeroLineWidth, int uSZeroLineAlpha, DashStyleHelper uSZeroLineDashStyle)
+		public Indicators.RelativeIndicators.RelativeDelta RelativeDelta(ISeries<double> input , Brush barColorDown, Brush barColorUp, Brush shadowColor, int shadowWidth, Brush wickColor, int wickWidth, int minSize, int daysToLoad, bool showDivs, Brush horizontalLineColor, int horizontalLineWidth, double horizontalLineValue, int horizontalLineAlphaPercent, bool showExtraLevels, bool showLine2500, Brush line2500Color, int line2500Alpha, bool showLineN2500, Brush lineN2500Color, int lineN2500Width, int lineN2500Alpha, bool showLine5000, Brush line5000Color, int line5000Width, int line5000Alpha, bool showLineN5000, Brush lineN5000Color, int lineN5000Width, int lineN5000Alpha, bool showLine10000, Brush line10000Color, int line10000Width, int line10000Alpha, bool showLineN10000, Brush lineN10000Color, int lineN10000Width, int lineN10000Alpha, Brush lineLabelColor, Brush lineLabelBackground, bool showUSZeroLine, string uSStartTime, string uSEndTime, Brush uSZeroLineColor, int uSZeroLineWidth, int uSZeroLineAlpha, DashStyleHelper uSZeroLineDashStyle, bool displayAsiaZeroLine, string asiaStartTime, string asiaEndTime, Brush asiaZeroLineColor, int asiaZeroLineWidth, int asiaZeroLineAlpha, DashStyleHelper asiaZeroLineDashStyle, bool showEUZeroLine, string eUStartTime, string eUEndTime, Brush eUZeroLineColor, int eUZeroLineWidth, int eUZeroLineAlpha, DashStyleHelper eUZeroLineDashStyle, bool displayGlobalZeroLine, string globalStartTime, string globalEndTime, Brush globalZeroLineColor, int globalZeroLineWidth, int globalZeroLineAlpha, DashStyleHelper globalZeroLineDashStyle)
 		{
-			return indicator.RelativeDelta(input, barColorDown, barColorUp, shadowColor, shadowWidth, wickColor, wickWidth, minSize, daysToLoad, showDivs, horizontalLineColor, horizontalLineWidth, horizontalLineValue, horizontalLineAlphaPercent, showExtraLevels, showLine2500, line2500Color, line2500Alpha, showLineN2500, lineN2500Color, lineN2500Width, lineN2500Alpha, showLine5000, line5000Color, line5000Width, line5000Alpha, showLineN5000, lineN5000Color, lineN5000Width, lineN5000Alpha, showLine10000, line10000Color, line10000Width, line10000Alpha, showLineN10000, lineN10000Color, lineN10000Width, lineN10000Alpha, lineLabelColor, lineLabelBackground, showUSZeroLine, uSStartTime, uSZeroLineColor, uSZeroLineWidth, uSZeroLineAlpha, uSZeroLineDashStyle);
+			return indicator.RelativeDelta(input, barColorDown, barColorUp, shadowColor, shadowWidth, wickColor, wickWidth, minSize, daysToLoad, showDivs, horizontalLineColor, horizontalLineWidth, horizontalLineValue, horizontalLineAlphaPercent, showExtraLevels, showLine2500, line2500Color, line2500Alpha, showLineN2500, lineN2500Color, lineN2500Width, lineN2500Alpha, showLine5000, line5000Color, line5000Width, line5000Alpha, showLineN5000, lineN5000Color, lineN5000Width, lineN5000Alpha, showLine10000, line10000Color, line10000Width, line10000Alpha, showLineN10000, lineN10000Color, lineN10000Width, lineN10000Alpha, lineLabelColor, lineLabelBackground, showUSZeroLine, uSStartTime, uSEndTime, uSZeroLineColor, uSZeroLineWidth, uSZeroLineAlpha, uSZeroLineDashStyle, displayAsiaZeroLine, asiaStartTime, asiaEndTime, asiaZeroLineColor, asiaZeroLineWidth, asiaZeroLineAlpha, asiaZeroLineDashStyle, showEUZeroLine, eUStartTime, eUEndTime, eUZeroLineColor, eUZeroLineWidth, eUZeroLineAlpha, eUZeroLineDashStyle, displayGlobalZeroLine, globalStartTime, globalEndTime, globalZeroLineColor, globalZeroLineWidth, globalZeroLineAlpha, globalZeroLineDashStyle);
 		}
 	}
 }

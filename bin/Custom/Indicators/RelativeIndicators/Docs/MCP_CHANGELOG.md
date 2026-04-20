@@ -7,6 +7,76 @@ Arquitectura de tres procesos:
 - `RelativeObserver.cs` — AddOn NinjaScript con HttpListener en `localhost:7891`
 - `RelativeNewsSquawk_Server/` — servidor Flask existente (no modificado en esta fase)
 
+## [0.3.0] — 2026-04-20
+
+Integración metodología NADRO + instrumentación de 7 indicadores clave + primera
+tool compuesta. Core de trading observability completo.
+
+### Instrumentación de indicadores (RLog + RelativeIndicatorRegistry)
+- **`RelativeVwap.cs`**: publica close, vwapH/L, deltas por sesión
+  (Global/Asia/Europe/USA), trend_mode, bearish, signals sig2H/sig2L.
+- **5 forks VWAP por timeframe** (Annual/Quarterly/Monthly/Weekly/Daily):
+  publican vwap, dvah_sd1, dval_sd1, dvah_sd3, dval_sd3, active_zones.
+- **`RelativeVolumeProfile.cs`**: POC, VAH, VAL, poc_volume, level_count,
+  total_profiles, profile_type, session_mode.
+- **`RelativeDelta.cs`** (Order Flow — NADRO "O"): cumulative_delta, bar_delta,
+  4 anchors de sesión US/EU/Asia/Global + estado activo.
+- **`RelativeVwapLevels.cs`** (NADRO "N" narrativa consolidada): total_levels,
+  active_confluences, armed_confluences, breached_confluences.
+
+### Fixes & Lessons Learned
+- Patrón `typeof(Indicator).Name` para identificador de clase (evita quirks
+  runtime donde `Name` vacía → key vacía en Registry).
+- `CaptureDelta` default `true` en RelativeVwap (para que los 4 deltas se
+  calculen automáticamente).
+- `RelativeVolumeProfile.IsSuspendedWhileInactive = false` (sin esto no publica
+  cuando el chart no está activo).
+- Publish en cada OnBarUpdate Realtime (sin gate `IsFirstTickOfBar`) — el gate
+  solo limita el RLog al buffer, no el Registry. Evita holes durante charts de
+  TF alto con `Calculate.OnPriceChange`.
+- Fallback `GetType().Name` en `RelativeLog.cs` cuando `ns.Name` vacío.
+
+### Nueva tool MCP compuesta: `nadro_snapshot(instrument)`
+- Aplica acrónimo **N-A-D-R-O** en una sola llamada cruzando los 9 indicadores
+  + bars del AddOn.
+- Output estructurado:
+  - **N** (Narrativa): bias macro/micro + confluence/dissonance entre TFs.
+  - **A** (Aceptación): acceptance_distance = 50% del ritmo.
+  - **D** (Distribución): régimen rotacional vs imbalance + táctica sugerida
+    (fading vs IPB).
+  - **R** (Ritmo): rotaciones dinámicas de las últimas N barras.
+  - **O** (Order Flow): delta strength, dirección, sessions, divergence hints.
+  - **Líneas en la arena**: top 12 ordenadas por proximidad.
+  - **Confluences**: clusters con 2+ fuentes independientes.
+  - **Hypos**: 3 escenarios if-then.
+  - **Setup Quality A+/B/C** con score y razones.
+
+### Regla de Segunda Gesta (NADRO 4.0)
+- `_collapse_segunda_gesta()` — cuando LTWVs de TFs adyacentes coinciden
+  (ej: D-DVAH = W-DVAH durante primer día de semana), el TF mayor se oculta
+  y solo se muestra el más granular con `nadro_note` explicativa.
+- Tolerance default 1 punto (configurable). Evita inflar confluencias
+  artificialmente durante períodos jóvenes.
+- No afecta fuentes independientes (TPO vs VWAP seguirán como confluencia
+  real si coinciden).
+
+### Memoria persistente
+- `memory/nadro_metodologia.md` — resumen operativo del acrónimo, 10 leyes LMD,
+  LTWVs, Market Profile, Ejecución 3.0, The Work, Order Flow. Claude aplica
+  NADRO cuando analiza mercado en este repo.
+- `memory/relative_mcp_server.md` actualizada con lecciones API NT8.
+
+### Docs/Nadro/
+- 5 guías maestras de la metodología (del NotebookLM del usuario):
+  - 02 Market Framework
+  - 03 Ejecución 3.0
+  - 04 Long-Term VWAPs + Narrativa Avanzada (NADRO 4.0)
+  - 05 The Work (NADRO 5.0)
+  - 06 Order Flow
+
+### Tools totales: 32
+(previo: 31) + `nadro_snapshot`.
+
 ## [0.2.0] — 2026-04-20
 
 Añade capa de live-data + trading observability + logging estructurado.

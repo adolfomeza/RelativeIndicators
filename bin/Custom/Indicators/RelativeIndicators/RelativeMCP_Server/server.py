@@ -20,6 +20,7 @@ from .paths import (
 )
 from .tools import exports as trade_exports
 from .tools import logs as nt_logs
+from .tools import nadro as nadro_tool
 from .tools import observer
 from .tools import vwap_levels as vwap
 
@@ -348,6 +349,33 @@ def get_print_output(
 def clear_print_output() -> dict:
     """Vacía el buffer de RelativeLog (no resetea total_count monotónico)."""
     return observer.clear_print_output()
+
+
+# ---------------------------------------------------------------------------
+# NADRO — tools compuestas que aplican la metodología del usuario
+# ---------------------------------------------------------------------------
+
+
+@mcp.tool
+def nadro_snapshot(instrument: str, tf_ritmo: str = "1m", n_bars: int = 20) -> dict:
+    """Brief NADRO completo aplicado al estado vivo del mercado.
+
+    Aplica el acrónimo N-A-D-R-O (Narrativa, Aceptación, DVA, Ritmo, Order Flow)
+    cruzando los 9 indicadores publicados en el Registry + bars del AddOn.
+
+    Devuelve:
+    - ``narrativa``: bias macro/micro, confluence vs dissonance, resumen textual
+    - ``distribucion``: régimen (rotacional / imbalance) y táctica sugerida
+    - ``ritmo``: rotaciones dinámicas de las últimas ``n_bars`` del timeframe ``tf_ritmo``
+    - ``order_flow``: cumulative delta + clasificación + divergencia
+    - ``lineas_arena``: top 12 niveles ordenados por proximidad al precio
+    - ``confluences``: zonas con 2+ niveles agrupados (tolerancia 8 ticks)
+    - ``hypos``: 3 escenarios if-then para pre-market
+    - ``setup_candidato``: calidad A+/B/C con justificación
+
+    Requiere que los indicadores estén publicando (ver ``list_indicator_states``).
+    """
+    return nadro_tool.nadro_snapshot(instrument=instrument, tf_ritmo=tf_ritmo, n_bars=n_bars)
 
 
 @mcp.tool

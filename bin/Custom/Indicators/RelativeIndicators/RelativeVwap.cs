@@ -1,4 +1,4 @@
-﻿#region Using declarations
+#region Using declarations
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,6 +24,7 @@ using System.IO;     // v1.0.26: File logging
 using NinjaTrader.NinjaScript.DrawingTools;
 using System.Globalization;
 using NinjaTrader.NinjaScript.Indicators.RelativeIndicators; // Fix for Generated Code Visibility
+using NinjaTrader.NinjaScript.AddOns; // v3.0.3: RelativeMCP — this.RLog() + RelativeIndicatorRegistry
 #endregion
 
 namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
@@ -38,16 +39,42 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     public partial class RelativeVwap : Indicator
     {
         // ========== VERSION ==========
-        private const string VERSION = "3.2.0";
+        private const string VERSION = "3.3.0";
         // ==============================
 
         // v3.1.2: Static shared data for companion indicators (RelativeVwapHealth)
+        // v3.3.7: Indexado por instrumento para soportar múltiples charts simultáneos
         private static volatile RelativeVwap _lastInstance;
         public static RelativeVwap LastInstance { get { return _lastInstance; } }
-        public static double SharedHighHealth;
-        public static double SharedLowHealth;
-        public static double SharedCurrentHighVWAP;
-        public static double SharedCurrentLowVWAP;
+
+        // Datos compartidos por instrumento (key = Instrument.FullName)
+        private static readonly Dictionary<string, double>   SharedHighHealthMap   = new Dictionary<string, double>();
+        private static readonly Dictionary<string, double>   SharedLowHealthMap    = new Dictionary<string, double>();
+        private static readonly Dictionary<string, double>   SharedHighVWAPMap     = new Dictionary<string, double>();
+        private static readonly Dictionary<string, double>   SharedLowVWAPMap      = new Dictionary<string, double>();
+        private static readonly Dictionary<string, int>      SharedHighAnchorMap   = new Dictionary<string, int>();
+        private static readonly Dictionary<string, int>      SharedLowAnchorMap    = new Dictionary<string, int>();
+
+        // v3.3.7: Arrays de scores por barra, por instrumento
+        private static readonly Dictionary<string, double[]> HistHealthHighMap     = new Dictionary<string, double[]>();
+        private static readonly Dictionary<string, double[]> HistHealthLowMap      = new Dictionary<string, double[]>();
+        // v3.3.7: Array de decisiones de pintura (1=demand stronger, -1=supply stronger, 0=no pintado)
+        private static readonly Dictionary<string, sbyte[]>  HistCandleColorMap    = new Dictionary<string, sbyte[]>();
+        private const int HIST_HEALTH_SIZE = 100000;
+
+        // Helpers estáticos para que RelativeVwapHealth lea por instrumento
+        public static double GetSharedHighHealth(string key) { double v; return SharedHighHealthMap.TryGetValue(key, out v) ? v : 0; }
+        public static double GetSharedLowHealth(string key)  { double v; return SharedLowHealthMap.TryGetValue(key, out v) ? v : 0; }
+        public static double GetSharedHighVWAP(string key)   { double v; return SharedHighVWAPMap.TryGetValue(key, out v) ? v : 0; }
+        public static double GetSharedLowVWAP(string key)    { double v; return SharedLowVWAPMap.TryGetValue(key, out v) ? v : 0; }
+        public static int    GetSharedHighAnchor(string key) { int v;    return SharedHighAnchorMap.TryGetValue(key, out v) ? v : -1; }
+        public static int    GetSharedLowAnchor(string key)  { int v;    return SharedLowAnchorMap.TryGetValue(key, out v) ? v : -1; }
+        public static double[] GetHistHealthHigh(string key) { double[] v; return HistHealthHighMap.TryGetValue(key, out v) ? v : null; }
+        public static double[] GetHistHealthLow(string key)  { double[] v; return HistHealthLowMap.TryGetValue(key, out v) ? v : null; }
+        public static sbyte[]  GetHistCandleColor(string key){ sbyte[] v;  return HistCandleColorMap.TryGetValue(key, out v) ? v : null; }
+
+        // Key del instrumento actual (set en DataLoaded)
+        private string _instrumentKey;
 
         private SessionIterator sessionIterator;
         
@@ -99,11 +126,12 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         private bool _internalHighJustReset;  // v1.0.49: Skip accumulation on internal VWAP creation bar
         private bool _internalLowJustReset;   // v1.0.49: Skip accumulation on internal VWAP creation bar
         private DateTime _lastTradingDay = DateTime.MinValue;  // v1.0.53: Track day changes for internal VWAP reset
-        private int _currentSessionStartBarIdx = 0;  // v3.0.3: Bar where current session started (for PreviousVWAPColor)
+        // v3.3.1: _currentSessionStartBarIdx eliminado — se escribía pero nunca se leía
         private bool highSignalFired;
         private bool lowSignalFired;
         private double currentHighVWAP;
         private double currentLowVWAP;
+        // v3.3.7: _prevBarHighVwap/_prevBarLowVwap eliminados — ya no se usan con tracking continuo
         private bool hasHighVWAP;
         private bool hasLowVWAP;
         private bool highSignal2Fired; // V_SIGNAL_2 One-Shot Flag
@@ -295,6 +323,43 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         // V_NORM: ATR-based Normalization for consistent spacing across instruments
         private NinjaTrader.NinjaScript.Indicators.ATR atr;
 
+        // v3.3.2: Demand/Supply candle painting
+        private bool _prevDemandStronger = false;
+        private bool _demandSupplyInitialized = false;
+
+        // v3.3.8: Health cross — pendiente estable para filtrar cruces falsos
+        private const int SLOPE_LOOKBACK = 15;           // barras para medir pendiente
+        private const int DECLINE_LOOKBACK = 5;          // barras para confirmar declive del perdedor
+        private double[] _recentDemandScores;             // buffer circular de scores Demand
+        private double[] _recentSupplyScores;             // buffer circular de scores Supply
+        private int _scoreBufIdx = 0;                     // índice actual en el buffer
+        private bool _scoreBufFull = false;               // buffer ya tiene SLOPE_LOOKBACK muestras
+        private bool _pendingFlip = false;                // cruce detectado pero esperando confirmación
+        private bool _pendingFlipDirection = false;       // true = demand ganó (pending long), false = supply ganó
+        private bool _pendingFlipStable = false;          // calidad del cruce pendiente
+        private int  _confirmBarsCount = 0;               // v3.3.10: barras transcurridas desde cruce detectado
+        private bool _confirmBarsPending = false;          // v3.3.10: esperando confirmación temporal
+        private bool _confirmBarsDirection = false;        // v3.3.10: dirección del cruce en espera
+        private DateTime _sessionResetTime = DateTime.MinValue; // v3.3.9: hora del último reset de sesión
+
+        // v3.3.8: Health cross export — tracking MFE/MAE post-cruce
+        private bool _crossTradeActive = false;
+        private bool _crossTradeIsLong = false;           // true = demand won (long), false = supply won (short)
+        private bool _crossTradeStable = false;           // true = crecimiento estable, false = zigzag
+        private DateTime _crossEntryTime;
+        private double _crossEntryPrice = 0;
+        private double _crossEntryDemand = 0;
+        private double _crossEntrySupply = 0;
+        private double _crossEntryDeltaGlobal = 0;
+        private double _crossEntryDeltaSession = 0;
+        private double _crossEntryATR = 0;
+        private double _crossMFE = 0;                     // máximo favorable post-cruce (ticks)
+        private double _crossMAE = 0;                     // máximo adverso post-cruce (ticks)
+        private int _crossEntryBar = 0;
+        private int _crossID = 0;
+        private System.Collections.Generic.List<CrossExportRecord> _crossExportRecords
+            = new System.Collections.Generic.List<CrossExportRecord>();
+
         // v2.2.4: Session Delta calculation (internal, no external indicator needed)
         private double _lastBarDelta;        // Delta of current bar (Close-Open)*Volume
         private double _deltaGlobal;         // Full day: Asia start (6pm) to USA end (4pm)
@@ -359,59 +424,26 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             // v2.2.7: TrendOnly mode - force trend based on delta direction (ignore threshold)
             if (TradingMode == TradingModeType.TrendOnly)
             {
-                // Determine direction from delta signs (even if below threshold)
                 if (_deltaGlobal < 0 && sessionDelta < 0)
-                {
                     isBearish = true;
-                    if (ShowDebugLogs)
-                        Print(string.Format("[TREND_MODE] Bar:{0} | FORCED TREND (BEARISH) | TradingMode=TrendOnly | DeltaGlobal:{1:F0} | SessionDelta:{2:F0}",
-                            CurrentBar, _deltaGlobal, sessionDelta));
-                    return true;
-                }
                 else if (_deltaGlobal > 0 && sessionDelta > 0)
-                {
                     isBearish = false;
-                    if (ShowDebugLogs)
-                        Print(string.Format("[TREND_MODE] Bar:{0} | FORCED TREND (BULLISH) | TradingMode=TrendOnly | DeltaGlobal:{1:F0} | SessionDelta:{2:F0}",
-                            CurrentBar, _deltaGlobal, sessionDelta));
-                    return true;
-                }
                 else
-                {
-                    // Deltas in opposite directions - no clear trend, still return true but use global delta for direction
-                    isBearish = _deltaGlobal < 0;
-                    if (ShowDebugLogs)
-                        Print(string.Format("[TREND_MODE] Bar:{0} | FORCED TREND (MIXED) | TradingMode=TrendOnly | Direction:{1} | DeltaGlobal:{2:F0} | SessionDelta:{3:F0}",
-                            CurrentBar, isBearish ? "BEARISH" : "BULLISH", _deltaGlobal, sessionDelta));
-                    return true;
-                }
+                    isBearish = _deltaGlobal < 0; // Mixed: use global delta
+                return true;
             }
 
             // Auto mode: Original threshold-based detection
-            // BEARISH trend: Both deltas negative and exceed threshold
             if (_deltaGlobal < -TrendDeltaThreshold && sessionDelta < -TrendDeltaThreshold)
             {
                 isBearish = true;
-                if (ShowDebugLogs)
-                    Print(string.Format("[TREND_MODE] Bar:{0} | BEARISH DETECTED | DeltaGlobal:{1:F0} < -{2} | SessionDelta:{3:F0} < -{2}",
-                        CurrentBar, _deltaGlobal, TrendDeltaThreshold, sessionDelta));
                 return true;
             }
-
-            // BULLISH trend: Both deltas positive and exceed threshold
             if (_deltaGlobal > TrendDeltaThreshold && sessionDelta > TrendDeltaThreshold)
             {
                 isBearish = false;
-                if (ShowDebugLogs)
-                    Print(string.Format("[TREND_MODE] Bar:{0} | BULLISH DETECTED | DeltaGlobal:{1:F0} > {2} | SessionDelta:{3:F0} > {2}",
-                        CurrentBar, _deltaGlobal, TrendDeltaThreshold, sessionDelta));
                 return true;
             }
-
-            // v2.2.7: Log when trend mode is NOT active (helps diagnose why reversals appear)
-            if (ShowDebugLogs && IsFirstTickOfBar)
-                Print(string.Format("[TREND_MODE] Bar:{0} | NO TREND | TradingMode=Auto | DeltaGlobal:{1:F0} | SessionDelta:{2:F0} | Threshold:{3}",
-                    CurrentBar, _deltaGlobal, sessionDelta, TrendDeltaThreshold));
 
             return false; // No trend - use reversal mode
         }
@@ -470,7 +502,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         // LogToFile and AddSignal moved to RelativeVwap.Utilities.cs
 
         // v3.0.1: Hide indicator label from top-left chart corner
-        public override string DisplayName { get { return ""; } }
+        public override string DisplayName { get { return "RelativeVwap"; } }
 
         protected override void OnStateChange()
         {
@@ -534,7 +566,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
                 ShowLabels = true;
                 ShowVwapHealth = true;
-                ShowTouchStudy = true;
+                ShowDemandSupplyCandles = true;
+                ShowTouchStudy = false;
                 TouchStudyDays = 3;
                 TouchStudySeparationATR = 1.0;
                 TouchStudyProximityTicks = 3;
@@ -593,18 +626,43 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                 // VWAP Method (v1.0.1)
                 VwapMethod = VwapPriceMethod.Close;  // Default: Close (matches SessionLevels strategy)
                 
-                EnableAlerts = true;
+                EnableAlerts = false;
                 AlertSound = "mzpack_alert4.wav";
 
                 
                 ShowDaysAgo = true; // Default True
                 ShowDebugLogs = false; // Default OFF para rendimiento
+
+                // v3.3.0: Market Structure Detection defaults (NT Swing fractal)
+                ShowStructure = false;
+                StructureSwingStrength = 3;          // Barras a cada lado para confirmar fractal
+                StructureMinSwingTicks = 0;          // Sin filtro de tamano minimo
+                StructureUptrendColor = Brushes.LimeGreen;
+                StructureDowntrendColor = Brushes.Crimson;
+                StructureDTDBColor = Brushes.Yellow;
+                StructureLabelColor = Brushes.White;
+                StructureLabelHH = "HH";
+                StructureLabelHL = "HL";
+                StructureLabelLH = "LH";
+                StructureLabelLL = "LL";
+                StructureLabelDT = "DT";
+                StructureLabelDB = "DB";
+                StructureLineThickness = 1.5f;
+                StructureLabelSize = 10;
+                ShowStructureLabels = true;
+                ShowStructureLines = false;          // Zigzag OFF por default
+                ShowStructureLabelBg = false;        // Fondos negros OFF
+                StructureMaxSwings = 50;
                 
                 if (ShowDebugLogs) Print("RelativeVwap Indicator: OnStateChange (SetDefaults) Reached - VERSION " + VERSION);
             }
             else if (State == State.DataLoaded)
             {
                 atr = ATR(14); // V_NORM: Correct Initialization
+
+                // v3.4.0: TDU Price Action integration
+                if (EnableTDUTrading)
+                    InitializeTDU();
 
                 // v2.2.4: Session Delta (internal calculation)
                 _lastBarDelta = 0;
@@ -650,6 +708,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                 {
                     if (ShowDebugLogs) Print("RelativeVwap: Entering State.DataLoaded...");
                     _lastInstance = this; // v3.1.2: Register for companion indicators
+                    // v3.3.0: Market Structure Detection
+                    InitStructure();
                     sessionIterator = new SessionIterator(Bars);
                     // On initial load, clear lists
                     if (historicalHighs != null) historicalHighs.Clear();
@@ -679,6 +739,21 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                     
                     InitializeTrading(); // Initialize Account and Events
                     InitializeVoiceAlerts(); // v1.0.50: Initialize Text-to-Speech
+
+                    // v3.3.8: Inicializar arrays por instrumento — NO recrear si ya existen (F5 preserva datos)
+                    _instrumentKey = Instrument.FullName;
+                    if (!HistHealthHighMap.ContainsKey(_instrumentKey))
+                        HistHealthHighMap[_instrumentKey] = new double[HIST_HEALTH_SIZE];
+                    if (!HistHealthLowMap.ContainsKey(_instrumentKey))
+                        HistHealthLowMap[_instrumentKey]  = new double[HIST_HEALTH_SIZE];
+                    if (!HistCandleColorMap.ContainsKey(_instrumentKey))
+                        HistCandleColorMap[_instrumentKey] = new sbyte[HIST_HEALTH_SIZE];
+
+                    // v3.3.8: Buffers para pendiente de health scores
+                    _recentDemandScores = new double[SLOPE_LOOKBACK];
+                    _recentSupplyScores = new double[SLOPE_LOOKBACK];
+                    _scoreBufIdx = 0;
+                    _scoreBufFull = false;
 
                     if (ShowDebugLogs) Print("RelativeVwap: State.DataLoaded OK.");
                 }
@@ -728,6 +803,27 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                 {
                     try { WriteTouchStudyCsv(); }
                     catch (Exception csvEx) { Print("[TOUCH_STUDY] CSV export error: " + csvEx.Message); }
+                }
+
+                // v3.3.10: Cerrar trade real al terminar
+                if (_healthCrossTradeOpen)
+                    CloseHealthCrossTrade("Terminated");
+
+                // v3.4.0: Cerrar trade TDU al terminar
+                if (_tduTradeActive)
+                    CloseTDUTrade("Terminated");
+                if (ExportTDUCSV)
+                {
+                    try { ExportTDURecords(); }
+                    catch (Exception tduEx) { Print("[TDU_EXPORT] CSV export error: " + tduEx.Message); }
+                }
+
+                // v3.3.8: Export health cross CSV
+                if (ExportHealthCrossCSV)
+                {
+                    if (_crossTradeActive) CloseCrossTradeTracking("EOD");
+                    try { ExportCrossRecords(); }
+                    catch (Exception csvEx) { Print("[CROSS_EXPORT] CSV export error: " + csvEx.Message); }
                 }
 
                 if (updateTimer != null)
@@ -827,11 +923,27 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             // internalLowPrice = 0;
             // hasInternalLowVWAP = false;
 
+            // v3.3.9: Reset health cross state at session start
+            if (_crossTradeActive && ExportHealthCrossCSV)
+                CloseCrossTradeTracking("EOD");
+            // v3.3.10: Cerrar trade real por EOD
+            if (_healthCrossTradeOpen)
+                CloseHealthCrossTrade("EOD");
+            // v3.4.0: Cerrar trade TDU por EOD
+            if (_tduTradeActive)
+                CloseTDUTrade("EOD");
+            _pendingFlip = false;
+            _confirmBarsPending = false;
+            _confirmBarsCount = 0;
+            _scoreBufIdx = 0;
+            _scoreBufFull = false;
+            _demandSupplyInitialized = false;
+
             if (ShowDebugLabels)
                 Draw.Text(this, "Reset" + CurrentBar, "RESET", 0, Low[0] - 5 * TickSize, Brushes.Red);
-            
+
             if (ShowDebugLogs)
-                Print(string.Format("RelativeVwap: ResetSession called at Bar {0} (Date: {1}). Cleared Anchors. Kept Sessions (Count A:{2} E:{3} U:{4}) ActiveTrades:{5}", 
+                Print(string.Format("RelativeVwap: ResetSession called at Bar {0} (Date: {1}). Cleared Anchors. Kept Sessions (Count A:{2} E:{3} U:{4}) ActiveTrades:{5}",
                     CurrentBar, Time[0], asiaSessions.Count, europeSessions.Count, usSessions.Count, (activeTrades != null ? activeTrades.Count : -1)));
         }
 
@@ -1072,6 +1184,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             // Reset VWAP calculation state (needed for any mode switch)
             hasHighVWAP = false;
             hasLowVWAP = false;
+            // v3.3.7: _prevBarHighVwap/_prevBarLowVwap eliminados
             hasInternalHighVWAP = false;
             hasInternalLowVWAP = false;
 
@@ -1100,6 +1213,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             _lastConfigCBar = -999;
             _lastConfigABar = -999;
             _lastConfigDBar = -999;
+
+            // v3.3.0: Reset market structure
+            if (ShowStructure) ResetStructure();
 
             // v3.1.0: Reset auto-trade state (don't cancel live orders, just reset tracking)
             _autoTradeOpen = false;
@@ -1172,6 +1288,19 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
               ? (currentTime >= europeStart || currentTime < usaStart)
               : (currentTime >= europeStart && currentTime < usaStart);
           bool inUSA = (currentTime >= usaStart && currentTime < usaEnd);
+
+          // v3.3.10: Cerrar trade real 1 minuto antes del cierre de sesión USA
+          {
+              TimeSpan eodCutoff = usaEnd.Subtract(TimeSpan.FromMinutes(1));
+              if (currentTime >= eodCutoff && currentTime < usaEnd)
+              {
+                  if (_healthCrossTradeOpen && State == State.Realtime)
+                      CloseHealthCrossTrade("EOD_1min");
+                  // v3.4.0: Cerrar trade TDU por EOD
+                  if (_tduTradeActive)
+                      CloseTDUTrade("EOD");
+              }
+          }
 
           // Reset individual deltas on session entry
           if (inAsia && !_wasInAsia) _deltaAsia = 0;
@@ -1306,8 +1435,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                    CloseGhostLines(europeSessions, CurrentBar);
                    CloseGhostLines(usSessions, CurrentBar);
 
-                   _currentSessionStartBarIdx = CurrentBar;  // v3.0.3: Mark session boundary for PreviousVWAPColor
                    ResetSession();
+                   _sessionResetTime = Time[0]; // v3.3.9: marcar inicio de sesión para blackout de cruces
 
                    // v1.0.53: Reset internal VWAPs only on NEW TRADING DAY
                    if (isNewTradingDay)
@@ -1446,6 +1575,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
              // v3.0.2: Always track period dividers (independent of Personality)
              TrackPeriodDividers(time);
 
+             // v3.3.0: Market Structure Detection
+             if (ShowStructure) UpdateStructure(time);
+
              // v3.0.0: Conditional Session Updates based on Personality Mode
              if (Personality == PersonalityMode.Intraday)
              {
@@ -1516,7 +1648,6 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                          _completedFirstTouches.Clear(); // v3.2.0
 
                          // Reset VWAP state for new period
-                         _currentSessionStartBarIdx = CurrentBar;  // v3.0.3: Mark session boundary for PreviousVWAPColor
                          ResetSession();
                          _lastTradingDay = time.Date;
                          
@@ -1833,15 +1964,199 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                // Accumulates MFE/MAE distances, must NOT run per-tick or values get inflated
                if (runTracking) UpdateVwapHealthTracking();
 
-               // v3.1.2: Push health scores to static fields for companion indicator
-               // v3.2.0 perf: Only update per-bar (health doesn't change meaningfully per-tick)
-               if (IsFirstTickOfBar)
+               // v3.3.7: Pintar velas con decisión persistida — live guarda, F5 lee
+               if (ShowDemandSupplyCandles && IsFirstTickOfBar)
                {
-                   SharedHighHealth = hasHighVWAP ? GetVwapHealthScore(true) : 0;
-                   SharedLowHealth = hasLowVWAP ? GetVwapHealthScore(false) : 0;
-                   SharedCurrentHighVWAP = hasHighVWAP ? currentHighVWAP : 0;
-                   SharedCurrentLowVWAP = hasLowVWAP ? currentLowVWAP : 0;
+                   sbyte[] colorArr = null;
+                   string ck = _instrumentKey;
+                   if (ck != null) HistCandleColorMap.TryGetValue(ck, out colorArr);
+
+                   bool demandStronger;
+
+                   if (State == State.Historical && colorArr != null && CurrentBar < HIST_HEALTH_SIZE && colorArr[CurrentBar] != 0)
+                   {
+                       // F5: reutilizar la decisión guardada en live
+                       demandStronger = colorArr[CurrentBar] > 0;
+                   }
+                   else
+                   {
+                       // Live (o histórico sin datos previos): calcular normalmente
+                       double demandScore = GetVwapHealthScore(false);
+                       double supplyScore = GetVwapHealthScore(true);
+                       demandStronger = demandScore > supplyScore;
+
+                       // Guardar decisión para que F5 la use
+                       if (colorArr != null && CurrentBar < HIST_HEALTH_SIZE)
+                           colorArr[CurrentBar] = demandStronger ? (sbyte)1 : (sbyte)-1;
+                   }
+
+                   if (demandStronger)
+                   {
+                       BarBrushes[0] = Brushes.White;
+                       CandleOutlineBrushes[0] = Brushes.White;
+                   }
+                   else
+                   {
+                       BarBrushes[0] = Brushes.Transparent;
+                       CandleOutlineBrushes[0] = Brushes.White;
+                   }
+
+                   // v3.3.8: Almacenar scores en buffer circular para cálculo de pendiente
+                   {
+                       double curDemand = GetVwapHealthScore(false);
+                       double curSupply = GetVwapHealthScore(true);
+                       if (_recentDemandScores != null)
+                       {
+                           _recentDemandScores[_scoreBufIdx] = curDemand;
+                           _recentSupplyScores[_scoreBufIdx] = curSupply;
+                           _scoreBufIdx = (_scoreBufIdx + 1) % SLOPE_LOOKBACK;
+                           if (!_scoreBufFull && _scoreBufIdx == 0) _scoreBufFull = true;
+                       }
+                   }
+
+                   // v3.3.8: Tracking MFE/MAE del cross trade activo (cada barra)
+                   if (_crossTradeActive && IsFirstTickOfBar)
+                       UpdateCrossTradeTracking();
+
+                   // v3.3.9: Blackout al inicio de sesión — VWAPs crudos generan cruces falsos
+                   bool inBlackout = (_sessionResetTime != DateTime.MinValue
+                       && HealthCrossBlackoutMinutes > 0
+                       && (Time[0] - _sessionResetTime).TotalMinutes < HealthCrossBlackoutMinutes);
+
+                   // v3.3.8: Detectar cruce con filtro de salida —
+                   // No salimos al primer cruce. Solo confirmamos cuando la línea perdedora DECLINA.
+                   if (!inBlackout && _demandSupplyInitialized && demandStronger != _prevDemandStronger && !_pendingFlip && !_confirmBarsPending)
+                   {
+                       // Cruce detectado. ¿La línea perdedora ya está declinando?
+                       bool loserDeclining = _scoreBufFull ? IsHealthDeclining(!demandStronger) : true;
+
+                       if (loserDeclining)
+                       {
+                           // v3.3.10: Si ConfirmBars > 0, no ejecutar inmediato — iniciar espera temporal
+                           if (HealthCrossConfirmBars > 0)
+                           {
+                               _confirmBarsPending = true;
+                               _confirmBarsDirection = demandStronger;
+                               _confirmBarsCount = 0;
+
+                               // Triángulo cyan = cruce esperando confirmación temporal
+                               double atrOff2 = (atr != null && CurrentBar >= 14) ? atr[0] * 0.5 : TickSize * 10;
+                               string confTag = "DSConf_" + CurrentBar;
+                               if (ShowSignalText)
+                               {
+                                   if (demandStronger)
+                                       Draw.TriangleUp(this, confTag, true, 0, Low[0] - atrOff2, Brushes.Cyan);
+                                   else
+                                       Draw.TriangleDown(this, confTag, true, 0, High[0] + atrOff2, Brushes.Cyan);
+                               }
+                           }
+                           else
+                           {
+                               // ConfirmBars = 0 → confirmar flip inmediato
+                               ExecuteHealthFlip(demandStronger);
+                           }
+                       }
+                       else
+                       {
+                           // Perdedor aún fuerte → poner en espera de declive
+                           _pendingFlip = true;
+                           _pendingFlipDirection = demandStronger;
+                           _pendingFlipStable = _scoreBufFull ? IsHealthStable(demandStronger) : true;
+
+                           // Triángulo amarillo = cruce pendiente de confirmación de declive
+                           double atrOff = (atr != null && CurrentBar >= 14) ? atr[0] * 0.5 : TickSize * 10;
+                           string pendTag = "DSPend_" + CurrentBar;
+                           if (ShowSignalText)
+                           {
+                               if (demandStronger)
+                               {
+                                   Draw.Text(this, pendTag, true, "▲\nPEND\nLONG", 0, Low[0] - atrOff, 0, Brushes.Yellow, new SimpleFont("Arial", 9) { Bold = true }, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
+                               }
+                               else
+                               {
+                                   Draw.Text(this, pendTag, true, "PEND\nSHORT\n▼", 0, High[0] + atrOff, 0, Brushes.Yellow, new SimpleFont("Arial", 9) { Bold = true }, TextAlignment.Center, Brushes.Transparent, Brushes.Transparent, 0);
+                               }
+                           }
+                       }
+                   }
+                   // Chequear pending flip (esperando declive del perdedor)
+                   else if (!inBlackout && _pendingFlip)
+                   {
+                       bool stillCrossed = (_pendingFlipDirection == demandStronger);
+                       if (!stillCrossed)
+                       {
+                           _pendingFlip = false;
+                       }
+                       else
+                       {
+                           bool loserNowDeclining = IsHealthDeclining(!_pendingFlipDirection);
+                           if (loserNowDeclining)
+                           {
+                               _pendingFlip = false;
+                               // v3.3.10: Después de confirmar declive, iniciar espera temporal si ConfirmBars > 0
+                               if (HealthCrossConfirmBars > 0)
+                               {
+                                   _confirmBarsPending = true;
+                                   _confirmBarsDirection = _pendingFlipDirection;
+                                   _confirmBarsCount = 0;
+                               }
+                               else
+                               {
+                                   ExecuteHealthFlip(_pendingFlipDirection);
+                               }
+                           }
+                       }
+                   }
+
+                   // v3.3.10: Contador de confirmación temporal — esperar N barras tras cruce
+                   if (_confirmBarsPending && !inBlackout)
+                   {
+                       _confirmBarsCount++;
+                       bool stillValid = (_confirmBarsDirection == demandStronger);
+
+                       if (!stillValid)
+                       {
+                           // Cruce se revirtió antes de confirmar → descartar
+                           _confirmBarsPending = false;
+                           _confirmBarsCount = 0;
+                       }
+                       else if (_confirmBarsCount >= HealthCrossConfirmBars)
+                       {
+                           // Cruce confirmado tras N barras → ejecutar
+                           _confirmBarsPending = false;
+                           _confirmBarsCount = 0;
+                           ExecuteHealthFlip(_confirmBarsDirection);
+                       }
+                   }
+
+                   // Solo actualizar _prevDemandStronger si NO hay pending flip ni confirm pending
+                   if (!_pendingFlip && !_confirmBarsPending)
+                       _prevDemandStronger = demandStronger;
+                   _demandSupplyInitialized = true;
                }
+
+               // v3.4.0: TDU Price Action — evaluar señales filtradas por Health bias
+               if (EnableTDUTrading && IsFirstTickOfBar)
+                   CheckTDUSignal();
+
+               // v3.3.7: Calcular scores y guardar por instrumento (DESPUÉS del tracking)
+               double hScore = hasHighVWAP ? GetVwapHealthScore(true) : 0;
+               double lScore = hasLowVWAP ? GetVwapHealthScore(false) : 0;
+               string key = _instrumentKey;
+               SharedHighHealthMap[key] = hScore;
+               SharedLowHealthMap[key]  = lScore;
+               // Guardar en arrays para histórico
+               double[] arrH, arrL;
+               if (HistHealthHighMap.TryGetValue(key, out arrH) && HistHealthLowMap.TryGetValue(key, out arrL)
+                   && CurrentBar < HIST_HEALTH_SIZE)
+               {
+                   arrH[CurrentBar] = hScore;
+                   arrL[CurrentBar] = lScore;
+               }
+               SharedHighVWAPMap[key]   = hasHighVWAP ? currentHighVWAP : 0;
+               SharedLowVWAPMap[key]    = hasLowVWAP ? currentLowVWAP : 0;
+               SharedHighAnchorMap[key] = sessionHighBarIdx;
+               SharedLowAnchorMap[key]  = sessionLowBarIdx;
 
                // v3.0.5: Update touch study tracking
                try { if (runTracking && ShowTouchStudy) UpdateTouchStudyTracking(); }
@@ -3085,6 +3400,31 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                  Draw.TextFixed(this, "VersionLabel", "RelativeVwap v" + VERSION, TextPosition.TopLeft, Brushes.White, new SimpleFont("Arial", 12), Brushes.Black, Brushes.Transparent, 100);
              }
 
+             // v3.3.10: Health Cross Trading Status
+             if (EnableHealthCrossTrading && ShowSignalText && CurrentBar >= Bars.Count - 2)
+             {
+                 string crossStatus;
+                 Brush statusColor;
+                 if (_healthCrossTradeOpen)
+                 {
+                     string dir = _healthCrossTradeIsLong ? "LONG" : "SHORT";
+                     crossStatus = "CROSS TRADE: " + dir + " x" + _healthCrossTradeQty;
+                     statusColor = _healthCrossTradeIsLong ? Brushes.Lime : Brushes.Red;
+                 }
+                 else if (_confirmBarsPending)
+                 {
+                     string pendDir = _confirmBarsDirection ? "LONG" : "SHORT";
+                     crossStatus = "CONFIRMANDO: " + pendDir + " (" + _confirmBarsCount + "/" + HealthCrossConfirmBars + ")";
+                     statusColor = Brushes.Cyan;
+                 }
+                 else
+                 {
+                     crossStatus = "CROSS TRADE: ESPERANDO";
+                     statusColor = Brushes.DimGray;
+                 }
+                 Draw.TextFixed(this, "CrossTradeStatus", crossStatus, TextPosition.TopRight, statusColor, new SimpleFont("Consolas", 12) { Bold = true }, Brushes.Transparent, Brushes.Black, 80);
+             }
+
              // Status Overlay
              if (ShowDebugLabels && (CurrentBar == Bars.Count - 1))
              {
@@ -3113,7 +3453,56 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
               {
                   ProcessPendingSignals();
               }
-             
+
+              // --- RelativeMCP observability (v3.0.3) ---
+              // Publica estado runtime al inicio de cada barra nueva en realtime.
+              // Consumible desde Claude vía get_print_output + get_indicator_state.
+              // Try/catch individual — nunca debe romper OnBarUpdate.
+              if (State == State.Realtime && IsFirstTickOfBar)
+              {
+                  try
+                  {
+                      double vwapH = CurrentBar >= 0 ? Values[0][0] : double.NaN;
+                      double vwapL = CurrentBar >= 0 ? Values[1][0] : double.NaN;
+                      bool isBearish;
+                      bool trendMode = IsTrendMode(out isBearish);
+                      double sessionDelta = GetCurrentSessionDelta();
+                      // v3.0.3: typeof garantiza el nombre correcto en compile-time
+                      string indName = typeof(RelativeVwap).Name;
+
+                      this.RLog(
+                          "bar={0} close={1:F2} vwapH={2:F2} vwapL={3:F2} | deltas G={4:F0} A={5:F0} E={6:F0} U={7:F0} sess={8:F0} | trend={9} bearish={10} mode={11} | sig2H={12} sig2L={13}",
+                          CurrentBar, Close[0], vwapH, vwapL,
+                          _deltaGlobal, _deltaAsia, _deltaEurope, _deltaUSA, sessionDelta,
+                          trendMode, isBearish, TradingMode,
+                          highSignal2Fired, lowSignal2Fired);
+
+                      RelativeIndicatorRegistry.Publish(
+                          string.Format("{0}:{1}:{2}{3}", indName, Instrument.FullName,
+                              BarsPeriod.Value, BarsPeriod.BarsPeriodType),
+                          new Dictionary<string, object>
+                          {
+                              ["bar"] = CurrentBar,
+                              ["bar_time"] = Time[0],
+                              ["close"] = Close[0],
+                              ["vwap_high"] = vwapH,
+                              ["vwap_low"] = vwapL,
+                              ["delta_global"] = _deltaGlobal,
+                              ["delta_asia"] = _deltaAsia,
+                              ["delta_europe"] = _deltaEurope,
+                              ["delta_usa"] = _deltaUSA,
+                              ["session_delta"] = sessionDelta,
+                              ["trend_mode"] = trendMode,
+                              ["trend_bearish"] = isBearish,
+                              ["trading_mode"] = TradingMode.ToString(),
+                              ["signal2_high_fired"] = highSignal2Fired,
+                              ["signal2_low_fired"] = lowSignal2Fired,
+                          });
+                  }
+                  catch { /* no-op: logging nunca debe romper OnBarUpdate */ }
+              }
+              // --- end RelativeMCP ---
+
              }
              catch (Exception ex)
              {
@@ -3338,6 +3727,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         // ========================================================================
         // 04. Señales y Textos
         // ========================================================================
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Display(Name = "Dirección de Trades", GroupName = "04. Señales y Textos", Order = 1)]
         public TradeDirectionMode TradeDirection { get; set; }
@@ -3346,33 +3736,43 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         [Display(Name = "Mostrar Etiquetas", GroupName = "04. Señales y Textos", Order = 2)]
         public bool ShowLabels { get; set; }
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Display(Name = "Modo Etiquetas", Description = "Selecciona el modo de visualización de etiquetas", GroupName = "04. Señales y Textos", Order = 3)]
         public LabelMode LabelDisplayMode { get; set; } = LabelMode.Default;
 
         [NinjaScriptProperty]
+        [Display(Name = "Pintar Velas Demanda/Oferta", Description = "Pinta velas blancas cuando demanda > oferta, transparentes cuando oferta > demanda", GroupName = "04. Señales y Textos", Order = 10)]
+        public bool ShowDemandSupplyCandles { get; set; } = true;
+
+        [Browsable(false)]
+        [NinjaScriptProperty]
         [Display(Name = "Texto Señal 1", Description = "Texto para señal de ruptura (ej. 'Liquidity Grabbed')", GroupName = "04. Señales y Textos", Order = 31)]
         public string CustomSignal1Text { get; set; } = "Liquidity Grabbed";
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Display(Name = "Texto Señal 2", Description = "Texto para señal confirmada (ej. 'Entry 1')", GroupName = "04. Señales y Textos", Order = 32)]
         public string CustomSignal2Text { get; set; } = "Entry 1";
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Display(Name = "Texto Señal 3", Description = "Texto para señal de re-test (ej. 'Entry 2')", GroupName = "04. Señales y Textos", Order = 33)]
         public string CustomSignal3Text { get; set; } = "Entry 2";
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Display(Name = "Mostrar Etiquetas Señal", Description = "Muestra iconos y líneas de señales", GroupName = "04. Señales y Textos", Order = 4)]
-        public bool ShowSignalLabels { get; set; } = true;
+        public bool ShowSignalLabels { get; set; } = false;
 
         [NinjaScriptProperty]
-        [Display(Name = "Mostrar Textos Señal", Description = "Muestra textos de señales (Entry, TP1, SL, Liquidity Grabbed)", GroupName = "04. Señales y Textos", Order = 5)]
-        public bool ShowSignalText { get; set; } = true;
+        [Display(Name = "Mostrar Textos Señal", Description = "Muestra textos de señales (Entry, TP1, SL, PEND LONG/SHORT, CROSS TRADE status)", GroupName = "04. Señales y Textos", Order = 5)]
+        public bool ShowSignalText { get; set; } = false;
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Display(Name = "Mostrar Trades Simulados", Description = "Muestra líneas, iconos y etiquetas de trades simulados históricos", GroupName = "04. Señales y Textos", Order = 6)]
-        public bool ShowTradeVisualization { get; set; } = true;
+        public bool ShowTradeVisualization { get; set; } = false;
 
         [NinjaScriptProperty]
         [Display(Name = "Mostrar Salud VWAP", Description = "Muestra score de fortaleza del VWAP (MFE/MAE ratio) con barra visual", GroupName = "04. Señales y Textos", Order = 7)]
@@ -3380,24 +3780,28 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
         [NinjaScriptProperty]
         [Display(Name = "Salud: Offset Barras", Description = "Barras hacia atras desde el final del VWAP para colocar el label (negativo = izquierda)", GroupName = "04. Señales y Textos", Order = 8)]
-        public int HealthLabelOffsetBars { get; set; } = -10;
+        public int HealthLabelOffsetBars { get; set; } = -15;
 
         [NinjaScriptProperty]
         [Display(Name = "Salud: Offset Ticks", Description = "Ticks de separacion vertical del VWAP (positivo = arriba para Supply, abajo para Demand)", GroupName = "04. Señales y Textos", Order = 9)]
         public int HealthLabelOffsetTicks { get; set; } = 40;
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Display(Name = "Mostrar Señal 1 (Ruptura)", Description = "Muestra la señal de toma de liquidez", GroupName = "04. Señales y Textos", Order = 40)]
-        public bool ShowSignal1 { get; set; } = true;
+        public bool ShowSignal1 { get; set; } = false;
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Display(Name = "Mostrar Señal 2 (Confir.)", Description = "Muestra la señal de entrada 1", GroupName = "04. Señales y Textos", Order = 41)]
-        public bool ShowSignal2 { get; set; } = true;
+        public bool ShowSignal2 { get; set; } = false;
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Display(Name = "Mostrar Señal 3 (Re-test)", Description = "Muestra la señal de entrada 2", GroupName = "04. Señales y Textos", Order = 42)]
-        public bool ShowSignal3 { get; set; } = true;
+        public bool ShowSignal3 { get; set; } = false;
 
+        [Browsable(false)]
         [XmlIgnore]
         [Display(Name = "Color Señales", Description = "Color para flechas y textos de señal", GroupName = "04. Señales y Textos", Order = 13)]
         public Brush SignalColor { get; set; } = Brushes.White;
@@ -3405,39 +3809,46 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
         [XmlIgnore]
         [Display(Name = "Color Fondo Etiquetas", GroupName = "04. Señales y Textos", Order = 14)]
-        public Brush LabelBackgroundColor { get; set; } = Brushes.Black;
+        public Brush LabelBackgroundColor { get; set; } = Brushes.MidnightBlue;
         [Browsable(false)] public string LabelBackgroundColorSerializable { get { return Serialize.BrushToString(LabelBackgroundColor); } set { LabelBackgroundColor = Serialize.StringToBrush(value); } }
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Range(6, 24)]
         [Display(Name = "Tamaño Fuente Señal", GroupName = "04. Señales y Textos", Order = 15)]
         public int LabelFontSize { get; set; } = 12;
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Range(-50, 50)]
         [Display(Name = "Offset Texto (px)", GroupName = "04. Señales y Textos", Order = 16)]
         public int LabelTextOffset { get; set; } = 10;
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Range(0.1, 5.0)]
         [Display(Name = "Distancia Etiqueta ATR", Description = "Multiplicador ATR para distancia desde precio", GroupName = "04. Señales y Textos", Order = 17)]
         public double LabelDistanceATR { get; set; } = 0.3;
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Range(0.5, 5.0)]
         [Display(Name = "Espaciado Colisión", GroupName = "04. Señales y Textos", Order = 18)]
         public double LabelCollisionSpacing { get; set; } = 1.5;
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Range(0, 50)]
         [Display(Name = "Ticks de Separación", Description = "Ticks mínimos requeridos entre High/Low y VWAP para considerar 'Detached'", GroupName = "04. Señales y Textos", Order = 19)]
         public int DetachmentTicks { get; set; } = 2;
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Range(0, 50)]
         [Display(Name = "Umbral Señal 2", Description = "Ticks requeridos para cierre dentro del VWAP", GroupName = "04. Señales y Textos", Order = 20)]
         public int Signal2ThresholdTicks { get; set; } = 1;
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Range(1, 20)]
         [Display(Name = "Max Intentos Globales", Description = "Máximas señales permitidas por nivel externo", GroupName = "04. Señales y Textos", Order = 21)]
@@ -3446,49 +3857,61 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         // ========================================================================
         // 05. Estudio de Toques
         // ========================================================================
+        [Browsable(false)]
         [Display(Name = "Template", Description = "Estudio: captura datos crudos (todo abierto, CSV activado). Auto: trading optimizado, adapta SL/TP segun ATR. Conservador/Equilibrado/Agresivo/MaxTrades/BajaVol: presets fijos.", GroupName = "05. Estudio de Toques", Order = 0)]
         public TouchStudyTemplate StudyTemplate { get; set; } = TouchStudyTemplate.Custom;
 
+        [Browsable(false)]
         [Display(Name = "Mostrar Estudio Toques", Description = "Muestra labels H:X.X L:X.X en primer toque tras separacion significativa", GroupName = "05. Estudio de Toques", Order = 1)]
-        public bool ShowTouchStudy { get; set; } = true;
+        public bool ShowTouchStudy { get; set; } = false;
 
+        [Browsable(false)]
         [Display(Name = "Estudio: Dias", Description = "Solo mostrar toques de los ultimos N dias", GroupName = "05. Estudio de Toques", Order = 2)]
         public int TouchStudyDays { get; set; } = 3;
 
+        [Browsable(false)]
         [Display(Name = "Estudio: Separacion ATR", Description = "Multiplicador ATR para considerar despegue significativo (1.0 = 1x ATR)", GroupName = "05. Estudio de Toques", Order = 3)]
         public double TouchStudySeparationATR { get; set; } = 1.0;
 
+        [Browsable(false)]
         [Display(Name = "Estudio: Proximidad Ticks", Description = "Ticks de proximidad al VWAP para considerar toque", GroupName = "05. Estudio de Toques", Order = 4)]
         public int TouchStudyProximityTicks { get; set; } = 3;
 
+        [Browsable(false)]
         [Display(Name = "Estudio: Filtro Config", Description = "All=todos, A=LONG breakout, B=SHORT breakout, C=SHORT reversal, D=LONG reversal, CD=reversals, BC=shorts, AD=longs", GroupName = "05. Estudio de Toques", Order = 5)]
         public TouchStudyFilterMode TouchStudyFilter { get; set; } = TouchStudyFilterMode.All;
 
+        [Browsable(false)]
         [Display(Name = "Estudio: SL Ticks", Description = "Stop Loss en ticks para simulacion de trade", GroupName = "05. Estudio de Toques", Order = 6)]
         public int TouchStudySLTicks { get; set; } = 24;
 
+        [Browsable(false)]
         [Display(Name = "Estudio: TP Ticks", Description = "Take Profit en ticks para simulacion de trade", GroupName = "05. Estudio de Toques", Order = 7)]
         public int TouchStudyTPTicks { get; set; } = 38;
 
+        [Browsable(false)]
         [Display(Name = "Estudio: Gap Episodio (barras)", Description = "Barras minimas entre toques para considerar nuevo episodio", GroupName = "05. Estudio de Toques", Order = 8)]
         public int TouchStudyEpisodeGap { get; set; } = 15;
 
+        [Browsable(false)]
         [Range(0, 10)]
         [Display(Name = "Estudio: Max ATR", Description = "Filtrar toques con ATR mayor a este valor (0=sin filtro). Estudio 2025: ATR<2.5 sube WR a 81%, ATR<1.5 sube a 90%.", GroupName = "05. Estudio de Toques", Order = 10)]
         public double TouchStudyMaxATR { get; set; } = 0;
 
+        [Browsable(false)]
         [Range(0, 200)]
         [Display(Name = "Estudio: Max Separacion", Description = "Filtrar toques con separacion mayor a N ticks (0=sin filtro). Estudio 2025: Sep<20 sube WR a 77%, Sep<10 sube a 93%.", GroupName = "05. Estudio de Toques", Order = 11)]
         public int TouchStudyMaxSeparation { get; set; } = 0;
 
         [Range(0, 10.0)]
-        [Display(Name = "Health: Umbral Fuerte", Description = "Health score minimo para considerar un VWAP 'fuerte'. Estudio 2024: 2.0=3477 trades/71%WR (optimo), 3.0=537 trades (muy estricto). 0=sin filtro (modo Estudio).", GroupName = "05. Estudio de Toques", Order = 13)]
+        [Display(Name = "Health: Umbral Fuerte", Description = "Health score minimo para considerar un VWAP 'fuerte'. 2.0 = optimo.", GroupName = "08. Health Cross", Order = 20)]
         public double HealthStrongThreshold { get; set; } = 2.0;
 
         [Range(0, 10.0)]
-        [Display(Name = "Health: Umbral Debil", Description = "Health score maximo para considerar un VWAP 'debil'. Estudio 2024: 1.5=3477 trades/71%WR (optimo), 2.0=537 trades (muy estricto).", GroupName = "05. Estudio de Toques", Order = 14)]
+        [Display(Name = "Health: Umbral Debil", Description = "Health score maximo para considerar un VWAP 'debil'. 1.5 = optimo.", GroupName = "08. Health Cross", Order = 21)]
         public double HealthWeakThreshold { get; set; } = 1.5;
 
+        [Browsable(false)]
         [XmlIgnore]
         [Display(Name = "Estudio: Color", Description = "Color del label de estudio de toques", GroupName = "05. Estudio de Toques", Order = 12)]
         public Brush TouchStudyColor { get; set; } = Brushes.Cyan;
@@ -3502,10 +3925,12 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         // ========================================================================
         // 06. Señales Internas
         // ========================================================================
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Display(Name = "Habilitar Señales Internas", Description = "Activa o desactiva toda la lógica interna (Grabs, Velas Naranjas, VWAPs internos)", GroupName = "06. Señales Internas", Order = 1)]
-        public bool EnableInternalLogic { get; set; } = true;
+        public bool EnableInternalLogic { get; set; } = false;
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Range(1, 20)]
         [Display(Name = "Max Intentos Señal 2", Description = "Máximas señales permitidas por nivel interno", GroupName = "06. Señales Internas", Order = 2)]
@@ -3514,24 +3939,30 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         // ========================================================================
         // 07. Exportación y Delta
         // ========================================================================
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Display(Name = "Exportar Simulación CSV", Description = "Exporta trades simulados (Signal 2) a CSV compatible con Streamlit Audit. Se escribe al cargar el chart.", GroupName = "07. Exportación y Delta", Order = 1)]
         public bool ExportSimulationCSV { get; set; } = false;
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Display(Name = "Analizar Todas las Señales", Description = "Registra TODAS las señales Signal 2, incluso superpuestas. Útil para análisis estadístico completo. Genera columna Overlapping en CSV.", GroupName = "07. Exportación y Delta", Order = 2)]
         public bool AnalyzeAllSignals { get; set; } = false;
 
+        [Browsable(false)]
         [Display(Name = "Exportar Estudio Toques CSV", Description = "Exporta primer toque post-separacion con health scores de ambos VWAPs a CSV.", GroupName = "07. Exportación y Delta", Order = 3)]
         public bool ExportTouchStudyCSV { get; set; } = false;
 
+        [Browsable(false)]
         [Display(Name = "Modo RAW (MFE/MAE sin truncar)", Description = "Exporta MFE/MAE hasta EOD sin cortar por SL/TP + precio del otro VWAP + path snapshots a 5,10,20,50,100,200 barras. Requiere ExportTouchStudyCSV activo.", GroupName = "07. Exportación y Delta", Order = 3)]
         public bool TouchStudyRawMode { get; set; } = false;
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Display(Name = "Exportar Aproximaciones VWAP", Description = "Exporta cada toque al VWAP con MFE/MAE hasta EOD para análisis de dominancia.", GroupName = "07. Exportación y Delta", Order = 4)]
         public bool ExportVwapApproaches { get; set; } = false;
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Range(0, 200)]
         [Display(Name = "Separación Ticks", Description = "Precio debe cerrar a esta distancia del VWAP antes de contar otro toque (0=deshabilitado). Elimina toques ruido.", GroupName = "07. Exportación y Delta", Order = 5)]
@@ -3539,7 +3970,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
         [NinjaScriptProperty]
         [Display(Name = "Capturar Delta", Description = "Calcula 4 deltas: DeltaGlobal (día), DeltaAsia, DeltaEurope, DeltaUSA. Columnas separadas en CSV.", GroupName = "07. Exportación y Delta", Order = 6)]
-        public bool CaptureDelta { get; set; } = false;
+        public bool CaptureDelta { get; set; } = true; // v3.0.3: default true para observabilidad vía RelativeMCP
 
         [NinjaScriptProperty]
         [Range(0, 5)]
@@ -3549,55 +3980,109 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         // ========================================================================
         // 08. Alertas y Debug
         // ========================================================================
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Display(Name = "Habilitar Alertas", GroupName = "08. Alertas y Debug", Order = 1)]
         public bool EnableAlerts { get; set; }
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Display(Name = "Sonido Alerta", GroupName = "08. Alertas y Debug", Order = 2)]
         public string AlertSound { get; set; }
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Display(Name = "Mostrar Labels Debug", GroupName = "08. Alertas y Debug", Order = 3)]
         public bool ShowDebugLabels { get; set; }
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Display(Name = "Logging a Archivo", Description = "Escribe logs detallados a trace/RelativeVwap/RelativeVwap_Debug_YYYYMMDD.txt", GroupName = "08. Alertas y Debug", Order = 4)]
         public bool EnableFileLogging { get; set; } = true;
 
         [NinjaScriptProperty]
-        [Display(Name = "Show Debug Logs", Description = "Enables detailed logging to Output window. Disable for better performance.", GroupName = "08. Alertas y Debug", Order = 5)]
+        [Display(Name = "Alerta Cruce Health", Description = "Reproduce sonido cuando Demand cruza sobre Supply o viceversa", GroupName = "08. Health Cross", Order = 5)]
+        public bool EnableHealthCrossAlert { get; set; } = true;
+
+        [NinjaScriptProperty]
+        [Display(Name = "Exportar Cruces CSV", Description = "Exporta señales de cruce Demand/Supply con MFE/MAE a VWAP_CROSS_{SYMBOL}.csv", GroupName = "08. Health Cross", Order = 6)]
+        public bool ExportHealthCrossCSV { get; set; } = false;
+
+        [NinjaScriptProperty]
+        [Range(0, 240)]
+        [Display(Name = "Blackout Cruces (min)", Description = "Minutos tras inicio de sesión donde se ignoran cruces (VWAPs crudos)", GroupName = "08. Health Cross", Order = 7)]
+        public int HealthCrossBlackoutMinutes { get; set; } = 0;
+
+        [NinjaScriptProperty]
+        [Range(0, 500)]
+        [Display(Name = "Confirmar Cruce (barras)", Description = "Barras de espera tras cruce detectado. Si el cruce sigue vigente tras N barras → se confirma. 0 = inmediato.", GroupName = "08. Health Cross", Order = 8)]
+        public int HealthCrossConfirmBars { get; set; } = 30;
+
+        [NinjaScriptProperty]
+        [Display(Name = "Operar Cruces Health", Description = "Envía órdenes market reales al confirmar cruce Health Score. Sale por cruce opuesto o EOD. SOLO en Realtime.", GroupName = "08. Health Cross", Order = 9)]
+        public bool EnableHealthCrossTrading { get; set; } = false;
+
+        [Browsable(false)]
+        [NinjaScriptProperty]
+        [Display(Name = "Show Debug Logs", Description = "Enables detailed logging to Output window. Disable for better performance.", GroupName = "08. Alertas y Debug", Order = 10)]
         [XmlIgnore]
         public bool ShowDebugLogs { get; set; }
 
         // ========================================================================
+        // 10. TDU Integration (Health Cross bias + TDU Price Action breakout)
+        // ========================================================================
+
+        [NinjaScriptProperty]
+        [Display(Name = "Activar TDU+Health", Description = "Usa Health Cross como sesgo direccional + TDU Price Action para timing de entrada por breakout de estructura.", GroupName = "10. TDU Integration", Order = 1)]
+        public bool EnableTDUTrading { get; set; } = false;
+
+        [NinjaScriptProperty]
+        [Display(Name = "Exportar TDU CSV", Description = "Exporta trades TDU a TDU_CROSS_{SYMBOL}.csv con MFE/MAE/PnL.", GroupName = "10. TDU Integration", Order = 2)]
+        public bool ExportTDUCSV { get; set; } = false;
+
+        [NinjaScriptProperty]
+        [Display(Name = "Usar SL del TDU", Description = "Usa el StopLoss del TDU como protección. Si se desactiva, solo sale por EOD.", GroupName = "10. TDU Integration", Order = 3)]
+        public bool TDUUseSL { get; set; } = true;
+
+        [NinjaScriptProperty]
+        [Display(Name = "Órdenes Reales TDU", Description = "Envía órdenes market reales al detectar señal TDU alineada con Health. SOLO en Realtime.", GroupName = "10. TDU Integration", Order = 4)]
+        public bool EnableTDULiveOrders { get; set; } = false;
+
+        // ========================================================================
         // 09. Contador
         // ========================================================================
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Display(Name = "Mostrar Contador", GroupName = "09. Contador", Order = 1)]
         public bool ShowCountdown { get; set; } = true;
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Display(Name = "Modo Cuenta Regresiva", GroupName = "09. Contador", Order = 2)]
         public bool CountDown { get; set; } = true;
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Display(Name = "Mostrar Porcentaje", GroupName = "09. Contador", Order = 3)]
         public bool ShowPercent { get; set; } = false;
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Display(Name = "Tamaño Fuente", GroupName = "09. Contador", Order = 4)]
         public int CountdownFontSize { get; set; } = 12;
 
+        [Browsable(false)]
         [XmlIgnore]
         [Display(Name = "Color Texto", GroupName = "09. Contador", Order = 5)]
         public Brush CountdownTextColor { get; set; } = Brushes.White;
         [Browsable(false)] public string CountdownTextColorSerializable { get { return Serialize.BrushToString(CountdownTextColor); } set { CountdownTextColor = Serialize.StringToBrush(value); } }
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Display(Name = "Offset X (px)", GroupName = "09. Contador", Order = 6)]
         public int CountdownOffsetX { get; set; } = 20;
 
+        [Browsable(false)]
         [NinjaScriptProperty]
         [Display(Name = "Offset Y (ticks)", GroupName = "09. Contador", Order = 7)]
         public int CountdownOffsetY { get; set; } = 10;
@@ -3677,18 +4162,18 @@ namespace NinjaTrader.NinjaScript.Indicators
 	public partial class Indicator : NinjaTrader.Gui.NinjaScript.IndicatorRenderBase
 	{
 		private RelativeIndicators.RelativeVwap[] cacheRelativeVwap;
-		public RelativeIndicators.RelativeVwap RelativeVwap(PersonalityMode personality, VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, bool showUSFirstHour, int uSFirstHourMinutes, int uSFirstHourOpacity, float historicalVWAPThickness, bool extendLinesUntilTouch, float sessionLevelThickness, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignalText, bool showTradeVisualization, bool showVwapHealth, int healthLabelOffsetBars, int healthLabelOffsetTicks, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, int globalSignal2MaxAttempts, bool enableInternalLogic, int internalSignal2MaxAttempts, bool exportSimulationCSV, bool analyzeAllSignals, bool exportVwapApproaches, int approachSeparationTicks, bool captureDelta, int eodWinterOffsetHours, bool enableAlerts, string alertSound, bool showDebugLabels, bool enableFileLogging, bool showDebugLogs, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY, DayOfWeek weekStartDay, int weeklyHistoryWeeks, int monthlyHistoryMonths, int quarterlyHistoryQuarters, int yearlyHistoryYears, bool showPeriodHigh, bool showPeriodLow, bool showPeriodDividers, bool showPeriodMarker, string dailyDividerTime)
+		public RelativeIndicators.RelativeVwap RelativeVwap(PersonalityMode personality, VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, bool showUSFirstHour, int uSFirstHourMinutes, int uSFirstHourOpacity, float historicalVWAPThickness, bool extendLinesUntilTouch, float sessionLevelThickness, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, bool showDemandSupplyCandles, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignalText, bool showTradeVisualization, bool showVwapHealth, int healthLabelOffsetBars, int healthLabelOffsetTicks, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, int globalSignal2MaxAttempts, bool enableInternalLogic, int internalSignal2MaxAttempts, bool exportSimulationCSV, bool analyzeAllSignals, bool exportVwapApproaches, int approachSeparationTicks, bool captureDelta, int eodWinterOffsetHours, bool enableAlerts, string alertSound, bool showDebugLabels, bool enableFileLogging, bool enableHealthCrossAlert, int healthCrossBlackoutMinutes, int healthCrossConfirmBars, bool enableHealthCrossTrading, bool showDebugLogs, bool enableTDUTrading, bool tDUUseSL, bool enableTDULiveOrders, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY, DayOfWeek weekStartDay, int weeklyHistoryWeeks, int monthlyHistoryMonths, int quarterlyHistoryQuarters, int yearlyHistoryYears, bool showPeriodHigh, bool showPeriodLow, bool showPeriodDividers, bool showPeriodMarker, string dailyDividerTime)
 		{
-			return RelativeVwap(Input, personality, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, showUSFirstHour, uSFirstHourMinutes, uSFirstHourOpacity, historicalVWAPThickness, extendLinesUntilTouch, sessionLevelThickness, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignalText, showTradeVisualization, showVwapHealth, healthLabelOffsetBars, healthLabelOffsetTicks, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, globalSignal2MaxAttempts, enableInternalLogic, internalSignal2MaxAttempts, exportSimulationCSV, analyzeAllSignals, exportVwapApproaches, approachSeparationTicks, captureDelta, eodWinterOffsetHours, enableAlerts, alertSound, showDebugLabels, enableFileLogging, showDebugLogs, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY, weekStartDay, weeklyHistoryWeeks, monthlyHistoryMonths, quarterlyHistoryQuarters, yearlyHistoryYears, showPeriodHigh, showPeriodLow, showPeriodDividers, showPeriodMarker, dailyDividerTime);
+			return RelativeVwap(Input, personality, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, showUSFirstHour, uSFirstHourMinutes, uSFirstHourOpacity, historicalVWAPThickness, extendLinesUntilTouch, sessionLevelThickness, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, showDemandSupplyCandles, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignalText, showTradeVisualization, showVwapHealth, healthLabelOffsetBars, healthLabelOffsetTicks, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, globalSignal2MaxAttempts, enableInternalLogic, internalSignal2MaxAttempts, exportSimulationCSV, analyzeAllSignals, exportVwapApproaches, approachSeparationTicks, captureDelta, eodWinterOffsetHours, enableAlerts, alertSound, showDebugLabels, enableFileLogging, enableHealthCrossAlert, healthCrossBlackoutMinutes, healthCrossConfirmBars, enableHealthCrossTrading, showDebugLogs, enableTDUTrading, tDUUseSL, enableTDULiveOrders, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY, weekStartDay, weeklyHistoryWeeks, monthlyHistoryMonths, quarterlyHistoryQuarters, yearlyHistoryYears, showPeriodHigh, showPeriodLow, showPeriodDividers, showPeriodMarker, dailyDividerTime);
 		}
 
-		public RelativeIndicators.RelativeVwap RelativeVwap(ISeries<double> input, PersonalityMode personality, VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, bool showUSFirstHour, int uSFirstHourMinutes, int uSFirstHourOpacity, float historicalVWAPThickness, bool extendLinesUntilTouch, float sessionLevelThickness, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignalText, bool showTradeVisualization, bool showVwapHealth, int healthLabelOffsetBars, int healthLabelOffsetTicks, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, int globalSignal2MaxAttempts, bool enableInternalLogic, int internalSignal2MaxAttempts, bool exportSimulationCSV, bool analyzeAllSignals, bool exportVwapApproaches, int approachSeparationTicks, bool captureDelta, int eodWinterOffsetHours, bool enableAlerts, string alertSound, bool showDebugLabels, bool enableFileLogging, bool showDebugLogs, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY, DayOfWeek weekStartDay, int weeklyHistoryWeeks, int monthlyHistoryMonths, int quarterlyHistoryQuarters, int yearlyHistoryYears, bool showPeriodHigh, bool showPeriodLow, bool showPeriodDividers, bool showPeriodMarker, string dailyDividerTime)
+		public RelativeIndicators.RelativeVwap RelativeVwap(ISeries<double> input, PersonalityMode personality, VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, bool showUSFirstHour, int uSFirstHourMinutes, int uSFirstHourOpacity, float historicalVWAPThickness, bool extendLinesUntilTouch, float sessionLevelThickness, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, bool showDemandSupplyCandles, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignalText, bool showTradeVisualization, bool showVwapHealth, int healthLabelOffsetBars, int healthLabelOffsetTicks, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, int globalSignal2MaxAttempts, bool enableInternalLogic, int internalSignal2MaxAttempts, bool exportSimulationCSV, bool analyzeAllSignals, bool exportVwapApproaches, int approachSeparationTicks, bool captureDelta, int eodWinterOffsetHours, bool enableAlerts, string alertSound, bool showDebugLabels, bool enableFileLogging, bool enableHealthCrossAlert, int healthCrossBlackoutMinutes, int healthCrossConfirmBars, bool enableHealthCrossTrading, bool showDebugLogs, bool enableTDUTrading, bool tDUUseSL, bool enableTDULiveOrders, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY, DayOfWeek weekStartDay, int weeklyHistoryWeeks, int monthlyHistoryMonths, int quarterlyHistoryQuarters, int yearlyHistoryYears, bool showPeriodHigh, bool showPeriodLow, bool showPeriodDividers, bool showPeriodMarker, string dailyDividerTime)
 		{
 			if (cacheRelativeVwap != null)
 				for (int idx = 0; idx < cacheRelativeVwap.Length; idx++)
-					if (cacheRelativeVwap[idx] != null && cacheRelativeVwap[idx].Personality == personality && cacheRelativeVwap[idx].VwapMethod == vwapMethod && cacheRelativeVwap[idx].MaxHistoryDays == maxHistoryDays && cacheRelativeVwap[idx].UseExchangeTime == useExchangeTime && cacheRelativeVwap[idx].ShowAsia == showAsia && cacheRelativeVwap[idx].AsiaStartTime == asiaStartTime && cacheRelativeVwap[idx].AsiaEndTime == asiaEndTime && cacheRelativeVwap[idx].ShowAsiaHigh == showAsiaHigh && cacheRelativeVwap[idx].ShowAsiaLow == showAsiaLow && cacheRelativeVwap[idx].ShowEurope == showEurope && cacheRelativeVwap[idx].EuropeStartTime == europeStartTime && cacheRelativeVwap[idx].EuropeEndTime == europeEndTime && cacheRelativeVwap[idx].ShowEuropeHigh == showEuropeHigh && cacheRelativeVwap[idx].ShowEuropeLow == showEuropeLow && cacheRelativeVwap[idx].ShowUS == showUS && cacheRelativeVwap[idx].USStartTime == uSStartTime && cacheRelativeVwap[idx].USEndTime == uSEndTime && cacheRelativeVwap[idx].ShowUSHigh == showUSHigh && cacheRelativeVwap[idx].ShowUSLow == showUSLow && cacheRelativeVwap[idx].ShowUSFirstHour == showUSFirstHour && cacheRelativeVwap[idx].USFirstHourMinutes == uSFirstHourMinutes && cacheRelativeVwap[idx].USFirstHourOpacity == uSFirstHourOpacity && cacheRelativeVwap[idx].HistoricalVWAPThickness == historicalVWAPThickness && cacheRelativeVwap[idx].ExtendLinesUntilTouch == extendLinesUntilTouch && cacheRelativeVwap[idx].SessionLevelThickness == sessionLevelThickness && cacheRelativeVwap[idx].HighVwapLabel == highVwapLabel && cacheRelativeVwap[idx].LowVwapLabel == lowVwapLabel && cacheRelativeVwap[idx].ShowDaysAgo == showDaysAgo && cacheRelativeVwap[idx].TradeDirection == tradeDirection && cacheRelativeVwap[idx].ShowLabels == showLabels && cacheRelativeVwap[idx].LabelDisplayMode == labelDisplayMode && cacheRelativeVwap[idx].CustomSignal1Text == customSignal1Text && cacheRelativeVwap[idx].CustomSignal2Text == customSignal2Text && cacheRelativeVwap[idx].CustomSignal3Text == customSignal3Text && cacheRelativeVwap[idx].ShowSignalLabels == showSignalLabels && cacheRelativeVwap[idx].ShowSignalText == showSignalText && cacheRelativeVwap[idx].ShowTradeVisualization == showTradeVisualization && cacheRelativeVwap[idx].ShowVwapHealth == showVwapHealth && cacheRelativeVwap[idx].HealthLabelOffsetBars == healthLabelOffsetBars && cacheRelativeVwap[idx].HealthLabelOffsetTicks == healthLabelOffsetTicks && cacheRelativeVwap[idx].ShowSignal1 == showSignal1 && cacheRelativeVwap[idx].ShowSignal2 == showSignal2 && cacheRelativeVwap[idx].ShowSignal3 == showSignal3 && cacheRelativeVwap[idx].LabelFontSize == labelFontSize && cacheRelativeVwap[idx].LabelTextOffset == labelTextOffset && cacheRelativeVwap[idx].LabelDistanceATR == labelDistanceATR && cacheRelativeVwap[idx].LabelCollisionSpacing == labelCollisionSpacing && cacheRelativeVwap[idx].DetachmentTicks == detachmentTicks && cacheRelativeVwap[idx].Signal2ThresholdTicks == signal2ThresholdTicks && cacheRelativeVwap[idx].GlobalSignal2MaxAttempts == globalSignal2MaxAttempts && cacheRelativeVwap[idx].EnableInternalLogic == enableInternalLogic && cacheRelativeVwap[idx].InternalSignal2MaxAttempts == internalSignal2MaxAttempts && cacheRelativeVwap[idx].ExportSimulationCSV == exportSimulationCSV && cacheRelativeVwap[idx].AnalyzeAllSignals == analyzeAllSignals && cacheRelativeVwap[idx].ExportVwapApproaches == exportVwapApproaches && cacheRelativeVwap[idx].ApproachSeparationTicks == approachSeparationTicks && cacheRelativeVwap[idx].CaptureDelta == captureDelta && cacheRelativeVwap[idx].EodWinterOffsetHours == eodWinterOffsetHours && cacheRelativeVwap[idx].EnableAlerts == enableAlerts && cacheRelativeVwap[idx].AlertSound == alertSound && cacheRelativeVwap[idx].ShowDebugLabels == showDebugLabels && cacheRelativeVwap[idx].EnableFileLogging == enableFileLogging && cacheRelativeVwap[idx].ShowDebugLogs == showDebugLogs && cacheRelativeVwap[idx].ShowCountdown == showCountdown && cacheRelativeVwap[idx].CountDown == countDown && cacheRelativeVwap[idx].ShowPercent == showPercent && cacheRelativeVwap[idx].CountdownFontSize == countdownFontSize && cacheRelativeVwap[idx].CountdownOffsetX == countdownOffsetX && cacheRelativeVwap[idx].CountdownOffsetY == countdownOffsetY && cacheRelativeVwap[idx].WeekStartDay == weekStartDay && cacheRelativeVwap[idx].WeeklyHistoryWeeks == weeklyHistoryWeeks && cacheRelativeVwap[idx].MonthlyHistoryMonths == monthlyHistoryMonths && cacheRelativeVwap[idx].QuarterlyHistoryQuarters == quarterlyHistoryQuarters && cacheRelativeVwap[idx].YearlyHistoryYears == yearlyHistoryYears && cacheRelativeVwap[idx].ShowPeriodHigh == showPeriodHigh && cacheRelativeVwap[idx].ShowPeriodLow == showPeriodLow && cacheRelativeVwap[idx].ShowPeriodDividers == showPeriodDividers && cacheRelativeVwap[idx].ShowPeriodMarker == showPeriodMarker && cacheRelativeVwap[idx].DailyDividerTime == dailyDividerTime && cacheRelativeVwap[idx].EqualsInput(input))
+					if (cacheRelativeVwap[idx] != null && cacheRelativeVwap[idx].Personality == personality && cacheRelativeVwap[idx].VwapMethod == vwapMethod && cacheRelativeVwap[idx].MaxHistoryDays == maxHistoryDays && cacheRelativeVwap[idx].UseExchangeTime == useExchangeTime && cacheRelativeVwap[idx].ShowAsia == showAsia && cacheRelativeVwap[idx].AsiaStartTime == asiaStartTime && cacheRelativeVwap[idx].AsiaEndTime == asiaEndTime && cacheRelativeVwap[idx].ShowAsiaHigh == showAsiaHigh && cacheRelativeVwap[idx].ShowAsiaLow == showAsiaLow && cacheRelativeVwap[idx].ShowEurope == showEurope && cacheRelativeVwap[idx].EuropeStartTime == europeStartTime && cacheRelativeVwap[idx].EuropeEndTime == europeEndTime && cacheRelativeVwap[idx].ShowEuropeHigh == showEuropeHigh && cacheRelativeVwap[idx].ShowEuropeLow == showEuropeLow && cacheRelativeVwap[idx].ShowUS == showUS && cacheRelativeVwap[idx].USStartTime == uSStartTime && cacheRelativeVwap[idx].USEndTime == uSEndTime && cacheRelativeVwap[idx].ShowUSHigh == showUSHigh && cacheRelativeVwap[idx].ShowUSLow == showUSLow && cacheRelativeVwap[idx].ShowUSFirstHour == showUSFirstHour && cacheRelativeVwap[idx].USFirstHourMinutes == uSFirstHourMinutes && cacheRelativeVwap[idx].USFirstHourOpacity == uSFirstHourOpacity && cacheRelativeVwap[idx].HistoricalVWAPThickness == historicalVWAPThickness && cacheRelativeVwap[idx].ExtendLinesUntilTouch == extendLinesUntilTouch && cacheRelativeVwap[idx].SessionLevelThickness == sessionLevelThickness && cacheRelativeVwap[idx].HighVwapLabel == highVwapLabel && cacheRelativeVwap[idx].LowVwapLabel == lowVwapLabel && cacheRelativeVwap[idx].ShowDaysAgo == showDaysAgo && cacheRelativeVwap[idx].TradeDirection == tradeDirection && cacheRelativeVwap[idx].ShowLabels == showLabels && cacheRelativeVwap[idx].LabelDisplayMode == labelDisplayMode && cacheRelativeVwap[idx].ShowDemandSupplyCandles == showDemandSupplyCandles && cacheRelativeVwap[idx].CustomSignal1Text == customSignal1Text && cacheRelativeVwap[idx].CustomSignal2Text == customSignal2Text && cacheRelativeVwap[idx].CustomSignal3Text == customSignal3Text && cacheRelativeVwap[idx].ShowSignalLabels == showSignalLabels && cacheRelativeVwap[idx].ShowSignalText == showSignalText && cacheRelativeVwap[idx].ShowTradeVisualization == showTradeVisualization && cacheRelativeVwap[idx].ShowVwapHealth == showVwapHealth && cacheRelativeVwap[idx].HealthLabelOffsetBars == healthLabelOffsetBars && cacheRelativeVwap[idx].HealthLabelOffsetTicks == healthLabelOffsetTicks && cacheRelativeVwap[idx].ShowSignal1 == showSignal1 && cacheRelativeVwap[idx].ShowSignal2 == showSignal2 && cacheRelativeVwap[idx].ShowSignal3 == showSignal3 && cacheRelativeVwap[idx].LabelFontSize == labelFontSize && cacheRelativeVwap[idx].LabelTextOffset == labelTextOffset && cacheRelativeVwap[idx].LabelDistanceATR == labelDistanceATR && cacheRelativeVwap[idx].LabelCollisionSpacing == labelCollisionSpacing && cacheRelativeVwap[idx].DetachmentTicks == detachmentTicks && cacheRelativeVwap[idx].Signal2ThresholdTicks == signal2ThresholdTicks && cacheRelativeVwap[idx].GlobalSignal2MaxAttempts == globalSignal2MaxAttempts && cacheRelativeVwap[idx].EnableInternalLogic == enableInternalLogic && cacheRelativeVwap[idx].InternalSignal2MaxAttempts == internalSignal2MaxAttempts && cacheRelativeVwap[idx].ExportSimulationCSV == exportSimulationCSV && cacheRelativeVwap[idx].AnalyzeAllSignals == analyzeAllSignals && cacheRelativeVwap[idx].ExportVwapApproaches == exportVwapApproaches && cacheRelativeVwap[idx].ApproachSeparationTicks == approachSeparationTicks && cacheRelativeVwap[idx].CaptureDelta == captureDelta && cacheRelativeVwap[idx].EodWinterOffsetHours == eodWinterOffsetHours && cacheRelativeVwap[idx].EnableAlerts == enableAlerts && cacheRelativeVwap[idx].AlertSound == alertSound && cacheRelativeVwap[idx].ShowDebugLabels == showDebugLabels && cacheRelativeVwap[idx].EnableFileLogging == enableFileLogging && cacheRelativeVwap[idx].EnableHealthCrossAlert == enableHealthCrossAlert && cacheRelativeVwap[idx].HealthCrossBlackoutMinutes == healthCrossBlackoutMinutes && cacheRelativeVwap[idx].HealthCrossConfirmBars == healthCrossConfirmBars && cacheRelativeVwap[idx].EnableHealthCrossTrading == enableHealthCrossTrading && cacheRelativeVwap[idx].ShowDebugLogs == showDebugLogs && cacheRelativeVwap[idx].EnableTDUTrading == enableTDUTrading && cacheRelativeVwap[idx].TDUUseSL == tDUUseSL && cacheRelativeVwap[idx].EnableTDULiveOrders == enableTDULiveOrders && cacheRelativeVwap[idx].ShowCountdown == showCountdown && cacheRelativeVwap[idx].CountDown == countDown && cacheRelativeVwap[idx].ShowPercent == showPercent && cacheRelativeVwap[idx].CountdownFontSize == countdownFontSize && cacheRelativeVwap[idx].CountdownOffsetX == countdownOffsetX && cacheRelativeVwap[idx].CountdownOffsetY == countdownOffsetY && cacheRelativeVwap[idx].WeekStartDay == weekStartDay && cacheRelativeVwap[idx].WeeklyHistoryWeeks == weeklyHistoryWeeks && cacheRelativeVwap[idx].MonthlyHistoryMonths == monthlyHistoryMonths && cacheRelativeVwap[idx].QuarterlyHistoryQuarters == quarterlyHistoryQuarters && cacheRelativeVwap[idx].YearlyHistoryYears == yearlyHistoryYears && cacheRelativeVwap[idx].ShowPeriodHigh == showPeriodHigh && cacheRelativeVwap[idx].ShowPeriodLow == showPeriodLow && cacheRelativeVwap[idx].ShowPeriodDividers == showPeriodDividers && cacheRelativeVwap[idx].ShowPeriodMarker == showPeriodMarker && cacheRelativeVwap[idx].DailyDividerTime == dailyDividerTime && cacheRelativeVwap[idx].EqualsInput(input))
 						return cacheRelativeVwap[idx];
-			return CacheIndicator<RelativeIndicators.RelativeVwap>(new RelativeIndicators.RelativeVwap(){ Personality = personality, VwapMethod = vwapMethod, MaxHistoryDays = maxHistoryDays, UseExchangeTime = useExchangeTime, ShowAsia = showAsia, AsiaStartTime = asiaStartTime, AsiaEndTime = asiaEndTime, ShowAsiaHigh = showAsiaHigh, ShowAsiaLow = showAsiaLow, ShowEurope = showEurope, EuropeStartTime = europeStartTime, EuropeEndTime = europeEndTime, ShowEuropeHigh = showEuropeHigh, ShowEuropeLow = showEuropeLow, ShowUS = showUS, USStartTime = uSStartTime, USEndTime = uSEndTime, ShowUSHigh = showUSHigh, ShowUSLow = showUSLow, ShowUSFirstHour = showUSFirstHour, USFirstHourMinutes = uSFirstHourMinutes, USFirstHourOpacity = uSFirstHourOpacity, HistoricalVWAPThickness = historicalVWAPThickness, ExtendLinesUntilTouch = extendLinesUntilTouch, SessionLevelThickness = sessionLevelThickness, HighVwapLabel = highVwapLabel, LowVwapLabel = lowVwapLabel, ShowDaysAgo = showDaysAgo, TradeDirection = tradeDirection, ShowLabels = showLabels, LabelDisplayMode = labelDisplayMode, CustomSignal1Text = customSignal1Text, CustomSignal2Text = customSignal2Text, CustomSignal3Text = customSignal3Text, ShowSignalLabels = showSignalLabels, ShowSignalText = showSignalText, ShowTradeVisualization = showTradeVisualization, ShowVwapHealth = showVwapHealth, HealthLabelOffsetBars = healthLabelOffsetBars, HealthLabelOffsetTicks = healthLabelOffsetTicks, ShowSignal1 = showSignal1, ShowSignal2 = showSignal2, ShowSignal3 = showSignal3, LabelFontSize = labelFontSize, LabelTextOffset = labelTextOffset, LabelDistanceATR = labelDistanceATR, LabelCollisionSpacing = labelCollisionSpacing, DetachmentTicks = detachmentTicks, Signal2ThresholdTicks = signal2ThresholdTicks, GlobalSignal2MaxAttempts = globalSignal2MaxAttempts, EnableInternalLogic = enableInternalLogic, InternalSignal2MaxAttempts = internalSignal2MaxAttempts, ExportSimulationCSV = exportSimulationCSV, AnalyzeAllSignals = analyzeAllSignals, ExportVwapApproaches = exportVwapApproaches, ApproachSeparationTicks = approachSeparationTicks, CaptureDelta = captureDelta, EodWinterOffsetHours = eodWinterOffsetHours, EnableAlerts = enableAlerts, AlertSound = alertSound, ShowDebugLabels = showDebugLabels, EnableFileLogging = enableFileLogging, ShowDebugLogs = showDebugLogs, ShowCountdown = showCountdown, CountDown = countDown, ShowPercent = showPercent, CountdownFontSize = countdownFontSize, CountdownOffsetX = countdownOffsetX, CountdownOffsetY = countdownOffsetY, WeekStartDay = weekStartDay, WeeklyHistoryWeeks = weeklyHistoryWeeks, MonthlyHistoryMonths = monthlyHistoryMonths, QuarterlyHistoryQuarters = quarterlyHistoryQuarters, YearlyHistoryYears = yearlyHistoryYears, ShowPeriodHigh = showPeriodHigh, ShowPeriodLow = showPeriodLow, ShowPeriodDividers = showPeriodDividers, ShowPeriodMarker = showPeriodMarker, DailyDividerTime = dailyDividerTime }, input, ref cacheRelativeVwap);
+			return CacheIndicator<RelativeIndicators.RelativeVwap>(new RelativeIndicators.RelativeVwap(){ Personality = personality, VwapMethod = vwapMethod, MaxHistoryDays = maxHistoryDays, UseExchangeTime = useExchangeTime, ShowAsia = showAsia, AsiaStartTime = asiaStartTime, AsiaEndTime = asiaEndTime, ShowAsiaHigh = showAsiaHigh, ShowAsiaLow = showAsiaLow, ShowEurope = showEurope, EuropeStartTime = europeStartTime, EuropeEndTime = europeEndTime, ShowEuropeHigh = showEuropeHigh, ShowEuropeLow = showEuropeLow, ShowUS = showUS, USStartTime = uSStartTime, USEndTime = uSEndTime, ShowUSHigh = showUSHigh, ShowUSLow = showUSLow, ShowUSFirstHour = showUSFirstHour, USFirstHourMinutes = uSFirstHourMinutes, USFirstHourOpacity = uSFirstHourOpacity, HistoricalVWAPThickness = historicalVWAPThickness, ExtendLinesUntilTouch = extendLinesUntilTouch, SessionLevelThickness = sessionLevelThickness, HighVwapLabel = highVwapLabel, LowVwapLabel = lowVwapLabel, ShowDaysAgo = showDaysAgo, TradeDirection = tradeDirection, ShowLabels = showLabels, LabelDisplayMode = labelDisplayMode, ShowDemandSupplyCandles = showDemandSupplyCandles, CustomSignal1Text = customSignal1Text, CustomSignal2Text = customSignal2Text, CustomSignal3Text = customSignal3Text, ShowSignalLabels = showSignalLabels, ShowSignalText = showSignalText, ShowTradeVisualization = showTradeVisualization, ShowVwapHealth = showVwapHealth, HealthLabelOffsetBars = healthLabelOffsetBars, HealthLabelOffsetTicks = healthLabelOffsetTicks, ShowSignal1 = showSignal1, ShowSignal2 = showSignal2, ShowSignal3 = showSignal3, LabelFontSize = labelFontSize, LabelTextOffset = labelTextOffset, LabelDistanceATR = labelDistanceATR, LabelCollisionSpacing = labelCollisionSpacing, DetachmentTicks = detachmentTicks, Signal2ThresholdTicks = signal2ThresholdTicks, GlobalSignal2MaxAttempts = globalSignal2MaxAttempts, EnableInternalLogic = enableInternalLogic, InternalSignal2MaxAttempts = internalSignal2MaxAttempts, ExportSimulationCSV = exportSimulationCSV, AnalyzeAllSignals = analyzeAllSignals, ExportVwapApproaches = exportVwapApproaches, ApproachSeparationTicks = approachSeparationTicks, CaptureDelta = captureDelta, EodWinterOffsetHours = eodWinterOffsetHours, EnableAlerts = enableAlerts, AlertSound = alertSound, ShowDebugLabels = showDebugLabels, EnableFileLogging = enableFileLogging, EnableHealthCrossAlert = enableHealthCrossAlert, HealthCrossBlackoutMinutes = healthCrossBlackoutMinutes, HealthCrossConfirmBars = healthCrossConfirmBars, EnableHealthCrossTrading = enableHealthCrossTrading, ShowDebugLogs = showDebugLogs, EnableTDUTrading = enableTDUTrading, TDUUseSL = tDUUseSL, EnableTDULiveOrders = enableTDULiveOrders, ShowCountdown = showCountdown, CountDown = countDown, ShowPercent = showPercent, CountdownFontSize = countdownFontSize, CountdownOffsetX = countdownOffsetX, CountdownOffsetY = countdownOffsetY, WeekStartDay = weekStartDay, WeeklyHistoryWeeks = weeklyHistoryWeeks, MonthlyHistoryMonths = monthlyHistoryMonths, QuarterlyHistoryQuarters = quarterlyHistoryQuarters, YearlyHistoryYears = yearlyHistoryYears, ShowPeriodHigh = showPeriodHigh, ShowPeriodLow = showPeriodLow, ShowPeriodDividers = showPeriodDividers, ShowPeriodMarker = showPeriodMarker, DailyDividerTime = dailyDividerTime }, input, ref cacheRelativeVwap);
 		}
 	}
 }
@@ -3697,14 +4182,14 @@ namespace NinjaTrader.NinjaScript.MarketAnalyzerColumns
 {
 	public partial class MarketAnalyzerColumn : MarketAnalyzerColumnBase
 	{
-		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(PersonalityMode personality, VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, bool showUSFirstHour, int uSFirstHourMinutes, int uSFirstHourOpacity, float historicalVWAPThickness, bool extendLinesUntilTouch, float sessionLevelThickness, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignalText, bool showTradeVisualization, bool showVwapHealth, int healthLabelOffsetBars, int healthLabelOffsetTicks, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, int globalSignal2MaxAttempts, bool enableInternalLogic, int internalSignal2MaxAttempts, bool exportSimulationCSV, bool analyzeAllSignals, bool exportVwapApproaches, int approachSeparationTicks, bool captureDelta, int eodWinterOffsetHours, bool enableAlerts, string alertSound, bool showDebugLabels, bool enableFileLogging, bool showDebugLogs, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY, DayOfWeek weekStartDay, int weeklyHistoryWeeks, int monthlyHistoryMonths, int quarterlyHistoryQuarters, int yearlyHistoryYears, bool showPeriodHigh, bool showPeriodLow, bool showPeriodDividers, bool showPeriodMarker, string dailyDividerTime)
+		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(PersonalityMode personality, VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, bool showUSFirstHour, int uSFirstHourMinutes, int uSFirstHourOpacity, float historicalVWAPThickness, bool extendLinesUntilTouch, float sessionLevelThickness, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, bool showDemandSupplyCandles, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignalText, bool showTradeVisualization, bool showVwapHealth, int healthLabelOffsetBars, int healthLabelOffsetTicks, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, int globalSignal2MaxAttempts, bool enableInternalLogic, int internalSignal2MaxAttempts, bool exportSimulationCSV, bool analyzeAllSignals, bool exportVwapApproaches, int approachSeparationTicks, bool captureDelta, int eodWinterOffsetHours, bool enableAlerts, string alertSound, bool showDebugLabels, bool enableFileLogging, bool enableHealthCrossAlert, int healthCrossBlackoutMinutes, int healthCrossConfirmBars, bool enableHealthCrossTrading, bool showDebugLogs, bool enableTDUTrading, bool tDUUseSL, bool enableTDULiveOrders, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY, DayOfWeek weekStartDay, int weeklyHistoryWeeks, int monthlyHistoryMonths, int quarterlyHistoryQuarters, int yearlyHistoryYears, bool showPeriodHigh, bool showPeriodLow, bool showPeriodDividers, bool showPeriodMarker, string dailyDividerTime)
 		{
-			return indicator.RelativeVwap(Input, personality, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, showUSFirstHour, uSFirstHourMinutes, uSFirstHourOpacity, historicalVWAPThickness, extendLinesUntilTouch, sessionLevelThickness, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignalText, showTradeVisualization, showVwapHealth, healthLabelOffsetBars, healthLabelOffsetTicks, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, globalSignal2MaxAttempts, enableInternalLogic, internalSignal2MaxAttempts, exportSimulationCSV, analyzeAllSignals, exportVwapApproaches, approachSeparationTicks, captureDelta, eodWinterOffsetHours, enableAlerts, alertSound, showDebugLabels, enableFileLogging, showDebugLogs, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY, weekStartDay, weeklyHistoryWeeks, monthlyHistoryMonths, quarterlyHistoryQuarters, yearlyHistoryYears, showPeriodHigh, showPeriodLow, showPeriodDividers, showPeriodMarker, dailyDividerTime);
+			return indicator.RelativeVwap(Input, personality, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, showUSFirstHour, uSFirstHourMinutes, uSFirstHourOpacity, historicalVWAPThickness, extendLinesUntilTouch, sessionLevelThickness, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, showDemandSupplyCandles, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignalText, showTradeVisualization, showVwapHealth, healthLabelOffsetBars, healthLabelOffsetTicks, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, globalSignal2MaxAttempts, enableInternalLogic, internalSignal2MaxAttempts, exportSimulationCSV, analyzeAllSignals, exportVwapApproaches, approachSeparationTicks, captureDelta, eodWinterOffsetHours, enableAlerts, alertSound, showDebugLabels, enableFileLogging, enableHealthCrossAlert, healthCrossBlackoutMinutes, healthCrossConfirmBars, enableHealthCrossTrading, showDebugLogs, enableTDUTrading, tDUUseSL, enableTDULiveOrders, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY, weekStartDay, weeklyHistoryWeeks, monthlyHistoryMonths, quarterlyHistoryQuarters, yearlyHistoryYears, showPeriodHigh, showPeriodLow, showPeriodDividers, showPeriodMarker, dailyDividerTime);
 		}
 
-		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(ISeries<double> input , PersonalityMode personality, VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, bool showUSFirstHour, int uSFirstHourMinutes, int uSFirstHourOpacity, float historicalVWAPThickness, bool extendLinesUntilTouch, float sessionLevelThickness, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignalText, bool showTradeVisualization, bool showVwapHealth, int healthLabelOffsetBars, int healthLabelOffsetTicks, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, int globalSignal2MaxAttempts, bool enableInternalLogic, int internalSignal2MaxAttempts, bool exportSimulationCSV, bool analyzeAllSignals, bool exportVwapApproaches, int approachSeparationTicks, bool captureDelta, int eodWinterOffsetHours, bool enableAlerts, string alertSound, bool showDebugLabels, bool enableFileLogging, bool showDebugLogs, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY, DayOfWeek weekStartDay, int weeklyHistoryWeeks, int monthlyHistoryMonths, int quarterlyHistoryQuarters, int yearlyHistoryYears, bool showPeriodHigh, bool showPeriodLow, bool showPeriodDividers, bool showPeriodMarker, string dailyDividerTime)
+		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(ISeries<double> input , PersonalityMode personality, VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, bool showUSFirstHour, int uSFirstHourMinutes, int uSFirstHourOpacity, float historicalVWAPThickness, bool extendLinesUntilTouch, float sessionLevelThickness, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, bool showDemandSupplyCandles, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignalText, bool showTradeVisualization, bool showVwapHealth, int healthLabelOffsetBars, int healthLabelOffsetTicks, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, int globalSignal2MaxAttempts, bool enableInternalLogic, int internalSignal2MaxAttempts, bool exportSimulationCSV, bool analyzeAllSignals, bool exportVwapApproaches, int approachSeparationTicks, bool captureDelta, int eodWinterOffsetHours, bool enableAlerts, string alertSound, bool showDebugLabels, bool enableFileLogging, bool enableHealthCrossAlert, int healthCrossBlackoutMinutes, int healthCrossConfirmBars, bool enableHealthCrossTrading, bool showDebugLogs, bool enableTDUTrading, bool tDUUseSL, bool enableTDULiveOrders, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY, DayOfWeek weekStartDay, int weeklyHistoryWeeks, int monthlyHistoryMonths, int quarterlyHistoryQuarters, int yearlyHistoryYears, bool showPeriodHigh, bool showPeriodLow, bool showPeriodDividers, bool showPeriodMarker, string dailyDividerTime)
 		{
-			return indicator.RelativeVwap(input, personality, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, showUSFirstHour, uSFirstHourMinutes, uSFirstHourOpacity, historicalVWAPThickness, extendLinesUntilTouch, sessionLevelThickness, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignalText, showTradeVisualization, showVwapHealth, healthLabelOffsetBars, healthLabelOffsetTicks, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, globalSignal2MaxAttempts, enableInternalLogic, internalSignal2MaxAttempts, exportSimulationCSV, analyzeAllSignals, exportVwapApproaches, approachSeparationTicks, captureDelta, eodWinterOffsetHours, enableAlerts, alertSound, showDebugLabels, enableFileLogging, showDebugLogs, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY, weekStartDay, weeklyHistoryWeeks, monthlyHistoryMonths, quarterlyHistoryQuarters, yearlyHistoryYears, showPeriodHigh, showPeriodLow, showPeriodDividers, showPeriodMarker, dailyDividerTime);
+			return indicator.RelativeVwap(input, personality, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, showUSFirstHour, uSFirstHourMinutes, uSFirstHourOpacity, historicalVWAPThickness, extendLinesUntilTouch, sessionLevelThickness, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, showDemandSupplyCandles, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignalText, showTradeVisualization, showVwapHealth, healthLabelOffsetBars, healthLabelOffsetTicks, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, globalSignal2MaxAttempts, enableInternalLogic, internalSignal2MaxAttempts, exportSimulationCSV, analyzeAllSignals, exportVwapApproaches, approachSeparationTicks, captureDelta, eodWinterOffsetHours, enableAlerts, alertSound, showDebugLabels, enableFileLogging, enableHealthCrossAlert, healthCrossBlackoutMinutes, healthCrossConfirmBars, enableHealthCrossTrading, showDebugLogs, enableTDUTrading, tDUUseSL, enableTDULiveOrders, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY, weekStartDay, weeklyHistoryWeeks, monthlyHistoryMonths, quarterlyHistoryQuarters, yearlyHistoryYears, showPeriodHigh, showPeriodLow, showPeriodDividers, showPeriodMarker, dailyDividerTime);
 		}
 	}
 }
@@ -3713,14 +4198,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public partial class Strategy : NinjaTrader.Gui.NinjaScript.StrategyRenderBase
 	{
-		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(PersonalityMode personality, VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, bool showUSFirstHour, int uSFirstHourMinutes, int uSFirstHourOpacity, float historicalVWAPThickness, bool extendLinesUntilTouch, float sessionLevelThickness, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignalText, bool showTradeVisualization, bool showVwapHealth, int healthLabelOffsetBars, int healthLabelOffsetTicks, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, int globalSignal2MaxAttempts, bool enableInternalLogic, int internalSignal2MaxAttempts, bool exportSimulationCSV, bool analyzeAllSignals, bool exportVwapApproaches, int approachSeparationTicks, bool captureDelta, int eodWinterOffsetHours, bool enableAlerts, string alertSound, bool showDebugLabels, bool enableFileLogging, bool showDebugLogs, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY, DayOfWeek weekStartDay, int weeklyHistoryWeeks, int monthlyHistoryMonths, int quarterlyHistoryQuarters, int yearlyHistoryYears, bool showPeriodHigh, bool showPeriodLow, bool showPeriodDividers, bool showPeriodMarker, string dailyDividerTime)
+		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(PersonalityMode personality, VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, bool showUSFirstHour, int uSFirstHourMinutes, int uSFirstHourOpacity, float historicalVWAPThickness, bool extendLinesUntilTouch, float sessionLevelThickness, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, bool showDemandSupplyCandles, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignalText, bool showTradeVisualization, bool showVwapHealth, int healthLabelOffsetBars, int healthLabelOffsetTicks, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, int globalSignal2MaxAttempts, bool enableInternalLogic, int internalSignal2MaxAttempts, bool exportSimulationCSV, bool analyzeAllSignals, bool exportVwapApproaches, int approachSeparationTicks, bool captureDelta, int eodWinterOffsetHours, bool enableAlerts, string alertSound, bool showDebugLabels, bool enableFileLogging, bool enableHealthCrossAlert, int healthCrossBlackoutMinutes, int healthCrossConfirmBars, bool enableHealthCrossTrading, bool showDebugLogs, bool enableTDUTrading, bool tDUUseSL, bool enableTDULiveOrders, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY, DayOfWeek weekStartDay, int weeklyHistoryWeeks, int monthlyHistoryMonths, int quarterlyHistoryQuarters, int yearlyHistoryYears, bool showPeriodHigh, bool showPeriodLow, bool showPeriodDividers, bool showPeriodMarker, string dailyDividerTime)
 		{
-			return indicator.RelativeVwap(Input, personality, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, showUSFirstHour, uSFirstHourMinutes, uSFirstHourOpacity, historicalVWAPThickness, extendLinesUntilTouch, sessionLevelThickness, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignalText, showTradeVisualization, showVwapHealth, healthLabelOffsetBars, healthLabelOffsetTicks, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, globalSignal2MaxAttempts, enableInternalLogic, internalSignal2MaxAttempts, exportSimulationCSV, analyzeAllSignals, exportVwapApproaches, approachSeparationTicks, captureDelta, eodWinterOffsetHours, enableAlerts, alertSound, showDebugLabels, enableFileLogging, showDebugLogs, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY, weekStartDay, weeklyHistoryWeeks, monthlyHistoryMonths, quarterlyHistoryQuarters, yearlyHistoryYears, showPeriodHigh, showPeriodLow, showPeriodDividers, showPeriodMarker, dailyDividerTime);
+			return indicator.RelativeVwap(Input, personality, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, showUSFirstHour, uSFirstHourMinutes, uSFirstHourOpacity, historicalVWAPThickness, extendLinesUntilTouch, sessionLevelThickness, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, showDemandSupplyCandles, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignalText, showTradeVisualization, showVwapHealth, healthLabelOffsetBars, healthLabelOffsetTicks, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, globalSignal2MaxAttempts, enableInternalLogic, internalSignal2MaxAttempts, exportSimulationCSV, analyzeAllSignals, exportVwapApproaches, approachSeparationTicks, captureDelta, eodWinterOffsetHours, enableAlerts, alertSound, showDebugLabels, enableFileLogging, enableHealthCrossAlert, healthCrossBlackoutMinutes, healthCrossConfirmBars, enableHealthCrossTrading, showDebugLogs, enableTDUTrading, tDUUseSL, enableTDULiveOrders, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY, weekStartDay, weeklyHistoryWeeks, monthlyHistoryMonths, quarterlyHistoryQuarters, yearlyHistoryYears, showPeriodHigh, showPeriodLow, showPeriodDividers, showPeriodMarker, dailyDividerTime);
 		}
 
-		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(ISeries<double> input , PersonalityMode personality, VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, bool showUSFirstHour, int uSFirstHourMinutes, int uSFirstHourOpacity, float historicalVWAPThickness, bool extendLinesUntilTouch, float sessionLevelThickness, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignalText, bool showTradeVisualization, bool showVwapHealth, int healthLabelOffsetBars, int healthLabelOffsetTicks, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, int globalSignal2MaxAttempts, bool enableInternalLogic, int internalSignal2MaxAttempts, bool exportSimulationCSV, bool analyzeAllSignals, bool exportVwapApproaches, int approachSeparationTicks, bool captureDelta, int eodWinterOffsetHours, bool enableAlerts, string alertSound, bool showDebugLabels, bool enableFileLogging, bool showDebugLogs, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY, DayOfWeek weekStartDay, int weeklyHistoryWeeks, int monthlyHistoryMonths, int quarterlyHistoryQuarters, int yearlyHistoryYears, bool showPeriodHigh, bool showPeriodLow, bool showPeriodDividers, bool showPeriodMarker, string dailyDividerTime)
+		public Indicators.RelativeIndicators.RelativeVwap RelativeVwap(ISeries<double> input , PersonalityMode personality, VwapPriceMethod vwapMethod, int maxHistoryDays, bool useExchangeTime, bool showAsia, string asiaStartTime, string asiaEndTime, bool showAsiaHigh, bool showAsiaLow, bool showEurope, string europeStartTime, string europeEndTime, bool showEuropeHigh, bool showEuropeLow, bool showUS, string uSStartTime, string uSEndTime, bool showUSHigh, bool showUSLow, bool showUSFirstHour, int uSFirstHourMinutes, int uSFirstHourOpacity, float historicalVWAPThickness, bool extendLinesUntilTouch, float sessionLevelThickness, string highVwapLabel, string lowVwapLabel, bool showDaysAgo, TradeDirectionMode tradeDirection, bool showLabels, LabelMode labelDisplayMode, bool showDemandSupplyCandles, string customSignal1Text, string customSignal2Text, string customSignal3Text, bool showSignalLabels, bool showSignalText, bool showTradeVisualization, bool showVwapHealth, int healthLabelOffsetBars, int healthLabelOffsetTicks, bool showSignal1, bool showSignal2, bool showSignal3, int labelFontSize, int labelTextOffset, double labelDistanceATR, double labelCollisionSpacing, int detachmentTicks, int signal2ThresholdTicks, int globalSignal2MaxAttempts, bool enableInternalLogic, int internalSignal2MaxAttempts, bool exportSimulationCSV, bool analyzeAllSignals, bool exportVwapApproaches, int approachSeparationTicks, bool captureDelta, int eodWinterOffsetHours, bool enableAlerts, string alertSound, bool showDebugLabels, bool enableFileLogging, bool enableHealthCrossAlert, int healthCrossBlackoutMinutes, int healthCrossConfirmBars, bool enableHealthCrossTrading, bool showDebugLogs, bool enableTDUTrading, bool tDUUseSL, bool enableTDULiveOrders, bool showCountdown, bool countDown, bool showPercent, int countdownFontSize, int countdownOffsetX, int countdownOffsetY, DayOfWeek weekStartDay, int weeklyHistoryWeeks, int monthlyHistoryMonths, int quarterlyHistoryQuarters, int yearlyHistoryYears, bool showPeriodHigh, bool showPeriodLow, bool showPeriodDividers, bool showPeriodMarker, string dailyDividerTime)
 		{
-			return indicator.RelativeVwap(input, personality, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, showUSFirstHour, uSFirstHourMinutes, uSFirstHourOpacity, historicalVWAPThickness, extendLinesUntilTouch, sessionLevelThickness, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignalText, showTradeVisualization, showVwapHealth, healthLabelOffsetBars, healthLabelOffsetTicks, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, globalSignal2MaxAttempts, enableInternalLogic, internalSignal2MaxAttempts, exportSimulationCSV, analyzeAllSignals, exportVwapApproaches, approachSeparationTicks, captureDelta, eodWinterOffsetHours, enableAlerts, alertSound, showDebugLabels, enableFileLogging, showDebugLogs, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY, weekStartDay, weeklyHistoryWeeks, monthlyHistoryMonths, quarterlyHistoryQuarters, yearlyHistoryYears, showPeriodHigh, showPeriodLow, showPeriodDividers, showPeriodMarker, dailyDividerTime);
+			return indicator.RelativeVwap(input, personality, vwapMethod, maxHistoryDays, useExchangeTime, showAsia, asiaStartTime, asiaEndTime, showAsiaHigh, showAsiaLow, showEurope, europeStartTime, europeEndTime, showEuropeHigh, showEuropeLow, showUS, uSStartTime, uSEndTime, showUSHigh, showUSLow, showUSFirstHour, uSFirstHourMinutes, uSFirstHourOpacity, historicalVWAPThickness, extendLinesUntilTouch, sessionLevelThickness, highVwapLabel, lowVwapLabel, showDaysAgo, tradeDirection, showLabels, labelDisplayMode, showDemandSupplyCandles, customSignal1Text, customSignal2Text, customSignal3Text, showSignalLabels, showSignalText, showTradeVisualization, showVwapHealth, healthLabelOffsetBars, healthLabelOffsetTicks, showSignal1, showSignal2, showSignal3, labelFontSize, labelTextOffset, labelDistanceATR, labelCollisionSpacing, detachmentTicks, signal2ThresholdTicks, globalSignal2MaxAttempts, enableInternalLogic, internalSignal2MaxAttempts, exportSimulationCSV, analyzeAllSignals, exportVwapApproaches, approachSeparationTicks, captureDelta, eodWinterOffsetHours, enableAlerts, alertSound, showDebugLabels, enableFileLogging, enableHealthCrossAlert, healthCrossBlackoutMinutes, healthCrossConfirmBars, enableHealthCrossTrading, showDebugLogs, enableTDUTrading, tDUUseSL, enableTDULiveOrders, showCountdown, countDown, showPercent, countdownFontSize, countdownOffsetX, countdownOffsetY, weekStartDay, weeklyHistoryWeeks, monthlyHistoryMonths, quarterlyHistoryQuarters, yearlyHistoryYears, showPeriodHigh, showPeriodLow, showPeriodDividers, showPeriodMarker, dailyDividerTime);
 		}
 	}
 }

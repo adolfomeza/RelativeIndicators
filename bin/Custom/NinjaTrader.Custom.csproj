@@ -441,28 +441,28 @@
     <Compile Include="Indicators\RelativeIndicators\RelativeVolumeProfile.ContextMenu.cs" />
     <Compile Include="Indicators\RelativeIndicators\RelativeVolumeProfile.Rendering.cs" />
     <Compile Include="AddOns\LicenseClient.cs" />
-    <Compile Include="Indicators\RelativeIndicators\RelativeVolumeProfile.cs" />
     <Compile Include="Indicators\RelativeIndicators\VWAPDelta.TouchDetect.cs" />
     <Compile Include="Indicators\RelativeIndicators\RelativeVwap.Toolbar.cs" />
     <Compile Include="Indicators\RelativeIndicators\RelativeVwap.TDUIntegration.cs" />
     <Compile Include="Indicators\RelativeIndicators\RelativeVwap.Structure.cs" />
     <Compile Include="Indicators\RelativeIndicators\RelativeVwapHealth.cs" />
     <Compile Include="Indicators\RelativeIndicators\RelativeVwap.Utilities.cs" />
-    <Compile Include="Indicators\RelativeIndicators\RelativeVwap.cs" />
     <Compile Include="Indicators\RelativeIndicators\RelativeVwap.Trading.cs" />
-    <Compile Include="Indicators\RelativeIndicators\RelativeWeeklyVwap.cs" />
     <Compile Include="Indicators\RelativeIndicators\RelativeNMonthlyVwap.cs" />
     <Compile Include="Indicators\RelativeIndicators\RelativeQuarterlyVwap.cs" />
     <Compile Include="Indicators\RelativeIndicators\RelativeDailyVwap.cs" />
     <Compile Include="Indicators\amaCurrentWeekVWAP.cs" />
     <Compile Include="Indicators\amaNMonthlyVWAP.cs" />
     <Compile Include="Indicators\RelativeIndicators\RelativeDailyVwap.cs" />
-    <Compile Include="Indicators\RelativeIndicators\RelativeAnnualVwap.cs" />
     <Compile Include="Indicators\RelativeIndicators\RelativeMonthlyVwap.cs" />
     <Compile Include="Indicators\RelativeIndicators\RelativeVwapLevels.cs" />
     <Compile Include="Indicators\RelativeIndicators\RelativeIndicatorRegistry.cs" />
     <Compile Include="Indicators\RelativeIndicators\RelativeObserver.cs" />
     <Compile Include="Indicators\RelativeIndicators\RelativeLog.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeAnnualVwap.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeVwap.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeWeeklyVwap.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeVolumeProfile.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Resource.resx">
