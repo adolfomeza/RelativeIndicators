@@ -7,6 +7,100 @@ Arquitectura de tres procesos:
 - `RelativeObserver.cs` — AddOn NinjaScript con HttpListener en `localhost:7891`
 - `RelativeNewsSquawk_Server/` — servidor Flask existente (no modificado en esta fase)
 
+## [0.4.0] — 2026-04-20
+
+NADRO metodología aplicada en profundidad. Sprints 1-4 del refinamiento.
+Cierre del stack antes de escalar a multi-instrumento (ScannerAddOn / Fase C).
+
+### Sprint 1 — Fresh Shift + Recency + Targets en Hypos
+
+**`_compute_freshness` / `_period_start`**:
+- Calcula edad del período actual para cada TF NADRO (Y/Q/M/W/D).
+- Score 0-1 lineal (1.0 = recién arrancado, 0.0 = próximo reset).
+- Etiquetas: ``fresh`` (≥0.8), ``developing`` (≥0.4), ``matured`` (≥0.15), ``expired`` (<0.15).
+- Aplicado a cada nivel en ``_generate_lineas_arena``.
+
+**Hypos refactor a accionables**:
+- Cada hypo ahora trae ``entry``, ``target``, ``invalidation``, ``rr_ratio``,
+  ``risk_pts``, ``reward_pts``, ``risk_usd``, ``reward_usd``.
+- H1 bullish: rupture del nivel arriba → target siguiente nivel / invalidación nivel abajo.
+- H2 bearish: simétrico.
+- H3 fade/rango o "sin setup claro — respetar inacción".
+
+**Setup quality extendido a 5 puntos (antes 4)**:
+- Incluye +1 por nivel cercano FRESH (Ley 8 NADRO: energía se disipa).
+- Max score 5 → grading A+/A/B/C.
+
+### Sprint 2 — Ritmo Zigzag + Compresión + Delta slope + Fresh Shift tool
+
+**`_zigzag_swings` + `_analyze_ritmo` refactor** (NADRO 3.0):
+- Detección de swings alto/bajo sobre lookback configurable.
+- Filtro alternando H/L con reversal mínimo auto-calibrado al 75% percentile
+  del bar range (adapta a volatilidad del instrumento sin parámetros fijos).
+- Reporta n_swings, n_rotations, avg_rotation_pts, acceptance_distance (50%).
+
+**`_detect_compresion`** (Ley 10 NADRO):
+- Detecta cuando ≥ min_bars barras mantienen highs (o lows) dentro del
+  acceptance_distance de un nivel extremo, sin rebote fuerte.
+- Direcciones: ``bullish_reversal`` (sobre soporte) o ``bearish_reversal``
+  (bajo resistencia).
+- NADRO autoriza ANTICIPAR sólo en este caso.
+
+**`_analyze_delta_slope`**:
+- Compara pendiente del Cumulative Delta vs pendiente del precio en los
+  últimos 500 ticks.
+- Ángulos en grados con clasificación: ``coherent``, ``absorption_phase2``
+  (delta >45° pero precio flat), ``strong_divergence``, ``moderate_divergence``.
+
+**Nueva tool: `nadro_detect_fresh_shift(instrument, tf, n_bars)`**:
+- Detecta la última transición balance↔imbalance_up/down usando el DVA Weekly.
+- Acceptance = 10% del ancho del DVA.
+- Reporta estado actual + último shift + timestamp + bars_ago + freshness_hint.
+
+### Sprint 3 — Instrumentación RelativeTrend + RelativeNewsFilter
+
+**`RelativeTrend` instrumentado**:
+- Publica high_vwap, low_vwap, has_high_vwap, has_low_vwap, session anchors.
+
+**`RelativeNewsFilter` instrumentado (gatekeeper NADRO 5.0 The Work)**:
+- Publica próximo evento con minutos al evento, country, impact.
+- Próximo High Impact con flag ``high_impact_within_30min``.
+- Contadores events_next_hour, events_next_24h.
+
+**Fix bug download (NewsFilter)**:
+- ``_downloaded = true`` solo tras download exitoso (antes se seteaba antes
+  del await → loop de "success" sin datos si fallaba).
+- Retry 3 veces con backoff exponencial (2s, 4s, 6s).
+- User-Agent explícito + timeout 15s.
+- Detección de respuesta vacía (<100 bytes).
+- Logs detallados con attempt number.
+
+### Sprint 4 — Tools compuestas finales
+
+**Nueva tool: `nadro_classify_setup(instrument, direction, entry, target, stop, size)`**:
+- Evalúa un setup hipotético contra Leyes NADRO.
+- Quality A+/A/B/C sobre 7 puntos:
+  - RR ≥ 2:1
+  - Referencia estructural en entry/stop
+  - Alineación con macro bias
+  - Alineación con régimen intraday
+  - Target realista vs ritmo
+  - Ley 10 Compresión alineada
+  - Order Flow strong + coherente
+- Reporta cumplimiento de Leyes 1, 3, 8, 10.
+- Calcula proximidad de entry/stop/target a niveles estructurales.
+- Recomendación clara: TOMAR / CAUTELA / NO OPERAR.
+
+**Nueva tool: `check_compile_status()`**:
+- Cruza mtime del NinjaTrader.Custom.dll con uptime del AddOn.
+- Detecta F7 exitoso (DLL mtime ≈ AddOn uptime reciente).
+- Detecta F7 fallido (AddOn restart reciente pero DLL no actualizado).
+- Útil para automatizar verificación sin preguntar al user.
+
+### Tools totales: 35
+Nuevas desde v0.3.0: nadro_detect_fresh_shift, nadro_classify_setup,
+check_compile_status. Plus: instrumentación de RelativeTrend y RelativeNewsFilter.
+
 ## [0.3.0] — 2026-04-20
 
 Integración metodología NADRO + instrumentación de 7 indicadores clave + primera

@@ -18,6 +18,7 @@ from .paths import (
     trade_exports_dir,
     vwap_levels_dir,
 )
+from .tools import compile as compile_tool
 from .tools import exports as trade_exports
 from .tools import logs as nt_logs
 from .tools import nadro as nadro_tool
@@ -376,6 +377,55 @@ def nadro_snapshot(instrument: str, tf_ritmo: str = "1m", n_bars: int = 20) -> d
     Requiere que los indicadores estén publicando (ver ``list_indicator_states``).
     """
     return nadro_tool.nadro_snapshot(instrument=instrument, tf_ritmo=tf_ritmo, n_bars=n_bars)
+
+
+@mcp.tool
+def nadro_classify_setup(
+    instrument: str,
+    direction: str,
+    entry: float,
+    target: float,
+    stop: float,
+    size: int = 1,
+) -> dict:
+    """Evalúa un setup hipotético contra las Leyes NADRO.
+
+    Devuelve calidad A+/A/B/C + cumplimiento de leyes + alineación con régimen
+    actual + recomendación concreta (tomar / cautela / no operar).
+
+    ``direction``: ``"long"`` o ``"short"``. Geometría validada automáticamente.
+    """
+    return nadro_tool.nadro_classify_setup(
+        instrument=instrument, direction=direction,
+        entry=entry, target=target, stop=stop, size=size,
+    )
+
+
+@mcp.tool
+def check_compile_status() -> dict:
+    """Verifica si NT8 recompiló recientemente y si fue exitoso.
+
+    Cruza DLL mtime + AddOn uptime para detectar F7 exitoso vs fallido.
+    Útil para confirmar compilación sin preguntar al usuario.
+    """
+    return compile_tool.check_compile_status()
+
+
+@mcp.tool
+def nadro_detect_fresh_shift(instrument: str, tf: str = "1m", n_bars: int = 200) -> dict:
+    """Detecta el último Fresh Condition Shift (balance ↔ imbalance).
+
+    Recorre las últimas ``n_bars`` comparando cada close contra el DVA Weekly
+    (fallback Daily). Marca la última transición de régimen:
+
+    - ``balance`` → close dentro del DVA (±10% de tolerancia del ancho)
+    - ``imbalance_up`` → close arriba del DVAH + tolerancia
+    - ``imbalance_down`` → close debajo del DVAL - tolerancia
+
+    Útil para determinar cuánta "energía fresca" tiene el régimen actual
+    (Ley 8 NADRO). Fresh shift reciente = máxima convicción para BPB/RPB.
+    """
+    return nadro_tool.nadro_detect_fresh_shift(instrument=instrument, tf=tf, n_bars=n_bars)
 
 
 @mcp.tool
