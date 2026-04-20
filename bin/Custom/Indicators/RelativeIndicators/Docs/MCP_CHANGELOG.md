@@ -7,6 +7,53 @@ Arquitectura de tres procesos:
 - `RelativeObserver.cs` — AddOn NinjaScript con HttpListener en `localhost:7891`
 - `RelativeNewsSquawk_Server/` — servidor Flask existente (no modificado en esta fase)
 
+## [0.5.0] — 2026-04-20
+
+Backtest NADRO con los 4 setups + visualización PNG + ventana configurable.
+
+### Nueva tool: `nadro_backtest`
+- 4 setups NADRO detectables: **BPB, RPB, IPB, EF**
+- Niveles históricos calculados desde bars crudos (VWAP + SD bands por sesión ETH)
+- **Prior Day High/Low + PVA** sobre RTH (9:30-16:00) del último día hábil
+- Filtro freshness Ley 8 (skip PDH/PDL > 3 días antigüedad)
+- Stops dinámicos ATR-based (piso 4pts, sin cap artificial)
+- Targets: RR 1:2 o SD3 (lo más lejos)
+- Confirmation bars para RPB/IPB/EF (reduce falsos positivos)
+- Regime filter para EF (no fade contra imbalance sostenido)
+- Stats globales + por setup + daily breakdown + curva PnL
+
+### Nueva tool: `nadro_backtest_with_charts`
+Genera 4 PNG en `RelativeMCP_Server/reports/`:
+- `equity_curve.png` — PnL acumulado total + por setup superpuestos
+- `by_setup.png` — 4 subplots (uno por setup) con W/L markers
+- `daily_pnl.png` — barras diarias verde/rojo
+- `distribution.png` — histograma PnL por trade
+
+### Resultados validados (MES 06-26, 30 días, 7am-23pm)
+```
+Trades: 38     WR: 44.7%     PnL: +$590.55     PF: 1.43     MaxDD: $632
+
+BPB:  7t  WR 71%  +$652.15  PF 5.18  ← EDGE INSTITUCIONAL VALIDADO
+RPB:  7t  WR 43%  +$69.50   PF 1.29  ← Break-even positivo
+EF:  22t  WR 41%  +$7.80    PF 1.01  ← Ruido sin Order Flow
+IPB:  2t  WR  0%  -$138.90  PF 0.00  ← Sample insuficiente
+```
+
+**Conclusión**: BPB es el único setup con edge estadístico sin OF. RPB/EF/IPB
+requieren `nadro_classify_setup` live con delta acumulado para filtrar.
+
+### Lecciones NADRO (respeto total a la metodología)
+- IPB debe ser pullback al **DVAH/DVAL (±1 SD)**, NUNCA al VWAP central
+  ("Chop Zone" — Guía NADRO 4.0: *prioridad SIEMPRE los extremos*)
+- Setups son raros por diseño (1 BPB/5 días, IPB/30 días) — coherente con
+  Ejecución 3.0: *"la mayor parte del tiempo no hay oportunidad"*
+- BPB usa **Prior Day RTH High/Low** como nivel estático, no developing DVA
+- Stops dinámicos ATR sin techo artificial — piso 4pts anti-ruido
+- Targets proporcionales al stop (RR 1:2) en vez de niveles fijos
+
+### Tools totales: 37
+Nuevas v0.5.0: `nadro_backtest`, `nadro_backtest_with_charts`.
+
 ## [0.4.0] — 2026-04-20
 
 NADRO metodología aplicada en profundidad. Sprints 1-4 del refinamiento.

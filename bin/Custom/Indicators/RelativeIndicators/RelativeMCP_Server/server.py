@@ -18,6 +18,8 @@ from .paths import (
     trade_exports_dir,
     vwap_levels_dir,
 )
+from .tools import backtest as backtest_tool
+from .tools import backtest_charts as backtest_charts_tool
 from .tools import compile as compile_tool
 from .tools import exports as trade_exports
 from .tools import logs as nt_logs
@@ -398,6 +400,68 @@ def nadro_classify_setup(
     return nadro_tool.nadro_classify_setup(
         instrument=instrument, direction=direction,
         entry=entry, target=target, stop=stop, size=size,
+    )
+
+
+@mcp.tool
+def nadro_backtest(
+    instrument: str,
+    days_back: int = 7,
+    tf: str = "5m",
+    window_start: str = "09:30",
+    window_end: str = "11:00",
+    stop_pts: float = 5.0,
+    max_hold_bars: int = 20,
+) -> dict:
+    """Backtest MVP NADRO — setups BPB en los últimos N días.
+
+    Recalcula VWAP + bandas SD desde bars crudos para cada día histórico.
+    Detecta breakouts del DVAH/DVAL con volumen > 1.5× promedio. Simula
+    entry al retest del nivel, stop fijo, target = banda SD3.
+
+    Devuelve:
+    - ``stats``: win_rate, profit_factor, expectancy, max DD, PnL total
+    - ``daily_breakdown``: PnL por día
+    - ``trades``: detalle de cada trade
+    - ``pnl_curve`` dentro de stats: curva cumulativa
+
+    Default MVP: 7 días, 5m bars, ventana 09:30-11:00 ET, stop 5pts, hold 20 bars.
+    """
+    return backtest_tool.nadro_backtest(
+        instrument=instrument,
+        days_back=days_back,
+        tf=tf,
+        window_start=window_start,
+        window_end=window_end,
+        stop_pts=stop_pts,
+        max_hold_bars=max_hold_bars,
+    )
+
+
+@mcp.tool
+def nadro_backtest_with_charts(
+    instrument: str,
+    days_back: int = 30,
+    tf: str = "15m",
+    window_start: str = "07:00",
+    window_end: str = "23:00",
+) -> dict:
+    """Corre el backtest NADRO y genera 4 gráficos PNG automáticamente.
+
+    Produce:
+    - ``equity_curve.png``: PnL acumulado total + por setup superpuestos
+    - ``by_setup.png``: 4 subplots, uno por setup (BPB/RPB/IPB/EF) con W/L markers
+    - ``daily_pnl.png``: barras diarias verde/rojo
+    - ``distribution.png``: histograma de PnL por trade por setup
+
+    Archivos en ``RelativeMCP_Server/reports/``. Returns dict con las rutas.
+    """
+    return backtest_charts_tool.nadro_backtest_with_charts(
+        instrument=instrument,
+        days_back=days_back,
+        tf=tf,
+        window_start=window_start,
+        window_end=window_end,
     )
 
 
