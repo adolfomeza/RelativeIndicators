@@ -66,6 +66,12 @@
     <Reference Include="TDUPriceAction">
       <HintPath>C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\TDUPriceAction.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\RestSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="TachEonTimeWarpOmnia">
+      <HintPath>C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\TachEonTimeWarpOmnia.dll</HintPath>
+    </Reference>
     <Reference Include="NinjaTrader.Vendor">
       <HintPath>C:\Users\prueba\Documents\NinjaTrader 8\bin\Custom\NinjaTrader.Vendor.dll</HintPath>
     </Reference>
@@ -415,6 +421,48 @@
     <Compile Include="ASCENDO_NewsEvents.cs" />
     <Compile Include="NinjaTrader.Vendor.cs" />
     <Compile Include="TDUPriceAction.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeVwap.Sessions.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeVwap.VoiceAlerts.cs" />
+    <Compile Include="Strategies\RelativeNewsSquawkBot.cs" />
+    <Compile Include="Strategies\SessionLevels\VirtualTrade.cs" />
+    <Compile Include="Strategies\SessionLevels\VirtualTradeManager.cs" />
+    <Compile Include="Strategies\SessionLevels\VWAPViolationTracker.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeTrend.cs" />
+    <Compile Include="Indicators\ManualBacktestTracker.cs" />
+    <Compile Include="DrawingTools\LongTrade.cs" />
+    <Compile Include="DrawingTools\ShortTrade.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeVwapsHiLo.cs" />
+    <Compile Include="DrawingTools\%40%40SupportLine.cs" />
+    <Compile Include="DrawingTools\CandleExtensionRect.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeSBS.cs" />
+    <Compile Include="Indicators\RelativeIndicators\VWAPDelta.cs" />
+    <Compile Include="Indicators\RelativeIndicators\VWAPDelta.Export.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeVwap.Rendering.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeVolumeProfile.ContextMenu.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeVolumeProfile.Rendering.cs" />
+    <Compile Include="AddOns\LicenseClient.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeVolumeProfile.cs" />
+    <Compile Include="Indicators\RelativeIndicators\VWAPDelta.TouchDetect.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeVwap.Toolbar.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeVwap.TDUIntegration.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeVwap.Structure.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeVwapHealth.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeVwap.Utilities.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeVwap.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeVwap.Trading.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeWeeklyVwap.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeNMonthlyVwap.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeQuarterlyVwap.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeDailyVwap.cs" />
+    <Compile Include="Indicators\amaCurrentWeekVWAP.cs" />
+    <Compile Include="Indicators\amaNMonthlyVWAP.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeDailyVwap.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeAnnualVwap.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeMonthlyVwap.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeVwapLevels.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeIndicatorRegistry.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeObserver.cs" />
+    <Compile Include="Indicators\RelativeIndicators\RelativeLog.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Resource.resx">

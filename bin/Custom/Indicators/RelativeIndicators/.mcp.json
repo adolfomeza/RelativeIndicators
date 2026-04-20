@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "relative-indicators": {
+      "type": "stdio",
+      "command": "python",
+      "args": ["-m", "RelativeMCP_Server.server"],
+      "env": {}
+    }
+  }
+}
