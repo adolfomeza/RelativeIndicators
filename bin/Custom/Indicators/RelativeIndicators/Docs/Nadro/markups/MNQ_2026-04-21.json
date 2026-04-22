@@ -52,27 +52,27 @@
           "direction": "short",
           "setup_type": "BPB-pVAH-17/04",
           "entry": 26870,
-          "stop": 26890,
+          "stop": 26923.7205,
           "grade": "B",
           "notes": "Rechazo pVAH 17/04 en resistencia. Fade del overnight rally.",
           "targets": [
             {
               "label": "pVAP-17/04",
               "price": 26835,
-              "rr": 1.8
+              "rr": 0.65
             },
             {
               "label": "wDVAH",
               "price": 26807,
-              "rr": 3.2
+              "rr": 1.17
             },
             {
               "label": "VWAP",
               "price": 26785,
-              "rr": 4.3
+              "rr": 1.58
             }
           ],
-          "risk_pts": 20.0,
+          "risk_pts": 53.72,
           "outcome": {
             "status": "filled",
             "trade_status": "filled",
@@ -96,39 +96,40 @@
             "mfe_pts": 318.25
           },
           "setup_companions": [],
-          "trading_horizon": "intraday"
+          "trading_horizon": "intraday",
+          "stop_reasoning": "Arriba del nearest resistance overnight-high=26882.0 | Arriba de overnight-high 26902.0 | Expandido a floor 0.20% price = 53.72 pts"
         },
         {
           "id": "h2",
           "direction": "long",
           "setup_type": "RPB-pVAH-17/04",
           "entry": 26875,
-          "stop": 26855,
+          "stop": 26751.25,
           "grade": "B",
           "notes": "Break pVAH + respeto como soporte. Alineado macro bullish.",
           "targets": [
             {
               "label": "extension",
               "price": 26920,
-              "rr": 2.3
+              "rr": 0.36
             },
             {
               "label": "extension-mayor",
               "price": 26960,
-              "rr": 4.3
+              "rr": 0.69
             },
             {
               "label": "round",
               "price": 27000,
-              "rr": 6.3
+              "rr": 1.01
             }
           ],
-          "risk_pts": 20.0,
+          "risk_pts": 123.75,
           "outcome": {
             "status": "stopped_out",
             "trade_status": "stopped_out",
             "triggered_at": "2026-04-21T09:30:00",
-            "stop_hit_at": "2026-04-21T09:30:00",
+            "stop_hit_at": "2026-04-21T09:32:00",
             "targets_hit": [],
             "targets_hit_before_stop": [],
             "targets_hit_after_stop": [],
@@ -139,7 +140,8 @@
             "mfe_pts": 10.0
           },
           "setup_companions": [],
-          "trading_horizon": "intraday"
+          "trading_horizon": "intraday",
+          "stop_reasoning": "Debajo del nearest support pVAH-17/04=26861.0 | Debajo de overnight-low 26751.5"
         }
       ],
       "snapshot_phase": "pit_open",

@@ -52,41 +52,41 @@
           "direction": "long",
           "setup_type": "RPB-wDVAH",
           "entry": 2814,
-          "stop": 2808,
+          "stop": 2803.3,
           "grade": "B",
           "notes": "Respeto W-DVAH como soporte desde arriba. Alineado macro bullish. Requiere break claro overnight high.",
           "targets": [
             {
               "label": "extension",
               "price": 2820,
-              "rr": 1
+              "rr": 0.56
             },
             {
               "label": "swing-higher",
               "price": 2828,
-              "rr": 2.3
+              "rr": 1.31
             },
             {
               "label": "extension-mayor",
               "price": 2835,
-              "rr": 3.5
+              "rr": 1.96
             }
           ],
-          "risk_pts": 6.0,
+          "risk_pts": 10.7,
           "outcome": {
-            "status": "stopped_out",
-            "trade_status": "stopped_out",
+            "status": "filled",
+            "trade_status": "filled",
             "triggered_at": "2026-04-21T09:30:00",
-            "stop_hit_at": "2026-04-21T09:32:00",
+            "stop_hit_at": "2026-04-21T10:59:00",
             "targets_hit": [
               0,
               1
             ],
-            "targets_hit_before_stop": [],
-            "targets_hit_after_stop": [
+            "targets_hit_before_stop": [
               0,
               1
             ],
+            "targets_hit_after_stop": [],
             "setup_reached_t1": true,
             "setup_reached_t2": true,
             "setup_reached_t3": false,
@@ -94,39 +94,40 @@
             "mfe_pts": 14.6
           },
           "setup_companions": [],
-          "trading_horizon": "intraday"
+          "trading_horizon": "intraday",
+          "stop_reasoning": "Debajo del nearest support wDVAH=2813.0 | Debajo de overnight-low 2803.4"
         },
         {
           "id": "h2",
           "direction": "short",
           "setup_type": "BPB-wDVAH",
           "entry": 2815,
-          "stop": 2820,
+          "stop": 2822.034,
           "grade": "B",
           "notes": "Rechazo W-DVAH como resistencia. Fade del overnight rally si muestra exhaustion.",
           "targets": [
             {
               "label": "CVAH",
               "price": 2803,
-              "rr": 2.4
+              "rr": 1.71
             },
             {
               "label": "wVWAP",
               "price": 2795,
-              "rr": 4
+              "rr": 2.84
             },
             {
               "label": "CVAP",
               "price": 2788,
-              "rr": 5.4
+              "rr": 3.84
             }
           ],
-          "risk_pts": 5.0,
+          "risk_pts": 7.03,
           "outcome": {
             "status": "stopped_out",
             "trade_status": "stopped_out",
             "triggered_at": "2026-04-21T09:31:00",
-            "stop_hit_at": "2026-04-21T09:47:00",
+            "stop_hit_at": "2026-04-21T09:48:00",
             "targets_hit": [
               0,
               1,
@@ -145,7 +146,8 @@
             "mfe_pts": 47.4
           },
           "setup_companions": [],
-          "trading_horizon": "intraday"
+          "trading_horizon": "intraday",
+          "stop_reasoning": "Arriba de overnight-high 2819.0 | Expandido a floor 0.25% price = 7.03 pts"
         }
       ],
       "snapshot_phase": "pit_open",

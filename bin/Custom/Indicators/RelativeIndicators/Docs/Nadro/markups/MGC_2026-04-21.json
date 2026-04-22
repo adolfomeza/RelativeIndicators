@@ -56,27 +56,27 @@
           "direction": "short",
           "setup_type": "RPB-pVAL-20/04",
           "entry": 4820,
-          "stop": 4830,
+          "stop": 4854.4,
           "grade": "B",
           "notes": "Precio abrio debajo de pVAL 20/04 (bearish sign). Si hay retest como resistencia, continuacion bearish.",
           "targets": [
             {
               "label": "medio",
               "price": 4808,
-              "rr": 1.2
+              "rr": 0.35
             },
             {
               "label": "wDVAL",
               "price": 4799,
-              "rr": 2.1
+              "rr": 0.61
             },
             {
               "label": "zona inferior",
               "price": 4790,
-              "rr": 3
+              "rr": 0.87
             }
           ],
-          "risk_pts": 10.0,
+          "risk_pts": 34.4,
           "outcome": {
             "status": "not_triggered",
             "trade_status": "not_triggered",
@@ -94,39 +94,40 @@
           "setup_companions": [
             "RPB-wVWAP"
           ],
-          "trading_horizon": "intraday"
+          "trading_horizon": "intraday",
+          "stop_reasoning": "Arriba del nearest resistance pVAL-20/04=4822.75 | Arriba de overnight-high 4854.3"
         },
         {
           "id": "h2",
           "direction": "long",
           "setup_type": "RPB-pVAL-20/04",
           "entry": 4825,
-          "stop": 4815,
+          "stop": 4790.6,
           "grade": "B",
           "notes": "Si break pVAL con respeto desde arriba = recovery bullish.",
           "targets": [
             {
               "label": "pVAP",
               "price": 4834,
-              "rr": 0.9
+              "rr": 0.26
             },
             {
               "label": "pVAH",
               "price": 4844,
-              "rr": 1.9
+              "rr": 0.55
             },
             {
               "label": "zona superior",
               "price": 4855,
-              "rr": 3
+              "rr": 0.87
             }
           ],
-          "risk_pts": 10.0,
+          "risk_pts": 34.4,
           "outcome": {
             "status": "stopped_out",
             "trade_status": "stopped_out",
-            "triggered_at": "2026-04-21T07:00:00",
-            "stop_hit_at": "2026-04-21T07:00:00",
+            "triggered_at": "2026-04-21T08:20:00",
+            "stop_hit_at": "2026-04-21T08:31:00",
             "targets_hit": [],
             "targets_hit_before_stop": [],
             "targets_hit_after_stop": [],
@@ -137,7 +138,8 @@
             "mfe_pts": 0.0
           },
           "setup_companions": [],
-          "trading_horizon": "intraday"
+          "trading_horizon": "intraday",
+          "stop_reasoning": "Debajo del nearest support pVAL-20/04=4822.75 | Debajo de overnight-low 4790.7"
         }
       ],
       "snapshot_phase": "pit_open",

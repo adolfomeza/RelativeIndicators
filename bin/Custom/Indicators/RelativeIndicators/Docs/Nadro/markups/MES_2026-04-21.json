@@ -59,32 +59,32 @@
           "direction": "long",
           "setup_type": "RPB-wDVAH+pVAH-20/04",
           "entry": 7152,
-          "stop": 7145,
+          "stop": 7141.2405,
           "grade": "B",
           "notes": "Retest W-DVAH+pVAH como soporte desde arriba. Alineado macro+micro bullish. Overnight rally intacto.",
           "targets": [
             {
               "label": "retest-high",
               "price": 7170,
-              "rr": 2.6
+              "rr": 1.67
             },
             {
               "label": "new-high",
               "price": 7183,
-              "rr": 4.4
+              "rr": 2.88
             },
             {
               "label": "extension",
               "price": 7200,
-              "rr": 6.9
+              "rr": 4.46
             }
           ],
-          "risk_pts": 7.0,
+          "risk_pts": 10.76,
           "outcome": {
             "status": "filled",
             "trade_status": "filled",
             "triggered_at": "2026-04-21T09:32:00",
-            "stop_hit_at": "2026-04-21T10:58:00",
+            "stop_hit_at": "2026-04-21T10:59:00",
             "targets_hit": [
               0
             ],
@@ -99,34 +99,35 @@
             "mfe_pts": 20.5
           },
           "setup_companions": [],
-          "trading_horizon": "intraday"
+          "trading_horizon": "intraday",
+          "stop_reasoning": "Debajo del nearest support pVAH-20/04=7149.75 | Debajo de overnight-low 7149.5 | Expandido a floor 0.15% price = 10.76 pts"
         },
         {
           "id": "h2",
           "direction": "short",
           "setup_type": "BPB-pVAH-17/04",
           "entry": 7180,
-          "stop": 7188,
+          "stop": 7190.7595,
           "grade": "C",
           "notes": "Rechazo en exhaustion high. Contra-tendencia macro, grade C. Solo si rechazo claro con mecha.",
           "targets": [
             {
               "label": "medio",
               "price": 7165,
-              "rr": 1.9
+              "rr": 1.39
             },
             {
               "label": "wDVAH",
               "price": 7152,
-              "rr": 3.5
+              "rr": 2.6
             },
             {
               "label": "wVWAP-zone",
               "price": 7140,
-              "rr": 5
+              "rr": 3.72
             }
           ],
-          "risk_pts": 8.0,
+          "risk_pts": 10.76,
           "outcome": {
             "status": "not_triggered",
             "trade_status": "not_triggered",
@@ -142,7 +143,8 @@
             "mfe_pts": null
           },
           "setup_companions": [],
-          "trading_horizon": "intraday"
+          "trading_horizon": "intraday",
+          "stop_reasoning": "Arriba de overnight-high 7183.0 | Expandido a floor 0.15% price = 10.76 pts"
         }
       ],
       "snapshot_phase": "pit_open",

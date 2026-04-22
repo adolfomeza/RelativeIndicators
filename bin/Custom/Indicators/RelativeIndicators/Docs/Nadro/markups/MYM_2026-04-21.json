@@ -63,32 +63,32 @@
           "direction": "short",
           "setup_type": "BPB-CVAH+DVAH-17-20",
           "entry": 49925,
-          "stop": 49960,
+          "stop": 50024.844,
           "grade": "A",
           "notes": "Rechazo CVAH + D-DVAH (confluencia grade A). Rally extendido posible exhaustion. Fade del overnight rally.",
           "targets": [
             {
               "label": "wDVAH",
               "price": 49844,
-              "rr": 2.3
+              "rr": 0.81
             },
             {
               "label": "VWAP",
               "price": 49790,
-              "rr": 3.8
+              "rr": 1.35
             },
             {
               "label": "CVAP",
               "price": 49745,
-              "rr": 5.1
+              "rr": 1.8
             }
           ],
-          "risk_pts": 35.0,
+          "risk_pts": 99.84,
           "outcome": {
             "status": "filled",
             "trade_status": "filled",
             "triggered_at": "2026-04-21T09:30:00",
-            "stop_hit_at": "2026-04-21T09:46:00",
+            "stop_hit_at": "2026-04-21T09:51:00",
             "targets_hit": [
               0,
               1,
@@ -108,48 +108,49 @@
             "mfe_pts": 696.0
           },
           "setup_companions": [],
-          "trading_horizon": "intraday"
+          "trading_horizon": "intraday",
+          "stop_reasoning": "Arriba del nearest resistance DVAH=49947.5 | Arriba de overnight-high 49983.0 | Expandido a floor 0.20% price = 99.84 pts"
         },
         {
           "id": "h2",
           "direction": "long",
           "setup_type": "RPB-CVAH-17-20",
           "entry": 49935,
-          "stop": 49895,
+          "stop": 49655.0,
           "grade": "B",
           "notes": "Break limpio CVAH con respeto. Requiere confirmacion por volumen.",
           "targets": [
             {
               "label": "new-high",
               "price": 49980,
-              "rr": 1.1
+              "rr": 0.16
             },
             {
               "label": "extension",
               "price": 50020,
-              "rr": 2.1
+              "rr": 0.3
             },
             {
               "label": "extension-mayor",
               "price": 50100,
-              "rr": 4.1
+              "rr": 0.59
             }
           ],
-          "risk_pts": 40.0,
+          "risk_pts": 280.0,
           "outcome": {
-            "status": "stopped_out",
-            "trade_status": "stopped_out",
+            "status": "filled",
+            "trade_status": "filled",
             "triggered_at": "2026-04-21T09:30:00",
-            "stop_hit_at": "2026-04-21T09:31:00",
+            "stop_hit_at": "2026-04-21T10:59:00",
             "targets_hit": [
               0,
               1
             ],
-            "targets_hit_before_stop": [],
-            "targets_hit_after_stop": [
+            "targets_hit_before_stop": [
               0,
               1
             ],
+            "targets_hit_after_stop": [],
             "setup_reached_t1": true,
             "setup_reached_t2": true,
             "setup_reached_t3": false,
@@ -157,7 +158,8 @@
             "mfe_pts": 110.0
           },
           "setup_companions": [],
-          "trading_horizon": "intraday"
+          "trading_horizon": "intraday",
+          "stop_reasoning": "Debajo del nearest support CVAH-17/20=49923.0 | Debajo de overnight-low 49656.0"
         }
       ],
       "snapshot_phase": "pit_open",
