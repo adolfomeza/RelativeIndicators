@@ -484,6 +484,75 @@ def _render_instrument(inst: str, r: dict) -> list[str]:
   <div class="nadro-row"><div class="letter">O</div><div>{_html.escape(of.get('summary', '-'))}</div></div>
 """)
 
+    # Hipos con narración
+    if classic.get("hypos"):
+        parts.append("<h3>Hipos del día — narración</h3>")
+        for h in classic["hypos"]:
+            cls = h.get("classification", "?")
+            badge_color = {
+                "BIG_WIN": "#15803d", "WIN": "#22c55e", "WIN_MINOR": "#16a34a",
+                "STOP_TIGHT": "#f59e0b", "STOP_GENUINE": "#dc2626",
+                "DEAD": "#6b7280", "OPEN": "#3b82f6",
+            }.get(cls, "#6b7280")
+            badge_text = {
+                "BIG_WIN": "BIG WIN", "WIN": "WIN", "WIN_MINOR": "WIN T1",
+                "STOP_TIGHT": "STOP TIGHT", "STOP_GENUINE": "STOP",
+                "DEAD": "DEAD", "OPEN": "OPEN",
+            }.get(cls, cls)
+
+            direction = (h.get("direction") or "?").upper()
+            setup = _html.escape(h.get("setup_type") or "?")
+
+            # Targets con marca pre/post
+            th_before = h.get("targets_hit_before_stop", []) or []
+            th_after = h.get("targets_hit_after_stop", []) or []
+            targets = h.get("targets", []) or []
+            tgt_html_parts = []
+            for i, t in enumerate(targets):
+                if i in th_before:
+                    marker = '<span style="color:#4ade80;">✓pre</span>'
+                elif i in th_after:
+                    marker = '<span style="color:#fbbf24;">·post</span>'
+                else:
+                    marker = '<span style="color:#64748b;">—</span>'
+                tgt_html_parts.append(
+                    f'T{i+1}={t.get("price")} <small>(RR {float(t.get("rr",0)):.1f})</small> {marker}'
+                )
+            tgt_html = " · ".join(tgt_html_parts) if tgt_html_parts else ""
+
+            # Narración
+            narr_lines = _build_trade_narrative(h)
+            narr_html = ""
+            if narr_lines:
+                items = "".join(f"<div style='margin:2px 0;'>{_html.escape(ln)}</div>" for ln in narr_lines)
+                narr_html = f'<div style="background:#0f172a;padding:8px 12px;border-radius:4px;margin:6px 0;font-size:13px;line-height:1.5;">{items}</div>'
+
+            verdict = _build_trade_verdict(h)
+            verdict_html = (
+                f'<div style="margin-top:6px;padding:8px 12px;background:rgba({badge_color}, 0.08);'
+                f'border-left:3px solid {badge_color};border-radius:4px;font-size:13px;">'
+                f'{_html.escape(verdict)}</div>'
+            ) if verdict else ""
+
+            parts.append(f"""
+<div style="background:#1e293b;padding:12px 16px;border-radius:6px;margin:10px 0;border-left:4px solid {badge_color};">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+    <div style="font-weight:600;font-size:15px;">
+      Hipo {h.get('id')} — {direction} {setup}
+    </div>
+    <span style="background:{badge_color};color:#fff;padding:3px 10px;border-radius:4px;font-size:11px;font-weight:700;">{badge_text}</span>
+  </div>
+  <div style="font-size:13px;color:#cbd5e1;margin:4px 0;">
+    Entry {h.get('entry')} · Stop {h.get('stop')} · Risk {h.get('risk_pts')} pts · MAE {_fmt_pts(h.get('mae_pts'))} / MFE {_fmt_pts(h.get('mfe_pts'))}
+  </div>
+  <div style="font-size:12px;color:#94a3b8;margin:4px 0;">
+    Targets: {tgt_html}
+  </div>
+  {narr_html}
+  {verdict_html}
+</div>
+""")
+
     if dissonance.get("has_dissonance"):
         parts.append(
             f'<div class="block"><strong>Disonancia</strong>: '
