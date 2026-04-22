@@ -23,8 +23,13 @@ from .tools import backtest_charts as backtest_charts_tool
 from .tools import compile as compile_tool
 from .tools import exports as trade_exports
 from .tools import logs as nt_logs
+from .tools import briefing as briefing_tool
+from .tools import markup as markup_tool
+from .tools import walkforward as walkforward_tool
+from .tools import eod_review as eod_review_tool
 from .tools import nadro as nadro_tool
 from .tools import observer
+from .tools import tpo_cva as tpo_cva_tool
 from .tools import vwap_levels as vwap
 
 
@@ -382,6 +387,148 @@ def nadro_snapshot(instrument: str, tf_ritmo: str = "1m", n_bars: int = 20) -> d
 
 
 @mcp.tool
+def nadro_snapshot_markup(
+    instrument: str,
+    price_at_analysis: float,
+    regime: str = "",
+    bias: str = "",
+    summary: str = "",
+    analysis_text: str = "",
+    confluences: list | None = None,
+    levels: list | None = None,
+    hypos: list | None = None,
+    timestamp: str | None = None,
+    snapshot_id: str | None = None,
+) -> dict:
+    """Persiste un snapshot NADRO en JSON que el indicador RelativeNadroMarkup lee.
+
+    Escribe en ``Docs/Nadro/markups/{INSTRUMENT_MASTER}_YYYY-MM-DD.json``. Si el
+    archivo existe hace APPEND al array ``snapshots``; si el ``snapshot_id`` ya
+    existe lo sobrescribe.
+
+    Parámetros:
+      ``instrument``: "MGC 06-26" o "MGC" (se normaliza a master symbol).
+      ``price_at_analysis``: precio al momento del snapshot.
+      ``regime``: ej. "imbalance bearish", "rotacional", "balance".
+      ``bias``: "bullish" | "bearish" | "neutral".
+      ``summary``: línea única del análisis (header del chart).
+      ``analysis_text``: texto completo multilínea para el panel izquierdo.
+      ``confluences``: ``[{label, price_min, price_max, grade, members: []}]``.
+      ``levels``: ``[{label, price}]``.
+      ``hypos``: ``[{id, direction, setup_type, entry, stop, grade, notes,
+                    targets: [{label, price, rr}], outcome: {...}}]``.
+      ``timestamp``: ISO ``2026-04-21T09:05:00`` (default: now).
+      ``snapshot_id``: default ``{MASTER}_{YYYYMMDD_HHMM}``.
+
+    Auto-calcula ``risk_pts = |entry - stop|`` y ``rr`` por target si faltan.
+    Inicializa ``outcome.status = "pending"`` si no viene.
+
+    Returns: path escrito, acción (created/appended/updated), total snapshots.
+    """
+    return markup_tool.save_snapshot(
+        instrument=instrument,
+        price_at_analysis=price_at_analysis,
+        regime=regime,
+        bias=bias,
+        summary=summary,
+        analysis_text=analysis_text,
+        confluences=confluences,
+        levels=levels,
+        hypos=hypos,
+        timestamp=timestamp,
+        snapshot_id=snapshot_id,
+    )
+
+
+@mcp.tool
+def nadro_markup_close_eod(date: str | None = None, instrument: str | None = None) -> dict:
+    """Walk-forward sobre bars 1m del día para actualizar outcomes de hipótesis.
+
+    Para cada snapshot del día, recorre bars desde `timestamp` hasta ahora
+    (o fin del día si ya cerró), y determina para cada hipo:
+
+    - `status`: pending/triggered/filled/stopped_out/not_triggered
+    - `triggered_at`, `stop_hit_at`: timestamps de eventos
+    - `targets_hit`: índices de targets alcanzados
+    - `mae_pts`, `mfe_pts`: max adverse / favorable excursion desde entry
+
+    Tras correr esto, las flechas del indicador `RelativeNadroMarkup` en
+    NT8 cambian color automáticamente (pending→verde/rojo según outcome).
+
+    ``date``: YYYY-MM-DD (default: hoy).
+    ``instrument``: master symbol opcional (ej "MGC"). Si se omite, procesa todos.
+
+    Returns: stats + status_changes por archivo procesado.
+    """
+    return walkforward_tool.close_eod(date_str=date, instrument=instrument)
+
+
+@mcp.tool
+def nadro_eod_review(instrument: str, date: str | None = None) -> dict:
+    """Genera el review narrativo EOD de un instrumento para un día.
+
+    Es el ANÁLISIS post-cierre del snapshot que se tomó al pit open.
+    NO genera hipos nuevos — solo narra lo que pasó:
+
+    - Hipos propuestos al pit open
+    - Outcome de cada uno (filled / stopped / not_triggered)
+    - MAE/MFE por hipo
+    - STOP TIGHT detection (stopped_out pero setup_reached_t1+)
+    - Clasificación: WIN / WIN_MINOR / STOP_TIGHT / STOP_GENUINE / DEAD
+    - Placeholder "Aprendizajes" para completar manual
+
+    ``instrument``: master symbol (MGC, MCL, MES, MNQ, MYM, M2K).
+    ``date``: YYYY-MM-DD (default: hoy).
+
+    Guarda el markdown en ``Docs/Nadro/eod_reviews/{INST}_{DATE}.md``.
+    """
+    return eod_review_tool.eod_review(instrument=instrument, date_str=date)
+
+
+@mcp.tool
+def nadro_eod_review_all(date: str | None = None) -> dict:
+    """Corre nadro_eod_review para los 6 instrumentos NADRO estándar.
+
+    Devuelve reviews individuales + agregado (total hipos, win rate, stop tights).
+    Cada review queda persistido en disco como markdown.
+    """
+    return eod_review_tool.eod_review_all(date_str=date)
+
+
+@mcp.tool
+def nadro_daily_briefing(date: str | None = None) -> dict:
+    """Genera un reporte HTML ranqueado con todos los snapshots NADRO del día.
+
+    Lee `Docs/Nadro/markups/*_{date}.json`, calcula score por hipótesis y
+    produce `reports/briefing_{date}.html` con:
+    - Hero: best setup del día
+    - Cards top #2-#4
+    - Panorama macro (bullish/bearish count)
+    - Tabla completa ranqueada
+    - Detalle por instrumento (acordeón colapsable)
+
+    Score factors: Grade (A+++=5, A=3, B=2), RR T1 (>5=+3, >3=+2),
+    confluencias (5+mb=+3, 3+mb=+2), Ley 10 (+4), bias alineado (+1),
+    dissonance (-1), entry cerca (+1).
+
+    ``date``: YYYY-MM-DD (default: hoy).
+    Returns path + stats (total instruments, hypos, top_setup info).
+    """
+    return briefing_tool.generate(date)
+
+
+@mcp.tool
+def nadro_markup_list(instrument: str | None = None, date: str | None = None) -> dict:
+    """Lista markups NADRO guardados. Filtro opcional por instrument y/o date.
+
+    ``instrument`` se normaliza a master symbol (ej "MGC 06-26" → "MGC").
+    ``date`` formato ``YYYY-MM-DD``. Útil para saber qué análisis se han hecho
+    y con qué IDs, antes de hacer walk-forward de outcomes.
+    """
+    return markup_tool.list_snapshots(instrument=instrument, date=date)
+
+
+@mcp.tool
 def nadro_classify_setup(
     instrument: str,
     direction: str,
@@ -410,22 +557,25 @@ def nadro_backtest(
     tf: str = "5m",
     window_start: str = "09:30",
     window_end: str = "11:00",
+    stop_mode: str = "dynamic",
     stop_pts: float = 5.0,
+    stop_atr_mult: float = 1.5,
+    dva_width_pct: float = 0.25,
+    min_stop_pts: float = 3.0,
+    max_stop_pts: float = 15.0,
     max_hold_bars: int = 20,
 ) -> dict:
-    """Backtest MVP NADRO — setups BPB en los últimos N días.
+    """Backtest NADRO 4 setups en los últimos N días.
 
-    Recalcula VWAP + bandas SD desde bars crudos para cada día histórico.
-    Detecta breakouts del DVAH/DVAL con volumen > 1.5× promedio. Simula
-    entry al retest del nivel, stop fijo, target = banda SD3.
+    Modos de stop:
+    - ``dynamic`` (default): ATR × stop_atr_mult, piso 4pts.
+    - ``dva_width``: NADRO — stop anclado al nivel ± dva_width_pct × ancho DVA.
+      BPB/RPB usan ancho pDVA (día anterior); IPB usa ancho DVA developing;
+      EF usa ancho DVA central aplicado al extremo ±2SD.
+      Piso ``min_stop_pts``, techo ``max_stop_pts``.
+    - ``fixed``: stop_pts fijo en puntos.
 
-    Devuelve:
-    - ``stats``: win_rate, profit_factor, expectancy, max DD, PnL total
-    - ``daily_breakdown``: PnL por día
-    - ``trades``: detalle de cada trade
-    - ``pnl_curve`` dentro de stats: curva cumulativa
-
-    Default MVP: 7 días, 5m bars, ventana 09:30-11:00 ET, stop 5pts, hold 20 bars.
+    Devuelve stats, daily_breakdown, trades (con ``dva_width_info`` si aplica).
     """
     return backtest_tool.nadro_backtest(
         instrument=instrument,
@@ -433,7 +583,12 @@ def nadro_backtest(
         tf=tf,
         window_start=window_start,
         window_end=window_end,
+        stop_mode=stop_mode,
         stop_pts=stop_pts,
+        stop_atr_mult=stop_atr_mult,
+        dva_width_pct=dva_width_pct,
+        min_stop_pts=min_stop_pts,
+        max_stop_pts=max_stop_pts,
         max_hold_bars=max_hold_bars,
     )
 
@@ -462,6 +617,50 @@ def nadro_backtest_with_charts(
         tf=tf,
         window_start=window_start,
         window_end=window_end,
+    )
+
+
+@mcp.tool
+def get_cvas(
+    instrument: str,
+    weeks_back: int = 4,
+    days_back: int | None = None,
+    overlap_threshold: float = 0.50,
+    reset_hour: int = 17,
+    session: str = "rth",
+) -> dict:
+    """Reconstruye pVAs + CVAs NADRO con fusión forward automática.
+
+    **Terminología NADRO estricta**:
+    - **pVA** (Prior Value Area) = 1 día individual (el del día actual es pVA activa).
+    - **CVA** (Composite Value Area) = 2+ días fusionados en equilibrio sostenido.
+
+    **Carga por semanas completas**: desde el LUNES de hace `weeks_back` semanas
+    hasta hoy. Esto evita cortar un CVA en medio por ventana arbitraria.
+
+    Reglas NADRO 05-2 Market Framework:
+    - Construcción forward-only (builds derecha, nunca mirar atrás)
+    - Overlap VA ≥ overlap_threshold entre días consecutivos → fusionar (pasa a CVA)
+    - Cambio de condición (breakout ± tolerancia 0.5 pts) → cerrar bloque
+    - Bloques cerrados dejan "línea secundaria" en el borde roto
+
+    Args:
+        instrument: "MES 06-26"
+        weeks_back: semanas completas hacia atrás (default 4)
+        days_back: días absolutos (legacy, anula weeks_back si se pasa)
+        overlap_threshold: fracción mínima overlap VA para fusionar (default 0.50)
+        reset_hour: hora local reset ETH (default 17 = 17:00 local)
+        session: "rth" (default NADRO) | "eth" | "pit_cl"
+
+    Returns dict con: pvas, cvas, secondary_lines, profiles_by_day, cutoff_date.
+    """
+    return tpo_cva_tool.get_cvas(
+        instrument=instrument,
+        weeks_back=weeks_back,
+        days_back=days_back,
+        overlap_threshold=overlap_threshold,
+        reset_hour=reset_hour,
+        session=session,
     )
 
 
@@ -498,9 +697,28 @@ def get_bars(instrument: str, tf: str = "1m", n: int = 50) -> dict:
 
     ``tf``: sufijos ``s/m/h/d`` (tiempo), ``t`` (ticks), ``v`` (volumen), ``r`` (rango).
     Ejemplos: ``1m``, ``5m``, ``15m``, ``1h``, ``1d``, ``1000t``, ``5000v``.
-    Máximo 2000 barras. Latencia típica 1-15s (BarsRequest es asíncrono).
+    Máximo 10000 barras. Latencia típica 1-15s (BarsRequest es asíncrono).
     """
     return observer.get_bars(instrument=instrument, tf=tf, n=n)
+
+
+@mcp.tool
+def get_bars_with_ha(instrument: str, tf: str = "1m", n: int = 50) -> dict:
+    """Últimas ``n`` barras OHLCV + Heikin Ashi calculado.
+
+    Cada bar incluye además de OHLCV: hao, hac, hah, hal, ha_color (BULL/BEAR),
+    ha_change (True si la bar cambió color HA respecto a la previa).
+
+    Útil para aplicar reglas NADRO sobre HA (Goldilocks, cambio de color al
+    cierre). Usuario típicamente opera con HA en el chart.
+
+    Fórmula:
+        HA_close = (O+H+L+C)/4
+        HA_open  = (HA_open[prev] + HA_close[prev]) / 2
+        HA_high  = max(H, HA_open, HA_close)
+        HA_low   = min(L, HA_open, HA_close)
+    """
+    return observer.get_bars_with_ha(instrument=instrument, tf=tf, n=n)
 
 
 # ---------------------------------------------------------------------------

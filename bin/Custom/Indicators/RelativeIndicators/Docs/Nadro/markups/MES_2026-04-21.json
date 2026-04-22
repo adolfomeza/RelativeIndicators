@@ -1,0 +1,151 @@
+{
+  "schema_version": "1.0",
+  "instrument": "MES",
+  "date": "2026-04-21",
+  "snapshots": [
+    {
+      "id": "MES_20260421_0930",
+      "timestamp": "2026-04-21T09:30:00",
+      "price_at_analysis": 7173.0,
+      "regime": "imbalance bullish overnight",
+      "bias": "bullish",
+      "summary": "Rally overnight +18 pts (7155 a 7173). Precio extendido arriba de W-DVAH 7152 y pVAH 20/04 7149.75. Macro bullish confirmed. Setups: RPB bullish retest W-DVAH vs BPB bearish en rechazo 7183.",
+      "analysis_text": "NADRO MES 06-26 — PRE-MARKET 07:00 VET\nPrecio: 7173.00\nRegimen: imbalance bullish overnight\n\nNARRATIVA (N)\n- Macro bullish: +314 pts vs yVWAP\n- Overnight rally: 7155 -> 7173 (+18 pts)\n- pVA 20/04 cerro drift-low\n  VAL 7133.25 / POC 7137.25 / VAH 7149.75\n- Precio ARRIBA pVAH (bullish confirmation)\n- Micro + Macro = CONFLUENCE bullish\n\nACEPTACION (A)\n- Arriba W-DVAH 7152.50 (+20)\n- Arriba pVAH 20/04 7149.75 (+23)\n- W-VWAP 7138.01 (+35)\n- Overnight range: 7155-7177 (22 pts)\n\nDISTRIBUCION (D)\n- Imbalance bullish confirmado\n- Rally limpio overnight\n- Aun no hay pullback significativo\n\nRITMO (R)\n- Subida progresiva overnight\n- Ultimo high 07:00 @ 7177.5\n- Sin swings significativos\n\nPRE-MARKET\n- US open 09:30 ET = 09:30 VET\n- Precio EXTENDIDO, posible pullback\n- Confluencia macro+micro bullish\n\nNIVELES CLAVE\n- High overnight 7177.5\n- pVAH 17/04 7176.5\n- Precio 7173\n- W-DVAH 7152.5\n- pVAH 20/04 7149.75\n- W-VWAP 7138.01\n- pVAP 20/04 7137.25\n- pVAL 20/04 7133.25\n\nSETUPS\nHYPO 1 RPB bullish grade B\n  Contexto: retest W-DVAH como soporte\n  Alineado con rally overnight\n  E 7152 (pullback a W-DVAH)\n  S 7145 (abajo pVAH)\n  T1 7170 retest high RR 2.6\n  T2 7183 new high RR 4.4\n  T3 7200 extension RR 6.9\n\nHYPO 2 BPB bearish grade C\n  Contexto: exhaustion high 7177-7183\n  Contra-tendencia macro\n  E 7180 (rechazo new high)\n  S 7188 (arriba mecha)\n  T1 7165 RR 1.9\n  T2 7152 W-DVAH RR 3.5\n  T3 7140 W-VWAP zone RR 5.0\n\nNota: HYPO 1 preferido por confluencia\nmacro+micro bullish. HYPO 2 solo si\nhay claro rechazo arriba de 7180.",
+      "confluences": [
+        {
+          "label": "Soporte (wDVAH+pVAH)",
+          "price_min": 7149.75,
+          "price_max": 7152.5,
+          "grade": "B",
+          "members": [
+            "wDVAH",
+            "pVAH-20/04"
+          ]
+        }
+      ],
+      "levels": [
+        {
+          "label": "overnight-high",
+          "price": 7177.5
+        },
+        {
+          "label": "pVAH-17/04",
+          "price": 7176.5
+        },
+        {
+          "label": "wDVAH",
+          "price": 7152.5
+        },
+        {
+          "label": "pVAH-20/04",
+          "price": 7149.75
+        },
+        {
+          "label": "wVWAP",
+          "price": 7138.01
+        },
+        {
+          "label": "pVAP-20/04",
+          "price": 7137.25
+        },
+        {
+          "label": "pVAL-20/04",
+          "price": 7133.25
+        }
+      ],
+      "hypos": [
+        {
+          "id": "h1",
+          "direction": "long",
+          "setup_type": "RPB-wDVAH+pVAH-20/04",
+          "entry": 7152,
+          "stop": 7145,
+          "grade": "B",
+          "notes": "Retest W-DVAH+pVAH como soporte desde arriba. Alineado macro+micro bullish. Overnight rally intacto.",
+          "targets": [
+            {
+              "label": "retest-high",
+              "price": 7170,
+              "rr": 2.6
+            },
+            {
+              "label": "new-high",
+              "price": 7183,
+              "rr": 4.4
+            },
+            {
+              "label": "extension",
+              "price": 7200,
+              "rr": 6.9
+            }
+          ],
+          "risk_pts": 7.0,
+          "outcome": {
+            "status": "filled",
+            "trade_status": "filled",
+            "triggered_at": "2026-04-21T09:32:00",
+            "stop_hit_at": "2026-04-21T10:58:00",
+            "targets_hit": [
+              0
+            ],
+            "targets_hit_before_stop": [
+              0
+            ],
+            "targets_hit_after_stop": [],
+            "setup_reached_t1": true,
+            "setup_reached_t2": false,
+            "setup_reached_t3": false,
+            "mae_pts": 67.0,
+            "mfe_pts": 20.5
+          },
+          "setup_companions": [],
+          "trading_horizon": "intraday"
+        },
+        {
+          "id": "h2",
+          "direction": "short",
+          "setup_type": "BPB-pVAH-17/04",
+          "entry": 7180,
+          "stop": 7188,
+          "grade": "C",
+          "notes": "Rechazo en exhaustion high. Contra-tendencia macro, grade C. Solo si rechazo claro con mecha.",
+          "targets": [
+            {
+              "label": "medio",
+              "price": 7165,
+              "rr": 1.9
+            },
+            {
+              "label": "wDVAH",
+              "price": 7152,
+              "rr": 3.5
+            },
+            {
+              "label": "wVWAP-zone",
+              "price": 7140,
+              "rr": 5
+            }
+          ],
+          "risk_pts": 8.0,
+          "outcome": {
+            "status": "not_triggered",
+            "trade_status": "not_triggered",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "targets_hit_before_stop": [],
+            "targets_hit_after_stop": [],
+            "setup_reached_t1": false,
+            "setup_reached_t2": false,
+            "setup_reached_t3": false,
+            "mae_pts": null,
+            "mfe_pts": null
+          },
+          "setup_companions": [],
+          "trading_horizon": "intraday"
+        }
+      ],
+      "snapshot_phase": "pit_open"
+    }
+  ]
+}

@@ -1,0 +1,166 @@
+{
+  "schema_version": "1.0",
+  "instrument": "MYM",
+  "date": "2026-04-21",
+  "snapshots": [
+    {
+      "id": "MYM_20260421_0930",
+      "timestamp": "2026-04-21T09:30:00",
+      "price_at_analysis": 49922.0,
+      "regime": "imbalance bullish overnight extendido",
+      "bias": "bullish extendido",
+      "summary": "RALLY FUERTE overnight +227 pts (49695 a 49922). Precio EN CVAH 49923 (resistencia critica). Macro bullish. Extendido - posible pullback. Setups: BPB bearish rechazo CVAH vs RPB bullish break.",
+      "analysis_text": "NADRO MYM 06-26 — PRE-MARKET 07:00 VET\nPrecio: 49922\nRegimen: imbalance bullish EXTENDIDO\n\nNARRATIVA (N)\n- Macro bullish: +1104 vs yVWAP\n- RALLY FUERTE overnight: +227 pts\n  49695 (23:45) -> 49922 (06:45)\n- CVA activa 17-20\n  VAL 49537.5 / POC 49745 / VAH 49923\n- Precio EN CVAH 49923 (CRITICO)\n\nACEPTACION (A)\n- EN CVAH 49923 (resistencia)\n- Arriba W-DVAH 49844 (+78)\n- Arriba D-VWAP 49790 (+132)\n- Overnight range: 49695-49958 (263 pts)\n\nDISTRIBUCION (D)\n- Imbalance bullish PERO extended\n- Precio en resistencia clave\n- Riesgo de reversal si falla break\n\nRITMO (R)\n- Rally fuerte desde 06:00 (49743 -> 49920)\n- Salto de +180 pts en 45 min\n- Posible absorcion en CVAH\n\nPRE-MARKET\n- US open 09:30 ET\n- CVAH es decision point clave\n- Si rechazo = pullback amplio\n- Si break = continuation agresiva\n\nNIVELES CLAVE\n- Overnight high 49958\n- D-DVAH 49947.5\n- CVAH 17-20 49923 (pivot)\n- W-DVAH 49844\n- D-VWAP 49790\n- pVAH 17/04 48788 (muy abajo)\n- CVAP 17-20 49745\n- W-VWAP 49641\n- CVAL 17-20 49537.5\n\nSETUPS\nHYPO 1 BPB bearish grade A\n  Contexto: rechazo CVAH+D-DVAH\n  Precio EXTENDIDO, posible exhaustion\n  E 49925 (pegado a CVAH)\n  S 49960 (arriba high)\n  T1 49844 W-DVAH RR 2.3\n  T2 49790 D-VWAP RR 3.8\n  T3 49745 CVAP RR 5.1\n\nHYPO 2 RPB bullish grade B\n  Contexto: break limpio CVAH\n  Requiere confirmacion de break\n  E 49935 (sobre break)\n  S 49895 (abajo de ruptura)\n  T1 49980 RR 1.1\n  T2 50020 RR 2.1\n  T3 50100 extension RR 4.1\n\nNota: HYPO 1 preferido por extension.\nRally overnight puede ser exhaustion.",
+      "confluences": [
+        {
+          "label": "Resistencia critica (CVAH+DVAH)",
+          "price_min": 49923,
+          "price_max": 49947.5,
+          "grade": "A",
+          "members": [
+            "CVAH-17/20",
+            "DVAH"
+          ]
+        }
+      ],
+      "levels": [
+        {
+          "label": "overnight-high",
+          "price": 49958
+        },
+        {
+          "label": "DVAH",
+          "price": 49947.5
+        },
+        {
+          "label": "CVAH-17/20",
+          "price": 49923
+        },
+        {
+          "label": "wDVAH",
+          "price": 49844
+        },
+        {
+          "label": "VWAP",
+          "price": 49790
+        },
+        {
+          "label": "CVAP-17/20",
+          "price": 49745
+        },
+        {
+          "label": "wVWAP",
+          "price": 49641
+        },
+        {
+          "label": "CVAL-17/20",
+          "price": 49537.5
+        }
+      ],
+      "hypos": [
+        {
+          "id": "h1",
+          "direction": "short",
+          "setup_type": "BPB-CVAH+DVAH-17-20",
+          "entry": 49925,
+          "stop": 49960,
+          "grade": "A",
+          "notes": "Rechazo CVAH + D-DVAH (confluencia grade A). Rally extendido posible exhaustion. Fade del overnight rally.",
+          "targets": [
+            {
+              "label": "wDVAH",
+              "price": 49844,
+              "rr": 2.3
+            },
+            {
+              "label": "VWAP",
+              "price": 49790,
+              "rr": 3.8
+            },
+            {
+              "label": "CVAP",
+              "price": 49745,
+              "rr": 5.1
+            }
+          ],
+          "risk_pts": 35.0,
+          "outcome": {
+            "status": "filled",
+            "trade_status": "filled",
+            "triggered_at": "2026-04-21T09:30:00",
+            "stop_hit_at": "2026-04-21T09:46:00",
+            "targets_hit": [
+              0,
+              1,
+              2
+            ],
+            "targets_hit_before_stop": [
+              0
+            ],
+            "targets_hit_after_stop": [
+              1,
+              2
+            ],
+            "setup_reached_t1": true,
+            "setup_reached_t2": true,
+            "setup_reached_t3": true,
+            "mae_pts": 120.0,
+            "mfe_pts": 696.0
+          },
+          "setup_companions": [],
+          "trading_horizon": "intraday"
+        },
+        {
+          "id": "h2",
+          "direction": "long",
+          "setup_type": "RPB-CVAH-17-20",
+          "entry": 49935,
+          "stop": 49895,
+          "grade": "B",
+          "notes": "Break limpio CVAH con respeto. Requiere confirmacion por volumen.",
+          "targets": [
+            {
+              "label": "new-high",
+              "price": 49980,
+              "rr": 1.1
+            },
+            {
+              "label": "extension",
+              "price": 50020,
+              "rr": 2.1
+            },
+            {
+              "label": "extension-mayor",
+              "price": 50100,
+              "rr": 4.1
+            }
+          ],
+          "risk_pts": 40.0,
+          "outcome": {
+            "status": "stopped_out",
+            "trade_status": "stopped_out",
+            "triggered_at": "2026-04-21T09:30:00",
+            "stop_hit_at": "2026-04-21T09:31:00",
+            "targets_hit": [
+              0,
+              1
+            ],
+            "targets_hit_before_stop": [],
+            "targets_hit_after_stop": [
+              0,
+              1
+            ],
+            "setup_reached_t1": true,
+            "setup_reached_t2": true,
+            "setup_reached_t3": false,
+            "mae_pts": 706.0,
+            "mfe_pts": 110.0
+          },
+          "setup_companions": [],
+          "trading_horizon": "intraday"
+        }
+      ],
+      "snapshot_phase": "pit_open"
+    }
+  ]
+}

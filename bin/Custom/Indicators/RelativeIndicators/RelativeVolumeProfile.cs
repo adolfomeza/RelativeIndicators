@@ -23,7 +23,7 @@ namespace NinjaTrader.NinjaScript.Indicators
 	public partial class RelativeVolumeProfile : Indicator
 	{
 		#region Constants
-		private const string VERSION = "1.0.0";
+		private const string VERSION = "1.1.0";
 		#endregion
 
 		#region Data Structures
@@ -198,6 +198,10 @@ namespace NinjaTrader.NinjaScript.Indicators
 					if (!TimeSpan.TryParse(ProfileEndTime, out _profileEndTs))
 						_profileEndTs = new TimeSpan(16, 0, 0);
 				}
+				else if (SessionMode == ProfileSessionMode.PitAuto)
+				{
+					ApplyPitAutoSession();
+				}
 
 				if (ShowDebugLogs)
 					Print("RelativeVolumeProfile v" + VERSION + " loaded for " + Instrument.FullName
@@ -330,8 +334,8 @@ namespace NinjaTrader.NinjaScript.Indicators
 				// Serie secundaria (1 min): distribuir volumen o TPO con resolución fina
 				if (_activeProfile == null || !_activeProfile.IsActive) return;
 
-				// En modo RTH o Custom, filtrar barras fuera del horario configurado
-				if (SessionMode == ProfileSessionMode.RTH || SessionMode == ProfileSessionMode.Custom)
+				// En modo RTH / Custom / PitAuto, filtrar barras fuera del horario configurado
+				if (SessionMode == ProfileSessionMode.RTH || SessionMode == ProfileSessionMode.Custom || SessionMode == ProfileSessionMode.PitAuto)
 				{
 					TimeSpan barTs = Times[1][0].TimeOfDay;
 					bool inPeriod;
@@ -383,9 +387,10 @@ namespace NinjaTrader.NinjaScript.Indicators
 		{
 			bool startNewProfile = false;
 
-			if (SessionMode == ProfileSessionMode.RTH || SessionMode == ProfileSessionMode.Custom)
+			if (SessionMode == ProfileSessionMode.RTH || SessionMode == ProfileSessionMode.Custom || SessionMode == ProfileSessionMode.PitAuto)
 			{
-				// RTH y Custom: perfil basado en horas configuradas (ProfileStartTime / ProfileEndTime)
+				// RTH / Custom / PitAuto: perfil basado en horas configuradas
+				// (PitAuto resuelve ProfileStartTime/EndTime a partir del MasterInstrument)
 				TimeSpan currentTs = Time[0].TimeOfDay;
 
 				bool insidePeriod;
@@ -522,6 +527,108 @@ namespace NinjaTrader.NinjaScript.Indicators
 
 			if (ShowDebugLogs)
 				Print("RelativeVolumeProfile: New profile [" + SessionMode + "] started at " + Time[0] + " bar " + CurrentBar);
+		}
+
+		#endregion
+
+		#region PitAuto — auto-detección de pit session por instrumento
+
+		/// <summary>
+		/// Setea _profileStartTs y _profileEndTs según el MasterInstrument del chart.
+		/// Se llama en State.DataLoaded. Si el usuario cambia el instrumento en el chart,
+		/// NT8 recicla el indicador (Terminated → Configure → DataLoaded), por lo que
+		/// esta función se re-ejecuta automáticamente.
+		/// Horarios referenciados al huso ET (timezone nativo del exchange).
+		/// </summary>
+		private void ApplyPitAutoSession()
+		{
+			string master = "";
+			try { master = Instrument?.MasterInstrument?.Name?.ToUpperInvariant() ?? ""; }
+			catch { master = ""; }
+
+			TimeSpan startTs;
+			TimeSpan endTs;
+			string family;
+
+			// CME Equity Index Futures (pit: 09:30 – 16:00 ET)
+			if (master == "ES" || master == "MES" ||
+			    master == "NQ" || master == "MNQ" ||
+			    master == "YM" || master == "MYM" ||
+			    master == "RTY" || master == "M2K")
+			{
+				startTs = new TimeSpan(9, 30, 0);
+				endTs   = new TimeSpan(16, 0, 0);
+				family  = "CME Index";
+			}
+			// COMEX Metals: Gold/Silver/Platinum (pit: 08:20 – 13:30 ET)
+			else if (master == "GC" || master == "MGC" ||
+			         master == "SI" || master == "SIL" ||
+			         master == "PL")
+			{
+				startTs = new TimeSpan(8, 20, 0);
+				endTs   = new TimeSpan(13, 30, 0);
+				family  = "COMEX Metals";
+			}
+			// COMEX Copper (pit: 08:10 – 13:00 ET)
+			else if (master == "HG" || master == "MHG")
+			{
+				startTs = new TimeSpan(8, 10, 0);
+				endTs   = new TimeSpan(13, 0, 0);
+				family  = "COMEX Copper";
+			}
+			// NYMEX Energy: Crude / Gasoline / Heating Oil / NatGas (pit: 09:00 – 14:30 ET)
+			else if (master == "CL" || master == "MCL" ||
+			         master == "QM" ||
+			         master == "NG" || master == "QG" ||
+			         master == "RB" || master == "HO")
+			{
+				startTs = new TimeSpan(9, 0, 0);
+				endTs   = new TimeSpan(14, 30, 0);
+				family  = "NYMEX Energy";
+			}
+			// CBOT Treasuries (pit: 07:20 – 14:00 ET)
+			else if (master == "ZB" || master == "UB" ||
+			         master == "ZN" || master == "TN" ||
+			         master == "ZF" || master == "ZT")
+			{
+				startTs = new TimeSpan(7, 20, 0);
+				endTs   = new TimeSpan(14, 0, 0);
+				family  = "CBOT Treasuries";
+			}
+			// CBOT Grains (pit: 08:30 – 13:20 ET)
+			else if (master == "ZC" || master == "ZS" || master == "ZW" ||
+			         master == "ZM" || master == "ZL" || master == "ZO" || master == "ZR")
+			{
+				startTs = new TimeSpan(8, 30, 0);
+				endTs   = new TimeSpan(13, 20, 0);
+				family  = "CBOT Grains";
+			}
+			// CME FX Futures (aprox pit: 07:20 – 14:00 ET)
+			else if (master == "6E" || master == "6B" || master == "6J" ||
+			         master == "6C" || master == "6A" || master == "6S" ||
+			         master == "6N" || master == "6M")
+			{
+				startTs = new TimeSpan(7, 20, 0);
+				endTs   = new TimeSpan(14, 0, 0);
+				family  = "CME FX";
+			}
+			// Fallback: si no se reconoce, usar ProfileStartTime/EndTime manuales
+			// (para que el usuario pueda operar instrumentos exóticos con Custom times)
+			else
+			{
+				if (!TimeSpan.TryParse(ProfileStartTime, out startTs))
+					startTs = new TimeSpan(9, 30, 0);
+				if (!TimeSpan.TryParse(ProfileEndTime, out endTs))
+					endTs = new TimeSpan(16, 0, 0);
+				family = "UNKNOWN → fallback manual";
+			}
+
+			_profileStartTs = startTs;
+			_profileEndTs   = endTs;
+
+			Print(string.Format(
+				"RelativeVolumeProfile[PitAuto] {0} → family={1} pit={2:hh\\:mm}-{3:hh\\:mm} ET",
+				master, family, _profileStartTs, _profileEndTs));
 		}
 
 		#endregion
@@ -1104,7 +1211,8 @@ public enum ProfileSessionMode
 {
 	RTH,
 	ETH,
-	Custom
+	Custom,
+	PitAuto
 }
 
 public enum ProfileDataType

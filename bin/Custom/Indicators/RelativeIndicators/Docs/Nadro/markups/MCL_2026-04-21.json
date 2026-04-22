@@ -1,0 +1,149 @@
+{
+  "schema_version": "1.0",
+  "instrument": "MCL",
+  "date": "2026-04-21",
+  "snapshots": [
+    {
+      "id": "MCL_20260421_0900",
+      "timestamp": "2026-04-21T09:00:00",
+      "price_at_analysis": 86.47,
+      "regime": "rotacional consolidacion",
+      "bias": "neutral (test piso)",
+      "summary": "Overnight volatil 85.68-87.47. Cerro 86.47 dentro W-DVA. pVA 20/04 cerro breakout_up 87.5. Precio pegado al piso W-DVA 86.35. Setups: RPB bullish rebote W-DVAL vs BPB bearish break.",
+      "analysis_text": "NADRO MCL 06-26 — PRE-MARKET 07:00 VET\nPrecio: 86.47\nRegimen: rotacional / consolidacion\n\nNARRATIVA (N)\n- Macro: neutral-bullish (+2.88 vs yVWAP)\n- Overnight volatil: rango 85.68-87.47\n  Low 01:30 @ 85.68\n  High 03:15 @ 87.47\n- pVA 20/04 cerro breakout_up\n  VAL 86.5 / POC 87.25 / VAH 87.5\n- Precio 86.47 DEBAJO pVAL (sospechoso)\n\nACEPTACION (A)\n- Cerca de pVAL 20/04 86.5 (-0.03)\n- Arriba W-DVAL 86.35 (+0.12)\n- Debajo W-VWAP 87.57 (-1.10)\n\nDISTRIBUCION (D)\n- Rangeo overnight amplio\n- Precio test piso W-DVA\n- Sin trend claro\n\nRITMO (R)\n- Swings overnight 2 pts\n- Subida 03:00-03:15: 85.98 -> 87.47\n- Bajada desde 87.47 hasta 86.47\n- Volatilidad alta\n\nPRE-MARKET\n- Crude abre 24/5, ya en session\n- W-DVAL = soporte critico\n- Si respeta = RPB bullish\n- Si falla = continuation bajista\n\nNIVELES CLAVE\n- Overnight high 87.47\n- pVAH 20/04 87.5\n- pVAP 20/04 87.25\n- W-VWAP 87.57\n- pVAL 20/04 86.5\n- Precio 86.47\n- W-DVAL 86.35\n- Overnight low 85.68\n\nSETUPS\nHYPO 1 RPB bullish grade A\n  Contexto: respeto W-DVAL tras overnight low\n  pVA 20/04 cerro bullish (breakout_up)\n  E 86.40 (respeto W-DVAL + mecha)\n  S 85.80 (abajo overnight low)\n  T1 87.25 pVAP RR 1.4\n  T2 87.50 pVAH RR 1.8\n  T3 88.00 extension RR 2.7\n\nHYPO 2 BPB bearish grade B\n  Contexto: break W-DVAL + falla recovery\n  Contra-tendencia breakout previo\n  E 86.30 (break W-DVAL)\n  S 86.80 (arriba pVAL)\n  T1 85.68 overnight low RR 1.2\n  T2 85.00 psicologico RR 2.6\n  T3 84.50 extension RR 3.6\n\nNota: HYPO 1 preferido porque pVA cerro\nbullish. W-DVAL es nivel critico.",
+      "confluences": [
+        {
+          "label": "Soporte piso (pVAL+wDVAL)",
+          "price_min": 86.35,
+          "price_max": 86.5,
+          "grade": "B",
+          "members": [
+            "pVAL-20/04",
+            "wDVAL"
+          ]
+        }
+      ],
+      "levels": [
+        {
+          "label": "overnight-high",
+          "price": 87.47
+        },
+        {
+          "label": "pVAH-20/04",
+          "price": 87.5
+        },
+        {
+          "label": "wVWAP",
+          "price": 87.57
+        },
+        {
+          "label": "pVAP-20/04",
+          "price": 87.25
+        },
+        {
+          "label": "pVAL-20/04",
+          "price": 86.5
+        },
+        {
+          "label": "wDVAL",
+          "price": 86.35
+        },
+        {
+          "label": "overnight-low",
+          "price": 85.68
+        }
+      ],
+      "hypos": [
+        {
+          "id": "h1",
+          "direction": "long",
+          "setup_type": "RPB-wDVAL",
+          "entry": 86.4,
+          "stop": 85.8,
+          "grade": "A",
+          "notes": "Respeto W-DVAL tras overnight low test. pVA 20/04 cerro breakout_up = contexto bullish. Grade A por confluencia soporte.",
+          "targets": [
+            {
+              "label": "pVAP",
+              "price": 87.25,
+              "rr": 1.4
+            },
+            {
+              "label": "pVAH",
+              "price": 87.5,
+              "rr": 1.8
+            },
+            {
+              "label": "extension",
+              "price": 88,
+              "rr": 2.7
+            }
+          ],
+          "risk_pts": 0.6000000000000085,
+          "outcome": {
+            "status": "not_triggered",
+            "trade_status": "not_triggered",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "targets_hit_before_stop": [],
+            "targets_hit_after_stop": [],
+            "setup_reached_t1": false,
+            "setup_reached_t2": false,
+            "setup_reached_t3": false,
+            "mae_pts": null,
+            "mfe_pts": null
+          },
+          "setup_companions": [
+            "RPB-pVAL-20/04"
+          ],
+          "trading_horizon": "intraday"
+        },
+        {
+          "id": "h2",
+          "direction": "short",
+          "setup_type": "BPB-wDVAL",
+          "entry": 86.3,
+          "stop": 86.8,
+          "grade": "B",
+          "notes": "Break W-DVAL sin recovery. Contra-tendencia previa breakout_up. Solo si falla respeto limpio.",
+          "targets": [
+            {
+              "label": "overnight-low",
+              "price": 85.68,
+              "rr": 1.2
+            },
+            {
+              "label": "psicologico",
+              "price": 85,
+              "rr": 2.6
+            },
+            {
+              "label": "extension",
+              "price": 84.5,
+              "rr": 3.6
+            }
+          ],
+          "risk_pts": 0.5,
+          "outcome": {
+            "status": "stopped_out",
+            "trade_status": "stopped_out",
+            "triggered_at": "2026-04-21T09:00:00",
+            "stop_hit_at": "2026-04-21T09:00:00",
+            "targets_hit": [],
+            "targets_hit_before_stop": [],
+            "targets_hit_after_stop": [],
+            "setup_reached_t1": false,
+            "setup_reached_t2": false,
+            "setup_reached_t3": false,
+            "mae_pts": 5.93,
+            "mfe_pts": 0.0
+          },
+          "setup_companions": [],
+          "trading_horizon": "intraday"
+        }
+      ],
+      "snapshot_phase": "pit_open"
+    }
+  ]
+}

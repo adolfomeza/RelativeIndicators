@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"/>
+<title>Blind Validation 2026-04-21</title>
+<style>
+body { font-family: -apple-system, Segoe UI, Arial, sans-serif; max-width: 1300px; margin: 24px auto; padding: 0 16px; color: #1f2d3d; background: #fafcff; }
+h1 { color: #0f172a; border-bottom: 3px solid #0ea5e9; padding-bottom: 6px; }
+h2 { color: #0f172a; margin-top: 32px; border-left: 4px solid #0ea5e9; padding-left: 10px; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0 24px; }
+th { background: #0ea5e9; color: white; padding: 6px 8px; text-align: left; }
+td { padding: 5px 8px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+tr:nth-child(even) { background: #f1f5f9; }
+.pill { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+.pill-long { background: #dcfce7; color: #14532d; }
+.pill-short { background: #fee2e2; color: #7f1d1d; }
+.pill-neutral { background: #e0e7ff; color: #312e81; }
+.pill-A { background: #fef3c7; color: #78350f; }
+.pill-B { background: #e0e7ff; color: #312e81; }
+.pill-C { background: #e2e8f0; color: #475569; }
+.status-filled { color: #15803d; font-weight: 600; }
+.status-stopped_out { color: #b91c1c; font-weight: 600; }
+.status-not_triggered { color: #64748b; }
+.status-pending { color: #64748b; }
+.status-triggered { color: #854d0e; font-weight: 600; }
+.kbd { font-family: monospace; background: #eef2ff; padding: 1px 4px; border-radius: 3px; font-size: 12px; }
+.section { background: white; padding: 16px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 20px; }
+.note { background: #fef9c3; border-left: 4px solid #ca8a04; padding: 10px 14px; margin: 16px 0; }
+.small { font-size: 11px; color: #64748b; }
+</style></head><body>
+<h1>Blind Validation NADRO — 2026-04-21</h1>
+<p class="small">Generado: 2026-04-21 post-NY close. Dataset: 6 instrumentos x 3 fases (context / pre_open / eod) = 18 snapshots blindos vs morning 07:00 originales.</p>
+<div class="note"><b>Proposito.</b> Reconstruir retrospectivamente que analisis NADRO habria generado el sistema completo (incluyendo TPO por instrumento con pit-session correcto - bug arreglado hoy) en 3 momentos del dia, sin mirar el estado live. Comparar contra los snapshots morning (07:00) originales y los outcomes del walk-forward para medir calidad reconstructiva.</div>
+<div class="section"><h2>Resumen por instrumento x fase</h2>
+<table><tr><th>Instrumento</th><th>Fase</th><th>Hora</th><th>Precio</th><th>Bias</th><th>#Confl</th><th>#Hipos</th><th>Hipos (direccion &middot; setup &middot; grade &middot; outcome)</th></tr>
+<tr><td><b>MES</b></td><td>context</td><td>07:00</td><td>7175.75</td><td><span class="pill pill-long">long</span></td><td>2</td><td>1</td><td><div><span class="pill pill-long">long</span> <span class="kbd">RPB-mDVAH</span> <span class="pill pill-B">B</span> E=7069.3031 S=7063.0531 risk=6.25 <span class="status-not_triggered">not_triggered</span> mae=None mfe=None t=[]</div></td></tr>
+<tr><td><b>MES</b></td><td>pre_open</td><td>09:25</td><td>7161.25</td><td><span class="pill pill-long">long-bias</span></td><td>2</td><td>1</td><td><div><span class="pill pill-short">short</span> <span class="kbd">BPB-mDVAH</span> <span class="pill pill-B">B</span> E=7069.3031 S=7077.0766 risk=7.7735 <span class="status-stopped_out">stopped_out</span> mae=103.2 mfe=0.0 t=[]</div></td></tr>
+<tr><td><b>MES</b></td><td>eod</td><td>16:00</td><td>7100.5</td><td><span class="pill pill-short">short</span></td><td>4</td><td>2</td><td><div><span class="pill pill-short">short</span> <span class="kbd">RPB-pWDVAH</span> <span class="pill pill-B">B</span> E=7121.3697 S=7127.6197 risk=6.25 <span class="status-stopped_out">stopped_out</span> mae=18.63 mfe=27.62 t=[0, 1, 2]</div><div><span class="pill pill-short">short</span> <span class="kbd">BPB-mDVAH</span> <span class="pill pill-B">B</span> E=7069.3031 S=7077.0766 risk=7.7735 <span class="status-stopped_out">stopped_out</span> mae=70.7 mfe=0.0 t=[]</div></td></tr>
+<tr><td><b>MNQ</b></td><td>context</td><td>07:00</td><td>26871.75</td><td><span class="pill pill-long">long</span></td><td>0</td><td>0</td><td><span class="small">sin hipos</span></td></tr>
+<tr><td><b>MNQ</b></td><td>pre_open</td><td>09:25</td><td>26805.75</td><td><span class="pill pill-short">short</span></td><td>1</td><td>1</td><td><div><span class="pill pill-short">short</span> <span class="kbd">RPB-wDVAH</span> <span class="pill pill-B">B</span> E=26806.6156 S=26812.8656 risk=6.25 <span class="status-filled">filled</span> mae=78.38 mfe=254.87 t=[0, 1, 2]</div></td></tr>
+<tr><td><b>MNQ</b></td><td>eod</td><td>16:00</td><td>26641.0</td><td><span class="pill pill-short">short</span></td><td>0</td><td>0</td><td><span class="small">sin hipos</span></td></tr>
+<tr><td><b>MYM</b></td><td>context</td><td>07:00</td><td>49937.0</td><td><span class="pill pill-long">long</span></td><td>1</td><td>1</td><td><div><span class="pill pill-long">long</span> <span class="kbd">RPB-mVWAP</span> <span class="pill pill-B">B</span> E=47541.77 S=47516.77 risk=25.0 <span class="status-not_triggered">not_triggered</span> mae=None mfe=None t=[]</div></td></tr>
+<tr><td><b>MYM</b></td><td>pre_open</td><td>09:25</td><td>49904.0</td><td><span class="pill pill-long">long-bias</span></td><td>2</td><td>1</td><td><div><span class="pill pill-long">long</span> <span class="kbd">BPB-DVAH</span> <span class="pill pill-B">B</span> E=49928.5026 S=49903.5026 risk=25.0 <span class="status-stopped_out">stopped_out</span> mae=699.5 mfe=116.5 t=[0, 1, 2]</div></td></tr>
+<tr><td><b>MYM</b></td><td>eod</td><td>16:00</td><td>49340.0</td><td><span class="pill pill-short">short</span></td><td>3</td><td>2</td><td><div><span class="pill pill-short">short</span> <span class="kbd">RPB-wDVAL</span> <span class="pill pill-B">B</span> E=49438.9328 S=49463.9328 risk=25.0 <span class="status-stopped_out">stopped_out</span> mae=171.07 mfe=132.93 t=[0, 1]</div><div><span class="pill pill-short">short</span> <span class="kbd">RPB-wDVAH</span> <span class="pill pill-B">B</span> E=49843.8158 S=49845.0 risk=1.1842 <span class="status-not_triggered">not_triggered</span> mae=None mfe=None t=[]</div></td></tr>
+<tr><td><b>M2K</b></td><td>context</td><td>07:00</td><td>2814.4</td><td><span class="pill pill-long">long</span></td><td>0</td><td>0</td><td><span class="small">sin hipos</span></td></tr>
+<tr><td><b>M2K</b></td><td>pre_open</td><td>09:25</td><td>2810.2</td><td><span class="pill pill-long">long-bias</span></td><td>0</td><td>0</td><td><span class="small">sin hipos</span></td></tr>
+<tr><td><b>M2K</b></td><td>eod</td><td>16:00</td><td>2775.5</td><td><span class="pill pill-short">short</span></td><td>1</td><td>1</td><td><div><span class="pill pill-short">short</span> <span class="kbd">RPB-wDVAH</span> <span class="pill pill-B">B</span> E=2812.9236 S=2815.4236 risk=2.5 <span class="status-not_triggered">not_triggered</span> mae=None mfe=None t=[]</div></td></tr>
+<tr><td><b>MGC</b></td><td>context</td><td>06:30</td><td>4802.0</td><td><span class="pill pill-short">short-bias</span></td><td>1</td><td>1</td><td><div><span class="pill pill-long">long</span> <span class="kbd">BPB-DVAH</span> <span class="pill pill-B">B</span> E=4835.8972 S=4819.5069 risk=16.3903 <span class="status-stopped_out">stopped_out</span> mae=149.5 mfe=0.0 t=[]</div></td></tr>
+<tr><td><b>MGC</b></td><td>pre_open</td><td>08:15</td><td>4810.4</td><td><span class="pill pill-short">short-bias</span></td><td>0</td><td>0</td><td><span class="small">sin hipos</span></td></tr>
+<tr><td><b>MGC</b></td><td>eod</td><td>13:30</td><td>4719.1</td><td><span class="pill pill-short">short</span></td><td>1</td><td>1</td><td><div><span class="pill pill-short">short</span> <span class="kbd">RPB-DVAL</span> <span class="pill pill-B">B</span> E=4758.9664 S=4759.1 risk=0.1336 <span class="status-stopped_out">stopped_out</span> mae=6.73 mfe=2.67 t=[0]</div></td></tr>
+<tr><td><b>MCL</b></td><td>context</td><td>07:00</td><td>86.65</td><td><span class="pill pill-short">short-bias</span></td><td>1</td><td>1</td><td><div><span class="pill pill-short">short</span> <span class="kbd">BPB-VWAP</span> <span class="pill pill-A">A</span> E=86.5093 S=86.659 risk=0.1497 <span class="status-stopped_out">stopped_out</span> mae=5.72 mfe=0.0 t=[]</div></td></tr>
+<tr><td><b>MCL</b></td><td>pre_open</td><td>08:55</td><td>87.34</td><td><span class="pill pill-long">long</span></td><td>1</td><td>1</td><td><div><span class="pill pill-long">long</span> <span class="kbd">RPB-wDVAL</span> <span class="pill pill-B">B</span> E=86.5246 S=86.4 risk=0.1246 <span class="status-not_triggered">not_triggered</span> mae=None mfe=None t=[]</div></td></tr>
+<tr><td><b>MCL</b></td><td>eod</td><td>14:30</td><td>89.55</td><td><span class="pill pill-short">short-bias</span></td><td>1</td><td>1</td><td><div><span class="pill pill-short">short</span> <span class="kbd">BPB-wDVAL</span> <span class="pill pill-A">A</span> E=86.5465 S=86.659 risk=0.1125 <span class="status-stopped_out">stopped_out</span> mae=5.68 mfe=0.0 t=[]</div></td></tr>
+</table></div>
+<div class="section"><h2>Comparacion con hipos de la manana (07:00 originales)</h2>
+<p class="small">Matching por dir + prefijo setup (BPB/RPB/IPB). Se compara morning 07:00 vs blind context (mismo cutoff 07:00 salvo MGC).</p>
+<table><tr><th>Instrumento</th><th>Morning (07:00)</th><th>Blind Context</th><th>Similar?</th></tr>
+<tr><td><b>MES</b></td><td><div>long <span class="kbd">RPB-wDVAH+pVAH-20/04</span> E=7152 <span class="status-filled">filled</span></div><div>short <span class="kbd">BPB-pVAH-17/04</span> E=7180 <span class="status-filled">filled</span></div></td><td><div>long <span class="kbd">RPB-mDVAH</span> E=7069.3031 <span class="status-not_triggered">not_triggered</span></div></td><td>si (dir + setup)</td></tr>
+<tr><td><b>MNQ</b></td><td><div>short <span class="kbd">BPB-pVAH-17/04</span> E=26870 <span class="status-stopped_out">stopped_out</span></div><div>long <span class="kbd">RPB-pVAH-17/04</span> E=26875 <span class="status-stopped_out">stopped_out</span></div></td><td><span class="small">&mdash;</span></td><td>no</td></tr>
+<tr><td><b>MYM</b></td><td><div>short <span class="kbd">BPB-CVAH+DVAH-17-20</span> E=49925 <span class="status-stopped_out">stopped_out</span></div><div>long <span class="kbd">RPB-CVAH-17-20</span> E=49935 <span class="status-stopped_out">stopped_out</span></div></td><td><div>long <span class="kbd">RPB-mVWAP</span> E=47541.77 <span class="status-not_triggered">not_triggered</span></div></td><td>si (dir + setup)</td></tr>
+<tr><td><b>M2K</b></td><td><div>long <span class="kbd">RPB-wDVAH</span> E=2814 <span class="status-stopped_out">stopped_out</span></div><div>short <span class="kbd">BPB-wDVAH</span> E=2815 <span class="status-stopped_out">stopped_out</span></div></td><td><span class="small">&mdash;</span></td><td>no</td></tr>
+<tr><td><b>MGC</b></td><td><div>short <span class="kbd">RPB-pVAL-20/04</span> E=4820 <span class="status-not_triggered">not_triggered</span></div><div>long <span class="kbd">RPB-pVAL-20/04</span> E=4825 <span class="status-stopped_out">stopped_out</span></div></td><td><div>long <span class="kbd">BPB-DVAH</span> E=4835.8972 <span class="status-stopped_out">stopped_out</span></div></td><td>no</td></tr>
+<tr><td><b>MCL</b></td><td><div>long <span class="kbd">RPB-wDVAL</span> E=86.4 <span class="status-not_triggered">not_triggered</span></div><div>short <span class="kbd">BPB-wDVAL</span> E=86.3 <span class="status-stopped_out">stopped_out</span></div></td><td><div>short <span class="kbd">BPB-VWAP</span> E=86.5093 <span class="status-stopped_out">stopped_out</span></div></td><td>si (dir + setup)</td></tr>
+</table></div>
+<div class="section"><h2>Walk-forward &mdash; 18 blindos</h2>
+<p class="small">Outcomes ejecutados desde cutoff hasta NY close.</p>
+<table><tr><th>Snapshot ID</th><th>Hipo</th><th>Dir</th><th>Setup</th><th>Entry</th><th>Stop</th><th>Status</th><th>MAE</th><th>MFE</th><th>Targets</th><th>T1 setup?</th></tr>
+<tr><td><b>MES_20260421_context_BLIND</b></td><td>h1</td><td>long</td><td class="kbd">RPB-mDVAH</td><td>7069.3031</td><td>7063.0531</td><td class="status-not_triggered">not_triggered</td><td>None</td><td>None</td><td>[]</td><td></td></tr>
+<tr><td><b>MES_20260421_pre_open_BLIND</b></td><td>h1</td><td>short</td><td class="kbd">BPB-mDVAH</td><td>7069.3031</td><td>7077.0766</td><td class="status-stopped_out">stopped_out</td><td>103.2</td><td>0.0</td><td>[]</td><td></td></tr>
+<tr><td><b>MES_20260421_eod_BLIND</b></td><td>h1</td><td>short</td><td class="kbd">RPB-pWDVAH</td><td>7121.3697</td><td>7127.6197</td><td class="status-stopped_out">stopped_out</td><td>18.63</td><td>27.62</td><td>[0, 1, 2]</td><td>OK</td></tr>
+<tr><td><b>MES_20260421_eod_BLIND</b></td><td>h2</td><td>short</td><td class="kbd">BPB-mDVAH</td><td>7069.3031</td><td>7077.0766</td><td class="status-stopped_out">stopped_out</td><td>70.7</td><td>0.0</td><td>[]</td><td></td></tr>
+<tr><td><b>MNQ_20260421_context_BLIND</b></td><td colspan='10' class='small'>sin hipos</td></tr>
+<tr><td><b>MNQ_20260421_pre_open_BLIND</b></td><td>h1</td><td>short</td><td class="kbd">RPB-wDVAH</td><td>26806.6156</td><td>26812.8656</td><td class="status-filled">filled</td><td>78.38</td><td>254.87</td><td>[0, 1, 2]</td><td>OK</td></tr>
+<tr><td><b>MNQ_20260421_eod_BLIND</b></td><td colspan='10' class='small'>sin hipos</td></tr>
+<tr><td><b>MYM_20260421_context_BLIND</b></td><td>h1</td><td>long</td><td class="kbd">RPB-mVWAP</td><td>47541.77</td><td>47516.77</td><td class="status-not_triggered">not_triggered</td><td>None</td><td>None</td><td>[]</td><td></td></tr>
+<tr><td><b>MYM_20260421_pre_open_BLIND</b></td><td>h1</td><td>long</td><td class="kbd">BPB-DVAH</td><td>49928.5026</td><td>49903.5026</td><td class="status-stopped_out">stopped_out</td><td>699.5</td><td>116.5</td><td>[0, 1, 2]</td><td>OK</td></tr>
+<tr><td><b>MYM_20260421_eod_BLIND</b></td><td>h1</td><td>short</td><td class="kbd">RPB-wDVAL</td><td>49438.9328</td><td>49463.9328</td><td class="status-stopped_out">stopped_out</td><td>171.07</td><td>132.93</td><td>[0, 1]</td><td>OK</td></tr>
+<tr><td><b>MYM_20260421_eod_BLIND</b></td><td>h2</td><td>short</td><td class="kbd">RPB-wDVAH</td><td>49843.8158</td><td>49845.0</td><td class="status-not_triggered">not_triggered</td><td>None</td><td>None</td><td>[]</td><td></td></tr>
+<tr><td><b>M2K_20260421_context_BLIND</b></td><td colspan='10' class='small'>sin hipos</td></tr>
+<tr><td><b>M2K_20260421_pre_open_BLIND</b></td><td colspan='10' class='small'>sin hipos</td></tr>
+<tr><td><b>M2K_20260421_eod_BLIND</b></td><td>h1</td><td>short</td><td class="kbd">RPB-wDVAH</td><td>2812.9236</td><td>2815.4236</td><td class="status-not_triggered">not_triggered</td><td>None</td><td>None</td><td>[]</td><td></td></tr>
+<tr><td><b>MGC_20260421_context_BLIND</b></td><td>h1</td><td>long</td><td class="kbd">BPB-DVAH</td><td>4835.8972</td><td>4819.5069</td><td class="status-stopped_out">stopped_out</td><td>149.5</td><td>0.0</td><td>[]</td><td></td></tr>
+<tr><td><b>MGC_20260421_pre_open_BLIND</b></td><td colspan='10' class='small'>sin hipos</td></tr>
+<tr><td><b>MGC_20260421_eod_BLIND</b></td><td>h1</td><td>short</td><td class="kbd">RPB-DVAL</td><td>4758.9664</td><td>4759.1</td><td class="status-stopped_out">stopped_out</td><td>6.73</td><td>2.67</td><td>[0]</td><td>OK</td></tr>
+<tr><td><b>MCL_20260421_context_BLIND</b></td><td>h1</td><td>short</td><td class="kbd">BPB-VWAP</td><td>86.5093</td><td>86.659</td><td class="status-stopped_out">stopped_out</td><td>5.72</td><td>0.0</td><td>[]</td><td></td></tr>
+<tr><td><b>MCL_20260421_pre_open_BLIND</b></td><td>h1</td><td>long</td><td class="kbd">RPB-wDVAL</td><td>86.5246</td><td>86.4</td><td class="status-not_triggered">not_triggered</td><td>None</td><td>None</td><td>[]</td><td></td></tr>
+<tr><td><b>MCL_20260421_eod_BLIND</b></td><td>h1</td><td>short</td><td class="kbd">BPB-wDVAL</td><td>86.5465</td><td>86.659</td><td class="status-stopped_out">stopped_out</td><td>5.68</td><td>0.0</td><td>[]</td><td></td></tr>
+</table></div>
+<div class="section"><h2>Estadisticas agregadas</h2>
+<ul><li>Total snapshots blindos generados: <b>18/18</b></li>
+<li>Total hipos blindos: <b>15</b></li>
+<li>Hipos que alcanzaron T1 (setup_reached_t1): <b>5/15</b></li></ul></div>
+<div class="section"><h2>Conclusion</h2>
+<p class="small"><i>(Placeholder para llenar tras revision).</i></p>
+<ul><li></li><li></li><li></li></ul></div>
+<p class="small">Generado por <span class="kbd">blind_snapshot.run_all_blind_snapshots</span> + <span class="kbd">walkforward.close_eod</span> + <span class="kbd">blind_briefing.generate</span>.</p>
+</body></html>
