@@ -62,17 +62,25 @@ Se listan los setups (IPB/BPB/RPB) que dispararon en niveles **no cubiertos** po
 ### H2 — Revisión NADRO: N-A-D-R-O
 Cinco micro-sub-secciones fijas (**orden verbatim del acrónimo NADRO**):
 
-1. **Narrativa** — ¿Se cumplió la narrativa pre-open?
+1. **Narrativa** — bias derivado de la **ESTRUCTURA DE LOS TPO**:
+   - Alto pobre (single TPO en el high) → bullish forward
+   - Mínimo débil (single TPO en el low) → bearish forward
+   - Excess (cola larga) en los extremos → rechazo confirmado
+   - Día tipo (trend / normal / neutral / non-trend)
+   - Cierre vs POC (above VAH = acceptance bullish, below VAL = acceptance bearish)
    - "¿Mantuvo/rompió equilibrio?", "¿los extremos funcionaron?"
-   - "Ruptura del CVA", "retroceso de ruptura", "retroceso de retorno"
+   - Distinguir bias DECLARADO pre-open (¿se cumplió hoy?) vs bias FORWARD para mañana
 2. **Aceptación** — ¿Qué niveles aceptó/rechazó el mercado?
    - "Aceptamos de vuelta dentro del valor anterior"
    - "El mercado no pudo bajar de esta área estructural"
    - "Reacción bajista del valor anterior para prepararnos para una reacción alcista"
-3. **DVA / estructura** — ¿Cómo se desarrolló el DVA? ¿POC, VAH, VAL relevantes?
+3. **DVA (Developing Value Areas) multi-TF** — NO es "distribución":
+   - Las 5 DVAs en simultáneo: **Daily, Weekly, Monthly, Quarterly, Annual**
+   - Posición del precio vs cada DVA (above DVAH / inside VA / below DVAL)
+   - Extensión en puntos cuando está fuera del VA
+   - Bias mean-revert: si ≥3 TFs above → bearish corto plazo; si ≥3 below → bullish
+   - TPO intraday POC/VAH/VAL del día se reporta como referencia, no como D principal
    - "Valor en desarrollo se desplazó hacia abajo toda la sesión"
-   - "Alto pobre / mínimo débil / falta de exceso"
-   - "POC tocado = señal A+"
 4. **Ritmo** — Compresión → expansión, velocidad, volatilidad.
    - "Nos comprimimos en este nivel y eventualmente explotaríamos"
    - "Entorno de tendencia lenta, empuja extremos, luego empuja hacia adentro"
