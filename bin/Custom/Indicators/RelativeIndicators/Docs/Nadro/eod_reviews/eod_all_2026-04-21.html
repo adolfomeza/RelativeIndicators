@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>EOD Review NADRO — 2026-04-21</title>
+<style>
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f172a; color: #e2e8f0; margin: 0; padding: 24px; line-height: 1.5; }
+  h1 { font-size: 28px; margin: 0 0 4px; color: #f1f5f9; }
+  h2 { font-size: 20px; margin: 32px 0 12px; color: #f1f5f9; border-bottom: 2px solid #334155; padding-bottom: 6px; }
+  h3 { font-size: 16px; margin: 16px 0 8px; color: #cbd5e1; }
+  .subtitle { color: #94a3b8; font-size: 14px; margin-bottom: 24px; }
+  .aggregate { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 16px 0 32px; }
+  .stat { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 16px; text-align: center; }
+  .stat .label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .stat .value { font-size: 24px; font-weight: 700; color: #f1f5f9; }
+  .stat .value.win { color: #4ade80; }
+  .stat .value.stop { color: #fca5a5; }
+  .stat .value.tight { color: #fbbf24; }
+  .instrument-card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+  .instrument-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .instrument-header h2 { margin: 0; border: none; padding: 0; font-size: 22px; color: #f1f5f9; }
+  .instrument-meta { font-size: 12px; color: #94a3b8; }
+  .snapshot-info { background: #0f172a; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 13px; }
+  .snapshot-info strong { color: #cbd5e1; }
+  .hypo { background: #0f172a; border-left: 3px solid #475569; border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 12px 0; }
+  .hypo.WIN { border-left-color: #16a34a; }
+  .hypo.WIN_MINOR { border-left-color: #22c55e; }
+  .hypo.STOP_TIGHT { border-left-color: #f59e0b; }
+  .hypo.STOP_GENUINE { border-left-color: #dc2626; }
+  .hypo.DEAD { border-left-color: #6b7280; }
+  .hypo-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px; }
+  .hypo-title { font-weight: 600; color: #f1f5f9; font-size: 15px; }
+  .hypo-badges { display: flex; gap: 6px; }
+  .hypo-details { font-size: 12px; color: #cbd5e1; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; margin: 8px 0; }
+  .hypo-details .field { background: #1e293b; padding: 4px 8px; border-radius: 4px; }
+  .hypo-details .field .label { color: #64748b; font-size: 10px; text-transform: uppercase; }
+  .hypo-note { font-size: 12px; color: #fbbf24; margin-top: 8px; padding: 6px 10px; background: rgba(251,191,36,0.1); border-radius: 4px; }
+  .hypo-note.win { color: #4ade80; background: rgba(74,222,128,0.1); }
+  .hypo-note.stop { color: #fca5a5; background: rgba(252,165,165,0.1); }
+  .targets { font-size: 11px; color: #94a3b8; margin-top: 4px; }
+  .error { color: #fca5a5; font-style: italic; }
+  a { color: #60a5fa; }
+  footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid #334155; color: #64748b; font-size: 12px; text-align: center; }
+</style>
+</head>
+<body>
+<h1>EOD Review NADRO — 2026-04-21</h1>
+<div class="subtitle">Análisis post-cierre de los 6 instrumentos. 1 snapshot por instrumento al pit open, review narrativo al pit close.</div>
+
+<div class="aggregate">
+  <div class="stat"><div class="label">Hipos propuestos</div><div class="value">12</div></div>
+  <div class="stat"><div class="label">Triggered</div><div class="value">9</div></div>
+  <div class="stat"><div class="label">Wins</div><div class="value win">3</div></div>
+  <div class="stat"><div class="label">Stop Tight</div><div class="value tight">3</div></div>
+  <div class="stat"><div class="label">Win rate</div><div class="value">33%</div></div>
+</div>
+
+<div class="instrument-card">
+  <div class="instrument-header">
+    <h2>MGC</h2>
+    <div class="instrument-meta">Pit 08:20–13:30 VET · 2 hipos · WR 0%</div>
+  </div>
+  <div class="snapshot-info">
+    <strong>Snapshot</strong> MGC_20260421_0820 @ 2026-04-21 08:20 · <strong>Precio</strong> 4805.4 · <strong>Bias</strong> neutral-bearish · <strong>Regime</strong> rotacional intradiario (macro bullish)<br>
+    <em>Precio 4805 DEBAJO de pVAL 4822 (bearish sign). Overnight -12 pts (4817 a 4805). En rango W-DVA 4799-4835. Setups: RPB bearish retest pVAL vs BPB bullish en W-DVAL.</em>
+  </div>
+  <div style="font-size:13px;color:#cbd5e1;margin-bottom:8px;">
+    Triggered 1 · Wins 0 (big 0, parcial 0) · Stopped 1 (tight 0, genuino 1) · Dead 1
+  </div>
+
+  <div class="hypo DEAD">
+    <div class="hypo-header">
+      <div class="hypo-title">HYPO h1 — short RPB-pVAL-20/04 / RPB-wVWAP <span style="color:#94a3b8;font-size:12px;">B</span></div>
+      <div class="hypo-badges"><span style="background:#64748b;color:#fff;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;">NOT TRIG</span><span style="background:#6b7280;color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.5px;">DEAD</span></div>
+    </div>
+    <div class="hypo-details">
+      <div class="field"><div class="label">Entry</div>4820</div>
+      <div class="field"><div class="label">Stop</div>4830 (10.0 pts)</div>
+      <div class="field"><div class="label">MAE / MFE</div>- / - pts</div>
+      <div class="field"><div class="label">Triggered</div>-</div>
+    </div>
+    <div class="targets">· T1 4808 (RR 1.2) | · T2 4799 (RR 2.1) | · T3 4790 (RR 3.0)</div>
+    <div class="hypo-note">— NOT TRIGGERED: precio nunca tocó el entry en el pit.</div>
+  </div>
+
+  <div class="hypo STOP_GENUINE">
+    <div class="hypo-header">
+      <div class="hypo-title">HYPO h2 — long RPB-pVAL-20/04 <span style="color:#94a3b8;font-size:12px;">B</span></div>
+      <div class="hypo-badges"><span style="background:#dc2626;color:#fff;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;">STOPPED</span><span style="background:#dc2626;color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.5px;">STOP</span></div>
+    </div>
+    <div class="hypo-details">
+      <div class="field"><div class="label">Entry</div>4825</div>
+      <div class="field"><div class="label">Stop</div>4815 (10.0 pts)</div>
+      <div class="field"><div class="label">MAE / MFE</div>138.6 / 0.0 pts</div>
+      <div class="field"><div class="label">Triggered</div>2026-04-21 07:00</div>
+    </div>
+    <div class="targets">· T1 4834 (RR 0.9) | · T2 4844 (RR 1.9) | · T3 4855 (RR 3.0)</div>
+    <div class="hypo-note stop">✗ STOP genuino: setup no se confirmó.</div>
+  </div>
+</div>
+<div class="instrument-card">
+  <div class="instrument-header">
+    <h2>MCL</h2>
+    <div class="instrument-meta">Pit 09:00–14:30 VET · 2 hipos · WR 0%</div>
+  </div>
+  <div class="snapshot-info">
+    <strong>Snapshot</strong> MCL_20260421_0900 @ 2026-04-21 09:00 · <strong>Precio</strong> 86.47 · <strong>Bias</strong> neutral (test piso) · <strong>Regime</strong> rotacional consolidacion<br>
+    <em>Overnight volatil 85.68-87.47. Cerro 86.47 dentro W-DVA. pVA 20/04 cerro breakout_up 87.5. Precio pegado al piso W-DVA 86.35. Setups: RPB bullish rebote W-DVAL vs BPB bearish break.</em>
+  </div>
+  <div style="font-size:13px;color:#cbd5e1;margin-bottom:8px;">
+    Triggered 1 · Wins 0 (big 0, parcial 0) · Stopped 1 (tight 0, genuino 1) · Dead 1
+  </div>
+
+  <div class="hypo DEAD">
+    <div class="hypo-header">
+      <div class="hypo-title">HYPO h1 — long RPB-wDVAL / RPB-pVAL-20/04 <span style="color:#94a3b8;font-size:12px;">A</span></div>
+      <div class="hypo-badges"><span style="background:#64748b;color:#fff;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;">NOT TRIG</span><span style="background:#6b7280;color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.5px;">DEAD</span></div>
+    </div>
+    <div class="hypo-details">
+      <div class="field"><div class="label">Entry</div>86.4</div>
+      <div class="field"><div class="label">Stop</div>85.8 (0.6000000000000085 pts)</div>
+      <div class="field"><div class="label">MAE / MFE</div>- / - pts</div>
+      <div class="field"><div class="label">Triggered</div>-</div>
+    </div>
+    <div class="targets">· T1 87.25 (RR 1.4) | · T2 87.5 (RR 1.8) | · T3 88 (RR 2.7)</div>
+    <div class="hypo-note">— NOT TRIGGERED: precio nunca tocó el entry en el pit.</div>
+  </div>
+
+  <div class="hypo STOP_GENUINE">
+    <div class="hypo-header">
+      <div class="hypo-title">HYPO h2 — short BPB-wDVAL <span style="color:#94a3b8;font-size:12px;">B</span></div>
+      <div class="hypo-badges"><span style="background:#dc2626;color:#fff;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;">STOPPED</span><span style="background:#dc2626;color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.5px;">STOP</span></div>
+    </div>
+    <div class="hypo-details">
+      <div class="field"><div class="label">Entry</div>86.3</div>
+      <div class="field"><div class="label">Stop</div>86.8 (0.5 pts)</div>
+      <div class="field"><div class="label">MAE / MFE</div>5.9 / 0.0 pts</div>
+      <div class="field"><div class="label">Triggered</div>2026-04-21 09:00</div>
+    </div>
+    <div class="targets">· T1 85.68 (RR 1.2) | · T2 85 (RR 2.6) | · T3 84.5 (RR 3.6)</div>
+    <div class="hypo-note stop">✗ STOP genuino: setup no se confirmó.</div>
+  </div>
+</div>
+<div class="instrument-card">
+  <div class="instrument-header">
+    <h2>MES</h2>
+    <div class="instrument-meta">Pit 09:30–16:00 VET · 2 hipos · WR 100%</div>
+  </div>
+  <div class="snapshot-info">
+    <strong>Snapshot</strong> MES_20260421_0930 @ 2026-04-21 09:30 · <strong>Precio</strong> 7173.0 · <strong>Bias</strong> bullish · <strong>Regime</strong> imbalance bullish overnight<br>
+    <em>Rally overnight +18 pts (7155 a 7173). Precio extendido arriba de W-DVAH 7152 y pVAH 20/04 7149.75. Macro bullish confirmed. Setups: RPB bullish retest W-DVAH vs BPB bearish en rechazo 7183.</em>
+  </div>
+  <div style="font-size:13px;color:#cbd5e1;margin-bottom:8px;">
+    Triggered 1 · Wins 1 (big 0, parcial 1) · Stopped 0 (tight 0, genuino 0) · Dead 1
+  </div>
+
+  <div class="hypo WIN_MINOR">
+    <div class="hypo-header">
+      <div class="hypo-title">HYPO h1 — long RPB-wDVAH+pVAH-20/04 <span style="color:#94a3b8;font-size:12px;">B</span></div>
+      <div class="hypo-badges"><span style="background:#16a34a;color:#fff;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;">FILLED</span><span style="background:#22c55e;color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.5px;">WIN</span></div>
+    </div>
+    <div class="hypo-details">
+      <div class="field"><div class="label">Entry</div>7152</div>
+      <div class="field"><div class="label">Stop</div>7145 (7.0 pts)</div>
+      <div class="field"><div class="label">MAE / MFE</div>67.0 / 20.5 pts</div>
+      <div class="field"><div class="label">Triggered</div>2026-04-21 09:32</div>
+    </div>
+    <div class="targets">✓ T1 7170 (RR 2.6) | · T2 7183 (RR 4.4) | · T3 7200 (RR 6.9)</div>
+    <div class="hypo-note win">✓ WIN parcial: filled en T1.</div>
+  </div>
+
+  <div class="hypo DEAD">
+    <div class="hypo-header">
+      <div class="hypo-title">HYPO h2 — short BPB-pVAH-17/04 <span style="color:#94a3b8;font-size:12px;">C</span></div>
+      <div class="hypo-badges"><span style="background:#64748b;color:#fff;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;">NOT TRIG</span><span style="background:#6b7280;color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.5px;">DEAD</span></div>
+    </div>
+    <div class="hypo-details">
+      <div class="field"><div class="label">Entry</div>7180</div>
+      <div class="field"><div class="label">Stop</div>7188 (8.0 pts)</div>
+      <div class="field"><div class="label">MAE / MFE</div>- / - pts</div>
+      <div class="field"><div class="label">Triggered</div>-</div>
+    </div>
+    <div class="targets">· T1 7165 (RR 1.9) | · T2 7152 (RR 3.5) | · T3 7140 (RR 5.0)</div>
+    <div class="hypo-note">— NOT TRIGGERED: precio nunca tocó el entry en el pit.</div>
+  </div>
+</div>
+<div class="instrument-card">
+  <div class="instrument-header">
+    <h2>MNQ</h2>
+    <div class="instrument-meta">Pit 09:30–16:00 VET · 2 hipos · WR 50%</div>
+  </div>
+  <div class="snapshot-info">
+    <strong>Snapshot</strong> MNQ_20260421_0930 @ 2026-04-21 09:30 · <strong>Precio</strong> 26860.25 · <strong>Bias</strong> bullish · <strong>Regime</strong> imbalance bullish overnight<br>
+    <em>Rally overnight +56 pts (26804 a 26860). Precio EN pVAH 17/04 26861 (resistencia critica). Macro bullish +1495 yVWAP. Setups: BPB bearish rechazo pVAH vs RPB bullish break.</em>
+  </div>
+  <div style="font-size:13px;color:#cbd5e1;margin-bottom:8px;">
+    Triggered 2 · Wins 1 (big 1, parcial 0) · Stopped 1 (tight 0, genuino 1) · Dead 0
+  </div>
+
+  <div class="hypo WIN">
+    <div class="hypo-header">
+      <div class="hypo-title">HYPO h1 — short BPB-pVAH-17/04 <span style="color:#94a3b8;font-size:12px;">B</span></div>
+      <div class="hypo-badges"><span style="background:#16a34a;color:#fff;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;">FILLED</span><span style="background:#15803d;color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.5px;">BIG WIN</span></div>
+    </div>
+    <div class="hypo-details">
+      <div class="field"><div class="label">Entry</div>26870</div>
+      <div class="field"><div class="label">Stop</div>26890 (20.0 pts)</div>
+      <div class="field"><div class="label">MAE / MFE</div>15.0 / 318.2 pts</div>
+      <div class="field"><div class="label">Triggered</div>2026-04-21 10:10</div>
+    </div>
+    <div class="targets">✓ T1 26835 (RR 1.8) | ✓ T2 26807 (RR 3.2) | ✓ T3 26785 (RR 4.3)</div>
+    <div class="hypo-note win">✓ BIG WIN: filled completo T1+T2+T3.</div>
+  </div>
+
+  <div class="hypo STOP_GENUINE">
+    <div class="hypo-header">
+      <div class="hypo-title">HYPO h2 — long RPB-pVAH-17/04 <span style="color:#94a3b8;font-size:12px;">B</span></div>
+      <div class="hypo-badges"><span style="background:#dc2626;color:#fff;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;">STOPPED</span><span style="background:#dc2626;color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.5px;">STOP</span></div>
+    </div>
+    <div class="hypo-details">
+      <div class="field"><div class="label">Entry</div>26875</div>
+      <div class="field"><div class="label">Stop</div>26855 (20.0 pts)</div>
+      <div class="field"><div class="label">MAE / MFE</div>323.2 / 10.0 pts</div>
+      <div class="field"><div class="label">Triggered</div>2026-04-21 09:30</div>
+    </div>
+    <div class="targets">· T1 26920 (RR 2.3) | · T2 26960 (RR 4.3) | · T3 27000 (RR 6.3)</div>
+    <div class="hypo-note stop">✗ STOP genuino: setup no se confirmó.</div>
+  </div>
+</div>
+<div class="instrument-card">
+  <div class="instrument-header">
+    <h2>MYM</h2>
+    <div class="instrument-meta">Pit 09:30–16:00 VET · 2 hipos · WR 50%</div>
+  </div>
+  <div class="snapshot-info">
+    <strong>Snapshot</strong> MYM_20260421_0930 @ 2026-04-21 09:30 · <strong>Precio</strong> 49922.0 · <strong>Bias</strong> bullish extendido · <strong>Regime</strong> imbalance bullish overnight extendido<br>
+    <em>RALLY FUERTE overnight +227 pts (49695 a 49922). Precio EN CVAH 49923 (resistencia critica). Macro bullish. Extendido - posible pullback. Setups: BPB bearish rechazo CVAH vs RPB bullish break.</em>
+  </div>
+  <div style="font-size:13px;color:#cbd5e1;margin-bottom:8px;">
+    Triggered 2 · Wins 1 (big 1, parcial 0) · Stopped 1 (tight 1, genuino 0) · Dead 0
+  </div>
+
+  <div class="hypo WIN">
+    <div class="hypo-header">
+      <div class="hypo-title">HYPO h1 — short BPB-CVAH+DVAH-17-20 <span style="color:#94a3b8;font-size:12px;">A</span></div>
+      <div class="hypo-badges"><span style="background:#16a34a;color:#fff;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;">FILLED</span><span style="background:#15803d;color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.5px;">BIG WIN</span></div>
+    </div>
+    <div class="hypo-details">
+      <div class="field"><div class="label">Entry</div>49925</div>
+      <div class="field"><div class="label">Stop</div>49960 (35.0 pts)</div>
+      <div class="field"><div class="label">MAE / MFE</div>120.0 / 696.0 pts</div>
+      <div class="field"><div class="label">Triggered</div>2026-04-21 09:30</div>
+    </div>
+    <div class="targets">✓ T1 49844 (RR 2.3) | ✓ T2 49790 (RR 3.8) | ✓ T3 49745 (RR 5.1)</div>
+    <div class="hypo-note win">✓ BIG WIN: filled completo T1+T2+T3.</div>
+  </div>
+
+  <div class="hypo STOP_TIGHT">
+    <div class="hypo-header">
+      <div class="hypo-title">HYPO h2 — long RPB-CVAH-17-20 <span style="color:#94a3b8;font-size:12px;">B</span></div>
+      <div class="hypo-badges"><span style="background:#dc2626;color:#fff;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;">STOPPED</span><span style="background:#f59e0b;color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.5px;">STOP TIGHT</span></div>
+    </div>
+    <div class="hypo-details">
+      <div class="field"><div class="label">Entry</div>49935</div>
+      <div class="field"><div class="label">Stop</div>49895 (40.0 pts)</div>
+      <div class="field"><div class="label">MAE / MFE</div>706.0 / 110.0 pts</div>
+      <div class="field"><div class="label">Triggered</div>2026-04-21 09:30</div>
+    </div>
+    <div class="targets">✓ T1 49980 (RR 1.1) | ✓ T2 50020 (RR 2.1) | · T3 50100 (RR 4.1)</div>
+    <div class="hypo-note">⚠ STOP TIGHT: setup alcanzó T2 post-stop. Stop fue más ajustado que el rango natural.</div>
+  </div>
+</div>
+<div class="instrument-card">
+  <div class="instrument-header">
+    <h2>M2K</h2>
+    <div class="instrument-meta">Pit 09:30–16:00 VET · 2 hipos · WR 0%</div>
+  </div>
+  <div class="snapshot-info">
+    <strong>Snapshot</strong> M2K_20260421_0930 @ 2026-04-21 09:30 · <strong>Precio</strong> 2813.6 · <strong>Bias</strong> bullish leve · <strong>Regime</strong> bullish moderado overnight<br>
+    <em>Rally moderado overnight +5 pts (2808 a 2814). Precio JUSTO en W-DVAH 2813 (crítico). Arriba de CVAH 2803.75. Macro bullish. Setups: RPB bullish retest CVAH vs BPB bearish rechazo W-DVAH.</em>
+  </div>
+  <div style="font-size:13px;color:#cbd5e1;margin-bottom:8px;">
+    Triggered 2 · Wins 0 (big 0, parcial 0) · Stopped 2 (tight 2, genuino 0) · Dead 0
+  </div>
+
+  <div class="hypo STOP_TIGHT">
+    <div class="hypo-header">
+      <div class="hypo-title">HYPO h1 — long RPB-wDVAH <span style="color:#94a3b8;font-size:12px;">B</span></div>
+      <div class="hypo-badges"><span style="background:#dc2626;color:#fff;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;">STOPPED</span><span style="background:#f59e0b;color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.5px;">STOP TIGHT</span></div>
+    </div>
+    <div class="hypo-details">
+      <div class="field"><div class="label">Entry</div>2814</div>
+      <div class="field"><div class="label">Stop</div>2808 (6.0 pts)</div>
+      <div class="field"><div class="label">MAE / MFE</div>46.4 / 14.6 pts</div>
+      <div class="field"><div class="label">Triggered</div>2026-04-21 09:30</div>
+    </div>
+    <div class="targets">✓ T1 2820 (RR 1.0) | ✓ T2 2828 (RR 2.3) | · T3 2835 (RR 3.5)</div>
+    <div class="hypo-note">⚠ STOP TIGHT: setup alcanzó T2 post-stop. Stop fue más ajustado que el rango natural.</div>
+  </div>
+
+  <div class="hypo STOP_TIGHT">
+    <div class="hypo-header">
+      <div class="hypo-title">HYPO h2 — short BPB-wDVAH <span style="color:#94a3b8;font-size:12px;">B</span></div>
+      <div class="hypo-badges"><span style="background:#dc2626;color:#fff;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;">STOPPED</span><span style="background:#f59e0b;color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.5px;">STOP TIGHT</span></div>
+    </div>
+    <div class="hypo-details">
+      <div class="field"><div class="label">Entry</div>2815</div>
+      <div class="field"><div class="label">Stop</div>2820 (5.0 pts)</div>
+      <div class="field"><div class="label">MAE / MFE</div>13.6 / 47.4 pts</div>
+      <div class="field"><div class="label">Triggered</div>2026-04-21 09:31</div>
+    </div>
+    <div class="targets">✓ T1 2803 (RR 2.4) | ✓ T2 2795 (RR 4.0) | ✓ T3 2788 (RR 5.4)</div>
+    <div class="hypo-note">⚠ STOP TIGHT: setup alcanzó T3 post-stop. Stop fue más ajustado que el rango natural.</div>
+  </div>
+</div>
+<footer>
+  Generado por <code>nadro_eod_review_all('2026-04-21')</code> · NADRO workflow end-to-end ·
+  Regla: 1 snapshot pit open + 1 review pit close.
+</footer>
+</body>
+</html>

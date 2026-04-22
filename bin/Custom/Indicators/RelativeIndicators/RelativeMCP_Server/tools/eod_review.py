@@ -333,8 +333,12 @@ def eod_review(instrument: str, date_str: str | None = None) -> dict:
     }
 
 
-def eod_review_all(date_str: str | None = None) -> dict:
-    """Corre EOD review para los 6 instrumentos NADRO estándar."""
+def eod_review_all(date_str: str | None = None, write_html: bool = True) -> dict:
+    """Corre EOD review para los 6 instrumentos NADRO estándar.
+
+    Si ``write_html=True``, también genera un HTML consolidado en
+    ``Docs/Nadro/eod_reviews/eod_all_{date}.html``.
+    """
     if not date_str:
         date_str = datetime.now().strftime("%Y-%m-%d")
 
@@ -357,14 +361,216 @@ def eod_review_all(date_str: str | None = None) -> dict:
         total_wins += rv["wins"]
         total_stop_tight += rv["counts"].get("STOP_TIGHT", 0)
 
+    aggregate = {
+        "total_hypos":      total_hypos,
+        "total_triggered":  total_triggered,
+        "total_wins":       total_wins,
+        "total_stop_tight": total_stop_tight,
+        "win_rate":         (total_wins / total_triggered) if total_triggered else None,
+    }
+
+    html_path = None
+    if write_html:
+        reviews_dir = markups_dir().parent / "eod_reviews"
+        reviews_dir.mkdir(parents=True, exist_ok=True)
+        html_path = reviews_dir / f"eod_all_{date_str}.html"
+        html_content = generate_html_consolidated(results, aggregate, date_str)
+        html_path.write_text(html_content, encoding="utf-8")
+        html_path = str(html_path)
+
     return {
         "date": date_str,
         "reviews": results,
-        "aggregate": {
-            "total_hypos":      total_hypos,
-            "total_triggered":  total_triggered,
-            "total_wins":       total_wins,
-            "total_stop_tight": total_stop_tight,
-            "win_rate":         (total_wins / total_triggered) if total_triggered else None,
-        },
+        "aggregate": aggregate,
+        "html_path": html_path,
     }
+
+
+# ============================================================================
+# HTML consolidated generator
+# ============================================================================
+
+def _status_badge(status: str) -> str:
+    """Devuelve HTML span con color según status."""
+    colors = {
+        "filled":        ("#16a34a", "FILLED"),
+        "stopped_out":   ("#dc2626", "STOPPED"),
+        "not_triggered": ("#64748b", "NOT TRIG"),
+        "triggered":     ("#2563eb", "OPEN"),
+        "pending":       ("#94a3b8", "PENDING"),
+    }
+    color, label = colors.get(status, ("#94a3b8", status.upper()))
+    return f'<span style="background:{color};color:#fff;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;">{label}</span>'
+
+
+def _classification_badge(cls: str) -> str:
+    colors = {
+        "WIN":          ("#15803d", "BIG WIN"),
+        "WIN_MINOR":    ("#22c55e", "WIN"),
+        "STOP_TIGHT":   ("#f59e0b", "STOP TIGHT"),
+        "STOP_GENUINE": ("#dc2626", "STOP"),
+        "DEAD":         ("#6b7280", "DEAD"),
+        "OPEN":         ("#3b82f6", "OPEN"),
+    }
+    color, label = colors.get(cls, ("#6b7280", cls))
+    return f'<span style="background:{color};color:#fff;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:0.5px;">{label}</span>'
+
+
+def generate_html_consolidated(reviews: dict, aggregate: dict, date_str: str) -> str:
+    """Genera HTML consolidado con los 6 reviews en una sola página."""
+    import html as _html
+
+    wr = aggregate.get("win_rate")
+    wr_str = f"{wr*100:.0f}%" if wr is not None else "N/A"
+
+    parts = []
+    parts.append(f"""<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>EOD Review NADRO — {date_str}</title>
+<style>
+  body {{ font-family: 'Segoe UI', system-ui, sans-serif; background: #0f172a; color: #e2e8f0; margin: 0; padding: 24px; line-height: 1.5; }}
+  h1 {{ font-size: 28px; margin: 0 0 4px; color: #f1f5f9; }}
+  h2 {{ font-size: 20px; margin: 32px 0 12px; color: #f1f5f9; border-bottom: 2px solid #334155; padding-bottom: 6px; }}
+  h3 {{ font-size: 16px; margin: 16px 0 8px; color: #cbd5e1; }}
+  .subtitle {{ color: #94a3b8; font-size: 14px; margin-bottom: 24px; }}
+  .aggregate {{ display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 16px 0 32px; }}
+  .stat {{ background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 16px; text-align: center; }}
+  .stat .label {{ font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }}
+  .stat .value {{ font-size: 24px; font-weight: 700; color: #f1f5f9; }}
+  .stat .value.win {{ color: #4ade80; }}
+  .stat .value.stop {{ color: #fca5a5; }}
+  .stat .value.tight {{ color: #fbbf24; }}
+  .instrument-card {{ background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; margin-bottom: 20px; }}
+  .instrument-header {{ display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }}
+  .instrument-header h2 {{ margin: 0; border: none; padding: 0; font-size: 22px; color: #f1f5f9; }}
+  .instrument-meta {{ font-size: 12px; color: #94a3b8; }}
+  .snapshot-info {{ background: #0f172a; border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; font-size: 13px; }}
+  .snapshot-info strong {{ color: #cbd5e1; }}
+  .hypo {{ background: #0f172a; border-left: 3px solid #475569; border-radius: 0 8px 8px 0; padding: 12px 16px; margin: 12px 0; }}
+  .hypo.WIN {{ border-left-color: #16a34a; }}
+  .hypo.WIN_MINOR {{ border-left-color: #22c55e; }}
+  .hypo.STOP_TIGHT {{ border-left-color: #f59e0b; }}
+  .hypo.STOP_GENUINE {{ border-left-color: #dc2626; }}
+  .hypo.DEAD {{ border-left-color: #6b7280; }}
+  .hypo-header {{ display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px; }}
+  .hypo-title {{ font-weight: 600; color: #f1f5f9; font-size: 15px; }}
+  .hypo-badges {{ display: flex; gap: 6px; }}
+  .hypo-details {{ font-size: 12px; color: #cbd5e1; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px; margin: 8px 0; }}
+  .hypo-details .field {{ background: #1e293b; padding: 4px 8px; border-radius: 4px; }}
+  .hypo-details .field .label {{ color: #64748b; font-size: 10px; text-transform: uppercase; }}
+  .hypo-note {{ font-size: 12px; color: #fbbf24; margin-top: 8px; padding: 6px 10px; background: rgba(251,191,36,0.1); border-radius: 4px; }}
+  .hypo-note.win {{ color: #4ade80; background: rgba(74,222,128,0.1); }}
+  .hypo-note.stop {{ color: #fca5a5; background: rgba(252,165,165,0.1); }}
+  .targets {{ font-size: 11px; color: #94a3b8; margin-top: 4px; }}
+  .error {{ color: #fca5a5; font-style: italic; }}
+  a {{ color: #60a5fa; }}
+  footer {{ margin-top: 48px; padding-top: 16px; border-top: 1px solid #334155; color: #64748b; font-size: 12px; text-align: center; }}
+</style>
+</head>
+<body>
+<h1>EOD Review NADRO — {date_str}</h1>
+<div class="subtitle">Análisis post-cierre de los 6 instrumentos. 1 snapshot por instrumento al pit open, review narrativo al pit close.</div>
+
+<div class="aggregate">
+  <div class="stat"><div class="label">Hipos propuestos</div><div class="value">{aggregate['total_hypos']}</div></div>
+  <div class="stat"><div class="label">Triggered</div><div class="value">{aggregate['total_triggered']}</div></div>
+  <div class="stat"><div class="label">Wins</div><div class="value win">{aggregate['total_wins']}</div></div>
+  <div class="stat"><div class="label">Stop Tight</div><div class="value tight">{aggregate['total_stop_tight']}</div></div>
+  <div class="stat"><div class="label">Win rate</div><div class="value">{wr_str}</div></div>
+</div>
+""")
+
+    for inst in ["MGC", "MCL", "MES", "MNQ", "MYM", "M2K"]:
+        r = reviews.get(inst, {})
+        if "error" in r:
+            parts.append(f'<div class="instrument-card"><h2>{inst}</h2><p class="error">{_html.escape(r["error"])}</p></div>')
+            continue
+
+        rv = r["review"]
+        pit_open, pit_close = PIT_HOURS_VET.get(inst, ("?", "?"))
+        c = rv["counts"]
+        wins = c["WIN"] + c["WIN_MINOR"]
+        stopped = c["STOP_TIGHT"] + c["STOP_GENUINE"]
+        wr_inst = f"{rv['win_rate']*100:.0f}%" if rv["win_rate"] is not None else "N/A"
+
+        bias = _html.escape(rv.get("bias") or "—")
+        summary = _html.escape(rv.get("summary") or "")
+        regime = _html.escape(rv.get("regime") or "—")
+        price = rv.get("price_at_analysis") or "—"
+        timestamp = _fmt_ts(rv.get("timestamp"))
+
+        parts.append(f"""
+<div class="instrument-card">
+  <div class="instrument-header">
+    <h2>{inst}</h2>
+    <div class="instrument-meta">Pit {pit_open}–{pit_close} VET · {len(rv['hypos'])} hipos · WR {wr_inst}</div>
+  </div>
+  <div class="snapshot-info">
+    <strong>Snapshot</strong> {_html.escape(rv['snapshot_id'] or '')} @ {timestamp} · <strong>Precio</strong> {price} · <strong>Bias</strong> {bias} · <strong>Regime</strong> {regime}<br>
+    <em>{summary}</em>
+  </div>
+  <div style="font-size:13px;color:#cbd5e1;margin-bottom:8px;">
+    Triggered {rv['triggered']} · Wins {wins} (big {c['WIN']}, parcial {c['WIN_MINOR']}) · Stopped {stopped} (tight {c['STOP_TIGHT']}, genuino {c['STOP_GENUINE']}) · Dead {c['DEAD']}
+  </div>
+""")
+
+        for h in rv["hypos"]:
+            cls = h["classification"]
+            companions = (" / " + " / ".join(h["companions"])) if h["companions"] else ""
+            setup_str = _html.escape((h["setup_type"] or "") + companions)
+            direction = h["direction"] or ""
+
+            targets_html = ""
+            if h["targets"]:
+                hit_set = set(h["targets_hit"] or [])
+                tgt_parts = []
+                for i, t in enumerate(h["targets"]):
+                    marker = "✓" if i in hit_set else "·"
+                    tgt_parts.append(f'{marker} T{i+1} {t.get("price")} (RR {float(t.get("rr",0)):.1f})')
+                targets_html = f'<div class="targets">{" | ".join(tgt_parts)}</div>'
+
+            # note
+            note_html = ""
+            if cls == "STOP_TIGHT":
+                last_t = 3 if h["reached_t3"] else 2 if h["reached_t2"] else 1
+                note_html = f'<div class="hypo-note">⚠ STOP TIGHT: setup alcanzó T{last_t} post-stop. Stop fue más ajustado que el rango natural.</div>'
+            elif cls == "WIN":
+                note_html = f'<div class="hypo-note win">✓ BIG WIN: filled completo T1+T2+T3.</div>'
+            elif cls == "WIN_MINOR":
+                note_html = f'<div class="hypo-note win">✓ WIN parcial: filled en T1.</div>'
+            elif cls == "STOP_GENUINE":
+                note_html = f'<div class="hypo-note stop">✗ STOP genuino: setup no se confirmó.</div>'
+            elif cls == "DEAD":
+                note_html = f'<div class="hypo-note">— NOT TRIGGERED: precio nunca tocó el entry en el pit.</div>'
+
+            parts.append(f"""
+  <div class="hypo {cls}">
+    <div class="hypo-header">
+      <div class="hypo-title">HYPO {h['id']} — {direction} {setup_str} <span style="color:#94a3b8;font-size:12px;">{h['grade'] or ''}</span></div>
+      <div class="hypo-badges">{_status_badge(h['trade_status'])}{_classification_badge(cls)}</div>
+    </div>
+    <div class="hypo-details">
+      <div class="field"><div class="label">Entry</div>{h['entry']}</div>
+      <div class="field"><div class="label">Stop</div>{h['stop']} ({h['risk_pts']} pts)</div>
+      <div class="field"><div class="label">MAE / MFE</div>{_fmt_pts(h['mae_pts'])} / {_fmt_pts(h['mfe_pts'])} pts</div>
+      <div class="field"><div class="label">Triggered</div>{_fmt_ts(h['triggered_at'])}</div>
+    </div>
+    {targets_html}
+    {note_html}
+  </div>
+""")
+
+        parts.append("</div>")
+
+    parts.append(f"""
+<footer>
+  Generado por <code>nadro_eod_review_all('{date_str}')</code> · NADRO workflow end-to-end ·
+  Regla: 1 snapshot pit open + 1 review pit close.
+</footer>
+</body>
+</html>
+""")
+
+    return "".join(parts)
