@@ -61,25 +61,63 @@ def _fmt_ts(ts: str | None) -> str:
 
 
 def review_hypo(h: dict) -> dict:
-    """Extrae campos relevantes de un hipo + clasifica su outcome."""
+    """Clasifica un hipo según LO QUE EL TRADER REALMENTE CAPTURÓ.
+
+    Distinguir crítico:
+    - `targets_hit_before_stop`: lo que el trader ganó (T1/T2/T3 antes del stop)
+    - `targets_hit_after_stop`: validación del setup (T2/T3 tocados POST-stop,
+      pero el trader ya estaba afuera — no contó como ganancia)
+    - `setup_reached_tN`: incluye ambos (validación del setup, no del trade)
+
+    Clasificaciones:
+    - **BIG_WIN**: T1+T2+T3 hit ANTES del stop (trade tomó todo el movimiento)
+    - **WIN**: T2 antes del stop (trade tomó al menos T1 y T2)
+    - **WIN_MINOR**: solo T1 antes del stop (trade tomó T1, después stopped o
+      todavía corriendo)
+    - **STOP_TIGHT**: stopped_out PERO el setup eventualmente alcanzó T1+ post-stop
+      (stop fue muy ajustado vs el rango natural — setup era válido)
+    - **STOP_GENUINE**: stopped sin que el setup alcance T1 (setup mal direccionado)
+    - **DEAD**: not_triggered
+    - **OPEN**: triggered pero todavía abierto (sin T1 ni stop hit)
+    """
     oc = h.get("outcome") or {}
     trade_status = oc.get("trade_status") or oc.get("status", "pending")
-    t1 = bool(oc.get("setup_reached_t1"))
-    t2 = bool(oc.get("setup_reached_t2"))
-    t3 = bool(oc.get("setup_reached_t3"))
 
-    is_stop_tight = (trade_status == "stopped_out") and t1
-    is_big_win    = (trade_status == "filled") and t3
-    is_dead       = trade_status == "not_triggered"
+    # Targets hit antes vs después del stop
+    th_before = oc.get("targets_hit_before_stop") or []
+    th_after  = oc.get("targets_hit_after_stop") or []
+    th_all    = oc.get("targets_hit") or list(set(th_before) | set(th_after))
 
-    classification = "WIN" if is_big_win else \
-                     "WIN_MINOR" if trade_status == "filled" else \
-                     "STOP_TIGHT" if is_stop_tight else \
-                     "STOP_GENUINE" if trade_status == "stopped_out" else \
-                     "DEAD" if is_dead else \
-                     "OPEN"
+    # Setup reached flags (incluyen pre+post stop = validación del setup)
+    reached_t1 = bool(oc.get("setup_reached_t1"))
+    reached_t2 = bool(oc.get("setup_reached_t2"))
+    reached_t3 = bool(oc.get("setup_reached_t3"))
 
-    targets_hit = oc.get("targets_hit", [])
+    # Trade reached flags (SOLO antes del stop = lo que el trader capturó)
+    trade_t1 = 0 in th_before
+    trade_t2 = 1 in th_before
+    trade_t3 = 2 in th_before
+
+    if trade_status == "filled":
+        if trade_t3:
+            classification = "BIG_WIN"
+        elif trade_t2:
+            classification = "WIN"
+        elif trade_t1:
+            classification = "WIN_MINOR"
+        else:
+            # Edge case: filled marcado pero ningún target hit antes del stop
+            classification = "WIN_MINOR"
+    elif trade_status == "stopped_out":
+        # STOP_TIGHT si el setup eventualmente alcanzó T1+ post-stop
+        if reached_t1 and not trade_t1:
+            classification = "STOP_TIGHT"
+        else:
+            classification = "STOP_GENUINE"
+    elif trade_status == "not_triggered":
+        classification = "DEAD"
+    else:
+        classification = "OPEN"
 
     return {
         "id":           h.get("id"),
@@ -93,10 +131,17 @@ def review_hypo(h: dict) -> dict:
         "grade":        h.get("grade"),
         "targets":      h.get("targets", []),
         "trade_status": trade_status,
-        "reached_t1":   t1,
-        "reached_t2":   t2,
-        "reached_t3":   t3,
-        "targets_hit":  targets_hit,
+        # Validación del setup (incluye post-stop)
+        "reached_t1":   reached_t1,
+        "reached_t2":   reached_t2,
+        "reached_t3":   reached_t3,
+        # Capturado por el trader (antes del stop)
+        "trade_t1":     trade_t1,
+        "trade_t2":     trade_t2,
+        "trade_t3":     trade_t3,
+        "targets_hit_before_stop": th_before,
+        "targets_hit_after_stop":  th_after,
+        "targets_hit":  th_all,
         "triggered_at": oc.get("triggered_at"),
         "stop_hit_at":  oc.get("stop_hit_at"),
         "mae_pts":      oc.get("mae_pts"),
@@ -109,12 +154,12 @@ def review_snapshot(snap: dict) -> dict:
     """Analiza un snapshot completo y devuelve stats + hipos analizados."""
     hypos = [review_hypo(h) for h in snap.get("hypos", [])]
 
-    counts = {"WIN": 0, "WIN_MINOR": 0, "STOP_TIGHT": 0, "STOP_GENUINE": 0, "DEAD": 0, "OPEN": 0}
+    counts = {"BIG_WIN": 0, "WIN": 0, "WIN_MINOR": 0, "STOP_TIGHT": 0, "STOP_GENUINE": 0, "DEAD": 0, "OPEN": 0}
     for h in hypos:
         counts[h["classification"]] = counts.get(h["classification"], 0) + 1
 
     triggered = sum(1 for h in hypos if h["trade_status"] in ("filled", "stopped_out", "triggered"))
-    wins      = counts["WIN"] + counts["WIN_MINOR"]
+    wins      = counts["BIG_WIN"] + counts["WIN"] + counts["WIN_MINOR"]
 
     return {
         "snapshot_id":      snap.get("id"),
@@ -171,27 +216,43 @@ def _narrative_for_hypo(h: dict, instrument: str) -> str:
 
     lines.append(f"MAE {_fmt_pts(h['mae_pts'])} pts | MFE {_fmt_pts(h['mfe_pts'])} pts")
 
-    # Lección por clasificación
+    # Lección por clasificación (basada en LO QUE EL TRADER CAPTURÓ)
     cls = h["classification"]
-    if cls == "STOP_TIGHT":
+    th_before = h.get("targets_hit_before_stop", [])
+    th_after  = h.get("targets_hit_after_stop", [])
+    if cls == "BIG_WIN":
+        lines.append(
+            "\n**BIG WIN**: T1+T2+T3 alcanzados ANTES del stop. "
+            "Trade capturó el movimiento completo. Setup + gestión óptimos."
+        )
+    elif cls == "WIN":
+        lines.append(
+            "\n**WIN**: T1+T2 alcanzados antes del stop (T3 no se logró pre-stop). "
+            f"Trade capturó ~2/3 del rango estimado."
+        )
+        if th_after:
+            t_labels = "/".join(f"T{i+1}" for i in th_after)
+            lines.append(f"   Info: {t_labels} SÍ se alcanzó post-stop (validación del setup), pero trader ya estaba afuera.")
+    elif cls == "WIN_MINOR":
+        msg = "\n**WIN parcial**: solo T1 alcanzado antes del stop."
+        if th_after:
+            t_labels = "/".join(f"T{i+1}" for i in th_after)
+            msg += f" Después del stop el precio reach {t_labels} (setup era válido, pero trade se cortó en T1)."
+        else:
+            msg += " Trade exitó en T1, precio no extendió más. Evaluar si T2/T3 estaban mal ubicados."
+        lines.append(msg)
+    elif cls == "STOP_TIGHT":
         last_t = 3 if h["reached_t3"] else 2 if h["reached_t2"] else 1
         lines.append(
-            f"\n**STOP TIGHT**: setup alcanzó T{last_t} post-stop. "
-            f"El stop fue muy ajustado vs rango natural del día. "
+            f"\n**STOP TIGHT**: stop cortó el trade, pero el setup eventualmente "
+            f"alcanzó T{last_t} post-stop. Stop fue más ajustado que el rango natural. "
             f"Revisar regla de stop vs rango overnight/ATR."
-        )
-    elif cls == "WIN" and h["trade_status"] == "filled":
-        lines.append(
-            "\n**BIG WIN**: filled completo (T1+T2+T3). Setup y gestión correctos."
-        )
-    elif cls == "WIN_MINOR" and h["trade_status"] == "filled":
-        lines.append(
-            "\n**WIN parcial**: filled en T1. Considerar si T2/T3 estaban bien ubicados."
         )
     elif cls == "STOP_GENUINE":
         lines.append(
-            "\n**STOP genuino**: ni T1 alcanzado. Setup no se confirmó — bias "
-            "probablemente equivocado o entry muy lejos de la zona de rechazo."
+            "\n**STOP genuino**: stopped sin que el setup alcance T1 "
+            "(ni pre ni post-stop). Setup mal direccionado — bias "
+            "equivocado o entry muy lejos de la zona de rechazo."
         )
     elif cls == "DEAD":
         lines.append(
@@ -232,7 +293,8 @@ def generate_markdown(review: dict, instrument: str, date_str: str) -> str:
     lines.append(f"## Resultado de la sesión")
     lines.append(f"- Hipos propuestos: **{len(review['hypos'])}**")
     lines.append(f"- Triggered: **{review['triggered']}**")
-    lines.append(f"- Wins (filled): **{c['WIN'] + c['WIN_MINOR']}** (big: {c['WIN']}, parcial: {c['WIN_MINOR']})")
+    lines.append(f"- Wins (filled): **{c['BIG_WIN'] + c['WIN'] + c['WIN_MINOR']}** "
+                 f"(big: {c['BIG_WIN']}, medio: {c['WIN']}, parcial: {c['WIN_MINOR']})")
     lines.append(f"- Stopped: **{c['STOP_TIGHT'] + c['STOP_GENUINE']}** (stop tight: {c['STOP_TIGHT']}, genuino: {c['STOP_GENUINE']})")
     lines.append(f"- Not triggered: **{c['DEAD']}**")
     if review["win_rate"] is not None:
@@ -405,8 +467,9 @@ def _status_badge(status: str) -> str:
 
 def _classification_badge(cls: str) -> str:
     colors = {
-        "WIN":          ("#15803d", "BIG WIN"),
-        "WIN_MINOR":    ("#22c55e", "WIN"),
+        "BIG_WIN":      ("#15803d", "BIG WIN"),
+        "WIN":          ("#22c55e", "WIN"),
+        "WIN_MINOR":    ("#16a34a", "WIN T1"),
         "STOP_TIGHT":   ("#f59e0b", "STOP TIGHT"),
         "STOP_GENUINE": ("#dc2626", "STOP"),
         "DEAD":         ("#6b7280", "DEAD"),

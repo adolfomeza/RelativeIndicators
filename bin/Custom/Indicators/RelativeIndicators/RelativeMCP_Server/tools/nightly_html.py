@@ -25,6 +25,162 @@ def _fmt_pts(v) -> str:
         return str(v)
 
 
+def _build_trade_narrative(h: dict) -> list[str]:
+    """Reconstruye el timeline cronológico de qué pasó con el trade.
+
+    Usa triggered_at, stop_hit_at, targets_hit_before_stop, targets_hit_after_stop
+    para narrar el orden real de los eventos como los vivió el trader.
+    """
+    direction = (h.get("direction") or "").upper()
+    entry = h.get("entry")
+    stop = h.get("stop")
+    targets = h.get("targets", []) or []
+    trade_status = h.get("trade_status")
+
+    triggered_at = h.get("triggered_at")
+    stop_hit_at = h.get("stop_hit_at")
+    th_before = h.get("targets_hit_before_stop", []) or []
+    th_after  = h.get("targets_hit_after_stop", []) or []
+
+    if trade_status == "not_triggered":
+        return [
+            f"- Entry @ {entry}: **NUNCA TOCADO** durante la pit session.",
+            f"- El precio se movió sin acercarse al entry, o estaba muy lejos del open price.",
+        ]
+
+    if trade_status == "pending":
+        return [f"- Trade pending — sin datos walk-forward aún."]
+
+    lines = []
+    # 1. Entry
+    if triggered_at:
+        lines.append(f"1. **{_fmt_ts(triggered_at)}** — entry {direction} @ {entry}")
+    else:
+        lines.append(f"1. Entry {direction} @ {entry} (timestamp no registrado)")
+
+    # 2. Construir orden cronológico de eventos
+    # Si filled = primer evento fue un target. Si stopped_out = primer evento fue stop.
+    # En filled, los targets en th_before ocurrieron antes del stop_hit_at.
+    # En stopped_out, los targets en th_after ocurrieron después.
+
+    step = 2
+    if trade_status == "filled":
+        # T1 (y posiblemente T2/T3) hit antes del stop
+        for ti in sorted(th_before):
+            if ti < len(targets):
+                t_price = targets[ti].get("price")
+                gain = abs((t_price - entry) if entry else 0)
+                lines.append(
+                    f"{step}. T{ti+1} = {t_price} hit ANTES del stop "
+                    f"({direction} ganó +{gain:.2f} pts hasta este punto). "
+                    f"Trader podría haber salido aquí."
+                )
+                step += 1
+        if stop_hit_at:
+            lines.append(
+                f"{step}. **{_fmt_ts(stop_hit_at)}** — stop {stop} tocado "
+                f"(después de T1+ → si trader salió antes, no le afectó)"
+            )
+            step += 1
+        # Targets after stop
+        for ti in sorted(th_after):
+            if ti < len(targets):
+                lines.append(
+                    f"{step}. T{ti+1} = {targets[ti].get('price')} alcanzado POST-stop "
+                    f"(setup siguió, pero trader ya estaba afuera tras el stop)"
+                )
+                step += 1
+
+    elif trade_status == "stopped_out":
+        if stop_hit_at:
+            lines.append(
+                f"2. **{_fmt_ts(stop_hit_at)}** — stop {stop} tocado primero "
+                f"(antes de cualquier target). Trade cerró en pérdida."
+            )
+            step = 3
+        for ti in sorted(th_after):
+            if ti < len(targets):
+                lines.append(
+                    f"{step}. T{ti+1} = {targets[ti].get('price')} alcanzado POST-stop "
+                    f"(stop tight: el setup era válido pero el stop fue muy ajustado)"
+                )
+                step += 1
+
+    elif trade_status == "triggered":
+        lines.append(
+            f"2. Trade triggered pero todavía abierto al cierre — "
+            f"sin stop ni target hit aún."
+        )
+
+    # MAE/MFE interpretation
+    mae = h.get("mae_pts")
+    mfe = h.get("mfe_pts")
+    if mae is not None and mfe is not None:
+        try:
+            mae_f, mfe_f = float(mae), float(mfe)
+            if direction == "LONG":
+                worst_low = (entry - mae_f) if entry else None
+                best_high = (entry + mfe_f) if entry else None
+                if worst_low is not None and best_high is not None:
+                    lines.append(
+                        f"- Excursión: máximo precio en contra {worst_low:.2f} (MAE -{mae_f:.2f}) / "
+                        f"máximo a favor {best_high:.2f} (MFE +{mfe_f:.2f})"
+                    )
+            else:  # SHORT
+                worst_high = (entry + mae_f) if entry else None
+                best_low = (entry - mfe_f) if entry else None
+                if worst_high is not None and best_low is not None:
+                    lines.append(
+                        f"- Excursión: máximo precio en contra {worst_high:.2f} (MAE +{mae_f:.2f}) / "
+                        f"máximo a favor {best_low:.2f} (MFE -{mfe_f:.2f})"
+                    )
+        except (ValueError, TypeError):
+            pass
+
+    return lines
+
+
+def _build_trade_verdict(h: dict) -> str:
+    """Veredicto interpretativo según la clasificación."""
+    cls = h.get("classification")
+    th_before = h.get("targets_hit_before_stop", []) or []
+    th_after  = h.get("targets_hit_after_stop", []) or []
+
+    if cls == "BIG_WIN":
+        return ("**BIG WIN** — T1+T2+T3 alcanzados ANTES del stop. Trade capturó todo "
+                "el rango. Setup + gestión óptimos.")
+    if cls == "WIN":
+        msg = ("**WIN** — T1+T2 alcanzados antes del stop. Trade capturó ~2/3 del "
+               "movimiento estimado.")
+        if 2 in th_after:
+            msg += " T3 también se alcanzó, pero post-stop (no contó al trade)."
+        return msg
+    if cls == "WIN_MINOR":
+        if th_after:
+            t_labels = "/".join(f"T{i+1}" for i in th_after)
+            return (f"**WIN parcial** — solo T1 antes del stop. Después del stop, el "
+                   f"precio extendió hasta {t_labels} (setup era válido pero trade "
+                   f"se cortó en T1). Considerar trailing stop más amplio.")
+        return ("**WIN parcial** — solo T1 alcanzado. T2/T3 no se tocaron ni siquiera "
+                "post-stop. Evaluar si T2/T3 estaban mal ubicados.")
+    if cls == "STOP_TIGHT":
+        if th_after:
+            t_labels = "/".join(f"T{i+1}" for i in th_after)
+            return (f"**STOP TIGHT** — stop cortó el trade antes de cualquier target. "
+                   f"DESPUÉS del stop, el setup alcanzó {t_labels}. Stop fue muy "
+                   f"ajustado vs el rango natural — revisar regla stop vs ATR/overnight.")
+        return "**STOP TIGHT** — stop muy ajustado (clasificado como tight)."
+    if cls == "STOP_GENUINE":
+        return ("**STOP genuino** — stop cortó sin que el setup alcance T1 (ni pre ni "
+                "post-stop). Setup mal direccionado: bias equivocado o entry mal ubicado.")
+    if cls == "DEAD":
+        return ("**NOT TRIGGERED** — precio nunca tocó el entry en el pit. ¿Entry muy "
+                "lejos del open? ¿Bias equivocado?")
+    if cls == "OPEN":
+        return "**OPEN** — trade triggered pero sin resolver al cierre."
+    return ""
+
+
 # ---------------------------------------------------------------------------
 # Markdown renderer (NADRO-compliant)
 # ---------------------------------------------------------------------------
@@ -88,11 +244,33 @@ def render_markdown(report: dict) -> str:
         setup = h.get("setup_type") or "?"
         lines.append(f"### Hipo {h.get('id')} — {direction} {setup} [{status_tag}]")
         lines.append(f"Entry {h.get('entry')} / Stop {h.get('stop')} / Risk {h.get('risk_pts')} pts")
-        lines.append(f"MAE {_fmt_pts(h.get('mae_pts'))} / MFE {_fmt_pts(h.get('mfe_pts'))} pts")
-        if h.get("targets_hit"):
-            th = ", ".join(f"T{i+1}" for i in h["targets_hit"])
-            lines.append(f"Targets alcanzados: {th}")
+
+        # Targets con marca de "antes del stop" vs "después"
+        th_before = h.get("targets_hit_before_stop", []) or []
+        th_after = h.get("targets_hit_after_stop", []) or []
+        targets = h.get("targets", []) or []
+        if targets:
+            tgt_lines = []
+            for i, t in enumerate(targets):
+                marker = "✓pre" if i in th_before else ("·post" if i in th_after else "—")
+                tgt_lines.append(f"T{i+1}={t.get('price')} (RR {float(t.get('rr',0)):.1f}) [{marker}]")
+            lines.append(f"Targets: {' / '.join(tgt_lines)}")
+        lines.append(f"MAE {_fmt_pts(h.get('mae_pts'))} pts / MFE {_fmt_pts(h.get('mfe_pts'))} pts")
         lines.append("")
+
+        # NARRACIÓN del trade — timeline cronológico
+        narr = _build_trade_narrative(h)
+        if narr:
+            lines.append("**Narración del trade**:")
+            for ln in narr:
+                lines.append(ln)
+            lines.append("")
+
+        # Veredicto interpretativo
+        verdict = _build_trade_verdict(h)
+        if verdict:
+            lines.append(f"**Veredicto**: {verdict}")
+            lines.append("")
 
     # 3. Missed setups
     lines.append("## 3. Missed Setups — lo que funcionó fuera del snapshot")
