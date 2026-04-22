@@ -7,10 +7,10 @@
       "id": "MCL_20260421_0900",
       "timestamp": "2026-04-21T09:00:00",
       "price_at_analysis": 86.47,
-      "regime": "rotacional consolidacion",
-      "bias": "neutral (test piso)",
-      "summary": "Overnight volatil 85.68-87.47. Cerro 86.47 dentro W-DVA. pVA 20/04 cerro breakout_up 87.5. Precio pegado al piso W-DVA 86.35. Setups: RPB bullish rebote W-DVAL vs BPB bearish break.",
-      "analysis_text": "NADRO MCL 06-26 — PRE-MARKET 07:00 VET\nPrecio: 86.47\nRegimen: rotacional / consolidacion\n\nNARRATIVA (N)\n- Macro: neutral-bullish (+2.88 vs yVWAP)\n- Overnight volatil: rango 85.68-87.47\n  Low 01:30 @ 85.68\n  High 03:15 @ 87.47\n- pVA 20/04 cerro breakout_up\n  VAL 86.5 / POC 87.25 / VAH 87.5\n- Precio 86.47 DEBAJO pVAL (sospechoso)\n\nACEPTACION (A)\n- Cerca de pVAL 20/04 86.5 (-0.03)\n- Arriba W-DVAL 86.35 (+0.12)\n- Debajo W-VWAP 87.57 (-1.10)\n\nDISTRIBUCION (D)\n- Rangeo overnight amplio\n- Precio test piso W-DVA\n- Sin trend claro\n\nRITMO (R)\n- Swings overnight 2 pts\n- Subida 03:00-03:15: 85.98 -> 87.47\n- Bajada desde 87.47 hasta 86.47\n- Volatilidad alta\n\nPRE-MARKET\n- Crude abre 24/5, ya en session\n- W-DVAL = soporte critico\n- Si respeta = RPB bullish\n- Si falla = continuation bajista\n\nNIVELES CLAVE\n- Overnight high 87.47\n- pVAH 20/04 87.5\n- pVAP 20/04 87.25\n- W-VWAP 87.57\n- pVAL 20/04 86.5\n- Precio 86.47\n- W-DVAL 86.35\n- Overnight low 85.68\n\nSETUPS\nHYPO 1 RPB bullish grade A\n  Contexto: respeto W-DVAL tras overnight low\n  pVA 20/04 cerro bullish (breakout_up)\n  E 86.40 (respeto W-DVAL + mecha)\n  S 85.80 (abajo overnight low)\n  T1 87.25 pVAP RR 1.4\n  T2 87.50 pVAH RR 1.8\n  T3 88.00 extension RR 2.7\n\nHYPO 2 BPB bearish grade B\n  Contexto: break W-DVAL + falla recovery\n  Contra-tendencia breakout previo\n  E 86.30 (break W-DVAL)\n  S 86.80 (arriba pVAL)\n  T1 85.68 overnight low RR 1.2\n  T2 85.00 psicologico RR 2.6\n  T3 84.50 extension RR 3.6\n\nNota: HYPO 1 preferido porque pVA cerro\nbullish. W-DVAL es nivel critico.",
+      "regime": "day type previo: trend day | precio extendido abajo en 4/5 TFs - bias mean-revert bullish corto plazo",
+      "bias": "bullish",
+      "summary": "N=bullish (trend day, low_excess) | D=0↑/1◆/4↓",
+      "analysis_text": "**N (bias forward desde TPO del 2026-04-20)**: BULLISH\n  - excess en low 85.43 -> compradores confirmados\n**TPO prev**: POC 87.34 / VAH 87.57 / VAL 86.31 (rango 1.26)\n**Extremos prev**: H 87.98 / L 85.43 / C 87.34 (below POC)\n**Dia tipo**: trend day\n\n**D (DVAs multi-TF vs precio 86.47)**: precio extendido abajo en 4/5 TFs - bias mean-revert bullish corto plazo\n  - Daily: DVAH 90.5304 / VWAP 90.185 / DVAL 89.8396 -> below DVAL (-3.37)\n  - Weekly: DVAH 89.5994 / VWAP 88.061 / DVAL 86.5226 -> below DVAL (-0.05)\n  - Monthly: DVAH 105.5398 / VWAP 97.0739 / DVAL 88.6079 -> below DVAL (-2.14)\n  - Quarterly: DVAH 105.6153 / VWAP 97.1559 / DVAL 88.6966 -> below DVAL (-2.23)\n  - Annual: DVAH 100.7479 / VWAP 86.5265 / DVAL 72.3051 -> inside VA\n\n**Analisis manual original (pre-open)**:\nNADRO MCL 06-26 — PRE-MARKET 07:00 VET\nPrecio: 86.47\nRegimen: rotacional / consolidacion\n\nNARRATIVA (N)\n- Macro: neutral-bullish (+2.88 vs yVWAP)\n- Overnight volatil: rango 85.68-87.47\n  Low 01:30 @ 85.68\n  High 03:15 @ 87.47\n- pVA 20/04 cerro breakout_up\n  VAL 86.5 / POC 87.25 / VAH 87.5\n- Precio 86.47 DEBAJO pVAL (sospechoso)\n\nACEPTACION (A)\n- Cerca de pVAL 20/04 86.5 (-0.03)\n- Arriba W-DVAL 86.35 (+0.12)\n- Debajo W-VWAP 87.57 (-1.10)\n\nDISTRIBUCION (D)\n- Rangeo overnight amplio\n- Precio test piso W-DVA\n- Sin trend claro\n\nRITMO (R)\n- Swings overnight 2 pts\n- Subida 03:00-03:15: 85.98 -> 87.47\n- Bajada desde 87.47 hasta 86.47\n- Volatilidad alta\n\nPRE-MARKET\n- Crude abre 24/5, ya en session\n- W-DVAL = soporte critico\n- Si respeta = RPB bullish\n- Si falla = continuation bajista\n\nNIVELES CLAVE\n- Overnight high 87.47\n- pVAH 20/04 87.5\n- pVAP 20/04 87.25\n- W-VWAP 87.57\n- pVAL 20/04 86.5\n- Precio 86.47\n- W-DVAL 86.35\n- Overnight low 85.68\n\nSETUPS\nHYPO 1 RPB bullish grade A\n  Contexto: respeto W-DVAL tras overnight low\n  pVA 20/04 cerro bullish (breakout_up)\n  E 86.40 (respeto W-DVAL + mecha)\n  S 85.80 (abajo overnight low)\n  T1 87.25 pVAP RR 1.4\n  T2 87.50 pVAH RR 1.8\n  T3 88.00 extension RR 2.7\n\nHYPO 2 BPB bearish grade B\n  Contexto: break W-DVAL + falla recovery\n  Contra-tendencia breakout previo\n  E 86.30 (break W-DVAL)\n  S 86.80 (arriba pVAL)\n  T1 85.68 overnight low RR 1.2\n  T2 85.00 psicologico RR 2.6\n  T3 84.50 extension RR 3.6\n\nNota: HYPO 1 preferido porque pVA cerro\nbullish. W-DVAL es nivel critico.",
       "confluences": [
         {
           "label": "Soporte piso (pVAL+wDVAL)",
@@ -143,7 +143,84 @@
           "trading_horizon": "intraday"
         }
       ],
-      "snapshot_phase": "pit_open"
+      "snapshot_phase": "pit_open",
+      "nadro_context": {
+        "N_forward_bias": "bullish",
+        "N_prev_day_tpo": {
+          "prev_date": "2026-04-20",
+          "tpo": {
+            "poc": 87.34,
+            "vah": 87.57,
+            "val": 86.31,
+            "range": 1.26
+          },
+          "extremes": {
+            "high": 87.98,
+            "low": 85.43,
+            "close": 87.34
+          },
+          "features": {
+            "poor_high": false,
+            "weak_low": false,
+            "high_excess": false,
+            "low_excess": true,
+            "day_type": "trend day",
+            "close_vs_poc": "below POC"
+          },
+          "forward_bias": "bullish",
+          "reasons": [
+            "excess en low 85.43 -> compradores confirmados"
+          ]
+        },
+        "D_multi_tf_dva": {
+          "levels": [
+            {
+              "tf": "Daily",
+              "dvah": 90.5304,
+              "vwap": 90.185,
+              "dval": 89.8396,
+              "position": "below DVAL (-3.37)",
+              "zone": "below"
+            },
+            {
+              "tf": "Weekly",
+              "dvah": 89.5994,
+              "vwap": 88.061,
+              "dval": 86.5226,
+              "position": "below DVAL (-0.05)",
+              "zone": "below"
+            },
+            {
+              "tf": "Monthly",
+              "dvah": 105.5398,
+              "vwap": 97.0739,
+              "dval": 88.6079,
+              "position": "below DVAL (-2.14)",
+              "zone": "below"
+            },
+            {
+              "tf": "Quarterly",
+              "dvah": 105.6153,
+              "vwap": 97.1559,
+              "dval": 88.6966,
+              "position": "below DVAL (-2.23)",
+              "zone": "below"
+            },
+            {
+              "tf": "Annual",
+              "dvah": 100.7479,
+              "vwap": 86.5265,
+              "dval": 72.3051,
+              "position": "inside VA",
+              "zone": "inside"
+            }
+          ],
+          "above": 0,
+          "inside": 1,
+          "below": 4,
+          "contextual": "precio extendido abajo en 4/5 TFs - bias mean-revert bullish corto plazo"
+        }
+      }
     }
   ]
 }

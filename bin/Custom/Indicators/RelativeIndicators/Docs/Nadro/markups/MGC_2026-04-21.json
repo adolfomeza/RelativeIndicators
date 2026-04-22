@@ -7,10 +7,10 @@
       "id": "MGC_20260421_0820",
       "timestamp": "2026-04-21T08:20:00",
       "price_at_analysis": 4805.4,
-      "regime": "rotacional intradiario (macro bullish)",
-      "bias": "neutral-bearish",
-      "summary": "Precio 4805 DEBAJO de pVAL 4822 (bearish sign). Overnight -12 pts (4817 a 4805). En rango W-DVA 4799-4835. Setups: RPB bearish retest pVAL vs BPB bullish en W-DVAL.",
-      "analysis_text": "NADRO MGC 06-26 — PRE-MARKET 07:00 VET\nPrecio: 4805.40\nRegimen: rotacional + pre-oro open\n\nNARRATIVA (N)\n- Macro bullish: precio arriba de yVWAP\n- Overnight: 4817 (23:45) -> 4805 (06:45)\n  Leve bajista -12 pts\n- pVA 20/04 cerro drift_low\n  VAL 4822.75 / POC 4834.5 / VAH 4844\n- Precio DEBAJO pVAL 20/04 (bearish sign)\n\nACEPTACION (A)\n- Debajo W-VWAP 4816.95\n- Debajo W-DVAH 4834.69\n- Arriba W-DVAL 4799.21 (+6)\n- Rangeo overnight: 4793-4819 (26 pts)\n\nDISTRIBUCION (D)\n- pVA 20/04 ya cerrada con drift-low\n- Precio abrio debajo del pVAL\n- Sugiere continuation bearish hacia W-DVAL\n\nRITMO (R)\n- Overnight con swings moderados\n- Ultima low 02:15 @ 4794\n- Cierre pre-open 06:45 @ 4805\n\nPRE-MARKET\n- Apertura oro: 08:20 VET (80 min)\n- Espera reaccion al pVAL desde abajo\n- Si respeto 4822 como resistencia = bearish\n- Si break + respeto = bullish recovery\n\nNIVELES CLAVE\n- pVAH 20/04 4844\n- pVAP 20/04 4834.5\n- W-DVAH 4834.69\n- pVAL 20/04 4822.75\n- W-VWAP 4816.95\n- Precio 4805\n- W-DVAL 4799.21\n\nSETUPS\nHYPO 1 RPB bearish grade B\n  Contexto: pVAL retest como resistencia\n  E 4820 (respeto pVAL desde abajo)\n  S 4830 (arriba pVAP)\n  T1 4808 medio RR 1.2\n  T2 4799 W-DVAL RR 2.1\n  T3 4790 zona inferior RR 3.0\n\nHYPO 2 RPB bullish grade B\n  Contexto: break pVAL con respeto\n  E 4825 (tras confirmacion)\n  S 4815 (abajo entry)\n  T1 4834 pVAP RR 0.9\n  T2 4844 pVAH RR 1.9\n  T3 4855 zona superior RR 3.0\n\nNota: esperar apertura oro para confirmacion.\nPreferido HYPO 1 si respeta pVAL.",
+      "regime": "day type previo: normal | mixed: 1 above / 4 inside / 0 below (tension multi-TF)",
+      "bias": "bearish",
+      "summary": "N=bearish (normal, high_excess,low_excess) | D=1↑/4◆/0↓",
+      "analysis_text": "**N (bias forward desde TPO del 2026-04-20)**: BEARISH\n  - excess en high 4848.0 -> vendedores confirmados\n  - excess en low 4812.0 -> compradores confirmados\n**TPO prev**: POC 4824.5 / VAH 4836.5 / VAL 4816.1 (rango 20.4)\n**Extremos prev**: H 4848.0 / L 4812.0 / C 4830.0 (above POC)\n**Dia tipo**: normal\n\n**D (DVAs multi-TF vs precio 4805.4)**: mixed: 1 above / 4 inside / 0 below (tension multi-TF)\n  - Daily: DVAH 4766.1799 / VWAP 4755.7321 / DVAL 4745.2843 -> above DVAH (+39.22)\n  - Weekly: DVAH 4831.0515 / VWAP 4792.904 / DVAL 4754.7565 -> inside VA\n  - Monthly: DVAH 4835.9074 / VWAP 4771.4041 / DVAL 4706.9007 -> inside VA\n  - Quarterly: DVAH 4834.8857 / VWAP 4769.7239 / DVAL 4704.5622 -> inside VA\n  - Annual: DVAH 5190.4276 / VWAP 4899.8965 / DVAL 4609.3654 -> inside VA\n\n**Analisis manual original (pre-open)**:\nNADRO MGC 06-26 — PRE-MARKET 07:00 VET\nPrecio: 4805.40\nRegimen: rotacional + pre-oro open\n\nNARRATIVA (N)\n- Macro bullish: precio arriba de yVWAP\n- Overnight: 4817 (23:45) -> 4805 (06:45)\n  Leve bajista -12 pts\n- pVA 20/04 cerro drift_low\n  VAL 4822.75 / POC 4834.5 / VAH 4844\n- Precio DEBAJO pVAL 20/04 (bearish sign)\n\nACEPTACION (A)\n- Debajo W-VWAP 4816.95\n- Debajo W-DVAH 4834.69\n- Arriba W-DVAL 4799.21 (+6)\n- Rangeo overnight: 4793-4819 (26 pts)\n\nDISTRIBUCION (D)\n- pVA 20/04 ya cerrada con drift-low\n- Precio abrio debajo del pVAL\n- Sugiere continuation bearish hacia W-DVAL\n\nRITMO (R)\n- Overnight con swings moderados\n- Ultima low 02:15 @ 4794\n- Cierre pre-open 06:45 @ 4805\n\nPRE-MARKET\n- Apertura oro: 08:20 VET (80 min)\n- Espera reaccion al pVAL desde abajo\n- Si respeto 4822 como resistencia = bearish\n- Si break + respeto = bullish recovery\n\nNIVELES CLAVE\n- pVAH 20/04 4844\n- pVAP 20/04 4834.5\n- W-DVAH 4834.69\n- pVAL 20/04 4822.75\n- W-VWAP 4816.95\n- Precio 4805\n- W-DVAL 4799.21\n\nSETUPS\nHYPO 1 RPB bearish grade B\n  Contexto: pVAL retest como resistencia\n  E 4820 (respeto pVAL desde abajo)\n  S 4830 (arriba pVAP)\n  T1 4808 medio RR 1.2\n  T2 4799 W-DVAL RR 2.1\n  T3 4790 zona inferior RR 3.0\n\nHYPO 2 RPB bullish grade B\n  Contexto: break pVAL con respeto\n  E 4825 (tras confirmacion)\n  S 4815 (abajo entry)\n  T1 4834 pVAP RR 0.9\n  T2 4844 pVAH RR 1.9\n  T3 4855 zona superior RR 3.0\n\nNota: esperar apertura oro para confirmacion.\nPreferido HYPO 1 si respeta pVAL.",
       "confluences": [
         {
           "label": "Resistencia techo (pVAH+POC+wDVAH)",
@@ -140,7 +140,85 @@
           "trading_horizon": "intraday"
         }
       ],
-      "snapshot_phase": "pit_open"
+      "snapshot_phase": "pit_open",
+      "nadro_context": {
+        "N_forward_bias": "bearish",
+        "N_prev_day_tpo": {
+          "prev_date": "2026-04-20",
+          "tpo": {
+            "poc": 4824.5,
+            "vah": 4836.5,
+            "val": 4816.1,
+            "range": 20.4
+          },
+          "extremes": {
+            "high": 4848.0,
+            "low": 4812.0,
+            "close": 4830.0
+          },
+          "features": {
+            "poor_high": false,
+            "weak_low": false,
+            "high_excess": true,
+            "low_excess": true,
+            "day_type": "normal",
+            "close_vs_poc": "above POC"
+          },
+          "forward_bias": "bearish",
+          "reasons": [
+            "excess en high 4848.0 -> vendedores confirmados",
+            "excess en low 4812.0 -> compradores confirmados"
+          ]
+        },
+        "D_multi_tf_dva": {
+          "levels": [
+            {
+              "tf": "Daily",
+              "dvah": 4766.1799,
+              "vwap": 4755.7321,
+              "dval": 4745.2843,
+              "position": "above DVAH (+39.22)",
+              "zone": "above"
+            },
+            {
+              "tf": "Weekly",
+              "dvah": 4831.0515,
+              "vwap": 4792.904,
+              "dval": 4754.7565,
+              "position": "inside VA",
+              "zone": "inside"
+            },
+            {
+              "tf": "Monthly",
+              "dvah": 4835.9074,
+              "vwap": 4771.4041,
+              "dval": 4706.9007,
+              "position": "inside VA",
+              "zone": "inside"
+            },
+            {
+              "tf": "Quarterly",
+              "dvah": 4834.8857,
+              "vwap": 4769.7239,
+              "dval": 4704.5622,
+              "position": "inside VA",
+              "zone": "inside"
+            },
+            {
+              "tf": "Annual",
+              "dvah": 5190.4276,
+              "vwap": 4899.8965,
+              "dval": 4609.3654,
+              "position": "inside VA",
+              "zone": "inside"
+            }
+          ],
+          "above": 1,
+          "inside": 4,
+          "below": 0,
+          "contextual": "mixed: 1 above / 4 inside / 0 below (tension multi-TF)"
+        }
+      }
     }
   ]
 }

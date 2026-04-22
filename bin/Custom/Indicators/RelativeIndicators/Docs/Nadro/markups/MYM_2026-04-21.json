@@ -7,10 +7,10 @@
       "id": "MYM_20260421_0930",
       "timestamp": "2026-04-21T09:30:00",
       "price_at_analysis": 49922.0,
-      "regime": "imbalance bullish overnight extendido",
-      "bias": "bullish extendido",
-      "summary": "RALLY FUERTE overnight +227 pts (49695 a 49922). Precio EN CVAH 49923 (resistencia critica). Macro bullish. Extendido - posible pullback. Setups: BPB bearish rechazo CVAH vs RPB bullish break.",
-      "analysis_text": "NADRO MYM 06-26 — PRE-MARKET 07:00 VET\nPrecio: 49922\nRegimen: imbalance bullish EXTENDIDO\n\nNARRATIVA (N)\n- Macro bullish: +1104 vs yVWAP\n- RALLY FUERTE overnight: +227 pts\n  49695 (23:45) -> 49922 (06:45)\n- CVA activa 17-20\n  VAL 49537.5 / POC 49745 / VAH 49923\n- Precio EN CVAH 49923 (CRITICO)\n\nACEPTACION (A)\n- EN CVAH 49923 (resistencia)\n- Arriba W-DVAH 49844 (+78)\n- Arriba D-VWAP 49790 (+132)\n- Overnight range: 49695-49958 (263 pts)\n\nDISTRIBUCION (D)\n- Imbalance bullish PERO extended\n- Precio en resistencia clave\n- Riesgo de reversal si falla break\n\nRITMO (R)\n- Rally fuerte desde 06:00 (49743 -> 49920)\n- Salto de +180 pts en 45 min\n- Posible absorcion en CVAH\n\nPRE-MARKET\n- US open 09:30 ET\n- CVAH es decision point clave\n- Si rechazo = pullback amplio\n- Si break = continuation agresiva\n\nNIVELES CLAVE\n- Overnight high 49958\n- D-DVAH 49947.5\n- CVAH 17-20 49923 (pivot)\n- W-DVAH 49844\n- D-VWAP 49790\n- pVAH 17/04 48788 (muy abajo)\n- CVAP 17-20 49745\n- W-VWAP 49641\n- CVAL 17-20 49537.5\n\nSETUPS\nHYPO 1 BPB bearish grade A\n  Contexto: rechazo CVAH+D-DVAH\n  Precio EXTENDIDO, posible exhaustion\n  E 49925 (pegado a CVAH)\n  S 49960 (arriba high)\n  T1 49844 W-DVAH RR 2.3\n  T2 49790 D-VWAP RR 3.8\n  T3 49745 CVAP RR 5.1\n\nHYPO 2 RPB bullish grade B\n  Contexto: break limpio CVAH\n  Requiere confirmacion de break\n  E 49935 (sobre break)\n  S 49895 (abajo de ruptura)\n  T1 49980 RR 1.1\n  T2 50020 RR 2.1\n  T3 50100 extension RR 4.1\n\nNota: HYPO 1 preferido por extension.\nRally overnight puede ser exhaustion.",
+      "regime": "day type previo: trend day | precio extendido arriba en 4/5 TFs - bias mean-revert bearish corto plazo",
+      "bias": "bearish",
+      "summary": "N=bearish (trend day, high_excess,low_excess) | D=4↑/1◆/0↓",
+      "analysis_text": "**N (bias forward desde TPO del 2026-04-20)**: BEARISH\n  - excess en high 49686.0 -> vendedores confirmados\n  - excess en low 49435.0 -> compradores confirmados\n**TPO prev**: POC 49595.0 / VAH 49654.0 / VAL 49554.0 (rango 100.0)\n**Extremos prev**: H 49686.0 / L 49435.0 / C 49641.0 (above POC)\n**Dia tipo**: trend day\n\n**D (DVAs multi-TF vs precio 49922.0)**: precio extendido arriba en 4/5 TFs - bias mean-revert bearish corto plazo\n  - Daily: DVAH 49946.6141 / VWAP 49788.7038 / DVAL 49630.7934 -> inside VA\n  - Weekly: DVAH 49843.6316 / VWAP 49640.7113 / DVAL 49437.7911 -> above DVAH (+78.37)\n  - Monthly: DVAH 48660.7449 / VWAP 47539.9804 / DVAL 46419.2159 -> above DVAH (+1261.26)\n  - Quarterly: DVAH 48678.8272 / VWAP 47543.5595 / DVAL 46408.2919 -> above DVAH (+1243.17)\n  - Annual: DVAH 49884.9961 / VWAP 48447.7031 / DVAL 47010.41 -> above DVAH (+37.00)\n\n**Analisis manual original (pre-open)**:\nNADRO MYM 06-26 — PRE-MARKET 07:00 VET\nPrecio: 49922\nRegimen: imbalance bullish EXTENDIDO\n\nNARRATIVA (N)\n- Macro bullish: +1104 vs yVWAP\n- RALLY FUERTE overnight: +227 pts\n  49695 (23:45) -> 49922 (06:45)\n- CVA activa 17-20\n  VAL 49537.5 / POC 49745 / VAH 49923\n- Precio EN CVAH 49923 (CRITICO)\n\nACEPTACION (A)\n- EN CVAH 49923 (resistencia)\n- Arriba W-DVAH 49844 (+78)\n- Arriba D-VWAP 49790 (+132)\n- Overnight range: 49695-49958 (263 pts)\n\nDISTRIBUCION (D)\n- Imbalance bullish PERO extended\n- Precio en resistencia clave\n- Riesgo de reversal si falla break\n\nRITMO (R)\n- Rally fuerte desde 06:00 (49743 -> 49920)\n- Salto de +180 pts en 45 min\n- Posible absorcion en CVAH\n\nPRE-MARKET\n- US open 09:30 ET\n- CVAH es decision point clave\n- Si rechazo = pullback amplio\n- Si break = continuation agresiva\n\nNIVELES CLAVE\n- Overnight high 49958\n- D-DVAH 49947.5\n- CVAH 17-20 49923 (pivot)\n- W-DVAH 49844\n- D-VWAP 49790\n- pVAH 17/04 48788 (muy abajo)\n- CVAP 17-20 49745\n- W-VWAP 49641\n- CVAL 17-20 49537.5\n\nSETUPS\nHYPO 1 BPB bearish grade A\n  Contexto: rechazo CVAH+D-DVAH\n  Precio EXTENDIDO, posible exhaustion\n  E 49925 (pegado a CVAH)\n  S 49960 (arriba high)\n  T1 49844 W-DVAH RR 2.3\n  T2 49790 D-VWAP RR 3.8\n  T3 49745 CVAP RR 5.1\n\nHYPO 2 RPB bullish grade B\n  Contexto: break limpio CVAH\n  Requiere confirmacion de break\n  E 49935 (sobre break)\n  S 49895 (abajo de ruptura)\n  T1 49980 RR 1.1\n  T2 50020 RR 2.1\n  T3 50100 extension RR 4.1\n\nNota: HYPO 1 preferido por extension.\nRally overnight puede ser exhaustion.",
       "confluences": [
         {
           "label": "Resistencia critica (CVAH+DVAH)",
@@ -160,7 +160,85 @@
           "trading_horizon": "intraday"
         }
       ],
-      "snapshot_phase": "pit_open"
+      "snapshot_phase": "pit_open",
+      "nadro_context": {
+        "N_forward_bias": "bearish",
+        "N_prev_day_tpo": {
+          "prev_date": "2026-04-20",
+          "tpo": {
+            "poc": 49595.0,
+            "vah": 49654.0,
+            "val": 49554.0,
+            "range": 100.0
+          },
+          "extremes": {
+            "high": 49686.0,
+            "low": 49435.0,
+            "close": 49641.0
+          },
+          "features": {
+            "poor_high": false,
+            "weak_low": false,
+            "high_excess": true,
+            "low_excess": true,
+            "day_type": "trend day",
+            "close_vs_poc": "above POC"
+          },
+          "forward_bias": "bearish",
+          "reasons": [
+            "excess en high 49686.0 -> vendedores confirmados",
+            "excess en low 49435.0 -> compradores confirmados"
+          ]
+        },
+        "D_multi_tf_dva": {
+          "levels": [
+            {
+              "tf": "Daily",
+              "dvah": 49946.6141,
+              "vwap": 49788.7038,
+              "dval": 49630.7934,
+              "position": "inside VA",
+              "zone": "inside"
+            },
+            {
+              "tf": "Weekly",
+              "dvah": 49843.6316,
+              "vwap": 49640.7113,
+              "dval": 49437.7911,
+              "position": "above DVAH (+78.37)",
+              "zone": "above"
+            },
+            {
+              "tf": "Monthly",
+              "dvah": 48660.7449,
+              "vwap": 47539.9804,
+              "dval": 46419.2159,
+              "position": "above DVAH (+1261.26)",
+              "zone": "above"
+            },
+            {
+              "tf": "Quarterly",
+              "dvah": 48678.8272,
+              "vwap": 47543.5595,
+              "dval": 46408.2919,
+              "position": "above DVAH (+1243.17)",
+              "zone": "above"
+            },
+            {
+              "tf": "Annual",
+              "dvah": 49884.9961,
+              "vwap": 48447.7031,
+              "dval": 47010.41,
+              "position": "above DVAH (+37.00)",
+              "zone": "above"
+            }
+          ],
+          "above": 4,
+          "inside": 1,
+          "below": 0,
+          "contextual": "precio extendido arriba en 4/5 TFs - bias mean-revert bearish corto plazo"
+        }
+      }
     }
   ]
 }
