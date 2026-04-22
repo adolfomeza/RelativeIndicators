@@ -185,30 +185,142 @@ def scan_missed_setups(instrument: str, date_str: str,
 # NADRO section analysis
 # ---------------------------------------------------------------------------
 
-def analyze_narrativa(snap: dict, price_trend: dict, classic: dict) -> dict:
-    """¿Se cumplió la narrativa pre-open?"""
-    bias = (snap.get("bias") or "").lower()
+def analyze_narrativa(snap: dict, price_trend: dict, classic: dict,
+                      tpo_profile: dict | None,
+                      pit_bars: list[dict],
+                      tick_size: float) -> dict:
+    """Narrativa NADRO: el bias proviene de la ESTRUCTURA DE LOS TPO.
+
+    NADRO usa la estructura del TPO del día para inferir bias forward:
+    - **Alto pobre**: el extremo alto se hizo con un solo TPO (sin excess) →
+      bullish bias para mañana (likely revisitar y extender)
+    - **Mínimo débil**: el extremo bajo se hizo con un solo TPO →
+      bearish bias para mañana
+    - **Excess (cola larga)**: rechazo amplio con múltiples wicks pequeños →
+      el nivel se va a respetar
+    - **Cierre vs POC**: posición del cierre relativa al POC del día
+    - **Día tipo trend / normal / neutral / non-trend**
+
+    Esto difiere del bias DECLARADO pre-open: el bias narrativa post-cierre se
+    actualiza con la estructura observada hoy y vale para mañana.
+    """
+    bias_stated = (snap.get("bias") or "").lower()
     direction = price_trend.get("direction", "flat")
     change = price_trend.get("change", 0)
 
+    # ── Pre-open bias check (¿se cumplió hoy?)
     bias_fulfilled = False
-    verdict = "neutral"
-    if bias in ("bullish", "alcista") and direction == "up":
+    fulfilled_verdict = "neutral"
+    if bias_stated in ("bullish", "alcista") and direction == "up":
         bias_fulfilled = True
-        verdict = "bias alcista confirmado — el precio cerró al alza"
-    elif bias in ("bearish", "bajista") and direction == "down":
+        fulfilled_verdict = "bias alcista pre-open confirmado"
+    elif bias_stated in ("bearish", "bajista") and direction == "down":
         bias_fulfilled = True
-        verdict = "bias bajista confirmado — el precio cerró a la baja"
-    elif bias in ("neutral", "rotacional"):
+        fulfilled_verdict = "bias bajista pre-open confirmado"
+    elif bias_stated in ("neutral", "rotacional"):
         if abs(price_trend.get("pct", 0)) < 0.5:
             bias_fulfilled = True
-            verdict = "bias neutral confirmado — rotación sin desequilibrio"
+            fulfilled_verdict = "bias neutral confirmado — sin desequilibrio"
         else:
-            verdict = f"bias neutral pero mercado se desequilibró {direction} ({change:+.2f})"
-    else:
-        verdict = f"bias '{bias}' vs precio '{direction}' — no alineado"
+            fulfilled_verdict = f"neutral declarado pero mercado se desequilibró {direction}"
+    elif bias_stated:
+        fulfilled_verdict = f"bias '{bias_stated}' NO confirmado — precio cerró {direction}"
 
-    # Hipos alineados vs no
+    # ── TPO structure analysis (bias para mañana)
+    tpo_features: dict = {
+        "poor_high":   False,
+        "weak_low":    False,
+        "high_excess": False,
+        "low_excess":  False,
+        "day_type":    "unknown",
+        "close_vs_poc": "unknown",
+    }
+
+    forward_bias = "neutral"
+    forward_reasons: list[str] = []
+
+    if tpo_profile and pit_bars:
+        try:
+            poc = float(tpo_profile.get("poc") or 0)
+            vah = float(tpo_profile.get("vah") or 0)
+            val = float(tpo_profile.get("val") or 0)
+            session_high = max(float(b.get("h", 0) or 0) for b in pit_bars)
+            session_low  = min(float(b.get("l", 9e9) or 9e9) for b in pit_bars
+                               if float(b.get("l", 0) or 0) > 0)
+            session_close = float(pit_bars[-1].get("c", 0) or 0)
+
+            # Excess: cuántos ticks de mecha hubo en el extremo
+            # Aproximación: high - max(open/close de la última bar que tocó el high)
+            high_bars = [b for b in pit_bars if float(b.get("h", 0) or 0) >= session_high - tick_size]
+            low_bars  = [b for b in pit_bars if float(b.get("l", 9e9) or 9e9) <= session_low + tick_size]
+
+            if high_bars:
+                # Excess = mecha superior promedio en bars que tocaron el high
+                excess_top = sum(
+                    float(b.get("h", 0) or 0) - max(float(b.get("o", 0) or 0), float(b.get("c", 0) or 0))
+                    for b in high_bars
+                ) / len(high_bars)
+                tpo_features["high_excess"] = excess_top >= tick_size * 4
+                # Poor high: muy poco excess + pocas bars en el extremo
+                tpo_features["poor_high"] = (not tpo_features["high_excess"]) and len(high_bars) <= 2
+
+            if low_bars:
+                excess_bot = sum(
+                    min(float(b.get("o", 0) or 0), float(b.get("c", 0) or 0)) - float(b.get("l", 0) or 0)
+                    for b in low_bars
+                ) / len(low_bars)
+                tpo_features["low_excess"] = excess_bot >= tick_size * 4
+                tpo_features["weak_low"] = (not tpo_features["low_excess"]) and len(low_bars) <= 2
+
+            # Close vs POC
+            if poc > 0:
+                if session_close > vah:
+                    tpo_features["close_vs_poc"] = "above VAH (acceptance arriba)"
+                elif session_close < val:
+                    tpo_features["close_vs_poc"] = "below VAL (acceptance abajo)"
+                elif session_close > poc:
+                    tpo_features["close_vs_poc"] = "above POC dentro del VA"
+                else:
+                    tpo_features["close_vs_poc"] = "below POC dentro del VA"
+
+            # Day type rough heuristic
+            range_pts = session_high - session_low
+            va_range = vah - val if vah > val else 0
+            if va_range > 0 and range_pts > va_range * 1.8:
+                tpo_features["day_type"] = "trend day (rango > 1.8x VA)"
+            elif va_range > 0 and range_pts < va_range * 1.1:
+                tpo_features["day_type"] = "non-trend / balance"
+            else:
+                tpo_features["day_type"] = "normal"
+
+            # ── Forward bias inferido de estructura TPO
+            if tpo_features["poor_high"]:
+                forward_bias = "bullish"
+                forward_reasons.append("alto pobre → likely revisitar el high mañana")
+            if tpo_features["weak_low"]:
+                if forward_bias == "bullish":
+                    forward_bias = "neutral"  # ambos = mercado en balance
+                    forward_reasons.append("alto pobre + mínimo débil = balance, ambos extremos al ataque")
+                else:
+                    forward_bias = "bearish"
+                    forward_reasons.append("mínimo débil → likely revisitar el low mañana")
+            if tpo_features["high_excess"] and not tpo_features["weak_low"]:
+                if forward_bias != "bullish":
+                    forward_bias = "bearish"
+                forward_reasons.append("excess en el high → rechazo confirmado, vendedores presentes")
+            if tpo_features["low_excess"] and not tpo_features["poor_high"]:
+                if forward_bias != "bearish":
+                    forward_bias = "bullish"
+                forward_reasons.append("excess en el low → rechazo confirmado, compradores presentes")
+            if "above VAH" in tpo_features["close_vs_poc"]:
+                forward_reasons.append("cierre arriba del VAH = acceptance bullish corto plazo")
+            elif "below VAL" in tpo_features["close_vs_poc"]:
+                forward_reasons.append("cierre abajo del VAL = acceptance bearish corto plazo")
+
+        except (ValueError, TypeError):
+            pass
+
+    # Hipos alineados vs no (commentary clásico)
     wins = classic.get("counts", {}).get("WIN", 0) + classic.get("counts", {}).get("WIN_MINOR", 0)
     dead = classic.get("counts", {}).get("DEAD", 0)
     stops = classic.get("counts", {}).get("STOP_TIGHT", 0) + classic.get("counts", {}).get("STOP_GENUINE", 0)
@@ -222,11 +334,16 @@ def analyze_narrativa(snap: dict, price_trend: dict, classic: dict) -> dict:
         commentary.append("todas las hipos DEAD — precio nunca se acercó a los entries")
 
     return {
-        "bias_stated": bias or "(no especificado)",
+        "bias_stated": bias_stated or "(no especificado)",
         "price_direction": direction,
         "price_change": change,
         "bias_fulfilled": bias_fulfilled,
-        "verdict": verdict,
+        "fulfilled_verdict": fulfilled_verdict,
+        # Compat key (algunos sitios viejos lo leen)
+        "verdict": fulfilled_verdict,
+        "tpo_features": tpo_features,
+        "forward_bias": forward_bias,
+        "forward_reasons": forward_reasons,
         "commentary": commentary,
     }
 
@@ -269,35 +386,103 @@ def analyze_aceptacion(snap: dict, pit_bars: list[dict], tick_size: float) -> di
     return {"rejected": rejected, "accepted": accepted, "summary": summary}
 
 
-def analyze_dva(tpo_profile: dict | None, snap_price: float) -> dict:
-    """Cómo se desarrolló el DVA/TPO del día y su posición final."""
-    if not tpo_profile:
-        return {"available": False, "summary": "no TPO profile disponible"}
+def analyze_dva(vwap_snap: dict, current_price: float,
+                tpo_profile: dict | None = None) -> dict:
+    """DVA = Developing Value Areas multi-TF (NO es distribución).
 
-    poc = tpo_profile.get("poc", 0)
-    vah = tpo_profile.get("vah", 0)
-    val = tpo_profile.get("val", 0)
+    NADRO trabaja con DVAs en 5 timeframes simultáneamente:
+    Daily, Weekly, Monthly, Quarterly, Annual. La D analiza dónde
+    está el precio respecto a cada DVA developing y cuál es el
+    contexto de valor:
 
-    # Forma del perfil (skew)
-    va_range = vah - val if vah > val else 0
-    poc_position = "center"
-    if va_range > 0:
-        rel_poc = (poc - val) / va_range
-        if rel_poc > 0.7:
-            poc_position = "upper (p-skew alcista)"
-        elif rel_poc < 0.3:
-            poc_position = "lower (n-skew bajista)"
+    - Above DVAH: precio extendido arriba del valor — buscar reversion
+    - Within VA: precio dentro del valor — rotación
+    - Below DVAL: precio extendido abajo — buscar reversion alcista
 
-    summary = (f"POC {poc} / VAH {vah} / VAL {val} (rango {va_range:.2f}). "
-               f"POC en {poc_position}.")
+    El TPO POC/VAH/VAL del día (intraday DVA) también se reporta como
+    referencia de la sesión específica.
+    """
+    tfs_data: dict = (vwap_snap or {}).get("timeframes", {}) or {}
+
+    dva_levels: list[dict] = []
+    for tf_name in ["Daily", "Weekly", "Monthly", "Quarterly", "Annual"]:
+        tf = tfs_data.get(tf_name) or {}
+        # vwap_levels.read_vwap_levels devuelve keys en lowercase
+        dvah = tf.get("dvah") if tf.get("dvah") is not None else tf.get("DVAH")
+        vwap_v = tf.get("vwap") if tf.get("vwap") is not None else tf.get("VWAP")
+        dval = tf.get("dval") if tf.get("dval") is not None else tf.get("DVAL")
+        if dvah is None or dval is None:
+            continue
+        try:
+            dvah_f, dval_f = float(dvah), float(dval)
+            vwap_f = float(vwap_v) if vwap_v is not None else None
+        except (ValueError, TypeError):
+            continue
+
+        # Posición del precio actual respecto a esta DVA
+        if current_price > dvah_f:
+            position = f"above DVAH (extendido +{current_price - dvah_f:.2f})"
+            zone = "above"
+        elif current_price < dval_f:
+            position = f"below DVAL (extendido {current_price - dval_f:.2f})"
+            zone = "below"
+        else:
+            position = "dentro del VA"
+            zone = "inside"
+
+        dva_levels.append({
+            "tf": tf_name,
+            "dvah": round(dvah_f, 4),
+            "vwap": round(vwap_f, 4) if vwap_f is not None else None,
+            "dval": round(dval_f, 4),
+            "position": position,
+            "zone": zone,
+            "va_width": round(dvah_f - dval_f, 4),
+        })
+
+    # TPO intraday (sesión hoy)
+    tpo_section = None
+    if tpo_profile:
+        try:
+            poc = float(tpo_profile.get("poc") or 0)
+            vah = float(tpo_profile.get("vah") or 0)
+            val = float(tpo_profile.get("val") or 0)
+            tpo_section = {
+                "available": True,
+                "poc": poc, "vah": vah, "val": val,
+                "range_pts": round(vah - val, 2) if vah > val else 0,
+            }
+        except (ValueError, TypeError):
+            pass
+
+    # Resumen narrativo
+    above_count = sum(1 for d in dva_levels if d["zone"] == "above")
+    below_count = sum(1 for d in dva_levels if d["zone"] == "below")
+    inside_count = sum(1 for d in dva_levels if d["zone"] == "inside")
+
+    if above_count >= 3:
+        contextual = f"precio extendido arriba en {above_count}/{len(dva_levels)} TFs — bias mean-revert bearish"
+    elif below_count >= 3:
+        contextual = f"precio extendido abajo en {below_count}/{len(dva_levels)} TFs — bias mean-revert bullish"
+    elif inside_count == len(dva_levels) and dva_levels:
+        contextual = "precio dentro del VA en todos los TFs — rotación, sin extensión"
+    else:
+        contextual = f"mixed: {above_count} above / {inside_count} inside / {below_count} below"
+
+    summary = f"{len(dva_levels)} DVAs tracked. {contextual}."
+    if tpo_section:
+        summary += (f" TPO intraday: POC {tpo_section['poc']} / "
+                   f"VAH {tpo_section['vah']} / VAL {tpo_section['val']}.")
 
     return {
-        "available": True,
-        "poc": poc,
-        "vah": vah,
-        "val": val,
-        "range_pts": round(va_range, 2),
-        "poc_position": poc_position,
+        "available": bool(dva_levels),
+        "current_price": current_price,
+        "dva_levels": dva_levels,
+        "tpo_intraday": tpo_section,
+        "above_count": above_count,
+        "below_count": below_count,
+        "inside_count": inside_count,
+        "contextual": contextual,
         "summary": summary,
     }
 
@@ -534,9 +719,17 @@ def generate_nightly_report(instrument: str, date_str: str | None = None) -> dic
     # N-A-D-R-O analysis
     tick_size = TICK_SIZES.get(master, 0.25)
     price_trend = compute_price_trend(pit_bars)
-    narrativa = analyze_narrativa(snap, price_trend, classic)
+    tpo_profile = missed_result.get("tpo_profile")
+    narrativa = analyze_narrativa(snap, price_trend, classic, tpo_profile, pit_bars, tick_size)
     aceptacion = analyze_aceptacion(snap, pit_bars, tick_size)
-    dva = analyze_dva(missed_result.get("tpo_profile"), snap.get("price_at_analysis", 0))
+    # D = DVAs multi-TF (Daily/Weekly/Monthly/Quarterly/Annual) — NO es distribución
+    current_price = pit_bars[-1].get("c", 0) if pit_bars else snap.get("price_at_analysis", 0)
+    try:
+        current_price = float(current_price)
+    except (ValueError, TypeError):
+        current_price = 0
+    vwap_snap = vwap_tool.snapshot(instrument=master)
+    dva = analyze_dva(vwap_snap, current_price, tpo_profile)
     ritmo = analyze_ritmo(pit_bars)
     order_flow = analyze_order_flow(pit_bars, price_trend)
     dissonance = detect_dissonance(snap.get("hypos", []) or [])

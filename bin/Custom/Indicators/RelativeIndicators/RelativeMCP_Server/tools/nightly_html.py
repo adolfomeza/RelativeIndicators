@@ -113,10 +113,29 @@ def render_markdown(report: dict) -> str:
     # 4. Review NADRO
     lines.append("## 4. Review NADRO")
     lines.append("")
-    lines.append("### Narrativa (N)")
-    lines.append(f"- Bias declarado: **{narrativa.get('bias_stated')}**")
+    lines.append("### Narrativa (N) — bias desde estructura TPO")
+    lines.append(f"- Bias DECLARADO pre-open: **{narrativa.get('bias_stated')}**")
     lines.append(f"- Precio cerró: {narrativa.get('price_direction')} ({narrativa.get('price_change'):+.2f} pts)")
-    lines.append(f"- **Veredicto**: {narrativa.get('verdict')}")
+    lines.append(f"- ¿Bias declarado se cumplió hoy?: {narrativa.get('fulfilled_verdict')}")
+    lines.append("")
+    lines.append("**Estructura TPO de hoy** (lo que define el bias para mañana):")
+    tpo_feat = narrativa.get("tpo_features") or {}
+    if tpo_feat.get("poor_high"):
+        lines.append("- **Alto pobre** detectado → likely revisitar el high mañana")
+    if tpo_feat.get("weak_low"):
+        lines.append("- **Mínimo débil** detectado → likely revisitar el low mañana")
+    if tpo_feat.get("high_excess"):
+        lines.append("- Excess en el high → rechazo confirmado por vendedores")
+    if tpo_feat.get("low_excess"):
+        lines.append("- Excess en el low → rechazo confirmado por compradores")
+    if tpo_feat.get("close_vs_poc") and tpo_feat.get("close_vs_poc") != "unknown":
+        lines.append(f"- Cierre: {tpo_feat['close_vs_poc']}")
+    if tpo_feat.get("day_type") and tpo_feat.get("day_type") != "unknown":
+        lines.append(f"- Día tipo: **{tpo_feat['day_type']}**")
+    lines.append("")
+    lines.append(f"**Bias FORWARD para mañana**: **{narrativa.get('forward_bias', 'neutral')}**")
+    for r in narrativa.get("forward_reasons") or []:
+        lines.append(f"- {r}")
     for c_line in narrativa.get("commentary", []):
         lines.append(f"- {c_line}")
     lines.append("")
@@ -127,11 +146,20 @@ def render_markdown(report: dict) -> str:
     for a in aceptacion.get("accepted", [])[:5]:
         lines.append(f"- **Aceptado**: {a['label']} @ {a['price']} ({a['type']})")
     lines.append("")
-    lines.append("### DVA / Distribución (D)")
+    lines.append("### DVA (D) — Developing Value Areas multi-TF")
     if dva.get("available"):
         lines.append(f"- {dva.get('summary')}")
-        lines.append(f"- POC: {dva['poc']}  /  VAH: {dva['vah']}  /  VAL: {dva['val']}")
-        lines.append(f"- Posición POC: {dva['poc_position']}")
+        lines.append("")
+        lines.append("| TF | DVAH | VWAP | DVAL | Posición precio actual |")
+        lines.append("|---|---|---|---|---|")
+        for d in dva.get("dva_levels", []):
+            vwap_v = d.get("vwap")
+            vwap_str = f"{vwap_v}" if vwap_v is not None else "-"
+            lines.append(f"| **{d['tf']}** | {d['dvah']} | {vwap_str} | {d['dval']} | {d['position']} |")
+        lines.append("")
+        tpo = dva.get("tpo_intraday")
+        if tpo and tpo.get("available"):
+            lines.append(f"- **TPO intraday (sesión hoy)**: POC {tpo['poc']} / VAH {tpo['vah']} / VAL {tpo['val']} (rango {tpo['range_pts']} pts)")
     else:
         lines.append(f"- {dva.get('summary', 'No disponible')}")
     lines.append("")
@@ -265,9 +293,15 @@ def _render_instrument(inst: str, r: dict) -> list[str]:
   </div>
 
   <h3>Review N-A-D-R-O</h3>
-  <div class="nadro-row"><div class="letter">N</div><div>{_html.escape(narrativa.get('verdict', '-'))}</div></div>
+  <div class="nadro-row"><div class="letter">N</div><div>
+    <strong>Bias forward (estructura TPO):</strong> {_html.escape(narrativa.get('forward_bias', 'neutral'))}<br>
+    <small>Cumplió pre-open: {_html.escape(narrativa.get('fulfilled_verdict', '-'))}</small>
+  </div></div>
   <div class="nadro-row"><div class="letter">A</div><div>{_html.escape(aceptacion.get('summary', '-'))}</div></div>
-  <div class="nadro-row"><div class="letter">D</div><div>{_html.escape(dva.get('summary', 'no TPO'))}</div></div>
+  <div class="nadro-row"><div class="letter">D</div><div>
+    <strong>DVAs multi-TF:</strong> {_html.escape(dva.get('contextual', dva.get('summary', '-')))}<br>
+    <small>{dva.get('above_count', 0)} above · {dva.get('inside_count', 0)} inside · {dva.get('below_count', 0)} below</small>
+  </div></div>
   <div class="nadro-row"><div class="letter">R</div><div>{_html.escape(ritmo.get('summary', '-'))}</div></div>
   <div class="nadro-row"><div class="letter">O</div><div>{_html.escape(of.get('summary', '-'))}</div></div>
 """)
