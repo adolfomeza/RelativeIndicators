@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>NADRO Nightly Report — 2026-04-21</title>
+<style>
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f172a; color: #e2e8f0; margin: 0; padding: 24px; line-height: 1.55; }
+  h1 { font-size: 28px; color: #f1f5f9; margin: 0 0 4px; }
+  h2 { font-size: 20px; color: #f1f5f9; border-bottom: 2px solid #334155; padding-bottom: 6px; margin: 28px 0 12px; }
+  h3 { font-size: 15px; color: #cbd5e1; margin: 14px 0 6px; }
+  .subtitle { color: #94a3b8; font-size: 14px; margin-bottom: 20px; }
+  .aggregate { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 16px 0 28px; }
+  .stat { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 14px; text-align: center; }
+  .stat .label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .stat .value { font-size: 22px; font-weight: 700; color: #f1f5f9; }
+  .stat .value.win { color: #4ade80; }
+  .stat .value.missed { color: #fbbf24; }
+  .instrument { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+  .inst-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .inst-hdr h2 { margin: 0; border: none; padding: 0; font-size: 22px; }
+  .inst-meta { font-size: 12px; color: #94a3b8; }
+  .block { background: #0f172a; border-radius: 8px; padding: 10px 14px; margin: 10px 0; font-size: 13px; }
+  .block strong { color: #cbd5e1; }
+  .nadro-row { display: grid; grid-template-columns: 80px 1fr; gap: 10px; margin: 8px 0; font-size: 13px; }
+  .nadro-row .letter { font-weight: 700; color: #60a5fa; text-align: center; background: #1e293b; padding: 4px 8px; border-radius: 4px; }
+  .missed { background: rgba(251,191,36,0.08); border-left: 3px solid #fbbf24; padding: 8px 12px; margin: 6px 0; font-size: 12px; color: #fde68a; border-radius: 0 6px 6px 0; }
+  .lessons { background: #0f172a; border-radius: 6px; padding: 10px 14px; margin-top: 10px; }
+  .lessons ol { margin: 4px 0 4px 20px; padding: 0; }
+  .lessons li { margin: 4px 0; font-size: 13px; color: #cbd5e1; }
+  .tomorrow { background: rgba(96,165,250,0.1); border-left: 3px solid #60a5fa; padding: 8px 12px; margin-top: 10px; font-size: 13px; color: #bfdbfe; border-radius: 0 6px 6px 0; }
+  .error { color: #fca5a5; font-style: italic; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-right: 6px; }
+  .badge.win { background: #16a34a; color: #fff; }
+  .badge.stop { background: #dc2626; color: #fff; }
+  .badge.dead { background: #6b7280; color: #fff; }
+  .badge.missed { background: #f59e0b; color: #fff; }
+  footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #334155; color: #64748b; font-size: 12px; text-align: center; }
+</style></head><body>
+<h1>NADRO Nightly Report — 2026-04-21</h1>
+<div class="subtitle">Review EOD completo bajo metodología N-A-D-R-O · Missed setups · Lecciones · Sugerencias mañana.</div>
+<div class="aggregate">
+  <div class="stat"><div class="label">Hipos totales</div><div class="value">12</div></div>
+  <div class="stat"><div class="label">Wins</div><div class="value win">3</div></div>
+  <div class="stat"><div class="label">Stop Tight</div><div class="value">3</div></div>
+  <div class="stat"><div class="label">Missed setups</div><div class="value missed">39</div></div>
+  <div class="stat"><div class="label">Disonancia (inst.)</div><div class="value">6</div></div>
+</div>
+
+<div class="instrument">
+  <div class="inst-hdr">
+    <h2>MGC</h2>
+    <div class="inst-meta">Pit 08:20–13:30 VET · 2 hipos · 0 missed</div>
+  </div>
+  <div class="block">
+    <strong>Bias</strong>: neutral-bearish ·
+    <strong>Regime</strong>: rotacional intradiario (macro bullish) ·
+    <strong>Precio open</strong>: 4805.4 ·
+    <strong>Close</strong>: +0.00 pts
+    <br><em>Precio 4805 DEBAJO de pVAL 4822 (bearish sign). Overnight -12 pts (4817 a 4805). En rango W-DVA 4799-4835. Setups: RPB bearish retest pVAL vs BPB bullish en W-DVAL.</em>
+  </div>
+  <div class="block">
+    <span class="badge win">WINS 0</span>
+    <span class="badge stop">STOPS 1</span>
+    <span class="badge dead">DEAD 1</span>
+    <span class="badge missed">MISSED 0</span>
+  </div>
+
+  <h3>Review N-A-D-R-O</h3>
+  <div class="nadro-row"><div class="letter">N</div><div>bias &#x27;neutral-bearish&#x27; vs precio &#x27;flat&#x27; — no alineado</div></div>
+  <div class="nadro-row"><div class="letter">A</div><div>sin niveles/bars para analizar</div></div>
+  <div class="nadro-row"><div class="letter">D</div><div>no TPO profile disponible</div></div>
+  <div class="nadro-row"><div class="letter">R</div><div>Regime: sin compresión clara — mercado extendido. Avg bar range 1m: 0.00 pts.</div></div>
+  <div class="nadro-row"><div class="letter">O</div><div>Delta alineado con precio (flat). Impulso confirmado.</div></div>
+<div class="block"><strong>Disonancia</strong>: Disonancia narrativa: 1 hipos LONG + 1 SHORT. Dos tesis válidas — elección dependió del marco de foco.</div><div class="lessons"><h3 style="margin-top:0">Lecciones</h3><ol><li>Bias pre-open (neutral-bearish) NO se cumplió. Revisar el top-down del LTVWs — ¿qué indicio se ignoró?</li><li>Principio NADRO: &quot;áreas, no líneas&quot;. Revisar si los entries respetan zonas.</li><li>Principio NADRO: &quot;a veces la operación te deja y está bien&quot;. No perseguir.</li></ol></div><div class="tomorrow"><strong>Mañana</strong>: Si el mercado abre cerca del entry de la hipo h1 (short RPB-pVAL-20/04 @ 4820), podría reactivarse como hipo #1 mañana.</div></div>
+<div class="instrument">
+  <div class="inst-hdr">
+    <h2>MCL</h2>
+    <div class="inst-meta">Pit 09:00–14:30 VET · 2 hipos · 13 missed</div>
+  </div>
+  <div class="block">
+    <strong>Bias</strong>: neutral (test piso) ·
+    <strong>Regime</strong>: rotacional consolidacion ·
+    <strong>Precio open</strong>: 86.47 ·
+    <strong>Close</strong>: +2.10 pts
+    <br><em>Overnight volatil 85.68-87.47. Cerro 86.47 dentro W-DVA. pVA 20/04 cerro breakout_up 87.5. Precio pegado al piso W-DVA 86.35. Setups: RPB bullish rebote W-DVAL vs BPB bearish break.</em>
+  </div>
+  <div class="block">
+    <span class="badge win">WINS 0</span>
+    <span class="badge stop">STOPS 1</span>
+    <span class="badge dead">DEAD 1</span>
+    <span class="badge missed">MISSED 13</span>
+  </div>
+
+  <h3>Review N-A-D-R-O</h3>
+  <div class="nadro-row"><div class="letter">N</div><div>bias &#x27;neutral (test piso)&#x27; vs precio &#x27;up&#x27; — no alineado</div></div>
+  <div class="nadro-row"><div class="letter">A</div><div>4 rechazos (wicks), 0 aceptaciones. Principal rechazo: overnight-high @ 87.47 (rejection from below).</div></div>
+  <div class="nadro-row"><div class="letter">D</div><div>POC 89.75 / VAH 90.25 / VAL 88.0 (rango 2.25). POC en upper (p-skew alcista).</div></div>
+  <div class="nadro-row"><div class="letter">R</div><div>Regime: compresión → expansión (ley NADRO). Avg bar range 1m: 0.18 pts. Compresión detectada @ 2026-04-21 14:03:00.000. Expansión @ 2026-04-21 14:06:00.000.</div></div>
+  <div class="nadro-row"><div class="letter">O</div><div>Divergencia: delta neutral vs precio up. Posible absorción / señal de fatiga.</div></div>
+<div class="block"><strong>Disonancia</strong>: Disonancia narrativa: 1 hipos LONG + 1 SHORT. Dos tesis válidas — elección dependió del marco de foco.</div><h3>Missed Setups</h3><div class="missed"><strong>IPB-pDVAH-6</strong> (long) · pDVAH-6 @ 86.649 · MFE 0.55 pts / MAE 0.0 pts · touch 2026-04-21 09:24</div><div class="missed"><strong>IPB-DVAH</strong> (short) · DVAH @ 90.5304 · MFE 0.47 pts / MAE 0.11 pts · touch 2026-04-21 13:06</div><div class="missed"><strong>IPB-mDVAL</strong> (long) · mDVAL @ 88.6079 · MFE 0.41 pts / MAE 0.0 pts · touch 2026-04-21 11:11</div><div class="missed"><strong>IPB-wDVAH</strong> (long) · wDVAH @ 89.5994 · MFE 0.35 pts / MAE 0.08 pts · touch 2026-04-21 11:49</div><div class="missed"><strong>IPB-VWAP</strong> (short) · VWAP @ 90.185 · MFE 0.32 pts / MAE 0.0 pts · touch 2026-04-21 12:15</div><div class="lessons"><h3 style="margin-top:0">Lecciones</h3><ol><li>MISSED SETUPS: 13 niveles dispararon fuera del snapshot (pDVAH-6, DVAH, mDVAL). Ampliar el universo de niveles tracked pre-open.</li><li>Bias pre-open (neutral (test piso)) NO se cumplió. Revisar el top-down del LTVWs — ¿qué indicio se ignoró?</li><li>Divergencia delta-precio visible durante el día. Monitorear absorción como señal adelantada en el próximo review.</li><li>Principio NADRO: &quot;a veces la operación te deja y está bien&quot;. No perseguir.</li></ol></div><div class="tomorrow"><strong>Mañana</strong>: Si el mercado abre cerca del entry de la hipo h1 (long RPB-wDVAL @ 86.4), podría reactivarse como hipo #1 mañana.</div></div>
+<div class="instrument">
+  <div class="inst-hdr">
+    <h2>MES</h2>
+    <div class="inst-meta">Pit 09:30–16:00 VET · 2 hipos · 7 missed</div>
+  </div>
+  <div class="block">
+    <strong>Bias</strong>: bullish ·
+    <strong>Regime</strong>: imbalance bullish overnight ·
+    <strong>Precio open</strong>: 7173.0 ·
+    <strong>Close</strong>: -62.00 pts
+    <br><em>Rally overnight +18 pts (7155 a 7173). Precio extendido arriba de W-DVAH 7152 y pVAH 20/04 7149.75. Macro bullish confirmed. Setups: RPB bullish retest W-DVAH vs BPB bearish en rechazo 7183.</em>
+  </div>
+  <div class="block">
+    <span class="badge win">WINS 1</span>
+    <span class="badge stop">STOPS 0</span>
+    <span class="badge dead">DEAD 1</span>
+    <span class="badge missed">MISSED 7</span>
+  </div>
+
+  <h3>Review N-A-D-R-O</h3>
+  <div class="nadro-row"><div class="letter">N</div><div>bias &#x27;bullish&#x27; vs precio &#x27;down&#x27; — no alineado</div></div>
+  <div class="nadro-row"><div class="letter">A</div><div>5 rechazos (wicks), 0 aceptaciones. Principal rechazo: wDVAH @ 7152.5 (rejection from above).</div></div>
+  <div class="nadro-row"><div class="letter">D</div><div>POC 7125.75 / VAH 7139.75 / VAL 7099.0 (rango 40.75). POC en center.</div></div>
+  <div class="nadro-row"><div class="letter">R</div><div>Regime: compresión → expansión (ley NADRO). Avg bar range 1m: 3.66 pts. Compresión detectada @ 2026-04-21 15:15:00.000. Expansión @ 2026-04-21 15:15:00.000.</div></div>
+  <div class="nadro-row"><div class="letter">O</div><div>Divergencia: delta neutral vs precio down. Posible absorción / señal de fatiga.</div></div>
+<div class="block"><strong>Disonancia</strong>: Disonancia narrativa: 1 hipos LONG + 1 SHORT. Dos tesis válidas — elección dependió del marco de foco.</div><h3>Missed Setups</h3><div class="missed"><strong>IPB-DVAH</strong> (short) · DVAH @ 7135.5082 · MFE 9.5 pts / MAE 0.0 pts · touch 2026-04-21 11:23</div><div class="missed"><strong>BPB-pit-TPO-VAL</strong> (long) · pit-TPO-VAL @ 7099.0 · MFE 9.0 pts / MAE 0.0 pts · touch 2026-04-21 13:23</div><div class="missed"><strong>IPB-wDVAL</strong> (long) · wDVAL @ 7114.7432 · MFE 8.0 pts / MAE 0.0 pts · touch 2026-04-21 13:00</div><div class="missed"><strong>RPB-pWDVAH-13</strong> (long) · pWDVAH-13 @ 7120.9894 · MFE 8.0 pts / MAE 0.75 pts · touch 2026-04-21 11:04</div><div class="missed"><strong>IPB-VWAP</strong> (long) · VWAP @ 7130.838 · MFE 7.75 pts / MAE 4.25 pts · touch 2026-04-21 11:02</div><div class="lessons"><h3 style="margin-top:0">Lecciones</h3><ol><li>MISSED SETUPS: 7 niveles dispararon fuera del snapshot (DVAH, pit-TPO-VAL, wDVAL). Ampliar el universo de niveles tracked pre-open.</li><li>Bias pre-open (bullish) NO se cumplió. Revisar el top-down del LTVWs — ¿qué indicio se ignoró?</li><li>Divergencia delta-precio visible durante el día. Monitorear absorción como señal adelantada en el próximo review.</li><li>Principio NADRO: &quot;a veces la operación te deja y está bien&quot;. No perseguir.</li></ol></div><div class="tomorrow"><strong>Mañana</strong>: Si el mercado abre cerca del entry de la hipo h2 (short BPB-pVAH-17/04 @ 7180), podría reactivarse como hipo #1 mañana.</div></div>
+<div class="instrument">
+  <div class="inst-hdr">
+    <h2>MNQ</h2>
+    <div class="inst-meta">Pit 09:30–16:00 VET · 2 hipos · 7 missed</div>
+  </div>
+  <div class="block">
+    <strong>Bias</strong>: bullish ·
+    <strong>Regime</strong>: imbalance bullish overnight ·
+    <strong>Precio open</strong>: 26860.25 ·
+    <strong>Close</strong>: -173.50 pts
+    <br><em>Rally overnight +56 pts (26804 a 26860). Precio EN pVAH 17/04 26861 (resistencia critica). Macro bullish +1495 yVWAP. Setups: BPB bearish rechazo pVAH vs RPB bullish break.</em>
+  </div>
+  <div class="block">
+    <span class="badge win">WINS 1</span>
+    <span class="badge stop">STOPS 1</span>
+    <span class="badge dead">DEAD 0</span>
+    <span class="badge missed">MISSED 7</span>
+  </div>
+
+  <h3>Review N-A-D-R-O</h3>
+  <div class="nadro-row"><div class="letter">N</div><div>bias &#x27;bullish&#x27; vs precio &#x27;down&#x27; — no alineado</div></div>
+  <div class="nadro-row"><div class="letter">A</div><div>8 rechazos (wicks), 0 aceptaciones. Principal rechazo: overnight-high @ 26882.0 (rejection from above).</div></div>
+  <div class="nadro-row"><div class="letter">D</div><div>POC 26741.5 / VAH 26799.0 / VAL 26664.25 (rango 134.75). POC en center.</div></div>
+  <div class="nadro-row"><div class="letter">R</div><div>Regime: compresión → expansión (ley NADRO). Avg bar range 1m: 17.81 pts. Compresión detectada @ 2026-04-21 15:15:00.000. Expansión @ 2026-04-21 15:15:00.000.</div></div>
+  <div class="nadro-row"><div class="letter">O</div><div>Divergencia: delta neutral vs precio down. Posible absorción / señal de fatiga.</div></div>
+<div class="block"><strong>Disonancia</strong>: Disonancia narrativa: 1 hipos LONG + 1 SHORT. Dos tesis válidas — elección dependió del marco de foco.</div><h3>Missed Setups</h3><div class="missed"><strong>BPB-pit-TPO-VAL</strong> (long) · pit-TPO-VAL @ 26664.25 · MFE 74.25 pts / MAE 0.0 pts · touch 2026-04-21 11:06</div><div class="missed"><strong>IPB-DVAH</strong> (long) · DVAH @ 26837.6224 · MFE 66.25 pts / MAE 34.25 pts · touch 2026-04-21 09:31</div><div class="missed"><strong>IPB-VWAP</strong> (long) · VWAP @ 26783.1685 · MFE 66.25 pts / MAE 34.25 pts · touch 2026-04-21 09:31</div><div class="missed"><strong>BPB-pit-TPO-VAH</strong> (long) · pit-TPO-VAH @ 26799.0 · MFE 66.25 pts / MAE 34.25 pts · touch 2026-04-21 09:31</div><div class="missed"><strong>IPB-DVAL</strong> (long) · DVAL @ 26728.7147 · MFE 41.25 pts / MAE 0.0 pts · touch 2026-04-21 09:36</div><div class="lessons"><h3 style="margin-top:0">Lecciones</h3><ol><li>MISSED SETUPS: 7 niveles dispararon fuera del snapshot (pit-TPO-VAL, DVAH, VWAP). Ampliar el universo de niveles tracked pre-open.</li><li>Bias pre-open (bullish) NO se cumplió. Revisar el top-down del LTVWs — ¿qué indicio se ignoró?</li><li>Divergencia delta-precio visible durante el día. Monitorear absorción como señal adelantada en el próximo review.</li><li>Principio NADRO: &quot;a veces la operación te deja y está bien&quot;. No perseguir.</li></ol></div><div class="tomorrow"><strong>Mañana</strong>: Incluir pit-TPO-VAL @ 26664.25 en el snapshot de mañana — hoy dio un long con MFE 74.25 pts fuera del análisis.</div></div>
+<div class="instrument">
+  <div class="inst-hdr">
+    <h2>MYM</h2>
+    <div class="inst-meta">Pit 09:30–16:00 VET · 2 hipos · 6 missed</div>
+  </div>
+  <div class="block">
+    <strong>Bias</strong>: bullish extendido ·
+    <strong>Regime</strong>: imbalance bullish overnight extendido ·
+    <strong>Precio open</strong>: 49922.0 ·
+    <strong>Close</strong>: -580.00 pts
+    <br><em>RALLY FUERTE overnight +227 pts (49695 a 49922). Precio EN CVAH 49923 (resistencia critica). Macro bullish. Extendido - posible pullback. Setups: BPB bearish rechazo CVAH vs RPB bullish break.</em>
+  </div>
+  <div class="block">
+    <span class="badge win">WINS 1</span>
+    <span class="badge stop">STOPS 1</span>
+    <span class="badge dead">DEAD 0</span>
+    <span class="badge missed">MISSED 6</span>
+  </div>
+
+  <h3>Review N-A-D-R-O</h3>
+  <div class="nadro-row"><div class="letter">N</div><div>bias &#x27;bullish extendido&#x27; vs precio &#x27;down&#x27; — no alineado</div></div>
+  <div class="nadro-row"><div class="letter">A</div><div>8 rechazos (wicks), 0 aceptaciones. Principal rechazo: overnight-high @ 49958.0 (rejection from above).</div></div>
+  <div class="nadro-row"><div class="letter">D</div><div>POC 49549.0 / VAH 49759.25 / VAL 49229.0 (rango 530.25). POC en center.</div></div>
+  <div class="nadro-row"><div class="letter">R</div><div>Regime: compresión → expansión (ley NADRO). Avg bar range 1m: 25.71 pts. Compresión detectada @ 2026-04-21 15:14:00.000. Expansión @ 2026-04-21 15:15:00.000.</div></div>
+  <div class="nadro-row"><div class="letter">O</div><div>Delta alineado con precio (down). Impulso confirmado.</div></div>
+<div class="block"><strong>Disonancia</strong>: Disonancia narrativa: 1 hipos LONG + 1 SHORT. Dos tesis válidas — elección dependió del marco de foco.</div><h3>Missed Setups</h3><div class="missed"><strong>BPB-pit-TPO-VAL</strong> (long) · pit-TPO-VAL @ 49229.0 · MFE 112.0 pts / MAE 0.0 pts · touch 2026-04-21 15:45</div><div class="missed"><strong>IPB-yDVAH</strong> (long) · yDVAH @ 49884.9961 · MFE 103.0 pts / MAE 0.0 pts · touch 2026-04-21 09:32</div><div class="missed"><strong>BPB-pit-POC</strong> (long) · pit-POC @ 49549.0 · MFE 84.0 pts / MAE 4.0 pts · touch 2026-04-21 11:05</div><div class="missed"><strong>RPB-pWDVAL-11</strong> (short) · pWDVAL-11 @ 49930.4064 · MFE 73.0 pts / MAE 20.0 pts · touch 2026-04-21 09:41</div><div class="missed"><strong>IPB-DVAL</strong> (long) · DVAL @ 49630.7934 · MFE 66.0 pts / MAE 35.0 pts · touch 2026-04-21 11:01</div><div class="lessons"><h3 style="margin-top:0">Lecciones</h3><ol><li>STOP TIGHT x1: stops más ajustados que rango natural. Regla: stop &gt;= 50% rango overnight o ATR*2.</li><li>MISSED SETUPS: 6 niveles dispararon fuera del snapshot (pit-TPO-VAL, yDVAH, pit-POC). Ampliar el universo de niveles tracked pre-open.</li><li>Bias pre-open (bullish extendido) NO se cumplió. Revisar el top-down del LTVWs — ¿qué indicio se ignoró?</li><li>Principio NADRO: &quot;a veces la operación te deja y está bien&quot;. No perseguir.</li></ol></div><div class="tomorrow"><strong>Mañana</strong>: Incluir pit-TPO-VAL @ 49229.0 en el snapshot de mañana — hoy dio un long con MFE 112.0 pts fuera del análisis.</div></div>
+<div class="instrument">
+  <div class="inst-hdr">
+    <h2>M2K</h2>
+    <div class="inst-meta">Pit 09:30–16:00 VET · 2 hipos · 6 missed</div>
+  </div>
+  <div class="block">
+    <strong>Bias</strong>: bullish leve ·
+    <strong>Regime</strong>: bullish moderado overnight ·
+    <strong>Precio open</strong>: 2813.6 ·
+    <strong>Close</strong>: -35.50 pts
+    <br><em>Rally moderado overnight +5 pts (2808 a 2814). Precio JUSTO en W-DVAH 2813 (crítico). Arriba de CVAH 2803.75. Macro bullish. Setups: RPB bullish retest CVAH vs BPB bearish rechazo W-DVAH.</em>
+  </div>
+  <div class="block">
+    <span class="badge win">WINS 0</span>
+    <span class="badge stop">STOPS 2</span>
+    <span class="badge dead">DEAD 0</span>
+    <span class="badge missed">MISSED 6</span>
+  </div>
+
+  <h3>Review N-A-D-R-O</h3>
+  <div class="nadro-row"><div class="letter">N</div><div>bias &#x27;bullish leve&#x27; vs precio &#x27;down&#x27; — no alineado</div></div>
+  <div class="nadro-row"><div class="letter">A</div><div>8 rechazos (wicks), 0 aceptaciones. Principal rechazo: overnight-high @ 2814.6 (rejection from above).</div></div>
+  <div class="nadro-row"><div class="letter">D</div><div>POC 2787.0 / VAH 2800.5 / VAL 2768.75 (rango 31.75). POC en center.</div></div>
+  <div class="nadro-row"><div class="letter">R</div><div>Regime: compresión sin expansión — energía latente. Avg bar range 1m: 2.29 pts. Compresión detectada @ 2026-04-21 14:41:00.000.</div></div>
+  <div class="nadro-row"><div class="letter">O</div><div>Divergencia: delta neutral vs precio down. Posible absorción / señal de fatiga.</div></div>
+<div class="block"><strong>Disonancia</strong>: Disonancia narrativa: 1 hipos LONG + 1 SHORT. Dos tesis válidas — elección dependió del marco de foco.</div><h3>Missed Setups</h3><div class="missed"><strong>IPB-VWAP</strong> (long) · VWAP @ 2808.4362 · MFE 6.9 pts / MAE 2.9 pts · touch 2026-04-21 09:31</div><div class="missed"><strong>BPB-pit-TPO-VAL</strong> (long) · pit-TPO-VAL @ 2768.75 · MFE 6.1 pts / MAE 1.2 pts · touch 2026-04-21 15:44</div><div class="missed"><strong>IPB-pDVAP-10</strong> (long) · pDVAP-10 @ 2785.4672 · MFE 5.0 pts / MAE 0.0 pts · touch 2026-04-21 12:45</div><div class="missed"><strong>IPB-DVAL</strong> (long) · DVAL @ 2797.2643 · MFE 4.3 pts / MAE 2.0 pts · touch 2026-04-21 11:02</div><div class="missed"><strong>BPB-pit-POC</strong> (long) · pit-POC @ 2787.0 · MFE 4.0 pts / MAE 0.7 pts · touch 2026-04-21 12:44</div><div class="lessons"><h3 style="margin-top:0">Lecciones</h3><ol><li>STOP TIGHT x2: stops más ajustados que rango natural. Regla: stop &gt;= 50% rango overnight o ATR*2.</li><li>MISSED SETUPS: 6 niveles dispararon fuera del snapshot (VWAP, pit-TPO-VAL, pDVAP-10). Ampliar el universo de niveles tracked pre-open.</li><li>Bias pre-open (bullish leve) NO se cumplió. Revisar el top-down del LTVWs — ¿qué indicio se ignoró?</li><li>Divergencia delta-precio visible durante el día. Monitorear absorción como señal adelantada en el próximo review.</li><li>Compresión detectada pero sin expansión dentro de la pit session. Oportunidad potencial para mañana — vigilar ese rango.</li></ol></div><div class="tomorrow"><strong>Mañana</strong>: Incluir VWAP @ 2808.4362 en el snapshot de mañana — hoy dio un long con MFE 6.9 pts fuera del análisis.</div></div>
+<footer>
+  Generado por <code>nadro_nightly_report_all('2026-04-21')</code> · Metodología NADRO oficial ·
+  Template: <code>Docs/Nadro/nightly_report_template.md</code>
+</footer>
+</body></html>

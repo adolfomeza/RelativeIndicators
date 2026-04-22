@@ -27,6 +27,7 @@ from .tools import briefing as briefing_tool
 from .tools import markup as markup_tool
 from .tools import walkforward as walkforward_tool
 from .tools import eod_review as eod_review_tool
+from .tools import nightly_report as nightly_report_tool
 from .tools import nadro as nadro_tool
 from .tools import observer
 from .tools import tpo_cva as tpo_cva_tool
@@ -493,6 +494,49 @@ def nadro_eod_review_all(date: str | None = None) -> dict:
     Cada review queda persistido en disco como markdown.
     """
     return eod_review_tool.eod_review_all(date_str=date)
+
+
+@mcp.tool
+def nadro_nightly_report(instrument: str, date: str | None = None) -> dict:
+    """**NADRO Nightly Report** — review EOD completo bajo metodología oficial.
+
+    Reemplazo recomendado de ``nadro_eod_review`` (que se mantiene como alias
+    mínimo). Estructura inspirada en transcripts oficiales NADRO 02-22 +
+    livestreams 24-28. Plantilla en ``Docs/Nadro/nightly_report_template.md``.
+
+    Secciones generadas:
+    - Preparación pre-open (snapshot del día)
+    - Walk-forward de hipos (filled/stopped/dead + MAE/MFE)
+    - **MISSED SETUPS** — niveles fuera del snapshot que dispararon (algoritmo
+      detecta touch ±3 ticks + reversal con MFE >= 0.10% precio + MAE/MFE < 0.6).
+      Clasificación BPB/RPB/IPB automática
+    - Review N-A-D-R-O en orden:
+      * Narrativa: ¿bias se cumplió?
+      * Aceptación: niveles rejected (wick) vs accepted (close cerca)
+      * DVA/Distribución: POC/VAH/VAL del pit + skew
+      * Ritmo: compresión → expansión detectada
+      * Order Flow: delta proxy vs precio (alignment / divergence)
+    - Disonancia narrativa (si hipos LONG y SHORT coexisten)
+    - Lecciones auto-generadas (3-5)
+    - Sugerencia hipo #1 mañana
+
+    Guarda markdown en ``Docs/Nadro/nightly_reports/{INST}_{DATE}.md``.
+
+    ``instrument``: master symbol (MGC, MCL, MES, MNQ, MYM, M2K).
+    ``date``: YYYY-MM-DD (default: hoy).
+    """
+    return nightly_report_tool.generate_nightly_report(instrument=instrument, date_str=date)
+
+
+@mcp.tool
+def nadro_nightly_report_all(date: str | None = None) -> dict:
+    """Genera nightly report NADRO para los 6 instrumentos + HTML consolidado.
+
+    HTML output: ``Docs/Nadro/nightly_reports/nightly_all_{date}.html``.
+    Reemplaza al ``eod_all_{date}.html`` del review clásico (que sigue
+    funcionando como alias).
+    """
+    return nightly_report_tool.generate_nightly_all(date_str=date)
 
 
 @mcp.tool

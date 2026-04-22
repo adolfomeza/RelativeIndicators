@@ -1,0 +1,338 @@
+"""Renderers del NADRO Nightly Report — markdown individual + HTML consolidado.
+
+Mantenido fuera de `nightly_report.py` para que ese archivo quede por debajo
+de 700 LOC (límite del project plan).
+"""
+from __future__ import annotations
+
+import html as _html
+
+from .nightly_helpers import PIT_SESSIONS
+
+
+def _fmt_ts(ts: str | None) -> str:
+    if not ts:
+        return "-"
+    return str(ts).replace("T", " ")[:16]
+
+
+def _fmt_pts(v) -> str:
+    if v is None:
+        return "-"
+    try:
+        return f"{float(v):.2f}"
+    except (ValueError, TypeError):
+        return str(v)
+
+
+# ---------------------------------------------------------------------------
+# Markdown renderer (NADRO-compliant)
+# ---------------------------------------------------------------------------
+
+def render_markdown(report: dict) -> str:
+    """Markdown del nightly report individual de un instrumento."""
+    inst = report["instrument"]
+    date_str = report["date"]
+    pit = PIT_SESSIONS.get(inst, ("?", "?"))
+
+    lines: list[str] = []
+    lines.append(f"# NADRO Nightly Report — {inst} {date_str}")
+    lines.append(f"Pit session: {pit[0]} – {pit[1]} VET")
+    lines.append("")
+
+    if "error" in report:
+        lines.append(f"**Error**: {report['error']}")
+        return "\n".join(lines)
+
+    classic = report.get("classic", {}) or {}
+    snap = report.get("snapshot", {}) or {}
+    missed = report.get("missed_setups", []) or []
+    narrativa = report.get("narrativa", {}) or {}
+    aceptacion = report.get("aceptacion", {}) or {}
+    dva = report.get("dva", {}) or {}
+    ritmo = report.get("ritmo", {}) or {}
+    of = report.get("order_flow", {}) or {}
+    dissonance = report.get("dissonance", {}) or {}
+    lessons = report.get("lessons", []) or []
+    tomorrow = report.get("tomorrow_hint")
+
+    # 1. Preparación pre-open
+    lines.append("## 1. Preparación pre-open")
+    lines.append(f"- **Snapshot ID**: `{snap.get('snapshot_id') or classic.get('snapshot_id') or '-'}`")
+    lines.append(f"- **Timestamp**: {_fmt_ts(classic.get('timestamp'))}")
+    lines.append(f"- **Precio al análisis**: {classic.get('price_at_analysis')}")
+    lines.append(f"- **Regime declarado**: {classic.get('regime') or '(sin especificar)'}")
+    lines.append(f"- **Bias declarado**: {classic.get('bias') or '(sin especificar)'}")
+    if classic.get("summary"):
+        lines.append(f"- **Summary**: {classic['summary']}")
+    lines.append(f"- **Hipos propuestas**: {len(classic.get('hypos', []))}")
+    lines.append(f"- **Niveles tracked**: {classic.get('n_levels', 0)}")
+    lines.append(f"- **Confluencias detectadas**: {classic.get('n_confluences', 0)}")
+    lines.append("")
+
+    # 2. Resultado hipos
+    c = classic.get("counts", {})
+    wins_total = c.get('WIN', 0) + c.get('WIN_MINOR', 0)
+    stops_total = c.get('STOP_TIGHT', 0) + c.get('STOP_GENUINE', 0)
+    lines.append("## 2. Resultado de hipos (walk-forward)")
+    lines.append(
+        f"- Triggered: **{classic.get('triggered', 0)}**  ·  Wins: **{wins_total}**"
+        f"  ·  Stopped: **{stops_total}**  ·  Dead: **{c.get('DEAD', 0)}**"
+    )
+    if classic.get("win_rate") is not None:
+        lines.append(f"- Win rate: **{classic['win_rate']*100:.0f}%**")
+    lines.append("")
+    for h in classic.get("hypos", []):
+        status_tag = h.get("classification", "?")
+        direction = (h.get("direction") or "?").upper()
+        setup = h.get("setup_type") or "?"
+        lines.append(f"### Hipo {h.get('id')} — {direction} {setup} [{status_tag}]")
+        lines.append(f"Entry {h.get('entry')} / Stop {h.get('stop')} / Risk {h.get('risk_pts')} pts")
+        lines.append(f"MAE {_fmt_pts(h.get('mae_pts'))} / MFE {_fmt_pts(h.get('mfe_pts'))} pts")
+        if h.get("targets_hit"):
+            th = ", ".join(f"T{i+1}" for i in h["targets_hit"])
+            lines.append(f"Targets alcanzados: {th}")
+        lines.append("")
+
+    # 3. Missed setups
+    lines.append("## 3. Missed Setups — lo que funcionó fuera del snapshot")
+    if missed:
+        lines.append(f"Se detectaron **{len(missed)}** setups válidos en niveles NO incluidos en el análisis pre-open.")
+        lines.append("")
+        for i, m in enumerate(missed[:8], 1):
+            lines.append(f"### MISSED #{i} — {m['setup_type']} ({m['direction']})")
+            lines.append(f"- Nivel: **{m['level_label']}** @ {m['level_price']}")
+            lines.append(f"- Touch @ {_fmt_ts(m['touch_time'])} — reversal desde {m['entry_ref']}")
+            lines.append(f"- **MFE {m['mfe_pts']} pts** / MAE {m['mae_pts']} pts (ratio {m.get('mae_to_mfe_ratio')})")
+            lines.append(f"- Tiempo a MFE: {m['bars_to_mfe']} bars de 1m")
+            lines.append("")
+    else:
+        lines.append("_No se detectaron setups missed con los umbrales actuales (MFE >= 0.10% price, MAE/MFE < 0.6)._")
+        lines.append("")
+
+    # 4. Review NADRO
+    lines.append("## 4. Review NADRO")
+    lines.append("")
+    lines.append("### Narrativa (N)")
+    lines.append(f"- Bias declarado: **{narrativa.get('bias_stated')}**")
+    lines.append(f"- Precio cerró: {narrativa.get('price_direction')} ({narrativa.get('price_change'):+.2f} pts)")
+    lines.append(f"- **Veredicto**: {narrativa.get('verdict')}")
+    for c_line in narrativa.get("commentary", []):
+        lines.append(f"- {c_line}")
+    lines.append("")
+    lines.append("### Aceptación (A)")
+    lines.append(f"- {aceptacion.get('summary', '-')}")
+    for r in aceptacion.get("rejected", [])[:5]:
+        lines.append(f"- **Rechazo**: {r['label']} @ {r['price']} ({r['type']})")
+    for a in aceptacion.get("accepted", [])[:5]:
+        lines.append(f"- **Aceptado**: {a['label']} @ {a['price']} ({a['type']})")
+    lines.append("")
+    lines.append("### DVA / Distribución (D)")
+    if dva.get("available"):
+        lines.append(f"- {dva.get('summary')}")
+        lines.append(f"- POC: {dva['poc']}  /  VAH: {dva['vah']}  /  VAL: {dva['val']}")
+        lines.append(f"- Posición POC: {dva['poc_position']}")
+    else:
+        lines.append(f"- {dva.get('summary', 'No disponible')}")
+    lines.append("")
+    lines.append("### Ritmo (R)")
+    lines.append(f"- {ritmo.get('summary', '-')}")
+    lines.append(f"- Régimen: **{ritmo.get('regime')}**")
+    if ritmo.get("compression_detected"):
+        lines.append(f"- Compresión @ {_fmt_ts(ritmo.get('compression_time'))}")
+    if ritmo.get("expansion_detected"):
+        lines.append(f"- Expansión @ {_fmt_ts(ritmo.get('expansion_time'))}")
+    lines.append("")
+    lines.append("### Order Flow (O)")
+    lines.append(f"- {of.get('summary', '-')}")
+    lines.append(f"- Delta: {of.get('delta_pct')}%  ({of.get('delta_bias')})")
+    lines.append(f"- Alineación delta-precio: **{of.get('alignment')}**")
+    lines.append("")
+
+    # 5. Disonancia
+    if dissonance.get("has_dissonance"):
+        lines.append("## 5. Disonancia narrativa")
+        lines.append(f"- {dissonance.get('summary')}")
+        lines.append("- Si el foco del trader era **LTVWs**, pudo haber tomado largos.")
+        lines.append("- Si el foco era **estructural CVA**, pudo haber tomado cortos.")
+        lines.append("- Ambas decisiones son válidas dentro de su marco.")
+        lines.append("")
+
+    # 6. Lecciones
+    lines.append("## 6. Lecciones de hoy")
+    lines.append("_Auto-generadas del análisis + espacio para anotación manual._")
+    lines.append("")
+    for i, lesson in enumerate(lessons, 1):
+        lines.append(f"{i}. {lesson}")
+    lines.append("")
+    lines.append("_Anotaciones manuales del trader:_")
+    lines.append("- _(¿Qué funcionó de mi proceso?)_")
+    lines.append("- _(¿Qué error repetí?)_")
+    lines.append("- _(¿Qué haré distinto mañana?)_")
+    lines.append("")
+
+    # 7. Mañana
+    if tomorrow:
+        lines.append("## 7. Sugerencia para mañana")
+        lines.append(f"- {tomorrow}")
+        lines.append("")
+
+    return "\n".join(lines)
+
+
+_CSS = """
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f172a; color: #e2e8f0; margin: 0; padding: 24px; line-height: 1.55; }
+  h1 { font-size: 28px; color: #f1f5f9; margin: 0 0 4px; }
+  h2 { font-size: 20px; color: #f1f5f9; border-bottom: 2px solid #334155; padding-bottom: 6px; margin: 28px 0 12px; }
+  h3 { font-size: 15px; color: #cbd5e1; margin: 14px 0 6px; }
+  .subtitle { color: #94a3b8; font-size: 14px; margin-bottom: 20px; }
+  .aggregate { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 16px 0 28px; }
+  .stat { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 14px; text-align: center; }
+  .stat .label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .stat .value { font-size: 22px; font-weight: 700; color: #f1f5f9; }
+  .stat .value.win { color: #4ade80; }
+  .stat .value.missed { color: #fbbf24; }
+  .instrument { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+  .inst-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .inst-hdr h2 { margin: 0; border: none; padding: 0; font-size: 22px; }
+  .inst-meta { font-size: 12px; color: #94a3b8; }
+  .block { background: #0f172a; border-radius: 8px; padding: 10px 14px; margin: 10px 0; font-size: 13px; }
+  .block strong { color: #cbd5e1; }
+  .nadro-row { display: grid; grid-template-columns: 80px 1fr; gap: 10px; margin: 8px 0; font-size: 13px; }
+  .nadro-row .letter { font-weight: 700; color: #60a5fa; text-align: center; background: #1e293b; padding: 4px 8px; border-radius: 4px; }
+  .missed { background: rgba(251,191,36,0.08); border-left: 3px solid #fbbf24; padding: 8px 12px; margin: 6px 0; font-size: 12px; color: #fde68a; border-radius: 0 6px 6px 0; }
+  .lessons { background: #0f172a; border-radius: 6px; padding: 10px 14px; margin-top: 10px; }
+  .lessons ol { margin: 4px 0 4px 20px; padding: 0; }
+  .lessons li { margin: 4px 0; font-size: 13px; color: #cbd5e1; }
+  .tomorrow { background: rgba(96,165,250,0.1); border-left: 3px solid #60a5fa; padding: 8px 12px; margin-top: 10px; font-size: 13px; color: #bfdbfe; border-radius: 0 6px 6px 0; }
+  .error { color: #fca5a5; font-style: italic; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-right: 6px; }
+  .badge.win { background: #16a34a; color: #fff; }
+  .badge.stop { background: #dc2626; color: #fff; }
+  .badge.dead { background: #6b7280; color: #fff; }
+  .badge.missed { background: #f59e0b; color: #fff; }
+  footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #334155; color: #64748b; font-size: 12px; text-align: center; }
+"""
+
+
+def _render_instrument(inst: str, r: dict) -> list[str]:
+    """Render del card de un instrumento."""
+    parts: list[str] = []
+
+    if "error" in r:
+        parts.append(
+            f'<div class="instrument"><h2>{inst}</h2>'
+            f'<p class="error">{_html.escape(r["error"])}</p></div>'
+        )
+        return parts
+
+    classic = r.get("classic", {})
+    narrativa = r.get("narrativa", {})
+    aceptacion = r.get("aceptacion", {})
+    dva = r.get("dva", {})
+    ritmo = r.get("ritmo", {})
+    of = r.get("order_flow", {})
+    missed = r.get("missed_setups", [])
+    lessons = r.get("lessons", [])
+    tomorrow = r.get("tomorrow_hint")
+    dissonance = r.get("dissonance", {})
+    pit = r.get("pit_session") or ("?", "?")
+
+    counts = classic.get("counts", {})
+    wins = counts.get("WIN", 0) + counts.get("WIN_MINOR", 0)
+    stops = counts.get("STOP_TIGHT", 0) + counts.get("STOP_GENUINE", 0)
+    dead = counts.get("DEAD", 0)
+    price_change = r.get("price_trend", {}).get("change", 0)
+
+    parts.append(f"""
+<div class="instrument">
+  <div class="inst-hdr">
+    <h2>{inst}</h2>
+    <div class="inst-meta">Pit {pit[0]}–{pit[1]} VET · {len(classic.get('hypos', []))} hipos · {len(missed)} missed</div>
+  </div>
+  <div class="block">
+    <strong>Bias</strong>: {_html.escape(classic.get('bias') or '—')} ·
+    <strong>Regime</strong>: {_html.escape(classic.get('regime') or '—')} ·
+    <strong>Precio open</strong>: {classic.get('price_at_analysis')} ·
+    <strong>Close</strong>: {price_change:+.2f} pts
+    <br><em>{_html.escape(classic.get('summary') or '')}</em>
+  </div>
+  <div class="block">
+    <span class="badge win">WINS {wins}</span>
+    <span class="badge stop">STOPS {stops}</span>
+    <span class="badge dead">DEAD {dead}</span>
+    <span class="badge missed">MISSED {len(missed)}</span>
+  </div>
+
+  <h3>Review N-A-D-R-O</h3>
+  <div class="nadro-row"><div class="letter">N</div><div>{_html.escape(narrativa.get('verdict', '-'))}</div></div>
+  <div class="nadro-row"><div class="letter">A</div><div>{_html.escape(aceptacion.get('summary', '-'))}</div></div>
+  <div class="nadro-row"><div class="letter">D</div><div>{_html.escape(dva.get('summary', 'no TPO'))}</div></div>
+  <div class="nadro-row"><div class="letter">R</div><div>{_html.escape(ritmo.get('summary', '-'))}</div></div>
+  <div class="nadro-row"><div class="letter">O</div><div>{_html.escape(of.get('summary', '-'))}</div></div>
+""")
+
+    if dissonance.get("has_dissonance"):
+        parts.append(
+            f'<div class="block"><strong>Disonancia</strong>: '
+            f'{_html.escape(dissonance.get("summary", ""))}</div>'
+        )
+
+    if missed:
+        parts.append("<h3>Missed Setups</h3>")
+        for m in missed[:5]:
+            parts.append(
+                f'<div class="missed">'
+                f'<strong>{_html.escape(m["setup_type"])}</strong> ({m["direction"]}) · '
+                f'{_html.escape(m["level_label"])} @ {m["level_price"]} · '
+                f'MFE {m["mfe_pts"]} pts / MAE {m["mae_pts"]} pts · '
+                f'touch {_fmt_ts(m["touch_time"])}'
+                f'</div>'
+            )
+
+    if lessons:
+        parts.append('<div class="lessons"><h3 style="margin-top:0">Lecciones</h3><ol>')
+        for l in lessons:
+            parts.append(f"<li>{_html.escape(l)}</li>")
+        parts.append("</ol></div>")
+
+    if tomorrow:
+        parts.append(
+            f'<div class="tomorrow"><strong>Mañana</strong>: '
+            f'{_html.escape(tomorrow)}</div>'
+        )
+
+    parts.append("</div>")
+    return parts
+
+
+def render_consolidated(reports: dict, aggregate: dict, date_str: str) -> str:
+    """HTML completo NADRO Nightly Report consolidado de los 6 instrumentos."""
+    parts: list[str] = []
+    parts.append(f"""<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<title>NADRO Nightly Report — {date_str}</title>
+<style>{_CSS}</style></head><body>
+<h1>NADRO Nightly Report — {date_str}</h1>
+<div class="subtitle">Review EOD completo bajo metodología N-A-D-R-O · Missed setups · Lecciones · Sugerencias mañana.</div>
+<div class="aggregate">
+  <div class="stat"><div class="label">Hipos totales</div><div class="value">{aggregate['total_hypos']}</div></div>
+  <div class="stat"><div class="label">Wins</div><div class="value win">{aggregate['total_wins']}</div></div>
+  <div class="stat"><div class="label">Stop Tight</div><div class="value">{aggregate['total_stop_tight']}</div></div>
+  <div class="stat"><div class="label">Missed setups</div><div class="value missed">{aggregate['total_missed']}</div></div>
+  <div class="stat"><div class="label">Disonancia (inst.)</div><div class="value">{aggregate['total_dissonance']}</div></div>
+</div>
+""")
+
+    for inst in ["MGC", "MCL", "MES", "MNQ", "MYM", "M2K"]:
+        parts.extend(_render_instrument(inst, reports.get(inst, {})))
+
+    parts.append(f"""
+<footer>
+  Generado por <code>nadro_nightly_report_all('{date_str}')</code> · Metodología NADRO oficial ·
+  Template: <code>Docs/Nadro/nightly_report_template.md</code>
+</footer>
+</body></html>
+""")
+
+    return "".join(parts)
