@@ -34,6 +34,8 @@ using NinjaTrader.NinjaScript;
 //   GET  /quote/{instrument}            → last/bid/ask/volume
 //   GET  /ticks/{instrument}?n=200      → últimos N ticks del buffer circular
 //   GET  /bars/{instrument}?tf=1m&n=50  → últimas N barras (request async)
+//   GET  /bars/{instrument}?tf=1m&from=YYYY-MM-DD&to=YYYY-MM-DD
+//                                        → rango por fechas (sin cap de 10k)
 //
 // Registrado en NinjaTrader.Custom.csproj como:
 //   <Compile Include="Indicators\RelativeIndicators\RelativeObserver.cs" />
@@ -47,6 +49,7 @@ namespace NinjaTrader.NinjaScript.AddOns
         private const string LISTEN_PREFIX = "http://localhost:7891/";
         private const int TICK_BUFFER_SIZE = 5000;
         private const int BARS_REQUEST_TIMEOUT_MS = 15000;
+        private const int BARS_RANGE_TIMEOUT_MS = 60000;
 
         #endregion
 
@@ -432,7 +435,7 @@ namespace NinjaTrader.NinjaScript.AddOns
 
             int n = ParseIntQuery(ctx.Request.QueryString, "n", 50);
             if (n <= 0) n = 50;
-            if (n > 2000) n = 2000;
+            if (n > 10000) n = 10000;
 
             string tf = (ctx.Request.QueryString["tf"] ?? "1m").Trim().ToLowerInvariant();
             if (!TryParseTimeframe(tf, out BarsPeriodType periodType, out int value))
@@ -441,10 +444,32 @@ namespace NinjaTrader.NinjaScript.AddOns
                 return;
             }
 
-            BarsRequest req = new BarsRequest(instrument, n)
+            // Modo rango: from/to ISO (YYYY-MM-DD o YYYY-MM-DDTHH:mm:ss).
+            // Cuando vienen ambos, usamos BarsRequest(instrument, from, to) que no
+            // tiene cap. Cuando faltan, caemos al modo legacy con `n`.
+            string fromStr = ctx.Request.QueryString["from"];
+            string toStr = ctx.Request.QueryString["to"];
+            bool useRange = !string.IsNullOrEmpty(fromStr) && !string.IsNullOrEmpty(toStr);
+            DateTime fromDate = default(DateTime);
+            DateTime toDate = default(DateTime);
+            if (useRange)
             {
-                BarsPeriod = new BarsPeriod { BarsPeriodType = periodType, Value = value },
-            };
+                if (!TryParseIsoDate(fromStr, out fromDate) || !TryParseIsoDate(toStr, out toDate))
+                {
+                    WriteJson(ctx, 400, "{\"error\":\"from/to deben ser ISO (YYYY-MM-DD o YYYY-MM-DDTHH:mm:ss)\"}");
+                    return;
+                }
+                if (toDate <= fromDate)
+                {
+                    WriteJson(ctx, 400, "{\"error\":\"to debe ser > from\"}");
+                    return;
+                }
+            }
+
+            BarsRequest req = useRange
+                ? new BarsRequest(instrument, fromDate, toDate)
+                : new BarsRequest(instrument, n);
+            req.BarsPeriod = new BarsPeriod { BarsPeriodType = periodType, Value = value };
 
             var reset = new ManualResetEventSlim();
             BarsRequest resultReq = null;
@@ -467,7 +492,8 @@ namespace NinjaTrader.NinjaScript.AddOns
                 return;
             }
 
-            if (!reset.Wait(BARS_REQUEST_TIMEOUT_MS))
+            int timeoutMs = useRange ? BARS_RANGE_TIMEOUT_MS : BARS_REQUEST_TIMEOUT_MS;
+            if (!reset.Wait(timeoutMs))
             {
                 WriteJson(ctx, 504, "{\"error\":\"BarsRequest timeout\"}");
                 return;
@@ -487,11 +513,17 @@ namespace NinjaTrader.NinjaScript.AddOns
             }
 
             int total = bars.Count;
-            int from = Math.Max(0, total - n);
+            // En modo rango devolvemos todo; en modo legacy, tail de n.
+            int from = useRange ? 0 : Math.Max(0, total - n);
 
             var sb = new StringBuilder();
             sb.Append("{\"instrument\":").Append(Quote(instrument.FullName));
             sb.Append(",\"timeframe\":").Append(Quote(tf));
+            if (useRange)
+            {
+                sb.Append(",\"from\":").Append(Quote(FormatTime(fromDate)));
+                sb.Append(",\"to\":").Append(Quote(FormatTime(toDate)));
+            }
             sb.Append(",\"count\":").Append(total - from);
             sb.Append(",\"bars\":[");
             bool first = true;
@@ -1354,6 +1386,23 @@ namespace NinjaTrader.NinjaScript.AddOns
             if (string.IsNullOrEmpty(raw)) return dflt;
             if (int.TryParse(raw, NumberStyles.Integer, CultureInfo.InvariantCulture, out int v)) return v;
             return dflt;
+        }
+
+        private static bool TryParseIsoDate(string raw, out DateTime dt)
+        {
+            dt = default(DateTime);
+            if (string.IsNullOrEmpty(raw)) return false;
+            string[] formats = new[]
+            {
+                "yyyy-MM-dd",
+                "yyyy-MM-ddTHH:mm:ss",
+                "yyyy-MM-ddTHH:mm:ss.fff",
+                "yyyy-MM-dd HH:mm:ss",
+                "yyyy-MM-dd HH:mm:ss.fff",
+            };
+            return DateTime.TryParseExact(
+                raw, formats, CultureInfo.InvariantCulture,
+                DateTimeStyles.AssumeLocal, out dt);
         }
 
         private static string Quote(string s)

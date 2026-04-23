@@ -1,0 +1,228 @@
+{
+  "schema_version": "1.0",
+  "instrument": "MNQ",
+  "date": "2026-04-21",
+  "snapshots": [
+    {
+      "id": "MNQ_20260421_0930",
+      "timestamp": "2026-04-21T09:30:00",
+      "price_at_analysis": 26860.25,
+      "regime": "day type previo: trend day | precio extendido arriba en 5/5 TFs - bias mean-revert bearish corto plazo",
+      "bias": "bearish",
+      "summary": "N=bearish (trend day, high_excess,low_excess) | D=5↑/0◆/0↓",
+      "analysis_text": "**N (bias forward desde TPO del 2026-04-20)**: BEARISH\n  - excess en high 26826.0 -> vendedores confirmados\n  - excess en low 26569.0 -> compradores confirmados\n**TPO prev**: POC 26729.75 / VAH 26765.5 / VAL 26660.5 (rango 105.0)\n**Extremos prev**: H 26826.0 / L 26569.0 / C 26746.25 (above POC)\n**Dia tipo**: trend day\n\n**D (DVAs multi-TF vs precio 26860.25)**: precio extendido arriba en 5/5 TFs - bias mean-revert bearish corto plazo\n  - Daily: DVAH 26837.6224 / VWAP 26783.1685 / DVAL 26728.7147 -> above DVAH (+22.63)\n  - Weekly: DVAH 26806.4836 / VWAP 26739.0406 / DVAL 26671.5976 -> above DVAH (+53.77)\n  - Monthly: DVAH 26324.5211 / VWAP 25321.6411 / DVAL 24318.761 -> above DVAH (+535.73)\n  - Quarterly: DVAH 26320.5349 / VWAP 25318.7665 / DVAL 24316.9982 -> above DVAH (+539.72)\n  - Annual: DVAH 25971.1209 / VWAP 25217.1902 / DVAL 24463.2594 -> above DVAH (+889.13)\n\n**Analisis manual original (pre-open)**:\nNADRO MNQ 06-26 — PRE-MARKET 07:00 VET\nPrecio: 26860.25\nRegimen: imbalance bullish overnight\n\nNARRATIVA (N)\n- Macro bullish: +1495 pts vs yVWAP\n- Overnight: 26804 -> 26860 (+56 pts)\n- pVA 17/04 VAL 26739.75 / POC 26835.5\n  VAH 26861 (resistencia)\n- Precio EN pVAH 17/04\n\nACEPTACION (A)\n- EN pVAH 26861\n- Arriba pVAP 17/04 26835 (+25)\n- Arriba W-DVAH 26807 (+53)\n- Overnight high 26882 (07:00)\n\nDISTRIBUCION (D)\n- Imbalance bullish\n- Precio en resistencia pVAH\n- Decision point\n\nRITMO (R)\n- Subida progresiva overnight\n- Sin pullback significativo\n- High 26882 @ 07:00\n\nPRE-MARKET\n- US open 09:30 ET\n- pVAH = pivot del dia\n- Confluencia con overnight high\n\nNIVELES CLAVE\n- Overnight high 26882\n- pVAH 17/04 26861\n- Precio 26860\n- pVAP 17/04 26835.5\n- W-DVAH 26807.6\n- D-VWAP 26785\n- W-VWAP 26740\n- pVAL 17/04 26739.75\n- W-DVAL 26672\n\nSETUPS\nHYPO 1 BPB bearish grade B\n  Contexto: rechazo pVAH como resistencia\n  Fade overnight rally en exhaustion\n  E 26870 (rechazo)\n  S 26890 (arriba high)\n  T1 26835 pVAP 17/04 RR 1.8\n  T2 26807 W-DVAH RR 3.2\n  T3 26785 D-VWAP RR 4.3\n\nHYPO 2 RPB bullish grade B\n  Contexto: break pVAH con respeto\n  Alineado con macro fuerte\n  E 26875 (sobre break)\n  S 26855 (abajo pVAH)\n  T1 26920 RR 2.3\n  T2 26960 RR 4.3\n  T3 27000 RR 6.3\n\nNota: HYPO 1 si hay mecha de rechazo.\nHYPO 2 si break con volumen.",
+      "confluences": [],
+      "levels": [
+        {
+          "label": "overnight-high",
+          "price": 26882
+        },
+        {
+          "label": "pVAH-17/04",
+          "price": 26861
+        },
+        {
+          "label": "pVAP-17/04",
+          "price": 26835.5
+        },
+        {
+          "label": "wDVAH",
+          "price": 26807.6
+        },
+        {
+          "label": "VWAP",
+          "price": 26785
+        },
+        {
+          "label": "wVWAP",
+          "price": 26740
+        },
+        {
+          "label": "pVAL-17/04",
+          "price": 26739.75
+        },
+        {
+          "label": "wDVAL",
+          "price": 26672
+        }
+      ],
+      "hypos": [
+        {
+          "id": "h1",
+          "direction": "short",
+          "setup_type": "BPB-pVAH-17/04",
+          "entry": 26870,
+          "stop": 26923.7205,
+          "grade": "B",
+          "notes": "Rechazo pVAH 17/04 en resistencia. Fade del overnight rally.",
+          "targets": [
+            {
+              "label": "pVAP-17/04",
+              "price": 26835,
+              "rr": 0.65
+            },
+            {
+              "label": "wDVAH",
+              "price": 26807,
+              "rr": 1.17
+            },
+            {
+              "label": "VWAP",
+              "price": 26785,
+              "rr": 1.58
+            }
+          ],
+          "risk_pts": 53.72,
+          "outcome": {
+            "status": "filled",
+            "trade_status": "filled",
+            "triggered_at": "2026-04-21T10:10:00",
+            "stop_hit_at": null,
+            "targets_hit": [
+              0,
+              1,
+              2
+            ],
+            "targets_hit_before_stop": [
+              0,
+              1,
+              2
+            ],
+            "targets_hit_after_stop": [],
+            "setup_reached_t1": true,
+            "setup_reached_t2": true,
+            "setup_reached_t3": true,
+            "mae_pts": 15.0,
+            "mfe_pts": 318.25
+          },
+          "setup_companions": [],
+          "trading_horizon": "intraday",
+          "stop_reasoning": "Arriba del nearest resistance overnight-high=26882.0 | Arriba de overnight-high 26902.0 | Expandido a floor 0.20% price = 53.72 pts"
+        },
+        {
+          "id": "h2",
+          "direction": "long",
+          "setup_type": "RPB-pVAH-17/04",
+          "entry": 26875,
+          "stop": 26751.25,
+          "grade": "B",
+          "notes": "Break pVAH + respeto como soporte. Alineado macro bullish.",
+          "targets": [
+            {
+              "label": "extension",
+              "price": 26920,
+              "rr": 0.36
+            },
+            {
+              "label": "extension-mayor",
+              "price": 26960,
+              "rr": 0.69
+            },
+            {
+              "label": "round",
+              "price": 27000,
+              "rr": 1.01
+            }
+          ],
+          "risk_pts": 123.75,
+          "outcome": {
+            "status": "stopped_out",
+            "trade_status": "stopped_out",
+            "triggered_at": "2026-04-21T09:30:00",
+            "stop_hit_at": "2026-04-21T09:32:00",
+            "targets_hit": [],
+            "targets_hit_before_stop": [],
+            "targets_hit_after_stop": [],
+            "setup_reached_t1": false,
+            "setup_reached_t2": false,
+            "setup_reached_t3": false,
+            "mae_pts": 323.25,
+            "mfe_pts": 10.0
+          },
+          "setup_companions": [],
+          "trading_horizon": "intraday",
+          "stop_reasoning": "Debajo del nearest support pVAH-17/04=26861.0 | Debajo de overnight-low 26751.5"
+        }
+      ],
+      "snapshot_phase": "pit_open",
+      "nadro_context": {
+        "N_forward_bias": "bearish",
+        "N_prev_day_tpo": {
+          "prev_date": "2026-04-20",
+          "tpo": {
+            "poc": 26729.75,
+            "vah": 26765.5,
+            "val": 26660.5,
+            "range": 105.0
+          },
+          "extremes": {
+            "high": 26826.0,
+            "low": 26569.0,
+            "close": 26746.25
+          },
+          "features": {
+            "poor_high": false,
+            "weak_low": false,
+            "high_excess": true,
+            "low_excess": true,
+            "day_type": "trend day",
+            "close_vs_poc": "above POC"
+          },
+          "forward_bias": "bearish",
+          "reasons": [
+            "excess en high 26826.0 -> vendedores confirmados",
+            "excess en low 26569.0 -> compradores confirmados"
+          ]
+        },
+        "D_multi_tf_dva": {
+          "levels": [
+            {
+              "tf": "Daily",
+              "dvah": 26837.6224,
+              "vwap": 26783.1685,
+              "dval": 26728.7147,
+              "position": "above DVAH (+22.63)",
+              "zone": "above"
+            },
+            {
+              "tf": "Weekly",
+              "dvah": 26806.4836,
+              "vwap": 26739.0406,
+              "dval": 26671.5976,
+              "position": "above DVAH (+53.77)",
+              "zone": "above"
+            },
+            {
+              "tf": "Monthly",
+              "dvah": 26324.5211,
+              "vwap": 25321.6411,
+              "dval": 24318.761,
+              "position": "above DVAH (+535.73)",
+              "zone": "above"
+            },
+            {
+              "tf": "Quarterly",
+              "dvah": 26320.5349,
+              "vwap": 25318.7665,
+              "dval": 24316.9982,
+              "position": "above DVAH (+539.72)",
+              "zone": "above"
+            },
+            {
+              "tf": "Annual",
+              "dvah": 25971.1209,
+              "vwap": 25217.1902,
+              "dval": 24463.2594,
+              "position": "above DVAH (+889.13)",
+              "zone": "above"
+            }
+          ],
+          "above": 5,
+          "inside": 0,
+          "below": 0,
+          "contextual": "precio extendido arriba en 5/5 TFs - bias mean-revert bearish corto plazo"
+        }
+      }
+    }
+  ]
+}

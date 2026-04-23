@@ -192,18 +192,71 @@ def clear_print_output() -> dict:
     return _request("DELETE", "/print-output")
 
 
-def get_bars(instrument: str, tf: str = "1m", n: int = 50) -> dict:
-    """Últimas N barras del instrumento en el timeframe dado.
+def get_bars(
+    instrument: str,
+    tf: str = "1m",
+    n: int = 50,
+    from_date: str | None = None,
+    to_date: str | None = None,
+) -> dict:
+    """Barras del instrumento. Dos modos:
 
-    ``tf`` sufijos soportados: ``s`` segundos, ``m`` minutos, ``h`` horas (=60m),
-    ``d`` días, ``t`` ticks, ``v`` volumen, ``r`` rango.
-    Ejemplos: ``1m``, ``5m``, ``1h``, ``1d``, ``500t``.
+    - **Últimas N** (default): pasar ``n`` (max 10000). Latencia ~1-15s.
+    - **Rango por fechas**: pasar ``from_date`` y ``to_date`` en ISO
+      (``YYYY-MM-DD`` o ``YYYY-MM-DDTHH:MM:SS``). Sin cap de 10k — pedí el
+      rango completo que tengas en NT. Latencia hasta 60s para rangos grandes.
 
-    ``n`` máximo 2000. Latencia: ~1-15s (BarsRequest es asíncrono).
+    ``tf`` sufijos: ``s`` segundos, ``m`` minutos, ``h`` horas, ``d`` días,
+    ``t`` ticks, ``v`` volumen, ``r`` rango. Ejemplos: ``1m``, ``5m``, ``1h``.
     """
+    if from_date and to_date:
+        query = {"tf": tf, "from": from_date, "to": to_date}
+        timeout = 90
+    else:
+        query = {"tf": tf, "n": n}
+        timeout = 30
     return _request(
         "GET",
         f"/bars/{parse.quote(instrument, safe='')}",
-        query={"tf": tf, "n": n},
-        timeout=20,
+        query=query,
+        timeout=timeout,
     )
+
+
+def get_bars_with_ha(instrument: str, tf: str = "1m", n: int = 50) -> dict:
+    """Últimas N barras OHLCV + Heikin Ashi calculado server-side.
+
+    HA_close = (O+H+L+C)/4
+    HA_open  = (HA_open[prev] + HA_close[prev]) / 2
+    HA_high  = max(H, HA_open, HA_close)
+    HA_low   = min(L, HA_open, HA_close)
+    color    = 'BULL' si HA_close > HA_open else 'BEAR'
+
+    Devuelve misma estructura que get_bars pero cada bar tiene campos extra:
+    hao, hac, hah, hal, ha_color, ha_change (True si cambió de color vs bar previa).
+    """
+    result = get_bars(instrument, tf=tf, n=n)
+    if "error" in result or not result.get("bars"):
+        return result
+
+    bars = result["bars"]
+    prev_hao = None
+    prev_hac = None
+    prev_color = None
+    for b in bars:
+        hac = (b["o"] + b["h"] + b["l"] + b["c"]) / 4.0
+        if prev_hao is None:
+            hao = (b["o"] + b["c"]) / 2.0
+        else:
+            hao = (prev_hao + prev_hac) / 2.0
+        hah = max(b["h"], hao, hac)
+        hal = min(b["l"], hao, hac)
+        color = "BULL" if hac > hao else "BEAR"
+        b["hao"] = round(hao, 4)
+        b["hac"] = round(hac, 4)
+        b["hah"] = round(hah, 4)
+        b["hal"] = round(hal, 4)
+        b["ha_color"] = color
+        b["ha_change"] = prev_color is not None and color != prev_color
+        prev_hao, prev_hac, prev_color = hao, hac, color
+    return result
