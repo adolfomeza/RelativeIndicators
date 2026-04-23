@@ -7,6 +7,33 @@ Arquitectura de tres procesos:
 - `RelativeObserver.cs` — AddOn NinjaScript con HttpListener en `localhost:7891`
 - `RelativeNewsSquawk_Server/` — servidor Flask existente (no modificado en esta fase)
 
+## [0.6.1] — 2026-04-23
+
+Paginación por rango de fechas — rompe el cap de 10000 bars/request.
+
+### AddOn `RelativeObserver.cs`
+- `/bars/{instrument}` acepta ahora `from=YYYY-MM-DD&to=YYYY-MM-DD` (opcional).
+  Cuando vienen, usa el constructor `BarsRequest(instrument, from, to)` en
+  lugar de `BarsRequest(instrument, n)` — **sin cap**.
+- Timeout elevado a 60s cuando hay rango (40k+ bars tardan más).
+- Nuevo helper `TryParseIsoDate` acepta: `YYYY-MM-DD`, `YYYY-MM-DDTHH:mm:ss`,
+  `YYYY-MM-DDTHH:mm:ss.fff`, y variantes con espacio en lugar de `T`.
+- **Requiere F7 en NinjaTrader para recompilar el AddOn**.
+
+### Python `observer.get_bars`
+- Parámetros nuevos: `from_date`, `to_date` (ISO strings). Si ambos se pasan,
+  va al modo rango con timeout 90s.
+- Backward compatible: sin esos params funciona igual (modo `n`).
+
+### `vwap_confluence_backtest` — paginación automática
+- Detecta cuando `estimated_bars > 10000` y pagina en chunks de 30 días.
+- Concatena chunks, deduplica por timestamp, ordena cronológicamente.
+- Output añade `fetch_mode` (`"n"` o `"range"`) y `fetch_requests` (cuántas
+  llamadas HTTP).
+- Ejemplo 365 días × 1m = 525k bars → ~13 requests × ~4MB response.
+
+### Tools totales: 38 (sin cambio — solo mejora interna)
+
 ## [0.6.0] — 2026-04-23
 
 **Dual-Anchor VWAP Confluence Fade** — nueva tool de backtest baseline CRUDO

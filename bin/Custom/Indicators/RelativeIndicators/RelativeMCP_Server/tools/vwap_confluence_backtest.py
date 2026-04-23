@@ -773,6 +773,88 @@ def _find_bar_idx(bars: list[dict], bar_time: str) -> Optional[int]:
 
 
 # ---------------------------------------------------------------------------
+# Fetch con paginación por rango
+# ---------------------------------------------------------------------------
+
+
+_CHUNK_DAYS = 30  # chunk size para paginación en modo rango
+
+
+def _fetch_bars(
+    instrument: str,
+    tf: str,
+    days_back: int,
+    estimated_bars: int,
+):
+    """Devuelve (bars_list, meta) o ({"error": ...}, None).
+
+    Si ``estimated_bars <= 10000`` usa modo ``n`` (1 request). Si excede, usa
+    modo rango paginado en chunks de ``_CHUNK_DAYS`` días.
+    """
+    if estimated_bars <= 10000:
+        target_n = min(10000, estimated_bars)
+        data = observer.get_bars(instrument, tf=tf, n=target_n)
+        if "error" in data or not data.get("bars"):
+            return {
+                "error": data.get("error", "sin bars"),
+                "addon_reachable": data.get("addon_reachable", False),
+            }, None
+        meta = {
+            "mode": "n",
+            "requests": 1,
+            "bars_received": data.get("count", len(data["bars"])),
+        }
+        return data["bars"], meta
+
+    # Modo rango: anchor por la última bar disponible
+    anchor = observer.get_bars(instrument, tf=tf, n=1)
+    if "error" in anchor or not anchor.get("bars"):
+        return {
+            "error": "no se pudo anclar rango: " + str(anchor.get("error", "sin bars")),
+            "addon_reachable": anchor.get("addon_reachable", False),
+        }, None
+
+    end_dt = _parse_dt(anchor["bars"][-1]["t"])
+    start_dt = end_dt - timedelta(days=days_back)
+
+    all_bars: list[dict] = []
+    seen_times: set[str] = set()
+    cursor = start_dt
+    n_requests = 0
+    while cursor < end_dt:
+        chunk_end = min(cursor + timedelta(days=_CHUNK_DAYS), end_dt + timedelta(days=1))
+        chunk = observer.get_bars(
+            instrument,
+            tf=tf,
+            from_date=cursor.strftime("%Y-%m-%dT%H:%M:%S"),
+            to_date=chunk_end.strftime("%Y-%m-%dT%H:%M:%S"),
+        )
+        n_requests += 1
+        if "error" in chunk:
+            return {
+                "error": f"chunk {cursor.date()}..{chunk_end.date()}: {chunk['error']}",
+                "bars_so_far": len(all_bars),
+                "chunks_completed": n_requests - 1,
+            }, None
+        for b in chunk.get("bars", []):
+            if b["t"] not in seen_times:
+                seen_times.add(b["t"])
+                all_bars.append(b)
+        cursor = chunk_end
+
+    # Garantizar orden cronológico (chunks secuenciales ya lo dan)
+    all_bars.sort(key=lambda x: x["t"])
+    meta = {
+        "mode": "range",
+        "requests": n_requests,
+        "bars_received": len(all_bars),
+        "range_from": start_dt.strftime("%Y-%m-%d %H:%M:%S"),
+        "range_to": end_dt.strftime("%Y-%m-%d %H:%M:%S"),
+    }
+    return all_bars, meta
+
+
+# ---------------------------------------------------------------------------
 # Main entry
 # ---------------------------------------------------------------------------
 
@@ -805,27 +887,19 @@ def vwap_confluence_backtest(
     if bands_to_use is None:
         bands_to_use = ["SD2", "SD3"]
 
-    # 1. Fetch bars
-    # AddOn cap: 10000 bars/request. Cobertura en bars/day aprox (23h session):
-    #   1m → 1380/day ≈ 7.2 días  |  5m → 276/day ≈ 36 días
-    #  15m → 92/day ≈ 108 días    |  1h  → 23/day ≈ 434 días
-    # Para 1m se recomienda exportar CSV o usar tf más grueso para horizontes largos.
+    # 1. Fetch bars — modo N si cabe, paginado por rango si no
     if tf.endswith("m"):
         bars_per_day = 23 * 60 // int(tf.rstrip("m"))
     elif tf.endswith("h"):
         bars_per_day = 23 // int(tf.rstrip("h"))
     else:
-        bars_per_day = 1380  # default conservador (1m)
-    target_n = min(10000, (days_back + 2) * bars_per_day)
+        bars_per_day = 1380
 
-    data = observer.get_bars(instrument, tf=tf, n=target_n)
-    if "error" in data or not data.get("bars"):
-        return {
-            "error": data.get("error", "sin bars"),
-            "addon_reachable": data.get("addon_reachable", False),
-        }
+    estimated_bars = (days_back + 2) * bars_per_day
+    bars, fetch_meta = _fetch_bars(instrument, tf, days_back, estimated_bars)
+    if isinstance(bars, dict) and "error" in bars:
+        return bars
 
-    bars = data["bars"]
     for b in bars:
         b["dt"] = _parse_dt(b["t"])
 
@@ -928,7 +1002,9 @@ def vwap_confluence_backtest(
             "point_value": point_value,
         },
         "bars_analyzed": len(bars),
-        "bars_received": data.get("count", len(bars)),
+        "bars_received": fetch_meta.get("bars_received") if fetch_meta else len(bars),
+        "fetch_mode": fetch_meta.get("mode") if fetch_meta else "n",
+        "fetch_requests": fetch_meta.get("requests") if fetch_meta else 1,
         "effective_days_covered": effective_days,
         "first_bar": bars[0]["t"] if bars else None,
         "last_bar": bars[-1]["t"] if bars else None,
