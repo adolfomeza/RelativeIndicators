@@ -7,6 +7,107 @@ Arquitectura de tres procesos:
 - `RelativeObserver.cs` — AddOn NinjaScript con HttpListener en `localhost:7891`
 - `RelativeNewsSquawk_Server/` — servidor Flask existente (no modificado en esta fase)
 
+## [0.6.0] — 2026-04-23
+
+**Dual-Anchor VWAP Confluence Fade** — nueva tool de backtest baseline CRUDO
+(sin filtro de sentimiento), independiente del stack NADRO. Primera fase para
+validar edge puro antes de cruzar con clasificador rotacional/tendencial.
+
+### Nueva tool: `vwap_confluence_backtest`
+
+Estrategia: fade en confluencias entre bandas de 2 VWAPs de sesión corriendo
+en paralelo — **ETH** (reset 18:00 ET) y **RTH** (09:30-16:00 ET).
+
+**Máquina de estados**:
+```
+IDLE
+  ↓ (wick ≥ touch_wick_ticks_inside dentro de confluencia inferior/superior)
+LONG_ARMED / SHORT_ARMED
+  ↓ (Signal 2: close - anchored_vwap ≥ signal2_threshold_ticks)
+IN_TRADE
+  ↓ (target dinámico / stop / close_at_rth_end)
+IDLE  → re-arm posible en el mismo bar
+```
+
+**Confluence zone**: al menos un par (ETH_SDn, RTH_SDm) con
+`|ETH - RTH| ≤ confluence_tolerance_ticks`. La zona es `[min, max]` sobre
+los niveles calificantes.
+
+**Anchor modes**:
+- `TOUCH` (default, B): VWAP anclado en la vela del toque. Re-ancla si hay
+  nuevo low/high durante ARMED (long → new min; short → new max).
+- `SESSION_EXTREME` (A): usa el Low/High absoluto de la sesión ETH.
+
+**Entry**: close del bar de Signal 2.
+**Stop**: Low[anchor_final] - 1 tick (long) / High[anchor_final] + 1 tick (short).
+**Target dinámico** (evaluado por bar post-entry):
+1. Confluencia opuesta activa que el bar toca → TP en borde cercano
+2. Fallback: bar toca SD2 ETH del lado opuesto → TP ahí
+
+**Cancelación** (`cancel_on_central_cross=True`): durante ARMED, close cruza
+cualquier VWAP central (ETH o RTH) en contra del fade → vuelta a IDLE.
+
+**Re-arm**: tras TP/SL, IDLE inmediato. Nueva confluencia tocada → nuevo setup
+(sin límite de trades/día).
+
+**Cierre forzado**: si `close_at_rth_end`, exit al precio de la bar que cruza
+`rth_end` (default 16:00 ET).
+
+### Parámetros (todos configurables)
+| Parámetro | Default |
+|-----------|---------|
+| `instrument` | `"MES 06-26"` |
+| `days_back` | 365 |
+| `tf` | `"1m"` |
+| `eth_reset_hour` | 18 |
+| `rth_start` / `rth_end` | `"09:30"` / `"16:00"` |
+| `window_start` / `window_end` | `"09:30"` / `"15:00"` |
+| `confluence_tolerance_ticks` | 1 |
+| `bands_to_use` | `["SD2", "SD3"]` |
+| `signal2_threshold_ticks` | 1 |
+| `touch_wick_ticks_inside` | 1 |
+| `anchor_mode` | `"TOUCH"` |
+| `close_at_rth_end` | `True` |
+| `cancel_on_central_cross` | `True` |
+| `tick_size` | 0.25 |
+| `point_value` | 5.0 |
+
+### Output
+```
+{
+  instrument, config (todos los params),
+  bars_analyzed, bars_received, effective_days_covered,
+  first_bar, last_bar,
+  setups_armed_total, setups_cancelled_by_central_cross, setups_triggered,
+  stats: { n_trades, win_rate, total_pnl_pts/usd, profit_factor, avg_win/loss,
+           largest_win/loss, expectancy_pts, max_drawdown_pts, pnl_curve },
+  stats_by_direction: { long: {...}, short: {...} },
+  stats_by_exit_reason: { target: {...}, stop: {...}, time_out_rth: {...} },
+  daily_breakdown: [ { date, trades, wins, losses, pnl_pts, pnl_usd } ],
+  trades: [ {
+      session_date, direction, state_transitions,
+      touch_bar_time, touch_price, anchor_bar_time, anchor_price,
+      entry_bar_time, entry_price, stop, target_hit, target_type,
+      exit_bar_time, exit_price, exit_reason,
+      pnl_pts, bars_held, mfe_pts, mae_pts
+  } ]
+}
+```
+
+### Limitación conocida (transparentada en output)
+`observer.get_bars` retorna **máximo 2000 bars/request**. En `tf=1m` eso cubre
+~2 días de trading. Para horizontes largos con granularidad 1m se necesitaría
+un feed histórico alternativo (ej. CSV exportado desde NT). El output reporta
+`bars_received` y `effective_days_covered` para hacer explícita la cobertura.
+
+### Filosofía
+Baseline **crudo** sin filtros — medir el edge puro del setup estructural. En
+fase 2 se cruzará con un clasificador de "día rotacional vs tendencial" usando
+`daily_breakdown` como input de label.
+
+### Tools totales: 38
+Nuevas v0.6.0: `vwap_confluence_backtest`.
+
 ## [0.5.0] — 2026-04-20
 
 Backtest NADRO con los 4 setups + visualización PNG + ventana configurable.

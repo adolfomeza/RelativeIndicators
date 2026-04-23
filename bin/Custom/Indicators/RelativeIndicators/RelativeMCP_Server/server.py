@@ -32,6 +32,8 @@ from .tools import nadro as nadro_tool
 from .tools import observer
 from .tools import tpo_cva as tpo_cva_tool
 from .tools import vwap_levels as vwap
+from .tools import delta_history as delta_history_tool
+from .tools import vwap_confluence_backtest as vwap_confluence_tool
 
 
 mcp = FastMCP(
@@ -141,6 +143,68 @@ def list_confluences(instrument: str, only_active: bool = True) -> dict:
     Por default solo los activos. Con ``only_active=False`` incluye históricos.
     """
     return vwap.list_confluences(instrument=instrument, only_active=only_active)
+
+
+# ---------------------------------------------------------------------------
+# Delta history (Apteros backtest)
+# ---------------------------------------------------------------------------
+
+
+@mcp.tool
+def list_delta_history() -> dict:
+    """Archivos ``DeltaHistory/{INSTRUMENT}_{YYYY-MM-DD}.jsonl`` disponibles
+    exportados por RelativeDelta. Agrupados por instrumento.
+    """
+    return delta_history_tool.list_delta_history_files()
+
+
+@mcp.tool
+def read_delta_history(
+    instrument: str,
+    date_start: str | None = None,
+    date_end: str | None = None,
+    sample_every: int = 1,
+) -> dict:
+    """Lee bars históricas del cumulative delta para un instrumento + rango.
+
+    Cada bar cerrado tiene cdOpen/cdHigh/cdLow/cdClose + bar_delta + anchors
+    por sesión (us/eu/asia/global). El `global` es el reset ETH (exchange reset
+    17:00 ET) — referente canónico Apteros.
+
+    Args:
+        instrument: master symbol (MNQ, MES, etc.)
+        date_start/date_end: YYYY-MM-DD. None = sin límite.
+        sample_every: 1=todas las bars, N=cada N-ésima (reduce payload).
+    """
+    return delta_history_tool.read_delta_history(
+        instrument=instrument,
+        date_start=date_start,
+        date_end=date_end,
+        sample_every=sample_every,
+    )
+
+
+@mcp.tool
+def delta_neutralization_scan(
+    instrument: str,
+    date_start: str | None = None,
+    date_end: str | None = None,
+    session: str = "global",
+) -> dict:
+    """Detecta cruces del cumulative delta por zero line (fresh delta
+    neutralization candidatas Apteros) en el rango dado.
+
+    `session`: "global" (ETH reset — canónico Apteros), "us", "eu", "asia".
+
+    Devuelve lista de eventos con timestamp, precio, dirección del cruce,
+    bars desde último cruce, flag fresh (≥10 bars desde cruce previo).
+    """
+    return delta_history_tool.delta_neutralization_scan(
+        instrument=instrument,
+        date_start=date_start,
+        date_end=date_end,
+        session=session,
+    )
 
 
 @mcp.tool
@@ -661,6 +725,98 @@ def nadro_backtest_with_charts(
         tf=tf,
         window_start=window_start,
         window_end=window_end,
+    )
+
+
+@mcp.tool
+def vwap_confluence_backtest(
+    instrument: str = "MES 06-26",
+    days_back: int = 365,
+    tf: str = "1m",
+    eth_reset_hour: int = 18,
+    rth_start: str = "09:30",
+    rth_end: str = "16:00",
+    window_start: str = "09:30",
+    window_end: str = "15:00",
+    confluence_tolerance_ticks: int = 1,
+    bands_to_use: list | None = None,
+    signal2_threshold_ticks: int = 1,
+    touch_wick_ticks_inside: int = 1,
+    anchor_mode: str = "TOUCH",
+    close_at_rth_end: bool = True,
+    cancel_on_central_cross: bool = True,
+    tick_size: float = 0.25,
+    point_value: float = 5.0,
+) -> dict:
+    """**Dual-Anchor VWAP Confluence Fade** — backtest baseline CRUDO (sin filtro).
+
+    Estrategia:
+    - 2 VWAPs dinámicos en paralelo: **ETH** (reset 18:00 ET) + **RTH** (09:30-16:00)
+    - Bandas SDn up/dn por cada VWAP
+    - Zona de operación: confluencia ETH∩RTH entre bandas ``bands_to_use``
+      (default ``["SD2","SD3"]``) dentro de ``confluence_tolerance_ticks``
+    - Máquina: IDLE → (wick ≥ ``touch_wick_ticks_inside`` en confluencia)
+      → ARMED → (Signal 2: close - anchored_vwap ≥ ``signal2_threshold_ticks``)
+      → IN_TRADE → (target dinámico / stop / EOD)
+
+    Anchor modes:
+    - ``TOUCH`` (default): VWAP anclado en bar del toque, re-ancla ante nuevo extremo
+    - ``SESSION_EXTREME``: usa el low/high absoluto de la sesión ETH
+
+    Entry: close del bar Signal 2.
+    Stop: Low[anchor_final]-1tick (long) / High[anchor_final]+1tick (short).
+    Target: (1) confluencia opuesta activa si el bar la toca, (2) fallback SD2 ETH opuesto.
+
+    Cancelación (si ``cancel_on_central_cross``): durante ARMED, close cruza VWAP
+    central (ETH o RTH) en contra del fade → vuelta a IDLE.
+
+    Re-arm automático tras TP/SL sin límite de trades/día. Cierre forzado al
+    ``rth_end`` si ``close_at_rth_end`` y el trade sigue abierto.
+
+    **Limitación**: ``observer.get_bars`` retorna máximo 2000 bars/request. En
+    ``tf=1m`` eso cubre ~2 días de trading. El output reporta ``bars_received`` y
+    ``effective_days_covered`` para transparencia.
+
+    Args:
+        instrument: FullName (``"MES 06-26"``) o master symbol.
+        days_back: días hacia atrás a filtrar (tras fetch).
+        tf: timeframe (``"1m"``, ``"5m"``, etc.). Default 1m para granularidad máxima.
+        eth_reset_hour: hora local reset sesión ETH (default 18).
+        rth_start/rth_end: ventana del VWAP RTH ``HH:MM`` (default 09:30-16:00).
+        window_start/window_end: ventana donde armar/disparar setups (default 09:30-15:00).
+        confluence_tolerance_ticks: tolerancia para confluencia ETH-RTH (default 1 tick).
+        bands_to_use: lista de bandas a considerar (default ``["SD2","SD3"]``).
+        signal2_threshold_ticks: ticks de despegue vs anchored VWAP para disparar (default 1).
+        touch_wick_ticks_inside: penetración mínima en ticks para registrar toque (default 1).
+        anchor_mode: ``"TOUCH"`` (default) o ``"SESSION_EXTREME"``.
+        close_at_rth_end: si True, cierra trade abierto al rth_end (default True).
+        cancel_on_central_cross: cancela ARMED si close cruza VWAP central (default True).
+        tick_size: tamaño de tick del instrumento (default 0.25 = MES/MNQ).
+        point_value: USD por punto (default 5.0 = MES).
+
+    Returns: dict con ``config``, ``bars_analyzed``, ``setups_armed_total/cancelled/triggered``,
+    ``stats`` globales, ``stats_by_direction`` (long/short), ``stats_by_exit_reason``
+    (target/stop/time_out_rth), ``daily_breakdown``, y lista completa de ``trades``
+    con state_transitions + MFE/MAE por trade.
+    """
+    return vwap_confluence_tool.vwap_confluence_backtest(
+        instrument=instrument,
+        days_back=days_back,
+        tf=tf,
+        eth_reset_hour=eth_reset_hour,
+        rth_start=rth_start,
+        rth_end=rth_end,
+        window_start=window_start,
+        window_end=window_end,
+        confluence_tolerance_ticks=confluence_tolerance_ticks,
+        bands_to_use=bands_to_use,
+        signal2_threshold_ticks=signal2_threshold_ticks,
+        touch_wick_ticks_inside=touch_wick_ticks_inside,
+        anchor_mode=anchor_mode,
+        close_at_rth_end=close_at_rth_end,
+        cancel_on_central_cross=cancel_on_central_cross,
+        tick_size=tick_size,
+        point_value=point_value,
     )
 
 
