@@ -94,11 +94,19 @@ cualquier VWAP central (ETH o RTH) en contra del fade → vuelta a IDLE.
 }
 ```
 
-### Limitación conocida (transparentada en output)
-`observer.get_bars` retorna **máximo 2000 bars/request**. En `tf=1m` eso cubre
-~2 días de trading. Para horizontes largos con granularidad 1m se necesitaría
-un feed histórico alternativo (ej. CSV exportado desde NT). El output reporta
-`bars_received` y `effective_days_covered` para hacer explícita la cobertura.
+### Cobertura del feed (transparentada en output)
+`observer.get_bars` cap **10000 bars/request**. Cobertura aprox (sesión ETH 23h):
+
+| tf | bars/day | cobertura max |
+|----|----------|---------------|
+| 1m | 1380 | ~7 días |
+| 5m | 276 | ~36 días |
+| 15m | 92 | ~108 días |
+| 1h | 23 | ~434 días (~1.2 años) |
+
+Para horizontes largos con granularidad 1m se requiere feed CSV alternativo.
+Output reporta `bars_received` y `effective_days_covered` para hacer explícita
+la cobertura real obtenida.
 
 ### Filosofía
 Baseline **crudo** sin filtros — medir el edge puro del setup estructural. En

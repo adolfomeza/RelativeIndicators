@@ -773,9 +773,9 @@ def vwap_confluence_backtest(
     Re-arm automático tras TP/SL sin límite de trades/día. Cierre forzado al
     ``rth_end`` si ``close_at_rth_end`` y el trade sigue abierto.
 
-    **Limitación**: ``observer.get_bars`` retorna máximo 2000 bars/request. En
-    ``tf=1m`` eso cubre ~2 días de trading. El output reporta ``bars_received`` y
-    ``effective_days_covered`` para transparencia.
+    **Cobertura**: ``observer.get_bars`` cap 10000 bars/request. Aproximado:
+    ``1m`` → ~7 días | ``5m`` → ~36 días | ``15m`` → ~108 días | ``1h`` → ~434 días.
+    Output reporta ``bars_received`` y ``effective_days_covered`` para transparencia.
 
     Args:
         instrument: FullName (``"MES 06-26"``) o master symbol.

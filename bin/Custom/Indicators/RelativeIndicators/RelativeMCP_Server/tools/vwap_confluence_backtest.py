@@ -37,10 +37,13 @@ Re-arm: tras TP/SL, IDLE inmediato. Nueva confluencia tocada → nuevo setup
 Cierre forzado: si ``close_at_rth_end``, exit al precio de la bar que cruza
 ``rth_end`` (default 16:00 ET).
 
-**Limitación**: ``observer.get_bars`` devuelve máximo 2000 bars/request. En
-``tf=1m`` eso cubre ~2 días de trading. Para 365 días se necesitaría un feed
-histórico distinto. Este backtest reporta ``bars_received`` y
-``effective_days_covered`` para hacer la limitación transparente.
+**Cobertura**: ``observer.get_bars`` cap 10000 bars/request. Cobertura aproximada
+(sesión ETH 23h):
+
+- ``1m`` → ~7 días | ``5m`` → ~36 días | ``15m`` → ~108 días | ``1h`` → ~434 días
+
+Para horizontes largos con granularidad 1m se necesita feed CSV alternativo.
+Output reporta ``bars_received`` y ``effective_days_covered`` para transparencia.
 """
 from __future__ import annotations
 
@@ -803,9 +806,17 @@ def vwap_confluence_backtest(
         bands_to_use = ["SD2", "SD3"]
 
     # 1. Fetch bars
-    # En 1m, 23h session × 60 min ≈ 1380 bars/day. Max 2000 del observer.
-    bars_per_day = 23 * 60 // int(tf.rstrip("m")) if tf.endswith("m") else 2000
-    target_n = min(2000, (days_back + 2) * bars_per_day)
+    # AddOn cap: 10000 bars/request. Cobertura en bars/day aprox (23h session):
+    #   1m → 1380/day ≈ 7.2 días  |  5m → 276/day ≈ 36 días
+    #  15m → 92/day ≈ 108 días    |  1h  → 23/day ≈ 434 días
+    # Para 1m se recomienda exportar CSV o usar tf más grueso para horizontes largos.
+    if tf.endswith("m"):
+        bars_per_day = 23 * 60 // int(tf.rstrip("m"))
+    elif tf.endswith("h"):
+        bars_per_day = 23 // int(tf.rstrip("h"))
+    else:
+        bars_per_day = 1380  # default conservador (1m)
+    target_n = min(10000, (days_back + 2) * bars_per_day)
 
     data = observer.get_bars(instrument, tf=tf, n=target_n)
     if "error" in data or not data.get("bars"):
