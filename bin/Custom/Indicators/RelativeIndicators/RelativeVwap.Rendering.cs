@@ -29,7 +29,6 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		private SharpDX.Direct2D1.SolidColorBrush _cachedGoldenrodBrush;
 		private SharpDX.Direct2D1.SolidColorBrush _cachedLimeGreenBrush;
 		private SharpDX.Direct2D1.StrokeStyle _cachedDashStyle;
-		private bool _diagPreviousVwapLogged; // v3.0.2: One-shot diagnostic flag
 		// v3.0.4: Health score brushes (green/yellow/red gradient)
 		private SharpDX.Direct2D1.SolidColorBrush _cachedHealthGreenBrush;
 		private SharpDX.Direct2D1.SolidColorBrush _cachedHealthYellowBrush;
@@ -131,6 +130,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                 // v3.2.0: Auto mode badge
                 _cachedAutoModeFmt = new SharpDX.DirectWrite.TextFormat(dwFactory, "Consolas", SharpDX.DirectWrite.FontWeight.Bold, SharpDX.DirectWrite.FontStyle.Normal, 12f);
                 _cachedAutoModeBrush = new SharpDX.Direct2D1.SolidColorBrush(RenderTarget, SharpDX.Color.White);
+
+                // v3.3.0: Market Structure brushes
+                if (ShowStructure) CreateStructureBrushes();
 
                 // Cache dash stroke style
                 var dashProps = new SharpDX.Direct2D1.StrokeStyleProperties()
@@ -380,6 +382,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             // v3.0.2: Render Period Dividers ALWAYS (independent of personality - daily ETH in Intraday, period boundaries in other modes)
             RenderPeriodDividers(chartControl, chartScale);
 
+            // v3.3.0: Market Structure (zigzag, labels, BOS/CHoCH)
+            if (ShowStructure) RenderStructure(chartControl, chartScale);
+
             // Draw Anchored VWAPs (High/Low)
             if (hasHighVWAP)
             {
@@ -393,51 +398,31 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             }
 
             // v3.0.4: Health score labels for active VWAPs
+            // v3.3.1: Posicionar a la derecha de la ultima vela usando offset en pixeles
             if (ShowVwapHealth)
             {
-                int rightEdgeBar = Math.Min(CurrentBar, ChartBars.ToIndex);
-                int labelBar = Math.Max(ChartBars.FromIndex, rightEdgeBar + HealthLabelOffsetBars);
+                int lastVisibleBar = Math.Min(CurrentBar, ChartBars.ToIndex);
+                float lastBarX = chartControl.GetXByBarIndex(ChartBars, lastVisibleBar);
+                // Calcular ancho de 1 barra para usar como unidad de offset
+                float barWidth = (lastVisibleBar > ChartBars.FromIndex)
+                    ? lastBarX - chartControl.GetXByBarIndex(ChartBars, lastVisibleBar - 1)
+                    : 10f;
+                // Offset positivo = a la derecha de la ultima vela
+                float healthX = lastBarX + barWidth * Math.Abs(HealthLabelOffsetBars);
+
                 if (hasHighVWAP && sessionHighBarIdx >= 0)
                 {
-                    float hx = chartControl.GetXByBarIndex(ChartBars, labelBar);
                     double hScore = GetVwapHealthScore(true);
-                    RenderHealthLabel(hx, currentHighVWAP, hScore, _highVwapTouchCount, chartControl, chartScale, true);
+                    RenderHealthLabel(healthX, currentHighVWAP, hScore, _highVwapTouchCount, chartControl, chartScale, true);
                 }
                 if (hasLowVWAP && sessionLowBarIdx >= 0)
                 {
-                    float lx = chartControl.GetXByBarIndex(ChartBars, labelBar);
                     double lScore = GetVwapHealthScore(false);
-                    RenderHealthLabel(lx, currentLowVWAP, lScore, _lowVwapTouchCount, chartControl, chartScale, false);
+                    RenderHealthLabel(healthX, currentLowVWAP, lScore, _lowVwapTouchCount, chartControl, chartScale, false);
                 }
             }
 
-            // v3.2.0: Auto mode badge — top-left corner showing current ATR mode
-            if (StudyTemplate == TouchStudyTemplate.Auto && _lastAutoMode.Length > 0
-                && _cachedAutoModeFmt != null && _cachedAutoModeBrush != null && _cachedDetailBgBrush != null)
-            {
-                string atrVal = (atr != null && CurrentBar >= 14) ? string.Format("{0:F1}", atr[0]) : "?";
-                string badgeText = string.Format("AUTO: {0}  ATR={1}  SL={2} TP={3}", _lastAutoMode, atrVal, TouchStudySLTicks, TouchStudyTPTicks);
-                using (var layout = new SharpDX.DirectWrite.TextLayout(dwFactory, badgeText, _cachedAutoModeFmt, 400, 20))
-                {
-                    float tw = layout.Metrics.Width;
-                    float th = layout.Metrics.Height;
-                    float chartW = (float)chartControl.ActualWidth;
-                    float chartH = chartScale.GetYByValue(chartScale.MinValue);
-                    float px = chartW - tw - 12f;
-                    float py = chartH - th - 8f;
-                    var bgRect = new SharpDX.RectangleF(px - 3, py - 2, tw + 6, th + 4);
-                    RenderTarget.FillRectangle(bgRect, _cachedDetailBgBrush);
-
-                    // Color by mode: green=BAJA_VOL, white=NORMAL, orange=ALTA_VOL
-                    SharpDX.Color modeColor;
-                    if (_lastAutoMode == "BAJA_VOL") modeColor = new SharpDX.Color(0, 200, 83);
-                    else if (_lastAutoMode == "ALTA_VOL") modeColor = new SharpDX.Color(255, 152, 0);
-                    else modeColor = SharpDX.Color.White;
-
-                    using (var modeBrush = new SharpDX.Direct2D1.SolidColorBrush(RenderTarget, modeColor))
-                        RenderTarget.DrawTextLayout(new SharpDX.Vector2(px, py), layout, modeBrush);
-                }
-            }
+            // v3.2.0: Auto mode badge — REMOVIDO (ensuciaba el chart)
 
             // v3.0.5: Touch study labels for active VWAPs
             // v3.2.0 perf: Only render active touches here. Completed ones are already in historicalHighs/Lows.
@@ -450,17 +435,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             // v3.0.3: IsSessionEnd anchors use PreviousVWAPColor (white) — these are the final VWAP of each completed session
             if (historicalHighs != null && historicalHighs.Count > 0)
             {
-                // v3.0.3 DIAG: One-shot log
-                if (!_diagPreviousVwapLogged && ShowDebugLogs)
-                {
-                    _diagPreviousVwapLogged = true;
-                    int sessionEndCount = 0;
-                    for (int i = 0; i < historicalHighs.Count; i++)
-                        if (historicalHighs[i].IsSessionEnd) sessionEndCount++;
-                    Print(string.Format("[DIAG v3.0.3] PreviousVWAP: histHighs={0} sessionEnds={1} prevBrush={2}",
-                        historicalHighs.Count, sessionEndCount,
-                        (_cachedPreviousVwapBrush != null ? "OK" : "NULL")));
-                }
+
 
                 for (int h = 0; h < historicalHighs.Count; h++)
                 {
@@ -822,12 +797,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
         {
             if (RenderTarget == null || dwFactory == null) return;
 
-            // Build bar: 7 blocks, score capped at 10
-            double cappedScore = Math.Min(score, 10.0);
-            int filledBlocks = (int)Math.Round(cappedScore * 7.0 / 10.0);
-            filledBlocks = Math.Max(0, Math.Min(7, filledBlocks));
-            string bar = new string('\u2588', filledBlocks) + new string('\u2591', 7 - filledBlocks);
-            string labelText = string.Format("{0:F1} {1}", score, bar);
+            string labelText = string.Format("{0:F1}", score);
 
             // Select color brush based on score
             SharpDX.Direct2D1.SolidColorBrush brush;
@@ -1350,10 +1320,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                 float xEnd1 = chartControl.GetXByBarIndex(ChartBars, seg1End);
                 float y = (float)chartScale.GetYByValue(price);
 
-                using(var dxBrush = lineColor.ToDxBrush(RenderTarget))
-                {
+                // PERF: usar cache de brushes en lugar de new+dispose por frame
+                var dxBrush = GetCachedDxBrush(lineColor);
+                if (dxBrush != null)
                     RenderTarget.DrawLine(new SharpDX.Vector2(x1, y), new SharpDX.Vector2(xEnd1, y), dxBrush, SessionLevelThickness);
-                }
 
                 float finalLabelX = xEnd1;
                 Brush finalLabelBrush = labelColor;
@@ -1486,8 +1456,40 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             }
         }
 
+        // PERF: cache genérico de brushes WPF→DX para evitar new Brush por frame.
+        // Usado por GetCachedDxBrush() en hot path de renders (sessions, dividers, etc).
+        private Dictionary<System.Windows.Media.Brush, SharpDX.Direct2D1.Brush> _genericDxBrushCache;
+
+        /// <summary>
+        /// Devuelve un dx brush cacheado para una WPF Brush. Si no existe en cache,
+        /// lo crea y lo guarda. Reusa el mismo dx brush mientras el render target esté vivo.
+        /// Disposed automáticamente en DisposeCachedBrushes.
+        /// </summary>
+        private SharpDX.Direct2D1.Brush GetCachedDxBrush(System.Windows.Media.Brush wpfBrush)
+        {
+            if (wpfBrush == null || RenderTarget == null) return null;
+            if (_genericDxBrushCache == null)
+                _genericDxBrushCache = new Dictionary<System.Windows.Media.Brush, SharpDX.Direct2D1.Brush>();
+
+            SharpDX.Direct2D1.Brush dx;
+            if (_genericDxBrushCache.TryGetValue(wpfBrush, out dx) && dx != null && !dx.IsDisposed)
+                return dx;
+
+            dx = wpfBrush.ToDxBrush(RenderTarget);
+            _genericDxBrushCache[wpfBrush] = dx;
+            return dx;
+        }
+
         private void DisposeCachedBrushes()
         {
+            // PERF: limpiar cache genérico primero
+            if (_genericDxBrushCache != null)
+            {
+                foreach (var kv in _genericDxBrushCache)
+                    kv.Value?.Dispose();
+                _genericDxBrushCache.Clear();
+            }
+
             _cachedHighVwapBrush?.Dispose(); _cachedHighVwapBrush = null;
             _cachedLowVwapBrush?.Dispose(); _cachedLowVwapBrush = null;
             _cachedHistoricalBrush?.Dispose(); _cachedHistoricalBrush = null;
@@ -1523,6 +1525,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             // v3.2.0: Auto mode badge
             _cachedAutoModeFmt?.Dispose(); _cachedAutoModeFmt = null;
             _cachedAutoModeBrush?.Dispose(); _cachedAutoModeBrush = null;
+            // v3.3.0: Market Structure
+            DisposeStructureBrushes();
         }
 
         // v3.0.0: Render Period Levels (Weekly, Monthly, Quarterly, Yearly)
@@ -1627,12 +1631,13 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                         int visibleMitigationIdx = Math.Min(mitigationIdx, ChartBars.ToIndex);
                         float mitigationX = chartControl.GetXByBarIndex(ChartBars, visibleMitigationIdx);
 
-                        SharpDX.Direct2D1.Brush solidBrush = lineColor.ToDxBrush(RenderTarget);
-                        RenderTarget.DrawLine(
-                            new SharpDX.Vector2(startX, y),
-                            new SharpDX.Vector2(mitigationX, y),
-                            solidBrush, SessionLevelThickness);
-                        solidBrush?.Dispose();
+                        // PERF: cached brush
+                        var solidBrush = GetCachedDxBrush(lineColor);
+                        if (solidBrush != null)
+                            RenderTarget.DrawLine(
+                                new SharpDX.Vector2(startX, y),
+                                new SharpDX.Vector2(mitigationX, y),
+                                solidBrush, SessionLevelThickness);
 
                         // Draw gray dashed line from mitigation to period end (only if period end is beyond mitigation)
                         if (periodEndIdx > mitigationIdx && _cachedGrayBrush != null && _cachedDashStyle != null)
@@ -1654,9 +1659,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                         SharpDX.Vector2 startPoint = new SharpDX.Vector2(startX, y);
                         SharpDX.Vector2 endPoint = new SharpDX.Vector2(endX, y);
 
-                        SharpDX.Direct2D1.Brush dxBrush = lineColor.ToDxBrush(RenderTarget);
-                        RenderTarget.DrawLine(startPoint, endPoint, dxBrush, SessionLevelThickness);
-                        dxBrush?.Dispose();
+                        // PERF: cached brush
+                        var dxBrush = GetCachedDxBrush(lineColor);
+                        if (dxBrush != null)
+                            RenderTarget.DrawLine(startPoint, endPoint, dxBrush, SessionLevelThickness);
                     }
 
                     // Add label at the right end
@@ -1709,12 +1715,13 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                         int visibleMitigationIdx = Math.Min(mitigationIdx, ChartBars.ToIndex);
                         float mitigationX = chartControl.GetXByBarIndex(ChartBars, visibleMitigationIdx);
 
-                        SharpDX.Direct2D1.Brush solidBrush = lineColor.ToDxBrush(RenderTarget);
-                        RenderTarget.DrawLine(
-                            new SharpDX.Vector2(startX, y),
-                            new SharpDX.Vector2(mitigationX, y),
-                            solidBrush, SessionLevelThickness);
-                        solidBrush?.Dispose();
+                        // PERF: cached brush
+                        var solidBrush = GetCachedDxBrush(lineColor);
+                        if (solidBrush != null)
+                            RenderTarget.DrawLine(
+                                new SharpDX.Vector2(startX, y),
+                                new SharpDX.Vector2(mitigationX, y),
+                                solidBrush, SessionLevelThickness);
 
                         // Draw gray dashed line from mitigation to period end (only if period end is beyond mitigation)
                         if (periodEndIdx > mitigationIdx && _cachedGrayBrush != null && _cachedDashStyle != null)
@@ -1736,9 +1743,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                         SharpDX.Vector2 startPoint = new SharpDX.Vector2(startX, y);
                         SharpDX.Vector2 endPoint = new SharpDX.Vector2(endX, y);
 
-                        SharpDX.Direct2D1.Brush dxBrush = lineColor.ToDxBrush(RenderTarget);
-                        RenderTarget.DrawLine(startPoint, endPoint, dxBrush, SessionLevelThickness);
-                        dxBrush?.Dispose();
+                        // PERF: cached brush
+                        var dxBrush = GetCachedDxBrush(lineColor);
+                        if (dxBrush != null)
+                            RenderTarget.DrawLine(startPoint, endPoint, dxBrush, SessionLevelThickness);
                     }
 
                     // Add label at the right end
@@ -1808,8 +1816,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
             if (!ShowPeriodDividers || periodDividerBars == null || periodDividerBars.Count == 0) return;
             if (RenderTarget == null || ChartBars == null) return;
 
-            // v3.1.2 perf: Create divider brush ONCE per frame (not per-divider)
-            SharpDX.Direct2D1.Brush dividerBrush = PeriodDividerColor.ToDxBrush(RenderTarget);
+            // v3.2.x perf: brush cacheado en GetCachedDxBrush (reusa entre frames, no por frame)
+            var dividerBrush = GetCachedDxBrush(PeriodDividerColor);
+            if (dividerBrush == null) return;
 
             foreach (int barIdx in periodDividerBars)
             {
@@ -1862,8 +1871,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                     pathGeometry.Dispose();
                 }
             }
-            // v3.1.2 perf: Dispose shared divider brush once (after loop)
-            dividerBrush?.Dispose();
+            // v3.2.x perf: NO dispose — el brush está en _genericDxBrushCache, se reusa.
+            // DisposeCachedBrushes() lo libera al cambiar RenderTarget.
         }
 
         #endregion

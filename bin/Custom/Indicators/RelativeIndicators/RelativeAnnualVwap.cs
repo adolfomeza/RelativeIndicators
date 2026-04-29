@@ -288,6 +288,29 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				else
 					calculateFromPriceData = false;
 		    	sessionIterator = new SessionIterator(Bars);
+
+				// Replay support: registrar query handler para snapshots historicos.
+				try
+				{
+					string _replayKey = "RelativeAnnualVwap:" + Instrument.FullName;
+					NinjaTrader.NinjaScript.AddOns.RelativeIndicatorRegistry.RegisterQueryHandler(_replayKey,
+						asOf =>
+						{
+							var dict = new System.Collections.Generic.Dictionary<string, object>();
+							if (Bars == null || CurrentBar < 0) { dict["error"] = "no bars"; return dict; }
+							int idx = -1;
+							for (int i = 0; i <= CurrentBar; i++) { if (Bars.GetTime(i) <= asOf) idx = i; else break; }
+							if (idx < 0) { dict["error"] = "as_of antes de la primera barra"; return dict; }
+							dict["bar_idx"] = idx;
+							dict["bar_time"] = Bars.GetTime(idx);
+							dict["close"] = Bars.GetClose(idx);
+							try { dict["vwap"] = SessionVWAP.GetValueAt(idx); } catch { dict["vwap"] = null; }
+							try { dict["dvah"] = UpperBand1.GetValueAt(idx); } catch { dict["dvah"] = null; }
+							try { dict["dval"] = LowerBand1.GetValueAt(idx); } catch { dict["dval"] = null; }
+							return dict;
+						});
+				}
+				catch { }
 		  	}
 			else if (State == State.Historical)
 			{
@@ -472,10 +495,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 					tradingYear[0] = GetLastBarSessionDateY(Time[0]);
 					if(tradingYear[0] != tradingYear[1])
 					{
-						// Freeze breached zones: marcar inactivas con EndTime = barra anterior
+						// v1.0.1: Congelar TODAS las zonas activas al cambio de año.
 						for (int i = activeZones.Count - 1; i >= 0; i--)
 						{
-							if (activeZones[i].IsBreached && activeZones[i].IsActive)
+							if (activeZones[i].IsActive)
 							{
 								activeZones[i].IsActive = false;
 								activeZones[i].EndTime = Time[1];
@@ -802,38 +825,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				LowerBand3.Reset();
 			}
 
-			// Update and draw active zones
-			if (showSessionZones && activeZones.Count > 0)
-			{
-				bool isLastBar = (CurrentBar == Bars.Count - 1);
-				for (int i = activeZones.Count - 1; i >= 0; i--)
-				{
-					SessionZone zone = activeZones[i];
-					if (zone.IsActive)
-					{
-						double range = zone.UpperY - zone.LowerY;
-						double cutoffY = zone.LowerY + (range * (zoneCutoffPercentage / 100.0));
-
-						// Breach: barra cruza (straddle) el cutoff line
-						if (!zone.IsBreached && CurrentBar > zone.CreationBar
-							&& High[0] >= cutoffY && Low[0] <= cutoffY)
-						{
-							zone.IsBreached = true;
-							zone.BreachTime = Time[0];
-						}
-
-						// Safety: si la zona fue breached en un año anterior y sigue activa, congelarla
-						if (zone.IsBreached && zone.BreachTime != DateTime.MinValue)
-						{
-							if (Time[0].Year > zone.BreachTime.Year)
-							{
-								zone.IsActive = false;
-								zone.EndTime = zone.BreachTime;
-							}
-						}
-					}
-				}
-			}
+			// v1.0.1: Eliminada detección de breach intra-año. Las zonas ya no se cortan
+			// cuando el precio cruza el midpoint — solo se congelan al cambio de año.
 
 			// v1.1.0: Global labels y DrawGlobalZone eliminados — todo via SharpDX en OnRender
 			// Export niveles a archivo para indicador lector (Realtime + última barra histórica)
@@ -921,7 +914,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				int zIdx = 0;
 				for (int i = 0; i < activeZones.Count; i++)
 				{
-					if (activeZones[i].IsBreached) continue;
+					// v1.0.1: Ya no filtramos por IsBreached (flag obsoleta).
 					var z = activeZones[i];
 					zoneSb.AppendLine("ZONE_" + zIdx + "="
 						+ z.UpperY.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|"
@@ -1871,8 +1864,12 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 						zoneTextFmt.Dispose();
 					}
 
-					// Draw Current Year Labels (mDVAH / mDVAL) — con anticolisión contra etiquetas de zona
-					if (lastBarIndex >= firstBarIndex)
+					// Draw Current Year Labels (yDVAH / yDVAL) — con anticolisión contra etiquetas de zona.
+					// REGLA NADRO cobertura Y/Q: durante TODO el primer trimestre del año (ene/feb/mar),
+					// el VWAP yearly comparte 100% de data con el quarterly current → es eco → ocultar.
+					// Y solo diverge de Q cuando empieza Q2 (1-abril), donde Q resetea pero Y continúa.
+					bool _yEcho = (DateTime.Now.Month <= 3);
+					if (lastBarIndex >= firstBarIndex && !_yEcho)
 					{
 						SharpDX.Direct2D1.Brush labelBrushDX = currentAnnualLabelColor.ToDxBrush(RenderTarget);
 						SimpleFont labelFont = new SimpleFont("Arial", currentAnnualLabelSize);

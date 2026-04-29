@@ -30,6 +30,7 @@ from .tools import eod_review as eod_review_tool
 from .tools import nightly_report as nightly_report_tool
 from .tools import nadro as nadro_tool
 from .tools import observer
+from .tools import replay as replay_tool
 from .tools import tpo_cva as tpo_cva_tool
 from .tools import vwap_levels as vwap
 
@@ -327,6 +328,83 @@ def get_indicator_state(key: str) -> dict:
     ``"{IndicatorName}:{Instrument.FullName}:{BarsPeriod.Value}{BarsPeriodType}"``
     """
     return observer.get_indicator_state(key=key)
+
+
+@mcp.tool
+def get_indicator_state_at(key: str, as_of: str) -> dict:
+    """Estado HISTÓRICO de un indicador en un timestamp específico (replay).
+
+    Para replay snapshots. Requiere que el indicador haya registrado un
+    ``HistoricalQueryHandler`` en ``RelativeIndicatorRegistry``. Los 5 forks
+    VWAP ya lo tienen — keys ``Relative{Tf}Vwap:{instrument}``.
+
+    ``as_of`` ISO 8601 (ej: ``2026-04-22T09:25:00``).
+    """
+    return observer.get_indicator_state_at(key=key, as_of=as_of)
+
+
+@mcp.tool
+def get_dva_at(instrument: str, timeframe: str, as_of: str) -> dict:
+    """Lee DVAH/VWAP/DVAL del fork VWAP correspondiente, a un timestamp histórico.
+
+    Wrapper de alto nivel sobre ``get_indicator_state_at`` para los 5 forks
+    Daily/Weekly/Monthly/Quarterly/Annual. Habilita replay snapshots NADRO
+    sin recomputar nada — lee los Series<double> que el indicador ya tiene
+    en memoria.
+
+    Args:
+        instrument: FullName del instrumento (ej: ``"NQ 06-26"``).
+        timeframe: ``Daily`` | ``Weekly`` | ``Monthly`` | ``Quarterly`` | ``Annual``.
+        as_of: ISO 8601 timestamp (ej: ``"2026-04-22T09:25:00"``).
+
+    Requisito: el chart con el indicador correspondiente debe estar abierto en NT.
+
+    Returns:
+        ``{key, as_of, payload: {bar_idx, bar_time, close, vwap, dvah, dval}}``
+    """
+    return observer.get_dva_at(instrument=instrument, timeframe=timeframe, as_of=as_of)
+
+
+@mcp.tool
+def nadro_snapshot_replay(
+    instrument: str,
+    as_of: str | None = None,
+    date: str | None = None,
+    kind: str = "pre_pit",
+    lookback_minutes: int = 5,
+) -> dict:
+    """Genera un snapshot NADRO point-in-time sin recomputar nada (replay).
+
+    Pipeline:
+    1. Resuelve timestamp según ``kind`` y pit-session por instrumento
+       (NQ/ES = 09:30 ET, MGC = 08:20 ET, MCL = 09:00 ET, etc.)
+    2. Lee DVAH/VWAP/DVAL de los 5 forks VWAP via ``get_dva_at``
+    3. Llama ``get_cvas`` con cutoff = as_of (sin data leak del día actual)
+    4. Aplica reglas de cobertura entre TFs adyacentes (NADRO §6.5)
+    5. Spot = close del último bar <= as_of
+
+    Args:
+        instrument: FullName (ej ``"NQ 06-26"``).
+        as_of: ISO 8601 explícito. Si None, se infiere de date+kind.
+        date: ``YYYY-MM-DD`` para inferir as_of. Default = hoy.
+        kind: ``pre_pit`` (5min antes pit-open) | ``pit_open`` |
+              ``mid_session`` (12:00 ET) | ``eod`` (1min antes pit-close).
+        lookback_minutes: para ``pre_pit``, cuánto antes de pit-open.
+
+    Returns dict con DVAs por TF (con flag is_echo_of_sub_period), CVAs/pVAs
+    cerradas, spot del bar at as_of, y notas de uso.
+
+    Habilita backtest walk-forward y verificación de hipos contra outcome real.
+    Requiere NT8 abierto con charts cargados que tengan los 5 forks VWAP del
+    instrumento + bars histórica suficiente.
+    """
+    return replay_tool.nadro_snapshot_replay(
+        instrument=instrument,
+        as_of=as_of,
+        date=date,
+        kind=kind,
+        lookback_minutes=lookback_minutes,
+    )
 
 
 @mcp.tool

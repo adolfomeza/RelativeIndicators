@@ -196,6 +196,14 @@ namespace NinjaTrader.NinjaScript.AddOns
                 if (root == "charts" && method == "GET") { HandleCharts(ctx); return; }
                 if (root == "indicator-state" && method == "GET" && parts.Length == 1)
                 { HandleIndicatorStatesList(ctx); return; }
+                // /indicator-state/{key}/at?ts=ISO  → query historica via QueryAt handler
+                if (root == "indicator-state" && method == "GET" && parts.Length >= 3
+                    && parts[parts.Length - 1].Equals("at", StringComparison.OrdinalIgnoreCase))
+                {
+                    string keyJoined = Uri.UnescapeDataString(string.Join("/", parts.Skip(1).Take(parts.Length - 2)));
+                    HandleIndicatorStateAt(ctx, keyJoined);
+                    return;
+                }
                 if (root == "indicator-state" && method == "GET" && parts.Length >= 2)
                 { HandleIndicatorState(ctx, Uri.UnescapeDataString(string.Join("/", parts.Skip(1)))); return; }
                 if (root == "print-output" && method == "GET") { HandlePrintOutput(ctx); return; }
@@ -432,7 +440,7 @@ namespace NinjaTrader.NinjaScript.AddOns
 
             int n = ParseIntQuery(ctx.Request.QueryString, "n", 50);
             if (n <= 0) n = 50;
-            if (n > 2000) n = 2000;
+            if (n > 50000) n = 50000; // bumped from 2000 to soportar backtests >30 días en 5m
 
             string tf = (ctx.Request.QueryString["tf"] ?? "1m").Trim().ToLowerInvariant();
             if (!TryParseTimeframe(tf, out BarsPeriodType periodType, out int value))
@@ -1061,6 +1069,59 @@ namespace NinjaTrader.NinjaScript.AddOns
             AppendPayload(sb, s.Payload);
             sb.Append("}");
             WriteJson(ctx, 200, sb.ToString());
+        }
+
+        // GET /indicator-state/{key}/at?ts=2026-04-22T09:25:00
+        // Invoca el HistoricalQueryHandler registrado para `key` con el timestamp
+        // dado y devuelve el dict resultante (DVAH/VWAP/DVAL/etc segun el indicador).
+        private void HandleIndicatorStateAt(HttpListenerContext ctx, string key)
+        {
+            string tsStr = ctx.Request.QueryString["ts"];
+            if (string.IsNullOrEmpty(tsStr))
+            {
+                WriteJson(ctx, 400, "{\"error\":\"falta query param ?ts=ISO timestamp\"}");
+                return;
+            }
+            DateTime asOf;
+            if (!DateTime.TryParse(tsStr, CultureInfo.InvariantCulture,
+                DateTimeStyles.AssumeLocal | DateTimeStyles.AdjustToUniversal, out asOf))
+            {
+                if (!DateTime.TryParse(tsStr, out asOf))
+                {
+                    WriteJson(ctx, 400, "{\"error\":\"ts no parseable: " + Escape(tsStr) + "\"}");
+                    return;
+                }
+            }
+
+            var payload = RelativeIndicatorRegistry.QueryAt(key, asOf);
+            if (payload == null)
+            {
+                WriteJson(ctx, 404, "{\"error\":\"no query handler registrado para key: " + Escape(key) + "\",\"available_keys\":" + JsonStringList(RelativeIndicatorRegistry.QueryHandlerKeys()) + "}");
+                return;
+            }
+
+            var sb = new StringBuilder();
+            sb.Append("{\"key\":").Append(Quote(key));
+            sb.Append(",\"as_of\":").Append(Quote(FormatTime(asOf)));
+            sb.Append(",\"payload\":");
+            AppendPayload(sb, payload);
+            sb.Append("}");
+            WriteJson(ctx, 200, sb.ToString());
+        }
+
+        private static string JsonStringList(IEnumerable<string> items)
+        {
+            var sb = new StringBuilder();
+            sb.Append("[");
+            bool first = true;
+            foreach (var s in items)
+            {
+                if (!first) sb.Append(",");
+                first = false;
+                sb.Append(Quote(s));
+            }
+            sb.Append("]");
+            return sb.ToString();
         }
 
         private static void AppendPayload(StringBuilder sb, IDictionary<string, object> payload)

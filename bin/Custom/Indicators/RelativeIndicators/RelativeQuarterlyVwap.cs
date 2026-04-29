@@ -288,6 +288,29 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				else
 					calculateFromPriceData = false;
 		    	sessionIterator = new SessionIterator(Bars);
+
+				// Replay support: registrar query handler para snapshots historicos.
+				try
+				{
+					string _replayKey = "RelativeQuarterlyVwap:" + Instrument.FullName;
+					NinjaTrader.NinjaScript.AddOns.RelativeIndicatorRegistry.RegisterQueryHandler(_replayKey,
+						asOf =>
+						{
+							var dict = new System.Collections.Generic.Dictionary<string, object>();
+							if (Bars == null || CurrentBar < 0) { dict["error"] = "no bars"; return dict; }
+							int idx = -1;
+							for (int i = 0; i <= CurrentBar; i++) { if (Bars.GetTime(i) <= asOf) idx = i; else break; }
+							if (idx < 0) { dict["error"] = "as_of antes de la primera barra"; return dict; }
+							dict["bar_idx"] = idx;
+							dict["bar_time"] = Bars.GetTime(idx);
+							dict["close"] = Bars.GetClose(idx);
+							try { dict["vwap"] = SessionVWAP.GetValueAt(idx); } catch { dict["vwap"] = null; }
+							try { dict["dvah"] = UpperBand1.GetValueAt(idx); } catch { dict["dvah"] = null; }
+							try { dict["dval"] = LowerBand1.GetValueAt(idx); } catch { dict["dval"] = null; }
+							return dict;
+						});
+				}
+				catch { }
 		  	}
 			else if (State == State.Historical)
 			{
@@ -472,10 +495,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 					tradingQuarter[0] = GetLastBarSessionDateQ(Time[0]);
 					if(tradingQuarter[0] != tradingQuarter[1])
 					{
-						// Freeze breached zones: marcar inactivas con EndTime = barra anterior
+						// v1.0.1: Congelar TODAS las zonas activas al cambio de trimestre.
 						for (int i = activeZones.Count - 1; i >= 0; i--)
 						{
-							if (activeZones[i].IsBreached && activeZones[i].IsActive)
+							if (activeZones[i].IsActive)
 							{
 								activeZones[i].IsActive = false;
 								activeZones[i].EndTime = Time[1];
@@ -802,40 +825,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				LowerBand3.Reset();
 			}
 
-			// Update and draw active zones
-			if (showSessionZones && activeZones.Count > 0)
-			{
-				bool isLastBar = (CurrentBar == Bars.Count - 1);
-				for (int i = activeZones.Count - 1; i >= 0; i--)
-				{
-					SessionZone zone = activeZones[i];
-					if (zone.IsActive)
-					{
-						double range = zone.UpperY - zone.LowerY;
-						double cutoffY = zone.LowerY + (range * (zoneCutoffPercentage / 100.0));
-
-						// Breach: barra cruza (straddle) el cutoff line
-						if (!zone.IsBreached && CurrentBar > zone.CreationBar
-							&& High[0] >= cutoffY && Low[0] <= cutoffY)
-						{
-							zone.IsBreached = true;
-							zone.BreachTime = Time[0];
-						}
-
-						// Safety: si la zona fue breached en un trimestre anterior y sigue activa, congelarla
-						if (zone.IsBreached && zone.BreachTime != DateTime.MinValue)
-						{
-							DateTime breachQuarter = new DateTime(zone.BreachTime.Year, ((zone.BreachTime.Month - 1) / 3) * 3 + 1, 1);
-							DateTime currentQuarter = new DateTime(Time[0].Year, ((Time[0].Month - 1) / 3) * 3 + 1, 1);
-							if (currentQuarter > breachQuarter)
-							{
-								zone.IsActive = false;
-								zone.EndTime = zone.BreachTime;
-							}
-						}
-					}
-				}
-			}
+			// v1.0.1: Eliminada detección de breach intra-trimestre. Las zonas ya no se cortan
+			// cuando el precio cruza el midpoint — solo se congelan al cambio de trimestre.
 
 			// v1.1.0: Global labels y DrawGlobalZone eliminados — todo via SharpDX en OnRender
 			// Export niveles a archivo para indicador lector (Realtime + última barra histórica)
@@ -923,7 +914,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				int zIdx = 0;
 				for (int i = 0; i < activeZones.Count; i++)
 				{
-					if (activeZones[i].IsBreached) continue;
+					// v1.0.1: Ya no filtramos por IsBreached (flag obsoleta).
 					var z = activeZones[i];
 					zoneSb.AppendLine("ZONE_" + zIdx + "="
 						+ z.UpperY.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|"
@@ -1877,8 +1868,14 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 						zoneTextFmt.Dispose();
 					}
 
-					// Draw Current Quarter Labels (mDVAH / mDVAL) — con anticolisión contra etiquetas de zona
-					if (lastBarIndex >= firstBarIndex)
+					// Draw Current Quarter Labels (qDVAH / qDVAL) — con anticolisión contra etiquetas de zona.
+					// REGLA NADRO cobertura Q/M: durante TODO el primer mes del trimestre (ene/abr/jul/oct),
+					// el VWAP quarterly comparte 100% de data con el monthly current → es eco → ocultar.
+					// Q solo diverge de M cuando empieza el segundo mes del Q (M resetea pero Q continúa).
+					DateTime _qNow = DateTime.Now;
+					int _qFirstMonth = ((_qNow.Month - 1) / 3) * 3 + 1;
+					bool _qEcho = (_qNow.Month == _qFirstMonth);
+					if (lastBarIndex >= firstBarIndex && !_qEcho)
 					{
 						SharpDX.Direct2D1.Brush labelBrushDX = currentQuarterLabelColor.ToDxBrush(RenderTarget);
 						SimpleFont labelFont = new SimpleFont("Arial", currentQuarterLabelSize);

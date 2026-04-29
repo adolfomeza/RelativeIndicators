@@ -80,6 +80,75 @@ namespace NinjaTrader.NinjaScript.AddOns
         public static void Clear()
         {
             _states.Clear();
+            _queryHandlers.Clear();
+        }
+
+        // ===========================================================================
+        // Historical query handlers — point-in-time replay support
+        // ===========================================================================
+        //
+        // Cada indicador puede registrar un callback que, dado un timestamp histórico,
+        // devuelve un dict con su estado en ESE momento (leído de sus Series<double>
+        // internas). Permite snapshots replay sin recomputar nada.
+        //
+        // Uso desde un indicador (en State.DataLoaded):
+        //
+        //     RelativeIndicatorRegistry.RegisterQueryHandler(
+        //         "RelativeDailyVwap:" + Instrument.FullName,
+        //         asOf => {
+        //             int idx = Bars.GetBar(asOf);
+        //             return new Dictionary<string, object> {
+        //                 ["dvah"] = UpperBand1.GetValueAt(idx),
+        //                 ["vwap"] = Values[2].GetValueAt(idx),
+        //                 ["dval"] = LowerBand1.GetValueAt(idx),
+        //                 ["bar_time"] = Bars.GetTime(idx),
+        //             };
+        //         });
+        //
+        // Y en State.Terminated:
+        //     RelativeIndicatorRegistry.UnregisterQueryHandler(key);
+        //
+        // El AddOn RelativeObserver expone esto vía /indicator-state/{key}/at?ts=...
+
+        public delegate IDictionary<string, object> HistoricalQueryHandler(DateTime asOf);
+
+        private static readonly ConcurrentDictionary<string, HistoricalQueryHandler> _queryHandlers =
+            new ConcurrentDictionary<string, HistoricalQueryHandler>(StringComparer.OrdinalIgnoreCase);
+
+        public static void RegisterQueryHandler(string key, HistoricalQueryHandler handler)
+        {
+            if (string.IsNullOrEmpty(key) || handler == null) return;
+            _queryHandlers[key] = handler;
+        }
+
+        public static void UnregisterQueryHandler(string key)
+        {
+            if (string.IsNullOrEmpty(key)) return;
+            _queryHandlers.TryRemove(key, out _);
+        }
+
+        /// <summary>
+        /// Invoca el query handler registrado bajo `key` con el timestamp dado.
+        /// Devuelve null si no hay handler. Si el handler tira excepción, devuelve
+        /// un dict con la clave "error" en lugar de propagar.
+        /// </summary>
+        public static IDictionary<string, object> QueryAt(string key, DateTime asOf)
+        {
+            if (string.IsNullOrEmpty(key)) return null;
+            if (!_queryHandlers.TryGetValue(key, out var handler)) return null;
+            try { return handler(asOf); }
+            catch (Exception ex)
+            {
+                return new Dictionary<string, object>
+                {
+                    ["error"] = ex.GetType().Name + ": " + ex.Message,
+                };
+            }
+        }
+
+        public static IReadOnlyList<string> QueryHandlerKeys()
+        {
+            return _queryHandlers.Keys.ToList();
         }
     }
 

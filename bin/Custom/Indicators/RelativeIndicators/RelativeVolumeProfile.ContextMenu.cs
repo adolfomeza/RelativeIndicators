@@ -18,6 +18,10 @@ namespace NinjaTrader.NinjaScript.Indicators
 		{
 			public List<VolumeProfileSession> OriginalProfiles;
 			public VolumeProfileSession MergedSession;
+			// True si fue creado por NADRO auto-merge. Permite distinguir auto vs manual:
+			// - auto-merges se reconstruyen al cierre de sesion
+			// - manuales sobreviven al rebuild (intencionales del usuario)
+			public bool IsNadroAuto;
 		}
 
 		/// <summary>
@@ -125,12 +129,17 @@ namespace NinjaTrader.NinjaScript.Indicators
 
 			int insertIdx = 0;
 
-			// TPO view toggle: always available when in TPO mode
+			// TPO view toggle: always available when in TPO mode (Compact -> Extended -> Histogram -> Compact)
 			if (ProfileType == ProfileDataType.TPO)
 			{
-				string header = _tpoViewMode == TpoViewMode.Compact
-					? "TPO Vista: Extendida"
-					: "TPO Vista: Compacta";
+				string header;
+				switch (_tpoViewMode)
+				{
+					case TpoViewMode.Compact:   header = "TPO Vista: Extendida"; break;
+					case TpoViewMode.Extended:  header = "TPO Vista: Histograma (rapido)"; break;
+					case TpoViewMode.Histogram: header = "TPO Vista: Compacta"; break;
+					default: header = "TPO Vista: Compacta"; break;
+				}
 
 				var mi = CreateTaggedMenuItem(header, OnTpoViewToggleClick);
 				_contextMenuChartControl.ContextMenu.Items.Insert(insertIdx++, mi);
@@ -277,6 +286,7 @@ namespace NinjaTrader.NinjaScript.Indicators
 			{
 				originals.AddRange(leftComposite.OriginalProfiles);
 				_composites.Remove(leftComposite);
+				_compositesStamp++;
 			}
 			else
 			{
@@ -288,6 +298,7 @@ namespace NinjaTrader.NinjaScript.Indicators
 			{
 				originals.AddRange(rightComposite.OriginalProfiles);
 				_composites.Remove(rightComposite);
+				_compositesStamp++;
 			}
 			else
 			{
@@ -325,6 +336,7 @@ namespace NinjaTrader.NinjaScript.Indicators
 				OriginalProfiles = originals,
 				MergedSession = merged
 			});
+			_compositesStamp++;
 
 			if (ShowDebugLogs)
 				Print("RelativeVolumeProfile: Merged " + originals.Count + " profiles | POC: " + merged.POC
@@ -355,6 +367,7 @@ namespace NinjaTrader.NinjaScript.Indicators
 				_activeProfile = activeOriginal;
 
 			_composites.Remove(composite);
+			_compositesStamp++;
 
 			if (ShowDebugLogs)
 				Print("RelativeVolumeProfile: Unmerged " + composite.OriginalProfiles.Count + " profiles");
@@ -365,9 +378,13 @@ namespace NinjaTrader.NinjaScript.Indicators
 
 		private void OnTpoViewToggleClick(object sender, RoutedEventArgs e)
 		{
-			_tpoViewMode = _tpoViewMode == TpoViewMode.Compact
-				? TpoViewMode.Extended
-				: TpoViewMode.Compact;
+			// Cicla: Compact -> Extended -> Histogram -> Compact
+			switch (_tpoViewMode)
+			{
+				case TpoViewMode.Compact:   _tpoViewMode = TpoViewMode.Extended;  break;
+				case TpoViewMode.Extended:  _tpoViewMode = TpoViewMode.Histogram; break;
+				default:                    _tpoViewMode = TpoViewMode.Compact;   break;
+			}
 
 			if (ShowDebugLogs)
 				Print("RelativeVolumeProfile: TPO view → " + _tpoViewMode);
@@ -443,7 +460,10 @@ namespace NinjaTrader.NinjaScript.Indicators
 			{
 				var comp = _composites.FirstOrDefault(c => c.MergedSession == profile);
 				if (comp != null)
+				{
 					_composites.Remove(comp);
+					_compositesStamp++;
+				}
 			}
 
 			// Execute the split
@@ -525,6 +545,8 @@ namespace NinjaTrader.NinjaScript.Indicators
 							{
 								mergedLevel.Volume += 1;
 								merged.TotalVolume += 1;
+								mergedLevel.SortedPeriodsCache = null;
+								merged.CachedMaxTpoCount = -1; // PERF: invalidar maxTpoCount al mergear
 							}
 							if (pi > maxPeriodInProfile)
 								maxPeriodInProfile = pi;
@@ -864,6 +886,7 @@ namespace NinjaTrader.NinjaScript.Indicators
 					OriginalProfiles = matchedProfiles,
 					MergedSession = merged
 				});
+				_compositesStamp++;
 
 				restoredMerges++;
 			}

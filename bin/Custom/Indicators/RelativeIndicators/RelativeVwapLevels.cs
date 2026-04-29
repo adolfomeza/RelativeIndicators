@@ -90,6 +90,76 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		private string _confluencesFile;
 		private string _lastInstrument = "";
 
+		// PERF v2.3.11: cache de archivos parseados por mtime. Antes: cada RefreshSeconds
+		// (5s) leía y parseaba 5 archivos enteros aunque no hubiera cambios. Ahora:
+		// File.GetLastWriteTimeUtc() es ~ns y solo re-parsea si el archivo cambió.
+		private struct ParseCacheEntry { public DateTime Mtime; public VwapLevel Level; }
+		private Dictionary<string, ParseCacheEntry> _parseCache = new Dictionary<string, ParseCacheEntry>();
+
+		// PERF v2.3.11: cache brushes/textFmt entre frames. Antes: por cada level (5 TFs)
+		// y cada frame, ToDxBrush() x2 + new SimpleFont().ToDirectWriteTextFormat() = ~15
+		// allocs SharpDX por frame. Ahora: 1 alloc por brush WPF distinto, persistente.
+		private Dictionary<System.Windows.Media.Brush, SharpDX.Direct2D1.Brush> _dxBrushCache;
+		private SharpDX.DirectWrite.TextFormat _cachedTextFmt;
+		private int _cachedTextFmtSize = -1;
+		private SharpDX.Direct2D1.Brush _cachedConfBrush;
+		private System.Windows.Media.Brush _cachedConfBrushKey;
+
+		private SharpDX.Direct2D1.Brush GetCachedDxBrush(System.Windows.Media.Brush wpfBrush)
+		{
+			if (wpfBrush == null || RenderTarget == null) return null;
+			if (_dxBrushCache == null)
+				_dxBrushCache = new Dictionary<System.Windows.Media.Brush, SharpDX.Direct2D1.Brush>();
+			SharpDX.Direct2D1.Brush dx;
+			if (_dxBrushCache.TryGetValue(wpfBrush, out dx) && dx != null && !dx.IsDisposed)
+				return dx;
+			dx = wpfBrush.ToDxBrush(RenderTarget);
+			_dxBrushCache[wpfBrush] = dx;
+			return dx;
+		}
+
+		private SharpDX.DirectWrite.TextFormat GetCachedTextFmt()
+		{
+			if (_cachedTextFmt == null || _cachedTextFmtSize != LabelFontSize)
+			{
+				if (_cachedTextFmt != null) { try { _cachedTextFmt.Dispose(); } catch { } }
+				_cachedTextFmt = new SimpleFont("Arial", LabelFontSize).ToDirectWriteTextFormat();
+				_cachedTextFmt.TextAlignment = SharpDX.DirectWrite.TextAlignment.Leading;
+				_cachedTextFmt.ParagraphAlignment = SharpDX.DirectWrite.ParagraphAlignment.Center;
+				_cachedTextFmtSize = LabelFontSize;
+			}
+			return _cachedTextFmt;
+		}
+
+		private void DisposeRenderCaches()
+		{
+			if (_dxBrushCache != null)
+			{
+				foreach (var kv in _dxBrushCache)
+					try { if (kv.Value != null && !kv.Value.IsDisposed) kv.Value.Dispose(); } catch { }
+				_dxBrushCache.Clear();
+			}
+			if (_cachedConfBrush != null)
+			{
+				try { if (!_cachedConfBrush.IsDisposed) _cachedConfBrush.Dispose(); } catch { }
+				_cachedConfBrush = null;
+				_cachedConfBrushKey = null;
+			}
+			if (_cachedTextFmt != null)
+			{
+				try { _cachedTextFmt.Dispose(); } catch { }
+				_cachedTextFmt = null;
+				_cachedTextFmtSize = -1;
+			}
+		}
+
+		public override void OnRenderTargetChanged()
+		{
+			// El RenderTarget anterior se invalidó: todos los brushes/textFmt cacheados
+			// quedan colgados. Limpiar para reconstruir contra el nuevo RT bajo demanda.
+			DisposeRenderCaches();
+		}
+
 		protected override void OnStateChange()
 		{
 			if (State == State.SetDefaults)
@@ -106,6 +176,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				_levelsDir = Path.Combine(
 					Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
 					"NinjaTrader 8", "bin", "Custom", "VwapLevels");
+			}
+			else if (State == State.Terminated)
+			{
+				DisposeRenderCaches();
 			}
 		}
 
@@ -460,6 +534,14 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		{
 			try
 			{
+				// PERF v2.3.11: short-circuit si el archivo no cambió desde el último parseo.
+				DateTime mtime;
+				try { mtime = File.GetLastWriteTimeUtc(filePath); } catch { mtime = DateTime.MinValue; }
+
+				ParseCacheEntry cached;
+				if (_parseCache.TryGetValue(filePath, out cached) && cached.Mtime == mtime && cached.Level != null)
+					return cached.Level;
+
 				string[] lines = File.ReadAllLines(filePath);
 				var level = new VwapLevel();
 				int zoneCount = 0;
@@ -499,6 +581,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 					}
 				}
 				if (string.IsNullOrEmpty(level.Timeframe)) return null;
+				// PERF v2.3.11: persistir en cache hasta el próximo cambio en disco.
+				_parseCache[filePath] = new ParseCacheEntry { Mtime = mtime, Level = level };
 				return level;
 			}
 			catch { return null; }
@@ -517,10 +601,14 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 			float lastBarX = (float)chartControl.GetXByBarIndex(ChartBars, lastBarIndex);
 			float xLeft    = (float)chartControl.GetXByBarIndex(ChartBars, ChartBars.FromIndex);
 
-			// Poblar currentPeriodPrices para deduplicación de etiquetas DVA actual
+			// Poblar currentPeriodPrices para deduplicación de etiquetas DVA actual.
+			// v2.3.12: si el TF es eco estructural del subperíodo (ej: lunes → Weekly =
+			// Daily), NO inyectamos sus precios para que ni dedupe a otros ni participe
+			// en confluencias.
 			foreach (var level in _levels)
 			{
 				if (!IsLevelVisible(level.Timeframe)) continue;
+				if (IsCurrentEchoOfSubPeriod(level.Timeframe)) continue;
 				int h = GetHierarchy(level.Timeframe);
 				if (level.DVAH > 0) currentPeriodPrices.Add(System.ValueTuple.Create(level.DVAH, h));
 				if (level.VWAP > 0) currentPeriodPrices.Add(System.ValueTuple.Create(level.VWAP, h));
@@ -548,11 +636,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				}
 				if (!show) continue;
 
-				var dxBrush = colorBrush.ToDxBrush(RenderTarget);
-				var zoneDxBrush = zoneColorBrush.ToDxBrush(RenderTarget);
-				var textFmt = new SimpleFont("Arial", LabelFontSize).ToDirectWriteTextFormat();
-				textFmt.TextAlignment = SharpDX.DirectWrite.TextAlignment.Leading;
-				textFmt.ParagraphAlignment = SharpDX.DirectWrite.ParagraphAlignment.Center;
+				// PERF v2.3.11: usa caches; evita allocs SharpDX por frame*timeframe
+				var dxBrush = GetCachedDxBrush(colorBrush);
+				var zoneDxBrush = GetCachedDxBrush(zoneColorBrush);
+				var textFmt = GetCachedTextFmt();
+				if (dxBrush == null || zoneDxBrush == null || textFmt == null) continue;
 
 				string tfPrefix;
 				string tfPrefixZone;
@@ -565,13 +653,19 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 					                  tfPrefixZone = "p" + level.Timeframe.Substring(0, 1); break;
 				}
 
-				// DVA actual — suprimir si un timeframe más granular tiene el mismo precio (±1 tick)
+				// DVA actual — suprimir si un timeframe más granular tiene el mismo precio (±1 tick).
 				// v2.3.1: la etiqueta PVA (VWAP central) ya no se dibuja; el valor sigue participando en confluencias y deduplicación.
+				// v2.3.12: además, suprimir totalmente si el TF actual es eco estructural
+				// del subperíodo (lunes → Weekly = Daily, primera semana del mes → Monthly = Weekly, etc.)
 				int lvlH = GetHierarchy(level.Timeframe);
-				if (level.DVAH > 0 && !IsCoveredByMoreGranular(level.DVAH, lvlH, currentPeriodPrices, dedupTick))
-					DrawLevel(chartScale, dxBrush, textFmt, lastBarX, level.DVAH, tfPrefix + "DVAH", labelObstacles);
-				if (level.DVAL > 0 && !IsCoveredByMoreGranular(level.DVAL, lvlH, currentPeriodPrices, dedupTick))
-					DrawLevel(chartScale, dxBrush, textFmt, lastBarX, level.DVAL, tfPrefix + "DVAL", labelObstacles);
+				bool isEcho = IsCurrentEchoOfSubPeriod(level.Timeframe);
+				if (!isEcho)
+				{
+					if (level.DVAH > 0 && !IsCoveredByMoreGranular(level.DVAH, lvlH, currentPeriodPrices, dedupTick))
+						DrawLevel(chartScale, dxBrush, textFmt, lastBarX, level.DVAH, tfPrefix + "DVAH", labelObstacles);
+					if (level.DVAL > 0 && !IsCoveredByMoreGranular(level.DVAL, lvlH, currentPeriodPrices, dedupTick))
+						DrawLevel(chartScale, dxBrush, textFmt, lastBarX, level.DVAL, tfPrefix + "DVAL", labelObstacles);
+				}
 
 				// Zonas históricas con edad según timeframe
 				// v2.3.1: la etiqueta PVA (VWAP central de la zona) ya no se dibuja.
@@ -583,9 +677,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 					DrawLevel(chartScale, zoneDxBrush, textFmt, lastBarX, zone.LowerY, tfPrefixZone + "DVAL" + ageStr, labelObstacles);
 				}
 
-				dxBrush.Dispose();
-				zoneDxBrush.Dispose();
-				textFmt.Dispose();
+				// PERF: NO disponer; los recursos están cacheados y se reutilizan en el próximo frame.
 			}
 		}
 
@@ -695,6 +787,48 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 			return false;
 		}
 
+		// v2.3.12: regla NADRO de cobertura entre TFs adyacentes — el TF INFERIOR
+		// cubre al TF SUPERIOR cuando el superior aún no contiene más de 1 sub-período.
+		// Pares: W/D, M/W, Q/M, Y/Q. Cuando se cumple la cobertura, el VWAP del TF
+		// superior es matemáticamente IDÉNTICO al del inferior, así que se oculta
+		// para no inflar confluencias (sería el mismo cálculo renombrado).
+		//
+		//   W/D: D cubre a W → lunes (la semana actual solo tiene el día actual)
+		//   M/W: W cubre a M → días 1-7 del mes (el mes solo tiene la primera semana)
+		//   Q/M: M cubre a Q → primer mes del trimestre (ene/abr/jul/oct), días 1-7
+		//   Y/Q: Q cubre a Y → enero, días 1-7
+		//
+		// NOTA: aplica solo al DVA *actual* (developing). Las zonas históricas
+		// (pXDVA) NO se ocultan porque son períodos cerrados con identidad propia.
+		private bool IsCurrentEchoOfSubPeriod(string timeframe)
+		{
+			// DateTime.Now (sistema) en lugar de Time[0]: evita falsos negativos por barras
+			// Globex domingo que pueden reportar DayOfWeek=Sunday en lugar de Monday cuando
+			// la última barra del chart es del Globex de domingo.
+			DateTime now = DateTime.Now;
+			switch (timeframe)
+			{
+				case "Weekly":
+					// Lunes: la semana solo tiene el día actual = Daily current
+					return now.DayOfWeek == DayOfWeek.Monday;
+				case "Monthly":
+					// Días 1-7: el mes solo tiene la primera semana (aproximación; M y W
+					// no alinean perfecto pero práctico).
+					return now.Day <= 7;
+				case "Quarterly":
+					// TODO el primer mes del trimestre: Q comparte 100% de data con M
+					// hasta que M resetee (1er día del 2do mes del Q).
+					int firstMonthOfQuarter = ((now.Month - 1) / 3) * 3 + 1;
+					return now.Month == firstMonthOfQuarter;
+				case "Annual":
+					// TODO Q1 (ene/feb/mar): Y comparte 100% de data con Q hasta que
+					// Q resetee (1-abril, inicio de Q2).
+					return now.Month <= 3;
+				default:
+					return false;
+			}
+		}
+
 		// v2.3.5: dibuja cada track histórico con inicio y fin horizontales definidos.
 		// - Activos (IsActive && !IsBreached): llegan hasta la vela actual
 		// - Cerrados por separación o breach: terminan en EndTime (congelado)
@@ -702,7 +836,15 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		{
 			if (_confluenceHistory.Count == 0) return;
 
-			var confBrush = ConfluenceColor.ToDxBrush(RenderTarget);
+			// PERF v2.3.11: cache de confBrush. Solo recrea si cambia el WPF brush
+			// (otro color elegido). La opacidad se reaplica cada frame por si cambió.
+			if (_cachedConfBrush == null || _cachedConfBrush.IsDisposed || !object.ReferenceEquals(_cachedConfBrushKey, ConfluenceColor))
+			{
+				if (_cachedConfBrush != null) try { _cachedConfBrush.Dispose(); } catch { }
+				_cachedConfBrush = ConfluenceColor.ToDxBrush(RenderTarget);
+				_cachedConfBrushKey = ConfluenceColor;
+			}
+			var confBrush = _cachedConfBrush;
 			confBrush.Opacity = (float)(ConfluenceOpacity / 100.0);
 
 			foreach (var t in _confluenceHistory)
@@ -726,7 +868,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 					confBrush);
 			}
 
-			confBrush.Dispose();
+			// PERF: confBrush está cacheado — NO disponer aquí.
 		}
 
 		#region Properties

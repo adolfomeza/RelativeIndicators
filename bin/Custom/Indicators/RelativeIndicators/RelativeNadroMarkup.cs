@@ -19,11 +19,28 @@ using SharpDX.DirectWrite;
 namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 {
 	/// <summary>
-	/// RelativeNadroMarkup v0.1.1 (POC) — plasma en el chart el análisis NADRO hecho en MCP.
+	/// RelativeNadroMarkup v0.1.5 (POC) — plasma en el chart el análisis NADRO hecho en MCP.
 	/// Lee archivos JSON de Docs/Nadro/markups/{INSTRUMENT}_YYYY-MM-DD.json y pinta:
 	/// confluencias, niveles, entry/stop/targets, flechas.
+	/// v0.1.2: labels de HYPOS como cards negros sólidos (entry/stop/target).
+	///         Render en 2 pasadas: PASS 1 todas las líneas+flechas, PASS 2 todas las labels (encima).
+	/// v0.1.3: 3 botones en toolbar nativa NT (📸 Pit-Open, ⚡ Ad-Hoc, 🌙 EOD Review).
+	/// v0.1.4: snapshot requests PLAYBACK-SAFE con captured_data completo.
+	/// v0.1.5: FIX timestamp obsoleto vía Bars.GetTime() en lugar de Time[0].
+	/// v0.1.6: FIX completo. Bars.GetClose/Open/High/Low/Volume/Time directos en lugar de
+	///         Close[0]/Open[idx]/etc — todos los indexadores dependen del último OnBarUpdate
+	///         del indicador. Si chart estaba en otra pestaña (IsSuspendedWhileInactive=true),
+	///         Close[0]/Time[idx] devolvían valores de la última sesión que vio el indicador.
+	///         Ahora precio + 50 bars + timestamp se leen del array Bars directo.
 	/// </summary>
-	public class RelativeNadroMarkup : Indicator
+	public enum RelativeNadroRenderLayer
+	{
+		Full,
+		BriefingOnly,
+		MarkupOnly
+	}
+
+	public partial class RelativeNadroMarkup : Indicator
 	{
 		#region Data classes
 
@@ -89,6 +106,69 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		private string _markupsDir;
 		private string _lastInstrument = "";
 
+		// PERF: cache de markups parseados por mtime. Evita re-leer y re-parsear
+		// JSONs de cada día N días atrás cuando nada cambió en disco. Granularidad
+		// File.GetLastWriteTimeUtc().
+		private struct MarkupCacheEntry { public DateTime Mtime; public List<MarkupSnapshot> Snapshots; }
+		private Dictionary<string, MarkupCacheEntry> _markupParseCache = new Dictionary<string, MarkupCacheEntry>();
+
+		// v: scroll con mouse wheel sobre el panel del briefing
+		private int _scrollOffsetLines = 0;
+		private SharpDX.RectangleF _briefingRect;
+		private bool _hasBriefingRect = false;
+		private bool _wheelHooked = false;
+
+		// PERF: cache de brushes WPF→DX (evita 14+ allocations por frame).
+		// Reusados entre frames mientras el RenderTarget viva. Disposed en OnRenderTargetChanged.
+		private Dictionary<System.Windows.Media.Brush, SharpDX.Direct2D1.Brush> _dxBrushCache;
+		// PERF: TextFormat cacheados (evita 2+ allocations por frame).
+		private SharpDX.DirectWrite.TextFormat _cachedLabelFmt;
+		private SharpDX.DirectWrite.TextFormat _cachedNotesFmt;
+		private int _cachedLabelFontSize = -1;
+		private int _cachedNotesFontSize = -1;
+
+		private SharpDX.Direct2D1.Brush GetCachedDxBrush(System.Windows.Media.Brush wpfBrush)
+		{
+			if (wpfBrush == null || RenderTarget == null) return null;
+			if (_dxBrushCache == null)
+				_dxBrushCache = new Dictionary<System.Windows.Media.Brush, SharpDX.Direct2D1.Brush>();
+
+			SharpDX.Direct2D1.Brush dx;
+			if (_dxBrushCache.TryGetValue(wpfBrush, out dx) && dx != null && !dx.IsDisposed)
+				return dx;
+
+			dx = wpfBrush.ToDxBrush(RenderTarget);
+			_dxBrushCache[wpfBrush] = dx;
+			return dx;
+		}
+
+		public override void OnRenderTargetChanged()
+		{
+			base.OnRenderTargetChanged();
+			DisposeBrushCache();
+			DisposeTextFormatCache();
+		}
+
+		private void DisposeBrushCache()
+		{
+			if (_dxBrushCache != null)
+			{
+				foreach (var kv in _dxBrushCache)
+					kv.Value?.Dispose();
+				_dxBrushCache.Clear();
+			}
+			if (_labelBgBrushCache != null) { _labelBgBrushCache.Dispose(); _labelBgBrushCache = null; }
+		}
+
+		private void DisposeTextFormatCache()
+		{
+			_cachedLabelFmt?.Dispose(); _cachedLabelFmt = null;
+			_cachedNotesFmt?.Dispose(); _cachedNotesFmt = null;
+			_cachedLabelFontSize = -1;
+			_cachedNotesFontSize = -1;
+		}
+		private NinjaTrader.Gui.Chart.ChartControl _hookedControl = null;
+
 		protected override void OnStateChange()
 		{
 			if (State == State.SetDefaults)
@@ -101,7 +181,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				IsSuspendedWhileInactive = true;
 
 				RefreshSeconds = 10;
-				DaysBack = 1;
+				DaysBack = 5;
 				ShowVerticalAnchor = true;
 				ShowConfluences = true;
 				ShowHypos = true;
@@ -109,11 +189,15 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				ShowNotes = true;
 
 				ConfluenceOpacity = 22;
+				DimPastOpacity = 50;
 				LabelFontSize = 11;
 				NotesFontSize = 10;
 				ArrowLengthBars = 30;
 				ShowAnalysisText = true;
 				AnalysisAreaWidth = 380;
+				TopPadding = 110;
+				RenderLayer = RelativeNadroRenderLayer.Full;
+				MarkupOpacity = 100;
 
 				ConfluenceAPlusColor = Brushes.OrangeRed;
 				ConfluenceAColor = Brushes.Orange;
@@ -138,7 +222,47 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 					Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
 					"NinjaTrader 8", "bin", "Custom", "Indicators", "RelativeIndicators",
 					"Docs", "Nadro", "markups");
+
+				// v0.1.3: hook chart toolbar for snapshot request buttons
+				if (ChartControl != null)
+					ChartControl.Dispatcher.InvokeAsync((Action)(() => AddToolBar()));
 			}
+			else if (State == State.Terminated)
+			{
+				if (_wheelHooked && _hookedControl != null)
+				{
+					try { _hookedControl.PreviewMouseWheel -= OnChartMouseWheel; } catch { }
+					_hookedControl = null;
+					_wheelHooked = false;
+				}
+				_hasBriefingRect = false;
+
+				// PERF: liberar caches SharpDX
+				DisposeBrushCache();
+				DisposeTextFormatCache();
+
+				// v0.1.3: cleanup chart toolbar
+				if (ChartControl != null)
+					ChartControl.Dispatcher.InvokeAsync((Action)(() => RemoveToolBar()));
+			}
+		}
+
+		private void OnChartMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+		{
+			if (!_hasBriefingRect) return;
+			try
+			{
+				var pt = e.GetPosition(sender as System.Windows.IInputElement);
+				if (pt.X >= _briefingRect.Left && pt.X <= _briefingRect.Right
+					&& pt.Y >= _briefingRect.Top && pt.Y <= _briefingRect.Bottom)
+				{
+					_scrollOffsetLines += (e.Delta > 0 ? -3 : 3);
+					if (_scrollOffsetLines < 0) _scrollOffsetLines = 0;
+					e.Handled = true;
+					if (ChartControl != null) ChartControl.InvalidateVisual();
+				}
+			}
+			catch { }
 		}
 
 		protected override void OnBarUpdate()
@@ -150,6 +274,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 			{
 				_lastRead = DateTime.MinValue;
 				_lastInstrument = currentInstrument;
+				_markupParseCache.Clear(); // PERF: cache mapea filename → snapshots; al cambiar de instrumento ya no aplica.
 			}
 
 			if ((DateTime.Now - _lastRead).TotalSeconds >= RefreshSeconds)
@@ -179,6 +304,17 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				if (!TryParseDateFromFileName(path, out fileDate)) continue;
 				if (fileDate < cutoff) continue;
 
+				// PERF: short-circuit si el archivo no cambió desde la última lectura.
+				DateTime mtime;
+				try { mtime = File.GetLastWriteTimeUtc(path); } catch { mtime = DateTime.MinValue; }
+
+				MarkupCacheEntry cached;
+				if (_markupParseCache.TryGetValue(path, out cached) && cached.Mtime == mtime && cached.Snapshots != null)
+				{
+					_snapshots.AddRange(cached.Snapshots);
+					continue;
+				}
+
 				try
 				{
 					string raw = File.ReadAllText(path);
@@ -190,13 +326,16 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 					var snapArr = snaps as object[];
 					if (snapArr == null) continue;
 
+					var parsedList = new List<MarkupSnapshot>(snapArr.Length);
 					foreach (var s in snapArr)
 					{
 						var snapDict = s as Dictionary<string, object>;
 						if (snapDict == null) continue;
 						var parsed = ParseSnapshot(snapDict);
-						if (parsed != null) _snapshots.Add(parsed);
+						if (parsed != null) parsedList.Add(parsed);
 					}
+					_snapshots.AddRange(parsedList);
+					_markupParseCache[path] = new MarkupCacheEntry { Mtime = mtime, Snapshots = parsedList };
 				}
 				catch (Exception ex)
 				{
@@ -376,35 +515,102 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 			base.OnRender(chartControl, chartScale);
 			if (chartControl == null || _snapshots.Count == 0 || !IsVisible) return;
 
+			// v: hookear mouse wheel una sola vez
+			if (!_wheelHooked)
+			{
+				try
+				{
+					chartControl.PreviewMouseWheel += OnChartMouseWheel;
+					_hookedControl = chartControl;
+					_wheelHooked = true;
+				}
+				catch { }
+			}
+
 			float chartRight = (float)ChartPanel.X + (float)ChartPanel.W;
 
-			var aPlus = ConfluenceAPlusColor.ToDxBrush(RenderTarget);
-			var aBrush = ConfluenceAColor.ToDxBrush(RenderTarget);
-			var bBrush = ConfluenceBColor.ToDxBrush(RenderTarget);
-			var lvlBr = LevelColor.ToDxBrush(RenderTarget);
-			var entryBr = EntryColor.ToDxBrush(RenderTarget);
-			var stopBr = StopColor.ToDxBrush(RenderTarget);
-			var tgtBr = TargetColor.ToDxBrush(RenderTarget);
-			var anchorBr = AnchorColor.ToDxBrush(RenderTarget);
-			var notesBr = NotesColor.ToDxBrush(RenderTarget);
-			var pendBr = ArrowPendingColor.ToDxBrush(RenderTarget);
-			var trigBr = ArrowTriggeredColor.ToDxBrush(RenderTarget);
-			var fillBr = ArrowFilledColor.ToDxBrush(RenderTarget);
-			var stopArrBr = ArrowStoppedColor.ToDxBrush(RenderTarget);
-			var missBr = ArrowMissedColor.ToDxBrush(RenderTarget);
-			_labelBgBrushCache = System.Windows.Media.Brushes.Black.ToDxBrush(RenderTarget);
+			// v: layer control + opacity
+			bool showMarkup = RenderLayer != RelativeNadroRenderLayer.BriefingOnly;
+			bool showBriefing = RenderLayer != RelativeNadroRenderLayer.MarkupOnly;
 
-			// Palette por hipo (h1, h2, ...) para distinguir labels visualmente
+			// PERF: brushes cacheados via GetCachedDxBrush (reusan entre frames).
+			// Antes: 14+ new SolidColorBrush por frame. Ahora: 0 (todos del cache).
+			var aPlus = GetCachedDxBrush(ConfluenceAPlusColor);
+			var aBrush = GetCachedDxBrush(ConfluenceAColor);
+			var bBrush = GetCachedDxBrush(ConfluenceBColor);
+			var lvlBr = GetCachedDxBrush(LevelColor);
+			var entryBr = GetCachedDxBrush(EntryColor);
+			var stopBr = GetCachedDxBrush(StopColor);
+			var tgtBr = GetCachedDxBrush(TargetColor);
+			var anchorBr = GetCachedDxBrush(AnchorColor);
+			var notesBr = GetCachedDxBrush(NotesColor);
+			var pendBr = GetCachedDxBrush(ArrowPendingColor);
+			var trigBr = GetCachedDxBrush(ArrowTriggeredColor);
+			var fillBr = GetCachedDxBrush(ArrowFilledColor);
+			var stopArrBr = GetCachedDxBrush(ArrowStoppedColor);
+			var missBr = GetCachedDxBrush(ArrowMissedColor);
+			if (_labelBgBrushCache == null || _labelBgBrushCache.IsDisposed)
+				_labelBgBrushCache = System.Windows.Media.Brushes.Black.ToDxBrush(RenderTarget);
+
+			// Palette por hipo (cacheada también)
 			var hypoBrushes = new List<SharpDX.Direct2D1.Brush>();
-			foreach (var b in _hypoPalette) hypoBrushes.Add(b.ToDxBrush(RenderTarget));
+			foreach (var b in _hypoPalette) hypoBrushes.Add(GetCachedDxBrush(b));
 
-			var labelFmt = new SimpleFont("Arial", LabelFontSize).ToDirectWriteTextFormat();
-			labelFmt.TextAlignment = SharpDX.DirectWrite.TextAlignment.Leading;
-			labelFmt.ParagraphAlignment = SharpDX.DirectWrite.ParagraphAlignment.Center;
+			// v: aplicar opacidad en modo MarkupOnly (todos los brushes de markup, incluyendo labels)
+			if (RenderLayer == RelativeNadroRenderLayer.MarkupOnly && MarkupOpacity < 100)
+			{
+				float op = MarkupOpacity / 100f;
+				aPlus.Opacity = op; aBrush.Opacity = op; bBrush.Opacity = op;
+				lvlBr.Opacity = op;
+				entryBr.Opacity = op; stopBr.Opacity = op; tgtBr.Opacity = op;
+				anchorBr.Opacity = op;
+				notesBr.Opacity = op;
+				pendBr.Opacity = op; trigBr.Opacity = op; fillBr.Opacity = op;
+				stopArrBr.Opacity = op; missBr.Opacity = op;
+				foreach (var b in hypoBrushes) b.Opacity = op;
+			}
 
-			var notesFmt = new SimpleFont("Arial", NotesFontSize).ToDirectWriteTextFormat();
-			notesFmt.TextAlignment = SharpDX.DirectWrite.TextAlignment.Leading;
-			notesFmt.ParagraphAlignment = SharpDX.DirectWrite.ParagraphAlignment.Near;
+			// PERF: TextFormats cacheados, recreados solo si LabelFontSize/NotesFontSize cambian.
+			if (_cachedLabelFmt == null || _cachedLabelFontSize != LabelFontSize)
+			{
+				_cachedLabelFmt?.Dispose();
+				_cachedLabelFmt = new SimpleFont("Arial", LabelFontSize).ToDirectWriteTextFormat();
+				_cachedLabelFmt.TextAlignment = SharpDX.DirectWrite.TextAlignment.Leading;
+				_cachedLabelFmt.ParagraphAlignment = SharpDX.DirectWrite.ParagraphAlignment.Center;
+				_cachedLabelFontSize = LabelFontSize;
+			}
+			if (_cachedNotesFmt == null || _cachedNotesFontSize != NotesFontSize)
+			{
+				_cachedNotesFmt?.Dispose();
+				_cachedNotesFmt = new SimpleFont("Arial", NotesFontSize).ToDirectWriteTextFormat();
+				_cachedNotesFmt.TextAlignment = SharpDX.DirectWrite.TextAlignment.Leading;
+				_cachedNotesFmt.ParagraphAlignment = SharpDX.DirectWrite.ParagraphAlignment.Near;
+				_cachedNotesFontSize = NotesFontSize;
+			}
+			var labelFmt = _cachedLabelFmt;
+			var notesFmt = _cachedNotesFmt;
+
+			// v: identificar snapshot "activo" para evitar superposicion de paneles.
+			// Los markups graficos (lineas, flechas, niveles) se pintan para todos,
+			// pero el panel de texto + caja de notas solo para el snapshot activo
+			// = el que tiene su anchor mas cerca del centro del viewport visible.
+			// Si ninguno esta en viewport, usar el ultimo (mas reciente) como fallback.
+			MarkupSnapshot activeSnap = null;
+			{
+				float viewLeft = (float)ChartPanel.X;
+				float viewRight = chartRight;
+				float viewCenter = (viewLeft + viewRight) * 0.5f;
+				float minDist = float.MaxValue;
+				foreach (var s in _snapshots)
+				{
+					float xA = (float)chartControl.GetXByTime(s.Timestamp);
+					if (xA < viewLeft || xA > viewRight) continue;
+					float d = Math.Abs(xA - viewCenter);
+					if (d < minDist) { minDist = d; activeSnap = s; }
+				}
+				if (activeSnap == null && _snapshots.Count > 0)
+					activeSnap = _snapshots[_snapshots.Count - 1];
+			}
 
 			foreach (var snap in _snapshots)
 			{
@@ -414,13 +620,32 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				// Anti-colisión de labels (reuso patrón RelativeVwapLevels)
 				var obstacles = new List<SharpDX.RectangleF>();
 
-				if (ShowVerticalAnchor)
+				// Opacar el "pasado" (área a la izquierda del anchor) con un velo negro
+				// semi-transparente. Resalta visualmente que solo el lado derecho del
+				// snapshot es relevante para la operativa actual.
+				if (showMarkup && DimPastOpacity > 0 && snap == activeSnap)
+				{
+					float dimRight = xAnchor;
+					float dimLeft = (float)ChartPanel.X;
+					if (dimRight > dimLeft && _labelBgBrushCache != null)
+					{
+						float prevOp = _labelBgBrushCache.Opacity;
+						_labelBgBrushCache.Opacity = (float)(DimPastOpacity / 100.0);
+						RenderTarget.FillRectangle(
+							new SharpDX.RectangleF(dimLeft, (float)ChartPanel.Y,
+								dimRight - dimLeft, (float)ChartPanel.H),
+							_labelBgBrushCache);
+						_labelBgBrushCache.Opacity = prevOp;
+					}
+				}
+
+				if (ShowVerticalAnchor && showMarkup)
 				{
 					DrawDashedVertical(xAnchor, (float)ChartPanel.Y,
 						(float)ChartPanel.Y + (float)ChartPanel.H, anchorBr);
 				}
 
-				if (ShowConfluences)
+				if (ShowConfluences && showMarkup)
 				{
 					foreach (var c in snap.Confluences)
 					{
@@ -450,23 +675,52 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 					}
 				}
 
-				if (ShowLevels)
+				// PASS 1 niveles: solo las líneas dashed (debajo de las líneas de hypos).
+				if (ShowLevels && showMarkup)
 				{
 					foreach (var l in snap.Levels)
 					{
 						float y = (float)chartScale.GetYByValue(l.Price);
 						DrawDashedHorizontal(xAnchor, chartRight, y, lvlBr);
-						DrawLabelAt(xAnchor + 4, y - LabelFontSize, l.Label, labelFmt, lvlBr, obstacles, 180);
 					}
 				}
 
-				if (ShowHypos)
+				if (ShowHypos && showMarkup)
 				{
-					float xArrowEnd = Math.Min(chartRight, xAnchor + ArrowLengthBars * 8f);
+					// Decoupled — labels y flechas se posicionan independientemente:
+					//   - labels a la IZQUIERDA del anchor (no tapan price action que está a la derecha)
+					//     fallback derecha si no hay 260px libres a la izquierda.
+					//   - flechas siempre apuntan al FUTURO (derecha) si hay espacio suficiente,
+					//     fallback izquierda solo cuando el anchor está pegado al borde derecho.
+					bool labelsLeft = (xAnchor - (float)ChartPanel.X) >= 260f;
+					bool arrowFlipped = (chartRight - xAnchor) < 80f; // solo flip arrow si no hay nada a la derecha
+
+					float xArrowStart, xArrowEnd;
+					if (arrowFlipped)
+					{
+						xArrowEnd = xAnchor;
+						xArrowStart = Math.Max((float)ChartPanel.X, xAnchor - ArrowLengthBars * 8f);
+					}
+					else
+					{
+						xArrowStart = xAnchor;
+						xArrowEnd = Math.Min(chartRight, xAnchor + ArrowLengthBars * 8f);
+					}
+					// En modo izquierda usamos right-align al anchor (el X concreto se calcula
+					// por label ya que el ancho del texto varía). En modo derecha, alineamos a
+					// xAnchor + 4 como antes.
+					float labelEntryX = xAnchor + 4f;
+					float labelStopX  = xAnchor + 4f;
+					float labelTgtX   = xAnchor + 4f;
+					// Alias retrocompat para el resto del bloque que aún referencia flipLeft.
+					bool flipLeft = arrowFlipped;
 
 					// Dedupe líneas target compartidas entre hipos (misma Y)
 					var drawnTargetYs = new HashSet<int>();
 
+					// PASS 1 — TODAS las líneas, flechas y dashed arrows de TODOS los hypos.
+					// Se dibujan ANTES que cualquier label para que las labels (PASS 2) queden
+					// SIEMPRE encima y sean legibles.
 					for (int hi = 0; hi < snap.Hypos.Count; hi++)
 					{
 						var h = snap.Hypos[hi];
@@ -481,17 +735,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 						float yEntry = (float)chartScale.GetYByValue(h.Entry);
 						float yStop = (float)chartScale.GetYByValue(h.Stop);
 
-						RenderTarget.DrawLine(new Vector2(xAnchor, yEntry), new Vector2(xArrowEnd, yEntry), entryBr, 1.5f);
-						string setup = h.SetupType ?? "";
-						if (h.SetupCompanions != null && h.SetupCompanions.Count > 0)
-							setup += " / " + string.Join(" / ", h.SetupCompanions);
-						string horizonTag = (h.TradingHorizon == "swing") ? " [SWING]" : "";
-						string eTxt = DisplayHypoId(h.Id) + " E " + h.Entry.ToString("0.##") + " " + h.Direction + " " + setup + " " + h.Grade + horizonTag;
-						DrawLabelAt(xAnchor + 4, yEntry - LabelFontSize, eTxt, labelFmt, notesBr, obstacles, 220);
-
-						RenderTarget.DrawLine(new Vector2(xAnchor, yStop), new Vector2(xArrowEnd, yStop), stopBr, 1.5f);
-						string sTxt = "S" + h.Id + " " + h.Stop.ToString("0.##");
-						DrawLabelAt(xAnchor + 4, yStop - LabelFontSize, sTxt, labelFmt, notesBr, obstacles, 140);
+						RenderTarget.DrawLine(new Vector2(xArrowStart, yEntry), new Vector2(xArrowEnd, yEntry), entryBr, 1.5f);
+						RenderTarget.DrawLine(new Vector2(xArrowStart, yStop), new Vector2(xArrowEnd, yStop), stopBr, 1.5f);
 
 						for (int ti = 0; ti < h.Targets.Count; ti++)
 						{
@@ -500,22 +745,21 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 							int yKey = (int)Math.Round(yT);
 							if (!drawnTargetYs.Contains(yKey))
 							{
-								RenderTarget.DrawLine(new Vector2(xAnchor, yT), new Vector2(xArrowEnd, yT), tgtBr, 1f);
+								RenderTarget.DrawLine(new Vector2(xArrowStart, yT), new Vector2(xArrowEnd, yT), tgtBr, 1f);
 								drawnTargetYs.Add(yKey);
 							}
-							string tTxt = "T" + (ti + 1) + h.Id + " " + t.Price.ToString("0.##") + " RR" + t.RR.ToString("0.0");
-							DrawLabelAt(xAnchor + 4, yT - LabelFontSize, tTxt, labelFmt, notesBr, obstacles, 180);
 						}
 
 						if (h.Targets.Count > 0)
 						{
 							double lastTP = h.Targets[h.Targets.Count - 1].Price;
 							float yTF = (float)chartScale.GetYByValue(lastTP);
-							DrawArrow(xAnchor + 2, yEntry, xArrowEnd, yTF, arrBr);
+							if (flipLeft)
+								DrawArrow(xArrowEnd - 2, yEntry, xArrowStart, yTF, arrBr);
+							else
+								DrawArrow(xArrowStart + 2, yEntry, xArrowEnd, yTF, arrBr);
 
-							// STOP TIGHT: si el trade fue stopped_out pero el setup alcanzó al menos T1,
-							// dibujar flecha secundaria PUNTEADA verde hacia el último target alcanzado.
-							// Revela visualmente que el setup iba bien pero el stop fue muy ajustado.
+							// STOP TIGHT: si el trade fue stopped_out pero alcanzó T1, flecha secundaria.
 							if (st == "stopped_out" && h.SetupReachedT1)
 							{
 								int lastReachedIdx = -1;
@@ -527,64 +771,180 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 								{
 									double tgtP = h.Targets[lastReachedIdx].Price;
 									float yTgt = (float)chartScale.GetYByValue(tgtP);
-									DrawDashedArrow(xAnchor + 2, yEntry, xArrowEnd - 4, yTgt, fillBr);
-
-									// Badge textual "STOP TIGHT" cerca del entry
-									var tightRect = new SharpDX.RectangleF(
-										xAnchor + 240, yEntry - LabelFontSize - 2,
-										120, LabelFontSize + 4);
-									if (_labelBgBrushCache != null)
-									{
-										_labelBgBrushCache.Opacity = 0.82f;
-										RenderTarget.FillRectangle(tightRect, _labelBgBrushCache);
-										_labelBgBrushCache.Opacity = 1f;
-									}
-									RenderTarget.DrawText("STOP TIGHT T" + (lastReachedIdx + 1),
-										labelFmt, tightRect, fillBr);
+									if (flipLeft)
+										DrawDashedArrow(xArrowEnd - 2, yEntry, xArrowStart + 4, yTgt, fillBr);
+									else
+										DrawDashedArrow(xArrowStart + 2, yEntry, xArrowEnd - 4, yTgt, fillBr);
 								}
+							}
+						}
+					}
+
+					// PASS 2a — labels de niveles. Se dibujan AHORA (después de líneas de
+					// hypos en PASS 1) para que el fondo del label cubra cualquier línea
+					// de entry/stop/target de hypo que coincida con el mismo precio.
+					if (ShowLevels && showMarkup)
+					{
+						foreach (var l in snap.Levels)
+						{
+							float y = (float)chartScale.GetYByValue(l.Price);
+							DrawLabelAt(xAnchor + 4, y - LabelFontSize, l.Label, labelFmt, lvlBr, obstacles, 180);
+						}
+					}
+
+					// PASS 2 — TODAS las labels de hypos como cards negros sólidos con borde.
+					// Se dibujan al final para quedar SIEMPRE encima de líneas y flechas.
+					for (int hi = 0; hi < snap.Hypos.Count; hi++)
+					{
+						var h = snap.Hypos[hi];
+						string st = (h.OutcomeStatus ?? "pending").ToLowerInvariant();
+						float yEntry = (float)chartScale.GetYByValue(h.Entry);
+						float yStop = (float)chartScale.GetYByValue(h.Stop);
+
+						string setup = h.SetupType ?? "";
+						if (h.SetupCompanions != null && h.SetupCompanions.Count > 0)
+							setup += " / " + string.Join(" / ", h.SetupCompanions);
+						string horizonTag = (h.TradingHorizon == "swing") ? " [SWING]" : "";
+						string eTxt = DisplayHypoId(h.Id) + " E " + h.Entry.ToString("0.##") + " " + h.Direction + " " + setup + " " + h.Grade + horizonTag;
+						// Right-align al anchor cuando labels van a la izquierda — evita que el
+						// fondo del label se desborde más allá de la línea del snapshot.
+						float eEstW = eTxt.Length * (LabelFontSize * 0.62f) + 8f;
+						float xE = labelsLeft ? (xAnchor - eEstW - 4f) : labelEntryX;
+						DrawHypoLabel(xE, yEntry - LabelFontSize, eTxt, labelFmt, entryBr, obstacles, Math.Max(220f, eEstW));
+
+						string sTxt = "S" + h.Id + " " + h.Stop.ToString("0.##");
+						float sEstW = sTxt.Length * (LabelFontSize * 0.62f) + 8f;
+						float xS = labelsLeft ? (xAnchor - sEstW - 4f) : labelStopX;
+						DrawHypoLabel(xS, yStop - LabelFontSize, sTxt, labelFmt, stopBr, obstacles, Math.Max(140f, sEstW));
+
+						for (int ti = 0; ti < h.Targets.Count; ti++)
+						{
+							var t = h.Targets[ti];
+							float yT = (float)chartScale.GetYByValue(t.Price);
+							string tTxt = "T" + (ti + 1) + h.Id + " " + t.Price.ToString("0.##") + " RR" + t.RR.ToString("0.0");
+							float tEstW = tTxt.Length * (LabelFontSize * 0.62f) + 8f;
+							float xT = labelsLeft ? (xAnchor - tEstW - 4f) : labelTgtX;
+							DrawHypoLabel(xT, yT - LabelFontSize, tTxt, labelFmt, tgtBr, obstacles, Math.Max(180f, tEstW));
+						}
+
+						// Badge "STOP TIGHT" si aplica
+						if (st == "stopped_out" && h.SetupReachedT1 && h.Targets.Count > 0)
+						{
+							int lastReachedIdx = -1;
+							if (h.SetupReachedT3 && h.Targets.Count >= 3) lastReachedIdx = 2;
+							else if (h.SetupReachedT2 && h.Targets.Count >= 2) lastReachedIdx = 1;
+							else if (h.SetupReachedT1 && h.Targets.Count >= 1) lastReachedIdx = 0;
+
+							if (lastReachedIdx >= 0)
+							{
+								var tightRect = new SharpDX.RectangleF(
+									labelsLeft ? xAnchor - 360f : xAnchor + 240f, yEntry - LabelFontSize - 2,
+									120, LabelFontSize + 4);
+								if (_labelBgBrushCache != null)
+								{
+									_labelBgBrushCache.Opacity = 1f;
+									RenderTarget.FillRectangle(tightRect, _labelBgBrushCache);
+								}
+								RenderTarget.DrawText("STOP TIGHT T" + (lastReachedIdx + 1),
+									labelFmt, tightRect, fillBr);
 							}
 						}
 					}
 				}
 
-				if (ShowAnalysisText && !string.IsNullOrEmpty(snap.AnalysisText))
+				if (ShowAnalysisText && showBriefing && snap == activeSnap && !string.IsNullOrEmpty(snap.AnalysisText))
 				{
 					float panelLeft = (float)ChartPanel.X;
-					float panelTop = (float)ChartPanel.Y + 44;
+					float panelTop = (float)ChartPanel.Y + TopPadding;
 					float boxRight = Math.Min(xAnchor - 2, panelLeft + AnalysisAreaWidth);
 					float boxWidth = boxRight - panelLeft;
 					if (boxWidth > 80)
 					{
+						float boxHeight = (float)ChartPanel.H - 8;
+						// v: guardar rect para hit-test del mouse wheel
+						_briefingRect = new SharpDX.RectangleF(panelLeft, panelTop, boxWidth, boxHeight);
+						_hasBriefingRect = true;
+
 						if (_labelBgBrushCache != null)
 						{
 							_labelBgBrushCache.Opacity = 0.78f;
 							RenderTarget.FillRectangle(
-								new SharpDX.RectangleF(panelLeft, panelTop, boxWidth, (float)ChartPanel.H - 8),
+								new SharpDX.RectangleF(panelLeft, panelTop, boxWidth, boxHeight),
 								_labelBgBrushCache);
 							_labelBgBrushCache.Opacity = 1f;
 						}
 						var atRect = new SharpDX.RectangleF(panelLeft + 6, panelTop + 4, boxWidth - 12, (float)ChartPanel.H - 12);
-						RenderTarget.DrawText(snap.AnalysisText, notesFmt, atRect, notesBr);
+
+						// v: Concatenar bloque de HIPOS al final del analysis_text
+						string fullText = snap.AnalysisText;
+						if (snap.Hypos != null && snap.Hypos.Count > 0)
+						{
+							var sb = new System.Text.StringBuilder();
+							sb.Append(fullText);
+							sb.Append("\n\n=== HIPOS ===");
+							for (int hi = 0; hi < snap.Hypos.Count; hi++)
+							{
+								var h = snap.Hypos[hi];
+								string setup = h.SetupType ?? "";
+								if (h.SetupCompanions != null && h.SetupCompanions.Count > 0)
+									setup += " / " + string.Join(" / ", h.SetupCompanions);
+								string dir = (h.Direction ?? "").ToUpperInvariant();
+								string hTag = (h.TradingHorizon == "swing") ? " [SWING]" : "";
+								double risk = Math.Abs(h.Entry - h.Stop);
+								sb.Append("\n[" + DisplayHypoId(h.Id) + "] " + setup + " " + dir + " grade " + h.Grade + hTag);
+								sb.Append("\n  E " + h.Entry.ToString("0.##") + "  S " + h.Stop.ToString("0.##") + "  (risk " + risk.ToString("0.##") + " pts)");
+								for (int ti = 0; ti < h.Targets.Count; ti++)
+								{
+									var t = h.Targets[ti];
+									sb.Append("\n  T" + (ti + 1) + " " + t.Price.ToString("0.##") + "  RR " + t.RR.ToString("0.0"));
+								}
+							}
+							fullText = sb.ToString();
+						}
+
+						// v: aplicar scroll offset (saltar N líneas lógicas desde arriba)
+						if (_scrollOffsetLines > 0 && !string.IsNullOrEmpty(fullText))
+						{
+							string[] lines = fullText.Split('\n');
+							int skip = Math.Min(_scrollOffsetLines, Math.Max(0, lines.Length - 3));
+							if (skip > 0) fullText = string.Join("\n", lines.Skip(skip));
+						}
+
+						RenderTarget.DrawText(fullText, notesFmt, atRect, notesBr);
 					}
 				}
 
-				if (ShowNotes)
+				if (ShowNotes && showBriefing && snap == activeSnap)
 				{
 					string notes = "NADRO " + snap.Id + " | " + snap.Timestamp.ToString("HH:mm") + " | " + snap.Regime + "\n" +
 						(string.IsNullOrEmpty(snap.Summary) ? "" : snap.Summary);
 					// Caja de notas en esquina superior izquierda fija del panel (no junto al anchor)
-					var noteRect = new SharpDX.RectangleF((float)ChartPanel.X + 8, (float)ChartPanel.Y + 18, 640, 24);
+					var noteRect = new SharpDX.RectangleF((float)ChartPanel.X + 8, (float)ChartPanel.Y + TopPadding - 66, 640, 60);
 					RenderTarget.DrawText(notes, notesFmt, noteRect, notesBr);
 				}
 			}
 
-			aPlus.Dispose(); aBrush.Dispose(); bBrush.Dispose();
-			lvlBr.Dispose(); entryBr.Dispose(); stopBr.Dispose(); tgtBr.Dispose();
-			anchorBr.Dispose(); notesBr.Dispose();
-			pendBr.Dispose(); trigBr.Dispose(); fillBr.Dispose(); stopArrBr.Dispose(); missBr.Dispose();
-			foreach (var b in hypoBrushes) b.Dispose();
-			if (_labelBgBrushCache != null) { _labelBgBrushCache.Dispose(); _labelBgBrushCache = null; }
-			labelFmt.Dispose(); notesFmt.Dispose();
+			// PERF: NO dispose — brushes/TextFormats están en _dxBrushCache + _cachedLabelFmt/_cachedNotesFmt.
+			// Se reutilizan entre frames y se liberan en OnRenderTargetChanged → DisposeBrushCache.
+			// Resetear opacity si MarkupOnly mode la modificó (los brushes son compartidos).
+			if (RenderLayer == RelativeNadroRenderLayer.MarkupOnly && MarkupOpacity < 100)
+			{
+				if (aPlus != null) aPlus.Opacity = 1f;
+				if (aBrush != null) aBrush.Opacity = 1f;
+				if (bBrush != null) bBrush.Opacity = 1f;
+				if (lvlBr != null) lvlBr.Opacity = 1f;
+				if (entryBr != null) entryBr.Opacity = 1f;
+				if (stopBr != null) stopBr.Opacity = 1f;
+				if (tgtBr != null) tgtBr.Opacity = 1f;
+				if (anchorBr != null) anchorBr.Opacity = 1f;
+				if (notesBr != null) notesBr.Opacity = 1f;
+				if (pendBr != null) pendBr.Opacity = 1f;
+				if (trigBr != null) trigBr.Opacity = 1f;
+				if (fillBr != null) fillBr.Opacity = 1f;
+				if (stopArrBr != null) stopArrBr.Opacity = 1f;
+				if (missBr != null) missBr.Opacity = 1f;
+				foreach (var b in hypoBrushes) if (b != null) b.Opacity = 1f;
+			}
 		}
 
 		private SharpDX.Direct2D1.Brush _labelBgBrushCache;
@@ -612,14 +972,59 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				rect = new SharpDX.RectangleF(x, y - pad, approxWidth, LabelFontSize + pad * 2);
 			}
 
-			// Fondo sólido detrás del texto para ocultar líneas bajo el label
+			// Fondo sólido detrás del texto para ocultar líneas bajo el label.
+			// Opacidad 1.0 (full black) y rect ampliado para cubrir bien la línea
+			// dashed que puede pasar por el centro del precio (priceY).
 			if (_labelBgBrushCache != null && !string.IsNullOrEmpty(text))
 			{
 				float estW = text.Length * (LabelFontSize * 0.58f) + 6f;
-				_labelBgBrushCache.Opacity = 0.8f;
-				var bgRect = new SharpDX.RectangleF(x - 2, y, estW, LabelFontSize + 4);
-				RenderTarget.FillRectangle(bgRect, _labelBgBrushCache);
 				_labelBgBrushCache.Opacity = 1f;
+				// Ampliamos el rect: 4px más arriba y 6px más abajo para cubrir descenders,
+				// la línea del nivel y posibles desplazamientos de baseline del texto.
+				var bgRect = new SharpDX.RectangleF(x - 2, y - 4, estW, LabelFontSize + 12);
+				RenderTarget.FillRectangle(bgRect, _labelBgBrushCache);
+			}
+
+			var drawRect = new SharpDX.RectangleF(x, y, approxWidth, LabelFontSize * 2);
+			RenderTarget.DrawText(text, fmt, drawRect, brush);
+			obstacles.Add(rect);
+		}
+
+		// Label especial para HYPOS: card negro sólido + borde, font ligeramente mayor.
+		// Pensado para llamarse en una segunda pasada (DESPUÉS de dibujar todas las líneas
+		// y flechas) para que el card quede ENCIMA y sea legible.
+		private void DrawHypoLabel(float x, float y, string text, TextFormat fmt,
+			SharpDX.Direct2D1.Brush brush, List<SharpDX.RectangleF> obstacles, float approxWidth)
+		{
+			int pad = LabelFontSize / 2 + 4;
+			var rect = new SharpDX.RectangleF(x, y - pad, approxWidth, LabelFontSize + pad * 2);
+
+			for (int attempt = 0; attempt < 20; attempt++)
+			{
+				bool collision = false;
+				foreach (var obs in obstacles)
+				{
+					if (rect.Bottom >= obs.Top && rect.Top <= obs.Bottom &&
+					    rect.Right > obs.Left && rect.Left < obs.Right)
+					{
+						collision = true;
+						break;
+					}
+				}
+				if (!collision) break;
+				x += approxWidth + 8;
+				rect = new SharpDX.RectangleF(x, y - pad, approxWidth, LabelFontSize + pad * 2);
+			}
+
+			// Fondo negro SÓLIDO (sin borde) para que las labels se lean encima de líneas/zonas
+			if (_labelBgBrushCache != null && !string.IsNullOrEmpty(text))
+			{
+				float estW = text.Length * (LabelFontSize * 0.62f) + 8f;
+				float bgH = LabelFontSize + 6f;
+				var bgRect = new SharpDX.RectangleF(x - 3, y - 1, estW, bgH);
+
+				_labelBgBrushCache.Opacity = 1f;
+				RenderTarget.FillRectangle(bgRect, _labelBgBrushCache);
 			}
 
 			var drawRect = new SharpDX.RectangleF(x, y, approxWidth, LabelFontSize * 2);
@@ -741,6 +1146,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		[Range(0, 100)]
 		[Display(Name = "Opacidad confluencia %", GroupName = "03. Estilo", Order = 0)]
 		public int ConfluenceOpacity { get; set; }
+
+		[Range(0, 95)]
+		[Display(Name = "Opacar pasado del snapshot %", Description = "0 = no opaca; 50 = oscurece 50% el area a la izquierda del anchor", GroupName = "03. Estilo", Order = 4)]
+		public int DimPastOpacity { get; set; }
 
 		[Range(7, 28)]
 		[Display(Name = "Tamano label", GroupName = "03. Estilo", Order = 1)]
@@ -901,6 +1310,17 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		[Range(100, 900)]
 		[Display(Name = "Ancho panel analisis (px)", GroupName = "03. Estilo", Order = 4)]
 		public int AnalysisAreaWidth { get; set; }
+
+		[Range(20, 300)]
+		[Display(Name = "Padding superior panel (px)", GroupName = "03. Estilo", Order = 5)]
+		public int TopPadding { get; set; }
+
+		[Display(Name = "Modo de render", GroupName = "03. Estilo", Order = 6, Description = "Full = todo; BriefingOnly = solo panel y notas; MarkupOnly = solo lineas/flechas (cargar PRIMERO para que quede atras)")]
+		public RelativeNadroRenderLayer RenderLayer { get; set; }
+
+		[Range(20, 100)]
+		[Display(Name = "Opacidad markup (%)", GroupName = "03. Estilo", Order = 7, Description = "Solo aplica en modo MarkupOnly. 50% recomendado para ver velas a traves.")]
+		public int MarkupOpacity { get; set; }
 
 		#endregion
 	}

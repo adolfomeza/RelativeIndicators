@@ -168,6 +168,45 @@ def get_indicator_state(key: str) -> dict:
     return _request("GET", f"/indicator-state/{_q(key, safe='/')}")
 
 
+def get_indicator_state_at(key: str, as_of: str) -> dict:
+    """Estado HISTÓRICO de un indicador en un timestamp específico (replay snapshot).
+
+    Requiere que el indicador haya registrado un ``HistoricalQueryHandler``
+    en ``RelativeIndicatorRegistry``. Para los 5 forks VWAP (Daily/Weekly/Monthly/
+    Quarterly/Annual) ya está implementado: keys son ``Relative{Tf}Vwap:{instrument}``.
+
+    ``as_of`` es ISO 8601 (ej: ``2026-04-22T09:25:00``).
+
+    Returns dict con: ``key``, ``as_of``, ``payload`` (DVAH/VWAP/DVAL/bar_idx/bar_time/close).
+    """
+    from urllib.parse import quote as _q
+    return _request("GET", f"/indicator-state/{_q(key, safe='/')}/at", query={"ts": as_of})
+
+
+def get_dva_at(instrument: str, timeframe: str, as_of: str) -> dict:
+    """Wrapper de alto nivel: lee DVAH/VWAP/DVAL del fork VWAP del TF correspondiente
+    a un instrumento, en un timestamp histórico.
+
+    ``timeframe`` ∈ Daily | Weekly | Monthly | Quarterly | Annual.
+    ``instrument`` ej: ``"NQ 06-26"`` (FullName, debe coincidir con el chart cargado).
+    ``as_of`` ISO 8601.
+
+    Convención de keys: ``Relative{Timeframe}Vwap:{instrument}``.
+    """
+    tf_map = {
+        "daily": "RelativeDailyVwap",
+        "weekly": "RelativeWeeklyVwap",
+        "monthly": "RelativeMonthlyVwap",
+        "quarterly": "RelativeQuarterlyVwap",
+        "annual": "RelativeAnnualVwap",
+    }
+    indicator_name = tf_map.get(timeframe.lower())
+    if not indicator_name:
+        return {"error": f"timeframe inválido: {timeframe}. Usá Daily/Weekly/Monthly/Quarterly/Annual"}
+    key = f"{indicator_name}:{instrument}"
+    return get_indicator_state_at(key, as_of)
+
+
 def get_print_output(
     n: int = 200,
     indicator: str | None = None,

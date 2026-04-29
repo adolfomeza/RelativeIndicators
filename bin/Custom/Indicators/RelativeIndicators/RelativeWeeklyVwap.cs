@@ -291,6 +291,34 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				else
 					calculateFromPriceData = false;
 		    	sessionIterator = new SessionIterator(Bars);
+
+				// Replay support: registrar query handler para snapshots historicos.
+				// Permite a `nadro_snapshot_replay` leer DVAH/VWAP/DVAL de cualquier
+				// barra historica via /indicator-state/{key}/at?ts=...
+				try
+				{
+					string _replayKey = "RelativeWeeklyVwap:" + Instrument.FullName;
+					NinjaTrader.NinjaScript.AddOns.RelativeIndicatorRegistry.RegisterQueryHandler(_replayKey,
+						asOf =>
+						{
+							var dict = new System.Collections.Generic.Dictionary<string, object>();
+							if (Bars == null || CurrentBar < 0) { dict["error"] = "no bars"; return dict; }
+							int idx = -1;
+							for (int i = 0; i <= CurrentBar; i++)
+							{
+								if (Bars.GetTime(i) <= asOf) idx = i; else break;
+							}
+							if (idx < 0) { dict["error"] = "as_of antes de la primera barra"; return dict; }
+							dict["bar_idx"] = idx;
+							dict["bar_time"] = Bars.GetTime(idx);
+							dict["close"] = Bars.GetClose(idx);
+							try { dict["vwap"] = SessionVWAP.GetValueAt(idx); } catch { dict["vwap"] = null; }
+							try { dict["dvah"] = UpperBand1.GetValueAt(idx); } catch { dict["dvah"] = null; }
+							try { dict["dval"] = LowerBand1.GetValueAt(idx); } catch { dict["dval"] = null; }
+							return dict;
+						});
+				}
+				catch { /* registry opcional, no rompe el indicador */ }
 		  	}
 			else if (State == State.Historical)
 			{
@@ -474,10 +502,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 					tradingWeek[0] = GetLastBarSessionDateW(Time[0]);
 					if(tradingWeek[0] != tradingWeek[1])
 					{
-						// Freeze breached zones at week boundary
+						// v1.0.2: Congelar TODAS las zonas activas al cambio de semana.
 						for (int i = activeZones.Count - 1; i >= 0; i--)
 						{
-							if (activeZones[i].IsBreached && activeZones[i].IsActive)
+							if (activeZones[i].IsActive)
 							{
 								activeZones[i].IsActive = false;
 								activeZones[i].EndTime = Time[1];
@@ -804,38 +832,8 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				LowerBand3.Reset();
 			}
 
-			// Breach detection and zone management
-			if (showSessionZones && activeZones.Count > 0)
-			{
-				for (int i = activeZones.Count - 1; i >= 0; i--)
-				{
-					SessionZone zone = activeZones[i];
-					if (zone.IsActive)
-					{
-						double range = zone.UpperY - zone.LowerY;
-						double cutoffY = zone.LowerY + (range * (zoneCutoffPercentage / 100.0));
-
-						if (!zone.IsBreached && CurrentBar > zone.CreationBar
-							&& High[0] >= cutoffY && Low[0] <= cutoffY)
-						{
-							zone.IsBreached = true;
-							zone.BreachTime = Time[0];
-						}
-
-						// Safety: cross-week breach freeze
-						if (zone.IsBreached && zone.BreachTime != DateTime.MinValue)
-						{
-							DateTime breachWeek = GetWeekStart(zone.BreachTime);
-							DateTime currentWeekStart = GetWeekStart(Time[0]);
-							if (currentWeekStart > breachWeek)
-							{
-								zone.IsActive = false;
-								zone.EndTime = zone.BreachTime;
-							}
-						}
-					}
-				}
-			}
+			// v1.0.2: Eliminada detección de breach intra-semana. Las zonas ya no se cortan
+			// cuando el precio cruza el midpoint — solo se congelan al cambio de semana.
 
 			// Export levels
 			if (State == State.Realtime || CurrentBar >= Bars.Count - 2)
@@ -926,7 +924,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				int zIdx = 0;
 				for (int i = 0; i < activeZones.Count; i++)
 				{
-					if (activeZones[i].IsBreached) continue;
+					// v1.0.2: Ya no filtramos por IsBreached (flag obsoleta en v1.0.2).
 					var z = activeZones[i];
 					zoneSb.AppendLine("ZONE_" + zIdx + "="
 						+ z.UpperY.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|"
@@ -1867,8 +1865,13 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 						zoneTextFmt.Dispose();
 					}
 
-					// Current Week Labels (wDVAH / wDVAL) with anti-collision
-					if (lastBarIndex >= firstBarIndex)
+					// Current Week Labels (wDVAH / wDVAL) with anti-collision.
+					// REGLA NADRO cobertura W/D: lunes la semana solo tiene 1 día (= Daily current),
+					// el VWAP weekly es eco del daily → ocultar las letras.
+					// Uso DateTime.Now (sistema) en lugar de Time[0] para evitar edge cases con
+					// barras Globex domingo que podrían reportar DayOfWeek=Sunday en la última barra.
+					bool _wkEcho = (DateTime.Now.DayOfWeek == DayOfWeek.Monday);
+					if (lastBarIndex >= firstBarIndex && !_wkEcho)
 					{
 						SharpDX.Direct2D1.Brush labelBrushDX = currentWeekLabelColor.ToDxBrush(RenderTarget);
 						SimpleFont labelFont = new SimpleFont("Arial", currentWeekLabelSize);

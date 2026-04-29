@@ -53,6 +53,13 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
 		private int 	lastBar;
 		private bool 	lastInTransition;
+
+		// v1.16: Delta history export para backtest Apteros
+		private string _deltaHistoryDir;
+		private string _currentDeltaFile = "";
+		private DateTime _lastDeltaExportDate = DateTime.MinValue;
+		private System.Text.StringBuilder _deltaBuffer = new System.Text.StringBuilder();
+		private DateTime _lastDeltaFlushTime = DateTime.MinValue;
 		
 		private Brush	divergeCandleup   = Brushes.Purple;  // Color body for Divergence Candle
 		private Brush	divergeCandledown   = Brushes.Pink;  // Color body for Divergence Candle
@@ -204,13 +211,21 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
 				
 				stoch = this.Stochastics(3, 14, 3);
-				
+
+				// v1.16: Delta history directory
+				_deltaHistoryDir = System.IO.Path.Combine(
+					Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+					"NinjaTrader 8", "bin", "Custom", "DeltaHistory");
+				if (!System.IO.Directory.Exists(_deltaHistoryDir))
+					System.IO.Directory.CreateDirectory(_deltaHistoryDir);
+
 				// Initialize D2D Factory once - NO LONGER NEEDED (Using RenderTarget.Factory)
 			}
 			else if (State == State.Terminated)
 			{
 			    DisposeD2DResources(); // Ensure cleanup
-			}		
+			    FlushDeltaBuffer(); // v1.16: flush last buffered delta bars on shutdown
+			}
 		}
 		
 		protected override void OnBarUpdate()
@@ -480,6 +495,10 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 								euSessionActive ? euSessionAnchor.ToString("F0") : "off",
 								asiaSessionActive ? asiaSessionAnchor.ToString("F0") : "off",
 								globalSessionActive ? globalSessionAnchor.ToString("F0") : "off");
+
+						// v1.16: Delta history export — persistir bar cerrado para backtest Apteros
+						if (IsFirstTickOfBar && CurrentBar >= 2)
+							ExportDeltaBar();
 					}
 					catch { }
 				}
@@ -487,6 +506,60 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 			}
 		}
 
+
+		// v1.16: Delta history export para backtest Apteros
+		private void ExportDeltaBar()
+		{
+			try
+			{
+				DateTime barTime = Time[1]; // bar que acaba de cerrar
+				DateTime barDate = barTime.Date;
+				if (barDate != _lastDeltaExportDate)
+				{
+					FlushDeltaBuffer();
+					string fn = string.Format("{0}_{1:yyyy-MM-dd}.jsonl",
+						Instrument.MasterInstrument.Name, barDate);
+					_currentDeltaFile = System.IO.Path.Combine(_deltaHistoryDir, fn);
+					_lastDeltaExportDate = barDate;
+				}
+
+				double dO = delta_open[1], dH = delta_high[1], dL = delta_low[1], dC = delta_close[1];
+				double barDelta = dC - dO;
+				var ci = System.Globalization.CultureInfo.InvariantCulture;
+				string usA = usSessionAnchor == double.MinValue ? "null" : usSessionAnchor.ToString("0.##", ci);
+				string euA = euSessionAnchor == double.MinValue ? "null" : euSessionAnchor.ToString("0.##", ci);
+				string asiaA = asiaSessionAnchor == double.MinValue ? "null" : asiaSessionAnchor.ToString("0.##", ci);
+				string globalA = globalSessionAnchor == double.MinValue ? "null" : globalSessionAnchor.ToString("0.##", ci);
+
+				_deltaBuffer.AppendFormat(ci,
+					"{{\"t\":\"{0:yyyy-MM-dd HH:mm:ss.fff}\",\"p\":{1},\"cdO\":{2},\"cdH\":{3},\"cdL\":{4},\"cdC\":{5},\"bd\":{6},\"us\":{7},\"eu\":{8},\"asia\":{9},\"g\":{10}}}\n",
+					barTime, Close[1], dO, dH, dL, dC, barDelta, usA, euA, asiaA, globalA);
+
+				// Flush si buffer grande o cada 5s
+				if (_deltaBuffer.Length > 8192 || (DateTime.Now - _lastDeltaFlushTime).TotalSeconds > 5)
+					FlushDeltaBuffer();
+			}
+			catch (Exception ex)
+			{
+				Print("RelativeDelta ExportDeltaBar ERROR: " + ex.Message);
+			}
+		}
+
+		private void FlushDeltaBuffer()
+		{
+			if (_deltaBuffer.Length == 0) return;
+			if (string.IsNullOrEmpty(_currentDeltaFile)) return;
+			try
+			{
+				System.IO.File.AppendAllText(_currentDeltaFile, _deltaBuffer.ToString());
+				_deltaBuffer.Clear();
+				_lastDeltaFlushTime = DateTime.Now;
+			}
+			catch (Exception ex)
+			{
+				Print("RelativeDelta FlushDeltaBuffer ERROR: " + ex.Message);
+			}
+		}
 
 		private void CalculateValues(bool forceCurrentBar)
 		{
@@ -581,7 +654,23 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 			base.OnRender(chartControl, chartScale);
 
 			barPaintWidth = Math.Max(1, (int)(ChartBars.Properties.ChartStyle.BarWidth * 2));
-	
+
+			// PERF: cachear referencias a brushes ANTES del loop. Antes: 7 string-key
+			// hashtable lookups por bar × 1000 bars visibles = 7000 lookups/frame.
+			// Ahora: 4 lookups una sola vez antes del loop.
+			SharpDX.Direct2D1.Brush brushWick = null, brushShadow = null, brushUp = null, brushDown = null;
+			try
+			{
+				if (dxmBrushes != null)
+				{
+					if (dxmBrushes.ContainsKey("wickColor"))   brushWick   = dxmBrushes["wickColor"].DxBrush;
+					if (dxmBrushes.ContainsKey("shadowColor")) brushShadow = dxmBrushes["shadowColor"].DxBrush;
+					if (dxmBrushes.ContainsKey("barColorUp"))  brushUp     = dxmBrushes["barColorUp"].DxBrush;
+					if (dxmBrushes.ContainsKey("barColorDown"))brushDown   = dxmBrushes["barColorDown"].DxBrush;
+				}
+			}
+			catch { }
+
 			try
 			{
 				for (int idx = ChartBars.FromIndex; idx <= ChartBars.ToIndex; idx++)
@@ -606,7 +695,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
     				reuseVector1.Y		= y2;
     				reuseVector2.X		= x;
     				reuseVector2.Y		= y3;
-    				RenderTarget.DrawLine(reuseVector1, reuseVector2, dxmBrushes["wickColor"].DxBrush, WickWidth);
+    				if (brushWick != null) RenderTarget.DrawLine(reuseVector1, reuseVector2, brushWick, WickWidth);
 
                     // Draw Doji Body Line
 					reuseVector1.X	= (x - barPaintWidth / 2);
@@ -614,7 +703,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 					reuseVector2.X	= (x + barPaintWidth / 2);
 					reuseVector2.Y	= y1;
 
-					RenderTarget.DrawLine(reuseVector1, reuseVector2, dxmBrushes["shadowColor"].DxBrush, ShadowWidth);
+					if (brushShadow != null) RenderTarget.DrawLine(reuseVector1, reuseVector2, brushShadow, ShadowWidth);
 				}
 				else
 				{
@@ -625,7 +714,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                         reuseVector1.Y = y2;
                         reuseVector2.X = x;
                         reuseVector2.Y = bodyTop;
-                        RenderTarget.DrawLine(reuseVector1, reuseVector2, dxmBrushes["wickColor"].DxBrush, WickWidth);
+                        if (brushWick != null) RenderTarget.DrawLine(reuseVector1, reuseVector2, brushWick, WickWidth);
                     }
 
                     // Draw Lower Wick (Body Bottom to Low)
@@ -635,31 +724,31 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
                         reuseVector1.Y = bodyBottom;
                         reuseVector2.X = x;
                         reuseVector2.Y = y3;
-                        RenderTarget.DrawLine(reuseVector1, reuseVector2, dxmBrushes["wickColor"].DxBrush, WickWidth);
+                        if (brushWick != null) RenderTarget.DrawLine(reuseVector1, reuseVector2, brushWick, WickWidth);
                     }
 
 					// Select Brush based on Structure State
-					SharpDX.Direct2D1.Brush activeBrush = dxmBrushes["barColorDown"].DxBrush;
-					
+					SharpDX.Direct2D1.Brush activeBrush = brushDown;
+
 					// Fallback to Up/Down standard logic if Structure logic disabled
-					if (y4 > y1) activeBrush = dxmBrushes["barColorDown"].DxBrush;
-					else activeBrush = dxmBrushes["barColorUp"].DxBrush;
+					if (y4 > y1) activeBrush = brushDown;
+					else activeBrush = brushUp;
 
 
 					if (y4 > y1) // Down Candle
 					{
 						UpdateRect(ref reuseRect, (x - barPaintWidth / 2), y1, barPaintWidth, (y4 - y1));
-						RenderTarget.FillRectangle(reuseRect, activeBrush);
+						if (activeBrush != null) RenderTarget.FillRectangle(reuseRect, activeBrush);
 					}
 					else // Up Candle
 					{
 						UpdateRect(ref reuseRect, (x - barPaintWidth / 2), y4, barPaintWidth, (y1 - y4));
-						RenderTarget.FillRectangle(reuseRect, activeBrush);
+						if (activeBrush != null) RenderTarget.FillRectangle(reuseRect, activeBrush);
 					}
 				}
 
 				UpdateRect(ref reuseRect, ((x - barPaintWidth / 2) + (ShadowWidth / 2)), Math.Min(y4, y1), (barPaintWidth - ShadowWidth + 2), Math.Abs(y4 - y1));
-				RenderTarget.DrawRectangle(reuseRect, dxmBrushes["shadowColor"].DxBrush);
+				if (brushShadow != null) RenderTarget.DrawRectangle(reuseRect, brushShadow);
 				
 
             }

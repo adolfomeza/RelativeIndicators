@@ -180,15 +180,20 @@ def build_daily_profiles(
 
 
 def _va_overlap_pct(va_a: dict, va_b: dict) -> float:
-    """% overlap de value area entre dos sesiones. 0-1."""
+    """% overlap de value area entre dos sesiones. 0-1.
+
+    Computado sobre el rango MAYOR (más estricto/NADRO-correcto). Un VA chico
+    contenido dentro de un VA grande NO debe fusionar — eso es consolidación
+    interna, no extensión de equilibrio. Si usáramos min_range, un VA chico
+    enteramente adentro de uno grande daría 100% y fusionaría siempre.
+    """
     lo = max(va_a["val"], va_b["val"])
     hi = min(va_a["vah"], va_b["vah"])
     if hi <= lo:
         return 0.0
-    # % sobre el menor de los dos rangos
     overlap = hi - lo
-    min_range = min(va_a["vah"] - va_a["val"], va_b["vah"] - va_b["val"])
-    return overlap / min_range if min_range > 0 else 0.0
+    max_range = max(va_a["vah"] - va_a["val"], va_b["vah"] - va_b["val"])
+    return overlap / max_range if max_range > 0 else 0.0
 
 
 def _breakout_detected(cva: dict, next_va: dict, tolerance_pts: float = 0.5) -> str | None:
@@ -317,6 +322,7 @@ def get_cvas(
     overlap_threshold: float = 0.50,
     reset_hour: int = 17,
     session: str = "rth",
+    as_of: str | None = None,
 ) -> dict:
     """Reconstruye pVAs + CVAs NADRO para las últimas ``weeks_back`` semanas completas.
 
@@ -329,6 +335,10 @@ def get_cvas(
     - "pit_cl": pit session crude oil 09:00-14:30 local.
 
     ``days_back`` legacy: si se pasa, usa modo days_back absoluto (compat).
+
+    ``as_of`` (opcional, ISO 8601): si se pasa, filtra bars al cierre del día
+    anterior a esa fecha. Útil para replay snapshots — evita data leak del día
+    actual al hacer backtest histórico.
     """
     if days_back is not None:
         calendar_days = days_back + 2
@@ -338,13 +348,13 @@ def get_cvas(
     # RTH usa 6.5h/día, 5m=78 bars/día pit. ETH usa 23h/día
     if session.lower() == "rth":
         tf = "5m"
-        n = min(10000, calendar_days * 370)
+        n = min(50000, calendar_days * 370)
     elif calendar_days <= 7:
         tf = "1m"
-        n = min(10000, calendar_days * 1840)
+        n = min(50000, calendar_days * 1840)
     else:
         tf = "5m"
-        n = min(10000, calendar_days * 368)
+        n = min(50000, calendar_days * 368)
 
     data = observer.get_bars(instrument, tf=tf, n=n)
     if "error" in data or not data.get("bars"):
@@ -354,14 +364,34 @@ def get_cvas(
         }
 
     bars = data["bars"]
-    last_dt = _parse_dt(bars[-1]["t"])
+    # Para replay (as_of): el "ahora" virtual es as_of, no la última barra real.
+    # NT8 devuelve bars en hora LOCAL del usuario (VET = ET durante DST), NO UTC.
+    # Las SESSION_PRESETS (RTH 09:30-16:00) están en ese mismo huso, así que
+    # comparamos as_of (también en ET local) directo como naive datetime.
+    if as_of:
+        try:
+            asof_naive = datetime.fromisoformat(as_of.replace("Z", ""))
+            # Filtrar bars < as_of (ambos naive en hora local del usuario = ET)
+            bars = [b for b in bars if _parse_dt(b["t"]) < asof_naive]
+            anchor_dt = asof_naive
+        except Exception:
+            anchor_dt = _parse_dt(bars[-1]["t"]) if bars else None
+    else:
+        anchor_dt = _parse_dt(bars[-1]["t"]) if bars else None
+
+    if anchor_dt is None:
+        return {
+            "error": "no bars after as_of filter",
+            "as_of": as_of,
+            "addon_reachable": True,
+        }
 
     if days_back is not None:
-        cutoff = (last_dt - timedelta(days=days_back + 1)).date()
+        cutoff = (anchor_dt - timedelta(days=days_back + 1)).date()
     else:
-        # weekday(): Mon=0..Sun=6. Lunes de esta semana, luego (weeks_back-1) semanas atrás
-        days_to_monday = last_dt.weekday()
-        current_monday = last_dt.date() - timedelta(days=days_to_monday)
+        # weekday(): Mon=0..Sun=6. Lunes de la semana del anchor, luego (weeks_back-1) semanas atrás
+        days_to_monday = anchor_dt.weekday()
+        current_monday = anchor_dt.date() - timedelta(days=days_to_monday)
         cutoff = current_monday - timedelta(weeks=weeks_back - 1)
 
     bars = [b for b in bars if _parse_dt(b["t"]).date() >= cutoff]
