@@ -1,0 +1,227 @@
+{
+  "schema_version": "1.0",
+  "instrument": "NQ",
+  "date": "2026-04-29",
+  "snapshots": [
+    {
+      "id": "NQ_20260429_0930_PIT_OPEN",
+      "timestamp": "2026-04-29T09:30:00",
+      "price_at_analysis": 27221.75,
+      "regime": "imbalance bullish (75 vs 51) + breakout_down ayer del CVA 04-24/27",
+      "bias": "bullish con disonancia",
+      "summary": "H1[A+] LONG 27069 RPB-pVAL+mDVAH | H2[A] LONG 27224 BPB-pVAH | H3[A] SHORT 27323 BPB-CVAL Ley3",
+      "analysis_text": "NQ 04-29 09:30 RTH | spot 27221.75\n\nN: bullish (75 vs 51), pero breakout_down ayer del CVA 04-24/27.\nA: spot dentro pVA-04-28 [27069-27224]. CVAL-04-24-04-27 (27323) es Ley 3.\nD: wDVA [27124-27397] spot dentro. mDVA spot encima del mDVAH 27062 (bullish del mes). yDVA muy abajo (bullish anual).\nR: cambio de condición reciente. Respeta valor → continuación. Pierde pVAL → drift a A+ 27054-27068.\nO: live en 1m/5m.\n\nNIVELES (-→+):\n27054-27068 A+ (pDVAL+mDVAH+pDVAH)\n27104.75 A (CVAH-04-22-04-23+sec)\n27124.4 wDVAL solo\n27155 pWDVAH solo\n27224.5 pVAH solo (techo valor 04-28)\n27323 A (CVAL-04-24-04-27+sec) ← Ley 3\n27397-27406 A (wDVAH+pDVAH)\n27445-27446 A (pDVAH+CVAH macro)\n\nDISCIPLINA:\nBias bullish → priorizar H1/H2.\nH3 SOLO con OF agresivo (contra-bias).\nStops listados con offset 30; en live va detrás del HA pivot (Guía 03 §9).\n",
+      "confluences": [
+        {
+          "label": "pDVAL+mDVAH+pDVAH",
+          "price_min": 27054.1,
+          "price_max": 27068.2,
+          "grade": "A+",
+          "members": [
+            "pDVAL 27054.1",
+            "mDVAH 27061.7",
+            "pDVAH 27068.2"
+          ]
+        },
+        {
+          "label": "CVAH-04-22-04-23+sec",
+          "price_min": 27104.75,
+          "price_max": 27104.75,
+          "grade": "A",
+          "members": [
+            "CVAH-04-22-04-23 27104.75",
+            "sec 27104.75"
+          ]
+        },
+        {
+          "label": "CVAL-04-24-04-27+sec",
+          "price_min": 27323,
+          "price_max": 27323,
+          "grade": "A",
+          "members": [
+            "CVAL-04-24-04-27 27323.0",
+            "sec 27323.0"
+          ]
+        },
+        {
+          "label": "wDVAH+pDVAH",
+          "price_min": 27397.5,
+          "price_max": 27406.4,
+          "grade": "A",
+          "members": [
+            "wDVAH 27397.5",
+            "pDVAH 27406.4"
+          ]
+        },
+        {
+          "label": "pDVAH+CVAH-04-24-04-27",
+          "price_min": 27445.25,
+          "price_max": 27446,
+          "grade": "A",
+          "members": [
+            "pDVAH 27445.25",
+            "CVAH-04-24-04-27 27446.0"
+          ]
+        }
+      ],
+      "levels": [
+        {
+          "label": "pVAH",
+          "price": 27224.5
+        },
+        {
+          "label": "pVAL",
+          "price": 27069.25
+        },
+        {
+          "label": "CVAH-04-22-04-23",
+          "price": 27104.75
+        },
+        {
+          "label": "CVAH-04-24-04-27",
+          "price": 27446
+        },
+        {
+          "label": "CVAL-04-24-04-27",
+          "price": 27323
+        },
+        {
+          "label": "pWDVAH",
+          "price": 27155.15
+        },
+        {
+          "label": "wDVAH",
+          "price": 27397.5
+        },
+        {
+          "label": "wDVAL",
+          "price": 27124.4
+        },
+        {
+          "label": "mDVAH",
+          "price": 27061.7
+        },
+        {
+          "label": "pDVAH",
+          "price": 27445.25
+        },
+        {
+          "label": "pDVAH",
+          "price": 27068.2
+        },
+        {
+          "label": "pDVAH",
+          "price": 27406.4
+        },
+        {
+          "label": "pDVAL",
+          "price": 27054.1
+        },
+        {
+          "label": "sec",
+          "price": 27323
+        },
+        {
+          "label": "sec",
+          "price": 27104.75
+        },
+        {
+          "label": "sec",
+          "price": 27146.5
+        }
+      ],
+      "hypos": [
+        {
+          "id": "H1",
+          "direction": "long",
+          "setup_type": "RPB-pVAL+mDVAH",
+          "grade": "A+",
+          "entry": 27069.25,
+          "stop": 27039.25,
+          "notes": "Confluencia A+ (pDVAL+mDVAH+pDVAH 27054-27068). mDVAH = pivote alcista del mes.",
+          "targets": [
+            {
+              "label": "pVAH",
+              "price": 27224.5,
+              "rr": 5.2
+            },
+            {
+              "label": "CVAL sec",
+              "price": 27323,
+              "rr": 8.5
+            }
+          ],
+          "risk_pts": 30.0,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        },
+        {
+          "id": "H2",
+          "direction": "long",
+          "setup_type": "BPB-pVAH",
+          "grade": "A",
+          "entry": 27224.5,
+          "stop": 27194.5,
+          "notes": "Continuación bullish: rotura techo valor 04-28 + retest desde arriba.",
+          "targets": [
+            {
+              "label": "CVAL sec",
+              "price": 27323,
+              "rr": 3.3
+            },
+            {
+              "label": "wDVAH",
+              "price": 27397.5,
+              "rr": 5.8
+            }
+          ],
+          "risk_pts": 30.0,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        },
+        {
+          "id": "H3",
+          "direction": "short",
+          "setup_type": "BPB-CVAL-04-24-04-27",
+          "grade": "A",
+          "entry": 27323,
+          "stop": 27353,
+          "notes": "Secondary del CVA roto (Ley 3). Contra-bias — solo con OF agresivo.",
+          "targets": [
+            {
+              "label": "wDVAL",
+              "price": 27124.4,
+              "rr": 6.6
+            },
+            {
+              "label": "pVAL",
+              "price": 27069.25,
+              "rr": 8.5
+            }
+          ],
+          "risk_pts": 30.0,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        }
+      ]
+    }
+  ]
+}

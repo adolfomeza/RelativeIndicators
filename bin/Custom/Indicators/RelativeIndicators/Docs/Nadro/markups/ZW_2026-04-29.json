@@ -1,0 +1,237 @@
+{
+  "schema_version": "1.0",
+  "instrument": "ZW",
+  "date": "2026-04-29",
+  "snapshots": [
+    {
+      "id": "ZW_20260429_0925_PRE_PIT",
+      "timestamp": "2026-04-29T09:25:00",
+      "price_at_analysis": 657.5,
+      "regime": "imbalance bullish multi-TF EXTREMO | breakout serial 6 sesiones (598→669, +71 pts) | gap up overnight desde pVAH-04-28 654.25 | LTWVs mayores Y/Q/M MUY ABAJO (618-638) = sin techo estructural | LIS densa 654.25-654.98 (4 niveles Daily previous+TPO+secondary)",
+      "bias": "bullish multi-TF extremo",
+      "summary": "H1[A+] LONG BPB-LIS 654.25-654.98 retest desde arriba (4 niveles Daily multi-TF) → T4 668.75 | H2[A] LONG breakout pVAH-active 668.75 → T3 679 | H3[A] SHORT solo pierde LIS 654.25 con aceptación dura → gap fill 639.25",
+      "analysis_text": "ZW PRE-PIT 2026-04-29 09:25 ET | spot ≈ 657.50 (gap up overnight, ETH close pre-pause)\n\nATR(14) Wilder ≈ 8.50 pts | Proximity = ATR×2 = ±17 pts | Cluster threshold = ATR×0.10 = 0.85 pts\n\n═══════════════════════════════════════════════════════════\nN — NARRATIVA\n═══════════════════════════════════════════════════════════\nTendencia bullish multi-TF EXTREMA 6 sesiones consecutivas (+71 pts: 598 → 669):\n• 04-22 VAH 614.25 → 04-23 VAH 622 → 04-24 VAH 617 → 04-27 VAH 631 (+9 gap) → 04-28 VAH 654.25 (+23 gap MASSIVE) → 04-29 RTH VAH 668.75 (+14)\n• Espejo del bearish multi-TF en GC. Aceleración verticales 04-28 (+15 día) y continuación 04-29.\n• Sesión asiática overnight 04-28→04-29 abandonó al alza el valor de ayer (+3 sobre pVAH-04-28).\n• 6 secondary lines apilados (599.5, 602, 604.75, 617, 631, 654.25) = escalera bullish vertical EXTREMA.\n• Mercado en clear price discovery — rotación rota completamente.\n\n═══════════════════════════════════════════════════════════\nA — ACEPTACIÓN (direccional NADRO)\n═══════════════════════════════════════════════════════════\nAceptación arriba EXTREMA — todos los LTWVs developing rotos arriba con margen:\n• yDVAH 618.79 (Annual dev) → spot +38.71 ARRIBA. Acceptance multi-sesional en RTH 04-15 al 04-28.\n• qDVAH 638.66 (Quarterly dev) → spot +18.84 ARRIBA. Roto 04-28.\n• mDVAH 638.50 (Monthly dev) → spot +19.00 ARRIBA. Roto 04-28.\n• pMDVAH-marzo 620.22 (Monthly previous) → spot +37.28 ARRIBA. Hace tiempo roto.\n• pQDVAH-Q1 607.03 (Quarterly previous) → spot +50.47 ARRIBA. Histórico.\n• pYDVAH-2025 630.95 (Annual previous) → spot +26.55 ARRIBA. Roto 04-28.\n• pVAH-04-28 654.25 (TPO RTH ayer) → spot +3.25 ARRIBA en sesión asiática.\n• pDVAH-04-28 654.98 (Daily VWAP previous) → spot +2.52 ARRIBA.\n\nNiveles cerca de spot:\n• DVAH 654.74 (Daily dev) → spot +2.76 ARRIBA (intra-zona del día actual).\n• wDVAH 663.57 (Weekly dev) → spot -6.07 (techo Weekly por cubrir).\n\n═══════════════════════════════════════════════════════════\nD — DISTRIBUCIÓN (LTWVs al 09:25 ET)\n═══════════════════════════════════════════════════════════\nDEVELOPING (en construcción):\n• Daily:     DVAH 654.74 / DVAL 651.00 — spot +2.76 (intra-zona del día)\n• Weekly:    wDVAH 663.57 / wDVAL 633.24 — spot -6.07 vs wDVAH (intra-techo)\n• Monthly:   mDVAH 638.50 / mDVAL 591.09 — spot +19.00 vs mDVAH (rotado MUY arriba)\n• Quarterly: qDVAH 638.66 / qDVAL 591.35 — spot +18.84 vs qDVAH (rotado MUY arriba)\n• Annual:    yDVAH 618.79 / yDVAL 541.78 — spot +38.71 vs yDVAH (rotado EXTREMO arriba)\n\nPREVIOUS (zonas cerradas, pXDVA):\n• pDVAH-04-28 654.98 / pDVAL-04-28 639.69 (Daily zone ayer) ⭐\n• pWDVAH-w16 617.04 / pWDVAL-w16 606.48 — pWDVAL fuera proximity (-51)\n• pMDVAH-marzo 620.22 / pMDVAL-marzo 591.97 — fuera proximity\n• pQDVAH-Q1 607.03 / pQDVAL-Q1 534.80 — fuera proximity\n• pYDVAH-2025 630.95 / pYDVAL-2025 545.31 — pYDVAL fuera proximity\n\n⚠ CONTEXTO CRÍTICO: Todos los LTWVs mayores (Y/Q/M previous + Y/Q/M developing) están MUY abajo (591-638) = SIN TECHO ESTRUCTURAL CERCANO arriba. Solo wDVAH 663.57 ofrece resistencia técnica próxima. Esto es bullish extremo en price discovery.\n\n═══════════════════════════════════════════════════════════\nR — RITMO\n═══════════════════════════════════════════════════════════\nSubida vertical con gap masivo 04-28 (+15 día = ATR×1.8 EN UN DÍA). Compresión rota completamente. Mercado en price discovery puro. Aceleración tipo squeeze probable.\n\n═══════════════════════════════════════════════════════════\nO — ORDER FLOW\n═══════════════════════════════════════════════════════════\nA leer en vivo en 1m/5m al pit-open 09:30. Riesgo gap-up adicional al pit-open (continuación). Si volumen alto + delta positivo en 660+ → continuación al wDVAH 663.57. Si volumen alto + delta negativo + rechazo desde 660 → fade técnico hacia LIS 654.25-654.98 (BPB H1).\n\n═══════════════════════════════════════════════════════════\nLINE IN THE SAND (zona densa NADRO)\n═══════════════════════════════════════════════════════════\n**654.25 — 654.98** (span 0.73 pts ≤ cluster threshold 0.85) [A+ multi-TF Daily]\n4 niveles apilados (Daily previous + TPO + Daily developing + secondary):\n• pVAH-04-28 654.25 [TPO RTH previous] ⭐\n• secondary-line 654.25 [último breakout 04-28]\n• DVAH 654.74 [Daily developing high]\n• pDVAH-04-28 654.98 [Daily VWAP previous] ⭐\n\nESTA es la LIS NADRO real (densidad de niveles, multi-TF, función límite régimen):\n• Mientras spot ARRIBA de 654.25 → bias bullish vivo del breakout multi-TF EXTREMO\n• Pierde 654.25 con aceptación dura → CAMBIO DE CARÁCTER (vuelve dentro del valor 04-28, posible reversión rápida hacia gap fill 639.25)\n\n═══════════════════════════════════════════════════════════\nZONAS CLAVE (ranking proximity)\n═══════════════════════════════════════════════════════════\nARRIBA (continuación, sin techo estructural mayor)\n• 668.75 — pVAH-active (TPO en desarrollo, RTH 04-29 high) ← T4 H1 final\n• 672 — zona aire ext 1 ATR\n• 675-679 — zona aire ext 1.5 ATR (T3 H2 final)\n\nDENTRO/CERCA (techo intermedio)\n• 663.57 — wDVAH (Weekly developing) ← T3 H1 / único techo estructural cercano\n• 662.00 — POC-active (TPO en desarrollo, referencia)\n• 659.50 — pVAL-active (TPO en desarrollo, RTH 04-29 low)\n• 657.50 — spot pre-pit estimado\n\nABAJO (LIS densa multi-TF)\n• 654.98-654.25 [A+] LIS NADRO — pDVAH-04-28 + DVAH dev + pVAH-04-28 + secondary\n\nABAJO (Daily intra-day)\n• 652.87 — VWAP Daily developing (centro)\n• 651.00 — DVAL (Daily developing low)\n\nABAJO (gap fill — LEJOS, fuera proximity)\n• 639.69-639.25 — pDVAL-04-28 + pVAL-04-28 (suelo valor ayer = gap fill)\n• 631 — pVAH-04-27 secondary line (escalón del rally)\n• 633.24 — wDVAL Weekly dev\n• 638.5-638.66 — mDVAH/qDVAH developing (cluster LTWV mayor abajo)\n\n═══════════════════════════════════════════════════════════\nDISCIPLINA\n═══════════════════════════════════════════════════════════\nBias bullish multi-TF EXTREMO en price discovery. Sin techo estructural mayor cercano. NADRO Guía 03 §6 — desequilibrio EXTREMO FAVOR de longs.\n⚠ Pero también NADRO Guía: cuidado con verticalidad / squeeze final (climax).\n\nH1 setup primario: BPB-LIS retest 654.25-654.98 desde arriba — único setup canónico con confluencia densa (4 niveles Daily multi-TF).\nH2 setup continuación: si rompe pVAH-active 668.75 con aceptación dura + aire arriba → breakout long en price discovery.\nH3 SHORT solo con cambio de carácter dura: pierde LIS 654.25 con aceptación bar-level + pullback. Sizing reducido (contra-bias multi-TF extremo). Target gap fill 639.25 (cluster mayor abajo).\n\nStops adaptables al ATR (offset 0.5-1 pts ≈ 0.075 × ATR). Filtro de gatillo NADRO: 4 barras pullback + cambio HA al cierre. Stops en último HA pivot (Guía 03 §9).\n",
+      "confluences": [
+        {
+          "label": "Techo Weekly developing (único estructural cercano arriba)",
+          "price_min": 663.57,
+          "price_max": 663.57,
+          "grade": "A",
+          "members": [
+            "wDVAH 663.57 [Weekly developing]"
+          ]
+        },
+        {
+          "label": "LINE IN THE SAND multi-TF Daily (4 niveles densos)",
+          "price_min": 654.25,
+          "price_max": 654.98,
+          "grade": "A+",
+          "members": [
+            "pVAH-04-28 654.25 [TPO RTH previous]",
+            "secondary-line 654.25 [breakout 04-28]",
+            "DVAH 654.74 [Daily developing]",
+            "pDVAH-04-28 654.98 [Daily VWAP previous]"
+          ]
+        },
+        {
+          "label": "Daily VWAP intra-day (banda inferior)",
+          "price_min": 651,
+          "price_max": 652.87,
+          "grade": "A",
+          "members": [
+            "VWAP Daily 652.87 [Daily developing center]",
+            "DVAL 651.00 [Daily developing low]"
+          ]
+        },
+        {
+          "label": "Cluster gap fill (pVAL-04-28 + pDVAL-04-28) - FUERA PROXIMITY",
+          "price_min": 639.25,
+          "price_max": 639.69,
+          "grade": "A",
+          "members": [
+            "pVAL-04-28 639.25 [TPO RTH previous]",
+            "pDVAL-04-28 639.69 [Daily VWAP previous]"
+          ]
+        }
+      ],
+      "levels": [
+        {
+          "label": "pVAH-active (RTH 04-29 high)",
+          "price": 668.75
+        },
+        {
+          "label": "POC-active",
+          "price": 662
+        },
+        {
+          "label": "wDVAH (techo wk)",
+          "price": 663.57
+        },
+        {
+          "label": "pVAL-active (RTH 04-29 low)",
+          "price": 659.5
+        },
+        {
+          "label": "DVAH (Daily dev)",
+          "price": 654.74
+        },
+        {
+          "label": "pDVAH-04-28 (LIS top)",
+          "price": 654.98
+        },
+        {
+          "label": "pVAH-04-28 (LIS bot)",
+          "price": 654.25
+        },
+        {
+          "label": "VWAP-Daily-dev",
+          "price": 652.87
+        },
+        {
+          "label": "DVAL",
+          "price": 651
+        },
+        {
+          "label": "pVAL-04-28 (gap fill)",
+          "price": 639.25
+        },
+        {
+          "label": "pDVAL-04-28 (gap fill)",
+          "price": 639.69
+        },
+        {
+          "label": "T1 H1 spot ref",
+          "price": 657.5
+        },
+        {
+          "label": "T2 H1 pVAL-active",
+          "price": 659.5
+        },
+        {
+          "label": "T3 H1 wDVAH",
+          "price": 663.57
+        },
+        {
+          "label": "T4 H1 pVAH-active (final)",
+          "price": 668.75
+        },
+        {
+          "label": "T3 H2 ext 1.5 ATR (final)",
+          "price": 679
+        }
+      ],
+      "hypos": [
+        {
+          "id": "H1",
+          "direction": "long",
+          "setup_type": "BPB-LIS multi-TF Daily (pVAH+pDVAH+DVAH+secondary retest desde arriba)",
+          "grade": "A+",
+          "entry": 654.5,
+          "stop": 651,
+          "notes": "LIS NADRO real (4 niveles densos multi-TF Daily, span 0.73 pts ≤ cluster threshold). pVAH-04-28 654.25 + secondary line 654.25 + DVAH dev 654.74 + pDVAH-04-28 654.98. Spot rompió arriba en sesión asiática overnight (+3.25 pts). Si retesta zona desde arriba y rebota = BPB canónico NADRO §4-§5 (PV+LTWV intersection). Bias multi-TF EXTREMO a favor: Annual + Quarterly + Monthly + Weekly + Daily todos rotos arriba. Entry óptimo: 654.50 (mid LIS); stop 651 (debajo DVAL Daily dev con buffer).",
+          "targets": [
+            {
+              "label": "T1 spot ref pre-pit",
+              "price": 657.5,
+              "rr": 0.86
+            },
+            {
+              "label": "T2 pVAL-active TPO",
+              "price": 659.5,
+              "rr": 1.43
+            },
+            {
+              "label": "T3 wDVAH (techo wk)",
+              "price": 663.57,
+              "rr": 2.59
+            },
+            {
+              "label": "T4 pVAH-active (final)",
+              "price": 668.75,
+              "rr": 4.07
+            }
+          ],
+          "risk_pts": 3.5,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        },
+        {
+          "id": "H2",
+          "direction": "long",
+          "setup_type": "BPB breakout pVAH-active (continuación price discovery)",
+          "grade": "A",
+          "entry": 668.75,
+          "stop": 663.57,
+          "notes": "Setup de continuación: si rompe arriba pVAH-active TPO 668.75 con aceptación dura + aire arriba (sin techo estructural mayor cercano) = BPB breakout en price discovery puro. Bias multi-TF EXTREMO. Risk mayor por verticalidad climax posible — sizing controlado. Stop debajo wDVAH 663.57 (único techo estructural perdido).",
+          "targets": [
+            {
+              "label": "T1 zona aire",
+              "price": 672,
+              "rr": 0.63
+            },
+            {
+              "label": "T2 ext 1 ATR",
+              "price": 675,
+              "rr": 1.21
+            },
+            {
+              "label": "T3 ext 1.5 ATR (final)",
+              "price": 679,
+              "rr": 2
+            }
+          ],
+          "risk_pts": 5.18,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        },
+        {
+          "id": "H3",
+          "direction": "short",
+          "setup_type": "BPB-LIS break (cambio de carácter, contra-bias EXTREMO)",
+          "grade": "A",
+          "entry": 651,
+          "stop": 656,
+          "notes": "SOLO si pierde LIS 654.25 con aceptación bar-level dura abajo + pullback al borde Daily intra-day 651 (DVAL). NADRO §6 ALERTA: contra-bias multi-TF EXTREMO establecido (6 sesiones, 6 secondary lines apiladas, gap masivo 04-28). Sizing MUY REDUCIDO. Setup solo si OF agresivo de venta confirma + 4 barras pullback NADRO + cambio HA dura. Si no hay aceptación dura, NO entrar — el bias EXTREMO puede absorber un fade técnico sin invalidar la tendencia. Target gap fill 639.25 = cluster mayor abajo (única zona de soporte estructural multi-TF cercana).",
+          "targets": [
+            {
+              "label": "T1 ext",
+              "price": 645,
+              "rr": 1.2
+            },
+            {
+              "label": "T2 pVAL-04-28 (gap fill)",
+              "price": 639.25,
+              "rr": 2.35
+            },
+            {
+              "label": "T3 pVAH-04-27 secondary (final)",
+              "price": 631,
+              "rr": 4
+            }
+          ],
+          "risk_pts": 5,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        }
+      ]
+    }
+  ]
+}

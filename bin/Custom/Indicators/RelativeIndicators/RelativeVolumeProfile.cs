@@ -279,48 +279,22 @@ namespace NinjaTrader.NinjaScript.Indicators
 					RecalculateKeyLevels(_activeProfile);
 
 				// --- RelativeMCP observability ---
-				// PERF: throttled a IsFirstTickOfBar. Antes corría cada tick (50/s × 7 charts).
+				// Publish primario (cada bar primario). En charts de 30min esto es lento;
+				// la publicación 1-min en BarsInProgress==1 abajo da granularidad fina.
 				if (State == State.Realtime && IsFirstTickOfBar)
-				{
-					try
-					{
-						string indName = typeof(RelativeVolumeProfile).Name;
-						double poc = _activeProfile != null ? _activeProfile.POC : double.NaN;
-						double vah = _activeProfile != null ? _activeProfile.VAH : double.NaN;
-						double val = _activeProfile != null ? _activeProfile.VAL : double.NaN;
-						long pocVol = _activeProfile != null ? _activeProfile.POCVolume : 0L;
-						int levelCount = (_activeProfile != null && _activeProfile.Levels != null) ? _activeProfile.Levels.Count : 0;
-						bool profActive = _activeProfile != null && _activeProfile.IsActive;
-						int allProfCount = _allProfiles != null ? _allProfiles.Count : 0;
-
-						RelativeIndicatorRegistry.Publish(
-							string.Format("{0}:{1}:{2}{3}", indName, Instrument.FullName,
-								BarsPeriod.Value, BarsPeriod.BarsPeriodType),
-							new Dictionary<string, object>
-							{
-								["bar"] = CurrentBar,
-								["bar_time"] = Time[0],
-								["close"] = Close[0],
-								["poc"] = poc,
-								["vah"] = vah,
-								["val"] = val,
-								["poc_volume"] = pocVol,
-								["level_count"] = levelCount,
-								["profile_active"] = profActive,
-								["total_profiles"] = allProfCount,
-								["profile_type"] = ProfileType.ToString(),
-								["session_mode"] = SessionMode.ToString(),
-							});
-
-						this.RLog("bar={0} close={1:F2} POC={2:F2} VAH={3:F2} VAL={4:F2} levels={5} active={6} total_sessions={7}",
-							CurrentBar, Close[0], poc, vah, val, levelCount, profActive, allProfCount);
-					}
-					catch { }
-				}
+					PublishStateToRegistry();
 				// --- end RelativeMCP ---
 			}
 			else if (BarsInProgress == 1 && (DataMode == VolumeDataMode.BarBased || ProfileType == ProfileDataType.TPO))
 			{
+				// Publish 1-min: la serie secundaria corre cada minuto. Garantiza que el
+				// registry refleje composites/pVAs con latencia <= 1min, independiente
+				// del TF primario del chart (puede ser 30min, 5min, etc).
+				// Va ANTES del early return de _activeProfile null porque las pVAs cerradas
+				// y composites no dependen del perfil activo — se publican siempre.
+				if (State == State.Realtime && IsFirstTickOfBar)
+					PublishStateToRegistry();
+
 				// Serie secundaria (1 min): distribuir volumen o TPO con resolución fina
 				if (_activeProfile == null || !_activeProfile.IsActive) return;
 
@@ -585,12 +559,12 @@ namespace NinjaTrader.NinjaScript.Indicators
 				endTs   = new TimeSpan(14, 0, 0);
 				family  = "CBOT Treasuries";
 			}
-			// CBOT Grains (pit: 08:30 – 13:20 ET)
+			// CBOT Grains (pit: 09:30 – 14:20 ET = 08:30-13:20 CT)
 			else if (master == "ZC" || master == "ZS" || master == "ZW" ||
 			         master == "ZM" || master == "ZL" || master == "ZO" || master == "ZR")
 			{
-				startTs = new TimeSpan(8, 30, 0);
-				endTs   = new TimeSpan(13, 20, 0);
+				startTs = new TimeSpan(9, 30, 0);
+				endTs   = new TimeSpan(14, 20, 0);
 				family  = "CBOT Grains";
 			}
 			// CME FX Futures (aprox pit: 07:20 – 14:00 ET)
@@ -601,6 +575,20 @@ namespace NinjaTrader.NinjaScript.Indicators
 				startTs = new TimeSpan(7, 20, 0);
 				endTs   = new TimeSpan(14, 0, 0);
 				family  = "CME FX";
+			}
+			// CME Livestock: Live Cattle / Feeder Cattle / Lean Hogs (pit: 09:30 – 14:05 ET = 08:30-13:05 CT)
+			else if (master == "LE" || master == "GF" || master == "HE")
+			{
+				startTs = new TimeSpan(9, 30, 0);
+				endTs   = new TimeSpan(14, 5, 0);
+				family  = "CME Livestock";
+			}
+			// CME Dairy & Lumber (pit aprox 09:30 – 14:05 ET = 08:30-13:05 CT)
+			else if (master == "DC" || master == "GDK" || master == "LBR" || master == "LBS")
+			{
+				startTs = new TimeSpan(9, 30, 0);
+				endTs   = new TimeSpan(14, 5, 0);
+				family  = "CME Dairy/Lumber";
 			}
 			// Fallback: si no se reconoce, usar ProfileStartTime/EndTime manuales
 			// (para que el usuario pueda operar instrumentos exóticos con Custom times)

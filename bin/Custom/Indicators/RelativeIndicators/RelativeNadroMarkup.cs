@@ -202,10 +202,16 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				ConfluenceAPlusColor = Brushes.OrangeRed;
 				ConfluenceAColor = Brushes.Orange;
 				ConfluenceBColor = Brushes.Gold;
+				LineInTheSandColor = Brushes.Yellow;
+				LineInTheSandOpacity = 50;
+				LevelDimOpacity = 30;  // Rank & Distill: niveles no usados en hipos atenuados al 30%
 				LevelColor = Brushes.LightGray;
 				EntryColor = Brushes.White;
 				StopColor = Brushes.Crimson;
-				TargetColor = Brushes.DeepSkyBlue;
+				TargetColor = Brushes.DeepSkyBlue;       // T1, T2 (intermedios) — color anterior
+				FinalTargetColor = Brushes.RoyalBlue;    // último target (destino macro NADRO)
+				TargetZonePercent = 0.0;   // 0 = solo línea sin zona (default). Subir > 0 para activar zona.
+				TargetZoneOpacity = 50;
 				AnchorColor = Brushes.DarkGray;
 
 				ArrowPendingColor = Brushes.Gold;
@@ -542,6 +548,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 			var entryBr = GetCachedDxBrush(EntryColor);
 			var stopBr = GetCachedDxBrush(StopColor);
 			var tgtBr = GetCachedDxBrush(TargetColor);
+			var finalTgtBr = GetCachedDxBrush(FinalTargetColor);
 			var anchorBr = GetCachedDxBrush(AnchorColor);
 			var notesBr = GetCachedDxBrush(NotesColor);
 			var pendBr = GetCachedDxBrush(ArrowPendingColor);
@@ -647,23 +654,53 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
 				if (ShowConfluences && showMarkup)
 				{
+					var lisBrush = GetCachedDxBrush(LineInTheSandColor);
 					foreach (var c in snap.Confluences)
 					{
-						SharpDX.Direct2D1.Brush br = bBrush;
-						if (!string.IsNullOrEmpty(c.Grade))
+						// Detección Line in the Sand (LIS): label que contiene
+						// "LINE IN THE SAND" (case-insensitive). Pintado distinto
+						// para destacar el pivote direccional del día.
+						bool isLis = !string.IsNullOrEmpty(c.Label)
+							&& c.Label.IndexOf("LINE IN THE SAND",
+								StringComparison.OrdinalIgnoreCase) >= 0;
+
+						SharpDX.Direct2D1.Brush br;
+						float opacity;
+						if (isLis && lisBrush != null)
 						{
-							if (c.Grade.StartsWith("A+")) br = aPlus;
-							else if (c.Grade.StartsWith("A")) br = aBrush;
-							else br = bBrush;
+							br = lisBrush;
+							opacity = (float)(LineInTheSandOpacity / 100.0);
 						}
-						br.Opacity = (float)(ConfluenceOpacity / 100.0);
+						else
+						{
+							br = bBrush;
+							if (!string.IsNullOrEmpty(c.Grade))
+							{
+								if (c.Grade.StartsWith("A+")) br = aPlus;
+								else if (c.Grade.StartsWith("A")) br = aBrush;
+								else br = bBrush;
+							}
+							opacity = (float)(ConfluenceOpacity / 100.0);
+						}
+						br.Opacity = opacity;
 
 						float yTop = (float)chartScale.GetYByValue(c.PriceMax);
 						float yBot = (float)chartScale.GetYByValue(c.PriceMin);
 						if (yBot - yTop < 1) yBot = yTop + 1;
 
 						float xStart = xAnchor;
-						float xEnd = Math.Min(chartRight, xAnchor + ArrowLengthBars * 10f);
+						float xEnd;
+						if (isLis)
+						{
+							// LIS se extiende hasta el final del chart visible — cubre
+							// la vela actual + el resto de la sesión. NADRO: la zona
+							// pivote del día se mantiene activa hasta cierre de sesión.
+							xEnd = chartRight;
+						}
+						else
+						{
+							xEnd = Math.Min(chartRight, xAnchor + ArrowLengthBars * 10f);
+						}
 						if (xEnd <= xStart) xEnd = xStart + 1;
 
 						RenderTarget.FillRectangle(
@@ -671,9 +708,33 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 
 						br.Opacity = 1f;
 						string lblTxt = (c.Grade ?? "") + " " + (c.Label ?? "") + " [" + c.Members.Count + "]";
-						DrawLabelAt(xStart + 4, yTop - LabelFontSize - 2, lblTxt, labelFmt, notesBr, obstacles, 360);
+						// Texto centrado verticalmente dentro de la zona (centro entre yTop y yBot).
+						float yMid = (yTop + yBot) * 0.5f - LabelFontSize * 0.5f;
+						DrawLabelAt(xStart + 4, yMid, lblTxt, labelFmt, notesBr, obstacles, 360);
 					}
 				}
+
+				// Rank & Distill (NADRO Guía 04 §7): niveles usados en hipos = full opacity,
+				// los demás = atenuados (LevelDimOpacity %) para reducir ruido visual.
+				var usedPrices = new List<double>();
+				if (snap.Hypos != null)
+				{
+					foreach (var h in snap.Hypos)
+					{
+						usedPrices.Add(h.Entry);
+						usedPrices.Add(h.Stop);
+						if (h.Targets != null)
+							foreach (var t in h.Targets) usedPrices.Add(t.Price);
+					}
+				}
+				double levelTol = TickSize * 2;
+				Func<double, bool> isLevelUsed = (price) =>
+				{
+					foreach (var up in usedPrices)
+						if (Math.Abs(price - up) <= levelTol) return true;
+					return false;
+				};
+				float dimOpacity = (float)(LevelDimOpacity / 100.0);
 
 				// PASS 1 niveles: solo las líneas dashed (debajo de las líneas de hypos).
 				if (ShowLevels && showMarkup)
@@ -681,7 +742,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 					foreach (var l in snap.Levels)
 					{
 						float y = (float)chartScale.GetYByValue(l.Price);
+						bool used = isLevelUsed(l.Price);
+						float prevOp = lvlBr.Opacity;
+						lvlBr.Opacity = used ? 1.0f : dimOpacity;
 						DrawDashedHorizontal(xAnchor, chartRight, y, lvlBr);
+						lvlBr.Opacity = prevOp;
 					}
 				}
 
@@ -745,7 +810,13 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 							int yKey = (int)Math.Round(yT);
 							if (!drawnTargetYs.Contains(yKey))
 							{
-								RenderTarget.DrawLine(new Vector2(xArrowStart, yT), new Vector2(xArrowEnd, yT), tgtBr, 1f);
+								// Color: el ÚLTIMO target = destino macro NADRO (FinalTargetColor,
+								// default RoyalBlue). Targets intermedios (T1, T2 si hay T3)
+								// usan TargetColor (default DeepSkyBlue).
+								// Solo línea fina, sin zona rectangular.
+								bool isFinalTarget = (ti == h.Targets.Count - 1);
+								var thisBr = (isFinalTarget && finalTgtBr != null) ? finalTgtBr : tgtBr;
+								RenderTarget.DrawLine(new Vector2(xArrowStart, yT), new Vector2(xArrowEnd, yT), thisBr, 1f);
 								drawnTargetYs.Add(yKey);
 							}
 						}
@@ -783,12 +854,17 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 					// PASS 2a — labels de niveles. Se dibujan AHORA (después de líneas de
 					// hypos en PASS 1) para que el fondo del label cubra cualquier línea
 					// de entry/stop/target de hypo que coincida con el mismo precio.
+					// Aplica Rank & Distill: niveles no usados se atenúan.
 					if (ShowLevels && showMarkup)
 					{
 						foreach (var l in snap.Levels)
 						{
 							float y = (float)chartScale.GetYByValue(l.Price);
+							bool used = isLevelUsed(l.Price);
+							float prevOp = lvlBr.Opacity;
+							lvlBr.Opacity = used ? 1.0f : dimOpacity;
 							DrawLabelAt(xAnchor + 4, y - LabelFontSize, l.Label, labelFmt, lvlBr, obstacles, 180);
+							lvlBr.Opacity = prevOp;
 						}
 					}
 
@@ -1194,6 +1270,24 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		}
 
 		[XmlIgnore]
+		[Display(Name = "Line in the Sand", Description = "Color de la zona LIS (pivote direccional del día)", GroupName = "04. Colores", Order = 5)]
+		public Brush LineInTheSandColor { get; set; }
+		[Browsable(false)]
+		public string LineInTheSandColorSerializable
+		{
+			get { return Serialize.BrushToString(LineInTheSandColor); }
+			set { LineInTheSandColor = Serialize.StringToBrush(value); }
+		}
+
+		[Range(1, 100)]
+		[Display(Name = "Opacidad LIS %", Description = "Opacidad de la zona Line in the Sand (default 50)", GroupName = "03. Estilo", Order = 1)]
+		public int LineInTheSandOpacity { get; set; }
+
+		[Range(0, 100)]
+		[Display(Name = "Opacidad niveles no usados %", Description = "Rank & Distill (NADRO §7): niveles que no aparecen como entry/stop/target en ninguna hipo se atenúan a este % (default 30). Reduce ruido visual.", GroupName = "03. Estilo", Order = 4)]
+		public int LevelDimOpacity { get; set; }
+
+		[XmlIgnore]
 		[Display(Name = "Nivel", GroupName = "04. Colores", Order = 3)]
 		public Brush LevelColor { get; set; }
 		[Browsable(false)]
@@ -1224,7 +1318,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		}
 
 		[XmlIgnore]
-		[Display(Name = "Target", GroupName = "04. Colores", Order = 6)]
+		[Display(Name = "Target intermedio (T1, T2)", Description = "Color de los targets intermedios (NADRO: destinos por los que el precio puede pasar)", GroupName = "04. Colores", Order = 6)]
 		public Brush TargetColor { get; set; }
 		[Browsable(false)]
 		public string TargetColorSerializable
@@ -1232,6 +1326,24 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 			get { return Serialize.BrushToString(TargetColor); }
 			set { TargetColor = Serialize.StringToBrush(value); }
 		}
+
+		[XmlIgnore]
+		[Display(Name = "Target final (último)", Description = "Color del último target = destino macro NADRO (zona neutral azul donde el operador espera y observa)", GroupName = "04. Colores", Order = 7)]
+		public Brush FinalTargetColor { get; set; }
+		[Browsable(false)]
+		public string FinalTargetColorSerializable
+		{
+			get { return Serialize.BrushToString(FinalTargetColor); }
+			set { FinalTargetColor = Serialize.StringToBrush(value); }
+		}
+
+		[Range(0.0, 1.0)]
+		[Display(Name = "Ancho zona target % precio", Description = "Anchura de la zona neutral azul como % del precio target (default 0.05 = 0.05%). 0 = solo línea sin zona.", GroupName = "03. Estilo", Order = 2)]
+		public double TargetZonePercent { get; set; }
+
+		[Range(1, 100)]
+		[Display(Name = "Opacidad zona target %", Description = "Opacidad de la zona azul de destino (default 50)", GroupName = "03. Estilo", Order = 3)]
+		public int TargetZoneOpacity { get; set; }
 
 		[XmlIgnore]
 		[Display(Name = "Ancla temporal", GroupName = "04. Colores", Order = 7)]

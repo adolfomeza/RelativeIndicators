@@ -192,6 +192,9 @@ namespace NinjaTrader.NinjaScript.Indicators
 				}
 				if (profile.StartBarIdx > ChartBars.ToIndex) continue;
 				if (!profile.IsActive && !ShowHistoricalProfiles) continue;
+				// NADRO: TPO del día en desarrollo NO se opera (bordes cambian intra-día).
+				// Solo se renderizan profiles HISTÓRICOS cerrados.
+				if (profile.IsActive) continue;
 
 				RenderProfile(profile, chartControl, chartScale);
 			}
@@ -773,8 +776,9 @@ namespace NinjaTrader.NinjaScript.Indicators
 		/// - If touched: solid hasta el bar de cierre del día NADRO con acceptance,
 		///   después DASHED hasta end-of-session de ese día.
 		///
-		/// VAH/VAL usan ACCEPTANCE (close del día NADRO en el lado correcto del nivel),
-		/// no wicks. POC usa wick touch simple porque está en el centro y no tiene "lado".
+		/// VAH/VAL usan ACCEPTANCE bar-level (close del bar + ≥50% del ritmo más allá
+		/// del nivel — NADRO Guía 03 §4), no wicks. POC usa wick touch simple porque
+		/// está en el centro del VA y no tiene "lado" de aceptación.
 		/// </summary>
 		private void DrawLevelExtension(double priceLevel, VolumeProfileSession profile, int lastBarIdx,
 			float extStartX, float barDist, ChartControl chartControl,
@@ -996,21 +1000,27 @@ namespace NinjaTrader.NinjaScript.Indicators
 		}
 
 		/// <summary>
-		/// Detecta acceptance + touch (patrón BPB clásico NADRO):
-		/// 1. ACCEPTANCE: primer día NADRO cuyo close confirma rotura
-		///    - VAH (isUpper=true): close > nivel
-		///    - VAL (isUpper=false): close < nivel
-		/// 2. TOUCH: después del acceptance, primer bar que vuelve a tocar el
-		///    nivel desde el lado nuevo (el pullback del BPB)
-		///    - Para VAH: low <= nivel (precio baja a testear desde arriba)
-		///    - Para VAL: high >= nivel (precio sube a testear desde abajo)
+		/// Detecta acceptance + touch (patrón BPB clásico NADRO Guía 03 §4):
+		///
+		/// 1. ACCEPTANCE bar-by-bar: primer BAR cuyo close cumple el criterio NADRO
+		///    "distancia de al menos el 50% del ritmo (rango high-low) más allá del
+		///    nivel". Esto detecta acceptance intra-día sin esperar al cierre del
+		///    día NADRO completo.
+		///    - VAH (isUpper=true): close > nivel  Y  (close - nivel) >= 0.5 * range
+		///    - VAL (isUpper=false): close < nivel  Y  (nivel - close) >= 0.5 * range
+		///
+		/// 2. TOUCH (pullback): después del bar acceptance, primer bar que vuelve a
+		///    tocar el nivel desde el lado nuevo.
+		///    - Para VAH: low &lt;= nivel (precio baja a testear desde arriba)
+		///    - Para VAL: high &gt;= nivel (precio sube a testear desde abajo)
 		///
 		/// Returns el bar del touch POST-acceptance, o -1 si:
-		/// - No hubo acceptance (puro ruido/wicks intra-día) → virgin
+		/// - No hubo bar con acceptance bar-level → virgin
 		/// - Hubo acceptance pero no pullback todavía → tampoco "touched" aún
 		///
-		/// Wicks intra-día que no resultan en close del día con acceptance NO
-		/// cuentan ni como acceptance ni como touch.
+		/// Wicks puros (sin close + 50% ritmo más allá) NO cuentan como acceptance.
+		/// El criterio 50% del ritmo evita false positives por bars planos o pequeños
+		/// que apenas cierran del lado nuevo.
 		/// </summary>
 		private int FindFirstAcceptanceBar(double priceLevel, int startBar, int endBar, bool isUpper)
 		{
@@ -1024,50 +1034,47 @@ namespace NinjaTrader.NinjaScript.Indicators
 				if (from > to) return -1;
 
 				double tolerance = TickSize * 0.5;
-				TimeSpan resetTod = new TimeSpan(18, 0, 0);
 
-				// === FASE 1: encontrar primer día NADRO con ACCEPTANCE ===
+				// === FASE 1: encontrar primer BAR con ACCEPTANCE bar-level ===
+				// Criterio NADRO Guía 03 §4: "distancia de al menos el 50% del ritmo
+				// actual" — interpretamos el "ritmo" como el rango high-low del bar.
 				int acceptanceCloseBar = -1;
-				int i = from;
-				while (i <= to)
+				for (int i = from; i <= to; i++)
 				{
-					// Próximo reset 18:00 ET (fin del día NADRO actual)
-					DateTime barTime = bars.GetTime(i);
-					DateTime dayEnd;
-					if (barTime.TimeOfDay < resetTod)
-						dayEnd = barTime.Date + resetTod;
-					else
-						dayEnd = barTime.Date.AddDays(1) + resetTod;
+					double barClose = bars.GetClose(i);
+					double barHigh  = bars.GetHigh(i);
+					double barLow   = bars.GetLow(i);
+					double barRange = barHigh - barLow;
 
-					// Último bar antes de dayEnd = "close" del día NADRO
-					int closeBar = i;
-					int j = i;
-					while (j <= to && bars.GetTime(j) < dayEnd)
+					// Skip bars planos (sin ritmo evaluable) — evita división por cero
+					// y falsos positivos por bars de open=close=high=low.
+					if (barRange <= tolerance) continue;
+
+					bool accepted;
+					if (isUpper)
 					{
-						closeBar = j;
-						j++;
+						// VAH: close arriba del nivel + 50% del ritmo
+						double distance = barClose - priceLevel;
+						accepted = distance > tolerance && distance >= 0.5 * barRange;
 					}
-					if (j == i) j = i + 1;
-
-					// Evaluar acceptance del día
-					double dayClose = bars.GetClose(closeBar);
-					bool accepted = isUpper
-						? (dayClose > priceLevel + tolerance)
-						: (dayClose < priceLevel - tolerance);
+					else
+					{
+						// VAL: close abajo del nivel + 50% del ritmo
+						double distance = priceLevel - barClose;
+						accepted = distance > tolerance && distance >= 0.5 * barRange;
+					}
 
 					if (accepted)
 					{
-						acceptanceCloseBar = closeBar;
+						acceptanceCloseBar = i;
 						break;
 					}
-
-					i = j;
 				}
 
 				// Sin acceptance → virgin (no hay BPB candidato)
 				if (acceptanceCloseBar < 0) return -1;
 
-				// === FASE 2: desde el día siguiente al acceptance, buscar TOUCH ===
+				// === FASE 2: desde el bar siguiente al acceptance, buscar TOUCH ===
 				// El touch es el pullback que vuelve a testear el nivel desde el lado nuevo.
 				int searchFrom = acceptanceCloseBar + 1;
 				for (int k = searchFrom; k <= to; k++)

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>NADRO Snapshot — ZC pre-pit 2026-04-29</title>
+<style>
+:root { --bg: #0e1116; --panel: #161b22; --border: #30363d; --text: #c9d1d9; --muted: #8b949e; --accent: #58a6ff; --green: #56d364; --red: #f85149; --yellow: #d29922; --orange: #db6d28; --purple: #bc8cff; --pink: #ff7eb6; --gray: #6e7681; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 14px; line-height: 1.55; margin: 0; padding: 24px; max-width: 1100px; margin-left: auto; margin-right: auto; }
+h1 { font-size: 22px; border-bottom: 2px solid var(--accent); padding-bottom: 8px; margin-bottom: 4px; }
+h1 .subtitle { display: block; font-size: 13px; color: var(--muted); font-weight: normal; margin-top: 4px; }
+h2 { font-size: 17px; color: var(--accent); margin-top: 28px; margin-bottom: 8px; border-left: 3px solid var(--accent); padding-left: 10px; }
+h3 { font-size: 14px; color: var(--purple); margin-top: 16px; margin-bottom: 4px; }
+.panel { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 14px 18px; margin-bottom: 12px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; margin: 8px 0; }
+th, td { border: 1px solid var(--border); padding: 6px 10px; text-align: left; }
+th { background: #1c2128; color: var(--accent); }
+tr:nth-child(even) td { background: #11151b; }
+code { background: #1c2128; padding: 1px 5px; border-radius: 3px; font-family: "Consolas", monospace; font-size: 12.5px; color: var(--yellow); }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; margin-right: 4px; }
+.tag-aplus { background: var(--pink); color: #000; }
+.tag-a { background: var(--accent); color: #000; }
+.tag-long { background: var(--green); color: #000; }
+.tag-short { background: var(--red); color: #fff; }
+.tag-virgin { background: var(--green); color: #000; }
+.tag-sec { background: var(--gray); color: #fff; font-style: italic; }
+.tag-bullish { background: var(--green); color: #000; }
+.tag-lis { background: var(--yellow); color: #000; }
+.green { color: var(--green); }
+.red { color: var(--red); }
+.yellow { color: var(--yellow); }
+.muted { color: var(--muted); }
+.flow-diagram { background: #11151b; border: 1px dashed var(--border); padding: 10px 14px; font-family: "Consolas", monospace; font-size: 12px; white-space: pre; border-radius: 4px; }
+.lis-zone { background: rgba(210, 153, 34, 0.10); border-left: 3px solid var(--yellow); padding: 8px 14px; margin: 10px 0; border-radius: 0 4px 4px 0; }
+.callout { background: rgba(86, 211, 100, 0.06); border-left: 3px solid var(--green); padding: 8px 14px; margin: 10px 0; border-radius: 0 4px 4px 0; }
+.warning { background: rgba(248, 81, 73, 0.06); border-left: 3px solid var(--red); padding: 8px 14px; margin: 10px 0; border-radius: 0 4px 4px 0; }
+ul { padding-left: 22px; }
+li { margin-bottom: 4px; }
+.lvl-row td:first-child { font-family: "Consolas", monospace; }
+.dim { opacity: 0.45; }
+</style>
+</head>
+<body>
+
+<h1>NADRO Snapshot — ZC 07-26 · pre-pit 2026-04-29 09:25 ET
+  <span class="subtitle">5 min antes de pit-open (09:30 ET) · Corn futures · enumeración mecánica completa LTWVs Y/Q/M/W + Daily previous + TPO</span>
+</h1>
+
+<div class="panel">
+  <strong>TL;DR:</strong> <span class="green">imbalance bullish multi-TF MADURO</span> — 6 sesiones consecutivas bullish (+17 pts: 461.5 → 478.5). Espejo perfecto del GC bearish. <strong>5 secondary lines apiladas</strong> (454, 457, 463.75, 469.75, 475.25) = escalera bullish viva. Spot abandonó al alza el valor de ayer overnight. <strong>LIS densa multi-TF identificada en 474.54-475.25</strong> (3 niveles Daily+Monthly previous, span 0.71 pts ≈ cluster threshold). Aire arriba sin resistencia cercana hasta 478+.
+</div>
+
+<h2>1. Datos pre-pit</h2>
+<table>
+  <tr><td>Snapshot ID</td><td><code>ZC_20260429_0925_PRE_PIT</code></td></tr>
+  <tr><td>Spot @ 09:25 ET</td><td><strong>476.75</strong></td></tr>
+  <tr><td>ATR(14) Wilder</td><td><strong>7.02 pts</strong></td></tr>
+  <tr><td>Proximity (ATR×2)</td><td>±14 pts</td></tr>
+  <tr><td>Cluster threshold (ATR×0.10)</td><td>0.70 pts</td></tr>
+  <tr><td>Régimen</td><td><span class="green">imbalance bullish multi-TF MADURO</span> (5 secondary lines apiladas)</td></tr>
+  <tr><td>Bias</td><td><span class="tag tag-bullish">BULLISH MULTI-TF</span> Annual + Quarterly + Monthly + Weekly + Daily todos a favor</td></tr>
+</table>
+
+<h2>2. Enumeración mecánica completa de niveles (PASO 1 NADRO)</h2>
+
+<p class="muted">Todos los niveles dentro de proximity <strong>±14 pts</strong> de spot 476.75. Lectura mecánica de los 5 archivos <code>VwapLevels/{TF}_ZC.txt</code> + <code>get_cvas</code>. Cero cherry-pick.</p>
+
+<h3>2.1 LTWVs DEVELOPING (en construcción al 09:25 ET)</h3>
+<table>
+  <tr><th>TF</th><th>DVAH</th><th>VWAP central</th><th>DVAL</th><th>Spot vs DVAH</th><th>Estado</th></tr>
+  <tr class="lvl-row">
+    <td><strong>Daily</strong></td><td><strong>477.97</strong></td><td>477.29</td><td>476.61</td>
+    <td><span class="yellow">-1.22 (DENTRO)</span></td>
+    <td>spot intra-DVA hoy = día actual</td>
+  </tr>
+  <tr class="lvl-row">
+    <td><strong>Weekly</strong></td><td><strong>477.20</strong></td><td>473.32</td><td>469.44</td>
+    <td><span class="yellow">-0.45 (intra-techo)</span></td>
+    <td>spot pegado wDVAH = pivote semanal</td>
+  </tr>
+  <tr class="lvl-row">
+    <td><strong>Monthly</strong></td><td><strong>469.21</strong></td><td>461.56</td><td>453.90</td>
+    <td><span class="green">+7.54 ARRIBA</span></td>
+    <td>🟢 mDVAH roto arriba (imbalance mensual)</td>
+  </tr>
+  <tr class="lvl-row">
+    <td><strong>Quarterly</strong></td><td><strong>469.31</strong></td><td>461.68</td><td>454.05</td>
+    <td><span class="green">+7.44 ARRIBA</span></td>
+    <td>🟢 qDVAH roto arriba (ECO de Monthly)</td>
+  </tr>
+  <tr class="lvl-row">
+    <td><strong>Annual</strong></td><td><strong>468.78</strong></td><td>457.91</td><td>447.04</td>
+    <td><span class="green">+7.97 ARRIBA</span></td>
+    <td>🟢 yDVAH roto arriba (imbalance anual)</td>
+  </tr>
+</table>
+
+<h3>2.2 LTWVs PREVIOUS (zonas cerradas, pXDVA)</h3>
+<table>
+  <tr><th>Familia</th><th>pXDVAH</th><th>pXDVAL</th><th>Spot vs pXDVAH</th><th>Notas</th></tr>
+  <tr class="lvl-row">
+    <td><strong>Daily previous (04-28)</strong></td><td><strong>474.82</strong> ⭐</td><td>471.80</td>
+    <td><span class="green">+1.93</span></td>
+    <td>🟢 LIS top — Daily VWAP zone ayer</td>
+  </tr>
+  <tr class="lvl-row">
+    <td><strong>Monthly previous (marzo)</strong></td><td><strong>474.54</strong> ⭐</td><td>459.67</td>
+    <td><span class="green">+2.21</span></td>
+    <td>🟢 LIS bottom — coincidencia 0.04 con pVAH-04-28</td>
+  </tr>
+  <tr class="lvl-row">
+    <td>Quarterly previous (Q1-2026)</td><td>468.75</td><td>445.99</td>
+    <td><span class="green">+8.00</span></td>
+    <td>cluster con yDVAH 468.78 (multi-TF mayor)</td>
+  </tr>
+  <tr class="lvl-row">
+    <td>Weekly previous (semana pasada)</td><td>464.57</td><td>460.48</td>
+    <td><span class="muted">+12.18 (lejos)</span></td>
+    <td>fuera proximity directa</td>
+  </tr>
+  <tr class="lvl-row">
+    <td>Annual previous (2025)</td><td>532.93 (lejos)</td><td>453.31</td>
+    <td><span class="muted">pYDVAL -23.4 (fuera proximity)</span></td>
+    <td>pYDVAH muy arriba, pYDVAL fuera ATR×2</td>
+  </tr>
+</table>
+
+<h3>2.3 TPO previous days (RTH 70%)</h3>
+<table>
+  <tr><th>Día</th><th>pVAH</th><th>POC (Ley 9)</th><th>pVAL</th><th>Spot vs pVAH</th><th>Estado</th></tr>
+  <tr class="lvl-row">
+    <td><strong>04-28 (ayer)</strong></td><td><strong>475.25</strong> ⭐</td><td>474.00</td><td>473.00</td>
+    <td><span class="green">+1.50</span></td>
+    <td>🟢 LIS top + secondary line del último breakout</td>
+  </tr>
+  <tr class="lvl-row">
+    <td>04-27 (antier)</td><td>469.75</td><td>469.25</td><td>467.00</td>
+    <td><span class="green">+7.00 (virgin)</span></td>
+    <td>roto y no testeado = virgin nivel</td>
+  </tr>
+</table>
+
+<h3>2.4 Secondary lines (breakouts apilados — escalera bullish)</h3>
+<div class="callout">
+5 niveles secundarios apilados desde el inicio del rally (zona inferior → superior):
+<ul>
+  <li><code>454</code> — breakout 04-15 (CVA 04-13/14)</li>
+  <li><code>457</code> — breakout 04-20 (pVA 04-17)</li>
+  <li><code>463.75</code> — breakout 04-27 (pVA 04-24)</li>
+  <li><code>469.75</code> — breakout 04-28 (pVA 04-27, virgin)</li>
+  <li><code>475.25</code> ⭐ — breakout 04-29 overnight (pVA 04-28) <strong>= LIS top</strong></li>
+</ul>
+Densidad de breakouts secuenciales = bias bullish maduro y serial.
+</div>
+
+<h2>3. Confluencias detectadas (cluster threshold ≤ 0.70 pts)</h2>
+<table>
+  <tr><th>#</th><th>Zona</th><th>Grade</th><th>Miembros</th><th>Notas</th></tr>
+  <tr>
+    <td>C1</td>
+    <td><code>477.20-477.97</code></td>
+    <td><span class="tag tag-a">A</span></td>
+    <td>DVAH 477.97 + wDVAH 477.20</td>
+    <td>techo dinámico intra-day Daily+Weekly developing (NO LIS — pivote del día actual)</td>
+  </tr>
+  <tr>
+    <td><strong>C2 (LIS)</strong></td>
+    <td><code><strong>474.54-475.25</strong></code></td>
+    <td><span class="tag tag-aplus">A+</span></td>
+    <td><strong>pVAH-04-28 475.25 + pDVAH-04-28 474.82 + pMDVAH-marzo 474.54</strong> + secondary line 475.25</td>
+    <td>🟡 <strong>LINE IN THE SAND NADRO</strong> — 3 niveles multi-TF (Daily+Monthly previous), span 0.71 pts</td>
+  </tr>
+  <tr>
+    <td>C3</td>
+    <td><code>473.00</code></td>
+    <td><span class="tag tag-a">A</span></td>
+    <td>pVAL-04-28 (TPO suelo valor ayer)</td>
+    <td>nivel solitario pero estructural</td>
+  </tr>
+  <tr>
+    <td>C4</td>
+    <td><code>471.80</code></td>
+    <td><span class="tag tag-a">A</span></td>
+    <td>pDVAL-04-28 (Daily VWAP previous low)</td>
+    <td>nivel solitario, soporte intermedio</td>
+  </tr>
+  <tr>
+    <td><strong>C5</strong></td>
+    <td><code>469.21-469.75</code></td>
+    <td><span class="tag tag-aplus">A+</span></td>
+    <td>pVAH-04-27 virgin 469.75 + wDVAL 469.44 + qDVAH 469.31 + mDVAH 469.21</td>
+    <td>4 niveles densos LTWV mayor + virgin TPO</td>
+  </tr>
+  <tr>
+    <td><strong>C6</strong></td>
+    <td><code>468.75-468.78</code></td>
+    <td><span class="tag tag-aplus">A+</span></td>
+    <td>yDVAH 468.78 + pQDVAH-Q1 468.75</td>
+    <td>multi-TF mayor (Annual dev + Quarterly previous), span 0.03 pts</td>
+  </tr>
+  <tr>
+    <td>C7</td>
+    <td><code>467.00</code></td>
+    <td><span class="tag tag-a">A</span></td>
+    <td>pVAL-04-27 virgin</td>
+    <td>soporte profundo no testeado</td>
+  </tr>
+</table>
+
+<h2>4. LINE IN THE SAND — zona NADRO real</h2>
+
+<div class="lis-zone">
+<strong>🟡 LIS = 474.54 – 475.25</strong> (span 0.71 pts ≈ cluster threshold) <span class="tag tag-aplus">A+</span> <span class="tag tag-lis">DENSA MULTI-TF</span>
+<br><br>
+<strong>3 niveles apilados (Daily previous + Monthly previous + TPO previous):</strong>
+<ul>
+  <li><code>475.25</code> — <strong>pVAH-04-28</strong> [TPO RTH previous] + secondary line del último breakout</li>
+  <li><code>474.82</code> — <strong>pDVAH-04-28</strong> [Daily VWAP previous]</li>
+  <li><code>474.54</code> — <strong>pMDVAH-marzo</strong> [Monthly previous] ⭐ multi-TF</li>
+</ul>
+
+<strong>Función NADRO de la LIS</strong>:
+<ul>
+  <li>Mientras spot <strong>ARRIBA de 474.54</strong> → bias bullish vivo del breakout multi-TF maduro</li>
+  <li>Pierde 474.54 con <strong>aceptación bar-level</strong> → CAMBIO DE CARÁCTER (vuelve dentro del valor 04-28, posible reversión hacia pVAL 473)</li>
+</ul>
+</div>
+
+<div class="warning">
+<strong>NOTA crítica vs versión anterior</strong>: el snapshot inicial colocó la LIS en <code>wDVAH 476.73-478</code> con grado A+, pero ese rango tiene <strong>solo 1 nivel real</strong> (wDVAH) + "spot" + "zona aire" — no es densa. La LIS NADRO requiere DENSIDAD DE NIVELES (Ley 6 "áreas, no líneas"). El cluster <strong>474.54-475.25 con 3 niveles multi-TF es la LIS verdadera</strong>. El wDVAH/DVAH 477.20-477.97 es un techo dinámico intra-day (pivote del día actual), no la LIS principal.
+</div>
+
+<h2>5. Mapa visual de niveles (proximity ±14 pts)</h2>
+<div class="flow-diagram">
+ARRIBA — continuación
+   485.00  ····· ext 1.5 ATR (T4 H1 final)
+   480.00  ····· ext 1 ATR (T3 H1)
+   478.25  ····· pVAH-active (TPO en desarrollo, referencia)
+   478.00  ····· zona aire (T2 H1)
+─────────────────────────────────────────────────
+TECHO DINÁMICO INTRA-DAY (cluster A)
+   477.97  ───── DVAH (Daily developing)
+   477.20  ───── wDVAH (Weekly developing) ← T1 H1
+   476.75  ▶▶▶▶▶ SPOT @ 09:25 ET
+   476.61  ───── DVAL (Daily developing)
+─────────────────────────────────────────────────
+🟡 LINE IN THE SAND (cluster A+ multi-TF, 3 niveles)
+   475.25  ═════ pVAH-04-28 (TPO) ⭐ + secondary line breakout
+   474.82  ═════ pDVAH-04-28 (Daily VWAP previous) ⭐
+   474.54  ═════ pMDVAH-marzo (Monthly previous) ⭐
+─────────────────────────────────────────────────
+SOPORTES INTERMEDIOS — valor de ayer
+   473.00  ───── pVAL-04-28 (TPO suelo valor ayer)
+   471.80  ───── pDVAL-04-28 (Daily VWAP previous low)
+─────────────────────────────────────────────────
+CLUSTER LTWV MAYOR (A+)
+   469.75  ═════ pVAH-04-27 [virgin]
+   469.44  ═════ wDVAL (Weekly developing low)
+   469.31  ═════ qDVAH (Quarterly developing)
+   469.21  ═════ mDVAH (Monthly developing)
+   468.78  ═════ yDVAH (Annual developing)
+   468.75  ═════ pQDVAH-Q1 (Quarterly previous)
+─────────────────────────────────────────────────
+SOPORTE PROFUNDO (A)
+   467.00  ───── pVAL-04-27 [virgin] (no testeado)
+</div>
+
+<h2>6. Hipos rankeadas por convicción</h2>
+
+<h3>H1 <span class="tag tag-aplus">A+</span> <span class="tag tag-long">LONG</span> BPB-LIS multi-TF</h3>
+<table>
+  <tr><td><strong>Setup</strong></td><td>BPB-LIS multi-TF (pVAH+pDVAH+pMDVAH retest desde arriba)</td></tr>
+  <tr><td><strong>Entry</strong></td><td><code>474.82</code> (mid LIS, pDVAH)</td></tr>
+  <tr><td><strong>Stop</strong></td><td><code>472.50</code> (debajo pVAL-04-28 con buffer 0.5)</td></tr>
+  <tr><td><strong>Risk</strong></td><td><strong>2.32 pts</strong> (≈ ATR×0.33)</td></tr>
+  <tr><td><strong>Targets</strong></td><td>
+    T1 <code>477.20</code> wDVAH (RR 1.0) →
+    T2 <code>478.00</code> zona aire (RR 1.4) →
+    T3 <code>480.00</code> ext 1 ATR (RR 2.2) →
+    T4 <code>485.00</code> ext 1.5 ATR <strong>FINAL</strong> (RR 4.4)
+  </td></tr>
+  <tr><td><strong>Tesis</strong></td><td>LIS densa multi-TF Daily+Monthly previous (3 niveles, span 0.71 pts). Spot rompió arriba en sesión asiática overnight (+1.50 a +2.21 sobre LIS). Si retesta zona desde arriba y rebota = BPB canónico NADRO §4-§5 (PV+LTWV intersection). Bias multi-TF maduro a favor: Annual + Quarterly + Monthly + Weekly + Daily todos rotos arriba.</td></tr>
+</table>
+
+<h3>H2 <span class="tag tag-aplus">A+</span> <span class="tag tag-long">LONG</span> RPB cluster LTWV mayor</h3>
+<table>
+  <tr><td><strong>Setup</strong></td><td>RPB cluster LTWV mayor (yDVAH+qDVAH+mDVAH+pQDVAH+pVAH-04-27 virgin)</td></tr>
+  <tr><td><strong>Entry</strong></td><td><code>469.31</code> (mid cluster, qDVAH)</td></tr>
+  <tr><td><strong>Stop</strong></td><td><code>466.50</code> (debajo pVAL-04-27 virgin con buffer)</td></tr>
+  <tr><td><strong>Risk</strong></td><td><strong>2.81 pts</strong> (≈ ATR×0.40)</td></tr>
+  <tr><td><strong>Targets</strong></td><td>
+    T1 <code>471.80</code> pDVAL-04-28 (RR 0.9) →
+    T2 <code>473.00</code> pVAL-04-28 (RR 1.3) →
+    T3 <code>474.54</code> LIS bottom (RR 1.9) →
+    T4 <code>475.25</code> LIS top <strong>FINAL</strong> (RR 2.1)
+  </td></tr>
+  <tr><td><strong>Tesis</strong></td><td>Cluster A+ multi-TF mayor 468.75-469.75 (banda 1 pt): 6 niveles densos LTWV recién rotos arriba (yDVAH+pQDVAH+qDVAH+mDVAH+wDVAL) + virgin pVAH-04-27. Si pit-open trae caída fuerte (apertura abajo del valor + sweep) = RPB long estructural en LTWV mayor. Reentry a zona de aceptación pre-breakout. Bias multi-TF refuerza el setup.</td></tr>
+</table>
+
+<h3>H3 <span class="tag tag-a">A</span> <span class="tag tag-short">SHORT</span> BPB-LIS break (contra-bias)</h3>
+<table>
+  <tr><td><strong>Setup</strong></td><td>BPB-LIS break (cambio de carácter, contra-bias)</td></tr>
+  <tr><td><strong>Entry</strong></td><td><code>473.00</code> (pVAL-04-28, pullback post-break LIS)</td></tr>
+  <tr><td><strong>Stop</strong></td><td><code>476.00</code> (vuelta sobre LIS)</td></tr>
+  <tr><td><strong>Risk</strong></td><td><strong>3.00 pts</strong> (≈ ATR×0.43)</td></tr>
+  <tr><td><strong>Targets</strong></td><td>
+    T1 <code>471.80</code> pDVAL-04-28 (RR 0.4) →
+    T2 <code>469.75</code> pVAH-04-27 virgin + wDVAL (RR 1.1) →
+    T3 <code>468.75</code> cluster LTWV mayor <strong>FINAL</strong> (RR 1.4)
+  </td></tr>
+  <tr><td><strong>Tesis</strong></td><td><span class="red">⚠ contra-bias multi-TF MADURO</span>. SOLO si pierde LIS 474.54 con aceptación bar-level dura abajo + pullback a pVAL-04-28 473.00. Sizing reducido. Setup solo si OF agresivo de venta confirma + 4 barras pullback NADRO. Si no hay aceptación dura, NO entrar — el bias multi-TF puede absorber un fade técnico sin invalidar la tendencia.</td></tr>
+</table>
+
+<h2>7. Disciplina y plan</h2>
+<div class="callout">
+<strong>Bias bullish multi-TF MADURO</strong> (5 secondary lines apiladas, 6 sesiones consecutivas). NADRO Guía 03 §6 — desequilibrio FAVOR de longs. <strong>NO short agresivo.</strong>
+
+<ul>
+  <li><strong>Plan A (alta probabilidad)</strong>: pit-open consolidación + retest LIS 474.54-475.25 → BPB-LIS H1 long.</li>
+  <li><strong>Plan B (caída fuerte)</strong>: gap-down al pit-open + ataque cluster 468-470 → RPB H2 long en LTWV mayor.</li>
+  <li><strong>Plan C (cambio de carácter)</strong>: pierde LIS 474.54 con aceptación dura + pullback a 473 → BPB-break H3 short reducido.</li>
+</ul>
+
+<strong>Filtro NADRO de gatillo</strong>: 4 barras pullback + cambio HA al cierre. Stops en último HA pivot (Guía 03 §9).
+</div>
+
+<h2>8. RCA — por qué este snapshot corrige al anterior</h2>
+<div class="warning">
+<strong>Versión inicial (corregida)</strong>:
+<ul>
+  <li><span class="red">❌ LIS</span> en <code>wDVAH 476.73-478</code> con grado A+ — 1 solo nivel real (wDVAH) + "spot" + "zona aire". <strong>No densa. No NADRO.</strong></li>
+  <li><span class="red">❌ pVAH-04-28</span> registrado como 474.50, valor TPO real es <code>475.25</code></li>
+  <li><span class="red">❌ pDVAH-04-28</span> omitido (Daily VWAP previous = 474.82, miembro clave del cluster LIS)</li>
+  <li><span class="red">❌ pMDVAH-marzo</span> omitido inicialmente (Monthly previous = 474.54)</li>
+</ul>
+
+<strong>Esta versión (RCA aplicado, ver memoria <code>feedback_completeness_levels_checklist.md</code>)</strong>:
+<ul>
+  <li><span class="green">✅ Enumeración mecánica</span> de los 5 archivos <code>VwapLevels/{TF}_ZC.txt</code> + <code>get_cvas</code></li>
+  <li><span class="green">✅ LIS reposicionada</span> a la zona densa real <code>474.54-475.25</code> (3 niveles multi-TF Daily+Monthly previous + secondary line)</li>
+  <li><span class="green">✅ pVAH-04-28 corregido</span> a 475.25 (valor TPO RTH real)</li>
+  <li><span class="green">✅ Daily previous incluido</span> (pDVAH 474.82 / pDVAL 471.80)</li>
+  <li><span class="green">✅ Todas las LTWVs developing y previous capturadas</span> (Y/Q/M/W developing + pYDVA/pQDVA/pMDVA/pWDVA previous, justificando las que están fuera proximity)</li>
+</ul>
+</div>
+
+<p class="muted" style="margin-top: 30px; font-size: 12px;">
+Generado por nadro_snapshot_markup MCP tool · Persistido en <code>Docs/Nadro/markups/ZC_2026-04-29.json</code> · Indicador <code>RelativeNadroMarkup</code> en NT8 renderiza la zona LIS en amarillo (50% opacity) extendida hasta fin de sesión + niveles atenuados (Rank &amp; Distill) los no usados en hipos.
+</p>
+
+</body>
+</html>

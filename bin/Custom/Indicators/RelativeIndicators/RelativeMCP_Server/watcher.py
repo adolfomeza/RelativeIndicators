@@ -52,75 +52,133 @@ def _kind_from_trigger(trigger_type: str) -> str:
 
 
 def compute_daily_atr(instrument: str, lookback_days: int = 14) -> float | None:
-    """ATR(N) de bars diarios. Mide la volatilidad típica del instrumento.
+    """ATR(N) de bars diarios — Wilder's smoothing (estándar industria).
 
-    Fórmula clásica:
+    Mide la volatilidad típica del instrumento. Coincide con el indicador ATR()
+    builtin de NinjaTrader, TradingView y la mayoría de plataformas.
+
+    Fórmula Wilder (J. Welles Wilder Jr., 1978):
         TR_i = max(high_i - low_i, |high_i - close_{i-1}|, |low_i - close_{i-1}|)
-        ATR  = SMA de los últimos N TR
+        ATR_inicial = SMA de los primeros N TR (seed)
+        ATR_t = (ATR_{t-1} * (N - 1) + TR_t) / N    ← smoothing exponencial
 
-    Returns: ATR en puntos del instrumento, o None si no hay data suficiente.
+    Wilder's smoothing es equivalente a EMA con α = 1/N (más suavizado que SMA).
+    Es lo estándar profesional. Para que el smoothing converja necesita warmup;
+    pedimos ~3N bars para que el ATR se estabilice.
+
+    Args:
+        instrument: FullName (ej "NQ 06-26").
+        lookback_days: período N del ATR. Default 14 (estándar).
+
+    Returns:
+        ATR en puntos del instrumento, o None si no hay data suficiente.
+        Adapta automáticamente al instrumento:
+        - NQ@27000 → ATR ~400 pts
+        - 6E@1.17 → ATR ~0.006 (60 pips)
+        - MGC@4500 → ATR ~100 pts
     """
     from .tools import observer
     try:
-        # Pedir bars diarios con margen (25 días para tener al menos 14 cerrados)
-        data = observer.get_bars(instrument=instrument, tf="1d", n=lookback_days + 10)
+        # Pedir 3*N bars para warmup del smoothing exponencial.
+        # Con 14*3+10 = 52 bars cubrimos ~10 semanas de trading.
+        warmup = lookback_days * 3
+        data = observer.get_bars(instrument=instrument, tf="1d", n=warmup + 10)
         bars = data.get("bars", [])
-        if len(bars) < 2:
+        if len(bars) < lookback_days + 2:
             return None
-        # Excluir el día actual (que está in-progress)
-        # NT devuelve hasta el bar actual; usar todos menos el último
-        bars = bars[:-1] if len(bars) > lookback_days else bars
-        if len(bars) < 2:
-            return None
-        bars = bars[-lookback_days:]  # últimos N
 
+        # Excluir el día actual (in-progress) para no contaminar el ATR
+        # con un TR parcial.
+        bars = bars[:-1] if len(bars) > lookback_days + 1 else bars
+        if len(bars) < lookback_days + 1:
+            return None
+
+        # Calcular True Range para todos los bars disponibles
         trs = []
         for i in range(1, len(bars)):
             h, l = bars[i]["h"], bars[i]["l"]
             prev_c = bars[i - 1]["c"]
             tr = max(h - l, abs(h - prev_c), abs(l - prev_c))
             trs.append(tr)
-        if not trs:
+
+        if len(trs) < lookback_days:
             return None
-        return sum(trs) / len(trs)
+
+        # Seed ATR = SMA de los primeros N TRs (método Wilder original)
+        atr = sum(trs[:lookback_days]) / lookback_days
+
+        # Aplicar Wilder's smoothing al resto: ATR_t = (ATR_{t-1}*(N-1) + TR_t)/N
+        for tr in trs[lookback_days:]:
+            atr = (atr * (lookback_days - 1) + tr) / lookback_days
+
+        return atr
     except Exception:
         return None
 
 
 def build_levels(snapshot: dict) -> list[dict]:
-    """Niveles ESTATICOS operables del snapshot.
+    """Niveles operables del snapshot (NADRO §2.5).
 
-    EXCLUYE deliberadamente los DVA (Daily/Weekly/Monthly/Quarterly/Annual)
-    porque son DINAMICOS — el valor en el snapshot no sera el mismo cuando
-    el trade se gatille horas despues. El usuario tiene los indicadores DVA
-    en el chart que se actualizan en tiempo real.
+    INCLUYE:
+      - pVAH/pVAL (TPO previous, cerradas y active)
+      - CVAH/CVAL (composites del RelativeVolumeProfile)
+      - Secondary lines (bordes rotos de bloques cerrados)
+      - pDVAH/pDVAL (Daily previous zone — vía VwapLevels/Daily_*.txt)
+      - pWDVAH/pWDVAL, pMDVAH/pMDVAL, pQDVAH/pQDVAL, pYDVAH/pYDVAL (LTWV previous zones)
+      - wDVAH/wDVAL, mDVAH/mDVAL, qDVAH/qDVAL, yDVAH/yDVAL (LTWV developing, no eco)
 
-    Solo niveles ESTATICOS (no cambian post-snapshot):
-      - pVAH/pVAL/pPOC (cerradas o active del dia previo)
-      - CVA boundaries (cerradas y active)
-      - Secondary lines (bordes rotos)
+    EXCLUYE:
+      - DVAH/DVAL Daily (developing) — referencia visual del usuario, no operable
+        según NADRO 4.0 §3 (Daily NO es LTWV).
     """
     levels = []
     cvas = snapshot.get("cvas", {})
 
-    # pVAs (estaticas)
+    # pVAs TPO (estáticas, del RelativeVolumeProfile)
     for pva in cvas.get("pvas", []):
-        date = pva.get("start_date", "?")[5:]  # MM-DD
         tag = "act" if pva.get("status") == "active" else ""
         levels.append({"label": f"pVAH{tag}", "price": pva["vah"]})
         levels.append({"label": f"pVAL{tag}", "price": pva["val"]})
 
-    # CVAs (estaticas)
+    # CVAs TPO (estáticas)
     for cva in cvas.get("cvas", []):
         tag = "act" if cva.get("status") == "active" else ""
         levels.append({"label": f"CVAH-{cva['start_date'][5:]}-{cva['end_date'][5:]}{tag}", "price": cva["vah"]})
         levels.append({"label": f"CVAL-{cva['start_date'][5:]}-{cva['end_date'][5:]}{tag}", "price": cva["val"]})
 
-    # Secondary lines (estaticas)
+    # Secondary lines (estáticas)
     for sec in cvas.get("secondary_lines", []):
         levels.append({"label": "sec", "price": sec["price"]})
 
-    # NOTA: DVAs intencionalmente NO incluidos. Ver docstring.
+    # Previous zones (pXDVA): Daily/Weekly/Monthly/Quarterly/Annual previous,
+    # leídas de archivos VwapLevels/{TF}_{master}.txt. Estáticas (período cerrado).
+    # NADRO §2.5 las marca operables.
+    for z in snapshot.get("previous_zones", []):
+        if z.get("price") is None or z.get("price") <= 0:
+            continue
+        levels.append({"label": z["label"], "price": z["price"]})
+
+    # LTWV developing (Weekly/Monthly/Quarterly/Annual). DVA del período en curso.
+    # Si el TF es eco del inferior (regla §6 nadro_master), saltarlo — sería
+    # confluencia espuria con el TF inferior. Daily NO se incluye (no es LTWV).
+    dvas = snapshot.get("dvas", {})
+    tf_prefix = {"weekly": "w", "monthly": "m", "quarterly": "q", "annual": "y"}
+    for tf, prefix in tf_prefix.items():
+        dva = dvas.get(tf, {})
+        if not isinstance(dva, dict):
+            continue
+        if dva.get("is_echo_of_sub_period"):
+            continue
+        payload = dva.get("payload", {})
+        if not isinstance(payload, dict):
+            continue
+        dvah = payload.get("dvah")
+        dval = payload.get("dval")
+        if dvah is not None and dvah > 0:
+            levels.append({"label": f"{prefix}DVAH", "price": dvah})
+        if dval is not None and dval > 0:
+            levels.append({"label": f"{prefix}DVAL", "price": dval})
+
     return levels
 
 
@@ -235,24 +293,41 @@ def rank_hipos(hipos: list[dict], snapshot: dict, confluences: list[dict] | None
     return ranked[:max_n]
 
 
-def hipo_to_markup(h: dict, idx: int, spot: float) -> dict:
-    """Convierte un hypo enumerado al formato del markup, calculando entry/stop/targets."""
+def hipo_to_markup(h: dict, idx: int, spot: float, atr: float | None = None) -> dict:
+    """Convierte un hypo enumerado al formato del markup, calculando entry/stop/targets.
+
+    Stop y targets son adaptables al instrumento usando ATR(14) como referencia:
+    - stop_offset = ATR * 0.075  (≈ 7.5% del ritmo diario, en NQ ATR=400 → stop 30pts)
+    - t1_offset   = ATR * 0.125  (≈ 12.5% del ritmo, NQ → 50pts)
+    - t2_offset   = ATR * 0.250  (≈ 25% del ritmo, NQ → 100pts)
+
+    Para 6E con ATR ~70 pips:
+    - stop ~5 pips, t1 ~9 pips, t2 ~17 pips (proporcional al instrumento)
+
+    En live el stop real se reemplaza por el último HA pivot dinámico (Guía 03 §9).
+    """
     level = h["level_price"]
     direction = h["direction"]
-
-    # Entry near level (BPB: at level on retest; IPB: at level on touch)
     entry = level
 
-    # Stop offset 30pts (será reemplazado por HA pivot dinámico al disparar trade real)
-    stop_offset = 30
+    # Offsets adaptables al instrumento. Si no hay ATR, fallback a 30pts (NQ-like).
+    if atr and atr > 0:
+        stop_offset = atr * 0.075
+        t1_offset = atr * 0.125
+        t2_offset = atr * 0.250
+    else:
+        stop_offset = 30.0
+        t1_offset = 50.0
+        t2_offset = 100.0
+
     if direction == "long":
         stop = level - stop_offset
-        t1 = level + 50
-        t2 = level + 100
+        t1 = level + t1_offset
+        t2 = level + t2_offset
     else:
         stop = level + stop_offset
-        t1 = level - 50
-        t2 = level - 100
+        t1 = level - t1_offset
+        t2 = level - t2_offset
 
     grade = "A" if h["level_type"] in ("CVAH", "CVAL", "pVAH", "pVAL") else "B"
 
@@ -263,7 +338,7 @@ def hipo_to_markup(h: dict, idx: int, spot: float) -> dict:
         "entry": entry,
         "stop": stop,
         "grade": grade,
-        "notes": f"auto-watcher | dist {h.get('distance_to_level', 0):.0f}pts del spot",
+        "notes": f"auto-watcher | dist {h.get('distance_to_level', 0):.4f} del spot",
         "targets": [
             {"label": "T1", "price": t1},
             {"label": "T2", "price": t2},
@@ -304,26 +379,47 @@ def process_request(req_path: Path) -> dict:
     # Filtro ESTADISTICO basado en ATR(14) de bars diarios.
     # Mejor que 500pts hardcoded porque escala con volatilidad y por instrumento.
     # Default: 2x ATR (cubre ~95% de los movimientos típicos diarios).
+    # Proximity adaptable por instrumento. Calculamos siempre como múltiplo de ATR
+    # (que se autoescala por instrumento — NQ ~400pts, 6E ~0.006). Sin caps absolutos
+    # hardcoded (los antiguos max=50/min=2000 daban valores absurdos para FX).
+    #
+    # Factor default: 2.0x ATR. Suficiente para captar niveles estructurales sin
+    # inundar de ruido. Se puede ajustar por instrumento abajo si fuera necesario.
+    PROXIMITY_FACTOR_BY_INSTR = {
+        # FX: ATR(14) ~ 60 pips. Factor 2.0 → ±120 pips. Capta pWDVAL/pWDVAH.
+        "6E": 2.0, "6B": 2.0, "6J": 2.0, "6A": 2.0, "6C": 2.0,
+        # Default 2.0 para todos los demás (NQ, ES, MGC, MCL, etc).
+    }
+    master = instrument.split(" ")[0].upper()
+    proximity_factor = PROXIMITY_FACTOR_BY_INSTR.get(master, 2.0)
+
     atr = compute_daily_atr(instrument, lookback_days=14)
     if atr is None or atr <= 0:
-        proximity = 500.0  # fallback si no hay ATR
+        # Fallback proporcional al precio: ±0.5% del spot. Independiente de la
+        # escala del instrumento. NQ@27000 → ±135pts; 6E@1.17 → ±0.00585 (58 pips).
+        proximity = abs(spot) * 0.005
     else:
-        # 2x ATR como ventana operativa, con floor 50pts y cap 2000pts
-        proximity = max(50.0, min(2000.0, atr * 2.0))
+        proximity = atr * proximity_factor
 
-    # Filtro ESTADISTICO puro: solo niveles dentro de ±2*ATR del spot.
-    # Sin excepciones — si ATR(14) dice que el precio típicamente NO llega al
-    # nivel intra-día, no tiene sentido renderizarlo. Mejor chart limpio.
+    # Filtro estadístico: solo niveles dentro de ±proximity del spot.
+    # NADRO §6: niveles estructurales (CVA recién formado, pVA active, pXDVA recientes)
+    # que estén "fuera del rango" siguen siendo operables — pero por ahora confiamos
+    # en el factor 2.0x ATR para captar lo relevante.
     levels = [l for l in all_levels if abs(l["price"] - spot) <= proximity]
 
-    confluences = build_confluences(levels, proximity_pts=15.0, min_count=2)
+    # Cluster threshold escalable: 10% del ATR diario.
+    # NQ ATR 400 → cluster 40pts (zonas amplias bien definidas)
+    # 6E ATR 0.007 → cluster 0.0007 = 7 pips (apropiado para FX)
+    # MGC ATR 108 → cluster 11pts (apropiado para metales)
+    # Sin caps absolutos — escala automáticamente.
+    cluster_threshold = (atr * 0.10) if (atr and atr > 0) else (abs(spot) * 0.0005)
+    confluences = build_confluences(levels, proximity_pts=cluster_threshold, min_count=2)
 
-    # Enumerar hipos. Filtrar las que apuntan a DVA (DINAMICAS) — el markup
-    # solo debe contener hipos con entry/stop/target en niveles ESTATICOS.
-    # Las DVA se ven en vivo en el chart via los indicadores VWAP forks.
+    # Enumerar hipos. NADRO 4.0 §3 + §2.5: LTWV developing (W/M/Q/Y) Y zonas
+    # previous (pXDVA) son operables. Solo Daily DVAH/DVAL se excluye (referencia
+    # del usuario, no LTWV) — y ya no entra desde build_levels/enumerate_hipos.
     all_hipos = enumerate_hipos(snap)
-    static_hipos = [h for h in all_hipos if h.get("level_type") not in ("DVAH", "DVAL")]
-    top_hipos = rank_hipos(static_hipos, snap, confluences=confluences, max_n=3)
+    top_hipos = rank_hipos(all_hipos, snap, confluences=confluences, max_n=3)
 
     # Bias estructural mecánico
     cvas = snap.get("cvas", {})
@@ -342,7 +438,7 @@ def process_request(req_path: Path) -> dict:
         regime = "rotacional / balance"
 
     # Convertir hipos enumerados al formato markup
-    markup_hipos = [hipo_to_markup(h, i + 1, spot) for i, h in enumerate(top_hipos)]
+    markup_hipos = [hipo_to_markup(h, i + 1, spot, atr=atr) for i, h in enumerate(top_hipos)]
 
     # Summary
     if markup_hipos:

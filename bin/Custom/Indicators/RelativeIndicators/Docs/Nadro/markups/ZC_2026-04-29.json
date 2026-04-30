@@ -1,0 +1,284 @@
+{
+  "schema_version": "1.0",
+  "instrument": "ZC",
+  "date": "2026-04-29",
+  "snapshots": [
+    {
+      "id": "ZC_20260429_0925_PRE_PIT",
+      "timestamp": "2026-04-29T09:25:00",
+      "price_at_analysis": 476.75,
+      "regime": "imbalance bullish multi-TF maduro | breakout serial 6 sesiones (461→477) | spot intra-techo Daily/Weekly developing | LIS densa multi-TF 474.54-475.25 abajo (3 niveles Daily+Monthly previous)",
+      "bias": "bullish multi-TF establecido",
+      "summary": "H1[A+] LONG zona 474.54-475.25 BPB-LIS multi-TF (Daily+Monthly previous, 3 niveles densos) → T1 477.20 T2 478 T3 480 T4 485 | H2[A+] LONG cluster 468-470 RPB LTWV mayor | H3[A] SHORT solo si pierde 474.54 con aceptación",
+      "analysis_text": "ZC PRE-PIT 2026-04-29 09:25 ET | spot 476.75 (5 min antes pit-open 09:30)\n\nATR(14) Wilder ≈ 7.02 pts | Proximity = ATR×2 = ±14 pts | Cluster threshold = ATR×0.10 = 0.70 pts\n\n═══════════════════════════════════════════════════════════\nN — NARRATIVA\n═══════════════════════════════════════════════════════════\nTendencia bullish multi-TF establecida 6 sesiones (+17 pts: 461.5 → 478.5):\n• 04-21 VAH 463 → 04-24 VAH 463.75 → 04-27 VAH 469.75 (+6 gap) → 04-28 VAH 475.25 (+5.5 gap) → 04-29 spot 476.75\n• Espejo perfecto del bearish multi-TF en GC.\n• Sesión asiática overnight 04-28→04-29 abandonó al alza el valor de ayer (>475.25 pVAH).\n• 5 secondary lines apilados arriba de cada breakout (454, 457, 463.75, 469.75, 475.25) — escalera bullish viva.\n\n═══════════════════════════════════════════════════════════\nA — ACEPTACIÓN (direccional NADRO)\n═══════════════════════════════════════════════════════════\nAceptación arriba multi-TF establecida en LTWVs de techo previo:\n• yDVAH 468.78 (Annual dev) → spot +7.97 ARRIBA. Acceptance bar-level RTH 04-28.\n• qDVAH 469.31 (Quarterly dev) → spot +7.44 ARRIBA. Idem.\n• mDVAH 469.21 (Monthly dev) → spot +7.54 ARRIBA. Idem.\n• pQDVAH-Q1 468.75 (Quarterly previous) → spot +8.00 ARRIBA.\n• pVAH-04-27 469.75 (TPO virgin) → spot +7.00 ARRIBA.\n• pMDVAH-marzo 474.54 (Monthly previous) → spot +2.21 ARRIBA en sesión asiática.\n• pDVAH-04-28 474.82 (Daily VWAP previous) → spot +1.93 ARRIBA.\n• pVAH-04-28 475.25 (TPO RTH previous) → spot +1.50 ARRIBA.\n\nNiveles en/cerca:\n• wDVAH 477.20 (Weekly dev) → spot -0.45 (intra-techo).\n• DVAH 477.97 (Daily dev) → spot -1.22 (intra-techo).\n\n═══════════════════════════════════════════════════════════\nD — DISTRIBUCIÓN (LTWVs al 09:25 ET)\n═══════════════════════════════════════════════════════════\nDEVELOPING (en construcción):\n• Daily:     DVAH 477.97 / DVAL 476.61 — spot DENTRO (intra-techo)\n• Weekly:    wDVAH 477.20 / wDVAL 469.44 — spot -0.45 vs wDVAH (extendido)\n• Monthly:   mDVAH 469.21 / mDVAL 453.90 — spot +7.54 vs mDVAH (rotado arriba)\n• Quarterly: qDVAH 469.31 / qDVAL 454.05 — spot +7.44 vs qDVAH (rotado arriba)\n• Annual:    yDVAH 468.78 / yDVAL 447.04 — spot +7.97 vs yDVAH (rotado arriba)\n\nPREVIOUS (zonas cerradas, pXDVA):\n• pDVAH-04-28 474.82 / pDVAL-04-28 471.80 (Daily zone ayer) ⭐\n• pWDVAH-w16 464.57 / pWDVAL-w16 460.48 (Weekly zone semana pasada) — fuera proximity\n• pMDVAH-marzo 474.54 / pMDVAL-marzo 459.67 ⭐\n• pQDVAH-Q1 468.75 / pQDVAL-Q1 445.99\n• pYDVAH 532.93 / pYDVAL 453.31 — yDVAL fuera proximity (-23 pts), pYDVAH muy lejos arriba\n\nLTWV developing (M/Q/Y) ROTOS arriba consistentemente. Weekly dev en techo. Daily dev = el día actual.\n\n═══════════════════════════════════════════════════════════\nR — RITMO\n═══════════════════════════════════════════════════════════\nSubida sostenida con gaps. Aceleración 04-27 (+6) y 04-28 (+5.5). Compresión rota al alza serial. Mercado en busca de equilibrio nuevo arriba.\n\n═══════════════════════════════════════════════════════════\nO — ORDER FLOW\n═══════════════════════════════════════════════════════════\nA leer en vivo en 1m/5m al pit-open 09:30. Volumen del primer bar RTH determinante. Si volumen alto + delta positivo en 477+ → continuación. Si volumen alto + delta negativo + rechazo desde 478 → fade técnico hacia LIS 474.54-475.25.\n\n═══════════════════════════════════════════════════════════\nLINE IN THE SAND (zona densa NADRO)\n═══════════════════════════════════════════════════════════\n**474.54 — 475.25** (span 0.71 pts ≈ cluster threshold) [A+]\n3 niveles multi-TF apilados (Daily + Monthly previous):\n• pMDVAH-marzo 474.54 [Monthly previous] ⭐\n• pDVAH-04-28 474.82 [Daily VWAP previous] ⭐\n• pVAH-04-28 475.25 [TPO RTH previous] ⭐\n+ secondary line 475.25 (último breakout 04-28)\n\nESTA es la LIS NADRO real (densidad de niveles, multi-TF, función de límite régimen):\n• Mientras spot ARRIBA de 474.54 → bias bullish vivo del breakout multi-TF\n• Pierde 474.54 con aceptación → CAMBIO DE CARÁCTER (vuelve dentro del valor 04-28, posible reversión)\n\n(El cluster wDVAH+DVAH 477.20-477.97 es TECHO DINÁMICO intra-day del día actual — pivot de breakout, NO la LIS principal. Si rompe arriba: continuación. Si rechaza: fade hacia LIS.)\n\n═══════════════════════════════════════════════════════════\nZONAS CLAVE (ranking proximity)\n═══════════════════════════════════════════════════════════\nARRIBA (continuación, sin techo cercano)\n• 478 — pVAH-active (TPO en desarrollo, referencia)\n• 480 — extensión 1 ATR sobre LIS\n• 485 — extensión 1.5 ATR (último target H1)\n\nDENTRO/CERCA (techo dinámico intra-day)\n• 477.97 — DVAH developing\n• 477.20 — wDVAH developing (cluster 0.77 pts con DVAH, A)\n\nABAJO (LIS densa multi-TF)\n• 475.25-474.54 [A+] LIS NADRO — pVAH-04-28 + pDVAH-04-28 + pMDVAH-marzo\n\nABAJO (soportes intermedios — valor de ayer)\n• 473.00 — pVAL-04-28 (TPO RTH suelo valor ayer)\n• 471.80 — pDVAL-04-28 (Daily VWAP previous low)\n\nABAJO (cluster LTWV mayor — soporte estructural)\n• 470-469.21 — wDVAL 469.44 + pVAH-04-27 virgin 469.75 + qDVAH 469.31 + mDVAH 469.21 (4 niveles)\n• 468.78-468.75 [A+] yDVAH 468.78 + pQDVAH-Q1 468.75 (Annual dev + Q previous, multi-TF mayor)\n\nABAJO (soporte profundo — secondary line + virgin)\n• 467.00 — pVAL-04-27 virgin (no testeado)\n\n═══════════════════════════════════════════════════════════\nDISCIPLINA\n═══════════════════════════════════════════════════════════\nBias bullish multi-TF MADURO (5 secondary lines apiladas). NADRO Guía 03 §6 — desequilibrio FAVOR de longs. NO short agresivo.\n\nH1 setup primario: BPB-LIS LONG retest 474.54-475.25 desde arriba (densidad multi-TF Daily+Monthly previous = setup A+ canónico NADRO §4-§5 PV+LTWV).\nH2 setup mayor estructural: si pit-open trae caída fuerte al cluster 468-470 → RPB long en LTWV mayor (yDVAH+qDVAH+mDVAH+pQDVAH+pVAH-04-27 virgin = 5+ niveles).\nH3 SHORT solo con cambio de carácter dura: pierde LIS 474.54 con aceptación bar-level + pullback a pVAL-04-28 473.00. Sizing reducido (contra-bias multi-TF).\n\nStops adaptables al ATR (offset 0.5 pts ≈ 0.075 × ATR). En live va detrás del último HA pivot (Guía 03 §9). Filtro de gatillo NADRO: 4 barras pullback + cambio HA al cierre.\n",
+      "confluences": [
+        {
+          "label": "Techo dinámico Daily+Weekly developing (intra-day)",
+          "price_min": 477.2,
+          "price_max": 477.97,
+          "grade": "A",
+          "members": [
+            "DVAH 477.97 [Daily developing]",
+            "wDVAH 477.20 [Weekly developing]"
+          ]
+        },
+        {
+          "label": "LINE IN THE SAND multi-TF (Daily+Monthly previous)",
+          "price_min": 474.54,
+          "price_max": 475.25,
+          "grade": "A+",
+          "members": [
+            "pVAH-04-28 475.25 [TPO RTH previous]",
+            "pDVAH-04-28 474.82 [Daily VWAP previous]",
+            "pMDVAH-marzo 474.54 [Monthly previous]",
+            "secondary-line 475.25 [breakout 04-28]"
+          ]
+        },
+        {
+          "label": "pVAL-04-28 (suelo valor ayer TPO)",
+          "price_min": 473,
+          "price_max": 473,
+          "grade": "A",
+          "members": [
+            "pVAL-04-28 473.00 [TPO RTH previous]"
+          ]
+        },
+        {
+          "label": "pDVAL-04-28 (Daily VWAP previous low)",
+          "price_min": 471.8,
+          "price_max": 471.8,
+          "grade": "A",
+          "members": [
+            "pDVAL-04-28 471.80 [Daily VWAP previous]"
+          ]
+        },
+        {
+          "label": "Cluster banda intermedia (Weekly low + pVAH-04-27 virgin + LTWV)",
+          "price_min": 469.21,
+          "price_max": 469.75,
+          "grade": "A+",
+          "members": [
+            "pVAH-04-27 469.75 [TPO virgin]",
+            "wDVAL 469.44 [Weekly developing low]",
+            "qDVAH 469.31 [Quarterly developing]",
+            "mDVAH 469.21 [Monthly developing]"
+          ]
+        },
+        {
+          "label": "Cluster LTWV mayor (Annual dev + Quarterly previous)",
+          "price_min": 468.75,
+          "price_max": 468.78,
+          "grade": "A+",
+          "members": [
+            "yDVAH 468.78 [Annual developing]",
+            "pQDVAH-Q1 468.75 [Quarterly previous]"
+          ]
+        },
+        {
+          "label": "pVAL-04-27 virgin (soporte profundo)",
+          "price_min": 467,
+          "price_max": 467,
+          "grade": "A",
+          "members": [
+            "pVAL-04-27 467.00 [TPO virgin]"
+          ]
+        }
+      ],
+      "levels": [
+        {
+          "label": "DVAH (techo dia)",
+          "price": 477.97
+        },
+        {
+          "label": "wDVAH (techo wk)",
+          "price": 477.2
+        },
+        {
+          "label": "DVAL (Daily dev)",
+          "price": 476.61
+        },
+        {
+          "label": "pVAH-04-28 (LIS top)",
+          "price": 475.25
+        },
+        {
+          "label": "pDVAH-04-28 (LIS mid)",
+          "price": 474.82
+        },
+        {
+          "label": "pMDVAH-marzo (LIS bot)",
+          "price": 474.54
+        },
+        {
+          "label": "pVAL-04-28",
+          "price": 473
+        },
+        {
+          "label": "pDVAL-04-28",
+          "price": 471.8
+        },
+        {
+          "label": "pVAH-04-27 (virgin)",
+          "price": 469.75
+        },
+        {
+          "label": "wDVAL",
+          "price": 469.44
+        },
+        {
+          "label": "qDVAH",
+          "price": 469.31
+        },
+        {
+          "label": "mDVAH",
+          "price": 469.21
+        },
+        {
+          "label": "yDVAH",
+          "price": 468.78
+        },
+        {
+          "label": "pQDVAH (Q1-2026)",
+          "price": 468.75
+        },
+        {
+          "label": "pVAL-04-27 (virgin)",
+          "price": 467
+        },
+        {
+          "label": "T1 H1 (techo wk)",
+          "price": 477.2
+        },
+        {
+          "label": "T2 H1 (zona aire)",
+          "price": 478
+        },
+        {
+          "label": "T3 H1 ext 1 ATR",
+          "price": 480
+        },
+        {
+          "label": "T4 H1 ext 1.5 ATR",
+          "price": 485
+        }
+      ],
+      "hypos": [
+        {
+          "id": "H1",
+          "direction": "long",
+          "setup_type": "BPB-LIS multi-TF (pVAH+pDVAH+pMDVAH retest desde arriba)",
+          "grade": "A+",
+          "entry": 474.82,
+          "stop": 472.5,
+          "notes": "LIS NADRO real (3 niveles densos multi-TF Daily+Monthly previous, span 0.71 pts). pVAH-04-28 475.25 + pDVAH-04-28 474.82 + pMDVAH-marzo 474.54. Spot rompió arriba en sesión asiática y aceptó (+1.50 a +2.21). Si retesta zona desde arriba y rebota = BPB en continuación bullish multi-TF maduro. Bias Annual+Monthly+Weekly+Daily a favor. Entry óptimo: 474.82 (mid de la zona, pDVAH); stop debajo pVAL-04-28 473.00 con buffer.",
+          "targets": [
+            {
+              "label": "T1 wDVAH (techo wk)",
+              "price": 477.2,
+              "rr": 1
+            },
+            {
+              "label": "T2 zona aire pVA-active",
+              "price": 478,
+              "rr": 1.4
+            },
+            {
+              "label": "T3 ext 1 ATR sobre LIS",
+              "price": 480,
+              "rr": 2.2
+            },
+            {
+              "label": "T4 ext 1.5 ATR (final)",
+              "price": 485,
+              "rr": 4.4
+            }
+          ],
+          "risk_pts": 2.32,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        },
+        {
+          "id": "H2",
+          "direction": "long",
+          "setup_type": "RPB cluster LTWV mayor (yDVAH+qDVAH+mDVAH+pQDVAH+pVAH-04-27 virgin)",
+          "grade": "A+",
+          "entry": 469.31,
+          "stop": 466.5,
+          "notes": "Cluster A+ multi-TF mayor 468-470 (banda 1.04 pts): yDVAH 468.78 + pQDVAH-Q1 468.75 + qDVAH 469.31 + mDVAH 469.21 + wDVAL 469.44 + pVAH-04-27 virgin 469.75. 6 niveles densos LTWV recien rotos arriba + virgin nivel pVAH ayer. Si pit-open trae caída fuerte (apertura abajo del valor de ayer + sweep) = RPB long estructural en LTWV mayor. Bias Annual+Quarterly+Monthly+Weekly a favor refuerza el setup. Entry óptimo: 469.31 (mid cluster, qDVAH); stop debajo pVAL-04-27 virgin 467.00 con buffer.",
+          "targets": [
+            {
+              "label": "T1 pDVAL-04-28",
+              "price": 471.8,
+              "rr": 0.9
+            },
+            {
+              "label": "T2 pVAL-04-28",
+              "price": 473,
+              "rr": 1.3
+            },
+            {
+              "label": "T3 LIS bottom",
+              "price": 474.54,
+              "rr": 1.9
+            },
+            {
+              "label": "T4 LIS top (final)",
+              "price": 475.25,
+              "rr": 2.1
+            }
+          ],
+          "risk_pts": 2.81,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        },
+        {
+          "id": "H3",
+          "direction": "short",
+          "setup_type": "BPB-LIS break (cambio de carácter, contra-bias)",
+          "grade": "A",
+          "entry": 473,
+          "stop": 476,
+          "notes": "SOLO si pierde LIS 474.54 con aceptación bar-level dura abajo + pullback a pVAL-04-28 473.00. NADRO §6 ALERTA: contra-bias multi-TF MADURO establecido (5 secondary lines apiladas, 6 sesiones bullish). Sizing reducido. Setup solo si OF agresivo de venta confirma + 4 barras pullback NADRO. Si no hay aceptación dura, NO entrar — el bias multi-TF puede absorber un fade técnico sin invalidar la tendencia.",
+          "targets": [
+            {
+              "label": "T1 pDVAL-04-28",
+              "price": 471.8,
+              "rr": 0.4
+            },
+            {
+              "label": "T2 pVAH-04-27 virgin + wDVAL",
+              "price": 469.75,
+              "rr": 1.1
+            },
+            {
+              "label": "T3 cluster LTWV mayor (final)",
+              "price": 468.75,
+              "rr": 1.4
+            }
+          ],
+          "risk_pts": 3,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,214 @@
+{
+  "schema_version": "1.0",
+  "instrument": "GC",
+  "date": "2026-04-29",
+  "snapshots": [
+    {
+      "id": "GC_20260429_0815_PRE_PIT",
+      "timestamp": "2026-04-29T08:15:00",
+      "price_at_analysis": 4574.7,
+      "regime": "cambio de condición macro bearish — caída -100 pts overnight 04-28→04-29 + rotura LTWV multi-TF en sesión previa | spot abajo del valor 04-28",
+      "bias": "bearish multi-TF (Annual+Quarterly+Monthly imbalance abajo, spot abajo del valor 04-28)",
+      "summary": "H1[A+] SHORT zona 4583-4604 BPB-pVA-04-28+yDVAL (LIS Ley 3) -> T1 4562 T2 4540 T3 4520 | H2[A] LONG 4562 RPB wDVAL (contra-bias, alto riesgo) -> T1 4583 T2 4603 | H3[A+] SHORT continuación si pierde wDVAL -> T1 4540 T2 4520 T3 4500",
+      "analysis_text": "GC PRE-PIT 2026-04-29 08:15 ET | spot 4574.70 (5min antes pit-open 08:20)\n\nATR(14) Wilder = 130 pts | Proximity = ±260 pts\n\nN — NARRATIVA\nCambio de condición MACRO bearish establecido en sesiones previas:\n• 04-21 VAH 4813 → 04-28 VAH 4603 = -210 pts en 5 sesiones\n• 04-28 RTH cerró breakout_down del valor del 27 (close 4608 vs pVAL-04-27 4681)\n• Sesión asiática 04-29 (overnight) profundizó: spot bajó de 4617 (apertura ETH) a 4574.7 al 08:15 ET\n• Estamos AHORA -29 abajo del pVAL-04-28 (4583.60) — abandonando el valor del día anterior\n\nA — ACEPTACIÓN\nBar-level NADRO §4: bar 04-29 04:00 ET (close 4581.4, range 5.8 pts, distance abajo del yDVAL 4591 = 10 pts → 172% del ritmo) → ACEPTACIÓN ABAJO del yDVAL confirmada bar-level.\nPullback al yDVAL desde abajo PENDIENTE (highs hasta 08:15 ET = 4589.5, no llega al 4591).\n→ yDVAL ES SECONDARY LINE ACTIVA por Ley 3, candidato H1 SHORT en pullback.\n\nAcceptance bar-level del pVAL-04-28 (4583.60): bar 06:00 ET 04-29 close 4568.3 con distance 15 pts vs ritmo 10.7 pts = 140% ✓ → pVAL-04-28 también es secondary line activa.\n\nD — DISTRIBUCIÓN (LTWV al 08:15 ET 04-29)\n• Annual: yDVAL ~4591 — spot -17 abajo. Imbalance bearish anual.\n• Quarterly: qDVAL ~4668 — spot -93 abajo. Imbalance bearish trimestral.\n• Monthly: mDVAL ~4670 — spot -95 abajo. Imbalance bearish mensual.\n• Weekly: wDVAL ~4562 — spot +13 arriba. Dentro del semanal, en zona inferior.\nLTWV mayores en imbalance bearish establecido. Solo Weekly aún rotacional.\n\nR — RITMO\nCaída en 3 fases: graduales 04-21 a 04-27, aceleración 04-28 (-100 pts intra-día), continuación overnight. Mercado en búsqueda de equilibrio nuevo abajo. Compresión rota.\n\nO — ORDER FLOW\nA leer en vivo en 1m/5m al pit-open 08:20.\n\nLINE IN THE SAND\nZona 4583-4604 (densidad alta — 4 niveles estructurales apilados):\n• 4583.60 pVAL-04-28 (secondary, acceptance abajo confirmada)\n• 4591.30 pPOC-04-28 (POC, NO operable salvo Ley 9)\n• 4591 yDVAL Annual (secondary, acceptance abajo confirmada)\n• 4603.60 pVAH-04-28 (virgin — borde superior valor 04-28)\n\nMientras spot abajo de 4604 → bias bearish del día. Aceptación dura ARRIBA + pullback → cambio de carácter macro (improbable inmediato).\n\nZONAS CLAVE\n\nARRIBA (resistencias)\n• 4583-4604 [A+] LINE IN THE SAND ⭐ entry H1 SHORT\n• 4622 wVWAP (centro semanal — fade)\n• 4668-4670 [A+] qDVAL+mDVAL secondary (lejos +93/+95)\n• 4681.50 pVAL-04-27 (virgin lejos)\n\nABAJO (soportes / targets)\n• 4562 wDVAL (Weekly developing low) — primer soporte LTWV cercano, T1 H1 / entry H2\n• 4540 zona intermedia (T2 H1)\n• 4520 zona estructural mayor (T3 H1)\n• 4500 round number / soporte psicológico\n\nDISCIPLINA\nBias bearish multi-TF establecido → **prioridad SHORTS**.\nNADRO Guía 03 §6 — \"ALERTA DE ALTO RIESGO si desequilibrio en su contra\" → NO LONG agresivos. H2 LONG es contra-bias, solo con OF agresivo en wDVAL.\nH1 setup primario. H3 confirma continuación si pierde wDVAL.\n\nStops adaptables al ATR (≈10 pts risk con offset 0.075x ATR). En live va detrás del último HA pivot (Guía 03 §9). Filtro NADRO de gatillo: 4 barras pullback + cambio HA al cierre.\n",
+      "confluences": [
+        {
+          "label": "LINE IN THE SAND pVA-04-28+yDVAL (Ley 3)",
+          "price_min": 4583.6,
+          "price_max": 4603.6,
+          "grade": "A+",
+          "members": [
+            "pVAL-04-28 4583.60 [secondary]",
+            "pPOC-04-28 4591.30 [Ley 9]",
+            "yDVAL 4591 [Annual secondary]",
+            "pVAH-04-28 4603.60 [virgin]"
+          ]
+        },
+        {
+          "label": "qDVAL+mDVAL secondary (Quarterly+Monthly rotos)",
+          "price_min": 4668,
+          "price_max": 4670,
+          "grade": "A+",
+          "members": [
+            "qDVAL 4668 [Quarterly secondary]",
+            "mDVAL 4670 [Monthly secondary]"
+          ]
+        },
+        {
+          "label": "wDVAL (último soporte LTWV cercano)",
+          "price_min": 4562,
+          "price_max": 4562,
+          "grade": "A",
+          "members": [
+            "wDVAL 4562 [Weekly developing]"
+          ]
+        },
+        {
+          "label": "pVAL-04-27 (virgin lejos)",
+          "price_min": 4681.5,
+          "price_max": 4681.5,
+          "grade": "A",
+          "members": [
+            "pVAL-04-27 4681.50 [virgin]"
+          ]
+        }
+      ],
+      "levels": [
+        {
+          "label": "pVAH-04-27 (virgin)",
+          "price": 4708.9
+        },
+        {
+          "label": "pVAL-04-27 (virgin)",
+          "price": 4681.5
+        },
+        {
+          "label": "qDVAL (sec)",
+          "price": 4668
+        },
+        {
+          "label": "mDVAL (sec)",
+          "price": 4670
+        },
+        {
+          "label": "wVWAP",
+          "price": 4622
+        },
+        {
+          "label": "pVAH-04-28 (virgin)",
+          "price": 4603.6
+        },
+        {
+          "label": "pPOC-04-28",
+          "price": 4591.3
+        },
+        {
+          "label": "yDVAL (sec)",
+          "price": 4591
+        },
+        {
+          "label": "pVAL-04-28 (sec)",
+          "price": 4583.6
+        },
+        {
+          "label": "wDVAL",
+          "price": 4562
+        },
+        {
+          "label": "T2 zona intermedia",
+          "price": 4540
+        },
+        {
+          "label": "T3 estructural",
+          "price": 4520
+        },
+        {
+          "label": "soporte psicológico",
+          "price": 4500
+        }
+      ],
+      "hypos": [
+        {
+          "id": "H1",
+          "direction": "short",
+          "setup_type": "BPB-pVA-04-28+yDVAL (LIS, Ley 3)",
+          "grade": "A+",
+          "entry": 4583.6,
+          "stop": 4615,
+          "notes": "LINE IN THE SAND. yDVAL+pVAL-04-28+pPOC apilados. Acceptance abajo confirmada bar-level esta madrugada. Si rebota al LIS y rechaza con OF, BPB short en continuación bearish multi-TF. Setup primario.",
+          "targets": [
+            {
+              "label": "wDVAL Weekly",
+              "price": 4562,
+              "rr": 0.7
+            },
+            {
+              "label": "zona intermedia",
+              "price": 4540,
+              "rr": 1.4
+            },
+            {
+              "label": "zona estructural",
+              "price": 4520,
+              "rr": 2.0
+            }
+          ],
+          "risk_pts": 31.399999999999636,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        },
+        {
+          "id": "H2",
+          "direction": "long",
+          "setup_type": "RPB-wDVAL (contra-bias, alto riesgo)",
+          "grade": "A",
+          "entry": 4562,
+          "stop": 4540,
+          "notes": "wDVAL es único soporte LTWV cercano. NADRO §6 ALERTA: contra-bias multi-TF. Solo disparar con OF agresivo de rechazo + reset del momentum bearish. Sizing reducido. NO insistir.",
+          "targets": [
+            {
+              "label": "LIS pVAL-04-28",
+              "price": 4583.6,
+              "rr": 1.0
+            },
+            {
+              "label": "pVAH-04-28 virgin",
+              "price": 4603.6,
+              "rr": 1.9
+            }
+          ],
+          "risk_pts": 22.0,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        },
+        {
+          "id": "H3",
+          "direction": "short",
+          "setup_type": "BPB-wDVAL break (continuación)",
+          "grade": "A+",
+          "entry": 4562,
+          "stop": 4583.6,
+          "notes": "Continuación bearish: si pierde wDVAL con aceptación + pullback, cambia el semanal también a bearish. Drift a zona estructural mayor abajo. Multi-TF refuerza setup.",
+          "targets": [
+            {
+              "label": "zona intermedia",
+              "price": 4540,
+              "rr": 1.0
+            },
+            {
+              "label": "zona estructural",
+              "price": 4520,
+              "rr": 1.9
+            },
+            {
+              "label": "soporte psicológico",
+              "price": 4500,
+              "rr": 2.9
+            }
+          ],
+          "risk_pts": 21.600000000000364,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        }
+      ]
+    }
+  ]
+}

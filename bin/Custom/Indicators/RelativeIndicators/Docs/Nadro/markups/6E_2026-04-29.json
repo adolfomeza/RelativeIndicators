@@ -1,0 +1,241 @@
+{
+  "schema_version": "1.0",
+  "instrument": "6E",
+  "date": "2026-04-29",
+  "snapshots": [
+    {
+      "id": "6E_20260429_0715_PRE_PIT",
+      "timestamp": "2026-04-29T07:15:00",
+      "price_at_analysis": 1.17335,
+      "regime": "rotacional con sesgo bearish ligero (74 vs 64 + 92 drifts) | spot pegado al oVAL 3d secondary | CVA-04-28-04-29 recién formado virgin | pWDVAL semana pasada también cambió de rol",
+      "bias": "bearish ligero con disonancia (spot encima de CVAH virgin)",
+      "summary": "H1[A+] SHORT zona 1.17340-1.17400 BPB-oVAL 3d (LIS Ley 3) -> T1 1.17295 T2 1.17170 | H2[A] LONG zona 1.17100 RPB CVAL virgin -> T1 1.17264-1.17295 T2 1.17580 | H3[A] LONG break above 1.17400 (cambio carácter) -> T1 1.17580 T2 1.17780",
+      "analysis_text": "6E PRE-PIT 2026-04-29 07:15 ET | spot 1.17335\n\nATR(14) Wilder = 0.00695 (69.5 pips) | Proximity = ±139p | Cluster = 7p\n\nN — NARRATIVA\nRotacional con sesgo bearish ligero (74 down vs 64 up, +92 drifts). CVA 04-28/29 acaba de formarse y oVAL del 24-abr se rompió con rejection del pullback el 28-abr 11:30 (Ley 3 confirmada).\n\nA — ACEPTACIÓN\nNiveles que YA cambiaron de rol (acceptance + pullback completados):\n• oVAL 3d 1.17340 — secondary bajista. Spot pegado.\n• pWDVAL 1.17264 — Weekly previous, secondary bajista.\n• wDVAL 1.17176 + pMDVAH 1.17170 — secondary cluster.\n• wDVAH 1.17569, CVAH-11-07-11-10, CVAH-01-15-01-16 — secondary.\n\nNiveles VIRGIN: pVAH-04-27 (1.17780), pVAL-04-27 (1.17580 pendiente pullback), CVAH/CVAL-04-28-04-29 (1.17295/1.17100), CVAL-11-07-11-10 (1.168), CVAL-01-15-01-16 (1.16725).\n\nD — DISTRIBUCIÓN\nSpot dentro del wDVA. Mensual y anual rotacionales.\n\nR — RITMO\nCambio de condición agresivo. Triple capa estructural intermedia (oVAL 3d arriba, CVAH virgin / pWDVAL sec / wDVAL+pMDVAH sec abajo).\n\nO — ORDER FLOW\nA leer en vivo en 1m/5m al pit-open.\n\nLINE IN THE SAND\nZona 1.17340-1.17400. oVAL 3d (sec bajista) es el ancla. Mientras spot abajo de 1.17400 → bias bearish.\n\nDISCIPLINA\nBias bearish ligero del día → priorizar H1 SHORT en LIS. H2 LONG es rebote en CVAL composite virgin. H3 LONG es cambio de carácter — solo con aceptación dura arriba de 1.17400.\n\nStops adaptables al ATR (≈ 5p risk). En live van detrás del último HA pivot (Guía 03 §9).\n",
+      "confluences": [
+        {
+          "label": "LINE IN THE SAND oVAL 3d secondary (Ley 3)",
+          "price_min": 1.1734,
+          "price_max": 1.174,
+          "grade": "A+",
+          "members": [
+            "oVAL 3d 1.17340 [secondary bajista]",
+            "spot pegado 1.17335",
+            "borde superior 1.17400"
+          ]
+        },
+        {
+          "label": "CVAH-04-28-04-29 virgin (techo composite)",
+          "price_min": 1.17295,
+          "price_max": 1.17295,
+          "grade": "A",
+          "members": [
+            "CVAH-04-28-04-29 1.17295 [VIRGIN]"
+          ]
+        },
+        {
+          "label": "pWDVAL secondary (Ley 3, Weekly previous)",
+          "price_min": 1.17264,
+          "price_max": 1.17264,
+          "grade": "A",
+          "members": [
+            "pWDVAL 1.17264 [secondary bajista]"
+          ]
+        },
+        {
+          "label": "wDVAL+pMDVAH secondary cluster",
+          "price_min": 1.1717,
+          "price_max": 1.17176,
+          "grade": "A",
+          "members": [
+            "wDVAL 1.17176 [secondary]",
+            "pMDVAH 1.17170 [secondary]"
+          ]
+        },
+        {
+          "label": "CVAL-04-28-04-29 virgin (suelo composite)",
+          "price_min": 1.171,
+          "price_max": 1.171,
+          "grade": "A+",
+          "members": [
+            "CVAL-04-28-04-29 1.17100 [VIRGIN]"
+          ]
+        },
+        {
+          "label": "wDVAH+pVAL-04-27 (resistencia mayor)",
+          "price_min": 1.17569,
+          "price_max": 1.1758,
+          "grade": "A+",
+          "members": [
+            "wDVAH 1.17569 [secondary]",
+            "pVAL-04-27 1.17580 [virgin pendiente pullback]"
+          ]
+        },
+        {
+          "label": "CVAH-01-15+CVAH-11-07 secondary",
+          "price_min": 1.16985,
+          "price_max": 1.17,
+          "grade": "A",
+          "members": [
+            "CVAH-01-15-01-16 1.16985 [secondary]",
+            "CVAH-11-07-11-10 1.17000 [secondary]"
+          ]
+        },
+        {
+          "label": "CVAL-11-07-11-10 virgin (soporte mayor)",
+          "price_min": 1.168,
+          "price_max": 1.168,
+          "grade": "A",
+          "members": [
+            "CVAL-11-07-11-10 1.168 [VIRGIN]"
+          ]
+        }
+      ],
+      "levels": [
+        {
+          "label": "oVAL 3d (sec)",
+          "price": 1.1734
+        },
+        {
+          "label": "pWDVAL (sec)",
+          "price": 1.17264
+        },
+        {
+          "label": "wDVAL (sec)",
+          "price": 1.17176
+        },
+        {
+          "label": "wDVAH (sec)",
+          "price": 1.17569
+        },
+        {
+          "label": "pMDVAH (sec)",
+          "price": 1.1717
+        },
+        {
+          "label": "CVAH-04-28-04-29 (virgin)",
+          "price": 1.17295
+        },
+        {
+          "label": "CVAL-04-28-04-29 (virgin)",
+          "price": 1.171
+        },
+        {
+          "label": "pVAH-04-27 (virgin)",
+          "price": 1.1778
+        },
+        {
+          "label": "pVAL-04-27 (pendiente)",
+          "price": 1.1758
+        },
+        {
+          "label": "CVAH-01-15-01-16 (sec)",
+          "price": 1.16985
+        },
+        {
+          "label": "CVAH-11-07-11-10 (sec)",
+          "price": 1.17
+        },
+        {
+          "label": "CVAL-01-15-01-16 (virgin)",
+          "price": 1.16725
+        },
+        {
+          "label": "CVAL-11-07-11-10 (virgin)",
+          "price": 1.168
+        }
+      ],
+      "hypos": [
+        {
+          "id": "H1",
+          "direction": "short",
+          "setup_type": "BPB-oVAL 3d (LIS, Ley 3)",
+          "grade": "A+",
+          "entry": 1.1734,
+          "stop": 1.17405,
+          "notes": "Line in the Sand 1.17340-1.17400. oVAL 3d cambió de rol secondary bajista por Ley 3 (pullback rejection 28-abr 11:30). Spot pegado al nivel.",
+          "targets": [
+            {
+              "label": "CVAH virgin",
+              "price": 1.17295,
+              "rr": 0.7
+            },
+            {
+              "label": "wDVAL+pMDVAH cluster",
+              "price": 1.1717,
+              "rr": 2.6
+            }
+          ],
+          "risk_pts": 0.0006500000000000394,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        },
+        {
+          "id": "H2",
+          "direction": "long",
+          "setup_type": "RPB-CVAL virgin",
+          "grade": "A",
+          "entry": 1.171,
+          "stop": 1.17035,
+          "notes": "Soporte CVAL composite recién formado virgin. Bias rotacional permite mean revert.",
+          "targets": [
+            {
+              "label": "CVAH virgin / pWDVAL",
+              "price": 1.17264,
+              "rr": 2.5
+            },
+            {
+              "label": "pVAL-04-27 pendiente",
+              "price": 1.1758,
+              "rr": 7.4
+            }
+          ],
+          "risk_pts": 0.0006500000000000394,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        },
+        {
+          "id": "H3",
+          "direction": "long",
+          "setup_type": "BPB break LIS",
+          "grade": "A",
+          "entry": 1.1742,
+          "stop": 1.17335,
+          "notes": "Cambio de carácter: aceptación dura ARRIBA de 1.17400 + pullback. Solo con aceptación confirmada.",
+          "targets": [
+            {
+              "label": "wDVAH+pVAL-04-27",
+              "price": 1.1758,
+              "rr": 1.9
+            },
+            {
+              "label": "pVAH-04-27 virgin",
+              "price": 1.1778,
+              "rr": 4.2
+            }
+          ],
+          "risk_pts": 0.0008500000000000174,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        }
+      ]
+    }
+  ]
+}

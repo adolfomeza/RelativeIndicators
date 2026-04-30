@@ -271,6 +271,145 @@ namespace NinjaTrader.NinjaScript.Indicators
 			});
 		}
 
+		// ============================================================================
+		// Payload helpers — exponen composites/pVAs al RelativeIndicatorRegistry
+		// para que el watcher Python use exactamente las mismas zonas que pinta el chart.
+		// ============================================================================
+
+		/// <summary>Publica el estado completo al RelativeIndicatorRegistry. Llamado tanto
+		/// desde la serie primaria (BarsInProgress==0) como desde la secundaria 1-min
+		/// (BarsInProgress==1) para granularidad <= 1min independiente del TF del chart.</summary>
+		private void PublishStateToRegistry()
+		{
+			try
+			{
+				string indName = typeof(RelativeVolumeProfile).Name;
+				double poc = _activeProfile != null ? _activeProfile.POC : double.NaN;
+				double vah = _activeProfile != null ? _activeProfile.VAH : double.NaN;
+				double val = _activeProfile != null ? _activeProfile.VAL : double.NaN;
+				long pocVol = _activeProfile != null ? _activeProfile.POCVolume : 0L;
+				int levelCount = (_activeProfile != null && _activeProfile.Levels != null) ? _activeProfile.Levels.Count : 0;
+				bool profActive = _activeProfile != null && _activeProfile.IsActive;
+				int allProfCount = _allProfiles != null ? _allProfiles.Count : 0;
+
+				var compositesList = BuildCompositesPayload();
+				var closedPvasList = BuildClosedPvasPayload();
+				var activePva = BuildActivePvaPayload();
+
+				NinjaTrader.NinjaScript.AddOns.RelativeIndicatorRegistry.Publish(
+					string.Format("{0}:{1}:{2}{3}", indName, Instrument.FullName,
+						BarsPeriod.Value, BarsPeriod.BarsPeriodType),
+					new Dictionary<string, object>
+					{
+						["bar"] = CurrentBar,
+						["bar_time"] = Time[0],
+						["close"] = Close[0],
+						["poc"] = poc,
+						["vah"] = vah,
+						["val"] = val,
+						["poc_volume"] = pocVol,
+						["level_count"] = levelCount,
+						["profile_active"] = profActive,
+						["total_profiles"] = allProfCount,
+						["profile_type"] = ProfileType.ToString(),
+						["session_mode"] = SessionMode.ToString(),
+						["composites"] = compositesList,
+						["closed_pvas"] = closedPvasList,
+						["active_pva"] = activePva,
+						["auto_merge_enabled"] = AutoMergeNadroEnabled,
+						["auto_merge_overlap_threshold"] = AutoMergeOverlapThreshold,
+						["auto_merge_breakout_tolerance"] = AutoMergeBreakoutTolerance,
+						["auto_merge_require_dshape"] = NadroRequireDShape,
+					});
+			}
+			catch { }
+		}
+
+		/// <summary>Serializa cada CompositeInfo (CVA NADRO) como dict consumible por replay.py.
+		/// start_date / end_date son ISO YYYY-MM-DD del primer y último OriginalProfiles.</summary>
+		private List<Dictionary<string, object>> BuildCompositesPayload()
+		{
+			var result = new List<Dictionary<string, object>>();
+			if (_composites == null || _composites.Count == 0) return result;
+
+			foreach (var comp in _composites)
+			{
+				if (comp == null || comp.MergedSession == null
+					|| comp.OriginalProfiles == null || comp.OriginalProfiles.Count == 0) continue;
+
+				var first = comp.OriginalProfiles[0];
+				var last = comp.OriginalProfiles[comp.OriginalProfiles.Count - 1];
+
+				result.Add(new Dictionary<string, object>
+				{
+					["start_date"] = first.StartTime.ToString("yyyy-MM-dd"),
+					["end_date"] = last.StartTime.ToString("yyyy-MM-dd"),
+					["start_time"] = first.StartTime.ToString("yyyy-MM-ddTHH:mm:ss"),
+					["end_time"] = last.EndTime.ToString("yyyy-MM-ddTHH:mm:ss"),
+					["vah"] = comp.MergedSession.VAH,
+					["val"] = comp.MergedSession.VAL,
+					["poc"] = comp.MergedSession.POC,
+					["status"] = comp.MergedSession.IsActive ? "active" : "closed",
+					["is_nadro_auto"] = comp.IsNadroAuto,
+					["n_members"] = comp.OriginalProfiles.Count,
+				});
+			}
+			return result;
+		}
+
+		/// <summary>pVAs CERRADAS que NO son parte de un composite (perfiles individuales del pasado).
+		/// Cada profile en _allProfiles que no es MergedSession de ningún composite y !IsActive.</summary>
+		private List<Dictionary<string, object>> BuildClosedPvasPayload()
+		{
+			var result = new List<Dictionary<string, object>>();
+			if (_allProfiles == null || _allProfiles.Count == 0) return result;
+
+			var mergedSet = new HashSet<VolumeProfileSession>();
+			if (_composites != null)
+			{
+				foreach (var c in _composites)
+				{
+					if (c != null && c.MergedSession != null) mergedSet.Add(c.MergedSession);
+				}
+			}
+
+			foreach (var p in _allProfiles)
+			{
+				if (p == null || p.IsActive) continue;
+				if (mergedSet.Contains(p)) continue; // ya está representado en composites
+
+				result.Add(new Dictionary<string, object>
+				{
+					["start_date"] = p.StartTime.ToString("yyyy-MM-dd"),
+					["end_date"] = p.StartTime.ToString("yyyy-MM-dd"),
+					["start_time"] = p.StartTime.ToString("yyyy-MM-ddTHH:mm:ss"),
+					["end_time"] = p.EndTime.ToString("yyyy-MM-ddTHH:mm:ss"),
+					["vah"] = p.VAH,
+					["val"] = p.VAL,
+					["poc"] = p.POC,
+					["status"] = "closed",
+				});
+			}
+			return result;
+		}
+
+		/// <summary>pVA activa (perfil del día/sesión actual). Null si no hay activo.</summary>
+		private Dictionary<string, object> BuildActivePvaPayload()
+		{
+			if (_activeProfile == null || !_activeProfile.IsActive) return null;
+			return new Dictionary<string, object>
+			{
+				["start_date"] = _activeProfile.StartTime.ToString("yyyy-MM-dd"),
+				["end_date"] = _activeProfile.StartTime.ToString("yyyy-MM-dd"),
+				["start_time"] = _activeProfile.StartTime.ToString("yyyy-MM-ddTHH:mm:ss"),
+				["end_time"] = _activeProfile.EndTime.ToString("yyyy-MM-ddTHH:mm:ss"),
+				["vah"] = _activeProfile.VAH,
+				["val"] = _activeProfile.VAL,
+				["poc"] = _activeProfile.POC,
+				["status"] = "active",
+			};
+		}
+
 		/// <summary>Hook que detecta si hay nuevas sesiones cerradas desde la ultima ejecucion
 		/// y dispara ApplyNadroAutoMerge. Llamar al final de OnBarUpdate (cheap).
 		///

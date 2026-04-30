@@ -1151,6 +1151,44 @@ namespace NinjaTrader.NinjaScript.AddOns
                 || v is int || v is uint || v is long || v is ulong)
                 return Convert.ToString(v, CultureInfo.InvariantCulture);
             if (v is DateTime dt) return Quote(FormatTime(dt));
+            if (v is string s) return Quote(s);
+            // Recursive: dicts → JSON object, IEnumerable (no string) → JSON array.
+            // Permite payloads anidados (composites con sus VAH/VAL/POC, listas de pVAs, etc).
+            if (v is IDictionary<string, object> dictSO)
+            {
+                var sb = new StringBuilder();
+                AppendPayload(sb, dictSO);
+                return sb.ToString();
+            }
+            if (v is System.Collections.IDictionary dictGen)
+            {
+                var sb = new StringBuilder();
+                sb.Append("{");
+                bool first = true;
+                foreach (System.Collections.DictionaryEntry kv in dictGen)
+                {
+                    if (!first) sb.Append(",");
+                    first = false;
+                    sb.Append(Quote(Convert.ToString(kv.Key, CultureInfo.InvariantCulture)));
+                    sb.Append(":").Append(FormatValue(kv.Value));
+                }
+                sb.Append("}");
+                return sb.ToString();
+            }
+            if (v is System.Collections.IEnumerable enumerable)
+            {
+                var sb = new StringBuilder();
+                sb.Append("[");
+                bool first = true;
+                foreach (var item in enumerable)
+                {
+                    if (!first) sb.Append(",");
+                    first = false;
+                    sb.Append(FormatValue(item));
+                }
+                sb.Append("]");
+                return sb.ToString();
+            }
             return Quote(v.ToString());
         }
 

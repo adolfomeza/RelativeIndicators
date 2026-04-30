@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>NADRO Snapshot — GC pre-pit 2026-04-29</title>
+<style>
+:root {
+  --bg: #0e1116; --panel: #161b22; --border: #30363d;
+  --text: #c9d1d9; --muted: #8b949e; --accent: #58a6ff;
+  --green: #56d364; --red: #f85149; --yellow: #d29922;
+  --orange: #db6d28; --purple: #bc8cff; --pink: #ff7eb6;
+  --gray: #6e7681;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 14px; line-height: 1.55; margin: 0; padding: 24px; max-width: 1100px; margin-left: auto; margin-right: auto; }
+h1 { font-size: 22px; border-bottom: 2px solid var(--accent); padding-bottom: 8px; margin-bottom: 4px; }
+h1 .subtitle { display: block; font-size: 13px; color: var(--muted); font-weight: normal; margin-top: 4px; }
+h2 { font-size: 17px; color: var(--accent); margin-top: 28px; margin-bottom: 8px; border-left: 3px solid var(--accent); padding-left: 10px; }
+h3 { font-size: 14px; color: var(--purple); margin-top: 16px; margin-bottom: 4px; }
+.panel { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 14px 18px; margin-bottom: 12px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; margin: 8px 0; }
+th, td { border: 1px solid var(--border); padding: 6px 10px; text-align: left; }
+th { background: #1c2128; color: var(--accent); }
+tr:nth-child(even) td { background: #11151b; }
+code { background: #1c2128; padding: 1px 5px; border-radius: 3px; font-family: "Consolas", monospace; font-size: 12.5px; color: var(--yellow); }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; margin-right: 4px; }
+.tag-aplus { background: var(--pink); color: #000; }
+.tag-a { background: var(--accent); color: #000; }
+.tag-long { background: var(--green); color: #000; }
+.tag-short { background: var(--red); color: #fff; }
+.tag-virgin { background: var(--green); color: #000; }
+.tag-sec { background: var(--gray); color: #fff; font-style: italic; }
+.tag-bearish { background: var(--red); color: #fff; }
+.green { color: var(--green); }
+.red { color: var(--red); }
+.yellow { color: var(--yellow); }
+.muted { color: var(--muted); }
+.flow-diagram { background: #11151b; border: 1px dashed var(--border); padding: 10px 14px; font-family: "Consolas", monospace; font-size: 12px; white-space: pre; border-radius: 4px; }
+.line-sand { background: rgba(219, 109, 40, 0.08); border-left: 3px solid var(--orange); padding: 6px 12px; margin: 8px 0; }
+.warning { background: rgba(248, 81, 73, 0.08); border-left: 3px solid var(--red); padding: 6px 12px; margin: 8px 0; }
+.callout { background: rgba(88, 166, 255, 0.06); border-left: 3px solid var(--accent); padding: 8px 14px; margin: 10px 0; border-radius: 0 4px 4px 0; }
+ul { padding-left: 22px; }
+li { margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<h1>NADRO Snapshot — GC 06-26 · pre-pit 2026-04-29 08:15 ET
+  <span class="subtitle">5 min antes de pit-open (08:20 ET) · Gold futures · NADRO PURO con LTWVs Y/Q/M + bar-level acceptance</span>
+</h1>
+
+<div class="panel">
+  <strong>TL;DR:</strong> <span class="red">cambio de condición macro bearish establecido</span> antes del pit-open. Aceleración en sesión 04-28 (-100 pts) + continuación overnight. Spot 4574.7 ya está <strong>abajo del pVAL-04-28</strong> (abandonó valor del día anterior) y <strong>abajo del yDVAL Annual</strong> (acceptance bar-level confirmada esta madrugada). <strong>Line in the Sand: 4583-4604</strong> — zona donde se decide el día. Bias multi-TF a favor de shorts.
+</div>
+
+<h2>1. Datos pre-pit</h2>
+<table>
+  <tr><td>Snapshot ID</td><td><code>GC_20260429_0815_PRE_PIT</code></td></tr>
+  <tr><td>Spot @ 08:15 ET</td><td><strong>4574.70</strong> (close bar 08:00-08:15 ET 04-29)</td></tr>
+  <tr><td>ATR(14) Wilder</td><td>130 pts</td></tr>
+  <tr><td>Régimen</td><td><span class="red">cambio de condición macro bearish</span></td></tr>
+  <tr><td>Bias</td><td><span class="tag tag-bearish">BEARISH MULTI-TF</span> Annual + Quarterly + Monthly imbalance abajo</td></tr>
+</table>
+
+<h2>2. LTWVs al 08:15 ET — bias del día</h2>
+<table>
+  <tr><th>TF</th><th>DVAL</th><th>Spot vs DVAL</th><th>Lectura</th></tr>
+  <tr>
+    <td><strong>Annual</strong></td><td><strong>~4591</strong></td>
+    <td><span class="red"><strong>-17 ABAJO</strong></span></td>
+    <td>🔴 yDVAL roto bar-level esta madrugada (04:00 ET)</td>
+  </tr>
+  <tr>
+    <td><strong>Quarterly</strong></td><td><strong>~4668</strong></td>
+    <td><span class="red"><strong>-93 ABAJO</strong></span></td>
+    <td>🔴 imbalance bearish trimestral establecido</td>
+  </tr>
+  <tr>
+    <td><strong>Monthly</strong></td><td><strong>~4670</strong></td>
+    <td><span class="red"><strong>-95 ABAJO</strong></span></td>
+    <td>🔴 imbalance bearish mensual establecido</td>
+  </tr>
+  <tr>
+    <td>Weekly</td><td>~4562</td>
+    <td><span class="muted">+13 dentro</span></td>
+    <td>spot dentro del semanal — <strong>último soporte LTWV cercano</strong></td>
+  </tr>
+</table>
+
+<div class="warning">
+  <strong>NADRO Guía 03 §6 — ALERTA DE ALTO RIESGO:</strong> "Si se establece un desequilibrio en su contra... no dispare." Annual + Quarterly + Monthly están bearish establecido. <strong>NO operar LONG agresivo contra este multi-TF.</strong>
+</div>
+
+<h2>3. Aceptación bar-level (NADRO §4)</h2>
+<div class="panel">
+  Aplicando regla bar-level NADRO (close + 50% del ritmo más allá del nivel) a bars del 04-29 madrugada:
+  <table>
+    <tr><th>Hora 04-29</th><th>Close</th><th>Range bar</th><th>Distance vs nivel</th><th>% ritmo</th><th>Estado</th></tr>
+    <tr>
+      <td>04:00 ET</td><td>4581.4</td><td>5.8 pts</td><td>10 pts abajo del yDVAL 4591</td><td><strong class="red">172%</strong></td>
+      <td>✅ <strong>ACCEPT abajo del yDVAL</strong></td>
+    </tr>
+    <tr>
+      <td>06:00 ET</td><td>4568.3</td><td>10.7 pts</td><td>15 pts abajo del pVAL-04-28 (4583.60)</td><td><strong class="red">140%</strong></td>
+      <td>✅ <strong>ACCEPT abajo del pVAL-04-28</strong></td>
+    </tr>
+  </table>
+  <strong>Conclusión:</strong> al pre-pit del 08:15 ET 04-29, tanto yDVAL como pVAL-04-28 son <span class="tag tag-sec">SECONDARY</span> bajistas activas (Ley 3). Pullback al LIS desde abajo aún no completado (highs hasta 08:15 ≤ 4589.5).
+</div>
+
+<h2>4. Mapa de zonas (line ladder al 08:15 ET 04-29)</h2>
+<div class="flow-diagram">
+4708.90  pVAH-04-27 [VIRGIN]         (lejos +134)
+4681.50  pVAL-04-27 [VIRGIN]         (lejos +107)
+4670     mDVAL [secondary, Monthly roto] ← imbalance multi-TF
+4668     qDVAL [secondary, Quarterly roto]
+4622     wVWAP                       ← centro semanal
+4604     ┐ A+ ⭐ LINE IN THE SAND
+4603.60  │   pVAH-04-28 [VIRGIN]
+4591.55  │   yDVAL [secondary, Annual roto] ⭐
+4591.30  │   pPOC-04-28 (Ley 9)
+4583.60  ┘   pVAL-04-28 [secondary]
+4574.70 ━━━━━━━━━━━━ SPOT 08:15 ━━━━━━━━━━━━
+4562     wDVAL                       ← T1 H1 / entry H2 LONG (último soporte LTWV)
+4540     zona intermedia              ← T2 H1
+4520     zona estructural mayor       ← T3 H1 / T1 H3
+4500     soporte psicológico          ← T2/T3 H3
+</div>
+
+<h2>5. Hipos NADRO PURO</h2>
+
+<h3><span class="tag tag-aplus">A+</span> <span class="tag tag-short">SHORT</span> H1 — BPB en LIS (pVA-04-28 + yDVAL, Ley 3)</h3>
+<div class="panel">
+  <strong>Tesis:</strong> spot abandonó el valor 04-28 abajo + acceptance del yDVAL Annual confirmada bar-level esta madrugada. Si rebota a la LIS (4583-4604) y rechaza con OF, BPB short en continuación bearish del cambio de condición macro. Setup primario.
+  <table>
+    <tr><td>Entry zona</td><td><strong>4583.60 - 4604</strong> (LINE IN THE SAND)</td></tr>
+    <tr><td>Stop</td><td>4615 (arriba del pVAH-04-28)</td></tr>
+    <tr><td>T1</td><td>4562 (wDVAL Weekly — último soporte LTWV)</td></tr>
+    <tr><td>T2</td><td>4540 (zona intermedia)</td></tr>
+    <tr><td>T3</td><td>4520 (zona estructural mayor)</td></tr>
+    <tr><td>Risk</td><td>~10-30 pts dependiendo del entry exacto en la zona</td></tr>
+  </table>
+</div>
+
+<h3><span class="tag tag-a">A</span> <span class="tag tag-long">LONG</span> H2 — RPB wDVAL (contra-bias, alto riesgo)</h3>
+<div class="panel">
+  <strong>Tesis:</strong> wDVAL semanal es el único soporte LTWV cercano. Si el precio cae al wDVAL con rechazo OF agresivo, posible reset técnico. <strong>NADRO §6 ALERTA</strong>: contra-bias multi-TF establecido. Solo disparar con OF claro de rechazo + reset del momentum bearish. Sizing reducido. NO insistir si el primer toque no rebota.
+  <table>
+    <tr><td>Entry</td><td><strong>4562</strong> (wDVAL)</td></tr>
+    <tr><td>Stop</td><td>4540 (debajo)</td></tr>
+    <tr><td>T1</td><td>4583.60 (LIS — pVAL-04-28)</td></tr>
+    <tr><td>T2</td><td>4603.60 (pVAH-04-28 virgin)</td></tr>
+  </table>
+</div>
+
+<h3><span class="tag tag-aplus">A+</span> <span class="tag tag-short">SHORT</span> H3 — BPB wDVAL break (continuación)</h3>
+<div class="panel">
+  <strong>Tesis:</strong> si el precio pierde wDVAL (4562) con aceptación + pullback, cambia también el semanal a bearish. Confirma cambio multi-TF completo. Drift hacia zona estructural mayor abajo del valor 04-29 (que aún no existe pre-pit).
+  <table>
+    <tr><td>Entry</td><td><strong>4562</strong> (después de aceptación abajo + pullback)</td></tr>
+    <tr><td>Stop</td><td>4583.60 (debajo del LIS)</td></tr>
+    <tr><td>T1</td><td>4540 (zona intermedia)</td></tr>
+    <tr><td>T2</td><td>4520 (zona estructural mayor)</td></tr>
+    <tr><td>T3</td><td>4500 (soporte psicológico round number)</td></tr>
+  </table>
+</div>
+
+<h2>6. Disciplina del día</h2>
+<div class="line-sand">
+  <strong>Mientras spot ABAJO de 4604 → solo shorts.</strong><br>
+  <strong>Aceptación dura ARRIBA de 4604 + pullback → cambio de carácter macro</strong> (improbable inmediato dado contexto multi-TF bearish).<br>
+  Zona <code>4583-4604</code> = line in the sand. yDVAL+pVA-04-28 apilados.
+</div>
+
+<ul>
+  <li>Bias bearish multi-TF establecido → <strong>prioridad SHORTS</strong>. H1 setup primario.</li>
+  <li>H2 LONG es contra-bias — solo con OF agresivo + reset del momentum. Sizing reducido.</li>
+  <li>H3 SHORT confirma continuación bearish si pierde wDVAL — refuerza el bias multi-TF.</li>
+  <li>Stops adaptables al ATR (≈10 pts risk). En live van detrás del último HA pivot (Guía 03 §9).</li>
+  <li>Filtro NADRO de gatillo: 4 barras pullback + cambio color HA al cierre (Guía 02 §8).</li>
+</ul>
+
+<h2>7. Lo que estaba mirando primero (08:20 ET pit-open)</h2>
+<ol>
+  <li>¿Sube a la LIS (4583-4604) y rechaza? → setup H1 SHORT con filtro HA.</li>
+  <li>¿Acepta arriba de 4604 con pullback? → cambia día (improbable, pero monitor).</li>
+  <li>¿Cae directo a wDVAL (4562)? → evaluar OF en H2 LONG vs continuación H3 SHORT.</li>
+  <li>¿Pierde wDVAL con aceptación? → H3 SHORT activado, cambio del semanal también.</li>
+</ol>
+
+<hr style="border-color: var(--border); margin: 28px 0;">
+<p class="muted" style="text-align: center; font-size: 12px;">Replay snapshot pre-pit 2026-04-29 08:15 ET · NADRO PURO · LTWVs Y/Q/M + bar-level acceptance + Line in the Sand · NinjaTrader 8 / RelativeIndicators</p>
+
+</body>
+</html>

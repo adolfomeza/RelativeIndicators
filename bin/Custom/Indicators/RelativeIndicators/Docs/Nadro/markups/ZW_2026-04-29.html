@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>NADRO Snapshot — ZW pre-pit 2026-04-29</title>
+<style>
+:root { --bg: #0e1116; --panel: #161b22; --border: #30363d; --text: #c9d1d9; --muted: #8b949e; --accent: #58a6ff; --green: #56d364; --red: #f85149; --yellow: #d29922; --orange: #db6d28; --purple: #bc8cff; --pink: #ff7eb6; --gray: #6e7681; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 14px; line-height: 1.55; margin: 0; padding: 24px; max-width: 1100px; margin-left: auto; margin-right: auto; }
+h1 { font-size: 22px; border-bottom: 2px solid var(--accent); padding-bottom: 8px; margin-bottom: 4px; }
+h1 .subtitle { display: block; font-size: 13px; color: var(--muted); font-weight: normal; margin-top: 4px; }
+h2 { font-size: 17px; color: var(--accent); margin-top: 28px; margin-bottom: 8px; border-left: 3px solid var(--accent); padding-left: 10px; }
+h3 { font-size: 14px; color: var(--purple); margin-top: 16px; margin-bottom: 4px; }
+.panel { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 14px 18px; margin-bottom: 12px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; margin: 8px 0; }
+th, td { border: 1px solid var(--border); padding: 6px 10px; text-align: left; }
+th { background: #1c2128; color: var(--accent); }
+tr:nth-child(even) td { background: #11151b; }
+code { background: #1c2128; padding: 1px 5px; border-radius: 3px; font-family: "Consolas", monospace; font-size: 12.5px; color: var(--yellow); }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; margin-right: 4px; }
+.tag-aplus { background: var(--pink); color: #000; }
+.tag-a { background: var(--accent); color: #000; }
+.tag-long { background: var(--green); color: #000; }
+.tag-short { background: var(--red); color: #fff; }
+.tag-virgin { background: var(--green); color: #000; }
+.tag-sec { background: var(--gray); color: #fff; font-style: italic; }
+.tag-bullish { background: var(--green); color: #000; }
+.tag-lis { background: var(--yellow); color: #000; }
+.tag-extreme { background: var(--orange); color: #000; }
+.green { color: var(--green); }
+.red { color: var(--red); }
+.yellow { color: var(--yellow); }
+.muted { color: var(--muted); }
+.flow-diagram { background: #11151b; border: 1px dashed var(--border); padding: 10px 14px; font-family: "Consolas", monospace; font-size: 12px; white-space: pre; border-radius: 4px; }
+.lis-zone { background: rgba(210, 153, 34, 0.10); border-left: 3px solid var(--yellow); padding: 8px 14px; margin: 10px 0; border-radius: 0 4px 4px 0; }
+.callout { background: rgba(86, 211, 100, 0.06); border-left: 3px solid var(--green); padding: 8px 14px; margin: 10px 0; border-radius: 0 4px 4px 0; }
+.warning { background: rgba(248, 81, 73, 0.06); border-left: 3px solid var(--red); padding: 8px 14px; margin: 10px 0; border-radius: 0 4px 4px 0; }
+.extreme { background: rgba(219, 109, 40, 0.10); border-left: 3px solid var(--orange); padding: 8px 14px; margin: 10px 0; border-radius: 0 4px 4px 0; }
+ul { padding-left: 22px; }
+li { margin-bottom: 4px; }
+.lvl-row td:first-child { font-family: "Consolas", monospace; }
+.dim { opacity: 0.45; }
+</style>
+</head>
+<body>
+
+<h1>NADRO Snapshot — ZW 07-26 · pre-pit 2026-04-29 09:25 ET
+  <span class="subtitle">5 min antes de pit-open (09:30 ET) · Wheat futures · enumeración mecánica completa LTWVs Y/Q/M/W + Daily previous + TPO</span>
+</h1>
+
+<div class="panel">
+  <strong>TL;DR:</strong> <span class="green">imbalance bullish multi-TF EXTREMO</span> en price discovery puro. ZW subió +71 pts en 6 sesiones (598 → 669). Espejo del bearish multi-TF en GC. <strong>Gap masivo 04-28 (+15 día = ATR×1.8 EN UN DÍA)</strong>. Continuación overnight 04-28→04-29 con +3 sobre pVAH-04-28 654.25. <strong>Todos los LTWVs mayores Y/Q/M están MUY ABAJO (591-638)</strong> = sin techo estructural cercano arriba. <strong>LIS densa 654.25-654.98</strong> (4 niveles Daily multi-TF). Único techo cercano arriba: wDVAH 663.57.
+</div>
+
+<h2>1. Datos pre-pit</h2>
+<table>
+  <tr><td>Snapshot ID</td><td><code>ZW_20260429_0925_PRE_PIT</code></td></tr>
+  <tr><td>Spot @ 09:25 ET (estimado pre-pit)</td><td><strong>657.50</strong> (ETH close pre-pause grano)</td></tr>
+  <tr><td>ATR(14) Wilder</td><td><strong>8.50 pts</strong></td></tr>
+  <tr><td>Proximity (ATR×2)</td><td>±17 pts</td></tr>
+  <tr><td>Cluster threshold (ATR×0.10)</td><td>0.85 pts</td></tr>
+  <tr><td>Régimen</td><td><span class="tag tag-extreme">BULLISH MULTI-TF EXTREMO</span> (price discovery, 6 secondary lines apiladas)</td></tr>
+  <tr><td>Bias</td><td><span class="tag tag-bullish">BULLISH MULTI-TF EXTREMO</span> Annual + Quarterly + Monthly + Weekly + Daily todos rotos arriba con margen</td></tr>
+</table>
+
+<h2>2. Enumeración mecánica completa de niveles (PASO 1 NADRO)</h2>
+
+<p class="muted">Todos los niveles dentro de proximity <strong>±17 pts</strong> de spot 657.50. Lectura mecánica de los 5 archivos <code>VwapLevels/{TF}_ZW.txt</code> + <code>get_cvas</code>. Cero cherry-pick.</p>
+
+<h3>2.1 LTWVs DEVELOPING (en construcción al 09:25 ET)</h3>
+<table>
+  <tr><th>TF</th><th>DVAH</th><th>VWAP central</th><th>DVAL</th><th>Spot vs DVAH</th><th>Estado</th></tr>
+  <tr class="lvl-row">
+    <td><strong>Daily</strong></td><td><strong>654.74</strong></td><td>652.87</td><td>651.00</td>
+    <td><span class="green">+2.76 ARRIBA</span></td>
+    <td>spot ARRIBA del Daily dev high (recién extendiendo arriba)</td>
+  </tr>
+  <tr class="lvl-row">
+    <td><strong>Weekly</strong></td><td><strong>663.57</strong></td><td>648.41</td><td>633.24</td>
+    <td><span class="yellow">-6.07 (intra-techo)</span></td>
+    <td>único techo estructural cercano arriba</td>
+  </tr>
+  <tr class="lvl-row">
+    <td><strong>Monthly</strong></td><td><strong>638.50</strong></td><td>614.80</td><td>591.09</td>
+    <td><span class="green"><strong>+19.00 ARRIBA</strong></span></td>
+    <td>🟢 mDVAH MUY roto arriba (imbalance mensual extremo)</td>
+  </tr>
+  <tr class="lvl-row">
+    <td><strong>Quarterly</strong></td><td><strong>638.66</strong></td><td>615.00</td><td>591.35</td>
+    <td><span class="green"><strong>+18.84 ARRIBA</strong></span></td>
+    <td>🟢 qDVAH MUY roto arriba</td>
+  </tr>
+  <tr class="lvl-row">
+    <td><strong>Annual</strong></td><td><strong>618.79</strong></td><td>580.29</td><td>541.78</td>
+    <td><span class="green"><strong>+38.71 ARRIBA</strong></span></td>
+    <td>🟢🟢 yDVAH EXTREMADAMENTE roto arriba (imbalance anual extremo)</td>
+  </tr>
+</table>
+
+<h3>2.2 LTWVs PREVIOUS (zonas cerradas, pXDVA)</h3>
+<table>
+  <tr><th>Familia</th><th>pXDVAH</th><th>pXDVAL</th><th>Spot vs pXDVAH</th><th>Notas</th></tr>
+  <tr class="lvl-row">
+    <td><strong>Daily previous (04-28)</strong></td><td><strong>654.98</strong> ⭐</td><td>639.69</td>
+    <td><span class="green">+2.52</span></td>
+    <td>🟡 LIS top — Daily VWAP zone ayer; pDVAL fuera proximity (-17.81)</td>
+  </tr>
+  <tr class="lvl-row">
+    <td>Weekly previous (semana pasada)</td><td>617.04</td><td>606.48</td>
+    <td><span class="muted">-40.46 (lejos)</span></td>
+    <td>fuera proximity</td>
+  </tr>
+  <tr class="lvl-row">
+    <td>Monthly previous (marzo)</td><td>620.22</td><td>591.97</td>
+    <td><span class="muted">-37.28 (lejos)</span></td>
+    <td>fuera proximity</td>
+  </tr>
+  <tr class="lvl-row">
+    <td>Quarterly previous (Q1-2026)</td><td>607.03</td><td>534.80</td>
+    <td><span class="muted">-50.47 (muy lejos)</span></td>
+    <td>fuera proximity</td>
+  </tr>
+  <tr class="lvl-row">
+    <td>Annual previous (2025)</td><td>630.95</td><td>545.31</td>
+    <td><span class="muted">-26.55 (fuera proximity)</span></td>
+    <td>pYDVAH fuera ATR×2 pero dentro de ATR×3 — referencia macro</td>
+  </tr>
+</table>
+
+<h3>2.3 TPO previous days (RTH 70%)</h3>
+<table>
+  <tr><th>Día</th><th>pVAH</th><th>POC (Ley 9)</th><th>pVAL</th><th>Spot vs pVAH</th><th>Estado</th></tr>
+  <tr class="lvl-row">
+    <td><strong>04-28 (ayer)</strong></td><td><strong>654.25</strong> ⭐</td><td>647.00</td><td>639.25</td>
+    <td><span class="green">+3.25</span></td>
+    <td>🟡 LIS bot + secondary line del último breakout</td>
+  </tr>
+  <tr class="lvl-row">
+    <td>04-27 (antier)</td><td>631.00</td><td>630.00</td><td>621.75</td>
+    <td><span class="muted">+26.50 (fuera proximity)</span></td>
+    <td>secondary line — referencia gap fill profundo</td>
+  </tr>
+  <tr class="lvl-row">
+    <td>04-29 (TPO ACTIVO HOY — solo referencia)</td><td>668.75</td><td>662.00</td><td>659.50</td>
+    <td><span class="muted">+11.25 a +2.00</span></td>
+    <td>⚠ TPO en desarrollo, NO operable como nivel cerrado (solo referencia)</td>
+  </tr>
+</table>
+
+<h3>2.4 Secondary lines (breakouts apilados — escalera bullish vertical)</h3>
+<div class="extreme">
+6 niveles secundarios apilados desde el inicio del rally vertical:
+<ul>
+  <li><code>599.50</code> — breakout 04-20 (pVA 04-17)</li>
+  <li><code>602.00</code> — breakout 04-16 (CVA 04-14/15)</li>
+  <li><code>604.75</code> — breakout 04-17 (pVA 04-16, side lower)</li>
+  <li><code>617.00</code> — breakout 04-27 (pVA 04-24)</li>
+  <li><code>631.00</code> — breakout 04-28 (pVA 04-27)</li>
+  <li><code>654.25</code> ⭐ — breakout 04-29 overnight (pVA 04-28) <strong>= LIS bottom</strong></li>
+</ul>
+<strong>Aceleración EXTREMA</strong>: gaps 04-27 (+9), 04-28 (+23 MASSIVE), 04-29 (+14). Verticalidad climax posible. NADRO §6 alerta cautela.
+</div>
+
+<h2>3. Confluencias detectadas (cluster threshold ≤ 0.85 pts)</h2>
+<table>
+  <tr><th>#</th><th>Zona</th><th>Grade</th><th>Miembros</th><th>Notas</th></tr>
+  <tr>
+    <td>C1</td>
+    <td><code>663.57</code></td>
+    <td><span class="tag tag-a">A</span></td>
+    <td>wDVAH 663.57 (solitario)</td>
+    <td>único techo estructural cercano arriba</td>
+  </tr>
+  <tr>
+    <td><strong>C2 (LIS)</strong></td>
+    <td><code><strong>654.25-654.98</strong></code></td>
+    <td><span class="tag tag-aplus">A+</span></td>
+    <td><strong>pVAH-04-28 654.25 + secondary 654.25 + DVAH dev 654.74 + pDVAH-04-28 654.98</strong></td>
+    <td>🟡 <strong>LINE IN THE SAND NADRO</strong> — 4 niveles multi-TF Daily, span 0.73 pts</td>
+  </tr>
+  <tr>
+    <td>C3</td>
+    <td><code>651.00-652.87</code></td>
+    <td><span class="tag tag-a">A</span></td>
+    <td>VWAP-Daily 652.87 + DVAL 651.00</td>
+    <td>banda Daily intra-day inferior (span 1.87 pts &gt; cluster threshold = 2 niveles separados pero zona)</td>
+  </tr>
+  <tr>
+    <td class="dim">C4 (lejos)</td>
+    <td class="dim"><code>639.25-639.69</code></td>
+    <td class="dim"><span class="tag tag-a">A</span></td>
+    <td class="dim">pVAL-04-28 639.25 + pDVAL-04-28 639.69</td>
+    <td class="dim">cluster gap fill — fuera proximity (-17.8 pts)</td>
+  </tr>
+</table>
+
+<h2>4. LINE IN THE SAND — zona NADRO real</h2>
+
+<div class="lis-zone">
+<strong>🟡 LIS = 654.25 – 654.98</strong> (span 0.73 pts ≤ cluster threshold 0.85) <span class="tag tag-aplus">A+</span> <span class="tag tag-lis">DENSA MULTI-TF DAILY</span>
+<br><br>
+<strong>4 niveles apilados (Daily previous + Daily developing + TPO previous + secondary line)</strong>:
+<ul>
+  <li><code>654.98</code> — <strong>pDVAH-04-28</strong> [Daily VWAP previous] ⭐</li>
+  <li><code>654.74</code> — <strong>DVAH</strong> [Daily developing high]</li>
+  <li><code>654.25</code> — <strong>pVAH-04-28</strong> [TPO RTH previous] ⭐</li>
+  <li><code>654.25</code> — <strong>secondary line</strong> [breakout 04-28]</li>
+</ul>
+
+<strong>Función NADRO de la LIS</strong>:
+<ul>
+  <li>Mientras spot <strong>ARRIBA de 654.25</strong> → bias bullish vivo del breakout multi-TF EXTREMO</li>
+  <li>Pierde 654.25 con <strong>aceptación bar-level</strong> → CAMBIO DE CARÁCTER (vuelve dentro del valor 04-28; siguiente parada técnica = gap fill 639.25 a -15 pts)</li>
+</ul>
+</div>
+
+<div class="warning">
+<strong>Aviso de contexto extremo</strong>: a diferencia de ZC (que tiene cluster LTWV mayor 468-470 con 6 niveles cerca), <strong>ZW NO tiene confluencia mayor estructural cerca</strong>. Los LTWVs Y/Q/M están MUY abajo (591-638). El cluster gap fill 639.25-639.69 está a -17 pts (fuera proximity). Esto significa: si pierde la LIS 654.25 con aceptación, la caída técnica puede ser RÁPIDA hacia el gap fill (poco soporte intermedio). Setup H3 SHORT tiene RR alto pero contra un bias EXTREMO — solo con confirmación dura.
+</div>
+
+<h2>5. Mapa visual de niveles (proximity ±17 pts)</h2>
+<div class="flow-diagram">
+ARRIBA — continuación price discovery (sin techo mayor)
+   679.00  ····· ext 1.5 ATR (T3 H2 final)
+   675.00  ····· ext 1 ATR (T2 H2)
+   672.00  ····· zona aire (T1 H2)
+─────────────────────────────────────────────────
+TPO ACTIVO HOY (referencia, NO operable cerrado)
+   668.75  ───── pVAH-active (TPO RTH 04-29 high) ← T4 H1 final
+   663.57  ───── wDVAH (Weekly developing) ← T3 H1 / único techo cercano
+   662.00  ····· POC-active (referencia)
+   659.50  ───── pVAL-active (TPO RTH 04-29 low) ← T2 H1
+   657.50  ▶▶▶▶▶ SPOT @ 09:25 ET (pre-pit estimado) ← T1 H1
+─────────────────────────────────────────────────
+🟡 LINE IN THE SAND (cluster A+ multi-TF Daily, 4 niveles densos)
+   654.98  ═════ pDVAH-04-28 (Daily VWAP previous) ⭐
+   654.74  ═════ DVAH (Daily developing)
+   654.25  ═════ pVAH-04-28 (TPO) ⭐ + secondary line breakout
+─────────────────────────────────────────────────
+DAILY VWAP INTRA-DAY (banda inferior)
+   652.87  ───── VWAP Daily developing (centro)
+   651.00  ───── DVAL (Daily developing low) ← stop H1
+─────────────────────────────────────────────────
+GAP / SOPORTE LEJANO (fuera proximity ATR×2)
+   645.00  ····· extension intermedia (T1 H3)
+   639.69  ───── pDVAL-04-28 (gap fill upper)
+   639.25  ───── pVAL-04-28 (gap fill lower) ← T2 H3
+   638.66  ───── qDVAH (Quarterly dev) — cluster LTWV mayor lejano
+   638.50  ───── mDVAH (Monthly dev)
+   633.24  ───── wDVAL (Weekly dev low)
+   631.00  ───── pVAH-04-27 secondary (escalón rally) ← T3 H3 final
+</div>
+
+<h2>6. Hipos rankeadas por convicción</h2>
+
+<h3>H1 <span class="tag tag-aplus">A+</span> <span class="tag tag-long">LONG</span> BPB-LIS multi-TF Daily</h3>
+<table>
+  <tr><td><strong>Setup</strong></td><td>BPB-LIS multi-TF Daily (pVAH+pDVAH+DVAH+secondary retest desde arriba)</td></tr>
+  <tr><td><strong>Entry</strong></td><td><code>654.50</code> (mid LIS)</td></tr>
+  <tr><td><strong>Stop</strong></td><td><code>651.00</code> (debajo DVAL Daily dev con buffer)</td></tr>
+  <tr><td><strong>Risk</strong></td><td><strong>3.50 pts</strong> (≈ ATR×0.41)</td></tr>
+  <tr><td><strong>Targets</strong></td><td>
+    T1 <code>657.50</code> spot ref (RR 0.86) →
+    T2 <code>659.50</code> pVAL-active (RR 1.43) →
+    T3 <code>663.57</code> wDVAH (RR 2.59) →
+    T4 <code>668.75</code> pVAH-active <strong>FINAL</strong> (RR 4.07)
+  </td></tr>
+  <tr><td><strong>Tesis</strong></td><td>LIS densa multi-TF Daily (4 niveles, span 0.73 pts ≤ cluster threshold). Spot rompió arriba en sesión asiática overnight (+3.25 pts). Si retesta zona desde arriba y rebota = BPB canónico NADRO §4-§5 (PV+LTWV intersection). Bias multi-TF EXTREMO a favor: Annual + Quarterly + Monthly + Weekly + Daily todos rotos arriba.</td></tr>
+</table>
+
+<h3>H2 <span class="tag tag-a">A</span> <span class="tag tag-long">LONG</span> BPB breakout pVAH-active</h3>
+<table>
+  <tr><td><strong>Setup</strong></td><td>BPB breakout pVAH-active (continuación price discovery)</td></tr>
+  <tr><td><strong>Entry</strong></td><td><code>668.75</code> (breakout pVAH-active TPO en desarrollo)</td></tr>
+  <tr><td><strong>Stop</strong></td><td><code>663.57</code> (debajo wDVAH perdido)</td></tr>
+  <tr><td><strong>Risk</strong></td><td><strong>5.18 pts</strong> (≈ ATR×0.61)</td></tr>
+  <tr><td><strong>Targets</strong></td><td>
+    T1 <code>672.00</code> zona aire (RR 0.63) →
+    T2 <code>675.00</code> ext 1 ATR (RR 1.21) →
+    T3 <code>679.00</code> ext 1.5 ATR <strong>FINAL</strong> (RR 2.00)
+  </td></tr>
+  <tr><td><strong>Tesis</strong></td><td>Continuación price discovery puro: si rompe pVAH-active 668.75 con aceptación dura + aire arriba (sin techo estructural mayor) = breakout long. Bias multi-TF EXTREMO. Risk mayor por verticalidad climax posible — sizing controlado. Stop debajo wDVAH 663.57 (único techo estructural perdido).</td></tr>
+</table>
+
+<h3>H3 <span class="tag tag-a">A</span> <span class="tag tag-short">SHORT</span> BPB-LIS break (contra-bias EXTREMO)</h3>
+<table>
+  <tr><td><strong>Setup</strong></td><td>BPB-LIS break (cambio de carácter, contra-bias EXTREMO)</td></tr>
+  <tr><td><strong>Entry</strong></td><td><code>651.00</code> (DVAL Daily dev, pullback post-break LIS)</td></tr>
+  <tr><td><strong>Stop</strong></td><td><code>656.00</code> (vuelta sobre LIS)</td></tr>
+  <tr><td><strong>Risk</strong></td><td><strong>5.00 pts</strong> (≈ ATR×0.59)</td></tr>
+  <tr><td><strong>Targets</strong></td><td>
+    T1 <code>645.00</code> ext (RR 1.20) →
+    T2 <code>639.25</code> pVAL-04-28 gap fill (RR 2.35) →
+    T3 <code>631.00</code> pVAH-04-27 secondary <strong>FINAL</strong> (RR 4.00)
+  </td></tr>
+  <tr><td><strong>Tesis</strong></td><td><span class="red">⚠ contra-bias multi-TF EXTREMO</span>. SOLO si pierde LIS 654.25 con aceptación bar-level dura abajo + pullback. <strong>Sizing MUY REDUCIDO</strong>. Setup solo si OF agresivo de venta confirma + 4 barras pullback NADRO + cambio HA dura. Si no hay aceptación dura, NO entrar — el bias EXTREMO puede absorber un fade técnico sin invalidar la tendencia. Target gap fill 639.25 = única zona soporte estructural multi-TF cercana (cluster mayor 638-639 detrás del gap).</td></tr>
+</table>
+
+<h2>7. Disciplina y plan</h2>
+<div class="callout">
+<strong>Bias bullish multi-TF EXTREMO en price discovery</strong> (6 secondary lines apiladas, gap masivo +23 el 04-28). NADRO Guía 03 §6 — desequilibrio EXTREMO FAVOR de longs. <strong>NO short agresivo</strong>. Pero también NADRO advierte: cuidado con verticalidad / squeeze climax final.
+
+<ul>
+  <li><strong>Plan A (alta probabilidad)</strong>: pit-open consolidación + retest LIS 654.25-654.98 → BPB-LIS H1 long.</li>
+  <li><strong>Plan B (continuación gap)</strong>: rompe pVAH-active 668.75 con aceptación dura → breakout H2 long en price discovery (sizing controlado por verticalidad).</li>
+  <li><strong>Plan C (cambio de carácter contra-bias)</strong>: pierde LIS 654.25 con aceptación dura + pullback → BPB-break H3 short reducido. Target gap fill 639.25 (RR alto pero contra bias extremo).</li>
+</ul>
+
+<strong>Filtro NADRO de gatillo</strong>: 4 barras pullback + cambio HA al cierre. Stops en último HA pivot (Guía 03 §9).
+</div>
+
+<h2>8. Comparación con ZC (espejo bullish del rally en grains)</h2>
+<table>
+  <tr><th>Aspecto</th><th>ZC (corn)</th><th>ZW (wheat)</th></tr>
+  <tr>
+    <td>Bias</td>
+    <td>Bullish multi-TF maduro</td>
+    <td><span class="red">Bullish multi-TF EXTREMO</span> (price discovery)</td>
+  </tr>
+  <tr>
+    <td>Rally (6 sesiones)</td>
+    <td>+17 pts (461 → 478)</td>
+    <td><strong>+71 pts (598 → 669)</strong> = 4× más explosivo</td>
+  </tr>
+  <tr>
+    <td>Gap día más fuerte</td>
+    <td>04-28 (+5.5)</td>
+    <td><strong>04-28 (+23 = ATR×1.8)</strong></td>
+  </tr>
+  <tr>
+    <td>LIS NADRO</td>
+    <td>474.54-475.25 (3 niveles, span 0.71)</td>
+    <td>654.25-654.98 (4 niveles, span 0.73)</td>
+  </tr>
+  <tr>
+    <td>Cluster LTWV mayor cerca</td>
+    <td>✅ 468-470 (6 niveles cerca de spot)</td>
+    <td><span class="red">❌ Lejos</span> (Y/Q/M en 591-638, fuera proximity)</td>
+  </tr>
+  <tr>
+    <td>Soporte estructural si pierde LIS</td>
+    <td>cluster 468-470 (a -7 pts)</td>
+    <td><strong>gap fill 639.25</strong> (a -15 pts) = caída más rápida posible</td>
+  </tr>
+  <tr>
+    <td>Riesgo verticalidad / squeeze</td>
+    <td>Bajo</td>
+    <td><span class="red">ALTO</span> — climax posible</td>
+  </tr>
+</table>
+
+<p class="muted" style="margin-top: 30px; font-size: 12px;">
+Generado por nadro_snapshot_markup MCP tool · Persistido en <code>Docs/Nadro/markups/ZW_2026-04-29.json</code> · Indicador <code>RelativeNadroMarkup</code> en NT8 renderiza la zona LIS en amarillo (50% opacity) extendida hasta fin de sesión + niveles atenuados (Rank &amp; Distill) los no usados en hipos.
+</p>
+
+</body>
+</html>
