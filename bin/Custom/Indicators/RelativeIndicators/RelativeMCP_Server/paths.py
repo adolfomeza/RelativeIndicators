@@ -27,3 +27,10 @@ def trade_exports_dir() -> Path:
 
 def project_root() -> Path:
     return Path(__file__).resolve().parent.parent
+
+
+def markups_dir() -> Path:
+    """Carpeta donde se persisten los markups NADRO para el indicador
+    RelativeNadroMarkup. Formato por archivo: ``{INSTRUMENT}_YYYY-MM-DD.json``.
+    """
+    return project_root() / "Docs" / "Nadro" / "markups"

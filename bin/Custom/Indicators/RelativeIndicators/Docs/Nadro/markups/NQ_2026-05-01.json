@@ -1,0 +1,151 @@
+{
+  "schema_version": "1.0",
+  "instrument": "NQ",
+  "date": "2026-05-01",
+  "snapshots": [
+    {
+      "id": "NQ_20260501_0925_PREPIT",
+      "timestamp": "2026-05-01T09:25:00",
+      "price_at_analysis": 27623.0,
+      "regime": "bullish multi-TF total + spot en extremo (arriba wDVAH, qDVAH, yDVAH) + dentro Daily DVA cerca DVAH",
+      "bias": "bullish multi-TF (LTWV W/Q/Y todos arriba) — extension fuerte, posible exhaustion en banda extrema",
+      "summary": "PREPIT 09:25 — Spot 27623 BULLISH multi-TF total. ARRIBA wDVAH (+156), qDVAH (+402), yDVAH (+1284). Dentro Daily DVA rozando DVAH (+9). Cluster A 27534-27572 (DVAL+pDVAH-30) primer soporte. Zona azul arriba sin resistencias densas.",
+      "analysis_text": "N (Narrativa): bullish multi-TF total. Spot 27623 ARRIBA de TODOS los DVAH operables (W/Q/Y). Trend day potencial o extension de continuation. Spot dentro Daily DVA muy cerca DVAH (+9) = posible exhaustion en banda alta daily.\n\nA (Aceptacion direccional):\n- wDVAH 27466.98: spot ARRIBA +156 con close ETH overnight = aceptacion ARRIBA dura del weekly +1SD\n- qDVAH 27221.36: spot ARRIBA +402 = aceptacion arriba quarterly establecida\n- yDVAH 26338.98: spot ARRIBA +1284 = aceptacion arriba anual extrema\n- DVAH Daily 27632.24: spot rozando desde abajo (+9) = primer test daily +1SD\n\nD (Distribucion): spot dentro Daily DVA cerca DVAH. Banda alta del Daily. Por encima de banda alta weekly = territorio extremo multi-TF.\n\nR (Ritmo): cierre 30-abr 17:00 = 27598.5. Spot 27623 al pre-pit = +25 pts overnight (recovery / continuation bullish).\n\nO (Order Flow): pendiente.\n\nNIVELES NEUTRALIZADOS DESCARTADOS:\n- pVA-30 TPO (VAH=27501.75, POC=27367, VAL=27231.5): TOUCHED al subir overnight arriba del VAH\n- pVA-29/28/27 TPO: aceptados/touched\n- CVA 24-27 (VAH=27446, VAL=27323): touched arriba\n- pDVA-29/28/27/24/22/21: breached\n\nLIS abajo (operables):\n- VWAP Daily 27602.48 (-21)\n- DVAL Daily 27572.72 (-50)\n- pDVAH-30 27534.97 (-88, FRESH active)\n- wDVAH 27466.98 (-156, banda +1SD weekly ROTA)\n- pVWAP-30 27411.99 (-211)\n- wVWAP 27316.95 (-306)\n- pDVAL-30 27289.01 (-334)\n- qDVAH 27221.36 (-402)\n\nLIS arriba (zona azul §10 destino abierto):\n- DVAH Daily 27632.24 (+9, primera resistencia DV daily)\n- (sin niveles densos arriba — destino abierto)\n\n3 HIPOS DOCTRINALES:\n\nH1 (RPB-pDVAH30 long pullback): retest del cluster A 27534-27572 desde arriba. PV cerrado pDVAH-30 + DVAL Daily. Stop debajo cluster.\nH2 (IPB-wDVAH long retest): wDVAH ROTA desde abajo, retest desde arriba como soporte rotado. IPB en imbalance bull weekly.\nH3 (EF-DVAH-Daily short): fade extremo daily si rechazo. CAVEAT §5.2 contra imbalance bull, requiere 3 confirmaciones (HA bear + OF + estructura).\n\nAnti-pattern check:\n- NO mDVA (eco §6) ✅\n- NO pVA-30/29/28/27 TPO (touched) ✅\n- NO CVA 24-27 (touched arriba) ✅\n- NO RPB en wDVAH (es DV) — H2 es IPB ✅\n- NO IPB short tradicional (imbalance bull §5.2) — H3 es EF en extremo ✅</analysis_text>\n<parameter name=\"levels\">[{\"label\": \"wDVAH\", \"price\": 27466.98}, {\"label\": \"wVWAP\", \"price\": 27316.95}, {\"label\": \"wDVAL\", \"price\": 27166.91}, {\"label\": \"qDVAH\", \"price\": 27221.36}, {\"label\": \"yDVAH\", \"price\": 26338.98}, {\"label\": \"DVAH\", \"price\": 27632.24}, {\"label\": \"VWAP\", \"price\": 27602.48}, {\"label\": \"DVAL\", \"price\": 27572.72}, {\"label\": \"pDVAH-30\", \"price\": 27534.97}, {\"label\": \"pVWAP-30\", \"price\": 27411.99}, {\"label\": \"pDVAL-30\", \"price\": 27289.01}]",
+      "confluences": [
+        {
+          "label": "Cluster A DVAL Daily + pDVAH-30 (DV+PV)",
+          "price_min": 27534.97,
+          "price_max": 27572.72,
+          "grade": "A",
+          "members": [
+            "DVAL Daily 27572.72 (DV banda -1SD)",
+            "pDVAH-30 27534.97 (PV cerrado FRESH)"
+          ]
+        },
+        {
+          "label": "Cluster B+ pVWAP-30 + wDVAH (banda weekly rota)",
+          "price_min": 27411.99,
+          "price_max": 27466.98,
+          "grade": "B+",
+          "members": [
+            "pVWAP-30 27411.99",
+            "wDVAH 27466.98 (banda +1SD weekly ROTA)"
+          ]
+        },
+        {
+          "label": "Cluster B pDVAL-30 + wVWAP",
+          "price_min": 27289.01,
+          "price_max": 27316.95,
+          "grade": "B",
+          "members": [
+            "pDVAL-30 27289.01",
+            "wVWAP 27316.95"
+          ]
+        }
+      ],
+      "levels": [],
+      "hypos": [
+        {
+          "id": "H1",
+          "direction": "long",
+          "setup_type": "RPB-pDVAH30+DVAL",
+          "entry": 27545,
+          "stop": 27520,
+          "grade": "A",
+          "notes": "RPB long en cluster A 27534-27572 (DVAL Daily + pDVAH-30 FRESH). Pullback al cluster fresh desde arriba del spot. Setup canonico §4.2 PV cerrado. Alineado con bias bullish multi-TF.",
+          "targets": [
+            {
+              "label": "T1 VWAP Daily",
+              "price": 27602,
+              "rr": 2.3
+            },
+            {
+              "label": "T2 DVAH Daily",
+              "price": 27632,
+              "rr": 3.5
+            },
+            {
+              "label": "T3 extension",
+              "price": 27700,
+              "rr": 6.2
+            }
+          ],
+          "risk_pts": 25.0,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        },
+        {
+          "id": "H2",
+          "direction": "long",
+          "setup_type": "IPB-wDVAH",
+          "entry": 27470,
+          "stop": 27450,
+          "grade": "B+",
+          "notes": "IPB long en wDVAH 27466.98 si pullback profundo retesta la banda +1SD weekly desde arriba como soporte rotado. Setup §4.3 alineado con imbalance bull weekly. Cluster B+ con pVWAP-30 cerca.",
+          "targets": [
+            {
+              "label": "T1 cluster A",
+              "price": 27535,
+              "rr": 3.2
+            },
+            {
+              "label": "T2 DVAL Daily",
+              "price": 27572,
+              "rr": 5.1
+            },
+            {
+              "label": "T3 spot",
+              "price": 27623,
+              "rr": 7.7
+            }
+          ],
+          "risk_pts": 20.0,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        },
+        {
+          "id": "H3",
+          "direction": "short",
+          "setup_type": "EF-DVAH-Daily",
+          "entry": 27632,
+          "stop": 27650,
+          "grade": "C",
+          "notes": "EF short en DVAH Daily 27632 si rechazo claro. Setup §4.4 fade extremo DV daily. CAVEAT §5.2 contra imbalance bull, requiere 3 confirmaciones simultaneas (HA bear change + OF negativo + estructura cambia).",
+          "targets": [
+            {
+              "label": "T1 VWAP Daily",
+              "price": 27602,
+              "rr": 1.7
+            },
+            {
+              "label": "T2 DVAL Daily",
+              "price": 27572,
+              "rr": 3.3
+            }
+          ],
+          "risk_pts": 18.0,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,158 @@
+{
+  "schema_version": "1.0",
+  "instrument": "ES",
+  "date": "2026-05-01",
+  "snapshots": [
+    {
+      "id": "ES_20260501_0925_PREPIT",
+      "timestamp": "2026-05-01T09:25:00",
+      "price_at_analysis": 7264.25,
+      "regime": "bullish multi-TF total + breakout fresh arriba del DVAH Daily",
+      "bias": "bullish multi-TF (LTWV W/Q/Y todos arriba) — extension fuerte, fresh breakout daily",
+      "summary": "PREPIT 09:25 — Spot 7264.25 BULLISH multi-TF total. ARRIBA wDVAH (+52), qDVAH (+82), yDVAH (+185). Fresh breakout DVAH Daily (+1.74). Cluster A 7232-7263 (Daily DVA + pDVAH-30 FRESH) primer soporte. Zona azul arriba sin resistencias densas.",
+      "analysis_text": "N (Narrativa): bullish multi-TF total. Spot 7264.25 ARRIBA de TODOS los DVAH operables (W/Q/Y). Daily DVA muy estrecho (10 pts: 7252-7263) con spot apenas +2 arriba del DVAH = fresh breakout daily.\n\nA (Aceptacion direccional):\n- wDVAH 7212.29: spot ARRIBA +52 con close ETH = aceptacion ARRIBA dura del weekly +1SD\n- qDVAH 7182.63: spot ARRIBA +82 = aceptacion arriba quarterly establecida\n- yDVAH 7079.06: spot ARRIBA +185 = aceptacion arriba anual\n- DVAH Daily 7262.51: spot ARRIBA +1.74 = breakout daily reciente, primera fase post-rompimiento\n\nD (Distribucion): spot dentro Daily DVA (banda muy estrecha 10 pts). Por encima de wDVAH = territorio extremo multi-TF como NQ.\n\nR (Ritmo): cierre 30-abr 17:00 = 7246.75. Spot 7264.25 al pre-pit = +17.5 pts overnight (recovery + push arriba).\n\nO (Order Flow): pendiente.\n\nNIVELES NEUTRALIZADOS DESCARTADOS:\n- pVA-30/29/28/27/24/23/22 TPO: aceptados/touched al subir overnight\n- CVA 27-30 (VAH=7211.25, VAL=7175.75): touched arriba al subir spot a 7264\n- CVA 28-29 (VAH=7166.75, VAL=7148): touched arriba\n- pDVA-29/28/27/24/23/22: breached\n\nLIS abajo (operables, FRESH/virgenes):\n- DVAH Daily 7262.51 (-1.74, fresh breakout point)\n- VWAP Daily 7257.35 (-6.9, central daily)\n- DVAL Daily 7252.18 (-12, banda -1SD daily)\n- pDVAH-30 7232.27 (-32, FRESH active not breached)\n- wDVAH 7212.29 (-52, banda +1SD weekly ROTA desde abajo)\n- pVWAP-30 7202.63 (-61.6, mid pDVA daily fresh)\n- qDVAH 7182.63 (-82, banda Q operable)\n- wVWAP 7183.62 (-80.6, central weekly)\n- pDVAL-30 7172.98 (-91.3, banda baja pDVA daily fresh)\n- wDVAL 7154.94 (-109, banda -1SD weekly)\n- yDVAH 7079.06 (-185, banda anual)\n\nLIS arriba (zona azul §10 destino abierto):\n- (sin niveles densos arriba — destino abierto, observar)\n\n3 HIPOS DOCTRINALES:\n\nH1 (RPB-pDVAH30 long pullback al cluster A): retest del cluster 7232-7263 (Daily DVA developing + pDVAH-30 FRESH) desde arriba. Setup §4.2 PV cerrado pDVAH-30 + DV Daily como confluencia. Alineado con bias bullish.\n\nH2 (IPB-wDVAH long retest profundo): wDVAH 7212.29 banda +1SD weekly ROTA desde abajo. Si pullback profundo retesta como soporte rotado = IPB en imbalance bull weekly. Cluster B con pVWAP-30 cerca refuerza.\n\nH3 (EF-DVAH-Daily short): fade del extremo daily 7262 si rechazo claro al toque. CAVEAT §5.2 contra imbalance bull multi-TF, requiere 3 confirmaciones (HA bear + OF negativo + estructura cambia). Convicion BAJA.\n\nAnti-pattern check:\n- NO mDVA (eco §6 primer viernes pre-pit) ✅\n- NO pVA-30/29/28/27/24/23/22 TPO (touched/neutralizados) ✅\n- NO CVA 27-30 / 28-29 (touched arriba) ✅\n- NO RPB en wDVAH (es DV) — H2 es IPB ✅\n- NO IPB short tradicional (imbalance bull §5.2) — H3 es EF en extremo con caveat ✅</analysis_text>\n<parameter name=\"levels\">[{\"label\": \"wDVAH\", \"price\": 7212.29}, {\"label\": \"wVWAP\", \"price\": 7183.62}, {\"label\": \"wDVAL\", \"price\": 7154.94}, {\"label\": \"qDVAH\", \"price\": 7182.63}, {\"label\": \"yDVAH\", \"price\": 7079.06}, {\"label\": \"DVAH\", \"price\": 7262.51}, {\"label\": \"VWAP\", \"price\": 7257.35}, {\"label\": \"DVAL\", \"price\": 7252.18}, {\"label\": \"pDVAH-30\", \"price\": 7232.27}, {\"label\": \"pVWAP-30\", \"price\": 7202.63}, {\"label\": \"pDVAL-30\", \"price\": 7172.98}]",
+      "confluences": [
+        {
+          "label": "Cluster A Daily DVA + pDVAH-30 FRESH (DV completo + PV)",
+          "price_min": 7232.27,
+          "price_max": 7262.51,
+          "grade": "A",
+          "members": [
+            "DVAH Daily 7262.51",
+            "VWAP Daily 7257.35",
+            "DVAL Daily 7252.18",
+            "pDVAH-30 7232.27 (FRESH)"
+          ]
+        },
+        {
+          "label": "Cluster B+ wDVAH + pVWAP-30 (banda weekly rota + mid pDVA)",
+          "price_min": 7202.63,
+          "price_max": 7212.29,
+          "grade": "B+",
+          "members": [
+            "pVWAP-30 7202.63",
+            "wDVAH 7212.29 (banda +1SD weekly ROTA)"
+          ]
+        },
+        {
+          "label": "Cluster B qDVAH + wVWAP",
+          "price_min": 7182.63,
+          "price_max": 7183.62,
+          "grade": "B",
+          "members": [
+            "qDVAH 7182.63",
+            "wVWAP 7183.62"
+          ]
+        }
+      ],
+      "levels": [],
+      "hypos": [
+        {
+          "id": "H1",
+          "direction": "long",
+          "setup_type": "RPB-pDVAH30+DailyDVA",
+          "entry": 7245,
+          "stop": 7225,
+          "grade": "A",
+          "notes": "RPB long en cluster A 7232-7263 (Daily DVA developing completo + pDVAH-30 FRESH). Pullback al cluster fresh desde arriba del spot. PV cerrado pDVAH-30 + DV daily como confluencia. Alineado bias bullish multi-TF. Stop debajo de pDVAH-30 con buffer.",
+          "targets": [
+            {
+              "label": "T1 spot/DVAH Daily",
+              "price": 7263,
+              "rr": 0.9
+            },
+            {
+              "label": "T2 extension",
+              "price": 7280,
+              "rr": 1.8
+            },
+            {
+              "label": "T3 extension",
+              "price": 7300,
+              "rr": 2.8
+            }
+          ],
+          "risk_pts": 20.0,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        },
+        {
+          "id": "H2",
+          "direction": "long",
+          "setup_type": "IPB-wDVAH",
+          "entry": 7215,
+          "stop": 7200,
+          "grade": "B+",
+          "notes": "IPB long en wDVAH 7212.29 si pullback profundo retesta la banda +1SD weekly desde arriba como soporte rotado. Setup §4.3 alineado con imbalance bull weekly. Cluster B+ con pVWAP-30 cerca refuerza.",
+          "targets": [
+            {
+              "label": "T1 pDVAH-30",
+              "price": 7232,
+              "rr": 1.1
+            },
+            {
+              "label": "T2 DVAL Daily",
+              "price": 7252,
+              "rr": 2.5
+            },
+            {
+              "label": "T3 spot",
+              "price": 7264,
+              "rr": 3.3
+            }
+          ],
+          "risk_pts": 15.0,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        },
+        {
+          "id": "H3",
+          "direction": "short",
+          "setup_type": "EF-DVAH-Daily",
+          "entry": 7263,
+          "stop": 7273,
+          "grade": "C",
+          "notes": "EF short en DVAH Daily 7262 si rechazo claro al toque del spot. Setup §4.4 fade extremo DV daily. CAVEAT §5.2 contra imbalance bull, requiere 3 confirmaciones simultaneas (HA bear change + OF negativo + estructura cambia). Convicion BAJA.",
+          "targets": [
+            {
+              "label": "T1 VWAP Daily",
+              "price": 7257,
+              "rr": 0.6
+            },
+            {
+              "label": "T2 DVAL Daily",
+              "price": 7252,
+              "rr": 1.1
+            },
+            {
+              "label": "T3 pDVAH-30",
+              "price": 7232,
+              "rr": 3.1
+            }
+          ],
+          "risk_pts": 10.0,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        }
+      ]
+    }
+  ]
+}

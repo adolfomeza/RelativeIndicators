@@ -54,13 +54,9 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 		private int 	lastBar;
 		private bool 	lastInTransition;
 
-		// v1.16: Delta history export para backtest Apteros
-		private string _deltaHistoryDir;
-		private string _currentDeltaFile = "";
-		private DateTime _lastDeltaExportDate = DateTime.MinValue;
-		private System.Text.StringBuilder _deltaBuffer = new System.Text.StringBuilder();
-		private DateTime _lastDeltaFlushTime = DateTime.MinValue;
-		
+		// v1.17: feature DeltaHistory eliminada (llenaba disco por APPEND duplicado en cada reload).
+		// Si en el futuro se reactiva para backtest Apteros, restringir a State.Realtime + dedupe por bar_time.
+
 		private Brush	divergeCandleup   = Brushes.Purple;  // Color body for Divergence Candle
 		private Brush	divergeCandledown   = Brushes.Pink;  // Color body for Divergence Candle
 		
@@ -212,19 +208,11 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 				
 				stoch = this.Stochastics(3, 14, 3);
 
-				// v1.16: Delta history directory
-				_deltaHistoryDir = System.IO.Path.Combine(
-					Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-					"NinjaTrader 8", "bin", "Custom", "DeltaHistory");
-				if (!System.IO.Directory.Exists(_deltaHistoryDir))
-					System.IO.Directory.CreateDirectory(_deltaHistoryDir);
-
 				// Initialize D2D Factory once - NO LONGER NEEDED (Using RenderTarget.Factory)
 			}
 			else if (State == State.Terminated)
 			{
 			    DisposeD2DResources(); // Ensure cleanup
-			    FlushDeltaBuffer(); // v1.16: flush last buffered delta bars on shutdown
 			}
 		}
 		
@@ -496,9 +484,7 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 								asiaSessionActive ? asiaSessionAnchor.ToString("F0") : "off",
 								globalSessionActive ? globalSessionAnchor.ToString("F0") : "off");
 
-						// v1.16: Delta history export — persistir bar cerrado para backtest Apteros
-						if (IsFirstTickOfBar && CurrentBar >= 2)
-							ExportDeltaBar();
+						// v1.17: ExportDeltaBar() eliminado (llenaba disco por APPEND duplicado en cada reload).
 					}
 					catch { }
 				}
@@ -506,60 +492,6 @@ namespace NinjaTrader.NinjaScript.Indicators.RelativeIndicators
 			}
 		}
 
-
-		// v1.16: Delta history export para backtest Apteros
-		private void ExportDeltaBar()
-		{
-			try
-			{
-				DateTime barTime = Time[1]; // bar que acaba de cerrar
-				DateTime barDate = barTime.Date;
-				if (barDate != _lastDeltaExportDate)
-				{
-					FlushDeltaBuffer();
-					string fn = string.Format("{0}_{1:yyyy-MM-dd}.jsonl",
-						Instrument.MasterInstrument.Name, barDate);
-					_currentDeltaFile = System.IO.Path.Combine(_deltaHistoryDir, fn);
-					_lastDeltaExportDate = barDate;
-				}
-
-				double dO = delta_open[1], dH = delta_high[1], dL = delta_low[1], dC = delta_close[1];
-				double barDelta = dC - dO;
-				var ci = System.Globalization.CultureInfo.InvariantCulture;
-				string usA = usSessionAnchor == double.MinValue ? "null" : usSessionAnchor.ToString("0.##", ci);
-				string euA = euSessionAnchor == double.MinValue ? "null" : euSessionAnchor.ToString("0.##", ci);
-				string asiaA = asiaSessionAnchor == double.MinValue ? "null" : asiaSessionAnchor.ToString("0.##", ci);
-				string globalA = globalSessionAnchor == double.MinValue ? "null" : globalSessionAnchor.ToString("0.##", ci);
-
-				_deltaBuffer.AppendFormat(ci,
-					"{{\"t\":\"{0:yyyy-MM-dd HH:mm:ss.fff}\",\"p\":{1},\"cdO\":{2},\"cdH\":{3},\"cdL\":{4},\"cdC\":{5},\"bd\":{6},\"us\":{7},\"eu\":{8},\"asia\":{9},\"g\":{10}}}\n",
-					barTime, Close[1], dO, dH, dL, dC, barDelta, usA, euA, asiaA, globalA);
-
-				// Flush si buffer grande o cada 5s
-				if (_deltaBuffer.Length > 8192 || (DateTime.Now - _lastDeltaFlushTime).TotalSeconds > 5)
-					FlushDeltaBuffer();
-			}
-			catch (Exception ex)
-			{
-				Print("RelativeDelta ExportDeltaBar ERROR: " + ex.Message);
-			}
-		}
-
-		private void FlushDeltaBuffer()
-		{
-			if (_deltaBuffer.Length == 0) return;
-			if (string.IsNullOrEmpty(_currentDeltaFile)) return;
-			try
-			{
-				System.IO.File.AppendAllText(_currentDeltaFile, _deltaBuffer.ToString());
-				_deltaBuffer.Clear();
-				_lastDeltaFlushTime = DateTime.Now;
-			}
-			catch (Exception ex)
-			{
-				Print("RelativeDelta FlushDeltaBuffer ERROR: " + ex.Message);
-			}
-		}
 
 		private void CalculateValues(bool forceCurrentBar)
 		{

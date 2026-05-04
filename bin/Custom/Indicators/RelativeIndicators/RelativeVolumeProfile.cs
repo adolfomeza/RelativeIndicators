@@ -160,6 +160,12 @@ namespace NinjaTrader.NinjaScript.Indicators
 				AutoMergeOverlapThreshold   = 0.40;  // 40% (con D-shape gate adicional, mas refinado)
 				AutoMergeBreakoutTolerance  = 0.5;   // 0.5 pts tolerance breakout
 				NadroRequireDShape          = true;  // gate de calidad: solo merge si forma D-shape
+				DShapeMode                  = DShapeAutoMode.Auto; // auto-ajusta thresholds segun familia (PitAuto-style)
+				NadroDShapeMinTailPct       = 10.0;  // default Indices/FX (Auto sobreescribe segun familia en DataLoaded)
+				NadroDShapeMinSymmetryPct   = 40.0;  // default Indices/FX
+				NadroDShapePocMinPct        = 30.0;  // default Indices/FX
+				NadroDShapePocMaxPct        = 70.0;  // default Indices/FX
+				NadroLogDShapeFailures      = false; // log diagnostico off por default
 
 				// 02. Histogram Visuals
 				HistogramMaxWidth     = 50;
@@ -225,6 +231,10 @@ namespace NinjaTrader.NinjaScript.Indicators
 					ApplyPitAutoSession();
 				}
 
+				// D-shape thresholds auto-adapt por familia (igual que PitAuto)
+				if (DShapeMode == DShapeAutoMode.Auto)
+					ApplyDShapeAutoSettings();
+
 				if (ShowDebugLogs)
 					Print("RelativeVolumeProfile v" + VERSION + " loaded for " + Instrument.FullName
 						+ " | SessionMode: " + SessionMode
@@ -234,6 +244,27 @@ namespace NinjaTrader.NinjaScript.Indicators
 				// Setup context menu on UI thread (pattern from PATSToolBar.cs)
 				if (ChartControl != null)
 					ChartControl.Dispatcher.InvokeAsync((Action)(() => SetupContextMenu()));
+
+				// FIX 2026-05-02: Registrar QueryAt handler para snapshots TPO point-in-time.
+				// Habilita review post-hoc preciso (ej. pre-pit GC ayer 08:15 ET con state TPO de
+				// ese momento exacto, NO el state actual). Llamado por get_tpo_levels_at/get_indicator_state_at.
+				try
+				{
+					string _tpoReplayKey = "RelativeVolumeProfile:" + Instrument.FullName;
+					NinjaTrader.NinjaScript.AddOns.RelativeIndicatorRegistry.RegisterQueryHandler(_tpoReplayKey,
+						asOf => BuildPointInTimePayload(asOf));
+				}
+				catch { /* registry opcional, no rompe el indicador */ }
+			}
+			else if (State == State.Realtime)
+			{
+				// FIX 2026-05-02: Publish UNICA al transicionar Historical→Realtime.
+				// Sin esto, en sábado/feriado/mercado cerrado el chart NUNCA publica al
+				// Registry porque OnBarUpdate solo publica con IsFirstTickOfBar live.
+				// Esta publicación garantiza que get_tpo_levels tenga state disponible
+				// inmediatamente tras cargar el chart, sin esperar tick nuevo.
+				try { PublishStateToRegistry(); }
+				catch (Exception ex) { Print("RelativeVolumeProfile: Publish on Realtime transition ERROR: " + ex.Message); }
 			}
 			else if (State == State.Terminated)
 			{
@@ -607,6 +638,100 @@ namespace NinjaTrader.NinjaScript.Indicators
 			Print(string.Format(
 				"RelativeVolumeProfile[PitAuto] {0} → family={1} pit={2:hh\\:mm}-{3:hh\\:mm} ET",
 				master, family, _profileStartTs, _profileEndTs));
+		}
+
+		/// <summary>Ajusta los 4 thresholds D-shape según la familia del instrumento (auto-detectado
+		/// por MasterInstrument.Name). Análogo a ApplyPitAutoSession() pero para los criterios D-shape.
+		/// Los presets vienen de análisis empírico: Metales/Granos/Livestock tienen perfiles más
+		/// concentrados (menos volumen en colas), Indices/FX más distribuidos.
+		///
+		/// Se llama en State.DataLoaded sólo si DShapeMode == Auto. Si Manual, los valores del
+		/// usuario se respetan tal cual.
+		/// </summary>
+		private void ApplyDShapeAutoSettings()
+		{
+			string master = "";
+			try { master = Instrument?.MasterInstrument?.Name?.ToUpperInvariant() ?? ""; }
+			catch { master = ""; }
+
+			double tailPct, symPct, pocMin, pocMax, overlapPct;
+			string family;
+
+			// CME Equity Index Large-Cap (ES/NQ/YM + micros) + FX: perfiles distribuidos.
+			// Overlap=0.30 permite fusionar dias complementarios (P + b + D etc.) que
+			// individualmente solapan poco pero juntos forman composite balanceado.
+			// El D-shape gate del merged final filtra los casos no-balance reales.
+			if (master == "ES" || master == "MES" ||
+			    master == "NQ" || master == "MNQ" ||
+			    master == "YM" || master == "MYM" ||
+			    master == "6E" || master == "6B" || master == "6J" ||
+			    master == "6C" || master == "6A" || master == "6S" ||
+			    master == "6N" || master == "6M")
+			{
+				tailPct = 10.0; symPct = 40.0; pocMin = 30.0; pocMax = 70.0; overlapPct = 0.30;
+				family  = "Indices Large-Cap/FX (default, overlap=30%)";
+			}
+			// Russell 2000 Micro-Cap (RTY/M2K): perfiles mas asimetricos por volatilidad
+			// inherente del small-cap. Alterna mas dias b/D y produce tails muy desiguales.
+			// Thresholds laxos para permitir fusion de balance multi-day claro visual.
+			else if (master == "RTY" || master == "M2K")
+			{
+				tailPct = 5.0; symPct = 15.0; pocMin = 25.0; pocMax = 75.0; overlapPct = 0.30;
+				family  = "Russell Microcap (laxo, sym=15 tail=5 POC 25-75)";
+			}
+			// COMEX Metals: perfiles muy concentrados con colas asimetricas en dias volatiles.
+			else if (master == "GC" || master == "MGC" ||
+			         master == "SI" || master == "SIL" ||
+			         master == "PL" || master == "HG" || master == "MHG")
+			{
+				tailPct = 8.0; symPct = 15.0; pocMin = 25.0; pocMax = 75.0; overlapPct = 0.40;
+				family  = "Metales (laxo, sym=15 + overlap=40%)";
+			}
+			// NYMEX Energy: distribuciones moderadas
+			else if (master == "CL" || master == "MCL" || master == "QM" ||
+			         master == "NG" || master == "QG" ||
+			         master == "RB" || master == "HO")
+			{
+				tailPct = 8.0; symPct = 35.0; pocMin = 28.0; pocMax = 72.0; overlapPct = 0.35;
+				family  = "Energy (moderado, overlap=35%)";
+			}
+			// CBOT Grains + Livestock + Dairy: perfiles muy concentrados
+			else if (master == "ZC" || master == "ZS" || master == "ZW" ||
+			         master == "ZM" || master == "ZL" || master == "ZO" || master == "ZR" ||
+			         master == "LE" || master == "GF" || master == "HE" ||
+			         master == "DC" || master == "GDK" || master == "LBR" || master == "LBS")
+			{
+				tailPct = 7.0; symPct = 30.0; pocMin = 25.0; pocMax = 75.0; overlapPct = 0.30;
+				family  = "Grains/Livestock/Dairy (muy laxo, overlap=30%)";
+			}
+			// CBOT Treasuries: rangos pequeños, perfiles ajustados
+			else if (master == "ZB" || master == "UB" ||
+			         master == "ZN" || master == "TN" ||
+			         master == "ZF" || master == "ZT")
+			{
+				tailPct = 8.0; symPct = 35.0; pocMin = 28.0; pocMax = 72.0; overlapPct = 0.35;
+				family  = "Treasuries (moderado, overlap=35%)";
+			}
+			// Fallback: respetar lo que tiene el usuario configurado
+			else
+			{
+				tailPct    = NadroDShapeMinTailPct;
+				symPct     = NadroDShapeMinSymmetryPct;
+				pocMin     = NadroDShapePocMinPct;
+				pocMax     = NadroDShapePocMaxPct;
+				overlapPct = AutoMergeOverlapThreshold;
+				family     = "UNKNOWN → mantener valores manuales";
+			}
+
+			NadroDShapeMinTailPct     = tailPct;
+			NadroDShapeMinSymmetryPct = symPct;
+			NadroDShapePocMinPct      = pocMin;
+			NadroDShapePocMaxPct      = pocMax;
+			AutoMergeOverlapThreshold = overlapPct;
+
+			Print(string.Format(
+				"RelativeVolumeProfile[DShapeAuto] {0} → family={1} | tail≥{2:0.0}% sym≥{3:0.0}% POC{4:0}%-{5:0}% overlap≥{6:P0}",
+				master, family, tailPct, symPct, pocMin, pocMax, overlapPct));
 		}
 
 		#endregion
@@ -1051,6 +1176,34 @@ namespace NinjaTrader.NinjaScript.Indicators
 		[Display(Name = "Require D-Shape", Description = "Solo mergear si el composite resultante forma D-shape (perfil balanceado/rotacional). Filtra falsos CVAs que en realidad son transition (P-shape o b-shape).", GroupName = "06. NADRO Auto-Merge", Order = 4)]
 		public bool NadroRequireDShape { get; set; }
 
+		[NinjaScriptProperty]
+		[Display(Name = "D-Shape Mode", Description = "Auto: ajusta thresholds D-shape segun familia del instrumento (similar a PitAuto). Manual: respeta los valores del usuario.", GroupName = "06. NADRO Auto-Merge", Order = 5)]
+		public DShapeAutoMode DShapeMode { get; set; }
+
+		[NinjaScriptProperty]
+		[Range(0.0, 50.0)]
+		[Display(Name = "D-Shape Min Tail %", Description = "Tail minima arriba/abajo del VA como % del rango total (default 10). Si DShapeMode=Auto, este valor se sobreescribe segun familia.", GroupName = "06. NADRO Auto-Merge", Order = 6)]
+		public double NadroDShapeMinTailPct { get; set; }
+
+		[NinjaScriptProperty]
+		[Range(0.0, 100.0)]
+		[Display(Name = "D-Shape Min Symmetry %", Description = "Simetria minima de tails (ratio min/max * 100, default 40). Si DShapeMode=Auto, se sobreescribe.", GroupName = "06. NADRO Auto-Merge", Order = 7)]
+		public double NadroDShapeMinSymmetryPct { get; set; }
+
+		[NinjaScriptProperty]
+		[Range(0.0, 50.0)]
+		[Display(Name = "D-Shape POC Min %", Description = "Limite inferior POC offset dentro del VA (default 30 = POC en 30% inferior del VA es OK). Si DShapeMode=Auto, se sobreescribe.", GroupName = "06. NADRO Auto-Merge", Order = 8)]
+		public double NadroDShapePocMinPct { get; set; }
+
+		[NinjaScriptProperty]
+		[Range(50.0, 100.0)]
+		[Display(Name = "D-Shape POC Max %", Description = "Limite superior POC offset dentro del VA (default 70 = POC en 70% superior del VA es OK). Si DShapeMode=Auto, se sobreescribe.", GroupName = "06. NADRO Auto-Merge", Order = 9)]
+		public double NadroDShapePocMaxPct { get; set; }
+
+		[NinjaScriptProperty]
+		[Display(Name = "Log D-Shape Failures", Description = "Imprime en Output Window el motivo cuando un merge tentativo falla el D-shape gate. Util para tunear thresholds por instrumento.", GroupName = "06. NADRO Auto-Merge", Order = 10)]
+		public bool NadroLogDShapeFailures { get; set; }
+
 		// === 02. Histogram Visuals ===
 
 		[NinjaScriptProperty]
@@ -1241,6 +1394,12 @@ public enum TpoViewMode
 	Histogram  // PERF: barras horizontales en vez de letras (mucho mas rapido)
 }
 
+public enum DShapeAutoMode
+{
+	Manual, // usa thresholds NadroDShape* del usuario tal cual
+	Auto    // ajusta thresholds automaticamente segun Instrument.MasterInstrument.Name (familia)
+}
+
 public enum RvpVwapPriceMethod
 {
 	Close,
@@ -1255,18 +1414,18 @@ namespace NinjaTrader.NinjaScript.Indicators
 	public partial class Indicator : NinjaTrader.Gui.NinjaScript.IndicatorRenderBase
 	{
 		private RelativeVolumeProfile[] cacheRelativeVolumeProfile;
-		public RelativeVolumeProfile RelativeVolumeProfile(string licenseKey, ProfileSessionMode sessionMode, string profileStartTime, string profileEndTime, VolumeDataMode dataMode, int barBasedPeriod, int ticksPerLevel, int valueAreaPercent, ProfileDataType profileType, int tpoPeriodMinutes, TpoViewMode tpoView, bool autoMergeNadroEnabled, double autoMergeOverlapThreshold, double autoMergeBreakoutTolerance, bool nadroRequireDShape, int histogramMaxWidth, HistogramSide histogramSideParam, int histogramOpacity, bool showPOCLine, bool showVALines, bool extendLines, bool showHistoricalProfiles, int maxFullDetailProfiles, bool showDebugLogs, bool showAnchoredVWAP, RvpVwapPriceMethod vwapMethod)
+		public RelativeVolumeProfile RelativeVolumeProfile(string licenseKey, ProfileSessionMode sessionMode, string profileStartTime, string profileEndTime, VolumeDataMode dataMode, int barBasedPeriod, int ticksPerLevel, int valueAreaPercent, ProfileDataType profileType, int tpoPeriodMinutes, TpoViewMode tpoView, bool autoMergeNadroEnabled, double autoMergeOverlapThreshold, double autoMergeBreakoutTolerance, bool nadroRequireDShape, DShapeAutoMode dShapeMode, double nadroDShapeMinTailPct, double nadroDShapeMinSymmetryPct, double nadroDShapePocMinPct, double nadroDShapePocMaxPct, bool nadroLogDShapeFailures, int histogramMaxWidth, HistogramSide histogramSideParam, int histogramOpacity, bool showPOCLine, bool showVALines, bool extendLines, bool showHistoricalProfiles, int maxFullDetailProfiles, bool showDebugLogs, bool showAnchoredVWAP, RvpVwapPriceMethod vwapMethod)
 		{
-			return RelativeVolumeProfile(Input, licenseKey, sessionMode, profileStartTime, profileEndTime, dataMode, barBasedPeriod, ticksPerLevel, valueAreaPercent, profileType, tpoPeriodMinutes, tpoView, autoMergeNadroEnabled, autoMergeOverlapThreshold, autoMergeBreakoutTolerance, nadroRequireDShape, histogramMaxWidth, histogramSideParam, histogramOpacity, showPOCLine, showVALines, extendLines, showHistoricalProfiles, maxFullDetailProfiles, showDebugLogs, showAnchoredVWAP, vwapMethod);
+			return RelativeVolumeProfile(Input, licenseKey, sessionMode, profileStartTime, profileEndTime, dataMode, barBasedPeriod, ticksPerLevel, valueAreaPercent, profileType, tpoPeriodMinutes, tpoView, autoMergeNadroEnabled, autoMergeOverlapThreshold, autoMergeBreakoutTolerance, nadroRequireDShape, dShapeMode, nadroDShapeMinTailPct, nadroDShapeMinSymmetryPct, nadroDShapePocMinPct, nadroDShapePocMaxPct, nadroLogDShapeFailures, histogramMaxWidth, histogramSideParam, histogramOpacity, showPOCLine, showVALines, extendLines, showHistoricalProfiles, maxFullDetailProfiles, showDebugLogs, showAnchoredVWAP, vwapMethod);
 		}
 
-		public RelativeVolumeProfile RelativeVolumeProfile(ISeries<double> input, string licenseKey, ProfileSessionMode sessionMode, string profileStartTime, string profileEndTime, VolumeDataMode dataMode, int barBasedPeriod, int ticksPerLevel, int valueAreaPercent, ProfileDataType profileType, int tpoPeriodMinutes, TpoViewMode tpoView, bool autoMergeNadroEnabled, double autoMergeOverlapThreshold, double autoMergeBreakoutTolerance, bool nadroRequireDShape, int histogramMaxWidth, HistogramSide histogramSideParam, int histogramOpacity, bool showPOCLine, bool showVALines, bool extendLines, bool showHistoricalProfiles, int maxFullDetailProfiles, bool showDebugLogs, bool showAnchoredVWAP, RvpVwapPriceMethod vwapMethod)
+		public RelativeVolumeProfile RelativeVolumeProfile(ISeries<double> input, string licenseKey, ProfileSessionMode sessionMode, string profileStartTime, string profileEndTime, VolumeDataMode dataMode, int barBasedPeriod, int ticksPerLevel, int valueAreaPercent, ProfileDataType profileType, int tpoPeriodMinutes, TpoViewMode tpoView, bool autoMergeNadroEnabled, double autoMergeOverlapThreshold, double autoMergeBreakoutTolerance, bool nadroRequireDShape, DShapeAutoMode dShapeMode, double nadroDShapeMinTailPct, double nadroDShapeMinSymmetryPct, double nadroDShapePocMinPct, double nadroDShapePocMaxPct, bool nadroLogDShapeFailures, int histogramMaxWidth, HistogramSide histogramSideParam, int histogramOpacity, bool showPOCLine, bool showVALines, bool extendLines, bool showHistoricalProfiles, int maxFullDetailProfiles, bool showDebugLogs, bool showAnchoredVWAP, RvpVwapPriceMethod vwapMethod)
 		{
 			if (cacheRelativeVolumeProfile != null)
 				for (int idx = 0; idx < cacheRelativeVolumeProfile.Length; idx++)
-					if (cacheRelativeVolumeProfile[idx] != null && cacheRelativeVolumeProfile[idx].LicenseKey == licenseKey && cacheRelativeVolumeProfile[idx].SessionMode == sessionMode && cacheRelativeVolumeProfile[idx].ProfileStartTime == profileStartTime && cacheRelativeVolumeProfile[idx].ProfileEndTime == profileEndTime && cacheRelativeVolumeProfile[idx].DataMode == dataMode && cacheRelativeVolumeProfile[idx].BarBasedPeriod == barBasedPeriod && cacheRelativeVolumeProfile[idx].TicksPerLevel == ticksPerLevel && cacheRelativeVolumeProfile[idx].ValueAreaPercent == valueAreaPercent && cacheRelativeVolumeProfile[idx].ProfileType == profileType && cacheRelativeVolumeProfile[idx].TpoPeriodMinutes == tpoPeriodMinutes && cacheRelativeVolumeProfile[idx].TpoView == tpoView && cacheRelativeVolumeProfile[idx].AutoMergeNadroEnabled == autoMergeNadroEnabled && cacheRelativeVolumeProfile[idx].AutoMergeOverlapThreshold == autoMergeOverlapThreshold && cacheRelativeVolumeProfile[idx].AutoMergeBreakoutTolerance == autoMergeBreakoutTolerance && cacheRelativeVolumeProfile[idx].NadroRequireDShape == nadroRequireDShape && cacheRelativeVolumeProfile[idx].HistogramMaxWidth == histogramMaxWidth && cacheRelativeVolumeProfile[idx].HistogramSideParam == histogramSideParam && cacheRelativeVolumeProfile[idx].HistogramOpacity == histogramOpacity && cacheRelativeVolumeProfile[idx].ShowPOCLine == showPOCLine && cacheRelativeVolumeProfile[idx].ShowVALines == showVALines && cacheRelativeVolumeProfile[idx].ExtendLines == extendLines && cacheRelativeVolumeProfile[idx].ShowHistoricalProfiles == showHistoricalProfiles && cacheRelativeVolumeProfile[idx].MaxFullDetailProfiles == maxFullDetailProfiles && cacheRelativeVolumeProfile[idx].ShowDebugLogs == showDebugLogs && cacheRelativeVolumeProfile[idx].ShowAnchoredVWAP == showAnchoredVWAP && cacheRelativeVolumeProfile[idx].VwapMethod == vwapMethod && cacheRelativeVolumeProfile[idx].EqualsInput(input))
+					if (cacheRelativeVolumeProfile[idx] != null && cacheRelativeVolumeProfile[idx].LicenseKey == licenseKey && cacheRelativeVolumeProfile[idx].SessionMode == sessionMode && cacheRelativeVolumeProfile[idx].ProfileStartTime == profileStartTime && cacheRelativeVolumeProfile[idx].ProfileEndTime == profileEndTime && cacheRelativeVolumeProfile[idx].DataMode == dataMode && cacheRelativeVolumeProfile[idx].BarBasedPeriod == barBasedPeriod && cacheRelativeVolumeProfile[idx].TicksPerLevel == ticksPerLevel && cacheRelativeVolumeProfile[idx].ValueAreaPercent == valueAreaPercent && cacheRelativeVolumeProfile[idx].ProfileType == profileType && cacheRelativeVolumeProfile[idx].TpoPeriodMinutes == tpoPeriodMinutes && cacheRelativeVolumeProfile[idx].TpoView == tpoView && cacheRelativeVolumeProfile[idx].AutoMergeNadroEnabled == autoMergeNadroEnabled && cacheRelativeVolumeProfile[idx].AutoMergeOverlapThreshold == autoMergeOverlapThreshold && cacheRelativeVolumeProfile[idx].AutoMergeBreakoutTolerance == autoMergeBreakoutTolerance && cacheRelativeVolumeProfile[idx].NadroRequireDShape == nadroRequireDShape && cacheRelativeVolumeProfile[idx].DShapeMode == dShapeMode && cacheRelativeVolumeProfile[idx].NadroDShapeMinTailPct == nadroDShapeMinTailPct && cacheRelativeVolumeProfile[idx].NadroDShapeMinSymmetryPct == nadroDShapeMinSymmetryPct && cacheRelativeVolumeProfile[idx].NadroDShapePocMinPct == nadroDShapePocMinPct && cacheRelativeVolumeProfile[idx].NadroDShapePocMaxPct == nadroDShapePocMaxPct && cacheRelativeVolumeProfile[idx].NadroLogDShapeFailures == nadroLogDShapeFailures && cacheRelativeVolumeProfile[idx].HistogramMaxWidth == histogramMaxWidth && cacheRelativeVolumeProfile[idx].HistogramSideParam == histogramSideParam && cacheRelativeVolumeProfile[idx].HistogramOpacity == histogramOpacity && cacheRelativeVolumeProfile[idx].ShowPOCLine == showPOCLine && cacheRelativeVolumeProfile[idx].ShowVALines == showVALines && cacheRelativeVolumeProfile[idx].ExtendLines == extendLines && cacheRelativeVolumeProfile[idx].ShowHistoricalProfiles == showHistoricalProfiles && cacheRelativeVolumeProfile[idx].MaxFullDetailProfiles == maxFullDetailProfiles && cacheRelativeVolumeProfile[idx].ShowDebugLogs == showDebugLogs && cacheRelativeVolumeProfile[idx].ShowAnchoredVWAP == showAnchoredVWAP && cacheRelativeVolumeProfile[idx].VwapMethod == vwapMethod && cacheRelativeVolumeProfile[idx].EqualsInput(input))
 						return cacheRelativeVolumeProfile[idx];
-			return CacheIndicator<RelativeVolumeProfile>(new RelativeVolumeProfile(){ LicenseKey = licenseKey, SessionMode = sessionMode, ProfileStartTime = profileStartTime, ProfileEndTime = profileEndTime, DataMode = dataMode, BarBasedPeriod = barBasedPeriod, TicksPerLevel = ticksPerLevel, ValueAreaPercent = valueAreaPercent, ProfileType = profileType, TpoPeriodMinutes = tpoPeriodMinutes, TpoView = tpoView, AutoMergeNadroEnabled = autoMergeNadroEnabled, AutoMergeOverlapThreshold = autoMergeOverlapThreshold, AutoMergeBreakoutTolerance = autoMergeBreakoutTolerance, NadroRequireDShape = nadroRequireDShape, HistogramMaxWidth = histogramMaxWidth, HistogramSideParam = histogramSideParam, HistogramOpacity = histogramOpacity, ShowPOCLine = showPOCLine, ShowVALines = showVALines, ExtendLines = extendLines, ShowHistoricalProfiles = showHistoricalProfiles, MaxFullDetailProfiles = maxFullDetailProfiles, ShowDebugLogs = showDebugLogs, ShowAnchoredVWAP = showAnchoredVWAP, VwapMethod = vwapMethod }, input, ref cacheRelativeVolumeProfile);
+			return CacheIndicator<RelativeVolumeProfile>(new RelativeVolumeProfile(){ LicenseKey = licenseKey, SessionMode = sessionMode, ProfileStartTime = profileStartTime, ProfileEndTime = profileEndTime, DataMode = dataMode, BarBasedPeriod = barBasedPeriod, TicksPerLevel = ticksPerLevel, ValueAreaPercent = valueAreaPercent, ProfileType = profileType, TpoPeriodMinutes = tpoPeriodMinutes, TpoView = tpoView, AutoMergeNadroEnabled = autoMergeNadroEnabled, AutoMergeOverlapThreshold = autoMergeOverlapThreshold, AutoMergeBreakoutTolerance = autoMergeBreakoutTolerance, NadroRequireDShape = nadroRequireDShape, DShapeMode = dShapeMode, NadroDShapeMinTailPct = nadroDShapeMinTailPct, NadroDShapeMinSymmetryPct = nadroDShapeMinSymmetryPct, NadroDShapePocMinPct = nadroDShapePocMinPct, NadroDShapePocMaxPct = nadroDShapePocMaxPct, NadroLogDShapeFailures = nadroLogDShapeFailures, HistogramMaxWidth = histogramMaxWidth, HistogramSideParam = histogramSideParam, HistogramOpacity = histogramOpacity, ShowPOCLine = showPOCLine, ShowVALines = showVALines, ExtendLines = extendLines, ShowHistoricalProfiles = showHistoricalProfiles, MaxFullDetailProfiles = maxFullDetailProfiles, ShowDebugLogs = showDebugLogs, ShowAnchoredVWAP = showAnchoredVWAP, VwapMethod = vwapMethod }, input, ref cacheRelativeVolumeProfile);
 		}
 	}
 }
@@ -1275,14 +1434,14 @@ namespace NinjaTrader.NinjaScript.MarketAnalyzerColumns
 {
 	public partial class MarketAnalyzerColumn : MarketAnalyzerColumnBase
 	{
-		public Indicators.RelativeVolumeProfile RelativeVolumeProfile(string licenseKey, ProfileSessionMode sessionMode, string profileStartTime, string profileEndTime, VolumeDataMode dataMode, int barBasedPeriod, int ticksPerLevel, int valueAreaPercent, ProfileDataType profileType, int tpoPeriodMinutes, TpoViewMode tpoView, bool autoMergeNadroEnabled, double autoMergeOverlapThreshold, double autoMergeBreakoutTolerance, bool nadroRequireDShape, int histogramMaxWidth, HistogramSide histogramSideParam, int histogramOpacity, bool showPOCLine, bool showVALines, bool extendLines, bool showHistoricalProfiles, int maxFullDetailProfiles, bool showDebugLogs, bool showAnchoredVWAP, RvpVwapPriceMethod vwapMethod)
+		public Indicators.RelativeVolumeProfile RelativeVolumeProfile(string licenseKey, ProfileSessionMode sessionMode, string profileStartTime, string profileEndTime, VolumeDataMode dataMode, int barBasedPeriod, int ticksPerLevel, int valueAreaPercent, ProfileDataType profileType, int tpoPeriodMinutes, TpoViewMode tpoView, bool autoMergeNadroEnabled, double autoMergeOverlapThreshold, double autoMergeBreakoutTolerance, bool nadroRequireDShape, DShapeAutoMode dShapeMode, double nadroDShapeMinTailPct, double nadroDShapeMinSymmetryPct, double nadroDShapePocMinPct, double nadroDShapePocMaxPct, bool nadroLogDShapeFailures, int histogramMaxWidth, HistogramSide histogramSideParam, int histogramOpacity, bool showPOCLine, bool showVALines, bool extendLines, bool showHistoricalProfiles, int maxFullDetailProfiles, bool showDebugLogs, bool showAnchoredVWAP, RvpVwapPriceMethod vwapMethod)
 		{
-			return indicator.RelativeVolumeProfile(Input, licenseKey, sessionMode, profileStartTime, profileEndTime, dataMode, barBasedPeriod, ticksPerLevel, valueAreaPercent, profileType, tpoPeriodMinutes, tpoView, autoMergeNadroEnabled, autoMergeOverlapThreshold, autoMergeBreakoutTolerance, nadroRequireDShape, histogramMaxWidth, histogramSideParam, histogramOpacity, showPOCLine, showVALines, extendLines, showHistoricalProfiles, maxFullDetailProfiles, showDebugLogs, showAnchoredVWAP, vwapMethod);
+			return indicator.RelativeVolumeProfile(Input, licenseKey, sessionMode, profileStartTime, profileEndTime, dataMode, barBasedPeriod, ticksPerLevel, valueAreaPercent, profileType, tpoPeriodMinutes, tpoView, autoMergeNadroEnabled, autoMergeOverlapThreshold, autoMergeBreakoutTolerance, nadroRequireDShape, dShapeMode, nadroDShapeMinTailPct, nadroDShapeMinSymmetryPct, nadroDShapePocMinPct, nadroDShapePocMaxPct, nadroLogDShapeFailures, histogramMaxWidth, histogramSideParam, histogramOpacity, showPOCLine, showVALines, extendLines, showHistoricalProfiles, maxFullDetailProfiles, showDebugLogs, showAnchoredVWAP, vwapMethod);
 		}
 
-		public Indicators.RelativeVolumeProfile RelativeVolumeProfile(ISeries<double> input , string licenseKey, ProfileSessionMode sessionMode, string profileStartTime, string profileEndTime, VolumeDataMode dataMode, int barBasedPeriod, int ticksPerLevel, int valueAreaPercent, ProfileDataType profileType, int tpoPeriodMinutes, TpoViewMode tpoView, bool autoMergeNadroEnabled, double autoMergeOverlapThreshold, double autoMergeBreakoutTolerance, bool nadroRequireDShape, int histogramMaxWidth, HistogramSide histogramSideParam, int histogramOpacity, bool showPOCLine, bool showVALines, bool extendLines, bool showHistoricalProfiles, int maxFullDetailProfiles, bool showDebugLogs, bool showAnchoredVWAP, RvpVwapPriceMethod vwapMethod)
+		public Indicators.RelativeVolumeProfile RelativeVolumeProfile(ISeries<double> input , string licenseKey, ProfileSessionMode sessionMode, string profileStartTime, string profileEndTime, VolumeDataMode dataMode, int barBasedPeriod, int ticksPerLevel, int valueAreaPercent, ProfileDataType profileType, int tpoPeriodMinutes, TpoViewMode tpoView, bool autoMergeNadroEnabled, double autoMergeOverlapThreshold, double autoMergeBreakoutTolerance, bool nadroRequireDShape, DShapeAutoMode dShapeMode, double nadroDShapeMinTailPct, double nadroDShapeMinSymmetryPct, double nadroDShapePocMinPct, double nadroDShapePocMaxPct, bool nadroLogDShapeFailures, int histogramMaxWidth, HistogramSide histogramSideParam, int histogramOpacity, bool showPOCLine, bool showVALines, bool extendLines, bool showHistoricalProfiles, int maxFullDetailProfiles, bool showDebugLogs, bool showAnchoredVWAP, RvpVwapPriceMethod vwapMethod)
 		{
-			return indicator.RelativeVolumeProfile(input, licenseKey, sessionMode, profileStartTime, profileEndTime, dataMode, barBasedPeriod, ticksPerLevel, valueAreaPercent, profileType, tpoPeriodMinutes, tpoView, autoMergeNadroEnabled, autoMergeOverlapThreshold, autoMergeBreakoutTolerance, nadroRequireDShape, histogramMaxWidth, histogramSideParam, histogramOpacity, showPOCLine, showVALines, extendLines, showHistoricalProfiles, maxFullDetailProfiles, showDebugLogs, showAnchoredVWAP, vwapMethod);
+			return indicator.RelativeVolumeProfile(input, licenseKey, sessionMode, profileStartTime, profileEndTime, dataMode, barBasedPeriod, ticksPerLevel, valueAreaPercent, profileType, tpoPeriodMinutes, tpoView, autoMergeNadroEnabled, autoMergeOverlapThreshold, autoMergeBreakoutTolerance, nadroRequireDShape, dShapeMode, nadroDShapeMinTailPct, nadroDShapeMinSymmetryPct, nadroDShapePocMinPct, nadroDShapePocMaxPct, nadroLogDShapeFailures, histogramMaxWidth, histogramSideParam, histogramOpacity, showPOCLine, showVALines, extendLines, showHistoricalProfiles, maxFullDetailProfiles, showDebugLogs, showAnchoredVWAP, vwapMethod);
 		}
 	}
 }
@@ -1291,14 +1450,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 {
 	public partial class Strategy : NinjaTrader.Gui.NinjaScript.StrategyRenderBase
 	{
-		public Indicators.RelativeVolumeProfile RelativeVolumeProfile(string licenseKey, ProfileSessionMode sessionMode, string profileStartTime, string profileEndTime, VolumeDataMode dataMode, int barBasedPeriod, int ticksPerLevel, int valueAreaPercent, ProfileDataType profileType, int tpoPeriodMinutes, TpoViewMode tpoView, bool autoMergeNadroEnabled, double autoMergeOverlapThreshold, double autoMergeBreakoutTolerance, bool nadroRequireDShape, int histogramMaxWidth, HistogramSide histogramSideParam, int histogramOpacity, bool showPOCLine, bool showVALines, bool extendLines, bool showHistoricalProfiles, int maxFullDetailProfiles, bool showDebugLogs, bool showAnchoredVWAP, RvpVwapPriceMethod vwapMethod)
+		public Indicators.RelativeVolumeProfile RelativeVolumeProfile(string licenseKey, ProfileSessionMode sessionMode, string profileStartTime, string profileEndTime, VolumeDataMode dataMode, int barBasedPeriod, int ticksPerLevel, int valueAreaPercent, ProfileDataType profileType, int tpoPeriodMinutes, TpoViewMode tpoView, bool autoMergeNadroEnabled, double autoMergeOverlapThreshold, double autoMergeBreakoutTolerance, bool nadroRequireDShape, DShapeAutoMode dShapeMode, double nadroDShapeMinTailPct, double nadroDShapeMinSymmetryPct, double nadroDShapePocMinPct, double nadroDShapePocMaxPct, bool nadroLogDShapeFailures, int histogramMaxWidth, HistogramSide histogramSideParam, int histogramOpacity, bool showPOCLine, bool showVALines, bool extendLines, bool showHistoricalProfiles, int maxFullDetailProfiles, bool showDebugLogs, bool showAnchoredVWAP, RvpVwapPriceMethod vwapMethod)
 		{
-			return indicator.RelativeVolumeProfile(Input, licenseKey, sessionMode, profileStartTime, profileEndTime, dataMode, barBasedPeriod, ticksPerLevel, valueAreaPercent, profileType, tpoPeriodMinutes, tpoView, autoMergeNadroEnabled, autoMergeOverlapThreshold, autoMergeBreakoutTolerance, nadroRequireDShape, histogramMaxWidth, histogramSideParam, histogramOpacity, showPOCLine, showVALines, extendLines, showHistoricalProfiles, maxFullDetailProfiles, showDebugLogs, showAnchoredVWAP, vwapMethod);
+			return indicator.RelativeVolumeProfile(Input, licenseKey, sessionMode, profileStartTime, profileEndTime, dataMode, barBasedPeriod, ticksPerLevel, valueAreaPercent, profileType, tpoPeriodMinutes, tpoView, autoMergeNadroEnabled, autoMergeOverlapThreshold, autoMergeBreakoutTolerance, nadroRequireDShape, dShapeMode, nadroDShapeMinTailPct, nadroDShapeMinSymmetryPct, nadroDShapePocMinPct, nadroDShapePocMaxPct, nadroLogDShapeFailures, histogramMaxWidth, histogramSideParam, histogramOpacity, showPOCLine, showVALines, extendLines, showHistoricalProfiles, maxFullDetailProfiles, showDebugLogs, showAnchoredVWAP, vwapMethod);
 		}
 
-		public Indicators.RelativeVolumeProfile RelativeVolumeProfile(ISeries<double> input , string licenseKey, ProfileSessionMode sessionMode, string profileStartTime, string profileEndTime, VolumeDataMode dataMode, int barBasedPeriod, int ticksPerLevel, int valueAreaPercent, ProfileDataType profileType, int tpoPeriodMinutes, TpoViewMode tpoView, bool autoMergeNadroEnabled, double autoMergeOverlapThreshold, double autoMergeBreakoutTolerance, bool nadroRequireDShape, int histogramMaxWidth, HistogramSide histogramSideParam, int histogramOpacity, bool showPOCLine, bool showVALines, bool extendLines, bool showHistoricalProfiles, int maxFullDetailProfiles, bool showDebugLogs, bool showAnchoredVWAP, RvpVwapPriceMethod vwapMethod)
+		public Indicators.RelativeVolumeProfile RelativeVolumeProfile(ISeries<double> input , string licenseKey, ProfileSessionMode sessionMode, string profileStartTime, string profileEndTime, VolumeDataMode dataMode, int barBasedPeriod, int ticksPerLevel, int valueAreaPercent, ProfileDataType profileType, int tpoPeriodMinutes, TpoViewMode tpoView, bool autoMergeNadroEnabled, double autoMergeOverlapThreshold, double autoMergeBreakoutTolerance, bool nadroRequireDShape, DShapeAutoMode dShapeMode, double nadroDShapeMinTailPct, double nadroDShapeMinSymmetryPct, double nadroDShapePocMinPct, double nadroDShapePocMaxPct, bool nadroLogDShapeFailures, int histogramMaxWidth, HistogramSide histogramSideParam, int histogramOpacity, bool showPOCLine, bool showVALines, bool extendLines, bool showHistoricalProfiles, int maxFullDetailProfiles, bool showDebugLogs, bool showAnchoredVWAP, RvpVwapPriceMethod vwapMethod)
 		{
-			return indicator.RelativeVolumeProfile(input, licenseKey, sessionMode, profileStartTime, profileEndTime, dataMode, barBasedPeriod, ticksPerLevel, valueAreaPercent, profileType, tpoPeriodMinutes, tpoView, autoMergeNadroEnabled, autoMergeOverlapThreshold, autoMergeBreakoutTolerance, nadroRequireDShape, histogramMaxWidth, histogramSideParam, histogramOpacity, showPOCLine, showVALines, extendLines, showHistoricalProfiles, maxFullDetailProfiles, showDebugLogs, showAnchoredVWAP, vwapMethod);
+			return indicator.RelativeVolumeProfile(input, licenseKey, sessionMode, profileStartTime, profileEndTime, dataMode, barBasedPeriod, ticksPerLevel, valueAreaPercent, profileType, tpoPeriodMinutes, tpoView, autoMergeNadroEnabled, autoMergeOverlapThreshold, autoMergeBreakoutTolerance, nadroRequireDShape, dShapeMode, nadroDShapeMinTailPct, nadroDShapeMinSymmetryPct, nadroDShapePocMinPct, nadroDShapePocMaxPct, nadroLogDShapeFailures, histogramMaxWidth, histogramSideParam, histogramOpacity, showPOCLine, showVALines, extendLines, showHistoricalProfiles, maxFullDetailProfiles, showDebugLogs, showAnchoredVWAP, vwapMethod);
 		}
 	}
 }

@@ -1,0 +1,151 @@
+{
+  "schema_version": "1.0",
+  "instrument": "GC",
+  "date": "2026-05-01",
+  "snapshots": [
+    {
+      "id": "GC_20260501_0815_PREPIT",
+      "timestamp": "2026-05-01T08:15:00",
+      "price_at_analysis": 4596.0,
+      "regime": "recovery overnight desde wDVAL — pre-pit consolidando bajo del wVWAP, posible flip de imbalance",
+      "bias": "bear bias multi-TF original con recovery bullish in progress",
+      "summary": "PREPIT 08:15 — Spot 4596 tras recovery overnight (low 4570 wDVAL EXACTO a las 06:00 → 4596, +26 pts). EF-wDVAL ya capturó el reversal. Pre-pit con bias bear pero acumulación visible. 3 hipos: RPB long cluster A (continuation), IPB short wVWAP (bear bias), EF long wDVAL (re-test backup).",
+      "analysis_text": "N (Narrativa): bear continuation overnight (4640 -> 4570 en 12h) tocó wDVAL EXACTO a las 06:00 con HA bull change → reversal con +26 pts en 2h al pre-pit. Bias bear multi-TF original intacto pero ACUMULACIÓN visible en wDVAL = posible flip a balance/bullish.\n\nA (Aceptacion direccional):\n- yDVAL 4589.64: spot acepto arriba (+6.4) — soporte anual aguanto el test (low 4570 fue debajo del yDVAL temporalmente pero cierre del bar 06:00 = 4573.6 ya recovery)\n- wDVAL 4569.22: spot acepto arriba (+27) — banda -1SD weekly TESTEADA y SOSTUVO (turning point del día)\n- wVWAP 4621.62: spot debajo (-25) — banda media weekly aún resistencia\n- qDVAL 4660.33: NO acepto arriba (-64), bear quarterly persistente\n\nD (Distribucion): banda baja del wDVA. Daily DVA del 30-abr roto. wDVAL aguantó el test del extremo = setup EF doctrinal §4.4 ya cumplido en el día.\n\nR (Ritmo): caida overnight 4640->4570 (12h) -> recovery rápido 4570->4596 (2h) = posible acumulación / flip de imbalance.\n\nO (Order Flow): pendiente (probable OF positivo en wDVAL durante reversal 06:00-06:30).\n\nEVENTO IMPORTANTE PREVIO AL SNAPSHOT:\n- wDVAL 4570 fue tocado EXACTAMENTE en bar 06:00 (low 4570) con HA bull change y recovery a 4583 (06:30) → +26 pts\n- Este fue el setup EF-wDVAL §4.4 doctrinal. Setup ya CUMPLIDO. Si quien viera el chart en vivo a las 06:30 con confirmación pudo entrar long en EF.\n- Al pre-pit 08:15 ese trade ya tendría +26 pts unrealized si entró en wDVAL. Pre-pit es tarde para H3 EF a menos que vuelva a tocar.\n\nNIVELES NEUTRALIZADOS DESCARTADOS:\n- pVA-28 completa (4583-4604): aceptados ABAJO el 29-abr\n- pVA-29 completa (4546-4572): aceptados ARRIBA el 30-abr\n- pVWAP-28/29 / pDVAH-29 / secondary lines pre-30-abr: zonas atravesadas\n- pVA-30 TPO (VAH=4638.1, POC=4628.8, VAL=4621.3): TOUCHED ABAJO en bar 02:30 (close 4605.3 < VAL 4621.3 con aceptación dura) → ghost dashed, no operable como BPB\n\nLIS abajo (operables):\n- pDVAL-30 4593.12 (-2.9, FRESH del 30-abr, cluster con yDVAL)\n- yDVAL 4589.65 (-6.4, anual virgen, AGUANTO el test overnight)\n- DVAL Daily 4584.63 (-11.4, banda -1SD daily developing)\n- wDVAL 4569.22 (-26.8, EXTREMO weekly DV — ya testeado, setup EF cumplido)\n\nLIS arriba (operables):\n- pQDVAL-Q1 4605.20 (+9.2, soporte/resistencia Q1 cerrado)\n- VWAP Daily 4608.47 (+12.5)\n- wVWAP 4621.62 (+25.6, banda media weekly)\n- DVAH Daily 4632.30 (+36.3)\n- pDVAH-30 4647.44 (+51.4, FRESH)\n- qDVAL 4659.05 (+63.1)\n- pMDVAL-abril 4662.74 (+66.7, mes recien cerrado virgen)\n- wDVAH 4674.03 (+78)\n\n3 HIPOS DOCTRINALES:\n\nH1 (RPB-pDVAL30+yDVAL long): si pullback al cluster A 4589-4593 desde arriba del spot. Setup canonico §4.2. Cluster A YA aguanto el primer test (4593 fue resistencia inicial, luego soporte intermedio en bar 06:00). Continuation del recovery in progress.\n\nH2 (IPB-wVWAP short): si rebote alcanza wVWAP 4621.62 con rechazo. Setup §4.3 alineado con bias bear weekly+quarterly original. ALERTA §5.2: si el imbalance flippeo a bull (acumulación visible), bandera roja contra el reversal nuevo. Solo activar con HA bear change confirmado en wVWAP.\n\nH3 (EF-wDVAL long backup): si el precio cae OTRA VEZ al wDVAL 4570. Setup §4.4 EF — fade del extremo del DV. Doctrinalmente válido aunque setup ya se cumplió hoy. Probabilidad baja (post-recovery) pero válido como backup si bear retoma momentum.\n\nAnti-pattern check:\n- NO RPB en wDVAL (DV) ✅\n- NO IPB long contra imbalance bear en banda MEDIA (§5.2) ✅\n- SI EF long en EXTREMO weekly DV (§4.4) ✅\n- NO mDVA (eco §6 primer viernes pre-pit) ✅\n- NO pVA-28/29 (neutralizados) ✅\n- NO BPB con pVA-30 (touched ghost dashed) ✅</analysis_text>\n<parameter name=\"levels\">[{\"label\": \"wDVAH\", \"price\": 4674.03}, {\"label\": \"wVWAP\", \"price\": 4621.62}, {\"label\": \"wDVAL\", \"price\": 4569.22}, {\"label\": \"qDVAL\", \"price\": 4659.05}, {\"label\": \"yDVAL\", \"price\": 4589.64}, {\"label\": \"DVAH\", \"price\": 4632.30}, {\"label\": \"VWAP\", \"price\": 4608.47}, {\"label\": \"DVAL\", \"price\": 4584.63}, {\"label\": \"pDVAH-30\", \"price\": 4647.44}, {\"label\": \"pDVAL-30\", \"price\": 4593.12}, {\"label\": \"pMDVAL-abril\", \"price\": 4662.74}, {\"label\": \"pQDVAL-Q1\", \"price\": 4605.20}]",
+      "confluences": [
+        {
+          "label": "Cluster A pDVAL-30 + yDVAL (FRESH+anual)",
+          "price_min": 4589.65,
+          "price_max": 4593.12,
+          "grade": "A",
+          "members": [
+            "pDVAL-30 4593.12 (VWAP daily fresh)",
+            "yDVAL 4589.65 (anual virgen)"
+          ]
+        },
+        {
+          "label": "Cluster A resistencia DVAH+pDVAH-30",
+          "price_min": 4632.3,
+          "price_max": 4647.44,
+          "grade": "A",
+          "members": [
+            "DVAH Daily 4632.30",
+            "pDVAH-30 4647.44 (FRESH)"
+          ]
+        },
+        {
+          "label": "Cluster B+ resistencia mayor qDVAL+pMDVAL",
+          "price_min": 4659.05,
+          "price_max": 4662.74,
+          "grade": "B+",
+          "members": [
+            "qDVAL 4659.05 (Q operable)",
+            "pMDVAL-abril 4662.74 (mes recien cerrado)"
+          ]
+        }
+      ],
+      "levels": [],
+      "hypos": [
+        {
+          "id": "H1",
+          "direction": "long",
+          "setup_type": "RPB-pDVAL30+yDVAL",
+          "entry": 4591,
+          "stop": 4582,
+          "grade": "A",
+          "notes": "RPB long en cluster A 4589-4593 (pDVAL-30 FRESH + yDVAL anual virgen). Pullback al cluster desde arriba del spot. Cluster YA aguanto el primer test overnight (low 4586.8 bar 04:00 luego rebote). Continuation del recovery 4570->4596. Stop 4582 ajustado entre cluster y yDVAL.",
+          "targets": [
+            {
+              "label": "T1 pQDVAL-Q1",
+              "price": 4605,
+              "rr": 1.6
+            },
+            {
+              "label": "T2 VWAP Daily",
+              "price": 4608,
+              "rr": 1.9
+            },
+            {
+              "label": "T3 wVWAP",
+              "price": 4622,
+              "rr": 3.4
+            }
+          ],
+          "risk_pts": 9.0,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        },
+        {
+          "id": "H2",
+          "direction": "short",
+          "setup_type": "IPB-wVWAP",
+          "entry": 4621,
+          "stop": 4632,
+          "grade": "B",
+          "notes": "IPB short en wVWAP 4621.62 si rebote alcanza la banda y rechaza. Setup §4.3 alineado con bias bear weekly+quarterly original. ALERTA: si imbalance flippeo a bull (acumulacion visible en wDVAL), §5.2 bandera roja contra el reversal nuevo. Solo activar con HA bear change confirmado en wVWAP + OF negativo.",
+          "targets": [
+            {
+              "label": "T1 spot pre-pit",
+              "price": 4596,
+              "rr": 2.3
+            },
+            {
+              "label": "T2 cluster A 4593",
+              "price": 4593,
+              "rr": 2.5
+            }
+          ],
+          "risk_pts": 11.0,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        },
+        {
+          "id": "H3",
+          "direction": "long",
+          "setup_type": "EF-wDVAL",
+          "entry": 4570,
+          "stop": 4555,
+          "grade": "B+",
+          "notes": "EF long backup en wDVAL si el precio cae OTRA VEZ al extremo. Setup §4.4 fade del extremo DV. Doctrinalmente valido aunque ya se cumplio hoy en bar 06:00. Probabilidad menor post-recovery pero valido si bear retoma momentum y vuelve al extremo. Stop 4555 entre wDVAL y -2SD weekly (4502.7).",
+          "targets": [
+            {
+              "label": "T1 cluster A 4593",
+              "price": 4593,
+              "rr": 1.5
+            },
+            {
+              "label": "T2 wVWAP 4622",
+              "price": 4622,
+              "rr": 3.5
+            },
+            {
+              "label": "T3 pDVAH-30",
+              "price": 4647,
+              "rr": 5.1
+            }
+          ],
+          "risk_pts": 15.0,
+          "outcome": {
+            "status": "pending",
+            "triggered_at": null,
+            "stop_hit_at": null,
+            "targets_hit": [],
+            "mae_pts": null,
+            "mfe_pts": null
+          }
+        }
+      ]
+    }
+  ]
+}
