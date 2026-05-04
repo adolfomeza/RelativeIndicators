@@ -1,218 +1,66 @@
-# RelativeNewsFilter
+# Docs/ — Índice del directorio
 
-Indicador de NinjaTrader 8 para filtrar operaciones basándose en el calendario de noticias económicas de ForexFactory.
+Documentación operativa y de referencia de la suite **RelativeIndicators** para NinjaTrader 8.
 
----
-
-## 📋 Descripción
-
-`RelativeNewsFilter` descarga automáticamente el calendario económico semanal y proporciona alertas visuales y por email antes de eventos importantes. Diseñado para proteger tus operaciones evitando períodos de alta volatilidad causados por noticias.
-
-### Características Principales
-
-✅ **50+ Instrumentos Soportados** - Auto-detección de moneda/país  
-✅ **Alertas por Email** - Notificaciones antes de eventos importantes  
-✅ **Visualización en Gráfico** - Zonas de exclusión coloreadas  
-✅ **Cache Inteligente** - Descarga una vez, usa todo el día  
-✅ **Limpieza Automática** - Elimina archivos antiguos (>7 días)  
-✅ **Filtrado por Impacto** - High, Medium, Low  
-✅ **Click Interactivo** - Haz clic en zonas para ver detalles  
+> Para empezar a trabajar: ver `../CLAUDE.md` (codebase) y `~/.claude/projects/.../memory/MEMORY.md` (autoridad NADRO + feedback vivos).
 
 ---
 
-## 🎯 Uso Básico
+## Dominios de trabajo
 
-### 1. Agregar al Gráfico
+### 🎯 Nadro/ — Trading metodología NADRO
+Análisis de mercado bajo metodología NADRO (Merritt Black). Operativo cada sesión.
 
-1. Abre un gráfico en NinjaTrader 8
-2. Click derecho → Indicators → RelativeNewsFilter
-3. Configura los parámetros según tus necesidades
+| Carpeta | Contenido |
+|---------|-----------|
+| [Nadro/](Nadro/) | Guías 02-06 metodología, briefings, eod_reviews, markups, nightly_reports, snapshots, snapshot_requests, trade_journal, transcripts |
+| `Nadro/markups/` | JSON + HTML con análisis NADRO por instrumento/fecha (operados via tool MCP `nadro_snapshot_markup`) |
+| `Nadro/nightly_reports/` | Reports 8-secciones por instrumento por sesión (tool `nadro_nightly_report`) |
+| `Nadro/trade_journal/` | Bitácora de setups con correcciones del usuario |
+| `Nadro/transcripts/` | 113 transcripts de entrenamiento NADRO |
 
-### 2. Configuración Recomendada
+### 🆕 Apteros Scalping/ — Scalping order-flow
+Framework independiente de Merritt Black. **NO mezclar vocabulario con NADRO.**
 
-**Para Trading Conservador:**
-- `PauseBeforeMinutes`: 15
-- `PauseAfterMinutes`: 15
-- `FilterImpact`: "High"
-- `EnableEmailAlerts`: true (opcional)
-
-**Para Trading Agresivo:**
-- `PauseBeforeMinutes`: 5
-- `PauseAfterMinutes`: 5
-- `FilterImpact`: "Medium"
-
-### 3. Uso desde Estrategias
-
-```csharp
-// Agregar el indicador
-RelativeNewsFilter newsFilter = RelativeNewsFilter(5, 10, "High", "", true);
-
-// Verificar si hay noticias inminentes
-if (newsFilter.IsNewsImminent)
-{
-    Print("NEWS ALERT: " + newsFilter.NextNewsTitle);
-    Print("Minutes to news: " + newsFilter.MinutesToNews);
-    // Pausar trading o cerrar posiciones
-}
-```
+| Carpeta | Contenido |
+|---------|-----------|
+| [Apteros Scalping/](Apteros%20Scalping/) | Transcripts, suscriptores, reglas operativas |
 
 ---
 
-## ⚙️ Parámetros
+## Referencia técnica
 
-### Grupo: Parameters
+### Indicadores
+- [_indicators_index.md](_indicators_index.md) — **tabla maestra** de los 9 indicadores con versión, propósito y archivos clave (RelativeVwap, RelativeMonthlyVwap, RelativeWeeklyVwap, RelativeNMonthlyVwap, RelativeVolumeProfile, RelativeVwapLevels, RelativeNewsFilter, RelativeDelta, RelativeDVAPVA).
+- Cada indicador tiene su carpeta propia `Relative*_Docs/` en la raíz del repo (un nivel arriba).
 
-| Parámetro | Tipo | Default | Descripción |
-|-----------|------|---------|-------------|
-| `PauseBeforeMinutes` | int (0-120) | 5 | Minutos antes del evento para pausar |
-| `PauseAfterMinutes` | int (0-120) | 10 | Minutos después del evento para pausar |
-| `FilterImpact` | string | "High" | Impacto mínimo: "Low", "Medium", "High" |
-| `CustomCurrencies` | string | "" | Monedas personalizadas (ej: "USD,EUR") |
+### Persona / rol experto
+- [persona-trading-ninjascript.md](persona-trading-ninjascript.md) — system prompt de rol "Experto en Trading Algorítmico con NinjaTrader". Contiene identidad, especialización NinjaScript, patrones de logging y GUIs. **No es codebase guide** (eso está en `../CLAUDE.md`).
 
-### Grupo: Visual
+### Changelogs
+- [_changelogs/CHANGELOG.md](_changelogs/CHANGELOG.md) — Changelog general de la suite
+- [_changelogs/MCP_CHANGELOG.md](_changelogs/MCP_CHANGELOG.md) — Changelog del servidor MCP (`RelativeMCP_Server/`)
+- [_changelogs/VWAPDelta_CHANGELOG.md](_changelogs/VWAPDelta_CHANGELOG.md) — Changelog del indicador VWAPDelta (en desarrollo)
 
-| Parámetro | Tipo | Default | Descripción |
-|-----------|------|---------|-------------|
-| `ShowLines` | bool | true | Mostrar zonas en el gráfico |
-| `ShowHistoricalNews` | bool | false | Incluir eventos pasados |
-| `LineColor` | Brush | Red | Color de las zonas |
-| `TextColor` | Brush | White | Color del texto (al hacer clic) |
+### Blueprints (especificaciones)
+- [_blueprints/VWAPDelta_Blueprint.md](_blueprints/VWAPDelta_Blueprint.md) — Especificación del indicador VWAPDelta (3 partial classes, 23h sesión, MFE/MAE)
 
-### Grupo: Email
+### Setup / operación
+- [_setup/EMAIL_SETUP.md](_setup/EMAIL_SETUP.md) — Configuración de alertas por email
+- [_setup/TROUBLESHOOTING.md](_setup/TROUBLESHOOTING.md) — Diagnóstico de problemas comunes
 
-| Parámetro | Tipo | Default | Descripción |
-|-----------|------|---------|-------------|
-| `EnableEmailAlerts` | bool | false | Activar alertas por email |
-| `EmailAlertMinutes` | int (1-60) | 15 | Minutos antes para enviar email |
-| `SmtpServer` | string | smtp.gmail.com | Servidor SMTP |
-| `SmtpPort` | int | 587 | Puerto SMTP |
-| `EmailFrom` | string | "" | Email remitente |
-| `EmailTo` | string | "" | Email destinatario |
-| `EmailPassword` | string | "" | Contraseña o App Password |
+### Planificación
+- [_planning/CSV_EXPORT_PLAN.md](_planning/CSV_EXPORT_PLAN.md) — Plan de exportación CSV
+- [_planning/CSV_EXPORT_TASKS.md](_planning/CSV_EXPORT_TASKS.md) — Tareas asociadas
+
+### Referencias
+- [_references/ninjascript-referencia.md](_references/ninjascript-referencia.md) — Referencia rápida de NinjaScript
 
 ---
 
-## 📧 Configuración de Email (Gmail)
+## Infraestructura externa (fuera de este `Docs/`)
 
-### Paso 1: Habilitar 2FA
-1. Ve a https://myaccount.google.com/security
-2. Activa la verificación en dos pasos
-
-### Paso 2: Crear App Password
-1. Ve a https://myaccount.google.com/apppasswords
-2. Selecciona "Correo" y "Windows Computer"
-3. Copia el password de 16 caracteres
-
-### Paso 3: Configurar en NinjaTrader
-- `Enable Email Alerts`: `true`
-- `SMTP Server`: `smtp.gmail.com`
-- `SMTP Port`: `587`
-- `Email From`: `tu-email@gmail.com`
-- `Email To`: `tu-email@gmail.com`
-- `Email Password`: `[16-char app password]`
-
----
-
-## 🎨 Instrumentos Soportados
-
-### Índices USA
-ES, NQ, YM, RTY (E-mini)  
-MES, MNQ, MYM, M2K (Micro)
-
-### Índices Europeos
-FDAX (DAX), FESX (STOXX)
-
-### Forex
-6E (EUR/USD), 6A (AUD/USD), 6J (JPY/USD), 6B (GBP/USD)  
-6C (CAD/USD), 6S (CHF/USD), 6M (MXN/USD), 6N (NZD/USD)
-
-### Metales
-GC (Gold), SI (Silver), HG (Copper), PL (Platinum)
-
-### Energía
-CL (Crude Oil), NG (Natural Gas), RB (Gasoline), HO (Heating Oil)
-
-### Agricultura
-ZC (Corn), ZW (Wheat), ZS (Soybeans), ZL (Soy Oil), ZM (Soy Meal)  
-KC (Coffee), SB (Sugar), CT (Cotton), CC (Cocoa)
-
-### Bonos del Tesoro
-ZB (30-Year), ZN (10-Year), ZF (5-Year), ZT (2-Year), UB (Ultra)
-
----
-
-## 📚 Propiedades Públicas
-
-Estas propiedades están disponibles para estrategias:
-
-```csharp
-public bool IsNewsImminent { get; }      // ¿Hay noticias cercanas?
-public string NextNewsTitle { get; }     // Título del próximo evento
-public double MinutesToNews { get; }     // Minutos hasta el evento
-```
-
----
-
-## 🗂️ Sistema de Caché
-
-### Ubicación
-```
-Documents/NinjaTrader 8/NewsCache/
-```
-
-### Formato de Archivos
-```
-NewsCache_YYYYMMDD.xml
-```
-
-### Retención
-- Los archivos se mantienen por **7 días**
-- Limpieza automática al cargar el indicador
-- Un archivo por día (descarga única)
-
----
-
-## 🔧 Solución de Problemas
-
-### No se Descargan Noticias
-- Verifica conexión a internet
-- Revisa Output Window para mensajes de error
-- El feed es: `https://nfs.faireconomy.media/ff_calendar_thisweek.xml`
-
-### Emails No se Envían
-- Verifica que `EnableEmailAlerts` esté en `true`
-- Confirma credenciales SMTP correctas
-- Gmail requiere "App Password", no tu contraseña normal
-- Los emails solo se envían en modo `Realtime`
-
-### Zonas No Aparecen en el Gráfico
-- Verifica que `ShowLines` esté en `true`
-- Asegúrate que hay eventos descargados (revisa Output Window)
-- Cambia `FilterImpact` a "Low" temporalmente para ver más eventos
-
----
-
-## 📎 Archivos Relacionados
-
-- [`CHANGELOG.md`](./CHANGELOG.md) - Historial de versiones
-- [`RelativeNewsFilter.cs`](../RelativeNewsFilter.cs) - Código fuente
-
----
-
-## 📄 Versión
-
-**Versión Actual**: v2.0.0  
-**Fecha**: 2026-01-19  
-**Compatibilidad**: NinjaTrader 8 (todas las versiones)
-
----
-
-## 🤝 Contribuciones
-
-Para reportar bugs o sugerir mejoras, contacta al desarrollador.
-
----
-
-## ⚖️ Licencia
-
-Este indicador es para uso personal. No redistribuir sin permiso.
+- **`../RelativeMCP_Server/`** — Servidor MCP Python/FastMCP (≥3.2.0). 20 tools cubriendo NADRO analysis, replay, backtest, nightly reports. Watcher daemon: `python -m RelativeMCP_Server.watcher`.
+- **`../VwapLevels/`** — Archivos `{Timeframe}_{INSTRUMENT}.txt` exportados por los 5 forks VWAP (Daily/Weekly/Monthly/Quarterly/Annual). Lector: `RelativeVwapLevels`.
+- **`../TradeExports/{Account}/`** — CSVs de trades (RelativeVwap).
+- **Memorias Claude** — `C:\Users\prueba\.claude\projects\C--Users-prueba-Documents-NinjaTrader-8\memory\` con `MEMORY.md` como índice y `nadro_master.md` como autoridad operativa.
